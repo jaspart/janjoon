@@ -26,7 +26,6 @@
 		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf"
 			invalidate-session="true" delete-cookies="true" />
 		<form-login login-page="/pages/login.jsf" />
-
 		<expression-handler ref="jsfWebExpressionHandler" />
 	</http>
 

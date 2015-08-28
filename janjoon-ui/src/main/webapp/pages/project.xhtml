@@ -28,10 +28,16 @@ td.ui-fileupload-preview {
 	<h:form id="projectForm">
 		<p:panel id="projectForm" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="projectDataTable" var="project" lazy="true" emptyMessage="#{messages.label_notRecordFound}"
+			<p:dataTable id="projectDataTable" var="project" lazy="true"
+				emptyMessage="#{messages.label_notRecordFound}"
 				paginatorPosition="bottom" value="#{jJProjectBean.projectListTable}"
-				paginator="true" rows="15" rowKey="#{project.id}">
-				<f:facet name="header">#{messages.admin_project_table_header}</f:facet>
+				sortMode="multiple" paginator="true" rows="15"
+				rowKey="#{project.id}" widgetVar="projectDataTableWV">
+				<f:facet name="header">#{messages.admin_project_table_header}
+				<p:inputText id="globalFilter"
+						onkeyup="PF('projectDataTableWV').filter()" style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+				</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
 					<p:graphicImage styleClass="avatar"
 						rendered="#{project.logo != null}"
@@ -39,13 +45,22 @@ td.ui-fileupload-preview {
 						<f:param name="ProjId" value="#{project.id}" />
 					</p:graphicImage>
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{project.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_project_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{project.name}" />
 				</p:column>
-				<p:column styleClass="action-column" style="width: 200px">
+				<p:column sortBy="#{project.manager.company.name}" id="company"
+					filterOptions="#{jJCompanyBean.companyOptions}"
+					filterMatchMode="exact" filterStyle="width: 90%;"
+					filterBy="#{project.manager.company.name}">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_menuitem}" />
+					</f:facet>
+					<h:outputText value="#{project.manager.company.name}" />
+				</p:column>
+				<p:column styleClass="action-column" style="width: 150px">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_project_table_action_title}" />
 					</f:facet>
@@ -74,12 +89,12 @@ td.ui-fileupload-preview {
 						update=":tabview:projectDialog" resetValues="true"
 						oncomplete="PF('projectDialogWidget').show()"
 						icon="ui-icon-circle-plus" />
-						
-						<p:commandButton id="restoreProject" icon="ui-icon-restore"
+
+					<p:commandButton id="restoreProject" icon="ui-icon-restore"
 						value="#{messages.admin_project_restore_dialog}"
 						oncomplete="PF('restoreProjectDialogWidget').show()"
 						resetValues="true" update=":tabview:restoreProjectForm" />
-						
+
 				</f:facet>
 			</p:dataTable>
 		</p:panel>
@@ -101,7 +116,8 @@ td.ui-fileupload-preview {
 					</f:facet>
 					<p:dataTable id="restoreProjectTable" var="project"
 						scrollable="true" value="#{jJProjectBean.deletedProject}"
-						rowKey="#{project.id}" emptyMessage="#{messages.label_notRecordFound}"
+						rowKey="#{project.id}"
+						emptyMessage="#{messages.label_notRecordFound}"
 						selection="#{jJProjectBean.restoredProject}" scrollHeight="400">
 
 						<p:ajax event="rowSelectCheckbox"
@@ -121,9 +137,9 @@ td.ui-fileupload-preview {
 							<h:outputText value="#{project.name}" />
 						</p:column>
 						<p:column headerText="Manager">
-						<h:outputText value="#{project.manager}"
-							converter="JJContactConverter" />
-					</p:column>
+							<h:outputText value="#{project.manager}"
+								converter="JJContactConverter" />
+						</p:column>
 					</p:dataTable>
 					<f:facet name="footer">
 						<p:commandButton id="restoreButton"

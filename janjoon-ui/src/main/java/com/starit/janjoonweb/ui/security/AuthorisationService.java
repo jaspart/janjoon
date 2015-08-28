@@ -584,7 +584,7 @@ public class AuthorisationService implements Serializable {
 			rRequiementMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rRequiementMSG = MessageFactory.getMessage("header_spec_menuitem",
+			rRequiementMSG = MessageFactory.getMessage("header_spec_menuitemhelp",
 					"").getDetail();
 		}
 
@@ -598,7 +598,7 @@ public class AuthorisationService implements Serializable {
 			rTestMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rTestMSG = MessageFactory.getMessage("header_test_menuitem", "")
+			rTestMSG = MessageFactory.getMessage("header_test_menuitemhelp", "")
 					.getDetail();
 		}
 
@@ -608,7 +608,7 @@ public class AuthorisationService implements Serializable {
 			rwDevMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rwDevMSG = MessageFactory.getMessage("header_dev_menuitem", "")
+			rwDevMSG = MessageFactory.getMessage("header_dev_menuitemhelp", "")
 					.getDetail();
 
 		}
@@ -621,7 +621,7 @@ public class AuthorisationService implements Serializable {
 			rProjectMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rProjectMSG = MessageFactory.getMessage("header_project_menuitem",
+			rProjectMSG = MessageFactory.getMessage("header_project_menuitemhelp",
 					"").getDetail();
 		}
 
@@ -631,7 +631,7 @@ public class AuthorisationService implements Serializable {
 			rBuildMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rBuildMSG = MessageFactory.getMessage("header_delivery_menuitem",
+			rBuildMSG = MessageFactory.getMessage("header_delivery_menuitemhelp",
 					"").getDetail();
 		}
 
@@ -641,7 +641,7 @@ public class AuthorisationService implements Serializable {
 			rBugMSG = MessageFactory.getMessage("header_noPermission_menuitem",
 					"").getDetail();
 		} else {
-			rBugMSG = MessageFactory.getMessage("header_bug_menuitem", "")
+			rBugMSG = MessageFactory.getMessage("header_bug_menuitemhelp", "")
 					.getDetail();
 		}
 
@@ -651,7 +651,7 @@ public class AuthorisationService implements Serializable {
 			rContactMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rContactMSG = MessageFactory.getMessage("header_team_menuitem", "")
+			rContactMSG = MessageFactory.getMessage("header_team_menuitemhelp", "")
 					.getDetail();
 		}
 
@@ -662,7 +662,7 @@ public class AuthorisationService implements Serializable {
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
 			rCompanyMSG = MessageFactory
-					.getMessage("header_admin_menuitem", "").getDetail();
+					.getMessage("header_admin_menuitemhelp", "").getDetail();
 		}
 
 		if (project != null) {

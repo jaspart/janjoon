@@ -192,16 +192,16 @@ public class CalendarUtil {
 		return getZeroTimeDate(cal.getTime());
 	}
 
-	public String addHoliday(Date date) throws IOException {
+	public static String addHoliday(Date date,String calendar,int size) throws IOException {
 		Properties properties = new Properties();
-		String calendar = company.getCalendar();
+		//String calendar = company.getCalendar();
 		if (calendar == null) {
 			calendar = "";
 		}
 		properties.load(new StringReader(calendar));
 		DateFormat f = new SimpleDateFormat("dd/MM/");
 		properties.setProperty(
-				HOLIDAYS + "." + String.format("%01d", holidays.size() + 1),
+				HOLIDAYS + "." + String.format("%01d", size + 1),
 				f.format(date));
 
 		StringWriter writer = new StringWriter();

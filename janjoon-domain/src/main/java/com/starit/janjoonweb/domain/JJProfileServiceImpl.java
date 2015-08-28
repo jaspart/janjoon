@@ -52,9 +52,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 			subquery.where(criteriaBuilder.and(criteriaBuilder
 					.or(predicatesRight.toArray(new Predicate[] {})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
-
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
-					.not());
+			
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		}
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));

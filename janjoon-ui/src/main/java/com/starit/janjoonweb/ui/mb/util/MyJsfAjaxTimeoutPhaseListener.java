@@ -47,20 +47,9 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 			logger.info("JSF Ajax Timeout Setting is not configured. Do Nothing!");
 			return;
 		}
-
-		// //////////////////////////////////////////////////////////////////////////////////////////////
-		//																							  //
-		// You can replace the above line of code with the security control of						 //
-		// your application.																		//
-		// For example , you may get the authenticated user object from session						\\
-		// or thread local storage.																	 \\
-		// It depends on your design.																  \\
-		//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
 		String resourceUri = request.getContextPath() + "/resources";
-//		String requestUri = ((HttpServletRequest) FacesContext
-//				.getCurrentInstance().getExternalContext().getRequest())
-//				.getRequestURI();
-//		String referrer = request.getHeader("referer");
+
 		boolean loginRequest = request.getRequestURI().contains(timeoutPage);
 		boolean resourceRequest = request.getRequestURI().startsWith(
 				resourceUri)
@@ -70,11 +59,8 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 
 		if (session == null || session.getAttribute("password") == null
 				&& !(loginRequest || resourceRequest)) {
-			// user credential not found.
-			// considered to be a Timeout case
-
-			if (ec.isResponseCommitted()) {
-				// redirect is not possible
+			
+			if (ec.isResponseCommitted()) {				
 				return;
 			}
 
@@ -111,7 +97,7 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 				throw new FacesException(e);
 			}
 		} else {
-			return; // This is not a timeout case . Do nothing !
+			return; 
 		}
 	}
 

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
@@ -20,12 +22,15 @@ import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
@@ -72,9 +77,9 @@ public class JJContactBean {
 	private Contact contactUtil;
 	private ContactCalendarUtil calendarUtil;
 	private List<JJCategory> categories;
-	private List<JJCategory> loggedContactCategories;	
+	private List<JJCategory> loggedContactCategories;
 	private List<JJVersion> versionList;
-	private LazyContactDataModel contactsLazyModel;
+	private LazyContactDataModel contactsLazyModel;	
 	private String message;
 	private boolean disabledContactMode;
 	private boolean disabledPermissionMode;
@@ -92,11 +97,10 @@ public class JJContactBean {
 		if (!loginBean.getAuthorisationService().isAdminCompany())
 			company = loginBean.getContact().getCompany();
 
-		if (contactsLazyModel == null)
+		if (contactsLazyModel == null) {
 			contactsLazyModel = new LazyContactDataModel(jJContactService,
-					company);
-
-		// getContacts();
+					company);	
+		}
 
 		return contactsLazyModel;
 	}

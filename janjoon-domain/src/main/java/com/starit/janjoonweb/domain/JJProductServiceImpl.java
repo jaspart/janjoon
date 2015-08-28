@@ -2,7 +2,10 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,10 +13,13 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 
 public class JJProductServiceImpl implements JJProductService {
 
@@ -96,7 +102,8 @@ public class JJProductServiceImpl implements JJProductService {
 	}
 
 	public List<JJProduct> load(JJCompany company, MutableInt size, int first,
-			int pageSize) {
+			int pageSize, List<SortMeta> multiSortMeta,
+			Map<String, Object> filters) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
 				.createQuery(JJProduct.class);
@@ -109,31 +116,87 @@ public class JJProductServiceImpl implements JJProductService {
 
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
-					from.join("manager").get("company"), company));
+					from.get("manager").get("company"), company));
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
+		if (filters != null) {
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
+			while (it.hasNext()) {
+				@SuppressWarnings("rawtypes")
+				Map.Entry pairs = (Map.Entry) it.next();
+				if (pairs.getKey().toString().contains("globalFilter")) {
+					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"), criteriaBuilder.like(
+							from.<String> get("extname"),
+							"%" + pairs.getValue() + "%")));
+				} else if (pairs.getKey().toString().contains("company")) {
+
+					predicates.add(criteriaBuilder.equal(from.get("manager")
+							.get("company").<String> get("name"), pairs
+							.getValue().toString()));
+
+				} else
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+
+			}
+		}
+
 		select.where(predicates.toArray(new Predicate[] {}));
+
+		if (multiSortMeta != null) {
+			for (SortMeta sortMeta : multiSortMeta) {
+				String sortField = sortMeta.getSortField();
+				SortOrder sortOrder = sortMeta.getSortOrder();
+				if (!sortField.contains("company")) {
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+					}
+				} else if (sortField.contains("company")) {
+					Join<JJContact, JJCompany> owner = from.join("manager")
+							.join("company");
+
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(owner.get("name")));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(owner.get("name")));
+					}
+				}
+			}
+		} else
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJProduct> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
 
-		if (company != null) {
-			String qu = "SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
-					+ "AND r.enabled = true ";
+		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
+		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
+		entityManager.createQuery(cq);
+		cq.where(predicates.toArray(new Predicate[] {}));
+		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
-			Query query = entityManager.createQuery(qu);
-			query.setParameter("c", company);
-			size.setValue(Math.round((long) query.getSingleResult()));
-		} else {
-			String qu = "SELECT COUNT(r) FROM  JJProduct r Where"
-					+ " r.enabled = true ";
-
-			Query query = entityManager.createQuery(qu);
-
-			size.setValue(Math.round((long) query.getSingleResult()));
-		}
+		// if (company != null) {
+		// String qu =
+		// "SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
+		// + "AND r.enabled = true ";
+		//
+		// Query query = entityManager.createQuery(qu);
+		// query.setParameter("c", company);
+		// size.setValue(Math.round((long) query.getSingleResult()));
+		// } else {
+		// String qu = "SELECT COUNT(r) FROM  JJProduct r Where"
+		// + " r.enabled = true ";
+		//
+		// Query query = entityManager.createQuery(qu);
+		//
+		// size.setValue(Math.round((long) query.getSingleResult()));
+		// }
 
 		return result.getResultList();
 

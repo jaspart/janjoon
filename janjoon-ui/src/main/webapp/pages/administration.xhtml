@@ -45,7 +45,7 @@
 
 			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
 				titletip="#{loginBean.authorisationService.adminCompanyMSG}"
-				rendered="#{loginBean.authorisationService.adminCompany}">
+				rendered="#{loginBean.authorisationService.adminCompany or loginBean.authorisationService.adminContact}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="Compagnies">
 						<ui:include src="compagnies.xhtml" />
@@ -121,7 +121,9 @@
 				</h:panelGrid>
 			</p:tab>
 			
-			<p:tab id="tabStatistique" title="Statistiques">
+			<p:tab id="tabStatistique" title="Statistiques"
+				titletip="#{loginBean.authorisationService.adminContactMSG}"
+				rendered="#{loginBean.authorisationService.adminContact}">
 				<h:panelGrid columns="1" cellpadding="3">
 					<ui:insert name="statistique">
 						<ui:include src="statistique.xhtml" />

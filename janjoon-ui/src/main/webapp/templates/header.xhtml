@@ -94,10 +94,7 @@
 
 					<p:splitButton
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
-						rendered="#{loginBean.enable}" style="right: 0px;">
-						<!-- 						<p:graphicImage value="#{loginBean.pictureUrl}" -->
-						<!-- 							rendered="#{loginBean.pictureUrl != null}" -->
-						<!-- 							style="float: left;height: 50px;width: 50px;" /> -->
+						rendered="#{loginBean.enable}" style="right: 0px;">						
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person"
 							url="/pages/contactConfig.jsf?faces-redirect=true" />
@@ -105,8 +102,6 @@
 							url="logout.jsf" actionListener="#{loginBean.logout}"
 							icon="ui-icon-extlink" />
 					</p:splitButton>
-
-					<!-- 	communicationButton	: Uncommand the button to start using the communication overlayPanel -->
 					<p:commandButton id="communicationButton" icon="ui-icon-comment"
 						value="#{loginBean.messageCount}"
 						oncomplete="PF('communicationPanel').show();"
@@ -165,7 +160,7 @@
 						disabled="#{!loginBean.authorisationService.rwDev}"
 						title="#{loginBean.authorisationService.rwDevMSG}"
 						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
-						icon="ui-icon-wrench" style="min-width: 120px;"
+						icon="ui-icon-wrench" 
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_test_menuitem}"
@@ -183,6 +178,7 @@
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_exploitation_menuitem}"
+						title="#{messages.header_exploitation_menuitemhelp}"
 						rendered="#{!loginBean.mobile}" style="min-width: 80px;"
 						url="/pages/exploitation.jsf?faces-redirect=true" icon="ui-icon-suitcase" />
 
@@ -208,7 +204,7 @@
 
 					<p:menuitem id="statsAction"
 						disabled="#{!loginBean.authorisationService.rProject}"
-						title="#{loginBean.authorisationService.rProjectMSG}"
+						title="#{messages.header_stat_menuitemhelp}"
 						value="#{messages.header_stat_menuitem}"
 						onstart="PF('blockUIWidget').block()"
 						actionListener="#{loginBean.redirection}" update=":growlForm"
@@ -216,6 +212,7 @@
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_admin_menuitem}"
+						title="#{messages.header_admin_menuitemhelp}"
 						rendered="#{loginBean.authorisationService.renderAdmin}"
 						url="/pages/administration.jsf?faces-redirect=true"
 						icon="ui-icon-key" update=":contentPanel" />

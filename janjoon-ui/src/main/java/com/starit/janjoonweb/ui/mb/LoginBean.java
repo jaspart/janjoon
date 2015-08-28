@@ -102,19 +102,19 @@ public class LoginBean implements Serializable {
 	private JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	private JJMessageService jJMessageService;	
-	
+	private JJMessageService jJMessageService;
+
 	@Autowired
 	private JJConnectionStatisticsService jJConnectionStatisticsService;
 
 	private String username = "";
 	private String password;
 	private boolean agreeTerms = false;
-	private boolean loading = false;	
+	private boolean loading = false;
 	private JJContact contact;
 	private boolean enable = false;
 	private int activeTabAdminIndex;
-	private int menuIndex;	
+	private int menuIndex;
 	private PlanningConfiguration planningConfiguration;
 
 	@Autowired
@@ -165,7 +165,8 @@ public class LoginBean implements Serializable {
 		return connectionStatistics;
 	}
 
-	public void setConnectionStatistics(JJConnectionStatistics connectionStatistics) {
+	public void setConnectionStatistics(
+			JJConnectionStatistics connectionStatistics) {
 		this.connectionStatistics = connectionStatistics;
 	}
 
@@ -205,6 +206,7 @@ public class LoginBean implements Serializable {
 	}
 
 	protected String getRedirectUrl(HttpSession session) {
+
 		if (session != null) {
 			SavedRequest savedRequest = (SavedRequest) session
 					.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
@@ -236,7 +238,9 @@ public class LoginBean implements Serializable {
 					}
 
 				} else if (savedRequest.getParameterMap() != null
-						&& !savedRequest.getParameterMap().isEmpty()) {
+						&& !savedRequest.getParameterMap().isEmpty()
+						&& (s.contains("requirement") || s.contains("bug") || s
+								.contains("test"))) {
 					s = s + ".jsf?";
 					Iterator<Entry<String, String[]>> it = savedRequest
 							.getParameterMap().entrySet().iterator();
@@ -259,8 +263,8 @@ public class LoginBean implements Serializable {
 				return s;
 			}
 		}
-
 		return "main.jsf?faces-redirect=true";
+
 	}
 
 	public String getUsername() {
@@ -551,13 +555,11 @@ public class LoginBean implements Serializable {
 							.getMessage("login_licence_expired",
 									FacesMessage.SEVERITY_WARN);
 				}
-				
-				
-				connectionStatistics =new JJConnectionStatistics();
-				connectionStatistics.setContact(contact);				
+
+				connectionStatistics = new JJConnectionStatistics();
+				connectionStatistics.setContact(contact);
 				connectionStatistics.setLoginDate(new Date());
-				
-				
+
 				prevPage = getRedirectUrl(session);
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -624,7 +626,7 @@ public class LoginBean implements Serializable {
 			break;
 		case "exploitation":
 			menuIndex = 6;
-			break;	
+			break;
 		case "delivery":
 			menuIndex = 7;
 			break;
@@ -659,9 +661,17 @@ public class LoginBean implements Serializable {
 
 	public void onTabAdminChange(TabChangeEvent event) {
 
-		TabView tv = (TabView) event.getComponent();
-		// System.out.println(this.activeTabAdminIndex);
+		
+		TabView tv = (TabView) event.getComponent();		
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
+		int i=activeTabAdminIndex;
+		System.err.println("###### ACtive tab: " + activeTabAdminIndex);
+		while(i>0)
+		{
+			if(!tv.getChildren().get(i).isRendered())
+				activeTabAdminIndex--;
+			i--;
+		}
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
 	}
@@ -792,13 +802,14 @@ public class LoginBean implements Serializable {
 					if (requirementBean == null)
 						requirementBean = new JJRequirementBean();
 					if (requirementBean.getTableDataModelList() == null)
-						
+
 						requirementBean.fullTableDataModelList();
-					RequestContext.getCurrentInstance().execute("updateDataTable()");
-//					ExternalContext ec = FacesContext.getCurrentInstance()
-//							.getExternalContext();
-//					ec.redirect(((HttpServletRequest) ec.getRequest())
-//							.getRequestURI());
+					RequestContext.getCurrentInstance().execute(
+							"updateDataTable()");
+					// ExternalContext ec = FacesContext.getCurrentInstance()
+					// .getExternalContext();
+					// ec.redirect(((HttpServletRequest) ec.getRequest())
+					// .getRequestURI());
 
 				}
 
@@ -1084,12 +1095,13 @@ public class LoginBean implements Serializable {
 									requirementBean = new JJRequirementBean();
 								if (requirementBean.getTableDataModelList() == null) {
 									requirementBean.fullTableDataModelList();
-									RequestContext.getCurrentInstance().execute("updateDataTable()");
-//									ExternalContext ec = FacesContext
-//											.getCurrentInstance()
-//											.getExternalContext();
-//									ec.redirect(((HttpServletRequest) ec
-//											.getRequest()).getRequestURI());
+									RequestContext.getCurrentInstance()
+											.execute("updateDataTable()");
+									// ExternalContext ec = FacesContext
+									// .getCurrentInstance()
+									// .getExternalContext();
+									// ec.redirect(((HttpServletRequest) ec
+									// .getRequest()).getRequestURI());
 								}
 
 							} else {
@@ -1241,12 +1253,13 @@ public class LoginBean implements Serializable {
 								requirementBean = new JJRequirementBean();
 							if (requirementBean.getTableDataModelList() == null) {
 								requirementBean.fullTableDataModelList();
-								RequestContext.getCurrentInstance().execute("updateDataTable()");
-//								ExternalContext ec = FacesContext
-//										.getCurrentInstance()
-//										.getExternalContext();
-//								ec.redirect(((HttpServletRequest) ec
-//										.getRequest()).getRequestURI());
+								RequestContext.getCurrentInstance().execute(
+										"updateDataTable()");
+								// ExternalContext ec = FacesContext
+								// .getCurrentInstance()
+								// .getExternalContext();
+								// ec.redirect(((HttpServletRequest) ec
+								// .getRequest()).getRequestURI());
 							}
 						} else {
 							facesMessage = MessageFactory.getMessage(
@@ -1599,20 +1612,20 @@ public class LoginBean implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@PreDestroy
 	public void preDestroySession() throws Exception {
-		
-	  System.err.println("Spring Container is destroy! Customer clean up");
-	  System.out.println("Contact "+contact.getName());
-	  
-	  if(connectionStatistics != null)
-	  {
-		  connectionStatistics.setCreationDate(new Date());
-		  connectionStatistics.setLogoutDate(new Date());
-		  jJConnectionStatisticsService.saveJJConnectionStatistics(connectionStatistics); 
-		  connectionStatistics = null;
-	  }	  
+
+		if (connectionStatistics != null) {
+			System.err
+					.println("Spring Container is destroy! Customer clean up");
+			System.out.println("Contact " + contact.getName());
+			connectionStatistics.setCreationDate(new Date());
+			connectionStatistics.setLogoutDate(new Date());
+			jJConnectionStatisticsService
+					.saveJJConnectionStatistics(connectionStatistics);
+			connectionStatistics = null;
+		}
 	}
 
 	public static void copyUploadImages(boolean copy)

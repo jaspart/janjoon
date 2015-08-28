@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJCompany;
@@ -56,12 +57,12 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	}
 
 	@Override
-	public List<JJProject> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, Object> filters) {
+	public List<JJProject> load(int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJProject> data = new ArrayList<JJProject>();
 		MutableInt size = new MutableInt(0);
-		data = projectService.load(company, size, first, pageSize);
+		data = projectService.load(company, size, first, pageSize,multiSortMeta,filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
