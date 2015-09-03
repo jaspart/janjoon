@@ -2473,6 +2473,7 @@ public class JJRequirementBean {
 					categoryDataModel = new CategoryDataModel(
 							getListOfRequiremntUtils(requirements),
 							category.getId(), category.getName(), true);
+					categoryDataModel.setActiveIndex(-1);
 
 					if (mine) {
 						if (filterValue == null || filterValue.isEmpty())

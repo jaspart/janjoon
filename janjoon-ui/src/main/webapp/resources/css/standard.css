@@ -51,6 +51,13 @@ div#contentPanel_content {
 	margin-left: -4px !important;
 }
 
+.thirtyPercent{
+	width: 25%;
+}
+.seventyPercent{
+	width: 70%;
+}
+
 .ui-rating-star a,.ui-rating-cancel a {
 	width: 24px;
 	height: 23px;
@@ -609,10 +616,23 @@ div#contentPanel_content {
 .TestcaseChapter {
 	color: black;
 	font-weight: bold;
+	padding: .2em .6em .3em;
+	font-size: 80%;	
+	line-height: 1;	
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseRequirement {
-	color: black;
+	color: black;	
+	font-size: 80%;	
+	line-height: 1;	
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 .TestcaseExec .ui-button:nth-child(1) {

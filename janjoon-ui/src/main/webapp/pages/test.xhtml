@@ -9,196 +9,206 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<style type="text/css">
+.ui-tree {
+	height: 700px;
+	width: 100%;
+	max-width: 350px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: rgba(255, 0, 0, 0);
+}
+</style>
 		<f:event type="preRenderView"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJTestcaseBean.loadData(null,null,false)}" />
 
 
-		<p:layout styleClass="content"
-			style="min-height:500px;overflow:hidden !important;height:700px !important;"
-			stateful="true">
-			<h:form id="testFormNorth">
-				<p:dialog widgetVar="categoryPanel" id="categoryPanel"
-					onHide="hideEvent()" styleClass="overlayPanelDialog"
-					rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
-					closable="false">
-					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
-						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}"
-							id="Mcategory_#{category.category.id}"
-							rendered="#{loginBean.mobile}"
-							style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
-							offLabel="#{category.category.name}" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
-							<p:ajax
-								listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth:categoryPanel :container :rate"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()" />
-						</p:selectBooleanButton>
-						<p:tooltip for="Mcategory_#{category.category.id}"
-							value="#{category.category.name}" showEffect="fade"
-							hideEffect="fade" />
-						<br />
-					</c:forEach>
-				</p:dialog>
-				<p:layoutUnit position="north" style="min-height:30px;">
-					<p:remoteCommand name="hideEvent" update="categoryPanel" />
-					<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
+		<!-- 		<p:layout styleClass="content" -->
+		<!-- 			style="min-height:500px;overflow:hidden !important;height:700px !important;" -->
+		<!-- 			stateful="true"> -->
+		<h:form id="testFormNorth">
+			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
+				onHide="hideEvent()" styleClass="overlayPanelDialog"
+				rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
+				closable="false">
+				<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
+					<p:selectBooleanButton value="#{category.checked}"
+						onLabel="#{category.category.name}"
+						id="Mcategory_#{category.category.id}"
+						rendered="#{loginBean.mobile}"
+						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
+						offLabel="#{category.category.name}" onIcon="ui-icon-check"
+						offIcon="ui-icon-close">
+						<p:ajax
+							listener="#{jJTestcaseBean.loadData(categoryPanel,category.category,true)}"
+							update=":testFormWest :testFormCenter :testFormNorth:categoryPanel :container :rate"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+					</p:selectBooleanButton>
+					<p:tooltip for="Mcategory_#{category.category.id}"
+						value="#{category.category.name}" showEffect="fade"
+						hideEffect="fade" />
+					<br />
+				</c:forEach>
+			</p:dialog>
+			<!-- 				<p:layoutUnit position="north" style="min-height:30px;"> -->
+			<p:remoteCommand name="hideEvent" update="categoryPanel" />
+			<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
 
-						<p:selectBooleanButton value="#{category.checked}"
-							onLabel="#{category.category.name}"
-							id="category_#{category.category.id}"
-							rendered="#{!loginBean.mobile}"
-							style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
-							offLabel="#{category.category.name}" onIcon="ui-icon-check"
-							offIcon="ui-icon-close">
-							<p:ajax
-								listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
-								update=":testFormWest :testFormCenter :testFormNorth :container :rate"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()" />
-						</p:selectBooleanButton>
-						<p:tooltip for="category_#{category.category.id}"
-							value="#{category.category.name}" showEffect="fade"
-							hideEffect="fade" />
-					</c:forEach>
+				<p:selectBooleanButton value="#{category.checked}"
+					onLabel="#{category.category.name}"
+					id="category_#{category.category.id}"
+					rendered="#{!loginBean.mobile}"
+					style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
+					offLabel="#{category.category.name}" onIcon="ui-icon-check"
+					offIcon="ui-icon-close">
+					<p:ajax
+						listener="#{jJTestcaseBean.loadData(null,category.category,true)}"
+						update=":testFormWest :testFormCenter :testFormNorth :container :rate"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()" />
+				</p:selectBooleanButton>
+				<p:tooltip for="category_#{category.category.id}"
+					value="#{category.category.name}" showEffect="fade"
+					hideEffect="fade" />
+			</c:forEach>
 
-					<p:commandButton value="&#9776;" id="overlayPanel"
-						style="font-weight:bold; float:none; position:relative; left:10%;visibility: visible;"
-						rendered="#{loginBean.mobile}" title="Category"
-						action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}" />
+			<p:commandButton value="&#9776;" id="overlayPanel"
+				style="font-weight:bold; float:none; position:relative; left:10%;visibility: visible;"
+				rendered="#{loginBean.mobile}" title="Category"
+				action="#{loginBean.showAndHideDialog('categoryPanel',categoryPanel)}" />
 
-					<p:commandButton
-						value="#{messages.specification_import_button} XML"
-						style="float: right;visibility: visible;"
-						disabled="#{jJProjectBean.project == null}"
-						update=":importXMLForm" onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
+			<p:commandButton value="#{messages.specification_import_button} XML"
+				style="float: right;visibility: visible;"
+				disabled="#{jJProjectBean.project == null}" update=":importXMLForm"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
 
-					<p:commandButton value="#{messages.specification_video_help_title}"
-						style="float: right;visibility: visible;" id="videoHelpBtn"
-						icon="ui-icon-video" onclick="PF('videoHelpWidget').show()"
-						type="button" />
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				style="float: right;visibility: visible;" id="videoHelpBtn"
+				icon="ui-icon-video" onclick="PF('videoHelpWidget').show()"
+				type="button" />
+			<!-- 				</p:layoutUnit> -->
+		</h:form>
+		<!-- 			<p:layoutUnit position="west" -->
+		<!-- 				style="min-width:200px;min-height:500px;height:600px !important;width:320px !important;" -->
+		<!-- 				resizable="true"> -->
+		<h:panelGrid columns="2" style="margin-top: 10px;width: 100%;"
+			columnClasses="thirtyPercent,seventyPercent">
+			<h:form id="testFormWest">
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
+								effect="fade" style="width:100%;" filter="true"
+								filterMatchMode="startsWith">
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.test_build_select} #{messages.test_build_label}" />
+								<f:selectItems value="#{jJBuildBean.builds}" var="bld"
+									itemLabel="#{bld.name}" itemValue="#{bld}" />
+								<p:ajax process="@this" partialSubmit="true"
+									listener="#{jJTestcaseBean.createTestcaseTree()}"
+									update=":testFormWest :testFormCenter "
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+								draggable="false" closable="false" resizable="false">
+								<p:graphicImage library="images" name="ajaxloadingbar.gif"
+									style="vertical-align: middle;" />
+							</p:dialog>
+							<p:commandButton ajax="false" id="xml"
+								title="#{messages.specification_req_exportTo} XML"
+								onclick="PrimeFaces.monitorDownload(start, stop);"
+								icon="ui-icon-arrowthick-1-s">
+								<p:fileDownload value="#{jJTestcaseBean.file}" />
+							</p:commandButton>
+							<!-- 								<p:tooltip for="xml" value="Export To XML" showEffect="fade" -->
+							<!-- 									hideEffect="fade" /> -->
+						</p:column>
+						<p:column>
 
-				</p:layoutUnit>
+							<p:commandButton ajax="false" id="exportPDF"
+								title="#{messages.test_export_tooltip}"
+								disabled="#{jJTestcaseBean.disabledExport}"
+								style="float: right;"
+								onclick="PrimeFaces.monitorDownload(start, stop);"
+								icon="ui-icon-pdf">
+								<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
+								var="node" selectionMode="single"
+								selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
+								<p:ajax event="select" listener="#{jJTestcaseBean.onNodeSelect}"
+									update=":testFormCenter :container :rate :testcaseDialog"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()" />
+
+								<p:treeNode>
+									<h:outputText value="#{node}" styleClass="TestcaseChapter" />
+								</p:treeNode>
+
+								<p:treeNode type="TestcaseRequirement">
+									<p:graphicImage library="images" name="add.ico" width="14"
+										height="14" />
+									<h:outputText value="#{node}" styleClass="TestcaseRequirement" />
+								</p:treeNode>
+
+								<p:treeNode type="TWT">
+									<h:outputText value="#{node}"
+										styleClass="TestcaseWithoutTeststep" />
+								</p:treeNode>
+
+								<p:treeNode type="TNE">
+									<h:outputText value="#{node}" styleClass="TestcaseNotExecuted" />
+								</p:treeNode>
+
+								<p:treeNode type="TF">
+									<h:outputText value="#{node}" styleClass="TestcaseFailed" />
+								</p:treeNode>
+
+								<p:treeNode type="TFWB">
+									<h:outputText value="#{node}"
+										styleClass="TestcaseFailedWithoutBuild" />
+								</p:treeNode>
+
+								<p:treeNode type="TS">
+									<h:outputText value="#{node}" styleClass="TestcaseSuccess" />
+								</p:treeNode>
+
+								<p:treeNode type="TSWB">
+									<h:outputText value="#{node}"
+										styleClass="TestcaseSuccessWithoutBuild" />
+								</p:treeNode>
+
+								<p:treeNode type="TNF">
+									<h:outputText value="#{node}" styleClass="TestcaseNonFini" />
+								</p:treeNode>
+
+								<p:treeNode type="TNFWB">
+									<h:outputText value="#{node}"
+										styleClass="TestcaseNonFiniWithoutBuild" />
+								</p:treeNode>
+							</p:tree>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
 			</h:form>
-			<p:layoutUnit position="west"
-				style="min-width:200px;min-height:500px;height:600px !important;width:320px !important;"
-				resizable="true">
-				<h:form id="testFormWest">
-					<p:panelGrid>
-						<p:row>
-							<p:column>
-								<!-- 								<h:outputText for="build" value="#{messages.test_build_label}" /> -->
-								<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-									effect="fade" style="width:100%;" filter="true"
-									filterMatchMode="startsWith">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
-									<f:selectItem itemValue="#{null}"
-										itemLabel="#{messages.test_build_select} #{messages.test_build_label}" />
-									<f:selectItems value="#{jJBuildBean.builds}" var="bld"
-										itemLabel="#{bld.name}" itemValue="#{bld}" />
-									<p:ajax process="@this" partialSubmit="true"
-										listener="#{jJTestcaseBean.createTestcaseTree()}"
-										update=":testFormWest :testFormCenter "
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()" />
-								</p:selectOneMenu>
-							</p:column>
-							<p:column>
-								<p:dialog modal="true" widgetVar="statusDialog" header="Status"
-									draggable="false" closable="false" resizable="false">
-									<p:graphicImage library="images" name="ajaxloadingbar.gif"
-										style="vertical-align: middle;" />
-								</p:dialog>
-								<p:commandButton ajax="false" id="xml" title="#{messages.specification_req_exportTo} XML"
-									onclick="PrimeFaces.monitorDownload(start, stop);"
-									icon="ui-icon-arrowthick-1-s">
-									<p:fileDownload value="#{jJTestcaseBean.file}" />
-								</p:commandButton>
-<!-- 								<p:tooltip for="xml" value="Export To XML" showEffect="fade" -->
-<!-- 									hideEffect="fade" /> -->
-							</p:column>
-							<p:column>
-
-								<p:commandButton ajax="false" id="exportPDF"
-									title="#{messages.test_export_tooltip}"
-									disabled="#{jJTestcaseBean.disabledExport}"
-									style="float: right;"
-									onclick="PrimeFaces.monitorDownload(start, stop);"
-									icon="ui-icon-pdf">
-									<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
-								</p:commandButton>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:tree id="testCaseTree" value="#{jJTestcaseBean.rootNode}"
-									var="node" selectionMode="single"
-									selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
-									<p:ajax event="select"
-										listener="#{jJTestcaseBean.onNodeSelect}"
-										update=":testFormCenter :container :rate :testcaseDialog"
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()" />
-
-									<p:treeNode>
-										<h:outputText value="#{node}" styleClass="TestcaseChapter" />
-									</p:treeNode>
-
-									<p:treeNode type="TestcaseRequirement">
-										<p:graphicImage library="images" name="add.ico" width="14"
-											height="14" />
-										<h:outputText value="#{node}" styleClass="TestcaseRequirement" />
-									</p:treeNode>
-
-									<p:treeNode type="TWT">
-										<h:outputText value="#{node}"
-											styleClass="TestcaseWithoutTeststep" />
-									</p:treeNode>
-
-									<p:treeNode type="TNE">
-										<h:outputText value="#{node}" styleClass="TestcaseNotExecuted" />
-									</p:treeNode>
-
-									<p:treeNode type="TF">
-										<h:outputText value="#{node}" styleClass="TestcaseFailed" />
-									</p:treeNode>
-
-									<p:treeNode type="TFWB">
-										<h:outputText value="#{node}"
-											styleClass="TestcaseFailedWithoutBuild" />
-									</p:treeNode>
-
-									<p:treeNode type="TS">
-										<h:outputText value="#{node}" styleClass="TestcaseSuccess" />
-									</p:treeNode>
-
-									<p:treeNode type="TSWB">
-										<h:outputText value="#{node}"
-											styleClass="TestcaseSuccessWithoutBuild" />
-									</p:treeNode>
-
-									<p:treeNode type="TNF">
-										<h:outputText value="#{node}" styleClass="TestcaseNonFini" />
-									</p:treeNode>
-
-									<p:treeNode type="TNFWB">
-										<h:outputText value="#{node}"
-											styleClass="TestcaseNonFiniWithoutBuild" />
-									</p:treeNode>
-								</p:tree>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</h:form>
-			</p:layoutUnit>
-			<p:layoutUnit position="center" resizable="false"
-				style="min-height:500px;width:1060px !important;height:600px !important;">
+			<!-- 			</p:layoutUnit> -->
+			<!-- 			<p:layoutUnit position="center" resizable="false" -->
+			<!-- 				style="min-height:500px;width:900px !important;height:600px !important;"> -->
+			<p:panel style="width: 100%;height: 738px;">
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-					style="float: right;"
+					style="float: right;margin-top: -0.5%;margin-right: -1%;"
 					title="#{messages.specification_video_help_title}" />
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade">
 					<p:panelGrid>
@@ -258,18 +268,30 @@
 					</p:panelGrid>
 				</p:overlayPanel>
 				<h:form id="rate">
-					<p:rating value="#{jJTestcaseBean.rated}"
+					<p:commandLink actionListener="#{jJTestcaseBean.onrate}"
+						update=":growlForm :messageCreationForm :headerForm:communicationButton rate"
+						rendered="#{jJTestcaseBean.renderCommentsPanel}"
 						style="float: right;margin-top: 2.5%;margin-right: -2.5%;"
-						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}">
-						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-					</p:rating>
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<p:graphicImage
+							name="#{!jJTestcaseBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
+							width="32" height="32" cache="false" library="images"
+							title="#{!jJTestcaseBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+					</p:commandLink>
+					<!-- 					<p:rating value="#{jJTestcaseBean.rated}" -->
+					<!-- 						style="float: right;margin-top: 2.5%;margin-right: -2.5%;" -->
+					<!-- 						stars="1" rendered="#{jJTestcaseBean.renderCommentsPanel}"> -->
+					<!-- 						<p:ajax event="rate" listener="#{jJTestcaseBean.onrate}" -->
+					<!-- 							onstart="PF('blockUIWidget').block()" -->
+					<!-- 							oncomplete="PF('blockUIWidget').unblock()" -->
+					<!-- 							update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+					<!-- 						<p:ajax event="cancel" listener="#{jJTestcaseBean.oncancel}" -->
+					<!-- 							onstart="PF('blockUIWidget').block()" -->
+					<!-- 							oncomplete="PF('blockUIWidget').unblock()" -->
+					<!-- 							update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+					<!-- 					</p:rating> -->
 				</h:form>
 				<h:panelGroup id="container"
 					style="width: 50%;float: right;margin-right: 1%;">
@@ -291,7 +313,8 @@
 					<p:dataTable var="columnName" value="#{jJTestcaseBean.colNames}"
 						id="buildTestTable" scrollable="#{jJTestcaseBean.scrollable}"
 						scrollHeight="#{jJTestcaseBean.scrollHeight}" rowIndexVar="colIdx"
-						scrollWidth="#{jJTestcaseBean.scrollWidth}" emptyMessage="#{messages.label_notRecordFound}"
+						scrollWidth="#{jJTestcaseBean.scrollWidth}"
+						emptyMessage="#{messages.label_notRecordFound}"
 						style="table-layout: fixed;width: #{jJTestcaseBean.width};"
 						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical}">
 
@@ -344,7 +367,8 @@
 					</p:dataTable>
 					<h:panelGrid columns="2" border="0">
 						<p:dataTable id="testcaseRecapDataTable" var="tcr"
-							paginatorPosition="bottom" emptyMessage="#{messages.label_notRecordFound}"
+							paginatorPosition="bottom"
+							emptyMessage="#{messages.label_notRecordFound}"
 							value="#{jJTestcaseBean.testCaseRecaps}" paginator="true"
 							rows="5" style="width:100%;" rowKey="#{tcr.testcase.id}"
 							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
@@ -436,7 +460,8 @@
 								#{messages.test_requirement_pieChart}
 								</f:facet>
 								<p:chart type="pie" id="custom" model="#{chartBean.pieChart}"
-									style="height:200px;margin: auto;width:300px;" responsive="true"
+									style="height:200px;margin: auto;width:300px;"
+									responsive="true"
 									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and chartBean.pieChart != null}" />
 							</p:panelGrid>
 						</h:panelGrid>
@@ -448,7 +473,8 @@
 					<p:dataTable id="teststepRecapDataTable" paginatorPosition="bottom"
 						value="#{jJTeststepBean.teststeps}" rowKey="#{ts.name}" var="ts"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:42%;" emptyMessage="#{messages.label_notRecordFound}">
+						paginator="true" rows="7" style="width:45%;"
+						emptyMessage="#{messages.label_notRecordFound}">
 						<f:facet name="header">
 							<p:row>
 								<p:column>
@@ -508,11 +534,12 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:dataTable id="testexecutionRecapDataTable" emptyMessage="#{messages.label_notRecordFound}"
+					<p:dataTable id="testexecutionRecapDataTable"
+						emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJTestcaseexecutionBean.testCaseexecutionRecaps}"
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-						paginator="true" rows="7" style="width:42%;margin-top: 20px;">
+						paginator="true" rows="7" style="width:45%;margin-top: 20px;">
 						<p:column headerText="Id">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
@@ -538,8 +565,11 @@
 						</p:column>
 					</p:dataTable>
 				</h:form>
-			</p:layoutUnit>
-		</p:layout>
+
+			</p:panel>
+			<!-- 			</p:layoutUnit> -->
+			<!-- 		</p:layout> -->
+		</h:panelGrid>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
@@ -636,7 +666,8 @@
 								</p:row>
 								<p:row rendered="#{not empty tse.teststep.bugs}">
 									<p:column colspan="2" rendered="#{not empty tse.teststep.bugs}">
-										<p:dataTable emptyMessage="#{messages.label_notRecordFound}" value="#{tse.teststep.bugs}" scrollable="true"
+										<p:dataTable emptyMessage="#{messages.label_notRecordFound}"
+											value="#{tse.teststep.bugs}" scrollable="true"
 											scrollHeight="120" var="bug">
 											<p:column headerText="Bug">
 												<h:outputText value="#{bug.name}" />

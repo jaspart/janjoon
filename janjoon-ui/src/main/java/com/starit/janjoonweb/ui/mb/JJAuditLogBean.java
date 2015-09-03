@@ -9,12 +9,29 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiquesDataModel;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJAuditLog.class, beanName = "jJAuditLogBean")
 public class JJAuditLogBean {
 
+	
+	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {
+
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		JJCompany company = null;
+		if (!loginBean.getAuthorisationService().isAdminCompany())
+			company = loginBean.getContact().getCompany();
+		LazyConnectionStatistiquesDataModel connectionStatistiquesListTable = null;
+		if (connectionStatistiquesListTable == null)
+			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
+					jJAuditLogService, company);
+		return connectionStatistiquesListTable;
+	}
+	
+	
 	public void saveJJAuditLog(JJAuditLog b) {
 		jJAuditLogService.saveJJAuditLog(b);
 	}

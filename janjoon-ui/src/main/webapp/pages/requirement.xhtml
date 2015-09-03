@@ -71,18 +71,32 @@
 				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
 					style="float: right;" />
-				<p:rating id="rate" value="#{requirementBean.rated}"
-					style="float: right;margin-top: 3%;margin-right: -2%;" stars="1"
-					rendered="#{requirementBean.requirement != null}">
-					<p:ajax event="rate" listener="#{requirementBean.onrate}"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()"
-						update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-					<p:ajax event="cancel" listener="#{requirementBean.oncancel}"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()"
-						update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-				</p:rating>
+				<!-- 				<p:rating id="rate" value="#{requirementBean.rated}" -->
+				<!-- 					style="float: right;margin-top: 3%;margin-right: -2%;" stars="1" -->
+				<!-- 					rendered="#{requirementBean.requirement != null}"> -->
+				<!-- 					<p:ajax event="rate" listener="#{requirementBean.onrate}" -->
+				<!-- 						onstart="PF('blockUIWidget').block()" -->
+				<!-- 						oncomplete="PF('blockUIWidget').unblock()" -->
+				<!-- 						update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+				<!-- 					<p:ajax event="cancel" listener="#{requirementBean.oncancel}" -->
+				<!-- 						onstart="PF('blockUIWidget').block()" -->
+				<!-- 						oncomplete="PF('blockUIWidget').unblock()" -->
+				<!-- 						update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+				<!-- 				</p:rating> -->
+
+				<p:commandLink actionListener="#{requirementBean.onrate}" id="rate"
+					update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate"
+					rendered="#{requirementBean.requirement != null}"
+					style="float: right;margin-top: 3%;margin-right: -2%;"
+					onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock()">
+
+					<p:graphicImage
+						name="#{!requirementBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
+						width="32" height="32" cache="false" library="images"
+						title="#{!requirementBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+				</p:commandLink>
 				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 					dynamic="true" style="width:40%">
 					<p:panelGrid>
@@ -328,13 +342,17 @@
 								<f:facet name="header">
 							#{messages.label_task}
 						</f:facet>
-								<p:column headerText="#{messages.project_gantt_table_name_title}" width="70%">
+								<p:column
+									headerText="#{messages.project_gantt_table_name_title}"
+									width="70%">
 									<h:outputText
 										value="#{task.id}-#{fn:substring(task.name,0,30)}" />
 								</p:column>
-								<p:column headerText="#{messages.project_gantt_table_assigned_title}" width="30%">
-									<h:outputText
-										value="#{task.assignedTo}" converter="JJContactConverter" />
+								<p:column
+									headerText="#{messages.project_gantt_table_assigned_title}"
+									width="30%">
+									<h:outputText value="#{task.assignedTo}"
+										converter="JJContactConverter" />
 								</p:column>
 							</p:dataTable>
 						</p:column>

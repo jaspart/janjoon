@@ -1,20 +1,28 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 
 public class JJStatusServiceImpl implements JJStatusService {
 
@@ -25,7 +33,24 @@ public class JJStatusServiceImpl implements JJStatusService {
 		this.entityManager = entityManager;
 	}
 
-	public List<JJStatus> load(MutableInt size, int first, int pageSize) {
+	public Set<String> getAllObject() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<String> criteriaQuery = criteriaBuilder
+				.createQuery(String.class);
+
+		Root<JJStatus> from = criteriaQuery.from(JJStatus.class);
+
+		CriteriaQuery<String> select = criteriaQuery.select(from
+				.<String> get("objet"));
+
+		TypedQuery<String> result = entityManager.createQuery(select);
+		return new HashSet<String>(result.getResultList());
+
+	}
+
+	public List<JJStatus> load(MutableInt size, int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
@@ -39,8 +64,43 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
+		if (filters != null) {
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
+			while (it.hasNext()) {
+				@SuppressWarnings("rawtypes")
+				Map.Entry pairs = (Map.Entry) it.next();
+				if (pairs.getKey().toString().contains("globalFilter")) {
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+				} else if (pairs.getKey().toString().contains("objet")) {
+
+					predicates.add(criteriaBuilder.equal(from.<String> get("objet"), pairs
+							.getValue().toString()));
+
+				}
+				else
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+
+			}
+		}
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
+		if (multiSortMeta != null) {
+			for (SortMeta sortMeta : multiSortMeta) {
+				String sortField = sortMeta.getSortField();
+				SortOrder sortOrder = sortMeta.getSortOrder();
+
+				if (sortOrder.equals(SortOrder.DESCENDING))
+					select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+				else if (sortOrder.equals(SortOrder.ASCENDING)) {
+					select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+				}
+			}
+		} else
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);

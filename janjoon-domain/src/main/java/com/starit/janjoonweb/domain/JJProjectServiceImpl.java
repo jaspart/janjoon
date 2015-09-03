@@ -144,23 +144,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(entityManager.createQuery(cq).getSingleResult());
-
-		// if (company != null) {
-		// String qu =
-		// "SELECT COUNT(r) FROM  JJProject r Where r.manager.company = :c "
-		// + "AND r.enabled = true ";
-		// Query query = entityManager.createQuery(qu);
-		// query.setParameter("c", company);
-		//
-		// size.setValue(Math.round((long) query.getSingleResult()));
-		// } else {
-		// String qu = "SELECT COUNT(r) FROM  JJProject r Where  "
-		// + " r.enabled = true ";
-		// Query query = entityManager.createQuery(qu);
-		//
-		// size.setValue(Math.round((long) query.getSingleResult()));
-		// }
+		size.setValue(entityManager.createQuery(cq).getSingleResult());	
 
 		return result.getResultList();
 

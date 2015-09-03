@@ -1,38 +1,37 @@
 package com.starit.janjoonweb.ui.mb.util.service;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class TestClass {
+	public static void main(String[] args) {
+		List<String> myList = new ArrayList<String>();
+		myList.add("one");
+		myList.add("two");
+		myList.add("three");
+		myList.add("four");
+		myList.add("five");
 
-	public static void main(String[] args) throws FileNotFoundException,
-			IOException {
+		System.out.println("Inserted in 'order': ");
+		printList(myList);
+		System.out.println("\n");
+		System.out.println("Inserted out of 'order': ");
 
-		// Properties properties = new Properties();
-		// String path = TestClass.class.getResource(
-		// "/com/starit/janjoonweb/ui/mb/i18n/messages_fr.properties")
-		// .getFile();
-		// properties.load(new FileInputStream(path));
-		// List<Object> list1 = Collections.list(properties.keys());
-		//
-		//
-		// Properties prop = new Properties();
-		// String pa = TestClass.class.getResource(
-		// "/com/starit/janjoonweb/ui/mb/i18n/messages_en.properties")
-		// .getFile();
-		// prop.load(new FileInputStream(pa));
-		// List<Object> list2 = Collections.list(prop.keys());
-		//
-		// for (Object ob:list1) {
-		//
-		// if(!list2.contains(ob))
-		// System.out.println(ob);
-		//
-		// }
+		// Clear the list
+		myList.clear();
 
+		myList.add("four");
+		myList.add("five");
+		myList.add("one");
+		myList.add("two");
+		myList.add("three");
+
+		printList(myList);
+	}
+
+	private static void printList(List<String> myList) {
+		for (String string : myList) {
+			System.out.println(string);
+		}
 	}
 }

@@ -81,7 +81,7 @@ public class RequirementBean {
 		this.jJMessageService = jJMessageService;
 	}
 
-	private Integer rated;
+	// private Integer rated;
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
 	private JJCategory category;
@@ -132,13 +132,14 @@ public class RequirementBean {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-	public Integer getRated() {
-		return rated;
+	public boolean isRated() {
+		return (((LoginBean) LoginBean.findBean("loginBean")).getContact()
+				.getRequirements().contains(requirement));
 	}
 
-	public void setRated(Integer rated) {
-		this.rated = rated;
-	}
+	// public void setRated(Integer rated) {
+	// this.rated = rated;
+	// }
 
 	public TreeNode getRootNode() {
 		if (rootNode == null)
@@ -438,9 +439,9 @@ public class RequirementBean {
 				reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 				reqSelectedtestCases = reqtestCases;
 				testCaseName = "";
-				rated = (((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getRequirements().contains(requirement)) ? 1
-						: 0;
+				// rated = (((LoginBean) LoginBean.findBean("loginBean"))
+				// .getContact().getRequirements().contains(requirement)) ? 1
+				// : 0;
 
 				requirementTasks = jJTaskService.getImportTasks(null,
 						requirement, null, true);
@@ -704,7 +705,7 @@ public class RequirementBean {
 		return suggestions;
 	}
 
-	public void onrate(RateEvent rateEvent) {
+	public void onrate() {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
@@ -734,6 +735,33 @@ public class RequirementBean {
 					MessageFactory.getMessage("label_requirement", "")
 							.getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
+
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
+			}
+			contact.getRequirements()
+					.remove(jJRequirementService.findJJRequirement(requirement
+							.getId()));
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, MessageFactory
+							.getMessage("label_requirement", "").getDetail());
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}

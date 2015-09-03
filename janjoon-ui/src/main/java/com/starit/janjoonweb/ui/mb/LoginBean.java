@@ -48,12 +48,12 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.html.simpleparser.StyleSheet;
+import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJAuditLogService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJConnectionStatistics;
-import com.starit.janjoonweb.domain.JJConnectionStatisticsService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJMessageService;
@@ -63,6 +63,7 @@ import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.UsageChecker;
@@ -84,7 +85,7 @@ public class LoginBean implements Serializable {
 	private boolean mobile;
 	private String showMarquee;
 	private FacesMessage facesMessage;
-	private JJConnectionStatistics connectionStatistics;
+	private JJAuditLog auditLogLogin;
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -105,7 +106,7 @@ public class LoginBean implements Serializable {
 	private JJMessageService jJMessageService;
 
 	@Autowired
-	private JJConnectionStatisticsService jJConnectionStatisticsService;
+	private JJAuditLogService jJAuditLogService;
 
 	private String username = "";
 	private String password;
@@ -160,23 +161,14 @@ public class LoginBean implements Serializable {
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
 		this.jJCompanyService = jJCompanyService;
 	}
-
-	public JJConnectionStatistics getConnectionStatistics() {
-		return connectionStatistics;
-	}
-
-	public void setConnectionStatistics(
-			JJConnectionStatistics connectionStatistics) {
-		this.connectionStatistics = connectionStatistics;
-	}
-
+	
 	public static void setLogger(Logger logger) {
 		LoginBean.logger = logger;
 	}
 
-	public void setjJConnectionStatisticsService(
-			JJConnectionStatisticsService jJConnectionStatisticsService) {
-		this.jJConnectionStatisticsService = jJConnectionStatisticsService;
+	public void setjJAuditLogService(
+			JJAuditLogService jJAuditLogService) {
+		this.jJAuditLogService = jJAuditLogService;
 	}
 
 	public boolean isEnable() {
@@ -555,10 +547,15 @@ public class LoginBean implements Serializable {
 							.getMessage("login_licence_expired",
 									FacesMessage.SEVERITY_WARN);
 				}
-
-				connectionStatistics = new JJConnectionStatistics();
-				connectionStatistics.setContact(contact);
-				connectionStatistics.setLoginDate(new Date());
+				
+				auditLogLogin = new JJAuditLog();
+				auditLogLogin.setContact(contact);
+				auditLogLogin.setAuditLogDate(new Date());
+				auditLogLogin.setKeyName(ConnectionStatistics.LOGIN_OBJECT);
+				auditLogLogin.setKeyValue(ConnectionStatistics.getFormatter().format(auditLogLogin.getAuditLogDate()));
+				auditLogLogin.setObjet("JJContact");
+				
+				
 
 				prevPage = getRedirectUrl(session);
 			} else {
@@ -1616,15 +1613,23 @@ public class LoginBean implements Serializable {
 	@PreDestroy
 	public void preDestroySession() throws Exception {
 
-		if (connectionStatistics != null) {
+		if (contact != null && auditLogLogin!= null) {
 			System.err
 					.println("Spring Container is destroy! Customer clean up");
 			System.out.println("Contact " + contact.getName());
-			connectionStatistics.setCreationDate(new Date());
-			connectionStatistics.setLogoutDate(new Date());
-			jJConnectionStatisticsService
-					.saveJJConnectionStatistics(connectionStatistics);
-			connectionStatistics = null;
+			JJAuditLog auditLog=new JJAuditLog();
+			auditLog.setContact(contact);
+			auditLog.setAuditLogDate(new Date());
+			auditLog.setKeyName(ConnectionStatistics.LOGOUT_OBJECT);
+			auditLog.setKeyValue(ConnectionStatistics.getFormatter().format(auditLog.getAuditLogDate()));
+			auditLog.setObjet("JJContact");
+			
+			jJAuditLogService.saveJJAuditLog(auditLogLogin);
+			jJAuditLogService.saveJJAuditLog(auditLog);
+			
+			
+			
+
 		}
 	}
 

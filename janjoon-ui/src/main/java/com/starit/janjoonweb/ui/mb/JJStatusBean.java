@@ -12,6 +12,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 
 import org.primefaces.component.autocomplete.AutoComplete;
@@ -19,7 +20,6 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
-import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.chart.MeterGaugeChartModel;
@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
@@ -59,7 +58,7 @@ public class JJStatusBean {
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel pieChart;
-	// private BarChartModel chartModel;
+	private SelectItem[] objectOptions;
 	private MeterGaugeChartModel bugMetergauge;
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
@@ -69,12 +68,15 @@ public class JJStatusBean {
 
 	public LazyStatusDataModel getLazyStatusList() {
 		if (lazyStatusList == null)
+		{
 			lazyStatusList = new LazyStatusDataModel(jJStatusService);
+		}			
 		return lazyStatusList;
 	}
 
 	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
 		this.lazyStatusList = lazyStatusList;
+		this.objectOptions=null;
 	}
 
 	public String onEdit() {
@@ -129,6 +131,30 @@ public class JJStatusBean {
 
 	public void setCategoryDataModel(List<CategoryDataModel> categoryDataModel) {
 		this.categoryDataModel = categoryDataModel;
+	}
+
+	public SelectItem[] getObjectOptions() {
+		
+		if (objectOptions == null) {
+			
+			Set<String> objects=jJStatusService.getAllObject();
+			objectOptions = new SelectItem[objects.size() + 1];
+
+			objectOptions[0] = new SelectItem("", "Select");
+			int i = 0;
+			for (String comp : objects) {
+				objectOptions[i + 1] = new SelectItem(comp, comp);
+				i++;
+
+			}		
+
+		}
+		return objectOptions;
+		
+	}
+
+	public void setObjectOptions(SelectItem[] objectOptions) {
+		this.objectOptions = objectOptions;
 	}
 
 	public PieChartModel getPieChart() {
@@ -342,12 +368,14 @@ public class JJStatusBean {
 		statusList = null;
 		pieChart = null;
 		lazyStatusList = null;
+		objectOptions=null;
 
 	}
 
 	public void reset() {
 		setJJStatus_(null);
 		lazyStatusList = null;
+		objectOptions=null;
 		statusList = null;
 		pieChart = null;
 		setCreateDialogVisible(false);

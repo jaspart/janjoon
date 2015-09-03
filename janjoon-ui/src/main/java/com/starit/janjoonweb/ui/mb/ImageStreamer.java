@@ -52,6 +52,37 @@ public class ImageStreamer {
 		this.jJProductService = jJProductService;
 	}
 
+	public StreamedContent getStar() throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			// So, we're rendering the HTML. Return a stub StreamedContent so
+			// that it will generate right URL.
+			return new DefaultStreamedContent();
+		} else {
+			String rated = context.getExternalContext()
+					.getRequestParameterMap().get("rated");
+
+			if (rated.equalsIgnoreCase("true")) {
+				InputStream stream = FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream(
+								"/resources/images/yelstar.ico");
+				return new DefaultStreamedContent(stream);
+				
+			} else {
+				InputStream stream = FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream(
+								"/resources/images/blackstar.ico");
+				return new DefaultStreamedContent(stream);
+			}
+
+		}
+	}
+
 	public StreamedContent getImageProd() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
 

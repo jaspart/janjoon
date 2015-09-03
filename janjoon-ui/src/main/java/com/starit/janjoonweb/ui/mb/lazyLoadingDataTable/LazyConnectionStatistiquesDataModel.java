@@ -1,41 +1,40 @@
 package com.starit.janjoonweb.ui.mb.lazyLoadingDataTable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.Join;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJAuditLogService;
 import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJConnectionStatistics;
-import com.starit.janjoonweb.domain.JJConnectionStatisticsService;
-import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
 
-public class LazyConnectionStatistiquesDataModel extends LazyDataModel<JJConnectionStatistics>{
+public class LazyConnectionStatistiquesDataModel extends
+		LazyDataModel<ConnectionStatistics> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JJConnectionStatisticsService connectionStatisticsService;
+	private JJAuditLogService jJAuditLogService;
 	private JJCompany company;
 
-	public LazyConnectionStatistiquesDataModel(JJConnectionStatisticsService connectionStatisticsService,
-			JJCompany company) {
+	public LazyConnectionStatistiquesDataModel(
+			JJAuditLogService auditLogService, JJCompany company) {
 
 		this.company = company;
 
-		this.connectionStatisticsService = connectionStatisticsService;
-	}
-
-	public JJConnectionStatisticsService getProductService() {
-		return connectionStatisticsService;
-	}
-
-	public void setProductService(JJConnectionStatisticsService connectionStatisticsService) {
-		this.connectionStatisticsService = connectionStatisticsService;
+		this.jJAuditLogService = auditLogService;
 	}
 
 	public JJCompany getCompany() {
@@ -47,26 +46,86 @@ public class LazyConnectionStatistiquesDataModel extends LazyDataModel<JJConnect
 	}
 
 	@Override
-	public JJConnectionStatistics getRowData(String rowKey) {
+	public ConnectionStatistics getRowData(String rowKey) {
 
-		return connectionStatisticsService.findJJConnectionStatistics(Long.parseLong(rowKey));
+		return getConnectionStatic(jJAuditLogService.findJJAuditLog(Long
+				.parseLong(rowKey)));
 	}
 
 	@Override
-	public Object getRowKey(JJConnectionStatistics connectionStatistics) {
+	public Object getRowKey(ConnectionStatistics connectionStatistics) {
+
 		return connectionStatistics.getId();
 	}
 
 	@Override
-	public List<JJConnectionStatistics> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, Object> filters) {
+	public List<ConnectionStatistics> load(int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
-		List<JJConnectionStatistics> data = new ArrayList<JJConnectionStatistics>();
+		List<ConnectionStatistics> data = new ArrayList<ConnectionStatistics>();
 		MutableInt size = new MutableInt(0);
-		data = connectionStatisticsService.load(company, size, first, pageSize);
+		data = load(size, first, pageSize, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
+//		if (multiSortMeta != null) {
+//			for (SortMeta sortMeta : multiSortMeta) {
+//				String sortField = sortMeta.getSortField();
+//				SortOrder sortOrder = sortMeta.getSortOrder();
+//
+//				if (sortField.contains("logoutDate")) {
+//					if (sortOrder.equals(SortOrder.DESCENDING))
+//						Collections.sort(data,
+//								new Comparator<ConnectionStatistics>() {
+//									@Override
+//									public int compare(ConnectionStatistics o1,
+//											ConnectionStatistics o2) {
+//										return o1.getLogoutDate().compareTo(
+//												o2.getLogoutDate());
+//
+//									}
+//								});
+//					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+//						Collections.sort(data,
+//								new Comparator<ConnectionStatistics>() {
+//									@Override
+//									public int compare(ConnectionStatistics o1,
+//											ConnectionStatistics o2) {
+//										return o2.getLogoutDate().compareTo(
+//												o1.getLogoutDate());
+//
+//									}
+//								});
+//					}
+//				} else if (sortField.contains("duration")) {
+//					if (sortOrder.equals(SortOrder.DESCENDING))
+//						Collections.sort(data,
+//								new Comparator<ConnectionStatistics>() {
+//									@Override
+//									public int compare(ConnectionStatistics o1,
+//											ConnectionStatistics o2) {
+//										return o1.getDuration().compareTo(
+//												o2.getDuration());
+//
+//									}
+//								});
+//					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+//						Collections.sort(data,
+//								new Comparator<ConnectionStatistics>() {
+//									@Override
+//									public int compare(ConnectionStatistics o1,
+//											ConnectionStatistics o2) {
+//										return o2.getDuration().compareTo(
+//												o1.getDuration());
+//
+//									}
+//								});
+//					}
+//				}
+//			}
+//		}
+		
+		
 		int dataSize = data.size();
 
 		if (dataSize > pageSize) {
@@ -78,6 +137,34 @@ public class LazyConnectionStatistiquesDataModel extends LazyDataModel<JJConnect
 		} else {
 			return data;
 		}
+	}
+
+	public List<ConnectionStatistics> load(MutableInt size, int first,
+			int pageSize, List<SortMeta> multiSortMeta,
+			Map<String, Object> filters) {
+
+		List<JJAuditLog> loginLogs = jJAuditLogService.getAuditLogByObject(
+				"JJContact", null, company, ConnectionStatistics.LOGIN_OBJECT,
+				first, pageSize, size, multiSortMeta, filters);
+		List<ConnectionStatistics> connectionStatistics = new ArrayList<ConnectionStatistics>();
+
+		for (JJAuditLog loginLog : loginLogs) {
+			ConnectionStatistics connStat = new ConnectionStatistics(loginLog,
+					jJAuditLogService.getLogoutAuditLog(loginLog.getContact(),
+							loginLog.getAuditLogDate()));
+			if (connStat.getContact() != null)
+				connectionStatistics.add(connStat);
+		}
+
+		return connectionStatistics;
+
+	}
+
+	public ConnectionStatistics getConnectionStatic(JJAuditLog loginLog) {
+		ConnectionStatistics connStat = new ConnectionStatistics(loginLog,
+				jJAuditLogService.getLogoutAuditLog(loginLog.getContact(),
+						loginLog.getAuditLogDate()));
+		return connStat;
 	}
 
 }

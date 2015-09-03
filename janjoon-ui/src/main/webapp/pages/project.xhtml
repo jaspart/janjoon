@@ -39,7 +39,7 @@ td.ui-fileupload-preview {
 						placeholder="#{messages.bug_table_search_watermark}" />
 				</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar"
+					<p:graphicImage styleClass="avatar" cache="false"
 						rendered="#{project.logo != null}"
 						value="#{imageStreamer.imageProj}">
 						<f:param name="ProjId" value="#{project.id}" />

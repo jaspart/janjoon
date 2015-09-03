@@ -32,7 +32,7 @@
 				emptyMessage="#{messages.label_notRecordFound}">
 				<f:facet name="header">#{messages.admin_company_table_header}</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar"
+					<p:graphicImage styleClass="avatar" cache="false"
 						rendered="#{company.logo != null}"
 						value="#{imageStreamer.imageComp}">
 						<f:param name="CompId" value="#{company.id}" />

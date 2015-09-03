@@ -26,21 +26,34 @@
 							<f:facet name="header">
 								<p:row>
 									<p:column colspan="1">
-										<p:rating value="#{jJBugBean.rated}"
-											rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}"
-											stars="1">
-											<p:ajax event="rate" listener="#{jJBugBean.onrate}"
-												update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-											<p:ajax event="cancel" listener="#{jJBugBean.oncancel}"
-												update=":growlForm :messageCreationForm :headerForm:communicationButton" />
-										</p:rating>
-										<p:commandButton id="createButton" icon="ui-icon-plusthick"
-											value="#{messages.bug_table_add_label}" update=":createForm "
-											resetValues="true" immediate="true"
-											oncomplete="PF('createDialogWidget').show()"
-											title="#{messages.label_create}" />
-										<p:tooltip for="createButton" value="#{messages.label_create}"
-											showEffect="fade" hideEffect="fade" />
+										<!-- 										<p:rating value="#{jJBugBean.rated}" -->
+										<!-- 											rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}" -->
+										<!-- 											stars="1"> -->
+										<!-- 											<p:ajax event="rate" listener="#{jJBugBean.onrate}" -->
+										<!-- 												update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+										<!-- 											<p:ajax event="cancel" listener="#{jJBugBean.oncancel}" -->
+										<!-- 												update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
+										<!-- 										</p:rating>										 -->
+										<h:panelGrid columns="2">
+											<p:commandLink actionListener="#{jJBugBean.onrate}"
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
+												rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}">
+
+												<p:graphicImage
+													name="#{!jJBugBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
+													width="32" height="32" cache="false" library="images"
+													title="#{!jJBugBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+											</p:commandLink>
+
+											<p:commandButton id="createButton" icon="ui-icon-plusthick"
+												value="#{messages.bug_table_add_label}"
+												update=":createForm " resetValues="true" immediate="true"
+												oncomplete="PF('createDialogWidget').show()"
+												title="#{messages.label_create}" />
+										</h:panelGrid>
 									</p:column>
 									<p:column colspan="2">BUG</p:column>
 								</p:row>
@@ -187,7 +200,8 @@
 							</f:facet>
 							<p:row>
 								<p:column>
-									<p:outputLabel for="bugReq" value="#{messages.label_requirement} :" />
+									<p:outputLabel for="bugReq"
+										value="#{messages.label_requirement} :" />
 								</p:column>
 								<p:column style="width: 220px;">
 									<p:autoComplete id="bugReq" scrollHeight="200"
@@ -238,7 +252,8 @@
 							</p:row>
 							<p:row>
 								<p:column>
-									<p:outputLabel for="bugTasks" value="#{messages.importTask_headerTable_tasks} :" />
+									<p:outputLabel for="bugTasks"
+										value="#{messages.importTask_headerTable_tasks} :" />
 								</p:column>
 								<p:column style="width: 220px;">
 									<p:dataList id="bugTasks" value="#{jJBugBean.viewBugTasks}"
