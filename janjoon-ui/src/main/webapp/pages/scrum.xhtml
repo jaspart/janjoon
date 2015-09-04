@@ -12,7 +12,7 @@
 		onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
 		var="jjsprint" style="width:100%;"
 		activeIndex="#{jJSprintBean.activeTabSprintIndex}">
-		<p:tab style="width:100%;"
+		<p:tab style="width:100%;min-height: 350px;"
 			disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
 			<f:facet name="title">
 				<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
@@ -25,7 +25,7 @@
 			<h:form id="sprintForm" rendered="#{!jjsprint.render}"
 				style="width:100% !important;">
 				<p:panelGrid id="sprintPanelGrid"
-					style="width:50% !important;min-width:200px !important;float:left;height:331px !important;">
+					style="width:50% !important;min-width:200px !important;float:left;height:333px !important;">
 					<f:facet name="header">
 						<p:row>
 							<p:column colspan="5">#{messages.project_scrum_sprint_info}</p:column>
@@ -156,7 +156,7 @@
 				<p:separator />
 			</h:form>
 			<h:form id="taskListForm" rendered="#{!jjsprint.render}"
-				style="width:100% !important;">
+				style="width:100% !important;margin-top: 10px;">
 				<p:panelGrid style="width:100% !important;">
 					<f:facet name="header">
 						<p:row>

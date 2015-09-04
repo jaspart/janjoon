@@ -722,11 +722,11 @@ public class JJTestcaseBean {
 		JJBuild rowName = ((JJBuildBean) LoginBean.findBean("jJBuildBean")).jJBuildService
 				.findJJBuild(((JJBuild) rowNames.get(rowIdx)).getId());
 		boolean successOperation = false;
-		if (value.get(colIdx).get(rowIdx)) {
-			successOperation = columnName.getBuilds().remove((JJBuild) rowName);
+		if (columnName.getBuilds().contains(rowName)) {
+			successOperation = columnName.getBuilds().remove(rowName);
 
 		} else {
-			successOperation = columnName.getBuilds().add((JJBuild) rowName);
+			successOperation = columnName.getBuilds().add(rowName);
 		}
 
 		if (successOperation) {
@@ -1882,27 +1882,34 @@ public class JJTestcaseBean {
 							if (testcaseexecution.getPassed() != null) {
 
 								if (testcaseexecution.getPassed()) {
-									status = "SUCCESS";
+									status = MessageFactory.getMessage(
+											"test_status_SUCCESS_label", "").getDetail();
 								} else {
-									status = "FAILED";
+									status = MessageFactory.getMessage(
+											"test_status_FAILED_label", "").getDetail();
 								}
 							} else {
-								status = "Non Fini";
+								status = MessageFactory.getMessage(
+										"test_status_nonFinished_label", "").getDetail();
 							}
 						} else {
-							status = "NOT RUN";
+							status =MessageFactory.getMessage(
+									"test_status_nonRUNED_label", "").getDetail();
 						}
 					} else {
-						status = "not allowed on this build";
+						status = MessageFactory.getMessage(
+								"test_status_BuildNonAllowed_label", "").getDetail();//"not allowed on this build";
 					}
 
 				} else {
 					disabled = true;
-					status = "Select a Build";
+					status = MessageFactory.getMessage(
+							"test_status_BuildNonSelected_label", "").getDetail();//"Select a Build";
 				}
 			} else {
 				disabled = true;
-				status = "This testcase doesn't have teststeps";
+				status = MessageFactory.getMessage(
+						"test_status_NoTestStep_label", "").getDetail();//"This testcase doesn't have teststeps";
 			}
 
 		}

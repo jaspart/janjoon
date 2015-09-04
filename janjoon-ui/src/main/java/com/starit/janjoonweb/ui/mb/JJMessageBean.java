@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -439,6 +440,63 @@ public class JJMessageBean {
 	public void onRowSelect(SelectEvent event) {
 		viewedMessage = (JJMessage) event.getObject();
 		// viewPanel = populateMessagePanel();
+	}
+
+	public boolean haveObject(JJMessage mes) {
+		return mes.getBug() != null || mes.getRequirement() != null
+				|| mes.getTestcase() != null;
+	}
+
+	public String getObjectName(JJMessage mes) {
+
+		if (mes.getBug() != null)
+			return mes.getBug().getName();
+		else if (mes.getRequirement() != null)
+			return mes.getRequirement().getName();
+		else if (mes.getTestcase() != null)
+			return mes.getTestcase().getName();
+		else
+			return null;
+	}
+
+	public void objectInfo(JJMessage mes) throws IOException {
+
+		if (mes.getBug() != null)
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							FacesContext.getCurrentInstance()
+									.getExternalContext()
+									.getRequestContextPath()
+									+ "/pages/bug.jsf?bug="
+									+ mes.getBug().getId()
+									+ "&faces-redirect=true");
+
+		else if (mes.getRequirement() != null)
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							FacesContext.getCurrentInstance()
+									.getExternalContext()
+									.getRequestContextPath()
+									+ "/pages/requirement.jsf?requirement="
+									+ mes.getRequirement().getId()
+									+ "&faces-redirect=true");
+
+		else if (mes.getTestcase() != null)
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							FacesContext.getCurrentInstance()
+									.getExternalContext()
+									.getRequestContextPath()
+									+ "/pages/test.jsf?testcase="
+									+ mes.getTestcase().getId()
+									+ "&faces-redirect=true");
+
 	}
 
 	public void saveJJMessage(JJMessage b) {

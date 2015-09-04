@@ -56,13 +56,6 @@
 						<h:outputText value="INFO"
 							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
 							styleClass="HOME" style="margin-left: 25%;" />
-						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
-							styleClass="OBJECT" style="margin-left: 25%;" />
-						<h:outputText value="Ano" rendered="#{mes.bug != null}"
-							styleClass="OBJECT" style="margin-left: 25%;" />
-						<h:outputText value="Test" rendered="#{mes.testcase != null}"
-							styleClass="OBJECT" style="margin-left: 25%;" />
-
 					</p:column>
 					<p:column headerText="#{messages.main_communication_message_title}"
 						filterBy="#{mes.message}" filterMatchMode="contains"
@@ -71,6 +64,18 @@
 						<h:outputText
 							style="width: 100% !important;color: #22222222;font-size: 14px;white-space: pre-wrap;"
 							value="#{mes.message}" />
+						<br /><br />
+						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
+							styleClass="OBJECT" />
+						<h:outputText value="Bug" rendered="#{mes.bug != null}"
+							styleClass="OBJECT"  />
+						<h:outputText value="Test" rendered="#{mes.testcase != null}"
+							styleClass="OBJECT" />
+
+						<p:commandLink target="_blank"
+							value=" : #{jJMessageBean.getObjectName(mes)}"
+							rendered="#{jJMessageBean.haveObject(mes)}"
+							action="#{jJMessageBean.objectInfo(mes)}" ajax="false" />
 					</p:column>
 					<p:column style="width:5% !important;">
 						<p:commandButton id="resolveButton" icon="ui-icon-minus"
@@ -158,7 +163,7 @@
 				</p:dataTable>
 			</h:form>
 		</p:panel>
-<!-- 		<p:separator styleClass="rsh"/> -->
+		<!-- 		<p:separator styleClass="rsh"/> -->
 		<p:panel id="specpanel" header="#{messages.main_specPanel_header}"
 			rendered="#{loginBean.enable and loginBean.noCouvretReq != null}"
 			styleClass="customTitleBar">

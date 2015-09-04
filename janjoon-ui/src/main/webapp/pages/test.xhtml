@@ -12,8 +12,7 @@
 		<style type="text/css">
 .ui-tree {
 	height: 700px;
-	width: 100%;
-	max-width: 350px;
+	width: 100%;	
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -97,11 +96,11 @@
 		<h:panelGrid columns="2" style="margin-top: 10px;width: 100%;"
 			columnClasses="thirtyPercent,seventyPercent">
 			<h:form id="testFormWest">
-				<p:panelGrid>
+				<p:panelGrid style="width: 100%;">
 					<p:row>
 						<p:column>
 							<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-								effect="fade" style="width:100%;" filter="true"
+								effect="fade" filter="true"
 								filterMatchMode="startsWith">
 								<f:converter
 									converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
@@ -236,7 +235,7 @@
 						<p:row>
 							<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
 								<p:outputLabel
-									value="#{messages.test_color_TestcaseNotExecuted_title}" />
+									value="#{messages.test_color_TestcaseWithoutTeststep_title}" />
 							</p:column>
 
 							<p:column colspan="2" styleClass="TestcaseNonFini">
@@ -301,7 +300,7 @@
 							<ui:param name="communicationList"
 								value="#{jJTestcaseBean.communicationMessages}" />
 							<ui:param name="field" value="#{jJTestcaseBean.testcase}" />
-							<ui:param name="cols" value="50" />
+							<ui:param name="cols" value="40" />
 						</ui:include>
 					</p:fieldset>
 				</h:panelGroup>
@@ -394,33 +393,29 @@
 								</f:facet>
 								<p:commandButton id="runButton" icon="ui-icon-play"
 									oncomplete="PF('runTestcaseDialogWidget').show()"
+									title="Run #{tcr.testcase.name}"
 									action="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
 									update=":runTestcaseDialog" resetValues="true"
 									disabled="#{tcr.disabled or !loginBean.authorisationService.xTest}">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.testcase}" />
-								</p:commandButton>
-								<p:tooltip for="runButton" value="Run #{tcr.testcase.name}"
-									showEffect="fade" hideEffect="fade" />
+								</p:commandButton>								
 								<p:commandButton id="editButton" icon="ui-icon-pencil"
 									oncomplete="PF('testcaseDialogWidget').show()"
+									title="#{messages.label_edit}"
 									action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
 									update=":testcaseDialog" resetValues="true"
 									disabled="#{!loginBean.authorisationService.wTest}">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.testcase}" />
-								</p:commandButton>
-								<p:tooltip for="editButton" value="#{messages.label_edit}"
-									showEffect="fade" hideEffect="fade" />
+								</p:commandButton>								
 								<p:commandButton id="copyButton" icon="ui-icon-copy"
 									disabled="#{!loginBean.authorisationService.wTest}"
-									action="#{jJTestcaseBean.onCopyEvent}"
+									action="#{jJTestcaseBean.onCopyEvent}" title="Copy"
 									update=":growlForm :testFormCenter:testcaseRecapDataTable :container :rate">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.copyTestcase}" />
-								</p:commandButton>
-								<p:tooltip for="copyButton" value="Copy" showEffect="fade"
-									hideEffect="fade" />
+								</p:commandButton>								
 							</p:column>
 							<f:facet name="footer">
 								<p:commandButton value="#{messages.test_create_button}"
@@ -490,16 +485,14 @@
 								<p:column>
 									<p:commandButton id="editButton" icon="ui-icon-pencil"
 										oncomplete="PF('testcaseDialogWidget').show()"
-										resetValues="true"
+										resetValues="true" title="#{messages.label_edit}"
 										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-										update=":testcaseDialog" />
-									<p:tooltip for="editButton" value="#{messages.label_edit}"
-										showEffect="fade" hideEffect="fade" />
+										update=":testcaseDialog" />									
 									<p:commandButton id="runButton" icon="ui-icon-play"
 										oncomplete="PF('runTestcaseDialogWidget').show()"
 										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-										update=":runTestcaseDialog" resetValues="true"
+										update=":runTestcaseDialog" resetValues="true" 
 										disabled="#{jJTestcaseBean.disableRun or empty jJTeststepBean.teststeps or !loginBean.authorisationService.xTest}">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
@@ -507,14 +500,12 @@
 									</p:commandButton>
 									<p:commandButton id="copyButton" icon="ui-icon-copy"
 										disabled="#{!loginBean.authorisationService.wTest}"
-										action="#{jJTestcaseBean.onCopyEvent}"
+										action="#{jJTestcaseBean.onCopyEvent}" title="Copy"
 										update=":growlForm :testFormCenter:testcaseRecapDataTable ">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.copyTestcase}" />
-									</p:commandButton>
-									<p:tooltip for="copyButton" value="Copy" showEffect="fade"
-										hideEffect="fade" />
+									</p:commandButton>									
 								</p:column>
 							</p:row>
 
@@ -540,7 +531,7 @@
 						rowKey="#{tce.name}" var="tce" paginatorPosition="bottom"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
 						paginator="true" rows="7" style="width:45%;margin-top: 20px;">
-						<p:column headerText="Id">
+						<p:column headerText="Id" rendered="false">
 							<h:outputText value="#{tce.testcaseexecution.id}" />
 						</p:column>
 						<p:column headerText="#{messages.label_build}">
