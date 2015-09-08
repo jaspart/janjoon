@@ -72,16 +72,17 @@
 					<ui:include src="footer.xhtml" />
 				</ui:insert>
 			</p:panel>
-
-			<pe:blockUI widgetVar="blockUIWidget">
-				<h:panelGrid columns="2">
-					<p:graphicImage library="images" name="ajax-loader.gif"
-						style="vertical-align: middle;" />
-					<h:outputText value="#{messages.label_refresh}"
-						style="white-space: nowrap;" />
-				</h:panelGrid>
-			</pe:blockUI>
 		</h:panelGrid>
+
+		<pe:blockUI widgetVar="blockUIWidget" target="applicatinPanelGrid">
+			<h:panelGrid columns="2">
+				<p:graphicImage library="images" name="ajax-loader.gif"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+
 		<p:dialog widgetVar="communicationPanel" id="communicationPanel"
 			styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
 			closable="true" style="width:400px" rendered="#{loginBean.enable}">
@@ -91,9 +92,8 @@
 				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
 					rowKey="#{mes.id}" var="mes" paginator="true"
 					paginatorPosition="bottom" rendered="#{loginBean.enable}"
-					rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
-					selectionMode="single" rows="10" lazy="true"
-					emptyMessage="#{messages.label_notRecordFound}"
+					style="border-spacing:0px;" selectionMode="single" rows="10"
+					lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}" immediate="true"
@@ -101,21 +101,21 @@
 					<!--									update=":viewForm1:viewPanelGrid1"-->
 					<p:column headerText="Messages" sortBy="#{mes.creationDate}">
 
-						<h:outputText value="INFO"
-							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
-							styleClass="HOME" />
+						<h:outputText value="#{mes.criticity.name}"
+							styleClass="#{mes.criticity.name}" />
 
-						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
-							styleClass="OBJECT" />
-						<h:outputText value="Bug" rendered="#{mes.bug != null}"
-							styleClass="OBJECT" />
-						<h:outputText value="Test" rendered="#{mes.testcase != null}"
-							styleClass="OBJECT" />
+						<!-- 						<h:outputText value="Spec" rendered="#{mes.requirement != null}" -->
+						<!-- 							styleClass="ALERT" /> -->
+						<!-- 						<h:outputText value="Bug" rendered="#{mes.bug != null}" -->
+						<!-- 							styleClass="OBJECT" /> -->
+						<!-- 						<h:outputText value="Test" rendered="#{mes.testcase != null}" -->
+						<!-- 							styleClass="OBJECT" /> -->
 
-						<h:outputText id="viewButton" value=" #{mes.message}" />
-						<p:tooltip for="viewButton"
-							value="#{messages.label_view} #{mes.name}" showEffect="fade"
-							hideEffect="fade" />
+						<h:outputText id="viewButton" value=" #{mes.message}"
+							title="#{messages.label_view} #{mes.name}" />
+						<!-- 						<p:tooltip for="viewButton" -->
+						<!-- 							value="#{messages.label_view} #{mes.name}" showEffect="fade" -->
+						<!-- 							hideEffect="fade" /> -->
 					</p:column>
 
 					<f:facet name="footer">

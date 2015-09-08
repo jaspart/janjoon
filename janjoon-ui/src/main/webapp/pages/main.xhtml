@@ -53,9 +53,8 @@
 						<h:outputText value="#{mes.project.name} / #{mes.product.name}"
 							style="font-weight: bold;color: #9197a3;font-size: 10px;" />
 						<br />
-						<h:outputText value="INFO"
-							rendered="#{mes.requirement == null and mes.bug == null and mes.testcase == null}"
-							styleClass="HOME" style="margin-left: 25%;" />
+						<h:outputText value="#{mes.criticity.name}"
+							styleClass="#{mes.criticity.name}" style="margin-left: 25%;" />
 					</p:column>
 					<p:column headerText="#{messages.main_communication_message_title}"
 						filterBy="#{mes.message}" filterMatchMode="contains"
@@ -64,16 +63,17 @@
 						<h:outputText
 							style="width: 100% !important;color: #22222222;font-size: 14px;white-space: pre-wrap;"
 							value="#{mes.message}" />
-						<br /><br />
-						<h:outputText value="Spec" rendered="#{mes.requirement != null}"
-							styleClass="OBJECT" />
-						<h:outputText value="Bug" rendered="#{mes.bug != null}"
-							styleClass="OBJECT"  />
-						<h:outputText value="Test" rendered="#{mes.testcase != null}"
-							styleClass="OBJECT" />
+						<br />
+						<br />
+						<!-- 						<h:outputText value="Spec" rendered="#{mes.requirement != null}" -->
+						<!-- 							styleClass="OBJECT" /> -->
+						<!-- 						<h:outputText value="Bug" rendered="#{mes.bug != null}" -->
+						<!-- 							styleClass="OBJECT"  /> -->
+						<!-- 						<h:outputText value="Test" rendered="#{mes.testcase != null}" -->
+						<!-- 							styleClass="OBJECT" /> -->
 
 						<p:commandLink target="_blank"
-							value=" : #{jJMessageBean.getObjectName(mes)}"
+							value="#{jJMessageBean.getObjectName(mes)}"
 							rendered="#{jJMessageBean.haveObject(mes)}"
 							action="#{jJMessageBean.objectInfo(mes)}" ajax="false" />
 					</p:column>

@@ -85,6 +85,7 @@
 					<p:commandButton value="#{messages.admin_company_new_button}"
 						title="#{messages.admin_company_new_button}" id="newCompany"
 						update=":tabview:companyDialog"
+						rendered="#{loginBean.authorisationService.adminCompany}"
 						oncomplete="PF('companyDialogWidget').show()"
 						icon="ui-icon-circle-plus" resetValues="true">
 						<f:setPropertyActionListener
@@ -226,7 +227,7 @@
 									</p:row>
 									<p:row>
 										<p:column colspan="2">
-											<p:commandButton id="addVacation"												
+											<p:commandButton id="addVacation"
 												update=":tabview:EditCalendarForm"
 												action="#{jJCompanyBean.addHoliday}"
 												onstart="PF('EditCalendarBlockUIWidget').block();"

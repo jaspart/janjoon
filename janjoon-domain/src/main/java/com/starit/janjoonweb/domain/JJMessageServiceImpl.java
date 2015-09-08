@@ -75,7 +75,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		update.where(criteriaBuilder.equal(from.get("company").get("id"), 0));
 		entityManager.createQuery(update).executeUpdate();
 	}
-
+	
 	public Integer getMessagesCount(JJProject project, JJProduct product,
 			JJCompany company, JJContact contact) {
 		long r = 0;
@@ -84,15 +84,15 @@ public class JJMessageServiceImpl implements JJMessageService {
 					+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 			if (contact.getBugs() != null && !contact.getBugs().isEmpty())
-				query = query + "or e.bug IN (:bugs)";
+				query = query + " or e.bug IN (:bugs)";
 
 			if (contact.getTestcases() != null
 					&& !contact.getTestcases().isEmpty())
-				query = query + "or e.testcase IN (:testcases))";
+				query = query + " or e.testcase IN (:testcases)";
 
 			if (contact.getRequirements() != null
 					&& !contact.getRequirements().isEmpty())
-				query = query + "or e.requirement IN (:reqs)";
+				query = query + " or e.requirement IN (:reqs)";
 
 			query = query + ")";
 
@@ -119,15 +119,15 @@ public class JJMessageServiceImpl implements JJMessageService {
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
-					query = query + "or e.bug IN (:bugs)";
+					query = query + " or e.bug IN (:bugs)";
 
 				if (contact.getTestcases() != null
 						&& !contact.getTestcases().isEmpty())
-					query = query + "or e.testcase IN (:testcases))";
+					query = query + " or e.testcase IN (:testcases)";
 
 				if (contact.getRequirements() != null
 						&& !contact.getRequirements().isEmpty())
-					query = query + "or e.requirement IN (:reqs)";
+					query = query + " or e.requirement IN (:reqs)";
 
 				query = query + ")";
 
@@ -151,15 +151,15 @@ public class JJMessageServiceImpl implements JJMessageService {
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
-					query = query + "or e.bug IN (:bugs)";
+					query = query + " or e.bug IN (:bugs)";
 
 				if (contact.getTestcases() != null
 						&& !contact.getTestcases().isEmpty())
-					query = query + "or e.testcase IN (:testcases))";
+					query = query + " or e.testcase IN (:testcases)";
 
 				if (contact.getRequirements() != null
 						&& !contact.getRequirements().isEmpty())
-					query = query + "or e.requirement IN (:reqs)";
+					query = query + " or e.requirement IN (:reqs)";
 
 				query = query + ")";
 
@@ -185,15 +185,15 @@ public class JJMessageServiceImpl implements JJMessageService {
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
-					query = query + "or e.bug IN (:bugs)";
+					query = query + " or e.bug IN (:bugs)";
 
 				if (contact.getTestcases() != null
 						&& !contact.getTestcases().isEmpty())
-					query = query + "or e.testcase IN (:testcases))";
+					query = query + " or e.testcase IN (:testcases)";
 
 				if (contact.getRequirements() != null
 						&& !contact.getRequirements().isEmpty())
-					query = query + "or e.requirement IN (:reqs)";
+					query = query + " or e.requirement IN (:reqs)";
 
 				query = query + ")";
 

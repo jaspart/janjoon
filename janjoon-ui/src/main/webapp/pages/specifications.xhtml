@@ -23,8 +23,11 @@
 	background: #E6E6E6;
 }
 </style>
+
 		<h:outputScript library="js" name="ckEditor.js" />
-		<f:event  type="preRenderComponent"	listener="#{jJRequirementBean.initDataTabels}" />
+		<f:event type="preRenderComponent"
+			oncomplete="PF('blockUIWidget').unblock()"
+			listener="#{jJRequirementBean.initDataTabels}" />
 		<h:form id="categoryForm">
 			<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 				<p:selectBooleanButton value="#{category.checked}"
@@ -50,7 +53,7 @@
 				placeholder="#{messages.specification_table_requirement_filter}"
 				style="margin-left: 5%;height: 20px;width: 15%;"
 				value="#{jJRequirementBean.filterValue}">
-				<p:ajax event="change" listener="#{jJRequirementBean.filterTable}"
+				<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"
 					onstart="PF('blockUIWidget').block()"
 					oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 			</p:inputText>
@@ -152,7 +155,8 @@
 			</p:overlayPanel>
 		</h:form>
 		<h:form id="specForm" style="overflow:hidden;width:100%">
-			<p:remoteCommand name="updateDataTable" update="specForm" />			
+			<p:remoteCommand name="updateDataTable" update="specForm"
+				oncomplete="PF('blockUIWidget').unblock()" />
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<p:panelGrid

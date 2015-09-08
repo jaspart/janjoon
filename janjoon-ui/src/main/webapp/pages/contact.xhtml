@@ -32,7 +32,7 @@
 					</f:facet>
 					<h:outputText value="#{contact.name}" />
 				</p:column>
-				<p:column sortBy="#{contact.email}">
+				<p:column sortBy="#{contact.email}" width="180">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_contact_table_email_label}" />
 					</f:facet>
@@ -40,14 +40,14 @@
 				</p:column>
 				<p:column sortBy="#{contact.company.name}" id="company"
 					filterOptions="#{jJCompanyBean.companyOptions}"
-					filterMatchMode="exact" filterStyle="width: 90%;"
+					filterMatchMode="exact" filterStyle="width: 80%;"
 					filterBy="#{contact.company.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_company_menuitem}" />
 					</f:facet>
 					<h:outputText value="#{contact.company.name}" />
 				</p:column>
-				<p:column styleClass="action-column">
+				<p:column styleClass="action-column" width="170">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
 					</f:facet>

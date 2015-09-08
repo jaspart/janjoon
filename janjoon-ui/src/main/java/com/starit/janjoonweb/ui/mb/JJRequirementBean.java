@@ -4974,6 +4974,9 @@ public class JJRequirementBean {
 
 	public void initDataTabels(ComponentSystemEvent e) {
 
+		if (tableDataModelList == null)
+			fullTableDataModelList();
+		
 		if (tableDataModelList != null) {
 			for (int i = 0; i < tableDataModelList.size(); i++) {
 				if (tableDataModelList.get(i).getFiltredRequirements() != null) {
@@ -4981,10 +4984,7 @@ public class JJRequirementBean {
 							.println("SIZE: -----"
 									+ tableDataModelList.get(i)
 											.getFiltredRequirements().size()
-									+ "------");
-					// RequestContext.getCurrentInstance().execute("PF('dataTable_"
-					// + i + "_Widget').filter();");
-					//
+									+ "------");					
 				} else
 					System.out.println("SIZE: -----NULL------");
 			}

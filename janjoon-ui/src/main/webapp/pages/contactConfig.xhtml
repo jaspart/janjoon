@@ -31,7 +31,7 @@
 </style>
 		<p:panel style="height:650px;"
 			header="#{messages.contact_panel_header}">
-			<h:panelGrid style="float: left;" columns="3">
+			<h:panelGrid style="float: left;" columns="3" cellspacing="0">
 				<h:form id="configForm" style="float:left;">
 					<p:remoteCommand name="updateAdmin" />
 					<p:panelGrid>
@@ -248,7 +248,8 @@
 							</p:column>
 						</p:dataTable>
 					</h:form>
-					<h:form id="permissionForm" style="margin-top :20px;">
+					<h:form id="permissionForm" 
+					style="#{jJContactBean.calendarUtil.workDays != null ? 'margin-top :20px;' : ''}">
 						<p:dataTable id="permissionDataTable" var="permission"
 							scrollable="true" style="width:550px;" scrollHeight="200"
 							value="#{jJContactBean.contactUtil.permissions}"

@@ -95,7 +95,7 @@
 					widgetVar="bugTable" lazy="true" binding="#{dataTable}"
 					emptyMessage="#{messages.label_notRecordFound}"
 					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="50"
-					paginatorPosition="bottom" 
+					paginatorPosition="bottom"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="50,100,200">
 
@@ -139,9 +139,10 @@
 						filterMatchMode="contains" sortBy="#{bug.name}"
 						filterStyle="width: 90%;"
 						style="width: 25% !important;height: 5px !important;">
-						<h:outputText value="#{bug.status.name}"
+						<h:outputText
+							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
 							styleClass="#{bug.status.name}" />
-						<h:outputText value="#{bug.name}" />
+						<h:outputText value=" #{bug.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
 						sortBy="#{bug.creationDate}"
@@ -176,7 +177,8 @@
 						filterStyleClass="status"
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
-						<h:outputText value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
+						<h:outputText
+							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
 							styleClass="#{bug.status.name}" />
 					</p:column>
 					<p:column styleClass="action-column" style="width: 100px;">

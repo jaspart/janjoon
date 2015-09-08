@@ -250,10 +250,7 @@ public class JJMessageBean {
 					LoginBean.getProject(), LoginBean.getProduct(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
 							.getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact());
-
-			// RequestContext context = RequestContext.getCurrentInstance();
-			// context.update(":headerForm:dataTable1");
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());			
 		}
 	}
 
@@ -450,11 +447,11 @@ public class JJMessageBean {
 	public String getObjectName(JJMessage mes) {
 
 		if (mes.getBug() != null)
-			return mes.getBug().getName();
+			return "BUG: "+mes.getBug().getName();
 		else if (mes.getRequirement() != null)
-			return mes.getRequirement().getName();
+			return "SPEC: "+mes.getRequirement().getName();
 		else if (mes.getTestcase() != null)
-			return mes.getTestcase().getName();
+			return "TEST: "+mes.getTestcase().getName();
 		else
 			return null;
 	}
