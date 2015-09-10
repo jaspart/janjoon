@@ -8,11 +8,72 @@
 	<h:form id="profileForm">
 		<p:panel id="profilePanel" style="width:600px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="profileDataTable" var="profile" lazy="true" emptyMessage="#{messages.label_notRecordFound}"
-				paginatorPosition="bottom" value="#{jJProfileBean.profileListTable}"
-				paginator="true" rows="15" rowKey="#{profile.id}">
-				<f:facet name="header">#{messages.admin_profile_table_header}</f:facet>
-				<p:column>
+			<p:dataTable id="profileDataTable" var="profile" lazy="true"
+				emptyMessage="#{messages.label_notRecordFound}" sortMode="multiple"
+				widgetVar="profileDataTableWV" paginatorPosition="bottom"
+				value="#{jJProfileBean.profileListTable}" paginator="true" rows="15"
+				rowKey="#{profile.id}">
+				<f:facet name="header">#{messages.admin_profile_table_header}	
+				<p:inputText id="globalFilter"
+						onkeyup="PF('profileDataTableWV').filter()" style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+					<p:panelGrid style="margin-top: 5px;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<p:outputLabel for="objectComponent"
+										value="#{messages.admin_profile_new_object_label}" />
+									<p:selectOneMenu id="objectComponent"
+										panelStyle="width: 150px;"
+										onchange="PF('profileDataTableWV').filter();" effect="fade"
+										filter="true" filterMatchMode="startsWith">
+										<f:selectItem itemValue="all"
+											itemLabel="#{messages.admin_profile_table_filter_all}" />
+										<f:selectItems value="#{jJRightBean.objects}" var="p"
+											itemLabel="#{p}" itemValue="#{p}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:outputLabel value="R: " for="rComponent" />
+									<p:selectOneMenu id="rComponent" panelStyle="width: 50px;"
+										onchange="PF('profileDataTableWV').filter();" effect="fade">
+										<f:selectItem itemValue="nottrue"
+											itemLabel="#{messages.admin_profile_table_filter_all}" />
+										<f:selectItem itemValue="true"
+											itemLabel="#{messages.admin_profile_table_filter_true}" />
+										<f:selectItem itemValue="false"
+											itemLabel="#{messages.admin_profile_table_filter_false}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:outputLabel value="W: " for="wComponent" />
+									<p:selectOneMenu id="wComponent" panelStyle="width: 50px;"
+										onchange="PF('profileDataTableWV').filter();" effect="fade">
+										<f:selectItem itemValue="nottrue"
+											itemLabel="#{messages.admin_profile_table_filter_all}" />
+										<f:selectItem itemValue="true"
+											itemLabel="#{messages.admin_profile_table_filter_true}" />
+										<f:selectItem itemValue="false"
+											itemLabel="#{messages.admin_profile_table_filter_false}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:outputLabel value="X: " for="xComponent" />
+									<p:selectOneMenu id="xComponent" panelStyle="width: 50px;"
+										onchange="PF('profileDataTableWV').filter();" effect="fade">
+										<f:selectItem itemValue="nottrue"
+											itemLabel="#{messages.admin_profile_table_filter_all}" />
+										<f:selectItem itemValue="true"
+											itemLabel="#{messages.admin_profile_table_filter_true}" />
+										<f:selectItem itemValue="false"
+											itemLabel="#{messages.admin_profile_table_filter_false}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+				</f:facet>
+				<p:column sortBy="#{profile.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_profile_table_name_title}" />
 					</f:facet>
@@ -156,7 +217,8 @@
 					</p:row>
 					<p:dataTable id="rightDataTable" var="rightModel" scrollable="true"
 						style="width:500px;" scrollHeight="300"
-						value="#{jJRightBean.rightDataModel}" emptyMessage="#{messages.label_notRecordFound}"
+						value="#{jJRightBean.rightDataModel}"
+						emptyMessage="#{messages.label_notRecordFound}"
 						rowStyleClass="#{rightModel.old ? 'old' : null}">
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_profile_new_table_header} " />
@@ -239,7 +301,8 @@
 
 					<f:facet name="footer">
 						<p:commandButton id="saveButton" style="float: right;"
-							value="#{messages.admin_profil_new_save_button}" update="profileDialogForm :growlForm"
+							value="#{messages.admin_profil_new_save_button}"
+							update="profileDialogForm :growlForm"
 							disabled="#{jJProfileBean.disabledRightMode}"
 							process="@this,name" action="#{jJProfileBean.save(jJRightBean)}" />
 					</f:facet>

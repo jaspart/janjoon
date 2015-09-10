@@ -1624,7 +1624,7 @@ public class JJTaskBean {
 
 				for (JJBug bug : jJBugService.getImportBugs(
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), project, version,
+								.getContact().getCompany(), project,LoginBean.getProduct(), version,
 						importCategory, importStatus, true)) {
 
 					if (!checkAll) {
@@ -2518,6 +2518,15 @@ public class JJTaskBean {
 
 		DateFormat f1 = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat f2 = new SimpleDateFormat("hh:mm:ss");
+		
+		Date startDateDay= LoginBean.getProject().getStartDate();
+		Date endDateDay= LoginBean.getProject().getEndDate();
+		
+		if(startDateDay == null) startDateDay = new Date();
+		if(endDateDay == null) endDateDay = new Date();
+		
+		
+		
 		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ System.getProperty("line.separator")
 				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"
@@ -2531,16 +2540,16 @@ public class JJTaskBean {
 				+ "<ScheduleFromStart>1</ScheduleFromStart>"
 				+ System.getProperty("line.separator")
 				+ "<StartDate>"
-				+ f1.format(LoginBean.getProject().getStartDate())
+				+ f1.format(startDateDay)
 				+ "T"
-				+ f2.format(LoginBean.getProject().getStartDate())
+				+ f2.format(startDateDay)
 				+ "</StartDate>"
 				+ System.getProperty("line.separator")
 				+ " <FinishDate>"
 				+ System.getProperty("line.separator")
-				+ f1.format(LoginBean.getProject().getEndDate())
+				+ f1.format(endDateDay)
 				+ "T"
-				+ f2.format(LoginBean.getProject().getEndDate())
+				+ f2.format(endDateDay)
 				+ "</FinishDate>"
 				+ System.getProperty("line.separator")
 				+ "<DefaultStartTime>09:00:00</DefaultStartTime>"

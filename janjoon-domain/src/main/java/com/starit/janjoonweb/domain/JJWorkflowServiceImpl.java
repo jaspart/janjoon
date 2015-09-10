@@ -1,12 +1,19 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class JJWorkflowServiceImpl implements JJWorkflowService {
@@ -35,6 +42,22 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 		jJWorkflowRepository.save(JJWorflow_);
 		JJWorflow_ = jJWorkflowRepository.findOne(JJWorflow_.getId());
 		return JJWorflow_;
+	}
+	
+	public Set<String> getAllObject() {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<String> criteriaQuery = criteriaBuilder
+				.createQuery(String.class);
+
+		Root<JJWorkflow> from = criteriaQuery.from(JJWorkflow.class);
+
+		CriteriaQuery<String> select = criteriaQuery.select(from
+				.<String> get("objet"));
+
+		TypedQuery<String> result = entityManager.createQuery(select);
+		return new HashSet<String>(result.getResultList());
+
 	}
 
 	public List<JJWorkflow> getObjectWorkFlows(String object, JJStatus source,
@@ -90,7 +113,8 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 	}
 
 	public List<JJWorkflow> load(MutableInt size, int first, int pageSize,
-			String object, String action, boolean onlyactif) {
+			String object, String action, boolean onlyactif,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJWorkflow> criteriaQuery = criteriaBuilder
@@ -124,7 +148,71 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 
 		}
 
+		if (filters != null) {
+			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
+			while (it.hasNext()) {
+				@SuppressWarnings("rawtypes")
+				Map.Entry pairs = (Map.Entry) it.next();
+				if (pairs.getKey().toString().contains("globalFilter")) {
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("name"), "%" + pairs.getValue()
+									+ "%"));
+				} else if (pairs.getKey().toString().contains("target")) {
+
+					predicates
+							.add(criteriaBuilder.equal(from.get("target")
+									.<String> get("name"), pairs.getValue()
+									.toString()));
+
+				} else if (pairs.getKey().toString().contains("source")) {
+
+					predicates
+							.add(criteriaBuilder.equal(from.get("source")
+									.<String> get("name"), pairs.getValue()
+									.toString()));
+
+				} else if (pairs.getKey().toString().contains("objet")) {
+					predicates.add(criteriaBuilder.like(
+							from.<String> get("objet"), "%" + pairs.getValue()
+									+ "%"));
+				}
+
+			}
+		}
+
 		select.where(predicates.toArray(new Predicate[] {}));
+
+		if (multiSortMeta != null) {
+			for (SortMeta sortMeta : multiSortMeta) {
+				String sortField = sortMeta.getSortField();
+				SortOrder sortOrder = sortMeta.getSortOrder();
+				if (!sortField.contains("source")
+						&& !sortField.contains("target")) {
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+					}
+				} else if (sortField.contains("target")) {
+					Join<JJWorkflow, JJStatus> owner = from.join("target");
+
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(owner.get("name")));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(owner.get("name")));
+					}
+				} else if (sortField.contains("source")) {
+					Join<JJWorkflow, JJStatus> owner = from.join("source");
+
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(owner.get("name")));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(owner.get("name")));
+					}
+				}
+			}
+		} else
+			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJWorkflow> result = entityManager.createQuery(select);
 		result.setFirstResult(first);

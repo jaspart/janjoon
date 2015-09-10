@@ -26,8 +26,8 @@ public class JJBugServiceImpl implements JJBugService {
 
 	@Override
 	public List<JJBug> getBugs(JJCompany company, JJProject project,
-			JJTeststep teststep, JJBuild build, boolean onlyActif,
-			boolean sortedByCreationDate) {
+			JJProduct product, JJTeststep teststep, JJBuild build,
+			boolean onlyActif, boolean sortedByCreationDate) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -49,6 +49,9 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").get("product"), product));
 		} else if (company != null) {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
@@ -72,8 +75,8 @@ public class JJBugServiceImpl implements JJBugService {
 
 	@Override
 	public List<JJBug> getImportBugs(JJCompany company, JJProject project,
-			JJVersion version, JJCategory category, JJStatus status,
-			boolean onlyActif) {
+			JJProduct product, JJVersion version, JJCategory category,
+			JJStatus status, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -96,6 +99,9 @@ public class JJBugServiceImpl implements JJBugService {
 		if (version != null) {
 			predicates.add(criteriaBuilder.equal(from.get("versioning"),
 					version));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").get("product"), product));
 		} else if (company != null) {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")

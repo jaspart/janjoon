@@ -207,7 +207,7 @@ public class JJTeststepexecutionBean {
 
 				List<JJBug> bugs = jJBugService.getBugs(((LoginBean) LoginBean
 						.findBean("loginBean")).getContact().getCompany(),
-						LoginBean.getProject(),
+						LoginBean.getProject(),LoginBean.getProduct(),
 						teststepexecution.getTeststep(),
 						jJBuildBean.getBuild(), true, true);
 				if (bugs.isEmpty()) {
@@ -379,7 +379,7 @@ public class JJTeststepexecutionBean {
 					List<JJBug> bugs = jJBugService.getBugs(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), LoginBean
-									.getProject(), teststepexecution
+									.getProject(), LoginBean.getProduct(),teststepexecution
 									.getTeststep(), jJBuildBean.getBuild(),
 							true, true);
 

@@ -891,7 +891,7 @@ public class JJSprintBean {
 
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService.getBugs(((LoginBean) LoginBean
-				.findBean("loginBean")).getContact().getCompany(), project,
+				.findBean("loginBean")).getContact().getCompany(), project,LoginBean.getProduct(),
 				null, null, true, true)) {
 			String jJBugStr = String.valueOf(jJBug.getName());
 			if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {

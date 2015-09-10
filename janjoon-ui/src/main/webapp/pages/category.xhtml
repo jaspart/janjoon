@@ -9,17 +9,22 @@
 		<p:panel id="categoryPanel" style="width:650px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="categoryDataTable" var="category" lazy="true"
-				paginatorPosition="bottom" emptyMessage="#{messages.label_notRecordFound}"
+				sortMode="multiple" paginatorPosition="bottom"
+				emptyMessage="#{messages.label_notRecordFound}"
 				value="#{jJCategoryBean.categoryListTable}" paginator="true"
-				rows="15" rowKey="#{category.id}">
-				<f:facet name="header">#{messages.admin_category_table_header}</f:facet>
-				<p:column>
+				widgetVar="categoryDataTableWV" rows="15" rowKey="#{category.id}">
+				<f:facet name="header">#{messages.admin_category_table_header}<p:inputText
+						id="globalFilter" onkeyup="PF('categoryDataTableWV').filter()"
+						style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+				</f:facet>
+				<p:column sortBy="#{category.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_category_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{category.name}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{category.stage}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_category_table_stage_title}" />
 					</f:facet>

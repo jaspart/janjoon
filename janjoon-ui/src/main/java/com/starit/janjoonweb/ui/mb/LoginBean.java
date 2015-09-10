@@ -655,6 +655,27 @@ public class LoginBean implements Serializable {
 					"#{" + beanName + "}", Object.class);
 
 	}
+	
+	public static UIComponent findComponent(final String id) {
+
+	    FacesContext context = FacesContext.getCurrentInstance(); 
+	    UIViewRoot root = context.getViewRoot();
+	    final UIComponent[] found = new UIComponent[1];
+
+	    root.visitTree(new FullVisitContext(context), new VisitCallback() {     
+	        @Override
+	        public VisitResult visit(VisitContext context, UIComponent component) {
+	            if(component.getId() != null && component.getId().equals(id)){
+	                found[0] = component;
+	                return VisitResult.COMPLETE;
+	            }
+	            return VisitResult.ACCEPT;              
+	        }
+	    });
+
+	    return found[0];
+
+	}
 
 	public void onTabAdminChange(TabChangeEvent event) {
 
@@ -1513,25 +1534,6 @@ public class LoginBean implements Serializable {
 	// return bbbb;
 	//
 	// }
-
-	public UIComponent findComponent(final String id) {
-
-		FacesContext context = FacesContext.getCurrentInstance();
-		UIViewRoot root = context.getViewRoot();
-		final UIComponent[] found = new UIComponent[1];
-		root.visitTree(new FullVisitContext(context), new VisitCallback() {
-
-			@Override
-			public VisitResult visit(VisitContext context, UIComponent component) {
-				if (component.getId().equals(id)) {
-					found[0] = component;
-					return VisitResult.COMPLETE;
-				}
-				return VisitResult.ACCEPT;
-			}
-		});
-		return found[0];
-	}
 
 	public String getStyleClass() {
 		FacesContext ctx = FacesContext.getCurrentInstance();

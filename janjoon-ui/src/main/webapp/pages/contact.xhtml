@@ -14,8 +14,8 @@
 				value="#{jJContactBean.contactsLazyModel}" paginator="true"
 				rows="15" rowKey="#{contact.id}">
 				<f:facet name="header">#{messages.admin_contact_table_title}
-					<p:inputText id="globalFilter" onkeyup="PF('contactDataTableWV').filter()"
-						style="width:200px"
+					<p:inputText id="globalFilter"
+						onkeyup="PF('contactDataTableWV').filter()" style="width:200px"
 						placeholder="#{messages.bug_table_search_watermark}" />
 				</f:facet>
 				<p:column sortBy="#{contact.firstname}">

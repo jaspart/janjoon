@@ -36,12 +36,12 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 	}
 
 	@Override
-	public List<JJCategory> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, Object> filters) {
+	public List<JJCategory> load(int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJCategory> data = new ArrayList<JJCategory>();
 		MutableInt size = new MutableInt(0);
-		data = jJCategoryService.load(size, first, pageSize);
+		data = jJCategoryService.load(size, first, pageSize,multiSortMeta,filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

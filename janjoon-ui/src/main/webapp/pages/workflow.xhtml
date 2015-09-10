@@ -10,23 +10,30 @@
 	<h:form id="workflowForm">
 		<p:panel id="workflowPanel" style="width:1000px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="dataTable" var="workflow" lazy="true"
-				paginatorPosition="bottom" value="#{jJWorkflowBean.workflowList}"
-				paginator="true" rows="10" emptyMessage="#{messages.label_notRecordFound}"
+			<p:dataTable id="workflowDataTable" var="workflow" lazy="true"
+				sortMode="multiple" paginatorPosition="bottom"
+				value="#{jJWorkflowBean.workflowList}" paginator="true" rows="10"
+				emptyMessage="#{messages.label_notRecordFound}"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15">
+				rowsPerPageTemplate="5,10,15" widgetVar="workflowDataTableWV">
 				<f:facet name="header">  
-           #{messages.admin_workflow_table_header}  
-        </f:facet>
+           #{messages.admin_workflow_table_header}  <p:inputText
+						id="globalFilter" onkeyup="PF('workflowDataTableWV').filter()"
+						style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+				</f:facet>
 
-				<p:column>
+				<p:column sortBy="#{workflow.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_workflow_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{workflow.name}" />
 				</p:column>
 
-				<p:column>
+				<p:column sortBy="#{workflow.objet}" id="objet"
+					filterOptions="#{jJWorkflowBean.objectOptions}"
+					filterMatchMode="exact" filterStyle="width: 90%;"
+					filterBy="#{workflow.objet}">
 					<f:facet name="header">
 						<h:outputText
 							value="#{messages.admin_workflow_table_object_title}" />
@@ -42,7 +49,7 @@
 					<h:outputText value="#{workflow.actionWorkflow}" />
 				</p:column>
 
-				<p:column>
+				<p:column sortBy="#{workflow.source.name}">
 					<f:facet name="header">
 						<h:outputText
 							value="#{messages.admin_workflow_table_source_title}" />
@@ -53,7 +60,7 @@
 
 				</p:column>
 
-				<p:column>
+				<p:column sortBy="#{workflow.target.name}">
 					<f:facet name="header">
 						<h:outputText
 							value="#{messages.admin_workflow_table_target_title}" />
@@ -131,7 +138,8 @@
 					</f:facet>
 					<h:panelGrid id="createWorkFlowPanelGrid" columns="2"
 						styleClass="dialog" columnClasses="col1,col2,col3">
-						<p:outputLabel for="workflowName" value="#{messages.admin_workflow_table_name_title}:" />
+						<p:outputLabel for="workflowName"
+							value="#{messages.admin_workflow_table_name_title}:" />
 						<p:inputTextarea value="#{jJWorkflowBean.JJWorkflow_.name}"
 							id="workflowName" required="true"
 							requiredMessage="Name field is requiered">

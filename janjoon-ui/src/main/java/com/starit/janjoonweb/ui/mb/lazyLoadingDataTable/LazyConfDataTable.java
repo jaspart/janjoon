@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
@@ -37,12 +38,12 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 
 	@Override
 	public List<JJConfiguration> load(int first, int pageSize,
-			String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJConfiguration> data = new ArrayList<JJConfiguration>();
 		MutableInt size = new MutableInt(0);
 		data = configurationService.load(size, first, pageSize, null, null,
-				true);
+				true,multiSortMeta,filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

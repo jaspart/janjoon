@@ -10,16 +10,20 @@
 	<h:form id="configForm">
 		<p:panel id="configPanel" style="width:800px" columns="1"
 			cellpadding="6">
-			<p:dataTable id="dataTable" var="conf" lazy="true"
-				paginatorPosition="bottom" value="#{jJConfigurationBean.configList}"
-				paginator="true" rows="10" emptyMessage="#{messages.label_notRecordFound}"
+			<p:dataTable id="configDataTable" var="conf" lazy="true"
+				sortMode="multiple" paginatorPosition="bottom"
+				value="#{jJConfigurationBean.configList}" paginator="true" rows="10"
+				emptyMessage="#{messages.label_notRecordFound}"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15">
+				rowsPerPageTemplate="5,10,15" widgetVar="configDataTableWV">
 				<f:facet name="header">  
-           #{messages.admin_config_table_header}  
-        </f:facet>
+           #{messages.admin_config_table_header}  <p:inputText
+						id="globalFilter" onkeyup="PF('configDataTableWV').filter()"
+						style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+				</f:facet>
 
-				<p:column>
+				<p:column sortBy="#{conf.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_config_table_name_title}" />
 					</f:facet>
@@ -105,7 +109,8 @@
 					</f:facet>
 					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
 						columnClasses="col1,col2,col3">
-						<p:outputLabel for="confName" value="#{messages.admin_config_table_name_title}:" />
+						<p:outputLabel for="confName"
+							value="#{messages.admin_config_table_name_title}:" />
 						<p:inputTextarea
 							value="#{jJConfigurationBean.JJConfiguration_.name}"
 							id="confName" required="true"
@@ -132,16 +137,18 @@
 							requiredMessage="Config Description is a required value" />
 
 
-						<p:outputLabel for="confParam" value="#{messages.admin_config_table_parameter_title}:" />
+						<p:outputLabel for="confParam"
+							value="#{messages.admin_config_table_parameter_title}:" />
 						<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
 							id="confParam">
 							<f:validateLength maximum="100" />
 						</p:inputText>
 
-						<p:outputLabel for="confVal" value="#{messages.admin_config_table_value_title}:" />
+						<p:outputLabel for="confVal"
+							value="#{messages.admin_config_table_value_title}:" />
 						<p:inputTextarea scrollHeight="6" cols="82" rows="6"
 							autoResize="false"
-							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">							
+							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
 						</p:inputTextarea>
 					</h:panelGrid>
 					<f:facet name="footer">

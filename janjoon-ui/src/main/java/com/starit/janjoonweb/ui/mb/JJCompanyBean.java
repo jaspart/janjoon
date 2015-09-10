@@ -21,6 +21,8 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCompanyDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.ChunkTime;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -30,6 +32,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJCompanyBean {
 
 	private String calendar;
+	private LazyCompanyDataModel lazyCompanyList;
 	private String updatedCompanyCalendar;
 	private boolean update;
 	private boolean disabledsaveCalendar;
@@ -72,21 +75,7 @@ public class JJCompanyBean {
 
 	public void setUpdatedCompanyCalendar(String updatedCompanyCalendar) {
 		this.updatedCompanyCalendar = updatedCompanyCalendar;
-	}
-
-	// private CalendarUtil companyCalendar;
-	//
-	// public CalendarUtil getCompanyCalendar() {
-	//
-	// if (companyCalendar == null)
-	// companyCalendar = new CalendarUtil(jJCompanyService
-	// .findAllJJCompanys().get(0));
-	// return companyCalendar;
-	// }
-	//
-	// public void setCompanyCalendar(CalendarUtil companyCalendar) {
-	// this.companyCalendar = companyCalendar;
-	// }
+	}	
 
 	public String getHeaderMessage() {
 		return headerMessage;
@@ -121,6 +110,17 @@ public class JJCompanyBean {
 		else
 			this.updatedCompanyCalendar = companie.getCalendar();
 		this.companie = companie;
+	}
+	
+	public LazyCompanyDataModel getLazyCompanyList() {
+		
+		if(lazyCompanyList == null)
+			lazyCompanyList = new LazyCompanyDataModel(jJCompanyService);
+		return lazyCompanyList;
+	}
+
+	public void setLazyCompanyList(LazyCompanyDataModel lazyCompanyList) {
+		this.lazyCompanyList = lazyCompanyList;
 	}
 
 	public JJCompanyService getJJCompanyService() {
@@ -203,8 +203,14 @@ public class JJCompanyBean {
 				workDays = new ArrayList<ChunkTime>();
 			while (i < 7) {
 
-				if (workDays.get(i) == null)
-					workDays.set(i, new ChunkTime(i));
+				try {
+					if (workDays.get(i) == null)
+						workDays.set(i, new ChunkTime(i));
+					
+				} catch (IndexOutOfBoundsException e) {
+					workDays.add(new ChunkTime(i));
+				}
+				
 				i++;
 			}
 		}

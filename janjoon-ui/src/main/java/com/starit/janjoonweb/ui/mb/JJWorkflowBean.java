@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +39,21 @@ public class JJWorkflowBean {
 
 	private LazyWorkFlowDataTable workflowList;
 	private JJWorkflow selectedWorkFlow;
+	private SelectItem[] objectOptions;
 	private boolean renderCreate;
 
 	public LazyWorkFlowDataTable getWorkflowList() {
 
 		if (workflowList == null)
+		{
 			workflowList = new LazyWorkFlowDataTable(jJWorkflowService);
+		}			
 		return workflowList;
 	}
 
 	public void setWorkflowList(LazyWorkFlowDataTable workflowList) {
 		this.workflowList = workflowList;
+		this.objectOptions=null;
 	}
 
 	public JJWorkflow getSelectedWorkFlow() {
@@ -66,6 +72,30 @@ public class JJWorkflowBean {
 		this.renderCreate = renderCreate;
 	}
 
+	public SelectItem[] getObjectOptions() {
+		
+		if (objectOptions == null) {
+			
+			Set<String> objects=jJWorkflowService.getAllObject();
+			objectOptions = new SelectItem[objects.size() + 1];
+
+			objectOptions[0] = new SelectItem("", "Select");
+			int i = 0;
+			for (String comp : objects) {
+				objectOptions[i + 1] = new SelectItem(comp, comp);
+				i++;
+
+			}		
+
+		}
+		return objectOptions;
+		
+	}
+
+	public void setObjectOptions(SelectItem[] objectOptions) {
+		this.objectOptions = objectOptions;
+	}
+
 	public void deleteWorkflow() {
 
 		selectedWorkFlow.setEnabled(false);
@@ -75,6 +105,7 @@ public class JJWorkflowBean {
 				MessageFactory.getMessage("label_workflow", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		workflowList = null;
+		this.objectOptions=null;
 
 	}
 
@@ -111,6 +142,7 @@ public class JJWorkflowBean {
 
 		setJJWorkflow_(null);
 		workflowList = null;
+		this.objectOptions=null;
 		setCreateDialogVisible(false);
 	}
 
