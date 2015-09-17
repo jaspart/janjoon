@@ -257,8 +257,8 @@ public class JJContactBean {
 	public List<JJContact> getDeletedContact() {
 		if (deletedContact == null) {
 			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-			deletedContact = jJContactService.getContacts(false, loginBean
-					.getContact().getCompany(), loginBean.getContact());
+			//deletedContact = jJContactService.getContacts(false, loginBean
+			//		.getContact().getCompany(), loginBean.getContact());
 		}
 
 		return deletedContact;
