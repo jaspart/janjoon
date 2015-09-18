@@ -508,7 +508,7 @@ public class ContactCalendarUtil {
 	private ChunkTime getWorkingChunkTime(int i) {
 		ChunkTime c = null;
 		for (ChunkTime chunk : workDays) {
-			if (chunk.getDayNumber() == i) {
+			if (chunk != null && chunk.getDayNumber() == i) {
 				c = chunk;
 				break;
 			}

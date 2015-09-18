@@ -134,12 +134,13 @@
 									<p:column colspan="3">
 										<p:inputText id="name"
 											disabled="#{jJProfileBean.disabledProfileMode}"
-											value="#{jJProfileBean.profileAdmin.name}" label="Name"
+											value="#{jJProfileBean.profileAdmin.name}"
 											required="true">
 											<f:validateLength maximum="100" />
 										</p:inputText>
-										<p:watermark for="name"
-											value="#{messages.admin_profile_new_name_watermark}" />
+										<p:watermark  
+											value="#{messages.admin_profile_new_name_watermark}"
+											for="name"  />
 									</p:column>
 									<p:column>
 										<p:commandButton id="addProfile"
@@ -153,7 +154,7 @@
 								</p:row>
 								<p:row>
 									<p:column>
-										<h:outputText
+										<p:outputLabel for="object"
 											value="#{messages.admin_profile_new_object_label}" />
 										<p:selectOneMenu id="object" value="#{jJRightBean.object}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -167,7 +168,7 @@
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
-										<h:outputText
+										<p:outputLabel for="category"
 											value="#{messages.admin_profile_new_category_label}" />
 										<p:selectOneMenu id="category" value="#{jJRightBean.category}"
 											panelStyle="width:150px" effect="fade" style="width:160px"
@@ -183,19 +184,19 @@
 										</p:selectOneMenu>
 									</p:column>
 									<p:column>
-										<h:outputText value="R " />
+										<p:outputLabel for="r" value="R " />
 										<p:selectBooleanCheckbox id="r"
 											disabled="#{jJProfileBean.disabledRightMode}"
 											value="#{jJRightBean.rightAdmin.r}">
 											<p:ajax listener="#{jJRightBean.addMessage}" />
 										</p:selectBooleanCheckbox>
-										<h:outputText value="W " />
+										<p:outputLabel for="w" value="W " />
 										<p:selectBooleanCheckbox id="w"
 											disabled="#{jJProfileBean.disabledRightMode}"
 											value="#{jJRightBean.rightAdmin.w}">
 											<p:ajax listener="#{jJRightBean.addMessage}" />
 										</p:selectBooleanCheckbox>
-										<h:outputText value="X " />
+										<p:outputLabel for="x" value="X " />
 										<p:selectBooleanCheckbox id="x"
 											disabled="#{jJProfileBean.disabledRightMode}"
 											value="#{jJRightBean.rightAdmin.x}">

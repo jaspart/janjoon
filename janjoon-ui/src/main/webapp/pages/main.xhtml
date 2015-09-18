@@ -33,7 +33,7 @@
 
 						</f:facet>
 						<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
-							rendered="#{mes.createdBy.picture != null}">
+							rendered="#{mes.createdBy.picture != null}" cache="false">
 							<f:param name="contactId" value="#{mes.createdBy.id}" />
 						</p:graphicImage>
 
@@ -169,7 +169,7 @@
 			styleClass="customTitleBar">
 			<h:form id="specForm">
 				<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
-					rowKey="#{req.id}" var="req" widgetVar="taskTable"
+					rowKey="#{req.id}" var="req" widgetVar="specTable"
 					scrollable="true" scrollHeight="200"
 					emptyMessage="#{messages.label_notRecordFound}">
 

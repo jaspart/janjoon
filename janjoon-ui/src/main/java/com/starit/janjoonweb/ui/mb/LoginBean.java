@@ -719,10 +719,10 @@ public class LoginBean implements Serializable {
 			session.setAttribute("jJRequirementBean", null);
 			session.setAttribute("jJStatusBean", new JJStatusBean());
 
-			if (session.getAttribute("jJBuildBean") != null) {
-				((JJBuildBean) session.getAttribute("jJBuildBean"))
-						.setBuildDataModelList(null);
-			}
+//			if (session.getAttribute("jJBuildBean") != null) {
+//				((JJBuildBean) session.getAttribute("jJBuildBean"))
+//						.setBuildDataModelList(null);
+//			}
 
 			if (event != null) {
 				if (session.getAttribute("requirementBean") != null) {
@@ -745,7 +745,7 @@ public class LoginBean implements Serializable {
 				} else if (event.getComponent().getClientId()
 						.contains("productSelectOneMenu")) {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
-					productBean.setProduct((JJProduct) event.getNewValue());
+					productBean.setProduct((JJProduct) event.getNewValue());					
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					if (session.getAttribute("jJStatusBean") != null)

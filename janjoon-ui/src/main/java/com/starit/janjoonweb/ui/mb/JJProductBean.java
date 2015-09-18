@@ -74,6 +74,8 @@ public class JJProductBean {
 		JJVersionBean jJVersionBean = (JJVersionBean) session
 				.getAttribute("jJVersionBean");
 		jJVersionBean.setVersion(null);
+		jJVersionBean.setVersionList(null);		
+		jJVersionBean.setVersionDataModelList(null);
 		if (product != null) {
 			jJVersionBean.setDisabled(false);
 		} else {
@@ -333,8 +335,7 @@ public class JJProductBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
-		jJVersionBean.setProduct(null);
+				.getAttribute("jJVersionBean");		
 		jJVersionBean.setVersionList(null);
 
 	}

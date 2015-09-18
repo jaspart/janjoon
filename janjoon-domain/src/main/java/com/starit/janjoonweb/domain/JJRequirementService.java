@@ -37,6 +37,8 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJStatus status);
+	
+	//public List<JJRequirement> getInfinishedRequirement(JJCompany company,Map<JJProject, JJProduct> map,JJVersion version);
 
 	public Long getReqCountByStaus(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version, JJStatus status,

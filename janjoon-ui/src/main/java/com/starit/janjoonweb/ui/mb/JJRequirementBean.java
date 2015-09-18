@@ -1295,12 +1295,12 @@ public class JJRequirementBean {
 					} else
 						tableDataModelList.get(i).setFiltredRequirements(null);
 
-				} else {					
-						tableDataModelList
-								.get(i)
-								.setFiltredRequirements(
-										getFiltredListValue((List<RequirementUtil>) tableDataModelList
-												.get(i).getWrappedData()));
+				} else {
+					tableDataModelList
+							.get(i)
+							.setFiltredRequirements(
+									getFiltredListValue((List<RequirementUtil>) tableDataModelList
+											.get(i).getWrappedData()));
 				}
 
 			}
@@ -1326,8 +1326,10 @@ public class JJRequirementBean {
 						.getRequirement().getName().toLowerCase()
 						.contains(filterValue.toLowerCase()))
 						&& (mineContact == null
-								|| (req.getRequirement().getUpdatedBy() != null && req.getRequirement().getUpdatedBy()
-										.equals(mineContact)) || (req.getRequirement().getCreatedBy() != null && req
+								|| (req.getRequirement().getUpdatedBy() != null && req
+										.getRequirement().getUpdatedBy()
+										.equals(mineContact)) || (req
+								.getRequirement().getCreatedBy() != null && req
 								.getRequirement().getCreatedBy()
 								.equals(mineContact))))
 					filtredList.add(req);
@@ -1773,7 +1775,7 @@ public class JJRequirementBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('requirementImportDialogWidget').hide()");
-		//loadData();
+		// loadData();
 		mineChangeEvent(null);
 		reset();
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -1962,8 +1964,8 @@ public class JJRequirementBean {
 		importVersionList = null;
 		importStatusList = null;
 
-		//loadData();
-		//LoginBean.redirectPage();
+		// loadData();
+		// LoginBean.redirectPage();
 
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 
@@ -3733,8 +3735,11 @@ public class JJRequirementBean {
 									}
 									if (add
 											&& (mineContact == null
-													|| (r.getUpdatedBy() != null && r.getUpdatedBy().equals(
-															mineContact)) || (r.getCreatedBy() != null && r.getCreatedBy().equals(
+													|| (r.getUpdatedBy() != null && r
+															.getUpdatedBy()
+															.equals(mineContact)) || (r
+													.getCreatedBy() != null && r
+													.getCreatedBy().equals(
 															mineContact)))) {
 
 										requirements.add(r);
@@ -3747,8 +3752,10 @@ public class JJRequirementBean {
 							if (req.getCategory().equals(category)
 									&& !listContain(req, requirements)
 									&& (mineContact == null
-											|| (req.getUpdatedBy() != null && req.getUpdatedBy()
-													.equals(mineContact)) || (req.getCreatedBy() != null && req
+											|| (req.getUpdatedBy() != null && req
+													.getUpdatedBy().equals(
+															mineContact)) || (req
+											.getCreatedBy() != null && req
 											.getCreatedBy().equals(mineContact))))
 								requirements.add(req);
 						}
@@ -4680,7 +4687,7 @@ public class JJRequirementBean {
 	}
 
 	public void saveJJRequirement(JJRequirement b) {
-		((LoginBean)LoginBean.findBean("loginBean")).setNoCouvretReq(null);
+		((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
@@ -4689,7 +4696,7 @@ public class JJRequirementBean {
 	}
 
 	public void updateJJRequirement(JJRequirement b) {
-		((LoginBean)LoginBean.findBean("loginBean")).setNoCouvretReq(null);
+		((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);
@@ -4972,11 +4979,26 @@ public class JJRequirementBean {
 		RequestContext.getCurrentInstance().execute("updateDataTable()");
 	}
 
+	public List<JJRequirement> getInfinshedRequirement(JJVersion jJversion) {
+		List<JJRequirement> infinshedRequirement = new ArrayList<JJRequirement>();
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		for (JJRequirement req : jJRequirementService.getRequirements(
+				null,
+				loginBean.getAuthorizedMap("Requirement",
+						LoginBean.getProject(), LoginBean.getProduct()),
+				jJversion)) {
+			if (!jJTaskService.haveTask(req, true, true) && jJversion == req.getVersioning())				
+				infinshedRequirement.add(req);
+		}
+
+		return infinshedRequirement;
+	}
+
 	public void initDataTabels(ComponentSystemEvent e) {
 
 		if (tableDataModelList == null)
 			fullTableDataModelList();
-		
+
 		if (tableDataModelList != null) {
 			for (int i = 0; i < tableDataModelList.size(); i++) {
 				if (tableDataModelList.get(i).getFiltredRequirements() != null) {
@@ -4984,7 +5006,7 @@ public class JJRequirementBean {
 							.println("SIZE: -----"
 									+ tableDataModelList.get(i)
 											.getFiltredRequirements().size()
-									+ "------");					
+									+ "------");
 				} else
 					System.out.println("SIZE: -----NULL------");
 			}

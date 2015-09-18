@@ -5,6 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/layout.xhtml">
@@ -14,33 +15,53 @@
 	float: left;
 }
 </style>
-		<p:panel id="deliveryPanel" style="height: #{jJBuildBean.height};">
-			<p:commandButton value="#{messages.specification_video_help_title}"
-				style="float: right;margin-right: -10px;margin-top: -7px;"
-				id="videoHelpBtn" icon="ui-icon-video"
-				onclick="PF('videoHelpWidget').show()" type="button" />
-			<h:form id="deliveryForm">
-				<h:panelGrid columns="3" style="margin-top: 20px;" border="0">
-					<c:forEach items="#{jJBuildBean.buildDataModelList}"
-						var="buildDataModel" varStatus="loop">
+		<h:form style="width:100%;display:none;">
+			<p:remoteCommand onstart="PF('blockUIWidget').block()"
+				name="tabChangeHelper"	
+				update=":versionTabView:deliveryForm"			
+				oncomplete="PF('blockUIWidget').unblock()" />
+		</h:form>
+			<p:tabView id="versionTabView" widgetVar="versionTab"
+				style="width: 1400px;" dynamic="true" cache="false"
+				onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
+				scrollable="#{jJVersionBean.scrollable}"
+				value="#{jJVersionBean.versionDataModelList}" var="versionDataModel">
+				<p:tab>
 
-						<p:fieldset
-							legend="#{buildDataModel.version.product.name}/#{buildDataModel.version.name}"
-							id="buildFieldSet">
-							<p:dataTable id="buildDataTable_#{loop.index}" scrollable="true"
-								scrollHeight="250" var="build" value="#{buildDataModel.builds}"
-								rowKey="#{build.id}" emptyMessage="#{messages.label_notRecordFound}">
+					<f:facet name="title">
+						<h:outputText rendered="#{versionDataModel.version != null}"
+							value="#{versionDataModel.version.product.name}/#{versionDataModel.version.name}" />
+						<h:outputText rendered="#{versionDataModel.version == null}"
+							value="No Version" />
+					</f:facet>
+
+					<h:form id="deliveryForm">
+						<h:panelGrid columns="3" style="margin-top: 10px;"
+							columnClasses="twentyFivePercent,thirtyPercent" border="0">
+							<!-- 						<c:forEach items="#{jJBuildBean.buildDataModelList}" -->
+							<!-- 							var="buildDataModel" varStatus="loop"> -->
+
+							<!-- 							<p:fieldset -->
+							<!-- 								legend="#{buildDataModel.version.product.name}/#{buildDataModel.version.name}" -->
+							<!-- 								id="buildFieldSet"> -->
+							<p:dataTable id="buildDataTable" scrollable="true"
+								scrollHeight="250" var="build"
+								value="#{versionDataModel.builds}" rowKey="#{build.id}"
+								rendered="#{versionDataModel.version != null}"
+								emptyMessage="#{messages.label_notRecordFound}">
 								<!-- 							<p:column headerText="Project"> -->
 								<!-- 								<h:outputText value="#{build.name}" /> -->
 								<!-- 							</p:column> -->
+								<f:facet name="header">
+										ChangeLog
+									</f:facet>
 								<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
-									update="buildDataTable_#{loop.index}"
+									update="buildDataTable"
 									onstart="updateRowExapansion();PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()" />
-								<p:column style="width:15%;">
+								<p:column style="width:20%;">
 									<p:rowToggler />
-									<p:commandLink target="_blank"
-										style="float: right;"
+									<p:commandLink target="_blank" style="float: right;"
 										action="#{jJBuildBean.getZipFile(build)}" ajax="false"
 										disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
 										<p:graphicImage name="download.ico" library="images"
@@ -59,8 +80,8 @@
 										<p:ajax event="itemSelect"
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
-											listener="#{jJBuildBean.changeEvent(build,buildDataModel)}"
-											update="buildDataTable_#{loop.index} :growlForm" />
+											listener="#{jJBuildBean.changeEvent(build,versionDataModel)}"
+											update="buildDataTable :growlForm" />
 									</p:autoComplete>
 								</p:column>
 								<p:rowExpansion styleClass="rowExpansion">
@@ -70,8 +91,9 @@
 									<!-- 										listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" /> -->
 
 									<p:dataTable id="taskDataTable" var="task" style="width:90%;"
-										rowKey="#{task.id}" emptyMessage="#{messages.label_notRecordFound}"
-										value="#{build.tasks}" >
+										rowKey="#{task.id}"
+										emptyMessage="#{messages.label_notRecordFound}"
+										value="#{build.tasks}">
 
 										<p:column style="width:25%">
 											<f:facet name="header">
@@ -108,12 +130,74 @@
 									</p:dataTable>
 								</p:rowExpansion>
 							</p:dataTable>
-						</p:fieldset>
-					</c:forEach>
-				</h:panelGrid>
-			</h:form>
+							<!-- 							</p:fieldset> -->
+							<!-- 						</c:forEach> -->
 
-		</p:panel>
+							<p:dataTable id="specTable"
+								value="#{versionDataModel.requirementRoadMap}"
+								rowKey="#{req.id}" var="req" widgetVar="specTable"
+								scrollable="true" scrollHeight="250"
+								emptyMessage="#{messages.label_notRecordFound}">
+								<f:facet name="header">
+										#{messages.label_requirement} RoadMap
+									</f:facet>
+								<p:column id="reqName" headerText="#{messages.label_requirement}" >
+									<p:commandLink target="_blank" value="#{req.name}"
+										action="#{jJRequirementBean.requirementInfo}" ajax="false">
+										<f:setPropertyActionListener value="#{req}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandLink>
+								</p:column>
+
+								<p:column id="reqCategory" headerText="#{messages.label_category}" >
+									<h:outputText value="#{req.category}"
+										converter="JJCategoryConverter" />
+								</p:column>
+
+								<p:column id="reqStatus" headerText="Status" >
+									<h:outputText
+										value="#{messages['status_'.concat(fn:replace(req.status.name, ' ', '_'))]}" />
+								</p:column>
+							</p:dataTable>
+							<p:dataTable id="bugTable" value="#{versionDataModel.bugRoadMap}"
+								rowKey="#{bug.id}" var="bug" widgetVar="bugTable"
+								scrollable="true" scrollHeight="250"
+								emptyMessage="#{messages.label_notRecordFound}">
+								<f:facet name="header">
+										Bug RoadMap
+									</f:facet>
+								<p:column id="bugName" headerText="#{messages.bug_table_title_title}"
+									width="35%" >
+									<p:commandLink target="_blank" value="#{bug.name}"
+										action="#{jJBugBean.bugInfo}" ajax="false">
+										<f:setPropertyActionListener value="#{bug}"
+											target="#{jJBugBean.viewBug}" />
+									</p:commandLink>
+								</p:column>
+								<p:column id="bugDate" headerText="#{messages.bug_table_creation_title}"
+									width="35%" >
+									<h:outputText value="#{bug.creationDate}">
+										<f:converter converterId="extendedDateTimeConverter" />
+										<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+										<f:attribute name="timeZone" value="UCL" />
+									</h:outputText>
+								</p:column>
+								<p:column id="bugImportance" headerText="#{messages.bug_table_importance_title}"
+									width="15%" >
+									<h:outputText value="#{bug.importance.name}" />
+								</p:column>
+								<p:column id="bugStatus" headerText="#{messages.bug_table_status_title}"
+									width="15%" >
+									<h:outputText
+										value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
+										styleClass="#{bug.status.name}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
 			position="center" header="#{messages.specification_video_help_title}"

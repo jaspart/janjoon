@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 public class JJRequirementServiceImpl implements JJRequirementService {
 
@@ -44,7 +45,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		return have;
 
 	}
-
+	
 	public boolean haveLinkUp(JJRequirement requirement) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

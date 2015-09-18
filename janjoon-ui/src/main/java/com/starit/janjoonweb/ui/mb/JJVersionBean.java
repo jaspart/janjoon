@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJTaskService;
@@ -20,6 +21,7 @@ import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
+import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
@@ -30,6 +32,13 @@ public class JJVersionBean {
 
 	@Autowired
 	private JJTaskService jJTaskService;
+
+	@Autowired
+	private JJBuildService jJBuildService;
+
+	public void setjJBuildService(JJBuildService jJBuildService) {
+		this.jJBuildService = jJBuildService;
+	}
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -44,7 +53,7 @@ public class JJVersionBean {
 		return jJVersionService;
 	}
 
-	private JJProduct product;
+	// private JJProduct product;
 	private JJVersion version;
 	private List<JJVersion> versionList;
 	private boolean disabled = true;
@@ -56,14 +65,7 @@ public class JJVersionBean {
 	private boolean checkVersions;
 	private boolean oldCheckVersions;
 	private boolean disabledCheckVersion;
-
-	public JJProduct getProduct() {
-		return product;
-	}
-
-	public void setProduct(JJProduct product) {
-		this.product = product;
-	}
+	private List<VersionDataModelUtil> versionDataModelList;
 
 	public JJVersion getVersion() {
 
@@ -77,19 +79,13 @@ public class JJVersionBean {
 
 	public List<JJVersion> getVersionList() {
 
-		JJProduct jJproduct = LoginBean.getProduct();
 		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
-			if (product == null) {
-				product = jJproduct;
-				versionList = jJVersionService.getVersions(true, true, product,
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), true);
+			if (versionList == null) {
+				versionList = jJVersionService.getVersions(true, true,
+						LoginBean.getProduct(), ((LoginBean) LoginBean
+								.findBean("loginBean")).getContact()
+								.getCompany(), true);
 
-			} else if (!product.equals(jJproduct)) {
-				product = jJproduct;
-				versionList = jJVersionService.getVersions(true, true, product,
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), true);
 			}
 		}
 
@@ -98,6 +94,7 @@ public class JJVersionBean {
 
 	public void setVersionList(List<JJVersion> versionList) {
 		this.versionList = versionList;
+
 	}
 
 	public boolean getDisabled() {
@@ -146,6 +143,53 @@ public class JJVersionBean {
 
 	public void setDisabledCheckVersion(boolean disabledCheckVersion) {
 		this.disabledCheckVersion = disabledCheckVersion;
+	}
+
+	public List<VersionDataModelUtil> getVersionDataModelList() {
+
+		if (versionDataModelList == null || versionDataModelList.isEmpty())
+			initVersionDataModelList();
+		return versionDataModelList;
+	}
+
+	public void setVersionDataModelList(
+			List<VersionDataModelUtil> buildDataModelList) {
+		this.versionDataModelList = buildDataModelList;
+	}
+
+	public boolean isScrollable() {
+		return this.versionDataModelList.size() > 7;
+	}
+
+	public void initVersionDataModelList() {
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		versionDataModelList = new ArrayList<VersionDataModelUtil>();
+
+		// if (LoginBean.getProduct() == null) {
+		//
+		// for (JJProduct prod : jJProductService.getProducts(loginBean
+		// .getContact().getCompany(), LoginBean.getProject())) {
+		List<JJVersion> versions = jJVersionService.getVersions(true, true,
+				LoginBean.getProduct(), loginBean.getContact().getCompany(),
+				true);
+		for (JJVersion version : versions) {
+			versionDataModelList.add(new VersionDataModelUtil(version,
+					jJBuildService));
+		}
+		// }
+
+		// } else {
+		// List<JJVersion> versions = jJVersionService.getVersions(true, true,
+		// LoginBean.getProduct(),
+		// loginBean.getContact().getCompany(), true);
+		// for (JJVersion version : versions) {
+		// versionDataModelList.add(new VersionDataModelUtil(version,
+		// jJBuildService));
+		// }
+		//
+		// }
+		versionDataModelList
+				.add(new VersionDataModelUtil(null, jJBuildService));
 	}
 
 	public void newVersion() {

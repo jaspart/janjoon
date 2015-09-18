@@ -71,6 +71,11 @@ public class JJProjectBean {
 
 	public void setProject(JJProject project) {
 		this.project = project;
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
+		jJVersionBean.setVersionDataModelList(null);
 	}
 
 	public List<JJProject> getProjectList() {

@@ -59,6 +59,10 @@ public class JJVersionServiceImpl implements JJVersionService {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
+		if (product == null) {
+			select.orderBy(criteriaBuilder.asc(from.get("product")));
+		}
+
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
 		return result.getResultList();
 

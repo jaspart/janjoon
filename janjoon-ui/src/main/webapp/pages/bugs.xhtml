@@ -125,9 +125,7 @@
 										value="#{messages.bug_table_add_label}" update=":createForm "
 										style="margin-left: 20px;" resetValues="true"
 										oncomplete="PF('createDialogWidget').show()"
-										title="#{messages.label_create}" />
-									<p:tooltip for="createButton" value="#{messages.label_create}"
-										showEffect="fade" hideEffect="fade" />
+										title="#{messages.label_create}" />									
 								</p:column>
 							</p:row>
 						</p:outputPanel>
@@ -197,9 +195,7 @@
 									target="#{jJBugBean.JJBug_}" />
 								<f:setPropertyActionListener value="#{bug.project}"
 									target="#{jJBugBean.bugProjectSelected}" />
-							</p:menuitem>
-							<p:tooltip for="editButton" value="#{messages.label_edit}"
-								showEffect="fade" hideEffect="fade" />
+							</p:menuitem>							
 							<p:menuitem id="deleteButton" icon="ui-icon-trash"
 								oncomplete="PF('deleteDialogWidget').show()"
 								value="#{messages.label_delete}"
@@ -207,8 +203,6 @@
 								<f:setPropertyActionListener value="#{bug}"
 									target="#{jJBugBean.JJBug_}" />
 							</p:menuitem>
-							<p:tooltip for="deleteButton" value="#{messages.label_delete}"
-								showEffect="fade" hideEffect="fade" />
 							<f:setPropertyActionListener value="#{bug}"
 								target="#{jJBugBean.viewBug}" />
 						</p:splitButton>

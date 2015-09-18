@@ -28,6 +28,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 	@Autowired
 	private JJRequirementService jJRequirementService;
 
+	@Autowired
+	private JJCategoryService jJCategoryService;
+
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
@@ -39,6 +42,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
 	}
 
 	@Override
@@ -339,6 +346,109 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	}
 
+	public boolean haveTask(Object object, boolean onlyActif, boolean finished) {
+		if (object != null
+				&& (object instanceof JJBug || object instanceof JJRequirement || object instanceof JJTestcase)) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<Long> select = criteriaBuilder
+					.createQuery(Long.class);
+
+			Root<JJTask> from = select.from(JJTask.class);
+			select.select(criteriaBuilder.count(from));
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (object instanceof JJRequirement) {
+				predicates.add(criteriaBuilder.equal(from.get("requirement"),
+						object));
+			} else if (object instanceof JJBug) {
+				predicates.add(criteriaBuilder.equal(from.get("bug"), object));
+			} else if (object instanceof JJTestcase) {
+				predicates.add(criteriaBuilder.equal(from.get("testcase"),
+						object));
+			}
+
+			if (onlyActif) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
+			}
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));			
+
+			if (finished
+					&& (entityManager.createQuery(select).getSingleResult() > 0 || (object instanceof JJRequirement
+							&& !jJCategoryService
+									.isHighLevel(((JJRequirement) object)
+											.getCategory()) && jJRequirementService
+								.haveLinkUp((JJRequirement) object))))
+				return isFinished(object, onlyActif);
+			else
+				return entityManager.createQuery(select).getSingleResult() > 0;
+
+		} else
+			return false;
+	}
+
+	private boolean isFinished(Object object, boolean onlyActif) {
+		if (object != null
+				&& (object instanceof JJBug || object instanceof JJRequirement || object instanceof JJTestcase)) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<Long> select = criteriaBuilder
+					.createQuery(Long.class);
+
+			Root<JJTask> from = select.from(JJTask.class);
+			select.select(criteriaBuilder.count(from));
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (object instanceof JJRequirement) {
+				predicates.add(criteriaBuilder.equal(from.get("requirement"),
+						object));
+			} else if (object instanceof JJBug) {
+				predicates.add(criteriaBuilder.equal(from.get("bug"), object));
+			} else if (object instanceof JJTestcase) {
+				predicates.add(criteriaBuilder.equal(from.get("testcase"),
+						object));
+			}
+
+			predicates.add(criteriaBuilder.notEqual(
+					criteriaBuilder.lower(from.get("status").<String> get(
+							"name")), "DONE".toLowerCase()));
+
+			if (onlyActif) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
+			}
+
+			select.where(criteriaBuilder.and(predicates
+					.toArray(new Predicate[] {})));			
+
+			if (object instanceof JJRequirement
+					&& entityManager.createQuery(select).getSingleResult() == 0
+					&& !jJCategoryService.isHighLevel(((JJRequirement) object)
+							.getCategory())
+					&& jJRequirementService.haveLinkUp((JJRequirement) object)) {
+				boolean isFinished = true;
+				List<JJRequirement> requirements = new ArrayList<JJRequirement>(
+						jJRequirementService.findJJRequirement(
+								((JJRequirement) object).getId())
+								.getRequirementLinkUp());
+				int i = 0;
+				while (isFinished && i < requirements.size()) {
+					isFinished = haveTask(requirements.get(i), onlyActif, true);
+					i++;
+				}
+				return isFinished;
+			} else
+				return entityManager.createQuery(select).getSingleResult() == 0;
+
+		} else
+			return false;
+	}
+
 	@Override
 	public List<JJTask> getTasksByStatus(JJStatus status, JJProject project,
 			JJSprint sprint, boolean onlyActif) {
@@ -361,7 +471,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 		}
 
 		if (sprint != null) {
-			predicates.add(criteriaBuilder.equal(from.get("sprint"), status));
+			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
 		}
 
 		if (onlyActif) {

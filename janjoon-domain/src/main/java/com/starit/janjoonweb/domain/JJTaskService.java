@@ -20,6 +20,8 @@ public interface JJTaskService {
 
 	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
 			JJTestcase testcase, boolean onlyActif);
+	
+	public boolean haveTask(Object object,boolean onlyActif,boolean finished);
 
 	public void saveTasks(Set<JJTask> tasks);
 

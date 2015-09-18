@@ -1612,8 +1612,7 @@ public class JJTaskBean {
 
 	public void fillTableImport() {
 
-		importFormats = new ArrayList<ImportFormat>();
-		List<JJTask> tasks;
+		importFormats = new ArrayList<ImportFormat>();		
 		copyObjets = false;
 		oldCopyObjects = false;
 		disabledImportButton = true;
@@ -1628,10 +1627,8 @@ public class JJTaskBean {
 						importCategory, importStatus, true)) {
 
 					if (!checkAll) {
-
-						tasks = jJTaskService.getImportTasks(bug, null, null,
-								true);
-						if (tasks.isEmpty()) {
+						
+						if (!jJTaskService.haveTask(bug, true,false)) {
 							importFormats.add(new ImportFormat(bug.getName(),
 									bug, copyObjets));
 						}
@@ -1654,11 +1651,8 @@ public class JJTaskBean {
 								false, true, false, false, null)) {
 
 					if (!checkAll) {
-
-						tasks = jJTaskService.getImportTasks(null, requirement,
-								null, true);
-
-						if (tasks.isEmpty()) {
+					
+						if (!jJTaskService.haveTask(requirement,true,false)) {
 							importFormats.add(new ImportFormat(requirement
 									.getName(), requirement, copyObjets));
 						}
@@ -1676,9 +1670,8 @@ public class JJTaskBean {
 								LoginBean.getProduct(), true, false)) {
 
 					if (!checkAll) {
-						tasks = jJTaskService.getImportTasks(null, null,
-								testcase, true);
-						if (tasks.isEmpty()) {
+					
+						if (!jJTaskService.haveTask(testcase, true,false)) {
 							importFormats.add(new ImportFormat(testcase
 									.getName(), testcase, copyObjets));
 						}

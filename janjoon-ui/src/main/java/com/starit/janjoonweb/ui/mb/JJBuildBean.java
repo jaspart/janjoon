@@ -15,15 +15,13 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
@@ -35,7 +33,7 @@ public class JJBuildBean {
 	private List<JJBuild> builds;
 	private List<JJStatus> statuts;
 	private List<BuildUtil> buildUtils;
-	private List<BuildDataModel> buildDataModelList;
+	// private List<BuildDataModel> buildDataModelList;
 
 	@Autowired
 	private JJProductService jJProductService;
@@ -104,16 +102,17 @@ public class JJBuildBean {
 		this.buildUtils = buildUtils;
 	}
 
-	public List<BuildDataModel> getBuildDataModelList() {
-
-		if (buildDataModelList == null || buildDataModelList.isEmpty())
-			initBuildDataModelList();
-		return buildDataModelList;
-	}
-
-	public void setBuildDataModelList(List<BuildDataModel> buildDataModelList) {
-		this.buildDataModelList = buildDataModelList;
-	}
+	// public List<BuildDataModel> getBuildDataModelList() {
+	//
+	// if (buildDataModelList == null || buildDataModelList.isEmpty())
+	// initBuildDataModelList();
+	// return buildDataModelList;
+	// }
+	//
+	// public void setBuildDataModelList(List<BuildDataModel>
+	// buildDataModelList) {
+	// this.buildDataModelList = buildDataModelList;
+	// }
 
 	public boolean haveUrl(JJBuild build) {
 
@@ -161,7 +160,7 @@ public class JJBuildBean {
 		return suggestions;
 	}
 
-	public void changeEvent(JJBuild b, BuildDataModel buildDataModel) {
+	public void changeEvent(JJBuild b, VersionDataModelUtil buildDataModel) {
 		updateJJBuild(b);
 		buildDataModel.getBuilds().set(buildDataModel.getBuilds().indexOf(b),
 				jJBuildService.findJJBuild(b.getId()));
@@ -190,14 +189,10 @@ public class JJBuildBean {
 		}
 		long l = version.getId();
 
-		if (version == null) {
-			buildUtils.add(new BuildUtil(version, null));
-		} else {
-			int i = BuildUtil.BuildUtil(version, buildUtils);
-			if (i == -1)
-				buildUtils.add(new BuildUtil(version, jJBuildService.getBuilds(
-						version, true, true)));
-		}
+		int i = BuildUtil.BuildUtil(version, buildUtils);
+		if (i == -1)
+			buildUtils.add(new BuildUtil(version, jJBuildService.getBuilds(
+					version, true, true)));
 
 		index = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l),
 				buildUtils);
@@ -233,9 +228,7 @@ public class JJBuildBean {
 		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l),
 				buildUtils);
 		BuildUtil buildUtil = buildUtils.get(i);
-		JJVersion version = buildUtil.getVersion();
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		JJVersion version = buildUtil.getVersion();		
 		JJBuild b = new JJBuild();
 		b.setName(buildName);
 		b.setEnabled(true);
@@ -262,46 +255,47 @@ public class JJBuildBean {
 
 	}
 
-	public String getHeight() {
-		if (buildDataModelList != null) {
-			int i = buildDataModelList.size() / 3;
-			int j = buildDataModelList.size() % 3;
+	// public String getHeight() {
+	// if (buildDataModelList != null) {
+	// int i = buildDataModelList.size() / 3;
+	// int j = buildDataModelList.size() % 3;
+	//
+	// if (j != 0)
+	// i = i + 1;
+	// return 300 * i + 100 + "px";
+	// } else
+	// return "100px";
+	//
+	// }
 
-			if (j != 0)
-				i = i + 1;
-			return 300 * i + 100 + "px";
-		} else
-			return "100px";
-
-	}
-
-	public void initBuildDataModelList() {
-		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		buildDataModelList = new ArrayList<BuildDataModel>();
-		statuts = jJStatusService.getStatus("Build", true, null, true);
-		if (LoginBean.getProduct() == null) {
-
-			for (JJProduct prod : jJProductService.getProducts(loginBean
-					.getContact().getCompany(), LoginBean.getProject())) {
-				List<JJVersion> versions = jJVersionService.getVersions(true,
-						true, prod, loginBean.getContact().getCompany(), true);
-				for (JJVersion version : versions) {
-					buildDataModelList.add(new BuildDataModel(version));
-				}
-			}
-
-		} else if (LoginBean.getVersion() == null) {
-			List<JJVersion> versions = jJVersionService.getVersions(true, true,
-					LoginBean.getProduct(),
-					loginBean.getContact().getCompany(), true);
-			for (JJVersion version : versions) {
-				buildDataModelList.add(new BuildDataModel(version));
-			}
-
-		} else {
-			buildDataModelList.add(new BuildDataModel(LoginBean.getVersion()));
-		}
-	}
+	// public void initBuildDataModelList() {
+	// LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+	// buildDataModelList = new ArrayList<BuildDataModel>();
+	// statuts = jJStatusService.getStatus("Build", true, null, true);
+	// if (LoginBean.getProduct() == null) {
+	//
+	// for (JJProduct prod : jJProductService.getProducts(loginBean
+	// .getContact().getCompany(), LoginBean.getProject())) {
+	// List<JJVersion> versions = jJVersionService.getVersions(true,
+	// true, prod, loginBean.getContact().getCompany(), true);
+	// for (JJVersion version : versions) {
+	// buildDataModelList.add(new BuildDataModel(version,jJBuildService));
+	// }
+	// }
+	//
+	// } else if (LoginBean.getVersion() == null) {
+	// List<JJVersion> versions = jJVersionService.getVersions(true, true,
+	// LoginBean.getProduct(),
+	// loginBean.getContact().getCompany(), true);
+	// for (JJVersion version : versions) {
+	// buildDataModelList.add(new BuildDataModel(version,jJBuildService));
+	// }
+	//
+	// } else {
+	// buildDataModelList.add(new
+	// BuildDataModel(LoginBean.getVersion(),jJBuildService));
+	// }
+	// }
 
 	public boolean buildNameExist(String name, JJVersion version) {
 		if (version != null)
@@ -365,34 +359,6 @@ public class JJBuildBean {
 			return true;
 		} else
 			return false;
-
-	}
-
-	public class BuildDataModel {
-
-		private JJVersion version;
-		private List<JJBuild> builds;
-
-		public BuildDataModel(JJVersion version) {
-			this.version = version;
-			this.builds = jJBuildService.getBuilds(null, version, true);
-		}
-
-		public JJVersion getVersion() {
-			return version;
-		}
-
-		public void setVersion(JJVersion version) {
-			this.version = version;
-		}
-
-		public List<JJBuild> getBuilds() {
-			return builds;
-		}
-
-		public void setBuilds(List<JJBuild> builds) {
-			this.builds = builds;
-		}
 
 	}
 

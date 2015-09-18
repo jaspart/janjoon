@@ -55,11 +55,19 @@ div#contentPanel_content {
 	width: 50%;
 }
 
+.thirtyThreePercent{
+	width: 33%;
+}
+
 .thirtyPercent{
 	width: 30%;
 }
 .seventyPercent{
 	width: 70%;
+}
+
+.twentyFivePercent{
+	width: 25%;
 }
 
 .ui-rating-star a,.ui-rating-cancel a {

@@ -14,21 +14,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.RateEvent;
-import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
@@ -42,11 +38,9 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
-import com.starit.janjoonweb.ui.mb.util.CategorieRequirement;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
@@ -61,7 +55,7 @@ public class JJBugBean {
 	private JJPermissionService jJPermissionService;
 
 	@Autowired
-	private JJTaskService jjTaskService;
+	private JJTaskService jJTaskService;
 
 	@Autowired
 	private JJMessageService jJMessageService;
@@ -86,8 +80,8 @@ public class JJBugBean {
 		this.jJImportanceService = jJImportanceService;
 	}
 
-	public void setJjTaskService(JJTaskService jjTaskService) {
-		this.jjTaskService = jjTaskService;
+	public void setJJTaskService(JJTaskService jjTaskService) {
+		this.jJTaskService = jjTaskService;
 	}
 
 	// Bug_page attributes
@@ -775,7 +769,7 @@ public class JJBugBean {
 											.getContact()));
 				}
 
-				viewBugTasks = jjTaskService.getImportTasks(viewBug, null,
+				viewBugTasks = jJTaskService.getImportTasks(viewBug, null,
 						null, true);
 //				rated = (((LoginBean) LoginBean.findBean("loginBean"))
 //						.getContact().getBugs().contains(viewBug));
@@ -866,6 +860,19 @@ public class JJBugBean {
 			if (field.equalsIgnoreCase("version"))
 				b.setBuild(null);
 		}
+	}
+	
+	public List<JJBug> getInfinshedBugs(JJVersion jJversion)
+	{
+		List<JJBug> infinshedBugs = new ArrayList<JJBug>();
+		
+		for(JJBug b:jJBugService.getBugs(null, LoginBean.getProject(),null , jJversion))
+		{
+			if (!jJTaskService.haveTask(b, true, true) && jJversion == b.getVersioning())
+				infinshedBugs.add(b);
+		}
+		
+		return infinshedBugs;
 	}
 
 	public List<JJRequirement> completeReqBug(String query) {
