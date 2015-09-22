@@ -18,20 +18,27 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiqu
 public class JJAuditLogBean {
 
 	
+	private LazyConnectionStatistiquesDataModel connectionStatistiquesListTable;
+	
 	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {
 
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
 			company = loginBean.getContact().getCompany();
-		LazyConnectionStatistiquesDataModel connectionStatistiquesListTable = null;
+		connectionStatistiquesListTable = null;
 		if (connectionStatistiquesListTable == null)
 			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
 					jJAuditLogService, company);
 		return connectionStatistiquesListTable;
+	}	
+	
+	public void setConnectionStatistiquesListTable(
+			LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
+		this.connectionStatistiquesListTable = connectionStatistiquesListTable;
 	}
-	
-	
+
+
 	public void saveJJAuditLog(JJAuditLog b) {
 		jJAuditLogService.saveJJAuditLog(b);
 	}

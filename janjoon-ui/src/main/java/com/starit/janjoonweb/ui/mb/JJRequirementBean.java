@@ -231,6 +231,11 @@ public class JJRequirementBean {
 		this.jJTeststepService = jJTeststepService;
 	}
 
+	public boolean isRated(JJRequirement req) {
+		return (((LoginBean) LoginBean.findBean("loginBean")).getContact()
+				.getRequirements().contains(req));
+	}
+
 	public String getFilterButton() {
 		if (filterButton == null) {
 			filterButton = "specification_filter_button";
@@ -4721,6 +4726,66 @@ public class JJRequirementBean {
 
 	}
 
+	public void onrate(JJRequirement req) {
+
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		if (!contact.getRequirements().contains(req)) {
+
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
+			}
+			contact.getRequirements().add(
+					jJRequirementService.findJJRequirement(req.getId()));
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail());
+			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
+
+			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
+			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
+			}
+			contact.getRequirements().remove(
+					jJRequirementService.findJJRequirement(req.getId()));
+			if (LoginBean.findBean("jJContactBean") == null) {
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+			}
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE, MessageFactory
+							.getMessage("label_requirement", "").getDetail());
+			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
+
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public void onNodeSelect(NodeSelectEvent event) throws IOException {
 
@@ -4987,7 +5052,8 @@ public class JJRequirementBean {
 				loginBean.getAuthorizedMap("Requirement",
 						LoginBean.getProject(), LoginBean.getProduct()),
 				jJversion)) {
-			if (!jJTaskService.haveTask(req, true, true) && jJversion == req.getVersioning())				
+			if (!jJTaskService.haveTask(req, true, true)
+					&& jJversion == req.getVersioning())
 				infinshedRequirement.add(req);
 		}
 

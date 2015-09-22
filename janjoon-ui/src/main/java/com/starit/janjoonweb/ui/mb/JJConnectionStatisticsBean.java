@@ -12,21 +12,6 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiqu
 @RooSerializable
 @RooJsfManagedBean(entity = JJConnectionStatistics.class, beanName = "jJConnectionStatisticsBean")
 public class JJConnectionStatisticsBean {
-	
-	
-	
-//	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {
-//
-//		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-//		JJCompany company = null;
-//		if (!loginBean.getAuthorisationService().isAdminCompany())
-//			company = loginBean.getContact().getCompany();
-//		LazyConnectionStatistiquesDataModel connectionStatistiquesListTable = null;
-//		if (connectionStatistiquesListTable == null)
-//			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
-//					jJConnectionStatisticsService, company);
-//		return connectionStatistiquesListTable;
-//	}
 
 	public void saveJJConnectionStatistics(JJConnectionStatistics b) {
 		b.setCreationDate(new Date());

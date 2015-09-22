@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -34,6 +35,8 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
+import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
+import com.starit.janjoonweb.ui.mb.util.ChunkTime;
 import com.starit.janjoonweb.ui.mb.util.Contact;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -79,7 +82,7 @@ public class JJContactBean {
 	private List<JJCategory> categories;
 	private List<JJCategory> loggedContactCategories;
 	private List<JJVersion> versionList;
-	private LazyContactDataModel contactsLazyModel;	
+	private LazyContactDataModel contactsLazyModel;
 	private String message;
 	private boolean disabledContactMode;
 	private boolean disabledPermissionMode;
@@ -99,7 +102,7 @@ public class JJContactBean {
 
 		if (contactsLazyModel == null) {
 			contactsLazyModel = new LazyContactDataModel(jJContactService,
-					company);	
+					company);
 		}
 
 		return contactsLazyModel;
@@ -782,6 +785,86 @@ public class JJContactBean {
 	private boolean getContactDialogConfiguration() {
 		return jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");
+	}
+
+	// edit Calendar
+	private List<ChunkTime> workDays;
+
+	public List<ChunkTime> getWorkDays() {
+
+		if (calendarUtil == null)
+			calendarUtil = getCalendarUtil();
+		if (workDays == null)
+			workDays = calendarUtil.getWorkDays();
+
+		if (calendarUtil != null
+				&& (workDays == null || workDays.contains(null))) {
+			int i = 0;
+			if (workDays == null)
+				workDays = new ArrayList<ChunkTime>();
+			while (i < 7) {
+
+				try {
+					if (workDays.get(i) == null)
+						workDays.set(i, new ChunkTime(i));
+
+				} catch (IndexOutOfBoundsException e) {
+					workDays.add(new ChunkTime(i));
+				}
+
+				i++;
+			}
+		}
+
+		return workDays;
+	}
+
+	public void timeSelectListener(ChunkTime day, int type,
+			LoginBean loginBean, JJContact jJContact) throws IOException {
+
+		if (type == 1
+				&& ((day.getStartDate1() != null && day.getEndDate1() != null) || (day
+						.getStartDate1() == null && day.getEndDate1() == null))
+				|| (type == 2 && ((day.getStartDate2() != null && day
+						.getEndDate2() != null) || (day.getStartDate2() == null && day
+						.getEndDate2() == null)))) {
+
+			boolean up = true;
+			if (day.getStartDate1() != null
+					&& day.getStartDate1().after(day.getEndDate1()))
+				up = false;
+			if (up && day.getStartDate2() != null
+					&& day.getStartDate2().after(day.getEndDate2()))
+				up = false;
+			if (up) {
+				calendarUtil = new ContactCalendarUtil(jJContact);
+				jJContact.setCalendar(calendarUtil.editWorkday(day));
+				jJContact.setUpdatedDate(new Date());
+				jJContactService.updateJJContact(jJContact);
+				
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
+				loginBean.getAuthorisationService().setSession(session);
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"message_successfully_updated",
+						FacesMessage.SEVERITY_INFO, "Contact "
+								+ loginBean.getContact().getName());
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+				session.setAttribute("jJContactBean", new JJContactBean());			
+				
+			} else {
+
+				String message = "validator_date_startAfterEndCompany";
+				FacesMessage facesMessage = MessageFactory.getMessage(message,
+						FacesMessage.SEVERITY_ERROR, new Object());
+				FacesContext.getCurrentInstance()
+						.addMessage(null, facesMessage);
+			}
+
+		}
+
 	}
 
 }

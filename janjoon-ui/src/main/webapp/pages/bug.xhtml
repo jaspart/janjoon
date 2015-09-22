@@ -27,16 +27,16 @@
 								<p:row>
 									<p:column colspan="1">																
 										<h:panelGrid columns="2">
-											<p:commandLink actionListener="#{jJBugBean.onrate}"
+											<p:commandLink actionListener="#{jJBugBean.onrate(jJBugBean.viewBug)}"
 												onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock()"
 												update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
 												rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}">
 
 												<p:graphicImage
-													name="#{!jJBugBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
+													name="#{!jJBugBean.isRated(jJBugBean.viewBug) ? 'blackstar.ico' : 'yelstar.ico'}"
 													width="32" height="32" cache="false" library="images"
-													title="#{!jJBugBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+													title="#{!jJBugBean.isRated(jJBugBean.viewBug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
 
 											</p:commandLink>
 

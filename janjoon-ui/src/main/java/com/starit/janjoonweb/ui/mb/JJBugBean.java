@@ -91,7 +91,7 @@ public class JJBugBean {
 	private JJBug JJBug_;
 
 	private JJProject bugProjectSelected;
-	//private boolean rated;
+	// private boolean rated;
 	// private JJRequirement bugRequirementSelected;
 	private JJProject project;
 	private LazyBugDataModel bugList;
@@ -147,14 +147,14 @@ public class JJBugBean {
 		this.JJBug_ = JJBug_;
 	}
 
-	public boolean isRated() {
-		return (((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact().getBugs().contains(viewBug));
+	public boolean isRated(JJBug b) {
+		return (((LoginBean) LoginBean.findBean("loginBean")).getContact()
+				.getBugs().contains(b));
 	}
 
-//	public void setRated(boolean rated) {
-//		this.rated = rated;
-//	}
+	// public void setRated(boolean rated) {
+	// this.rated = rated;
+	// }
 
 	public JJProject getProject() {
 
@@ -771,8 +771,8 @@ public class JJBugBean {
 
 				viewBugTasks = jJTaskService.getImportTasks(viewBug, null,
 						null, true);
-//				rated = (((LoginBean) LoginBean.findBean("loginBean"))
-//						.getContact().getBugs().contains(viewBug));
+				// rated = (((LoginBean) LoginBean.findBean("loginBean"))
+				// .getContact().getBugs().contains(viewBug));
 			} else {
 				viewBug = null;
 				FacesMessage facesMessage = MessageFactory.getMessage(
@@ -861,17 +861,17 @@ public class JJBugBean {
 				b.setBuild(null);
 		}
 	}
-	
-	public List<JJBug> getInfinshedBugs(JJVersion jJversion)
-	{
+
+	public List<JJBug> getInfinshedBugs(JJVersion jJversion) {
 		List<JJBug> infinshedBugs = new ArrayList<JJBug>();
-		
-		for(JJBug b:jJBugService.getBugs(null, LoginBean.getProject(),null , jJversion))
-		{
-			if (!jJTaskService.haveTask(b, true, true) && jJversion == b.getVersioning())
+
+		for (JJBug b : jJBugService.getBugs(null, LoginBean.getProject(), null,
+				jJversion)) {
+			if (!jJTaskService.haveTask(b, true, true)
+					&& jJversion == b.getVersioning())
 				infinshedBugs.add(b);
 		}
-		
+
 		return infinshedBugs;
 	}
 
@@ -991,11 +991,11 @@ public class JJBugBean {
 		return suggestions;
 	}
 
-	public void onrate() {
+	public void onrate(JJBug b) {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		if (!contact.getBugs().contains(viewBug)) {
+		if (!contact.getBugs().contains(b)) {
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
@@ -1004,7 +1004,7 @@ public class JJBugBean {
 				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
 						.setMainMessages(null);
 			}
-			contact.getBugs().add(jJBugService.findJJBug(viewBug.getId()));
+			contact.getBugs().add(jJBugService.findJJBug(b.getId()));
 
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -1021,7 +1021,7 @@ public class JJBugBean {
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
-			contact.getBugs().remove(jJBugService.findJJBug(viewBug.getId()));
+			contact.getBugs().remove(jJBugService.findJJBug(b.getId()));
 
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
@@ -1081,6 +1081,42 @@ public class JJBugBean {
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+	}
+
+	public void onRateMultiple() {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		for (JJBug b : selectedBugList) {
+
+			if (!contact.getBugs().contains(b)) {
+				((LoginBean) LoginBean.findBean("loginBean"))
+						.setMessageCount(null);
+				if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
+					((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+							.setAlertMessages(null);
+					((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+							.setMainMessages(null);
+				}
+				contact.getBugs().add(jJBugService.findJJBug(b.getId()));
+
+				if (LoginBean.findBean("jJContactBean") == null) {
+					FacesContext fContext = FacesContext.getCurrentInstance();
+					HttpSession session = (HttpSession) fContext
+							.getExternalContext().getSession(false);
+					session.setAttribute("jJProjectBean", new JJProjectBean());
+				}
+			}
+		}
+
+		((JJContactBean) LoginBean.findBean("jJContactBean"))
+				.updateJJContact(contact);
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE, "Bugs");
+		facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		selectedBugList = null;
 	}
 
 	public List<JJCriticity> completeCriticityBug(String query) {

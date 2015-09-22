@@ -180,12 +180,12 @@
 						</f:facet>
 					</p:panelGrid>
 				</h:form>
-				<h:panelGrid  columns="1">
+				<h:panelGrid columns="1">
 					<h:form id="workdaysCalendar">
-						<p:dataTable value="#{jJContactBean.calendarUtil.workDays}"
+						<p:dataTable value="#{jJContactBean.workDays}"
 							var="day" style="width: 550px;"
 							emptyMessage="#{messages.label_notRecordFound}"
-							rendered="#{jJContactBean.calendarUtil.workDays != null}">
+							rendered="#{jJContactBean.workDays != null}">
 
 							<p:columnGroup type="header">
 								<p:row>
@@ -214,42 +214,46 @@
 							<p:column width="40%">
 								<h:outputText value="#{day.day}" />
 							</p:column>
-							<p:column colspan="2" style="text-align: center;" width="30%"
-								rendered="#{day.startDate1 == null}">#{messages.contact_datatable_off}</p:column>
-							<p:column rendered="#{day.startDate1 != null}" width="15%">
-								<p:inputText readonly="true" value="#{day.startDate1}"
-									style="width: 50px;">
-									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="HH:mm" />
-								</p:inputText>
+							<p:column width="15%">
+								<pe:timePicker value="#{day.startDate1}"
+									showDeselectButton="true" mode="popup">
+									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
+										onstart="PF('blockUIWidget').block();"
+										oncomplete="PF('blockUIWidget').unblock();" />
+								</pe:timePicker>
 							</p:column>
-							<p:column rendered="#{day.startDate1 != null}" width="15%">
-								<p:inputText readonly="true" value="#{day.endDate1}"
-									style="width: 50px;">
-									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="HH:mm" />
-								</p:inputText>
+							<p:column width="15%">
+								<pe:timePicker value="#{day.endDate1}" showDeselectButton="true"
+									mode="popup">
+									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm" 
+										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
+										onstart="PF('blockUIWidget').block();"
+										oncomplete="PF('blockUIWidget').unblock();" />
+								</pe:timePicker>
 							</p:column>
-							<p:column colspan="2" style="text-align: center;" width="30%"
-								rendered="#{day.startDate2 == null}">#{messages.contact_datatable_off}</p:column>
-							<p:column rendered="#{day.startDate2 != null}" width="15%">
-								<p:inputText readonly="true" value="#{day.startDate2}"
-									style="width: 50px;">
-									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="HH:mm" />
-								</p:inputText>
+							<p:column width="15%">
+								<pe:timePicker value="#{day.startDate2}"
+									showDeselectButton="true" mode="popup">
+									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
+										onstart="PF('blockUIWidget').block();"
+										oncomplete="PF('blockUIWidget').unblock();" />
+								</pe:timePicker>
 							</p:column>
-							<p:column rendered="#{day.startDate2 != null}" width="15%">
-								<p:inputText readonly="true" value="#{day.endDate2}"
-									style="width: 50px;">
-									<f:converter converterId="extendedDateTimeConverter" />
-									<f:attribute name="pattern" value="HH:mm" />
-								</p:inputText>
-							</p:column>
+							<p:column width="15%">
+								<pe:timePicker value="#{day.endDate2}" showDeselectButton="true"
+									mode="popup">
+									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
+										onstart="PF('blockUIWidget').block();"
+										oncomplete="PF('blockUIWidget').unblock();" />
+								</pe:timePicker>
+							</p:column>							
 						</p:dataTable>
 					</h:form>
-					<h:form id="permissionForm" 
-					style="#{jJContactBean.calendarUtil.workDays != null ? 'margin-top :20px;' : ''}">
+					<h:form id="permissionForm"
+						style="#{jJContactBean.calendarUtil.workDays != null ? 'margin-top :20px;' : ''}">
 						<p:dataTable id="permissionDataTable" var="permission"
 							scrollable="true" style="width:550px;" scrollHeight="200"
 							value="#{jJContactBean.contactUtil.permissions}"
@@ -295,7 +299,7 @@
 						</p:dataTable>
 					</h:form>
 				</h:panelGrid>
-				<h:form id="vacationForm" >
+				<h:form id="vacationForm">
 					<p:panelGrid>
 						<f:facet name="header">
 							<p:row>

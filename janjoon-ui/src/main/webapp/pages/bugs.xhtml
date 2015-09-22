@@ -99,10 +99,10 @@
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="50,100,200">
 
-					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton" />
+					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
 					<p:ajax event="rowUnselectCheckbox"
-						update="bugTable2:deleteMButton" />
-					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton" />
+						update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
+					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
 					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
@@ -125,13 +125,25 @@
 										value="#{messages.bug_table_add_label}" update=":createForm "
 										style="margin-left: 20px;" resetValues="true"
 										oncomplete="PF('createDialogWidget').show()"
-										title="#{messages.label_create}" />									
+										title="#{messages.label_create}" />
 								</p:column>
 							</p:row>
 						</p:outputPanel>
 					</f:facet>
 
-					<p:column selectionMode="multiple" style="width:2%" />
+					<p:column selectionMode="multiple" style="width:5%">
+						<p:commandLink actionListener="#{jJBugBean.onrate(bug)}"
+							onstart="PF('blockUIWidget').block()" style="margin-left:25%;"
+							oncomplete="PF('blockUIWidget').unblock()"
+							update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm">
+
+							<p:graphicImage
+								name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}"
+								width="16" height="16" cache="false" library="images"
+								title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+						</p:commandLink>
+					</p:column>
 
 					<p:column headerText="#{messages.bug_table_title_title}"
 						filterMatchMode="contains" sortBy="#{bug.name}"
@@ -195,7 +207,7 @@
 									target="#{jJBugBean.JJBug_}" />
 								<f:setPropertyActionListener value="#{bug.project}"
 									target="#{jJBugBean.bugProjectSelected}" />
-							</p:menuitem>							
+							</p:menuitem>
 							<p:menuitem id="deleteButton" icon="ui-icon-trash"
 								oncomplete="PF('deleteDialogWidget').show()"
 								value="#{messages.label_delete}"
@@ -213,6 +225,15 @@
 							oncomplete="PF('deleteMDialogWidget').show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
+
+						<p:commandButton value="#{messages.bug_favoris_button}"
+							id="subscribeMButton" icon="ui-icon-star"
+							update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{jJBugBean.onRateMultiple}"
+							disabled="#{empty jJBugBean.selectedBugList}"
+							title="#{messages.requirement_subscription_rate_title}" />
 					</f:facet>
 				</p:dataTable>
 			</h:form>

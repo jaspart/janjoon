@@ -1,7 +1,9 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,7 +65,7 @@ public class ContactCalendarUtil {
 			properties.load(new StringReader(contact.getCalendar()));
 
 			int j = 0;
-			while (j > 7) {
+			while (j < 7) {
 				try {
 					String workDay = properties
 							.getProperty(WORK_DAYS + "." + j);
@@ -764,6 +766,40 @@ public class ContactCalendarUtil {
 		}
 		return periodTasks;
 	}
+	
+	public String editWorkday(ChunkTime day) throws IOException {
+		Properties properties = new Properties();
+		String calendar = contact.getCalendar();
+		if (calendar == null) {
+			calendar = "";
+		}
+		properties.load(new StringReader(calendar));
+		DateFormat f = new SimpleDateFormat("HH:mm");
+		String value;
+		if (day.getStartDate1() != null && day.getStartDate2() != null)
+			value = f.format(day.getStartDate1()) + "-"
+					+ f.format(day.getEndDate1()) + " & "
+					+ f.format(day.getStartDate2()) + "-"
+					+ f.format(day.getEndDate2());
+		else {
+			if (day.getStartDate1() != null)
+				value = f.format(day.getStartDate1()) + "-"
+						+ f.format(day.getEndDate1());
+			else if (day.getStartDate2() != null)
+				value = f.format(day.getStartDate2()) + "-"
+						+ f.format(day.getEndDate2());
+			else
+				value = "null";
+		}
+
+		properties.setProperty(WORK_DAYS + "." + day.getDayNumber(), value);
+
+		StringWriter writer = new StringWriter();
+		properties.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
+
+	}
+
 
 	public class SuperimposedShunkTime {
 

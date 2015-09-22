@@ -64,68 +64,9 @@ public class LazyConnectionStatistiquesDataModel extends
 
 		List<ConnectionStatistics> data = new ArrayList<ConnectionStatistics>();
 		MutableInt size = new MutableInt(0);
+		
 		data = load(size, first, pageSize, multiSortMeta, filters);
-		setRowCount(size.getValue());
-		System.err.println("SIZE :" + data.size());
-
-//		if (multiSortMeta != null) {
-//			for (SortMeta sortMeta : multiSortMeta) {
-//				String sortField = sortMeta.getSortField();
-//				SortOrder sortOrder = sortMeta.getSortOrder();
-//
-//				if (sortField.contains("logoutDate")) {
-//					if (sortOrder.equals(SortOrder.DESCENDING))
-//						Collections.sort(data,
-//								new Comparator<ConnectionStatistics>() {
-//									@Override
-//									public int compare(ConnectionStatistics o1,
-//											ConnectionStatistics o2) {
-//										return o1.getLogoutDate().compareTo(
-//												o2.getLogoutDate());
-//
-//									}
-//								});
-//					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-//						Collections.sort(data,
-//								new Comparator<ConnectionStatistics>() {
-//									@Override
-//									public int compare(ConnectionStatistics o1,
-//											ConnectionStatistics o2) {
-//										return o2.getLogoutDate().compareTo(
-//												o1.getLogoutDate());
-//
-//									}
-//								});
-//					}
-//				} else if (sortField.contains("duration")) {
-//					if (sortOrder.equals(SortOrder.DESCENDING))
-//						Collections.sort(data,
-//								new Comparator<ConnectionStatistics>() {
-//									@Override
-//									public int compare(ConnectionStatistics o1,
-//											ConnectionStatistics o2) {
-//										return o1.getDuration().compareTo(
-//												o2.getDuration());
-//
-//									}
-//								});
-//					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-//						Collections.sort(data,
-//								new Comparator<ConnectionStatistics>() {
-//									@Override
-//									public int compare(ConnectionStatistics o1,
-//											ConnectionStatistics o2) {
-//										return o2.getDuration().compareTo(
-//												o1.getDuration());
-//
-//									}
-//								});
-//					}
-//				}
-//			}
-//		}
-		
-		
+		setRowCount(size.getValue());		
 		int dataSize = data.size();
 
 		if (dataSize > pageSize) {

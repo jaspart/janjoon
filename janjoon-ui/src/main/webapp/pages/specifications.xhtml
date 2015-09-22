@@ -259,6 +259,21 @@
 										</f:facet>
 									</p:panelGrid>
 								</f:facet>
+								<p:column width="5%">
+									<p:commandLink
+										actionListener="#{jJRequirementBean.onrate(reqUtil.requirement)}"
+										id="rate"
+										update=":growlForm :messageCreationForm :headerForm:communicationButton categoryTable_#{loop.index}:rate"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()">
+
+										<p:graphicImage
+											name="#{!jJRequirementBean.isRated(reqUtil.requirement) ? 'blackstar.ico' : 'yelstar.ico'}"
+											width="16" height="16" cache="false" library="images"
+											title="#{!jJRequirementBean.isRated(reqUtil.requirement) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+									</p:commandLink>
+								</p:column>
 
 								<p:column rendered="false" exportable="false"
 									filterBy="#{reqUtil.requirement.id}" filterStyle="display:none"

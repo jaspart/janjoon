@@ -6,22 +6,39 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="statistiqueForm">
-		<p:panel id="statistiquePanel" style="width:600px" columns="1"
+		<p:panel id="statistiquePanel" style="width:700px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="statistiqueDataTable" var="statistique" lazy="true"
-				emptyMessage="#{messages.label_notRecordFound}"
 				paginatorPosition="bottom"
-				value="#{jJConnectionStatisticsBean.connectionStatistiquesListTable}"
-				paginator="true" rows="10" rowKey="#{statistique.id}">
-				<f:facet name="header">#{messages.admin_statistique_table_header}</f:facet>
-				<p:column>
+				value="#{jJAuditLogBean.connectionStatistiquesListTable}"
+				paginator="true" rows="10"
+				emptyMessage="#{messages.label_notRecordFound}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" sortMode="multiple"
+				widgetVar="statistiqueDataTableWV">
+				<f:facet name="header">#{messages.admin_statistique_table_header}
+				<p:inputText id="globalFilter"
+						onkeyup="PF('statistiqueDataTableWV').filter()"
+						style="width:200px"
+						placeholder="#{messages.bug_table_search_watermark}" />
+				</f:facet>
+				<p:column sortBy="#{statistique.contact.company.name}" id="company"
+					filterOptions="#{jJCompanyBean.companyOptions}"
+					filterMatchMode="exact" filterStyle="width: 80%;"
+					filterBy="#{statistique.contact.company.name}">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_menuitem}" />
+					</f:facet>
+					<h:outputText value="#{statistique.contact.company.name}" />
+				</p:column>
+				<p:column sortBy="#{statistique.contact.name}">
 					<f:facet name="header">
 						<h:outputText
 							value="#{messages.admin_statistique_table_name_title}" />
 					</f:facet>
 					<h:outputText value="#{statistique.contact.name}" />
 				</p:column>
-				<p:column>
+				<p:column sortBy="#{statistique.loginDate}">
 					<f:facet name="header">
 						<h:outputText
 							value="#{messages.admin_statistique_table_logindate_title}" />

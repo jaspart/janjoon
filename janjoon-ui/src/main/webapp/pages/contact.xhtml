@@ -18,6 +18,15 @@
 						onkeyup="PF('contactDataTableWV').filter()" style="width:200px"
 						placeholder="#{messages.bug_table_search_watermark}" />
 				</f:facet>
+				<p:column sortBy="#{contact.company.name}" id="company"
+					filterOptions="#{jJCompanyBean.companyOptions}"
+					filterMatchMode="exact" filterStyle="width: 80%;"
+					filterBy="#{contact.company.name}">
+					<f:facet name="header">
+						<h:outputText value="#{messages.admin_company_menuitem}" />
+					</f:facet>
+					<h:outputText value="#{contact.company.name}" />
+				</p:column>
 				<p:column sortBy="#{contact.firstname}">
 					<f:facet name="header">
 						<h:outputText
@@ -37,16 +46,7 @@
 						<h:outputText value="#{messages.admin_contact_table_email_label}" />
 					</f:facet>
 					<h:outputText value="#{contact.email}" />
-				</p:column>
-				<p:column sortBy="#{contact.company.name}" id="company"
-					filterOptions="#{jJCompanyBean.companyOptions}"
-					filterMatchMode="exact" filterStyle="width: 80%;"
-					filterBy="#{contact.company.name}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_menuitem}" />
-					</f:facet>
-					<h:outputText value="#{contact.company.name}" />
-				</p:column>
+				</p:column>				
 				<p:column styleClass="action-column" width="170">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_contact_table_action_label}" />
