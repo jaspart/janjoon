@@ -120,6 +120,146 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		return result.getResultList();
 	}
+	
+	@Override
+	public List<JJTask> getTasks(JJProject project, JJProduct product,
+			JJContact assignedTo, Date startDate, Date endDate) {
+
+		Set<JJTask> returnedValue = new HashSet<JJTask>();
+
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "requirement")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "bug")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "testcase")));
+
+		return new ArrayList<JJTask>(returnedValue);
+
+	}
+
+	private List<JJTask> getTasks(JJProject project, JJProduct product,
+			JJContact assignedTo, Date startDate, Date endDate,String objet) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
+				.createQuery(JJTask.class);
+
+		Root<JJTask> from = criteriaQuery.from(JJTask.class);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> orPredicate= new ArrayList<Predicate>();
+
+		if (assignedTo != null) {
+			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
+					assignedTo));
+		}
+		
+		predicates.add(criteriaBuilder.isNotNull(from.get("startDateReal")));
+		predicates.add(criteriaBuilder.isNotNull(from.get("endDateReal")));
+
+		predicates.add(criteriaBuilder.lessThan(
+				from.<Date> get("startDateReal"), endDate));
+
+		orPredicate.add(criteriaBuilder.between(
+				from.<Date> get("startDateReal"), startDate, endDate));
+		orPredicate.add(criteriaBuilder.equal(
+				from.<Date> get("startDateReal"), startDate));
+
+		orPredicate.add(criteriaBuilder.between(
+				from.<Date> get("endDateReal"), startDate, endDate));
+		orPredicate.add(criteriaBuilder.equal(from.<Date> get("endDateReal"),
+				endDate));
+
+		orPredicate.add(criteriaBuilder.and(criteriaBuilder.lessThan(
+				from.<Date> get("startDateReal"), startDate), criteriaBuilder
+				.isNull(from.get("endDateReal"))));
+
+		orPredicate.add(criteriaBuilder.and(criteriaBuilder.lessThan(
+				from.<Date> get("startDateReal"), startDate), criteriaBuilder
+				.greaterThan(from.<Date> get("endDateReal"), endDate)));	
+		
+		if (objet != null && project != null) {
+
+			if (objet.equalsIgnoreCase("bug") || objet.equalsIgnoreCase("b")) {
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("bug")));
+				andPredicates.add(criteriaBuilder.equal(
+						from.join("bug").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(
+						from.join("bug").get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			} else if (objet.equalsIgnoreCase("requirement")) {
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("requirement")));
+				andPredicates.add(criteriaBuilder.equal(from
+						.join("requirement").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(from
+						.join("requirement").get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			} else if (objet.equalsIgnoreCase("testcase")) {
+				List<Predicate> andPredicates = new ArrayList<Predicate>();
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("testcase")));
+				andPredicates.add(criteriaBuilder.equal(from.join("testcase")
+						.join("requirement").get("project"), project));
+				andPredicates.add(criteriaBuilder.equal(from.join("testcase")
+						.get("enabled"), true));
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			}
+
+		}
+
+		if (product != null) {
+
+			List<Predicate> andPredicates = new ArrayList<Predicate>();
+
+			if (objet.equalsIgnoreCase("requirement")) {
+				andPredicates.add(criteriaBuilder.equal(from
+						.join("requirement").get("product"), product));
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("requirement")));
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			} else if (objet.equalsIgnoreCase("bug")
+					|| objet.equalsIgnoreCase("b")) {
+
+				andPredicates.add(criteriaBuilder.equal(
+						from.get("bug").get("versioning").get("product"),
+						product));
+				andPredicates.add(criteriaBuilder.isNotNull(from.get("bug")));
+
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			}
+
+			else if (objet.equalsIgnoreCase("testcase")) {
+				andPredicates.add(criteriaBuilder.equal(from.get("testcase")
+						.get("requirement").get("product"), product));
+				andPredicates.add(criteriaBuilder.isNotNull(from
+						.get("testcase")));
+
+				predicates.add(criteriaBuilder.and(andPredicates
+						.toArray(new Predicate[] {})));
+			}
+
+		}
+		
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
+
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})),
+				criteriaBuilder.or(orPredicate.toArray(new Predicate[] {})));
+
+		select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
+
+		TypedQuery<JJTask> result = entityManager.createQuery(select);
+
+		return result.getResultList();
+
+	}
 
 	@Override
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
@@ -375,7 +515,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			}
 
 			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));			
+					.toArray(new Predicate[] {})));
 
 			if (finished
 					&& (entityManager.createQuery(select).getSingleResult() > 0 || (object instanceof JJRequirement
@@ -424,7 +564,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			}
 
 			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));			
+					.toArray(new Predicate[] {})));
 
 			if (object instanceof JJRequirement
 					&& entityManager.createQuery(select).getSingleResult() == 0

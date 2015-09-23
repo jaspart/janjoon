@@ -6,6 +6,63 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/layout.xhtml">
-	<ui:define name="content"></ui:define>
+	<ui:define name="content">
+		<p:tabView id="teamTabView" widgetVar="teamTabView">
+			<p:tab title="Imputation Schedule">
+				<h:form id="imputationForm">
+					<p:schedule value="#{jJTaskBean.lazyEventModel}" draggable="false"
+						locale="#{localeBean.locale}">
+						<p:ajax event="eventSelect" listener="#{jJTaskBean.onEventSelect}"
+							update=":viewTaskForm :viewTaskDialog" immediate="true"
+							resetValues="true" />
+						<!-- 						<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" -->
+						<!-- 							update="messages" /> -->
+						<!-- 						<p:ajax event="eventResize" -->
+						<!-- 							listener="#{scheduleView.onEventResize}" update="messages" /> -->
+
+					</p:schedule>
+				</h:form>
+			</p:tab>
+		</p:tabView>
+
+		<p:dialog id="viewTaskDialog"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode" draggable="false">
+			<p:ajax event="close" update=":teamTabView"
+				listener="#{jJTaskBean.closeEvent('team')}" />
+			<p:outputPanel id="viewTaskPanel">
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<p:remoteCommand name="updateForm" update=":viewTaskForm" />
+
+					<p:panel styleClass="panelDialog">
+						<f:facet name="header">
+							<p:messages id="msg" closable="true" />
+						</f:facet>
+						<ui:include src="taskDialog.xhtml">
+							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						</ui:include>
+						<f:facet name="footer">
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
+								value="#{messages.label_update} Task"
+								onstart="PF('viewtaskBlockUIWidget').block()"
+								style="margin-top: 5px;"
+								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
+								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
+							<p:commandButton id="viewCloseButton"
+								value="#{messages.label_close}"
+								style="margin-left: 20px;margin-top: 5px;"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+						</f:facet>
+					</p:panel>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+	</ui:define>
 </ui:composition>
 </html>

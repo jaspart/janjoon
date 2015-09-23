@@ -161,13 +161,12 @@ public class LoginBean implements Serializable {
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
 		this.jJCompanyService = jJCompanyService;
 	}
-	
+
 	public static void setLogger(Logger logger) {
 		LoginBean.logger = logger;
 	}
 
-	public void setjJAuditLogService(
-			JJAuditLogService jJAuditLogService) {
+	public void setjJAuditLogService(JJAuditLogService jJAuditLogService) {
 		this.jJAuditLogService = jJAuditLogService;
 	}
 
@@ -220,7 +219,7 @@ public class LoginBean implements Serializable {
 							"dev.nullProject.label",
 							FacesMessage.SEVERITY_ERROR, "");
 				} else if (s.contains("planning") || s.contains("test")
-						|| s.contains("stats")) {
+						|| s.contains("teams") || s.contains("stats")) {
 
 					if (getProject() == null) {
 						s = "main";
@@ -547,15 +546,14 @@ public class LoginBean implements Serializable {
 							.getMessage("login_licence_expired",
 									FacesMessage.SEVERITY_WARN);
 				}
-				
+
 				auditLogLogin = new JJAuditLog();
 				auditLogLogin.setContact(contact);
 				auditLogLogin.setAuditLogDate(new Date());
 				auditLogLogin.setKeyName(ConnectionStatistics.LOGIN_OBJECT);
-				auditLogLogin.setKeyValue(ConnectionStatistics.getFormatter().format(auditLogLogin.getAuditLogDate()));
+				auditLogLogin.setKeyValue(ConnectionStatistics.getFormatter()
+						.format(auditLogLogin.getAuditLogDate()));
 				auditLogLogin.setObjet("JJContact");
-				
-				
 
 				prevPage = getRedirectUrl(session);
 			} else {
@@ -631,10 +629,10 @@ public class LoginBean implements Serializable {
 			menuIndex = 8;
 			break;
 		case "stats":
-			menuIndex = 8;
+			menuIndex = 9;
 			break;
 		case "administration":
-			menuIndex = 9;
+			menuIndex = 10;
 			break;
 
 		default:
@@ -655,38 +653,36 @@ public class LoginBean implements Serializable {
 					"#{" + beanName + "}", Object.class);
 
 	}
-	
+
 	public static UIComponent findComponent(final String id) {
 
-	    FacesContext context = FacesContext.getCurrentInstance(); 
-	    UIViewRoot root = context.getViewRoot();
-	    final UIComponent[] found = new UIComponent[1];
+		FacesContext context = FacesContext.getCurrentInstance();
+		UIViewRoot root = context.getViewRoot();
+		final UIComponent[] found = new UIComponent[1];
 
-	    root.visitTree(new FullVisitContext(context), new VisitCallback() {     
-	        @Override
-	        public VisitResult visit(VisitContext context, UIComponent component) {
-	            if(component.getId() != null && component.getId().equals(id)){
-	                found[0] = component;
-	                return VisitResult.COMPLETE;
-	            }
-	            return VisitResult.ACCEPT;              
-	        }
-	    });
+		root.visitTree(new FullVisitContext(context), new VisitCallback() {
+			@Override
+			public VisitResult visit(VisitContext context, UIComponent component) {
+				if (component.getId() != null && component.getId().equals(id)) {
+					found[0] = component;
+					return VisitResult.COMPLETE;
+				}
+				return VisitResult.ACCEPT;
+			}
+		});
 
-	    return found[0];
+		return found[0];
 
 	}
 
 	public void onTabAdminChange(TabChangeEvent event) {
 
-		
-		TabView tv = (TabView) event.getComponent();		
+		TabView tv = (TabView) event.getComponent();
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
-		int i=activeTabAdminIndex;
+		int i = activeTabAdminIndex;
 		System.err.println("###### ACtive tab: " + activeTabAdminIndex);
-		while(i>0)
-		{
-			if(!tv.getChildren().get(i).isRendered())
+		while (i > 0) {
+			if (!tv.getChildren().get(i).isRendered())
 				activeTabAdminIndex--;
 			i--;
 		}
@@ -719,10 +715,10 @@ public class LoginBean implements Serializable {
 			session.setAttribute("jJRequirementBean", null);
 			session.setAttribute("jJStatusBean", new JJStatusBean());
 
-//			if (session.getAttribute("jJBuildBean") != null) {
-//				((JJBuildBean) session.getAttribute("jJBuildBean"))
-//						.setBuildDataModelList(null);
-//			}
+			// if (session.getAttribute("jJBuildBean") != null) {
+			// ((JJBuildBean) session.getAttribute("jJBuildBean"))
+			// .setBuildDataModelList(null);
+			// }
 
 			if (event != null) {
 				if (session.getAttribute("requirementBean") != null) {
@@ -745,7 +741,7 @@ public class LoginBean implements Serializable {
 				} else if (event.getComponent().getClientId()
 						.contains("productSelectOneMenu")) {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
-					productBean.setProduct((JJProduct) event.getNewValue());					
+					productBean.setProduct((JJProduct) event.getNewValue());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					if (session.getAttribute("jJStatusBean") != null)
@@ -821,14 +817,14 @@ public class LoginBean implements Serializable {
 						requirementBean = new JJRequirementBean();
 					if (requirementBean.getTableDataModelList() == null)
 						requirementBean.fullTableDataModelList();
-					
-//					RequestContext.getCurrentInstance().execute(
-//							"updateDataTable()");
-//					
-					 ExternalContext ec = FacesContext.getCurrentInstance()
-					 .getExternalContext();
-					 ec.redirect(((HttpServletRequest) ec.getRequest())
-					 .getRequestURI());
+
+					// RequestContext.getCurrentInstance().execute(
+					// "updateDataTable()");
+					//
+					ExternalContext ec = FacesContext.getCurrentInstance()
+							.getExternalContext();
+					ec.redirect(((HttpServletRequest) ec.getRequest())
+							.getRequestURI());
 
 				}
 
@@ -1079,6 +1075,7 @@ public class LoginBean implements Serializable {
 
 			} else if (getProject() == null
 					&& (root.getViewId().contains("planning")
+							|| root.getViewId().contains("teams")
 							|| root.getViewId().contains("test")
 							|| root.getViewId().contains("stats") || root
 							.getViewId().contains("development"))) {
@@ -1109,19 +1106,22 @@ public class LoginBean implements Serializable {
 						if (viewID.contains("specifications")) {
 							if (authorisationService.isrRequiement()) {
 
-//								JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-//								if (requirementBean == null)
-//									requirementBean = new JJRequirementBean();
-//								if (requirementBean.getTableDataModelList() == null) {
-//									requirementBean.fullTableDataModelList();
-//									RequestContext.getCurrentInstance()
-//											.execute("updateDataTable()");
-//									// ExternalContext ec = FacesContext
-//									// .getCurrentInstance()
-//									// .getExternalContext();
-//									// ec.redirect(((HttpServletRequest) ec
-//									// .getRequest()).getRequestURI());
-//								}
+								// JJRequirementBean requirementBean =
+								// (JJRequirementBean)
+								// findBean("jJRequirementBean");
+								// if (requirementBean == null)
+								// requirementBean = new JJRequirementBean();
+								// if (requirementBean.getTableDataModelList()
+								// == null) {
+								// requirementBean.fullTableDataModelList();
+								// RequestContext.getCurrentInstance()
+								// .execute("updateDataTable()");
+								// // ExternalContext ec = FacesContext
+								// // .getCurrentInstance()
+								// // .getExternalContext();
+								// // ec.redirect(((HttpServletRequest) ec
+								// // .getRequest()).getRequestURI());
+								// }
 
 							} else {
 								facesMessage = MessageFactory.getMessage(
@@ -1154,7 +1154,7 @@ public class LoginBean implements Serializable {
 							}
 
 						} else if ((!authorisationService.isrBug() && root
-								.getViewId().contains("bug"))
+								.getViewId().contains("bug"))								
 								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
 										.getViewId().contains("stats")))
@@ -1267,19 +1267,22 @@ public class LoginBean implements Serializable {
 					} else if (root.getViewId().contains("specifications")) {
 
 						if (authorisationService.isrRequiement()) {
-//							JJRequirementBean requirementBean = (JJRequirementBean) findBean("jJRequirementBean");
-//							if (requirementBean == null)
-//								requirementBean = new JJRequirementBean();
-//							if (requirementBean.getTableDataModelList() == null) {
-//								requirementBean.fullTableDataModelList();
-//								RequestContext.getCurrentInstance().execute(
-//										"updateDataTable()");
-//								// ExternalContext ec = FacesContext
-//								// .getCurrentInstance()
-//								// .getExternalContext();
-//								// ec.redirect(((HttpServletRequest) ec
-//								// .getRequest()).getRequestURI());
-//							}
+							// JJRequirementBean requirementBean =
+							// (JJRequirementBean)
+							// findBean("jJRequirementBean");
+							// if (requirementBean == null)
+							// requirementBean = new JJRequirementBean();
+							// if (requirementBean.getTableDataModelList() ==
+							// null) {
+							// requirementBean.fullTableDataModelList();
+							// RequestContext.getCurrentInstance().execute(
+							// "updateDataTable()");
+							// // ExternalContext ec = FacesContext
+							// // .getCurrentInstance()
+							// // .getExternalContext();
+							// // ec.redirect(((HttpServletRequest) ec
+							// // .getRequest()).getRequestURI());
+							// }
 						} else {
 							facesMessage = MessageFactory.getMessage(
 									"header_noPermission_menuitem",
@@ -1616,22 +1619,20 @@ public class LoginBean implements Serializable {
 	@PreDestroy
 	public void preDestroySession() throws Exception {
 
-		if (contact != null && auditLogLogin!= null) {
+		if (contact != null && auditLogLogin != null) {
 			System.err
 					.println("Spring Container is destroy! Customer clean up");
 			System.out.println("Contact " + contact.getName());
-			JJAuditLog auditLog=new JJAuditLog();
+			JJAuditLog auditLog = new JJAuditLog();
 			auditLog.setContact(contact);
 			auditLog.setAuditLogDate(new Date());
 			auditLog.setKeyName(ConnectionStatistics.LOGOUT_OBJECT);
-			auditLog.setKeyValue(ConnectionStatistics.getFormatter().format(auditLog.getAuditLogDate()));
+			auditLog.setKeyValue(ConnectionStatistics.getFormatter().format(
+					auditLog.getAuditLogDate()));
 			auditLog.setObjet("JJContact");
-			
+
 			jJAuditLogService.saveJJAuditLog(auditLogLogin);
 			jJAuditLogService.saveJJAuditLog(auditLog);
-			
-			
-			
 
 		}
 	}

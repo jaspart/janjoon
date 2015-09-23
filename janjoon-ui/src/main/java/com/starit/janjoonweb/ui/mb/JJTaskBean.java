@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,13 +41,18 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.extensions.event.timeline.TimelineAddEvent;
 import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
 import org.primefaces.extensions.model.layout.LayoutOptions;
 import org.primefaces.extensions.model.timeline.TimelineEvent;
 import org.primefaces.extensions.model.timeline.TimelineModel;
+import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.LazyScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -658,7 +664,6 @@ public class JJTaskBean {
 	}
 
 	public void closeEvent(String operation) {
-
 		// System.err.println("dfgdfgdfg");
 		// //Long id = null;
 		// if (task.getSprint() != null)
@@ -1612,7 +1617,7 @@ public class JJTaskBean {
 
 	public void fillTableImport() {
 
-		importFormats = new ArrayList<ImportFormat>();		
+		importFormats = new ArrayList<ImportFormat>();
 		copyObjets = false;
 		oldCopyObjects = false;
 		disabledImportButton = true;
@@ -1623,12 +1628,13 @@ public class JJTaskBean {
 
 				for (JJBug bug : jJBugService.getImportBugs(
 						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), project,LoginBean.getProduct(), version,
-						importCategory, importStatus, true)) {
+								.getContact().getCompany(), project, LoginBean
+								.getProduct(), version, importCategory,
+						importStatus, true)) {
 
 					if (!checkAll) {
-						
-						if (!jJTaskService.haveTask(bug, true,false)) {
+
+						if (!jJTaskService.haveTask(bug, true, false)) {
 							importFormats.add(new ImportFormat(bug.getName(),
 									bug, copyObjets));
 						}
@@ -1651,8 +1657,8 @@ public class JJTaskBean {
 								false, true, false, false, null)) {
 
 					if (!checkAll) {
-					
-						if (!jJTaskService.haveTask(requirement,true,false)) {
+
+						if (!jJTaskService.haveTask(requirement, true, false)) {
 							importFormats.add(new ImportFormat(requirement
 									.getName(), requirement, copyObjets));
 						}
@@ -1670,8 +1676,8 @@ public class JJTaskBean {
 								LoginBean.getProduct(), true, false)) {
 
 					if (!checkAll) {
-					
-						if (!jJTaskService.haveTask(testcase, true,false)) {
+
+						if (!jJTaskService.haveTask(testcase, true, false)) {
 							importFormats.add(new ImportFormat(testcase
 									.getName(), testcase, copyObjets));
 						}
@@ -2506,20 +2512,21 @@ public class JJTaskBean {
 		context.execute("PF('viewTaskDialogWidget').show()");
 
 	}
-
+	
+	
 	public StreamedContent getFile() {
 
 		DateFormat f1 = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat f2 = new SimpleDateFormat("hh:mm:ss");
-		
-		Date startDateDay= LoginBean.getProject().getStartDate();
-		Date endDateDay= LoginBean.getProject().getEndDate();
-		
-		if(startDateDay == null) startDateDay = new Date();
-		if(endDateDay == null) endDateDay = new Date();
-		
-		
-		
+
+		Date startDateDay = LoginBean.getProject().getStartDate();
+		Date endDateDay = LoginBean.getProject().getEndDate();
+
+		if (startDateDay == null)
+			startDateDay = new Date();
+		if (endDateDay == null)
+			endDateDay = new Date();
+
 		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
 				+ System.getProperty("line.separator")
 				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"
@@ -3367,6 +3374,54 @@ public class JJTaskBean {
 			toDoTasks = jJTaskService.getToDoTasks(contact);
 
 	}
+
+	// shedule imputaion
+	private ScheduleModel lazyEventModel;
+
+	public ScheduleModel getLazyEventModel() {
+		if (lazyEventModel == null)
+			lazyEventModel = new LazyScheduleModel() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void loadEvents(Date start, Date end) {
+					HttpSession session = (HttpSession) FacesContext
+							.getCurrentInstance().getExternalContext()
+							.getSession(false);
+					LoginBean loginBean = (LoginBean) session
+							.getAttribute("loginBean");
+					List<JJTask> tasks = jJTaskService.getTasks(
+							LoginBean.getProject(), LoginBean.getProduct(),
+							loginBean.getContact(), start, end);
+
+					for (JJTask t : tasks) {
+						addEvent(new DefaultScheduleEvent(t.getName(),
+								t.getStartDateReal(), t.getEndDateReal() != null ? t.getEndDateReal() : end, t));
+					}				
+				}
+			};
+		return lazyEventModel;
+	}
+
+	public void setLazyEventModel(ScheduleModel lazyEventModel) {
+		this.lazyEventModel = lazyEventModel;
+	}
+
+	public Date getRandomDate(Date base) {
+		Calendar date = Calendar.getInstance();
+		date.setTime(base);
+		date.add(Calendar.DATE, ((int) (Math.random() * 30)) + 1); // set random
+																	// day of
+																	// month
+
+		return date.getTime();
+	}
+	
+	public void onEventSelect(SelectEvent selectEvent) {
+        task =(JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
+        initiateReqTreeNode();
+    }
 
 	// layout options
 	private LayoutOptions layoutOptionsOne;

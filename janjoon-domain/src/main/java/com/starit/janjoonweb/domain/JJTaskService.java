@@ -18,10 +18,13 @@ public interface JJTaskService {
 	public List<JJTask> getSuperimposeTasks(JJContact assignedTo,
 			Date startDate, Date endDate, JJTask task);
 
+	public List<JJTask> getTasks(JJProject project, JJProduct product,
+			JJContact assignedTo, Date startDate, Date endDate);
+
 	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
 			JJTestcase testcase, boolean onlyActif);
-	
-	public boolean haveTask(Object object,boolean onlyActif,boolean finished);
+
+	public boolean haveTask(Object object, boolean onlyActif, boolean finished);
 
 	public void saveTasks(Set<JJTask> tasks);
 
