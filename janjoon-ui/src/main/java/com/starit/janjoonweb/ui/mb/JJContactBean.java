@@ -413,11 +413,11 @@ public class JJContactBean {
 
 	public void save(JJPermissionBean jJPermissionBean) {
 
-		System.out.println("in save permission");
-
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		contactAdmin.setUpdatedDate(new Date());
-		contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact());
+		contactAdmin.setUpdatedBy(contact);
+		boolean changed=false;
 
 		if (!contactAdmin
 				.getPassword()
@@ -427,8 +427,50 @@ public class JJContactBean {
 			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
 					.trim()));
 		}
+		
+		if (contact.equals(contactAdmin)) {
+			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
+			if (contactAdmin.getLastProject() == null
+					|| !contactAdmin.getCompany().equals(
+							contactAdmin.getLastProject().getCompany())) {
+				contactAdmin.setLastProject(jJPermissionService
+						.getDefaultProject(contactAdmin));
+				changed = true;
+			}
+
+			if (contactAdmin.getLastProduct() == null
+					|| !contactAdmin.getCompany().equals(
+							contactAdmin.getLastProduct().getCompany())) {
+				contactAdmin.setLastProduct(jJPermissionService
+						.getDefaultProduct(contactAdmin));
+				changed = true;
+			}
+		}
 
 		if (jJContactService.updateJJContactTransaction(contactAdmin)) {
+			
+			if (changed) {				
+				
+				FacesContext fContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				JJProjectBean jjProjectBean = (JJProjectBean) session
+						.getAttribute("jJProjectBean");
+				JJProductBean jjProductBean = (JJProductBean) session
+						.getAttribute("jJProductBean");
+				
+				jjProjectBean.getProjectList();
+				if (jjProjectBean.getProjectList().contains(
+						contactAdmin.getLastProject()))
+					jjProjectBean.setProject(contactAdmin.getLastProject());
+
+				jjProductBean.getProductList();
+				if (jjProductBean.getProductList().contains(
+						contactAdmin.getLastProduct())) {
+					jjProductBean.setProduct(contactAdmin.getLastProduct());
+				}
+				
+			}
 			List<JJPermission> permissions = jJPermissionService
 					.getPermissions(contactAdmin, true, null, null, null);
 
@@ -708,6 +750,15 @@ public class JJContactBean {
 		if (contact.equals(b)) {
 			b.setUpdatedBy(b);
 			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
+			if (b.getLastProject() == null
+					|| !b.getCompany().equals(b.getLastProject().getCompany())) {
+				b.setLastProject(jJPermissionService.getDefaultProject(contact));
+			}
+
+			if (b.getLastProduct() == null
+					|| !b.getCompany().equals(b.getLastProduct().getCompany())) {
+				b.setLastProduct(jJPermissionService.getDefaultProduct(contact));
+			}
 		} else
 			b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
@@ -841,7 +892,7 @@ public class JJContactBean {
 				jJContact.setCalendar(calendarUtil.editWorkday(day));
 				jJContact.setUpdatedDate(new Date());
 				jJContactService.updateJJContact(jJContact);
-				
+
 				HttpSession session = (HttpSession) FacesContext
 						.getCurrentInstance().getExternalContext()
 						.getSession(false);
@@ -852,8 +903,8 @@ public class JJContactBean {
 								+ loginBean.getContact().getName());
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
-				session.setAttribute("jJContactBean", new JJContactBean());			
-				
+				session.setAttribute("jJContactBean", new JJContactBean());
+
 			} else {
 
 				String message = "validator_date_startAfterEndCompany";

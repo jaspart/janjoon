@@ -9,6 +9,11 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
+		<style type="text/css">
+.mineSelect .ui-selectonemenu-trigger {
+	display: none;
+}
+</style>
 		<p:panel id="bugPanel" header="BUG" style="width: 99.5%;valign: top;">
 			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
 
@@ -79,7 +84,7 @@
 			<br />
 			<h:form id="bugForm">
 				<f:event type="preRenderComponent"
-					listener="#{bugDataTableOptions.dataTableInit(dataTable)}" />
+					listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs)}" />
 				<pe:blockUI target="bugTable2" content="blockUIContent"
 					widgetVar="blockUIWidget2" />
 				<h:panelGrid id="blockUIContent" columns="2"
@@ -99,10 +104,12 @@
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="50,100,200">
 
-					<p:ajax event="rowSelectCheckbox" update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
+					<p:ajax event="rowSelectCheckbox"
+						update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
 					<p:ajax event="rowUnselectCheckbox"
 						update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
-					<p:ajax event="toggleSelect" update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
+					<p:ajax event="toggleSelect"
+						update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
 					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
@@ -113,11 +120,22 @@
 					<f:facet name="header">
 						<p:outputPanel>
 							<p:row>
+								<p:column>
+									<p:selectOneMenu id="mineBugs" styleClass="mineSelect"
+										onchange="PF('bugTable').filter();" effect="fade"
+										binding="#{mineBugs}"
+										title="#{messages.specification_table_requirement_filter}">
+										<f:selectItem itemValue="false"
+											itemLabel="#{messages.specification_table_requirement_all}" />
+										<f:selectItem itemValue="true"
+											itemLabel="#{messages.specification_table_requirement_mine}" />
+									</p:selectOneMenu>
+								</p:column>
 								<p:column colspan="1">
 									<h:outputText value="#{messages.bug_table_search_label}"
-										style="vertical-align: middle !important;" />
+										style="vertical-align: middle !important;margin-left: 20px;" />
 									<p:inputText id="globalFilter"
-										onkeyup="PF('bugTable').filter()" style="width:200px"
+										onkeyup="PF('bugTable').filter()" style="width:200px;"
 										placeholder="#{messages.bug_table_search_watermark}" />
 								</p:column>
 								<p:column colspan="1">

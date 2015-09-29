@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.text.DateFormatSymbols;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.faces.context.FacesContext;

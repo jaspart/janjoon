@@ -11,15 +11,16 @@
 			<p:tab title="Imputation Schedule">
 				<h:form id="imputationForm">
 					<p:schedule value="#{jJTaskBean.lazyEventModel}" draggable="false"
-						locale="#{localeBean.locale}">
+						clientTimeZone="local" locale="#{localBean.locale}"
+						initialDate="#{jJTaskBean.scheduleInitialDate}"
+						view="#{jJTaskBean.scheduleInitialView}">
 						<p:ajax event="eventSelect" listener="#{jJTaskBean.onEventSelect}"
 							update=":viewTaskForm :viewTaskDialog" immediate="true"
-							resetValues="true" />
-						<!-- 						<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" -->
-						<!-- 							update="messages" /> -->
-						<!-- 						<p:ajax event="eventResize" -->
-						<!-- 							listener="#{scheduleView.onEventResize}" update="messages" /> -->
-
+							resetValues="true" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}" 
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:schedule>
 				</h:form>
 			</p:tab>

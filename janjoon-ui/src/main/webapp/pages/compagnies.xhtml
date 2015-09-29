@@ -163,7 +163,7 @@
 										<h:outputText value="#{day.day}" />
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.startDate1}"
+										<pe:timePicker value="#{day.startDate1}" locale="#{localeBean.locale}"
 											showDeselectButton="true" mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
@@ -172,7 +172,7 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.endDate1}"
+										<pe:timePicker value="#{day.endDate1}" locale="#{localeBean.locale}"
 											showDeselectButton="true" mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
@@ -181,7 +181,7 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.startDate2}"
+										<pe:timePicker value="#{day.startDate2}" locale="#{localeBean.locale}"
 											showDeselectButton="true" mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,2)}"
@@ -190,7 +190,7 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.endDate2}"
+										<pe:timePicker value="#{day.endDate2}" locale="#{localeBean.locale}"
 											showDeselectButton="true" mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,2)}"

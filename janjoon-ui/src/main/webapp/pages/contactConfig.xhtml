@@ -215,7 +215,7 @@
 								<h:outputText value="#{day.day}" />
 							</p:column>
 							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate1}"
+								<pe:timePicker value="#{day.startDate1}" locale="#{localeBean.locale}"
 									showDeselectButton="true" mode="popup">
 									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
@@ -225,7 +225,7 @@
 							</p:column>
 							<p:column width="15%">
 								<pe:timePicker value="#{day.endDate1}" showDeselectButton="true"
-									mode="popup">
+									mode="popup" locale="#{localeBean.locale}">
 									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm" 
 										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"
@@ -233,7 +233,7 @@
 								</pe:timePicker>
 							</p:column>
 							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate2}"
+								<pe:timePicker value="#{day.startDate2}" locale="#{localeBean.locale}"
 									showDeselectButton="true" mode="popup">
 									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
@@ -243,7 +243,7 @@
 							</p:column>
 							<p:column width="15%">
 								<pe:timePicker value="#{day.endDate2}" showDeselectButton="true"
-									mode="popup">
+									mode="popup" locale="#{localeBean.locale}">
 									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"

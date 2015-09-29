@@ -8,11 +8,13 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -79,7 +81,40 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 		System.err.println("FIRST " + first);
 		List<JJBug> data = new ArrayList<JJBug>();
 		MutableInt size = new MutableInt(0);
-		data = bugService.load(((LoginBean) LoginBean.findBean("loginBean"))
+		SelectOneMenu mineComponent = (SelectOneMenu) LoginBean
+				.findComponent("mineBugs");
+		JJContact contact=null;		
+		System.out.println("VALUE: "+mineComponent.getValue());
+		if(mineComponent.getValue() instanceof Boolean)
+		{
+			Boolean mine= (Boolean) mineComponent.getValue();
+			if(mine != null && mine)
+				contact=((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact();
+			else if(mine == null)
+			{
+				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean.findBean("bugDataTableOptions"));
+				if(bugDataTableOptions.isMine())
+					contact=((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			}
+		}else if(mineComponent.getValue() instanceof String)
+		{
+			String mine= (String) mineComponent.getValue();
+			if(mine != null && mine.equalsIgnoreCase("true"))
+				contact=((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact();
+			else if(mine == null)
+			{
+				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean.findBean("bugDataTableOptions"));
+				if(bugDataTableOptions.isMine())
+					contact=((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			}
+		}
+		
+			
+		data = bugService.load(contact,((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact().getCompany(), size, first, pageSize,
 				multiSortMeta, filters, project, product, version);
 		setRowCount(size.getValue());
@@ -88,7 +123,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 		int dataSize = data.size();
 		((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false)).setAttribute("bugDataTableOptions",
-				new BugDataTableOptions(first, multiSortMeta, filters));
+				new BugDataTableOptions(first, multiSortMeta, filters,contact != null));
 		if (dataSize > pageSize) {
 			try {
 				return data.subList(first, first + pageSize);

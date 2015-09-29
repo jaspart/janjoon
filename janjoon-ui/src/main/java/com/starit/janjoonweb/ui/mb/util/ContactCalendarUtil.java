@@ -652,7 +652,8 @@ public class ContactCalendarUtil {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		if (getWorkingChunkTime(cal.get(Calendar.DAY_OF_WEEK) - 1).isWeekEnd())
+		int i = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (getWorkingChunkTime(i).isWeekEnd())
 			return true;
 		else
 			return false;

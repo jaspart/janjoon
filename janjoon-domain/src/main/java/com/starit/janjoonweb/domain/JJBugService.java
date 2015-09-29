@@ -23,7 +23,7 @@ public interface JJBugService {
 
 	public Long requirementBugCount(JJRequirement requirement);
 
-	public List<JJBug> load(JJCompany company, MutableInt size, int first,
+	public List<JJBug> load(JJContact contact,JJCompany company, MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters, JJProject project, JJProduct product,
 			JJVersion version);

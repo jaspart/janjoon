@@ -51,7 +51,7 @@
 				for="taskStartDatePlanned" />
 			<p:calendar id="taskStartDatePlanned" style="width:90px"
 				value="#{JJTask_.startDatePlanned}" navigator="true"
-				pattern="yyyy/MM/dd HH:mm" required="true"
+				pattern="yyyy/MM/dd HH:mm"  required="true" 
 				binding="#{taskStartDatePlanned}">
 				<f:validator validatorId="dateRangeValidator" />
 				<f:attribute name="edition" value="startDatePlanned" />

@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javax.faces.event.ComponentSystemEvent;
 
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.SortMeta;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ public class BugDataTableOptions {
 	private String importance;
 	private String status;
 	private String criticity;
+	private boolean mine;
 
 	public String getImportance() {
 		return importance;
@@ -52,11 +54,12 @@ public class BugDataTableOptions {
 	}
 
 	public BugDataTableOptions(int first, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters) {
+			Map<String, Object> filters,boolean mine) {
 
 		this.first = first;
 		this.multiSortMeta = multiSortMeta;
 		this.filters = filters;
+		this.mine = mine;
 		importance = "selected";
 		status = "selected";
 		criticity = "selected";
@@ -79,11 +82,12 @@ public class BugDataTableOptions {
 		}
 	}
 
-	public void dataTableInit(DataTable dataTable) {
+	public void dataTableInit(DataTable dataTable,SelectOneMenu mineBugs) {
 
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);
 		dataTable.setMultiSortMeta(multiSortMeta);
+		mineBugs.setValue(mine);
 	}
 
 	public int getFirst() {
@@ -108,6 +112,14 @@ public class BugDataTableOptions {
 
 	public void setFilters(Map<String, Object> filters) {
 		this.filters = filters;
+	}
+
+	public boolean isMine() {
+		return mine;
+	}
+
+	public void setMine(boolean mine) {
+		this.mine = mine;
 	}
 
 }

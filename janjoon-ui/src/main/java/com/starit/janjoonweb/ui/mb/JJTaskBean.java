@@ -34,10 +34,12 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.record.ScenarioProtectRecord;
 import org.hibernate.Hibernate;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.component.schedule.Schedule;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
@@ -3377,6 +3379,8 @@ public class JJTaskBean {
 
 	// shedule imputaion
 	private ScheduleModel lazyEventModel;
+	private Date scheduleInitialDate;
+	private String scheduleInitialView;
 
 	public ScheduleModel getLazyEventModel() {
 		if (lazyEventModel == null)
@@ -3390,7 +3394,7 @@ public class JJTaskBean {
 							.getCurrentInstance().getExternalContext()
 							.getSession(false);
 					LoginBean loginBean = (LoginBean) session
-							.getAttribute("loginBean");
+							.getAttribute("loginBean");					
 					List<JJTask> tasks = jJTaskService.getTasks(
 							LoginBean.getProject(), LoginBean.getProduct(),
 							loginBean.getContact(), start, end);
@@ -3398,7 +3402,8 @@ public class JJTaskBean {
 					for (JJTask t : tasks) {
 						addEvent(new DefaultScheduleEvent(t.getName(),
 								t.getStartDateReal(), t.getEndDateReal() != null ? t.getEndDateReal() : end, t));
-					}				
+					}	
+					scheduleInitialDate = start;
 				}
 			};
 		return lazyEventModel;
@@ -3406,22 +3411,39 @@ public class JJTaskBean {
 
 	public void setLazyEventModel(ScheduleModel lazyEventModel) {
 		this.lazyEventModel = lazyEventModel;
-	}
-
-	public Date getRandomDate(Date base) {
-		Calendar date = Calendar.getInstance();
-		date.setTime(base);
-		date.add(Calendar.DATE, ((int) (Math.random() * 30)) + 1); // set random
-																	// day of
-																	// month
-
-		return date.getTime();
-	}
+	}	
 	
+	public Date getScheduleInitialDate() {
+		return scheduleInitialDate;
+	}
+
+	public void setScheduleInitialDate(Date scheduleInitialDate) {
+		this.scheduleInitialDate = scheduleInitialDate;
+	}
+
+	public String getScheduleInitialView() {
+		
+		if(scheduleInitialView == null)
+			scheduleInitialView = "month";
+		return scheduleInitialView;
+	}
+
+	public void setScheduleInitialView(String scheduleInitialView) {
+		this.scheduleInitialView = scheduleInitialView;
+	}
+
 	public void onEventSelect(SelectEvent selectEvent) {
         task =(JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
+        //scheduleInitialDate = task.getStartDateReal();
         initiateReqTreeNode();
     }
+	
+	public void onViewChange(SelectEvent selectEvent)
+	{
+		System.out.println(((Schedule)selectEvent.getComponent()).getView());
+		scheduleInitialDate = (Date) ((Schedule)selectEvent.getComponent()).getInitialDate();
+		scheduleInitialView = ((Schedule)selectEvent.getComponent()).getView();
+	}
 
 	// layout options
 	private LayoutOptions layoutOptionsOne;

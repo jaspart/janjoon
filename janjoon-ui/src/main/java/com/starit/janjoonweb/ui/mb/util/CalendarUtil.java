@@ -102,6 +102,19 @@ public class CalendarUtil {
 
 		if (workDays.size() == i)
 			workDays = null;
+		else 
+		{
+			i = 0;
+			while (i < workDays.size())
+			{
+				if(workDays.get(i) == null)
+				{
+					workDays.set(i, new ChunkTime(i));
+				}
+				i++;
+			}
+				
+		}
 
 		// initHolidays
 		String day_format = properties.getProperty("day.format");

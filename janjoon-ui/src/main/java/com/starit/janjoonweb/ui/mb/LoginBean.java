@@ -501,13 +501,17 @@ public class LoginBean implements Serializable {
 
 				}
 
-				if (contact.getLastProject() == null) {
+				if (contact.getLastProject() == null
+						|| !contact.getCompany().equals(
+								contact.getLastProject().getCompany())) {
 					save = true;
 					contact.setLastProject(jJPermissionService
 							.getDefaultProject(contact));
 				}
 
-				if (contact.getLastProduct() == null) {
+				if (contact.getLastProduct() == null
+						|| !contact.getCompany().equals(
+								contact.getLastProduct().getCompany())) {
 					save = true;
 					contact.setLastProduct(jJPermissionService
 							.getDefaultProduct(contact));
@@ -1154,7 +1158,7 @@ public class LoginBean implements Serializable {
 							}
 
 						} else if ((!authorisationService.isrBug() && root
-								.getViewId().contains("bug"))								
+								.getViewId().contains("bug"))
 								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
 										.getViewId().contains("stats")))

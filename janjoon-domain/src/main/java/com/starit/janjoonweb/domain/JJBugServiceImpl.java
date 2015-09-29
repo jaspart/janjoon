@@ -151,7 +151,7 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 
-	public List<JJBug> load(JJCompany company, MutableInt size, int first,
+	public List<JJBug> load(JJContact contact,JJCompany company, MutableInt size, int first,
 			int pageSize, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters, JJProject project, JJProduct product,
 			JJVersion version) {
@@ -179,6 +179,14 @@ public class JJBugServiceImpl implements JJBugService {
 			predicates.add(criteriaBuilder.equal(
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
+		}
+		
+		if (contact != null) {
+			Predicate condition1 = criteriaBuilder.equal(
+					from.get("createdBy"), contact);
+			Predicate condition2 = criteriaBuilder.equal(
+					from.get("updatedBy"), contact);
+			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (filters != null) {
@@ -286,7 +294,7 @@ public class JJBugServiceImpl implements JJBugService {
 		result.setMaxResults(pageSize);
 
 		if (size.getValue() == 0 && multiSortMeta != null)
-			return load(company, size, first, pageSize, null, filters, project,
+			return load(contact,company, size, first, pageSize, null, filters, project,
 					product, version);
 		else
 			return result.getResultList();
