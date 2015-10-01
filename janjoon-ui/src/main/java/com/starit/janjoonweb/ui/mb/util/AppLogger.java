@@ -37,7 +37,7 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 @Configurable
 public class AppLogger {
 
-	static Logger logger = Logger.getLogger("ManagedBean-Logger");
+	static Logger logger = Logger.getLogger("AppLogger-Logger");
 
 	@Autowired
 	private JJBugService jJBugService;

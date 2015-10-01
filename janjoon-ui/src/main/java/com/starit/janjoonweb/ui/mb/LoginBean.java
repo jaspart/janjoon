@@ -1161,13 +1161,12 @@ public class LoginBean implements Serializable {
 								.getViewId().contains("bug"))
 								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
-										.getViewId().contains("stats")))
+										.getViewId().contains("stats") || root
+										.getViewId().contains("teams")))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
-										.contains("test"))
-								|| (!authorisationService.isrContact() && root
-										.getViewId().contains("team"))
+										.contains("test"))								
 								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))) {
 
@@ -1217,13 +1216,12 @@ public class LoginBean implements Serializable {
 								.getViewId().contains("bug"))
 								|| ((!authorisationService.isrProject()) && (root
 										.getViewId().contains("planning") || root
-										.getViewId().contains("stats")))
+										.getViewId().contains("stats") || root
+										.getViewId().contains("teams")))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
-										.contains("test"))
-								|| (!authorisationService.isrContact() && root
-										.getViewId().contains("team"))
+										.contains("test"))								
 								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))
 								|| (!authorisationService.isrRequiement() && root
@@ -1248,13 +1246,12 @@ public class LoginBean implements Serializable {
 							.contains("bug"))
 							|| ((!authorisationService.isrProject()) && (root
 									.getViewId().contains("planning") || root
-									.getViewId().contains("stats")))
+									.getViewId().contains("stats") || root
+									.getViewId().contains("teams")))
 							|| (!authorisationService.isrBuild() && viewID
 									.contains("delivery"))
 							|| ((!authorisationService.isrTest()) && viewID
-									.contains("test"))
-							|| (!authorisationService.isrContact() && root
-									.getViewId().contains("team"))
+									.contains("test"))							
 							|| (!authorisationService.isRenderAdmin() && root
 									.getViewId().contains("administration"))) {
 

@@ -394,7 +394,7 @@
 									<!-- 									oncomplete="PF('taskImportDialogWidget').show()" /> -->
 									<p:ajax event="add" update="@none"
 										onstart="PF('timelineWdgt').cancelAdd()" />
-									<p:ajax event="change"
+									<p:ajax event="changed"
 										update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :growlForm"
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"

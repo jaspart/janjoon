@@ -41,11 +41,11 @@ public class AuthorisationService implements Serializable {
 		jjContactBean.setContactsLazyModel(null);
 		jjContactBean.setContactUtil(null);
 		jjProductBean.setProductListTable(null);
-		jjProjectBean.setProjectListTable(null);		
+		jjProjectBean.setProjectListTable(null);
 		jjContactBean.setCategories(null);
 		jjContactBean.setVersionList(null);
 		jjContactBean.setLoggedContactCategories(null);
-		if(jjCompanyBean != null)
+		if (jjCompanyBean != null)
 			jjCompanyBean.setCompanies(null);
 
 		if (jJSprintBean != null)
@@ -95,6 +95,7 @@ public class AuthorisationService implements Serializable {
 	private boolean rCompany;
 	private String rCompanyMSG;
 	private boolean renderAdmin;
+	private boolean rwxProjectProduct;
 
 	public JJContact getContact() {
 		return contact;
@@ -436,6 +437,14 @@ public class AuthorisationService implements Serializable {
 		this.renderAdmin = renderAdmin;
 	}
 
+	public boolean isRwxProjectProduct() {
+		return rwxProjectProduct;
+	}
+
+	public void setRwxProjectProduct(boolean rwxProjectProduct) {
+		this.rwxProjectProduct = rwxProjectProduct;
+	}
+
 	public boolean isRenderCategoryConfig() {
 
 		JJPermissionBean permissionBean = (JJPermissionBean) session
@@ -584,8 +593,8 @@ public class AuthorisationService implements Serializable {
 			rRequiementMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rRequiementMSG = MessageFactory.getMessage("header_spec_menuitemhelp",
-					"").getDetail();
+			rRequiementMSG = MessageFactory.getMessage(
+					"header_spec_menuitemhelp", "").getDetail();
 		}
 
 		rTest = jJPermissionService.isAuthorized(contact, project, product,
@@ -598,8 +607,8 @@ public class AuthorisationService implements Serializable {
 			rTestMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rTestMSG = MessageFactory.getMessage("header_test_menuitemhelp", "")
-					.getDetail();
+			rTestMSG = MessageFactory
+					.getMessage("header_test_menuitemhelp", "").getDetail();
 		}
 
 		rwDev = jJPermissionService.isAuthorized(contact, project, product,
@@ -621,8 +630,8 @@ public class AuthorisationService implements Serializable {
 			rProjectMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rProjectMSG = MessageFactory.getMessage("header_project_menuitemhelp",
-					"").getDetail();
+			rProjectMSG = MessageFactory.getMessage(
+					"header_project_menuitemhelp", "").getDetail();
 		}
 
 		rBuild = jJPermissionService.isAuthorized(contact, project, product,
@@ -631,8 +640,8 @@ public class AuthorisationService implements Serializable {
 			rBuildMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rBuildMSG = MessageFactory.getMessage("header_delivery_menuitemhelp",
-					"").getDetail();
+			rBuildMSG = MessageFactory.getMessage(
+					"header_delivery_menuitemhelp", "").getDetail();
 		}
 
 		rBug = jJPermissionService.isAuthorized(contact, project, product,
@@ -651,8 +660,8 @@ public class AuthorisationService implements Serializable {
 			rContactMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rContactMSG = MessageFactory.getMessage("header_team_menuitemhelp", "")
-					.getDetail();
+			rContactMSG = MessageFactory.getMessage("header_team_menuitemhelp",
+					"").getDetail();
 		}
 
 		rCompany = jJPermissionService.isAuthorized(contact, null, null,
@@ -661,9 +670,14 @@ public class AuthorisationService implements Serializable {
 			rCompanyMSG = MessageFactory.getMessage(
 					"header_noPermission_menuitem", "").getDetail();
 		} else {
-			rCompanyMSG = MessageFactory
-					.getMessage("header_admin_menuitemhelp", "").getDetail();
+			rCompanyMSG = MessageFactory.getMessage(
+					"header_admin_menuitemhelp", "").getDetail();
 		}
+
+		rwxProjectProduct = jJPermissionService.isAuthorized(contact, project,
+				product, "Project", null, true, true, true)
+				&& jJPermissionService.isAuthorized(contact, project, product,
+						"Product", null, true, true, true);
 
 		if (project != null) {
 			wRequiement = jJPermissionService.isAuthorized(contact, project,
@@ -676,8 +690,8 @@ public class AuthorisationService implements Serializable {
 						"specification_table_requirement_new", "").getDetail();
 		} else {
 			wRequiement = false;
-			//wRequiementMSG = "Select a project to create requirement";
-			wRequiementMSG=MessageFactory.getMessage(
+			// wRequiementMSG = "Select a project to create requirement";
+			wRequiementMSG = MessageFactory.getMessage(
 					"specification_warning_lackProject", "").getDetail();
 		}
 	}

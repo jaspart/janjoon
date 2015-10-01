@@ -7,20 +7,63 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<p:tabView id="teamTabView" widgetVar="teamTabView">
+		<h:form style="width:100%;display:none;">			
+			<p:remoteCommand onstart="PF('blockUIWidget').block()"
+				name="tabChangeHelper"
+				update=":teamTabView"
+				actionListener="#{jJTaskBean.onTabTeamChange}"
+				oncomplete="PF('blockUIWidget').unblock()" />
+		</h:form>
+		<p:tabView id="teamTabView" widgetVar="teamTabView"
+			activeIndex="#{jJTaskBean.activeTabTeamIndex}"
+			onTabChange="tabChangeHelper([{name: 'activeTeamIndex', value: index}])">
 			<p:tab title="Imputation Schedule">
 				<h:form id="imputationForm">
-					<p:schedule value="#{jJTaskBean.lazyEventModel}" draggable="false"
-						clientTimeZone="local" locale="#{localBean.locale}"
-						initialDate="#{jJTaskBean.scheduleInitialDate}"
-						view="#{jJTaskBean.scheduleInitialView}">
+					<p:schedule value="#{jJTaskBean.lazyEventModel}" draggable="true"
+						clientTimeZone="local" locale="#{localBean.locale}" tooltip="true"
+						resizable="true" initialDate="#{jJTaskBean.scheduleInitialDate}"
+						view="#{jJTaskBean.scheduleInitialView}" timeFormat="HH:mm">
 						<p:ajax event="eventSelect" listener="#{jJTaskBean.onEventSelect}"
 							update=":viewTaskForm :viewTaskDialog" immediate="true"
 							resetValues="true" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
-						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}" 
+						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="eventMove" listener="#{jJTaskBean.onEventMove}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":growlForm" />
+						<p:ajax event="eventResize" listener="#{jJTaskBean.onEventResize}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":growlForm" />
+					</p:schedule>
+				</h:form>
+			</p:tab>
+			<p:tab title="Team Imputation Schedule"
+				rendered="#{loginBean.authorisationService.rwxProjectProduct}">
+				<h:form id="teamImputationForm">
+					<p:schedule value="#{jJTaskBean.lazyEventModelAll}"
+						draggable="true" clientTimeZone="local" tooltip="true"
+						locale="#{localBean.locale}" resizable="true"
+						initialDate="#{jJTaskBean.scheduleInitialDateAll}"
+						view="#{jJTaskBean.scheduleInitialViewAll}" timeFormat="HH:mm">
+						<p:ajax event="eventSelect"
+							listener="#{jJTaskBean.onEventSelectAll}"
+							update=":viewTaskForm :viewTaskDialog" immediate="true"
+							resetValues="true" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="viewChange"
+							listener="#{jJTaskBean.onViewChangeAll}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="eventMove" listener="#{jJTaskBean.onEventMove}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							update=":growlForm :teamTabView" />
+						<p:ajax event="eventResize" listener="#{jJTaskBean.onEventResize}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							update=":growlForm :teamTabView" />
 					</p:schedule>
 				</h:form>
 			</p:tab>

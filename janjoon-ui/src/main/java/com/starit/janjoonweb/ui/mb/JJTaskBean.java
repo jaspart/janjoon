@@ -43,6 +43,8 @@ import org.primefaces.component.schedule.Schedule;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.extensions.event.timeline.TimelineAddEvent;
 import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
@@ -80,6 +82,7 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.converter.JJTaskConverter;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooSerializable
@@ -1323,12 +1326,13 @@ public class JJTaskBean {
 			saveJJTask(task, true);
 			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, UPDATE_OPERATION);
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
 
-			if (task.getSprint() != null) {
+			if (task.getSprint() != null
+					&& session.getAttribute("jJSprintBean") != null) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
 				JJSprintBean jJSprintBean = (JJSprintBean) session
 						.getAttribute("jJSprintBean");
 				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
@@ -1451,7 +1455,9 @@ public class JJTaskBean {
 
 			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
 					.findBean("jJSprintBean");
-			if (jJSprintBean.contains(duplicatedTask.getSprint().getId()) != -1) {
+			if (jJSprintBean != null
+					&& jJSprintBean
+							.contains(duplicatedTask.getSprint().getId()) != -1) {
 				SprintUtil s = SprintUtil.getSprintUtil(duplicatedTask
 						.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
@@ -1863,15 +1869,13 @@ public class JJTaskBean {
 		}
 
 		if (mode.equalsIgnoreCase("planning")) {
-
-			// project = null;
-			// tasksData = null;
-			if (sprint != null) {
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			if (sprint != null && session.getAttribute("jJSprintBean") != null) {
 
 				sprint = jJSprintService.findJJSprint(sprint.getId());
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
+
 				JJSprintBean jJSprintBean = (JJSprintBean) session
 						.getAttribute("jJSprintBean");
 				jJSprintBean.getSprintList().set(
@@ -2514,8 +2518,7 @@ public class JJTaskBean {
 		context.execute("PF('viewTaskDialogWidget').show()");
 
 	}
-	
-	
+
 	public StreamedContent getFile() {
 
 		DateFormat f1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -2810,7 +2813,8 @@ public class JJTaskBean {
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, UPDATE_OPERATION);
 
-		} else {
+		} else if (group.toLowerCase().contains(Planned.toLowerCase())
+				|| group.toLowerCase().contains(Revised.toLowerCase())) {
 
 			tt.setStartDateRevised(ev.getTimelineEvent().getStartDate());
 			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());
@@ -2818,16 +2822,19 @@ public class JJTaskBean {
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, UPDATE_OPERATION);
 
+		} else {
+			tt = null;
 		}
 
-		if (tt.getSprint() != null) {
+		if (tt != null && tt.getSprint() != null) {
 
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			JJSprintBean jJSprintBean = (JJSprintBean) session
 					.getAttribute("jJSprintBean");
-			if (jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+			if (jJSprintBean != null
+					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
 				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
 						jJSprintBean.getSprintList());
 				if (s != null) {
@@ -2844,13 +2851,17 @@ public class JJTaskBean {
 		}
 
 		reset();
-		String message = "";
-		FacesMessage facesMessage = null;
+		if (tt != null) {
+			String message = "";
+			FacesMessage facesMessage = null;
 
-		message = "Success Update " + group + " Date";
-		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
-				MessageFactory.getMessage("label_task", "").getDetail());
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			message = "Success Update " + group + " Date";
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					message, MessageFactory.getMessage("label_task", "")
+							.getDetail());
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+
 	}
 
 	public void onSprintUpdate(JJSprint sprint) {
@@ -3381,6 +3392,7 @@ public class JJTaskBean {
 	private ScheduleModel lazyEventModel;
 	private Date scheduleInitialDate;
 	private String scheduleInitialView;
+	private int activeTabTeamIndex;
 
 	public ScheduleModel getLazyEventModel() {
 		if (lazyEventModel == null)
@@ -3394,16 +3406,38 @@ public class JJTaskBean {
 							.getCurrentInstance().getExternalContext()
 							.getSession(false);
 					LoginBean loginBean = (LoginBean) session
-							.getAttribute("loginBean");					
+							.getAttribute("loginBean");
 					List<JJTask> tasks = jJTaskService.getTasks(
 							LoginBean.getProject(), LoginBean.getProduct(),
 							loginBean.getContact(), start, end);
 
 					for (JJTask t : tasks) {
-						addEvent(new DefaultScheduleEvent(t.getName(),
-								t.getStartDateReal(), t.getEndDateReal() != null ? t.getEndDateReal() : end, t));
-					}	
-					scheduleInitialDate = start;
+						Date s, e;
+
+						Calendar calendar = Calendar.getInstance();
+
+						calendar.setTime(t.getStartDateReal());
+						calendar.set(Calendar.SECOND, 0);
+						calendar.set(Calendar.MILLISECOND, 0);
+
+						s = calendar.getTime();
+
+						calendar = Calendar.getInstance();
+
+						calendar.setTime(t.getEndDateReal() != null ? t
+								.getEndDateReal() : end);
+						calendar.set(Calendar.SECOND, 0);
+						calendar.set(Calendar.MILLISECOND, 0);
+
+						e = calendar.getTime();
+
+						DefaultScheduleEvent ev = new DefaultScheduleEvent(
+								t.getName(), s, e, t);
+						ev.setDescription(getDialogHeader(t));					
+						addEvent(ev);
+					}
+					scheduleInitialDate = new Date(
+							(end.getTime() + start.getTime()) / 2);
 				}
 			};
 		return lazyEventModel;
@@ -3411,8 +3445,8 @@ public class JJTaskBean {
 
 	public void setLazyEventModel(ScheduleModel lazyEventModel) {
 		this.lazyEventModel = lazyEventModel;
-	}	
-	
+	}
+
 	public Date getScheduleInitialDate() {
 		return scheduleInitialDate;
 	}
@@ -3422,8 +3456,8 @@ public class JJTaskBean {
 	}
 
 	public String getScheduleInitialView() {
-		
-		if(scheduleInitialView == null)
+
+		if (scheduleInitialView == null)
 			scheduleInitialView = "month";
 		return scheduleInitialView;
 	}
@@ -3432,17 +3466,225 @@ public class JJTaskBean {
 		this.scheduleInitialView = scheduleInitialView;
 	}
 
+	public int getActiveTabTeamIndex() {
+		return activeTabTeamIndex;
+	}
+
+	public void setActiveTabTeamIndex(int activeTabTeamIndex) {
+		this.activeTabTeamIndex = activeTabTeamIndex;
+	}
+
 	public void onEventSelect(SelectEvent selectEvent) {
-        task =(JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
-        //scheduleInitialDate = task.getStartDateReal();
-        initiateReqTreeNode();
-    }
+		task = (JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
+		scheduleInitialDate = task.getStartDateReal();
+		task = jJTaskService.findJJTask(task.getId());
+		initiateReqTreeNode();
+	}
+
+	public void onViewChange(SelectEvent selectEvent) {
+
+		scheduleInitialDate = (Date) ((Schedule) selectEvent.getComponent())
+				.getInitialDate();
+		scheduleInitialView = ((Schedule) selectEvent.getComponent()).getView();
+	}
+
+	public void onEventMove(ScheduleEntryMoveEvent event) {
+
+		JJTask tt = (JJTask) event.getScheduleEvent().getData();
+		tt = jJTaskService.findJJTask(tt.getId());
+
+		tt.setStartDateReal(event.getScheduleEvent().getStartDate());
+		tt.setEndDateReal(event.getScheduleEvent().getEndDate());
+		saveJJTask(tt, true);
+		tt = jJTaskService.findJJTask(tt.getId());
+		updateView(tt, UPDATE_OPERATION);
+
+		if (tt.getSprint() != null) {
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			if (jJSprintBean != null
+					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
+						jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(tt
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintService
+									.findJJSprint(tt.getSprint().getId()),
+									LoginBean.getProduct()), jJContactService);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
+			}
+
+		}
+
+		String message = "";
+		FacesMessage facesMessage = null;
+
+		message = "Success Update " + Real + " Date";
+		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
+				MessageFactory.getMessage("label_task", "").getDetail());
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void onEventResize(ScheduleEntryResizeEvent event) {
+
+		JJTask tt = (JJTask) event.getScheduleEvent().getData();
+		tt = jJTaskService.findJJTask(tt.getId());
+
+		tt.setStartDateReal(event.getScheduleEvent().getStartDate());
+		tt.setEndDateReal(event.getScheduleEvent().getEndDate());
+		saveJJTask(tt, true);
+		tt = jJTaskService.findJJTask(tt.getId());
+		updateView(tt, UPDATE_OPERATION);
+
+		if (tt.getSprint() != null) {
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session
+					.getAttribute("jJSprintBean");
+			if (jJSprintBean != null
+					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
+						jJSprintBean.getSprintList());
+				if (s != null) {
+					s = new SprintUtil(jJSprintService.findJJSprint(tt
+							.getSprint().getId()),
+							jJTaskService.getSprintTasks(jJSprintService
+									.findJJSprint(tt.getSprint().getId()),
+									LoginBean.getProduct()), jJContactService);
+					jJSprintBean.getSprintList().set(
+							jJSprintBean.contains(s.getSprint().getId()), s);
+				}
+			}
+
+		}
+
+		String message = "";
+		FacesMessage facesMessage = null;
+
+		message = "Success Update " + Real + " Date";
+		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
+				MessageFactory.getMessage("label_task", "").getDetail());
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	private ScheduleModel lazyEventModelAll;
+	private Date scheduleInitialDateAll;
+	private String scheduleInitialViewAll;
+
+	public ScheduleModel getLazyEventModelAll() {
+		if (lazyEventModelAll == null)
+			lazyEventModelAll = new LazyScheduleModel() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void loadEvents(Date start, Date end) {
+
+					List<JJTask> tasks = jJTaskService.getTasks(
+							LoginBean.getProject(), LoginBean.getProduct(),
+							null, start, end);
+					HttpSession session = (HttpSession) FacesContext
+							.getCurrentInstance().getExternalContext()
+							.getSession(false);
+					LoginBean loginBean = (LoginBean) session
+							.getAttribute("loginBean");
+
+					for (JJTask t : tasks) {
+						Date s, e;
+
+						Calendar calendar = Calendar.getInstance();
+
+						calendar.setTime(t.getStartDateReal());
+						calendar.set(Calendar.SECOND, 0);
+						calendar.set(Calendar.MILLISECOND, 0);
+
+						s = calendar.getTime();
+
+						calendar = Calendar.getInstance();
+
+						calendar.setTime(t.getEndDateReal() != null ? t
+								.getEndDateReal() : end);
+						calendar.set(Calendar.SECOND, 0);
+						calendar.set(Calendar.MILLISECOND, 0);
+
+						e = calendar.getTime();
+						DefaultScheduleEvent ev = new DefaultScheduleEvent(
+								t.getName(), s, e, t);
+						ev.setDescription(getDialogHeader(t));
+
+						if (t.getAssignedTo() == null
+								|| !t.getAssignedTo().equals(
+										loginBean.getContact())) {
+							ev.setStyleClass("scheduleNotMine");
+						}
+						addEvent(ev);
+					}
+					scheduleInitialDateAll = new Date(
+							(end.getTime() + start.getTime()) / 2);
+				}
+			};
+		return lazyEventModelAll;
+	}
+
+	public void setLazyEventModelAll(ScheduleModel lazyEventModel) {
+		this.lazyEventModelAll = lazyEventModel;
+	}
+
+	public Date getScheduleInitialDateAll() {
+		return scheduleInitialDateAll;
+	}
+
+	public void setScheduleInitialDateAll(Date scheduleInitialDate) {
+		this.scheduleInitialDateAll = scheduleInitialDate;
+	}
+
+	public String getScheduleInitialViewAll() {
+
+		if (scheduleInitialViewAll == null)
+			scheduleInitialViewAll = "month";
+		return scheduleInitialViewAll;
+	}
+
+	public void setScheduleInitialViewAll(String scheduleInitialView) {
+		this.scheduleInitialViewAll = scheduleInitialView;
+	}
+
+	public void onEventSelectAll(SelectEvent selectEvent) {
+		task = (JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
+		scheduleInitialDateAll = task.getStartDateReal();
+		task = jJTaskService.findJJTask(task.getId());
+		initiateReqTreeNode();
+	}
+
+	public void onViewChangeAll(SelectEvent selectEvent) {
+
+		scheduleInitialDateAll = (Date) ((Schedule) selectEvent.getComponent())
+				.getInitialDate();
+		scheduleInitialViewAll = ((Schedule) selectEvent.getComponent())
+				.getView();
+	}
 	
-	public void onViewChange(SelectEvent selectEvent)
-	{
-		System.out.println(((Schedule)selectEvent.getComponent()).getView());
-		scheduleInitialDate = (Date) ((Schedule)selectEvent.getComponent()).getInitialDate();
-		scheduleInitialView = ((Schedule)selectEvent.getComponent()).getView();
+	public void onTabTeamChange() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map<String, String> paramMap = context.getExternalContext()
+				.getRequestParameterMap();
+	 if (paramMap.get("activeTeamIndex") != null) {
+			String paramIndex = paramMap.get("activeTeamIndex");
+			setActiveTabTeamIndex(Integer.valueOf(paramIndex));
+
+		}
 	}
 
 	// layout options
