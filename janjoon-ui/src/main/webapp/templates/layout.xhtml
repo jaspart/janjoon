@@ -83,6 +83,12 @@
 			</h:panelGrid>
 		</pe:blockUI>
 
+		<p:dialog modal="true" widgetVar="statusDialog" header="Status"
+			draggable="false" closable="false" resizable="false">
+			<p:graphicImage library="images" name="ajaxloadingbar.gif"
+				style="vertical-align: middle;" />
+		</p:dialog>
+
 		<p:dialog widgetVar="communicationPanel" id="communicationPanel"
 			styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
 			closable="true" style="width:400px" rendered="#{loginBean.enable}">

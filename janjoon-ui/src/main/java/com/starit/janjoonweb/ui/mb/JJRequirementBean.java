@@ -110,6 +110,7 @@ public class JJRequirementBean {
 	private List<CategoryUtil> categoryList;
 
 	private List<CategoryDataModel> tableDataModelList;
+	private CategoryDataModel categoryDataModel;
 
 	private JJRequirement requirement;
 	private JJRequirement viewLinkRequirement;
@@ -314,6 +315,14 @@ public class JJRequirementBean {
 
 	public void setTableDataModelList(List<CategoryDataModel> tableDataModelList) {
 		this.tableDataModelList = tableDataModelList;
+	}
+
+	public CategoryDataModel getCategoryDataModel() {
+		return categoryDataModel;
+	}
+
+	public void setCategoryDataModel(CategoryDataModel categoryDataModel) {
+		this.categoryDataModel = categoryDataModel;
 	}
 
 	public String getDisplay(CategoryDataModel dataModel) {

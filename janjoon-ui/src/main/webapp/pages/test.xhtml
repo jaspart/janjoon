@@ -12,7 +12,7 @@
 		<style type="text/css">
 .ui-tree {
 	height: 700px;
-	width: 100%;	
+	width: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -36,6 +36,7 @@
 						onLabel="#{category.category.name}"
 						id="Mcategory_#{category.category.id}"
 						rendered="#{loginBean.mobile}"
+						title="#{category.category.name}"
 						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
 						offLabel="#{category.category.name}" onIcon="ui-icon-check"
 						offIcon="ui-icon-close">
@@ -45,9 +46,9 @@
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectBooleanButton>
-					<p:tooltip for="Mcategory_#{category.category.id}"
-						value="#{category.category.name}" showEffect="fade"
-						hideEffect="fade" />
+<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
+<!-- 						value="#{category.category.name}" showEffect="fade" -->
+<!-- 						hideEffect="fade" /> -->
 					<br />
 				</c:forEach>
 			</p:dialog>
@@ -59,6 +60,7 @@
 					onLabel="#{category.category.name}"
 					id="category_#{category.category.id}"
 					rendered="#{!loginBean.mobile}"
+					title="#{category.category.name}"
 					style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
 					offLabel="#{category.category.name}" onIcon="ui-icon-check"
 					offIcon="ui-icon-close">
@@ -68,9 +70,9 @@
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()" />
 				</p:selectBooleanButton>
-				<p:tooltip for="category_#{category.category.id}"
-					value="#{category.category.name}" showEffect="fade"
-					hideEffect="fade" />
+<!-- 				<p:tooltip for="category_#{category.category.id}" -->
+<!-- 					value="#{category.category.name}" showEffect="fade" -->
+<!-- 					hideEffect="fade" /> -->
 			</c:forEach>
 
 			<p:commandButton value="&#9776;" id="overlayPanel"
@@ -98,10 +100,9 @@
 			<h:form id="testFormWest">
 				<p:panelGrid style="width: 100%;">
 					<p:row>
-						<p:column>
+						<p:column colspan="2">
 							<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-								effect="fade" filter="true"
-								filterMatchMode="startsWith">
+								effect="fade" filter="true" filterMatchMode="startsWith">
 								<f:converter
 									converterId="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter" />
 								<f:selectItem itemValue="#{null}"
@@ -116,30 +117,25 @@
 							</p:selectOneMenu>
 						</p:column>
 						<p:column>
-							<p:dialog modal="true" widgetVar="statusDialog" header="Status"
-								draggable="false" closable="false" resizable="false">
-								<p:graphicImage library="images" name="ajaxloadingbar.gif"
-									style="vertical-align: middle;" />
-							</p:dialog>
-							<p:commandButton ajax="false" id="xml"
-								title="#{messages.specification_req_exportTo} XML"
-								onclick="PrimeFaces.monitorDownload(start, stop);"
-								icon="ui-icon-arrowthick-1-s">
-								<p:fileDownload value="#{jJTestcaseBean.file}" />
-							</p:commandButton>
-							<!-- 								<p:tooltip for="xml" value="Export To XML" showEffect="fade" -->
-							<!-- 									hideEffect="fade" /> -->
-						</p:column>
-						<p:column>
-
-							<p:commandButton ajax="false" id="exportPDF"
-								title="#{messages.test_export_tooltip}"
-								disabled="#{jJTestcaseBean.disabledExport}"
-								style="float: right;"
-								onclick="PrimeFaces.monitorDownload(start, stop);"
-								icon="ui-icon-pdf">
-								<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
-							</p:commandButton>
+							<!-- 							<p:commandButton ajax="false" id="xml" -->
+							<!-- 								title="#{messages.specification_req_exportTo} XML" -->
+							<!-- 								onclick="PrimeFaces.monitorDownload(start, stop);" -->
+							<!-- 								icon="ui-icon-arrowthick-1-s"> -->
+							<!-- 								<p:fileDownload value="#{jJTestcaseBean.file}" /> -->
+							<!-- 							</p:commandButton>							 -->
+							<!-- 						</p:column> -->
+							<!-- 						<p:column> -->
+							<!-- 							<p:commandButton ajax="false" id="exportPDF" -->
+							<!-- 								title="#{messages.test_export_tooltip}" -->
+							<!-- 								disabled="#{jJTestcaseBean.disabledExport}" -->
+							<!-- 								style="float: right;" -->
+							<!-- 								onclick="PrimeFaces.monitorDownload(start, stop);" -->
+							<!-- 								icon="ui-icon-pdf"> -->
+							<!-- 								<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" /> -->
+							<!-- 							</p:commandButton> -->
+							<p:commandButton title="#{messages.specification_req_exportTo}"
+								resetValues="true" onclick="PF('exportMenuWidget').show();"
+								update=":exportMenuPanel" icon="ui-icon-arrowthick-1-s" />
 						</p:column>
 					</p:row>
 					<p:row>
@@ -399,7 +395,7 @@
 									disabled="#{tcr.disabled or !loginBean.authorisationService.xTest}">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.testcase}" />
-								</p:commandButton>								
+								</p:commandButton>
 								<p:commandButton id="editButton" icon="ui-icon-pencil"
 									oncomplete="PF('testcaseDialogWidget').show()"
 									title="#{messages.label_edit}"
@@ -408,14 +404,14 @@
 									disabled="#{!loginBean.authorisationService.wTest}">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.testcase}" />
-								</p:commandButton>								
+								</p:commandButton>
 								<p:commandButton id="copyButton" icon="ui-icon-copy"
 									disabled="#{!loginBean.authorisationService.wTest}"
 									action="#{jJTestcaseBean.onCopyEvent}" title="Copy"
 									update=":growlForm :testFormCenter:testcaseRecapDataTable :container :rate">
 									<f:setPropertyActionListener value="#{tcr.testcase}"
 										target="#{jJTestcaseBean.copyTestcase}" />
-								</p:commandButton>								
+								</p:commandButton>
 							</p:column>
 							<f:facet name="footer">
 								<p:commandButton value="#{messages.test_create_button}"
@@ -488,11 +484,11 @@
 										resetValues="true" title="#{messages.label_edit}"
 										disabled="#{!loginBean.authorisationService.wTest}"
 										action="#{jJTestcaseBean.editTestcase(jJTeststepBean)}"
-										update=":testcaseDialog" />									
+										update=":testcaseDialog" />
 									<p:commandButton id="runButton" icon="ui-icon-play"
 										oncomplete="PF('runTestcaseDialogWidget').show()"
 										actionListener="#{jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,jJTeststepexecutionBean)}"
-										update=":runTestcaseDialog" resetValues="true" 
+										update=":runTestcaseDialog" resetValues="true"
 										disabled="#{jJTestcaseBean.disableRun or empty jJTeststepBean.teststeps or !loginBean.authorisationService.xTest}">
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
@@ -505,7 +501,7 @@
 										<f:setPropertyActionListener
 											value="#{jJTestcaseBean.testcase}"
 											target="#{jJTestcaseBean.copyTestcase}" />
-									</p:commandButton>									
+									</p:commandButton>
 								</p:column>
 							</p:row>
 
@@ -590,6 +586,46 @@
 						update="messages :testFormCenter :testFormWest :testFormNorth "
 						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
 
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="exportMenu" draggable="false" modal="true"
+			widgetVar="exportMenuWidget" dynamic="true" resizable="false"
+			header="#{messages.specification_export_title}">
+			<p:outputPanel id="exportMenuPanel">
+				<h:form id="exportMenuForm">
+					<h:panelGrid columns="2" width="100%">
+						<p:commandLink ajax="false"
+							oncomplete="PF('exportMenuWidget').show();"
+							onclick="PrimeFaces.monitorDownload(start, stop);">
+							<p:graphicImage name="xmlButton.ico" width="64" height="64"
+								library="images"
+								title="#{messages.specification_req_exportTo} XML" />
+							<p:fileDownload value="#{jJTestcaseBean.file}" />
+						</p:commandLink>
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();"
+							disabled="#{jJTestcaseBean.disabledExport}">
+							<p:graphicImage name="pdf.png" width="64" height="64"
+								library="images" title="#{jJRequirementBean.warnMessage}" />
+							<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
+						</p:commandLink>
+
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();">
+							<p:graphicImage name="xmlButton.ico" width="64" height="64"
+								library="images"
+								title="#{messages.specification_req_exportTo} XML" />
+							<p:fileDownload value="#{jJTestcaseBean.file}" />
+						</p:commandLink>
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();"
+							disabled="#{jJTestcaseBean.disabledExport}">
+							<p:graphicImage name="pdf.png" width="64" height="64"
+								library="images" title="#{jJRequirementBean.warnMessage}" />
+							<p:fileDownload value="#{jJTestcaseBean.preProcessPDF}" />
+						</p:commandLink>
+					</h:panelGrid>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

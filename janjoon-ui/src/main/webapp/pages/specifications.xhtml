@@ -225,15 +225,25 @@
 														onstart="PF('blockUIWidget').block()"
 														oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 												</p:column>
+												<!-- 												<p:column> -->
+												<!-- 													<p:commandButton ajax="false" id="xml" -->
+												<!-- 														title="#{messages.specification_req_exportTo} XML" -->
+												<!-- 														onclick="PrimeFaces.monitorDownload(start, stop);" -->
+												<!-- 														icon="ui-icon-arrowthick-1-s"> -->
+												<!-- 														<p:fileDownload value="#{tableDataModel.file}" /> -->
+												<!-- 													</p:commandButton> -->
+												<!-- 												</p:column> -->
 												<p:column>
-													<p:commandButton ajax="false" id="xml"
-														title="#{messages.specification_req_exportTo} XML"
-														onclick="PrimeFaces.monitorDownload(start, stop);"
+													<p:commandButton
+														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel,jJRequirementBean)}"
+														title="#{messages.specification_req_exportTo}" resetValues="true"
+														onclick="PF('exportMenuWidget').show();" update=":exportMenuPanel"
 														icon="ui-icon-arrowthick-1-s">
-														<p:fileDownload value="#{tableDataModel.file}" />
+														<f:setPropertyActionListener value="#{tableDataModel}"
+															target="#{jJRequirementBean.categoryDataModel}" />
 													</p:commandButton>
-
 												</p:column>
+
 												<p:column colspan="1">
 													<p:commandButton id="newRequirementButton"
 														icon="ui-icon-plusthick" resetValues="true"
@@ -244,17 +254,25 @@
 														onstart="PF('blockUIWidget').block()"
 														oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 												</p:column>
-												<p:column colspan="1">
-													<p:commandButton ajax="false" id="pdf"
-														title="#{jJRequirementBean.warnMessage}"
-														disabled="#{jJRequirementBean.disabledExport}"
-														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"
-														onclick="PrimeFaces.monitorDownload(start, stop);"
-														icon="ui-icon-pdf">
-														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
-													</p:commandButton>
+												<!-- 												<p:column colspan="1"> -->
+												<!-- 													<p:commandButton ajax="false" id="pdf" -->
+												<!-- 														title="#{jJRequirementBean.warnMessage}" -->
+												<!-- 														disabled="#{jJRequirementBean.disabledExport}" -->
+												<!-- 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}" -->
+												<!-- 														onclick="PrimeFaces.monitorDownload(start, stop);" -->
+												<!-- 														icon="ui-icon-pdf"> -->
+												<!-- 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" /> -->
+												<!-- 													</p:commandButton> -->
+												<!-- 													<p:commandLink id="pdf" -->
+												<!-- 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}" -->
+												<!-- 														onclick="PrimeFaces.monitorDownload(start, stop);" -->
+												<!-- 														ajax="false"> -->
+												<!-- 														<p:graphicImage name="pdf.png" width="25" height="25" -->
+												<!-- 															library="images" title="#{jJRequirementBean.warnMessage}" /> -->
+												<!-- 														<p:fileDownload value="#{jJChapterBean.preProcessPDF}" /> -->
+												<!-- 													</p:commandLink> -->
 
-												</p:column>
+												<!-- 												</p:column> -->
 											</p:row>
 										</f:facet>
 									</p:panelGrid>
@@ -549,14 +567,43 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-
 		<p:dialog id="exportMenu" draggable="false" modal="true"
-			widgetVar="exportMenuWidget" dynamic="true" resizable="false">
+			widgetVar="exportMenuWidget" dynamic="true" resizable="false"
+			header="#{messages.specification_export_title}">
 			<p:outputPanel id="exportMenuPanel">
 				<h:form id="exportMenuForm">
-					<p:panelGrid columns="2">
-
-					</p:panelGrid>
+					<h:panelGrid columns="2" width="100%">
+						<p:commandLink ajax="false"
+							oncomplete="PF('exportMenuWidget').show();"
+							onclick="PrimeFaces.monitorDownload(start, stop);">
+							<p:graphicImage name="xmlButton.ico" width="64" height="64"
+								library="images"
+								title="#{messages.specification_req_exportTo} XML" />
+							<p:fileDownload
+								value="#{jJRequirementBean.categoryDataModel.file}" />
+						</p:commandLink>
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();">
+							<p:graphicImage name="pdf.png" width="64" height="64"
+								library="images" title="#{jJRequirementBean.warnMessage}" />
+							<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
+						</p:commandLink>
+						
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();">
+							<p:graphicImage name="xmlButton.ico" width="64" height="64"
+								library="images"
+								title="#{messages.specification_req_exportTo} XML" />
+							<p:fileDownload
+								value="#{jJRequirementBean.categoryDataModel.file}" />
+						</p:commandLink>
+						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
+							ajax="false" oncomplete="PF('exportMenuWidget').show();">
+							<p:graphicImage name="pdf.png" width="64" height="64"
+								library="images" title="#{jJRequirementBean.warnMessage}" />
+							<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
+						</p:commandLink>
+					</h:panelGrid>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -783,12 +830,6 @@
 						action="#{jJRequirementBean.importRequirement()}" />
 				</h:form>
 			</p:outputPanel>
-		</p:dialog>
-
-		<p:dialog modal="true" widgetVar="statusDialog" header="Status"
-			draggable="false" closable="false" resizable="false">
-			<p:graphicImage library="images" name="ajaxloadingbar.gif"
-				style="vertical-align: middle;" />
 		</p:dialog>
 
 		<p:dialog id="requirementMindMap"
