@@ -25,9 +25,10 @@
 						<p:panelGrid id="createPanelGrid">
 							<f:facet name="header">
 								<p:row>
-									<p:column colspan="1">																
+									<p:column colspan="1">
 										<h:panelGrid columns="2">
-											<p:commandLink actionListener="#{jJBugBean.onrate(jJBugBean.viewBug)}"
+											<p:commandLink
+												actionListener="#{jJBugBean.onrate(jJBugBean.viewBug)}"
 												onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock()"
 												update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"

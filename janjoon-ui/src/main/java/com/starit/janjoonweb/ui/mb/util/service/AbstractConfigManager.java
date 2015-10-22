@@ -1,6 +1,9 @@
 package com.starit.janjoonweb.ui.mb.util.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -70,7 +73,7 @@ public abstract class AbstractConfigManager implements Serializable {
 		this.password = password;
 	}
 
-	public abstract boolean checkIn(String message);
+	public abstract boolean checkIn(File file,String message);
 
 	public abstract boolean checkOut(String branche);
 
@@ -88,7 +91,53 @@ public abstract class AbstractConfigManager implements Serializable {
 	public abstract boolean pullRepository();
 
 	public abstract ArrayList<String> getAllBranches();
+	
+	public boolean setFileTexte(File file, String texte) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writer.write(texte);
+			writer.close();
+			return true;
+		} catch (IOException e) {
 
-	public abstract boolean setFileTexte(File file, String texte);
+			return false;
+		}
+
+	}
+	
+	public static void delete(File file) throws IOException {
+
+		if (file.isDirectory()) {
+
+			// directory is empty, then delete it
+			if (file.list().length == 0) {
+
+				file.delete();
+
+			} else {
+
+				// list all the directory contents
+				String files[] = file.list();
+
+				for (String temp : files) {
+					// construct the file structure
+					File fileDelete = new File(file, temp);
+
+					// recursive delete
+					delete(fileDelete);
+				}
+
+				// check the directory again, if empty then delete it
+				if (file.list().length == 0) {
+					file.delete();
+				}
+			}
+
+		} else {
+			// if file, then delete it
+			file.delete();
+		}
+	}
+
 
 }

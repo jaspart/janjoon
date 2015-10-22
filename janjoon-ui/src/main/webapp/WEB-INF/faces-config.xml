@@ -72,8 +72,8 @@
 	<lifecycle>
 		<phase-listener id="JSFAjaxTimeoutPhaseListener">com.starit.janjoonweb.ui.mb.util.MyJsfAjaxTimeoutPhaseListener</phase-listener>
 	</lifecycle>
-<!-- 	<component>	 -->
-<!-- 		<component-type>org.primefaces.component.Schedule</component-type> -->
-<!-- 		<component-class>com.starit.janjoonweb.ui.mb.util.ScheduleImpl</component-class> -->
-<!-- 	</component> -->
+	<!-- <component> -->
+	<!-- <component-type>org.primefaces.component.Schedule</component-type> -->
+	<!-- <component-class>com.starit.janjoonweb.ui.mb.util.ScheduleImpl</component-class> -->
+	<!-- </component> -->
 </faces-config>

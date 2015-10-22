@@ -67,13 +67,14 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugTeststep" scrollHeight="200"
 					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
-					itemValue="#{teststep}" placeholder="TestStep : " 
+					itemValue="#{teststep}" placeholder="TestStep : "
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
 					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
-					completeMethod="#{jJBugBean.completeTestStepsBug}" >
+					completeMethod="#{jJBugBean.completeTestStepsBug}">
 					<p:column>
-						<h:outputText rendered="#{teststep != null}" value="#{teststep.name}" escape="false" />
+						<h:outputText rendered="#{teststep != null}"
+							value="#{teststep.name}" escape="false" />
 					</p:column>
 					<f:attribute name="requirement" value="#{JJBug_.requirement}" />
 					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
@@ -112,13 +113,14 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugVersion" scrollHeight="200"
 					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{JJBug_.versioning}" placeholder="Version :"					
+					value="#{JJBug_.versioning}" placeholder="Version :"
 					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
-					dropdown="true" var="version" itemLabel="#{version.name} : #{version.product.name}"
+					dropdown="true" var="version"
+					itemLabel="#{version.name} : #{version.product.name}"
 					completeMethod="#{jJBugBean.completeVersioningBug}">
 					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
-						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />					
+						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
 				</p:autoComplete>
 				<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
 					rendered="#{jJVersionBean.version != null}"
@@ -140,7 +142,7 @@
 					<f:attribute name="version" value="#{JJBug_.versioning}" />
 					<f:validator validatorId="bugValidator" />
 					<f:attribute name="jJbugVersion" value="#{JJBug_.versioning}" />
-				</p:autoComplete>				
+				</p:autoComplete>
 			</p:column>
 		</p:row>
 		<p:row>

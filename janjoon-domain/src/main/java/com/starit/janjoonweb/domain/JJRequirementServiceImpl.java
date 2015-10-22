@@ -45,7 +45,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		return have;
 
 	}
-	
+
 	public boolean haveLinkUp(JJRequirement requirement) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -190,8 +190,12 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					}
 
 				}
-				predicates.add(criteriaBuilder.or(orPredicates
-						.toArray(new Predicate[] {})));
+				if (!orPredicates.isEmpty())
+					predicates.add(criteriaBuilder.or(orPredicates
+							.toArray(new Predicate[] {})));
+				else
+					predicates.add(criteriaBuilder.equal(from.join("project")
+							.join("manager").get("company"), company));
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),
@@ -296,6 +300,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				if (!orPredicates.isEmpty())
 					predicates.add(criteriaBuilder.or(orPredicates
 							.toArray(new Predicate[] {})));
+				else
+					predicates.add(criteriaBuilder.equal(from.join("project")
+							.join("manager").get("company"), company));
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),
@@ -482,8 +489,13 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					}
 
 				}
-				predicates.add(criteriaBuilder.or(orPredicates
-						.toArray(new Predicate[] {})));
+				if (!orPredicates.isEmpty())
+					predicates.add(criteriaBuilder.or(orPredicates
+							.toArray(new Predicate[] {})));
+				else
+					predicates.add(criteriaBuilder.equal(from.join("project")
+							.join("manager").get("company"), company));
+
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),

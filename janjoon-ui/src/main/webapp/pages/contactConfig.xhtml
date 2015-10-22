@@ -182,8 +182,8 @@
 				</h:form>
 				<h:panelGrid columns="1">
 					<h:form id="workdaysCalendar">
-						<p:dataTable value="#{jJContactBean.workDays}"
-							var="day" style="width: 550px;"
+						<p:dataTable value="#{jJContactBean.workDays}" var="day"
+							style="width: 550px;"
 							emptyMessage="#{messages.label_notRecordFound}"
 							rendered="#{jJContactBean.workDays != null}">
 
@@ -215,9 +215,11 @@
 								<h:outputText value="#{day.day}" />
 							</p:column>
 							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate1}" locale="#{localeBean.locale}"
-									showDeselectButton="true" mode="popup">
-									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+								<pe:timePicker value="#{day.startDate1}"
+									locale="#{localeBean.locale}" showDeselectButton="true"
+									mode="popup">
+									<p:ajax event="timeSelect"
+										update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"
 										oncomplete="PF('blockUIWidget').unblock();" />
@@ -226,16 +228,19 @@
 							<p:column width="15%">
 								<pe:timePicker value="#{day.endDate1}" showDeselectButton="true"
 									mode="popup" locale="#{localeBean.locale}">
-									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm" 
+									<p:ajax event="timeSelect"
+										update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"
 										oncomplete="PF('blockUIWidget').unblock();" />
 								</pe:timePicker>
 							</p:column>
 							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate2}" locale="#{localeBean.locale}"
-									showDeselectButton="true" mode="popup">
-									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+								<pe:timePicker value="#{day.startDate2}"
+									locale="#{localeBean.locale}" showDeselectButton="true"
+									mode="popup">
+									<p:ajax event="timeSelect"
+										update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"
 										oncomplete="PF('blockUIWidget').unblock();" />
@@ -244,12 +249,13 @@
 							<p:column width="15%">
 								<pe:timePicker value="#{day.endDate2}" showDeselectButton="true"
 									mode="popup" locale="#{localeBean.locale}">
-									<p:ajax event="timeSelect" update=":workdaysCalendar :vacationForm :configForm :growlForm"
+									<p:ajax event="timeSelect"
+										update=":workdaysCalendar :vacationForm :configForm :growlForm"
 										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
 										onstart="PF('blockUIWidget').block();"
 										oncomplete="PF('blockUIWidget').unblock();" />
 								</pe:timePicker>
-							</p:column>							
+							</p:column>
 						</p:dataTable>
 					</h:form>
 					<h:form id="permissionForm"

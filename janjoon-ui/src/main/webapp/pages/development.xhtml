@@ -17,6 +17,7 @@
 	height: 450px;
 }
 </style>
+<!-- 		<h:outputScript library="js" name="codeMirror.js" /> -->
 		<h:form>
 			<p:remoteCommand name="updateHeader"
 				oncomplete="PF('blockUIWidget').unblock()"
@@ -49,7 +50,7 @@
 											value="#{jJDevelopment.task}" panelStyle="width:150px"
 											effect="fold" editable="false" style="width:160px"
 											required="true" requiredMessage="Select task to commit">
-											<f:selectItem itemValue="#{null}" noSelectionOption="true"
+											<f:selectItem itemValue="#{null}"
 												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --" />
 											<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 												itemLabel="#{t.name}" itemValue="#{t}" />
@@ -86,9 +87,6 @@
 												<!-- 												<f:setPropertyActionListener value="#{jJDevelopment.task}" -->
 												<!-- 													target="#{jJTaskBean.JJTask_}" /> -->
 											</p:commandButton>
-											<p:tooltip for="viewTaskButton"
-												value="#{messages.label_view}" showEffect="fade"
-												hideEffect="fade" />
 											<br />
 											<h:outputText
 												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
@@ -117,18 +115,22 @@
 													<p:menuitem
 														value="#{messages['dev.menuitem.deleteFolder.label']}"
 														icon="ui-icon-trash" immediate="true"
+														update=":deletePanel" resetValues="true"
 														oncomplete="PF('deleteFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.addFile.label']}"
 														icon="ui-icon-document" immediate="true"
+														resetValues="true" update=":createFilePanel"
 														oncomplete="PF('createFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.uploadFile.label']}"
 														icon="ui-icon-arrowthickstop-1-n" immediate="true"
+														resetValues="true"
 														oncomplete="PF('uploadFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
+														resetValues="true"
 														oncomplete="PF('commitFileDialogWidget').show()" />
 												</p:contextMenu>
 
@@ -136,15 +138,17 @@
 													<p:menuitem
 														value="#{messages['dev.menuitem.deleteFile.label']}"
 														icon="ui-icon-trash" immediate="true"
+														update=":deletePanel" resetValues="true"
 														oncomplete="PF('deleteFileDialogWidget').show()" />
 													<p:menuitem
 														value="#{messages['dev.menuitem.commit.label']}"
 														icon="ui-icon-arrowthickstop-1-e" immediate="true"
+														resetValues="true"
 														oncomplete="PF('commitFileDialogWidget').show()" />
 												</p:contextMenu>
 
 												<p:tree id="fileTree" value="#{jJDevelopment.tree}"
-													var="file" animate="true"
+													var="file" animate="true" dynamic="true"
 													selection="#{jJDevelopment.selectedTree}"
 													selectionMode="single">
 													<p:ajax event="select" update=":form:tabViewPanel"
@@ -165,11 +169,13 @@
 											<p:commandButton
 												value="#{messages['dev.menuitem.uploadFile.label']}"
 												icon="ui-icon-arrowthickstop-1-n" immediate="true"
+												resetValues="true"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="PF('uploadFileDialogWidget').show()" />
 											<p:commandButton
 												value="#{messages['dev.menuitem.addFile.label']}"
-												icon="ui-icon-document" immediate="true"
+												icon="ui-icon-document" immediate="true" resetValues="true"
+												update=":createFilePanel"
 												actionListener="#{jJDevelopment.addToRoot}"
 												oncomplete="PF('createFileDialogWidget').show()" />
 										</p:panel>
@@ -200,13 +206,13 @@
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
 											actionListener="#{jJDevelopment.commit}"
-											update=":growlForm,:form:tabView,:form:fileTree,:form:taskmessage,:form:commentmessage,startTaskPanel" />
+											update=":growlForm,:form" />
 									</p:column>
 								</p:row>
 							</p:panelGrid></td>
 						<td><p:panel id="tabViewPanel"
 								header="#{messages['dev.fileContent.panel']}"
-								style="height:545px;width:700px;margin-top: 11px;margin-left: 20px;">
+								style="height:570px;width:700px;margin-top: 11px;margin-left: 20px;">
 								<p:tabView id="tabView" effectDuration="fast"
 									rendered="#{not empty jJDevelopment.files}"
 									activeIndex="#{jJDevelopment.activeTabIndex}" effect="fade"
@@ -215,21 +221,30 @@
 									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
 										update=":form:tabViewPanel" />
 
-									<p:ajax event="tabChange" update=":form:tabView" />
+									<p:ajax event="tabChange" update=":form:tabViewPanel" />
 
 									<p:tab title="#{tab.title}" closable="true">
 
 										<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
-											autoformat="true" widgetVar="myCodeMirror" theme="eclipse"
-											value="#{tab.texte}" lineNumbers="true" tabSize="150"
+											binding="#{codeMirror}" autoformat="true" theme="eclipse"
+											value="#{tab.texte}" lineNumbers="true" tabSize="150" widgetVar="myCodeMirror_#{tab.index}"
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
 											<p:ajax event="blur" update=":form:tabView:codeMirror"
-												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}">
-												<f:attribute name="fileMapValue" value="#{tab}" />
-											</p:ajax>
+												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
+
+											<f:attribute name="cm" value="#{codeMirror}" />
 										</pe:codeMirror>
-										<!-- 										<p:inputTextarea id="textArea" rows="27" cols="88" -->
-										<!-- 											autoResize="false" scrollHeight="28" value="#{tab.texte}" /> -->
+<!-- 										<h:panelGrid columns="3"> -->
+<!-- 											<a -->
+<!-- 												href="javascript:autoFormatSelection(PF('myCodeMirror_#{tab.index}').instance)"> -->
+<!-- 												Autoformat Selected </a> -->
+<!-- 											<a -->
+<!-- 												href="javascript:commentSelection(true,PF('myCodeMirror_#{tab.index}').instance)"> -->
+<!-- 												Comment Selected </a> -->
+<!-- 											<a -->
+<!-- 												href="javascript:commentSelection(false,PF('myCodeMirror_#{tab.index}').instance)"> -->
+<!-- 												Uncomment Selected </a> -->
+<!-- 										</h:panelGrid> -->
 									</p:tab>
 								</p:tabView>
 							</p:panel></td>
@@ -248,7 +263,8 @@
 					<h:form id="deleteForm">
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
-							action="#{jJDevelopment.deleteFile}" update=":form :growlForm"
+							action="#{jJDevelopment.deleteFile}"
+							update=":form :growlForm :deletePanel"
 							oncomplete="PF('deleteFileDialogWidget').hide()" />
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 							onclick="PF('deleteFileDialogWidget').hide()" type="button" />

@@ -2,6 +2,8 @@ package com.starit.janjoonweb.ui.mb.util.service;
 
 import java.io.*;
 
+import org.tmatesoft.svn.core.SVNException;
+
 public class TreeOperation {
 
 	private AbstractConfigManager configManager;
@@ -19,9 +21,9 @@ public class TreeOperation {
 		this.configManager = configManager;
 	}
 
-	public void deleteFile(File file) {
+	public void deleteFile(File file,AbstractConfigManager config) {
 
-		if (file.isDirectory()) {
+		if (file.isDirectory() && !(config instanceof SvnConfigManager)) {
 			if (file.list().length == 0) {
 				file.delete();
 			} else {
@@ -29,7 +31,7 @@ public class TreeOperation {
 				for (String temp : files) {
 					File fileDelete = new File(file, temp);
 
-					deleteFile(fileDelete);
+					deleteFile(fileDelete,config);
 				}
 
 				if (file.list().length == 0) {
@@ -37,7 +39,16 @@ public class TreeOperation {
 				}
 			}
 
-		} else {
+		}else if(config instanceof SvnConfigManager)
+		{
+			try {
+				SvnConfigManager.delete(file, true);
+			} catch (SVNException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
 			file.delete();
 		}
 
@@ -58,10 +69,10 @@ public class TreeOperation {
 			return configManager.addFile(version, name, false);
 	}
 
-	public static boolean uploadFile(File parent, InputStream in, String name)
-			throws IOException {
+	public static boolean uploadFile(File parent, InputStream in, String name,
+			AbstractConfigManager configManager) throws IOException {
 
-		OutputStream out = new FileOutputStream(new File(parent.getPath() + "/"
+		OutputStream out = new FileOutputStream(new File(parent.getPath() + File.separator
 				+ name));
 		int read = 0;
 		byte[] bytes = new byte[1024];
@@ -78,7 +89,17 @@ public class TreeOperation {
 
 		System.out.println("New file created!");
 
-		return true;
+		if (configManager instanceof SvnConfigManager) {
+			try {
+				SvnConfigManager.addEntry(new File(parent.getPath()
+						+ File.separator + name));
+				return true;
+			} catch (SVNException e) {
+				return false;
+			}
+		} else
+
+			return true;
 
 	}
 
@@ -87,11 +108,11 @@ public class TreeOperation {
 		OutputStream out;
 		try {
 			if (parent != null)
-				out = new FileOutputStream(new File(parent.getPath() + "/"
+				out = new FileOutputStream(new File(parent.getPath() + File.separator
 						+ uploadedFile));
 			else
-				out = new FileOutputStream(new File("/"
-						+ configManager.getPath() + "/" + version + "/"
+				out = new FileOutputStream(new File(File.separator
+						+ configManager.getPath() + File.separator+ version +File.separator
 						+ uploadedFile));
 			int read = 0;
 			byte[] bytes = new byte[1024];

@@ -846,19 +846,9 @@ public class JJTaskBean {
 						LoginBean.getProduct(), null, chapter, true, null,
 						null, null, true, true, false, "Bug"));
 
-				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
-				// TreeMap<String, JJTask> Tasks = new TreeMap<String,
-				// JJTask>(new
-				// Comparator<JJTask>() {
-				// public int compare(JJTask t1, JJTask t2) {
-				// return
-				// t1.getStartDatePlanned().compareTo(t2.getStartDatePlanned());
-				// }
-				// });
+				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();				
 
 				for (JJTask tt : tasks) {
-
-					// Tasks.put(task.getName(), task);
 					Tasks.put(tt.getId() + "", tt);
 				}
 

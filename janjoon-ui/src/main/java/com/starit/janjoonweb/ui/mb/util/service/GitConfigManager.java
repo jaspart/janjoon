@@ -1,19 +1,44 @@
 package com.starit.janjoonweb.ui.mb.util.service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jgit.api.*;
-import org.eclipse.jgit.api.errors.*;
+import org.eclipse.jgit.api.CheckoutCommand;
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.CommitCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PullCommand;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.CanceledException;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
+import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
+import org.eclipse.jgit.api.errors.DetachedHeadException;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidConfigurationException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.NoFilepatternException;
+import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.api.errors.NoMessageException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.api.errors.UnmergedPathsException;
+import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.lib.*;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.transport.*;
-import org.primefaces.model.*;
-
-import com.starit.janjoonweb.domain.JJContact;
+import org.eclipse.jgit.transport.RemoteConfig;
+import org.eclipse.jgit.transport.URIish;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 public class GitConfigManager extends AbstractConfigManager {
 
@@ -143,7 +168,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	// commit a repository
 	@Override
-	public boolean checkIn(String message) {
+	public boolean checkIn(File f,String message) {
 
 		logger.info("---commit operation started!!");
 		try {
@@ -519,54 +544,6 @@ public class GitConfigManager extends AbstractConfigManager {
 			return null;
 		}
 
-	}
-
-	@Override
-	public boolean setFileTexte(File file, String texte) {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write(texte);
-			writer.close();
-			return true;
-		} catch (IOException e) {
-
-			return false;
-		}
-
-	}
-
-	public static void delete(File file) throws IOException {
-
-		if (file.isDirectory()) {
-
-			// directory is empty, then delete it
-			if (file.list().length == 0) {
-
-				file.delete();
-
-			} else {
-
-				// list all the directory contents
-				String files[] = file.list();
-
-				for (String temp : files) {
-					// construct the file structure
-					File fileDelete = new File(file, temp);
-
-					// recursive delete
-					delete(fileDelete);
-				}
-
-				// check the directory again, if empty then delete it
-				if (file.list().length == 0) {
-					file.delete();
-				}
-			}
-
-		} else {
-			// if file, then delete it
-			file.delete();
-		}
-	}
-
+	}	
+	
 }

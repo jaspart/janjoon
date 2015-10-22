@@ -46,11 +46,13 @@
 					</p:commandButton>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sortMode" value="#{messages.project_gantt_select_sortBy} :" />
+					<p:outputLabel for="sortMode"
+						value="#{messages.project_gantt_select_sortBy} :" />
 					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
-						panelStyle="width:150px;" effect="fade" style="width:150px;" >
-						
-						<f:selectItem itemValue="chapter" itemLabel="#{messages.label_chapter}" />
+						panelStyle="width:150px;" effect="fade" style="width:150px;">
+
+						<f:selectItem itemValue="chapter"
+							itemLabel="#{messages.label_chapter}" />
 						<f:selectItem itemValue="StartDateReal"
 							itemLabel="#{messages.project_gantt_table_startreal_title}" />
 						<f:selectItem itemValue="StartDatePlanned"
@@ -107,10 +109,12 @@
 										</p:row>
 									</f:facet>
 								</p:panelGrid>
-								<p:dataTable id="taskDataTable" var="taskData" emptyMessage="#{messages.label_notRecordFound}"
-									sortFunction="#{jJTaskBean.sortFunction}" style="width: 1600px;"
-									styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
-									value="#{jJTaskBean.tasksData}" editable="true" editMode="cell">
+								<p:dataTable id="taskDataTable" var="taskData"
+									emptyMessage="#{messages.label_notRecordFound}"
+									sortFunction="#{jJTaskBean.sortFunction}"
+									style="width: 1600px;" styleClass="planning-dataTable"
+									sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
+									editable="true" editMode="cell">
 
 									<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 										process="@widgetVar(nameWidget)"

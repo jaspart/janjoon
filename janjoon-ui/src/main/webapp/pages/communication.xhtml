@@ -8,9 +8,10 @@
 <ui:composition>
 	<h:form id="comForm">
 		<p:dataTable id="comDataTable" value="#{communicationList}"
-			rowKey="#{mes.id}" var="mes" scrollable="true" emptyMessage="#{messages.label_notRecordFound}"
+			rowKey="#{mes.id}" var="mes" scrollable="true"
+			emptyMessage="#{messages.label_notRecordFound}"
 			rendered="#{loginBean.enable}" scrollHeight="300"
-			style="border-spacing:0px;"	selectionMode="single">
+			style="border-spacing:0px;" selectionMode="single">
 			<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 				listener="#{jJMessageBean.onRowSelect}" immediate="true"
 				oncomplete="PF('viewDialogWidget1').show()" />
@@ -64,7 +65,7 @@
 					<f:converter converterId="extendedDateTimeConverter" />
 					<f:attribute name="pattern" value="dd/MM/yyyy HH:mm:ss" />
 					<f:attribute name="timeZone" value="UCL" />
-				</h:outputText>	
+				</h:outputText>
 			</p:column>
 			<p:column style="width: 65%;min-width: 200px">
 				<h:outputText id="viewButton"

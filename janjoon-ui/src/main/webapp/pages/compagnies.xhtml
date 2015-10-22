@@ -30,15 +30,14 @@
 				sortMode="multiple" paginatorPosition="bottom"
 				emptyMessage="#{messages.label_notRecordFound}"
 				value="#{jJCompanyBean.lazyCompanyList}" paginator="true"
-				widgetVar="companyDataTableWV" rows="15" rowKey="#{company.id}">			
+				widgetVar="companyDataTableWV" rows="15" rowKey="#{company.id}">
 				<f:facet name="header">#{messages.admin_company_table_header}
 				<p:inputText id="globalFilter"
 						onkeyup="PF('companyDataTableWV').filter()" style="width:200px"
 						rendered="#{loginBean.authorisationService.adminCompany}"
 						placeholder="#{messages.bug_table_search_watermark}" />
 				</f:facet>
-				<p:column 
-				style="width: 70px !important;text-align: center;">
+				<p:column style="width: 70px !important;text-align: center;">
 					<p:graphicImage styleClass="avatar" cache="false"
 						rendered="#{company.logo != null}"
 						value="#{imageStreamer.imageComp}">
@@ -163,8 +162,9 @@
 										<h:outputText value="#{day.day}" />
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.startDate1}" locale="#{localeBean.locale}"
-											showDeselectButton="true" mode="popup">
+										<pe:timePicker value="#{day.startDate1}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
 												onstart="PF('EditCalendarBlockUIWidget').block();"
@@ -172,8 +172,9 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.endDate1}" locale="#{localeBean.locale}"
-											showDeselectButton="true" mode="popup">
+										<pe:timePicker value="#{day.endDate1}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
 												onstart="PF('EditCalendarBlockUIWidget').block();"
@@ -181,8 +182,9 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.startDate2}" locale="#{localeBean.locale}"
-											showDeselectButton="true" mode="popup">
+										<pe:timePicker value="#{day.startDate2}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,2)}"
 												onstart="PF('EditCalendarBlockUIWidget').block();"
@@ -190,8 +192,9 @@
 										</pe:timePicker>
 									</p:column>
 									<p:column width="15%">
-										<pe:timePicker value="#{day.endDate2}" locale="#{localeBean.locale}"
-											showDeselectButton="true" mode="popup">
+										<pe:timePicker value="#{day.endDate2}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
 											<p:ajax event="timeSelect" update=":tabview:EditCalendarForm"
 												listener="#{jJCompanyBean.timeSelectListener(day,2)}"
 												onstart="PF('EditCalendarBlockUIWidget').block();"

@@ -32,6 +32,8 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
@@ -50,6 +52,7 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 import com.starit.janjoonweb.ui.mb.util.service.AbstractConfigManager;
 import com.starit.janjoonweb.ui.mb.util.service.FileMap;
 import com.starit.janjoonweb.ui.mb.util.service.GitConfigManager;
+import com.starit.janjoonweb.ui.mb.util.service.SvnConfigManager;
 import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 
 @Scope("session")
@@ -173,9 +176,9 @@ public class DevelopmentBean implements Serializable {
 		project = LoginBean.getProject();
 
 		configuration = jJConfigurationService.getConfigurations(
-				"ConfigurationManager", "git", true).get(0);
+				"ConfigurationManager", null, true).get(0);
 
-		if (getConfigManager() != null && version != null && product != null) {
+		if (configuration != null && getConfigManager() != null && version != null && product != null) {
 
 			render = true;
 			treeOperation = new TreeOperation(configManager);
@@ -187,14 +190,17 @@ public class DevelopmentBean implements Serializable {
 				selectedTree = selectedTree.getChildren().get(0);
 
 			}
-			File file = (File) selectedTree.getData();
-			files = new ArrayList<FileMap>();
-			try (FileInputStream inputStream = new FileInputStream(file)) {
-				String fileTexte = IOUtils.toString(inputStream);
-				FileMap filemap = new FileMap(file.getName(), fileTexte, file);
-				files.add(filemap);
+			if (selectedTree != null && selectedTree.getData() instanceof File) {
+				File file = (File) selectedTree.getData();
+				files = new ArrayList<FileMap>();
+				try (FileInputStream inputStream = new FileInputStream(file)) {
+					String fileTexte = IOUtils.toString(inputStream);
+					FileMap filemap = new FileMap(file.getName(), fileTexte,
+							file);
+					files.add(filemap);
+				}
+				selectedTree = null;
 			}
-			selectedTree = null;
 
 		} else {
 			render = false;
@@ -324,6 +330,21 @@ public class DevelopmentBean implements Serializable {
 				configManager = null;
 
 			}
+
+		} else if (configuration.getParam().equalsIgnoreCase("svn")
+				&& product != null && version != null) {
+
+			String path = System.getProperty("user.home") + File.separator
+					+ "svn" + File.separator + contact.getName()
+					+ File.separator;
+			configManager = new SvnConfigManager("",
+					"https://svn.riouxsvn.com/testchemakh", path, "chemakh",
+					"taraji0000", product.getName(), version.getName());
+			configManager
+					.cloneRemoteRepository(
+							"https://svn.riouxsvn.com/testchemakh/"
+									+ product.getName(), product.getName(),
+							path);
 
 		} else
 			configManager = null;
@@ -593,22 +614,29 @@ public class DevelopmentBean implements Serializable {
 				}
 			}
 
-		}
+		}		
+		
 		FacesMessage growlMessage = null;
 
-		if (configManager.checkIn(task.getId() + ":" + task.getName() + " : "
+		if (configManager.checkIn(null,task.getId() + ":" + task.getName() + " : "
 				+ comment)) {
 			FacesMessage commitMessage = MessageFactory.getMessage(
 					"dev.commitSuccess.label", FacesMessage.SEVERITY_INFO, "");
 			FacesContext.getCurrentInstance().addMessage(null, commitMessage);
-			if (configManager.pushRepository()) {
+			if (configManager.getType().equalsIgnoreCase("git")
+					&& configManager.pushRepository()) {
 				growlMessage = MessageFactory.getMessage(
 						"dev.pushSucces.label", FacesMessage.SEVERITY_INFO, "");
 
 				comment = "";
-			} else {
+				task= null;
+			} else if (configManager.getType().equalsIgnoreCase("git")) {
 				growlMessage = MessageFactory.getMessage("dev.pushError.label",
 						FacesMessage.SEVERITY_ERROR, "");
+			}else
+			{
+				comment = null;
+				task = null;
 			}
 
 		} else {
@@ -617,7 +645,8 @@ public class DevelopmentBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR, "");
 
 		}
-		FacesContext.getCurrentInstance().addMessage(null, growlMessage);
+		if (growlMessage != null)
+			FacesContext.getCurrentInstance().addMessage(null, growlMessage);
 
 	}
 
@@ -663,16 +692,17 @@ public class DevelopmentBean implements Serializable {
 	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event)
 			throws InterruptedException, IOException {
 
-		CodeMirror cm = (CodeMirror) event.getComponent();
-
+		CodeMirror cm = (CodeMirror) event.getComponent().getAttributes().get("cm");		
 		FileInputStream inputStream = new FileInputStream(files.get(
 				activeTabIndex).getFile());
 
 		String fileTexte = IOUtils.toString(inputStream);
+		String cmValue= cm.getValue().toString();		
 
-		if (!cm.getValue().toString().contains(fileTexte)
-				&& fileTexte.contains(cm.getValue().toString())) {
+		if (!(cmValue.contains(fileTexte)
+				&& fileTexte.contains(cmValue))) {
 			files.get(activeTabIndex).setChange(true);
+			//files.get(activeTabIndex).setTexte(cmValue);
 
 		}
 
@@ -688,6 +718,7 @@ public class DevelopmentBean implements Serializable {
 			fileIndex = j;
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('saveFileDialogWidget').show()");
+			
 		} else {
 
 			updatetabView(j, index);
@@ -708,7 +739,7 @@ public class DevelopmentBean implements Serializable {
 		int i = 0;
 		int j = -1;
 		while (i < files.size()) {
-			if (files.get(i).getFile() == f) {
+			if (files.get(i).getFile().getAbsolutePath().equalsIgnoreCase(f.getAbsolutePath())) {
 				j = i;
 				i = files.size();
 			} else
@@ -725,7 +756,7 @@ public class DevelopmentBean implements Serializable {
 		selectedTree.getParent().getChildren().remove(selectedTree);
 		selectedTree.setParent(null);
 
-		treeOperation.deleteFile(f);
+		treeOperation.deleteFile(f,configManager);
 		int i = contains(f);
 		if (i != -1) {
 			updatetabView(i, files.get(i));
@@ -736,11 +767,35 @@ public class DevelopmentBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
+	private void  saveFiles(File f) throws IOException
+	{
+		if(!f.isDirectory())
+		{
+			FileMap fMap=new FileMap(f.getName(), null, f);
+			if(files.contains(fMap) && files.get(files.indexOf(fMap)).isChange())
+			{
+				configManager.setFileTexte(f,files.get(files.indexOf(fMap)).getTexte());
+			}
+		}else
+		{
+			if (f.list().length != 0) {
+			
+				String files[] = f.list();
+				for (String temp : files) {
+					File fileDelete = new File(f, temp);
 
-	public void commitFile() {
+					saveFiles(fileDelete);
+				}				
+			}
+		}
+	}
+
+	public void commitFile() throws IOException {
 
 		File f = (File) selectedTree.getData();
-		configManager.checkIn("commitFile" + f.getName());
+		saveFiles(f);
+		
+		configManager.checkIn(f,"commitFile" + f.getName());
 
 		FacesMessage msg = MessageFactory.getMessage(
 				"dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,
@@ -752,7 +807,7 @@ public class DevelopmentBean implements Serializable {
 
 		configManager.setFileTexte(files.get(fileIndex).getFile(),
 				files.get(fileIndex).getTexte());
-		updatetabView(fileIndex, files.get(activeTabIndex));
+		updatetabView(fileIndex, files.get(fileIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('saveFileDialogWidget').hide()");
 		if (files.isEmpty())
@@ -765,7 +820,7 @@ public class DevelopmentBean implements Serializable {
 
 	public void notSaveFile() {
 
-		updatetabView(fileIndex, files.get(activeTabIndex));
+		updatetabView(fileIndex, files.get(fileIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('saveFileDialogWidget').hide()");
 		fileIndex = -1;

@@ -3,6 +3,7 @@ package com.starit.janjoonweb.ui.mb.util.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+
 import org.apache.commons.io.FilenameUtils;
 
 public class FileMap {
@@ -82,6 +83,12 @@ public class FileMap {
 
 	public void setMode(String mode) {
 		this.mode = mode;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof FileMap) && (getFile() != null) ? getFile().getAbsolutePath().equals(
+				((FileMap) object).getFile().getAbsolutePath()) : (object == this);
 	}
 
 }

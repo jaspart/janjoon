@@ -796,6 +796,12 @@ public class LoginBean implements Serializable {
 								context.update(":growlForm");
 							}
 						} else {
+							
+//							context.update(":contentPanel:devPanel");
+//							context.update(":contentPanel:errorPanel");
+//							context.update(":growlForm");
+							jJDevelopment.setRender(false);
+							
 							FacesMessage facesMessage = MessageFactory
 									.getMessage("dev.nullVersion.label",
 											FacesMessage.SEVERITY_ERROR, "");
@@ -917,22 +923,22 @@ public class LoginBean implements Serializable {
 
 			String viewId = FacesContext.getCurrentInstance().getViewRoot()
 					.getViewId();
-			if (!viewId.contains("development")) {
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				DevelopmentBean jJDevelopment = (DevelopmentBean) session
-						.getAttribute("jJDevelopment");
-				if (jJDevelopment != null) {
-					if (jJDevelopment.isInit()) {
-						session.setAttribute("jJDevelopment",
-								new DevelopmentBean(jJDevelopment));
-					}
-				}
-				RequestContext context = RequestContext.getCurrentInstance();
-				context.execute("PF('blockUIWidget').unblock()");
-
-			}
+//			if (!viewId.contains("development")) {
+//				HttpSession session = (HttpSession) FacesContext
+//						.getCurrentInstance().getExternalContext()
+//						.getSession(false);
+//				DevelopmentBean jJDevelopment = (DevelopmentBean) session
+//						.getAttribute("jJDevelopment");
+//				if (jJDevelopment != null) {
+//					if (jJDevelopment.isInit()) {
+//						session.setAttribute("jJDevelopment",
+//								new DevelopmentBean(jJDevelopment));
+//					}
+//				}
+//				RequestContext context = RequestContext.getCurrentInstance();
+//				context.execute("PF('blockUIWidget').unblock()");
+//
+//			}
 			String previos = getPreviousPage();
 
 			if (viewId.contains("administration")
@@ -1050,6 +1056,9 @@ public class LoginBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			}
+			
+			RequestContext.getCurrentInstance().execute(
+					"PF('blockUIWidget').unblock()");
 		}
 	}
 

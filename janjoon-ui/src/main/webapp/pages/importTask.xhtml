@@ -95,7 +95,8 @@
 		</p:panelGrid>
 
 		<p:dataTable id="importDataTable" var="format" scrollable="true"
-			style="width:700px;table-layout: fixed;" scrollHeight="350" emptyMessage="#{messages.label_notRecordFound}"
+			style="width:700px;table-layout: fixed;" scrollHeight="350"
+			emptyMessage="#{messages.label_notRecordFound}"
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
 				<p:row>
@@ -131,7 +132,8 @@
 					</p:row>
 				</f:facet>
 				<p:selectBooleanCheckbox value="#{format.copyObjet}" id="checkOne">
-					<p:ajax update="importDataTable" listener="#{jJTaskBean.copyObjetListener}"
+					<p:ajax update="importDataTable"
+						listener="#{jJTaskBean.copyObjetListener}"
 						process="@this,checkAll" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="#{format.name}" id="reqContent" />
@@ -160,7 +162,8 @@
 				</p:tooltip>
 			</p:column>
 
-			<p:column style="width:30%" headerText="#{messages.importTask_headerTable_startDate}">
+			<p:column style="width:30%"
+				headerText="#{messages.importTask_headerTable_startDate}">
 				<p:cellEditor>
 					<f:facet name="output">
 						<p:calendar value="#{format.startDate}" navigator="true"
@@ -175,7 +178,8 @@
 				</p:cellEditor>
 			</p:column>
 
-			<p:column style="width:15%" headerText="#{messages.importTask_headerTable_requirement}">
+			<p:column style="width:15%"
+				headerText="#{messages.importTask_headerTable_requirement}">
 				<p:panel style="height: 25px;width: 30px; margin: auto;">
 					<p:commandButton id="specButton"
 						value="#{format.specification ? 'X' : ' '}"
@@ -183,7 +187,8 @@
 						actionListener="#{format.setSpecification(!format.specification)}" />
 				</p:panel>
 			</p:column>
-			<p:column style="width:15%" headerText="#{messages.importTask_headerTable_workload}">
+			<p:column style="width:15%"
+				headerText="#{messages.importTask_headerTable_workload}">
 				<p:cellEditor>
 					<f:facet name="output">
 						<h:outputText value="#{format.workload}" />

@@ -80,11 +80,11 @@
 					<p:column style="width:5% !important;">
 						<p:commandButton id="resolveButton" icon="ui-icon-minus"
 							oncomplete="PF('resolveDialogWidget').show()" resetValues="true"
-							title="#{messages.label_disable}" >
+							title="#{messages.label_disable}">
 							<!--value="#{messages.main_communication_resolve_button}"-->
 							<f:setPropertyActionListener value="#{mes}"
 								target="#{jJMessageBean.resolvedJJMessage}" />
-						</p:commandButton>						
+						</p:commandButton>
 					</p:column>
 				</p:dataTable>
 			</h:form>
