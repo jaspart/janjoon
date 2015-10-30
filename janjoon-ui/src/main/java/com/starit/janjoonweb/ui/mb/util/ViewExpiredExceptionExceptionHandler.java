@@ -4,13 +4,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class ViewExpiredExceptionExceptionHandler extends
 		ExceptionHandlerWrapper {
@@ -37,21 +41,39 @@ public class ViewExpiredExceptionExceptionHandler extends
 			if (t instanceof ViewExpiredException) {
 				ViewExpiredException vee = (ViewExpiredException) t;
 				FacesContext facesContext = FacesContext.getCurrentInstance();
+				ExternalContext ec = facesContext.getExternalContext();
 				Map<String, Object> requestMap = facesContext
 						.getExternalContext().getRequestMap();
 				NavigationHandler navigationHandler = facesContext
 						.getApplication().getNavigationHandler();
+
 				try {
-					// Push some useful stuff to the request scope for use in
-					// the page
-					requestMap.put("currentViewId", vee.getViewId());
-					navigationHandler.handleNavigation(facesContext, null,
-							"pages/login");
-					facesContext.renderResponse();
+					if (facesContext.getPartialViewContext().isAjaxRequest()) {
+						
+					}
+
 				} finally {
 					i.remove();
 				}
+			} else if (LoginBean.findBean("loginBean") != null) {
+
+				FacesContext ctx = FacesContext.getCurrentInstance();
+				String viewId = ctx.getViewRoot().getViewId();
+				String path = FacesContext.getCurrentInstance()
+						.getExternalContext().getRequestContextPath();
+				String view = viewId.replace(path, "");
+				view = view.replace("/pages/", "");
+				if (view.indexOf(".jsf") != -1)
+					view = view.substring(0, view.indexOf(".jsf"));
+				else
+					view = view.replace(".xhtml", "");
+				LoginBean loginBean = (LoginBean) LoginBean
+						.findBean("loginBean");
+				loginBean.setFacesMessage(MessageFactory.getMessage(
+						"label_exceptionHandler", FacesMessage.SEVERITY_ERROR,
+						view));
 			}
+
 		}
 
 		// At this point, the queue will not contain any ViewExpiredEvents.

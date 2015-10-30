@@ -27,7 +27,8 @@ public class DateRangeValidator implements Validator {
 				&& LoginBean.getProject().getStartDate().after(testedDate)) {
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"validator_date_startBeforeStart", "Sprint", "Project");
+					"validator_date_startBeforeStart", "Sprint", MessageFactory
+							.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		} else if (LoginBean.getProject().getEndDate() != null
@@ -36,7 +37,8 @@ public class DateRangeValidator implements Validator {
 						.before(testedDate)) {
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"validator_date_endAfterEnd", "Sprint", "Project");
+					"validator_date_endAfterEnd", "Sprint", MessageFactory
+							.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -64,13 +66,16 @@ public class DateRangeValidator implements Validator {
 							LoginBean.getProject().getEndDate()).before(
 							testedDate)) {
 				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_date_endAfterEnd", "Sprint", "Project");
+						"validator_date_endAfterEnd", "Sprint", MessageFactory
+								.getMessage("label_project", "").getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (LoginBean.getProject().getStartDate() != null
 					&& LoginBean.getProject().getStartDate().after(testedDate)) {
 				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_date_endBeforeStart", "Sprint", "Project");
+						"validator_date_endBeforeStart", "Sprint",
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (startDate.after(testedDate)) {
@@ -84,7 +89,9 @@ public class DateRangeValidator implements Validator {
 		} else if (startDate.after(testedDate)) {
 			startDateComponent.setValid(false);
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"validator_date_startAfterEnd", "Project", "Project");
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_project", "").getDetail(),
+					MessageFactory.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -161,7 +168,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (taskData.getTask().getProject() != null
@@ -171,7 +179,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -212,7 +221,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (taskData.getTask().getProject() != null
@@ -222,7 +232,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -263,7 +274,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (taskData.getTask().getProject() != null
@@ -273,7 +285,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -318,7 +331,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (taskData.getTask().getProject() != null
@@ -329,7 +343,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
@@ -378,7 +393,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
@@ -389,7 +405,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_startAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
@@ -439,7 +456,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endAfterEnd", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (task.getProject() != null
@@ -448,7 +466,8 @@ public class DateRangeValidator implements Validator {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"validator_date_endBeforeStart", MessageFactory
 								.getMessage("label_task", "").getDetail(),
-						"Project");
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}

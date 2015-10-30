@@ -130,13 +130,16 @@ public class JJCompanyBean {
 	public List<JJCompany> getCompanies() {
 
 		if (companies == null) {
-			if (((LoginBean) LoginBean.findBean("loginBean"))
-					.getAuthorisationService().isAdminCompany())
+			if (((LoginBean) LoginBean.findBean("loginBean")).isEnable() && ((LoginBean) LoginBean.findBean("loginBean"))
+					.getAuthorisationService().isAdminCompany() )
 				companies = jJCompanyService.getActifCompanies();
-			else {
+			else if(((LoginBean) LoginBean.findBean("loginBean")).isEnable()){
 				companies = new ArrayList<JJCompany>();
 				companies.add(((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact().getCompany());
+			}else
+			{
+				companies = jJCompanyService.getActifCompanies();
 			}
 
 			companyOptions = null;

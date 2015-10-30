@@ -51,22 +51,23 @@ div#contentPanel_content {
 	margin-left: -4px !important;
 }
 
-.fiftyPercent{
+.fiftyPercent {
 	width: 50%;
 }
 
-.thirtyThreePercent{
+.thirtyThreePercent {
 	width: 33%;
 }
 
-.thirtyPercent{
+.thirtyPercent {
 	width: 30%;
 }
-.seventyPercent{
+
+.seventyPercent {
 	width: 70%;
 }
 
-.twentyFivePercent{
+.twentyFivePercent {
 	width: 25%;
 }
 
@@ -125,8 +126,8 @@ div#contentPanel_content {
 	overflow: scroll;
 }
 
-.scheduleNotMine, .scheduleNotMine .fc-event-skin, .scheduleNotMine a{
-    background-color: red;
+.scheduleNotMine,.scheduleNotMine .fc-event-skin,.scheduleNotMine a {
+	background-color: red;
 }
 
 .ui-messages-info,.ui-messages-warn,.ui-messages-error,.ui-messages-fatal
@@ -459,7 +460,6 @@ div#contentPanel_content {
 /* 	width: 120px; */
 /* 	margin: auto; */
 /* } */
-
 .ui-datatable .ui-datatable-footer {
 	text-align: left !important;
 }
@@ -633,8 +633,8 @@ div#contentPanel_content {
 	color: black;
 	font-weight: bold;
 	padding: .2em .6em .3em;
-	font-size: 80%;	
-	line-height: 1;	
+	font-size: 80%;
+	line-height: 1;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -642,9 +642,9 @@ div#contentPanel_content {
 }
 
 .TestcaseRequirement {
-	color: black;	
-	font-size: 80%;	
-	line-height: 1;	
+	color: black;
+	font-size: 80%;
+	line-height: 1;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;

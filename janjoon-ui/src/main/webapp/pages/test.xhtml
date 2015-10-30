@@ -35,8 +35,7 @@
 					<p:selectBooleanButton value="#{category.checked}"
 						onLabel="#{category.category.name}"
 						id="Mcategory_#{category.category.id}"
-						rendered="#{loginBean.mobile}"
-						title="#{category.category.name}"
+						rendered="#{loginBean.mobile}" title="#{category.category.name}"
 						style="width: 150px;margin-left: 20px;height: 100px;margin-top: 20px;visibility: visible;"
 						offLabel="#{category.category.name}" onIcon="ui-icon-check"
 						offIcon="ui-icon-close">
@@ -46,9 +45,9 @@
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
 					</p:selectBooleanButton>
-<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
-<!-- 						value="#{category.category.name}" showEffect="fade" -->
-<!-- 						hideEffect="fade" /> -->
+					<!-- 					<p:tooltip for="Mcategory_#{category.category.id}" -->
+					<!-- 						value="#{category.category.name}" showEffect="fade" -->
+					<!-- 						hideEffect="fade" /> -->
 					<br />
 				</c:forEach>
 			</p:dialog>
@@ -59,8 +58,7 @@
 				<p:selectBooleanButton value="#{category.checked}"
 					onLabel="#{category.category.name}"
 					id="category_#{category.category.id}"
-					rendered="#{!loginBean.mobile}"
-					title="#{category.category.name}"
+					rendered="#{!loginBean.mobile}" title="#{category.category.name}"
 					style="visibility: visible;#{jJTestcaseBean.getMarginLeft(category)}"
 					offLabel="#{category.category.name}" onIcon="ui-icon-check"
 					offIcon="ui-icon-close">
@@ -70,9 +68,9 @@
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()" />
 				</p:selectBooleanButton>
-<!-- 				<p:tooltip for="category_#{category.category.id}" -->
-<!-- 					value="#{category.category.name}" showEffect="fade" -->
-<!-- 					hideEffect="fade" /> -->
+				<!-- 				<p:tooltip for="category_#{category.category.id}" -->
+				<!-- 					value="#{category.category.name}" showEffect="fade" -->
+				<!-- 					hideEffect="fade" /> -->
 			</c:forEach>
 
 			<p:commandButton value="&#9776;" id="overlayPanel"

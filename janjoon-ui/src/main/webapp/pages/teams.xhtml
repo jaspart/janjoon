@@ -7,10 +7,9 @@
 
 <ui:composition template="../templates/layout.xhtml">
 	<ui:define name="content">
-		<h:form style="width:100%;display:none;">			
+		<h:form style="width:100%;display:none;">
 			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper"
-				update=":teamTabView"
+				name="tabChangeHelper" update=":teamTabView"
 				actionListener="#{jJTaskBean.onTabTeamChange}"
 				oncomplete="PF('blockUIWidget').unblock()" />
 		</h:form>

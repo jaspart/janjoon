@@ -91,7 +91,7 @@
 							state="#{jJTaskBean.stateOne}">
 
 							<pe:layoutPane position="west" id="westLayout">
-								<f:facet name="header">Task Data Table</f:facet>
+								<f:facet name="header">#{messages.project_gantt_table_header}</f:facet>
 								<p:panelGrid id="stickyHeader" styleClass="stickyHeader">
 									<f:facet name="header">
 										<p:row>
@@ -233,12 +233,16 @@
 										headerText="#{messages.project_gantt_table_startplanned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar value="#{taskData.startDate}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" style="width:90px" />
+												<h:outputText value="#{taskData.startDate}"
+													style="width:90px">
+													<f:converter converterId="extendedDateTimeConverter" />
+													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+													<f:attribute name="timeZone" value="UCL" />
+												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar style="width:90px" value="#{taskData.startDate}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
+												<p:calendar size="" style="width:90px"  value="#{taskData.startDate}"
+													navigator="true" pattern="yyyy/MM/dd HH:mm">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="taskData" value="#{taskData}" />
 													<f:attribute name="edition" value="startDate" />
@@ -251,12 +255,15 @@
 										headerText="#{messages.project_gantt_table_endplanned_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px" value="#{taskData.endDate}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss" />
+												<h:outputText value="#{taskData.endDate}" style="width:90px">
+													<f:converter converterId="extendedDateTimeConverter" />
+													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+													<f:attribute name="timeZone" value="UCL" />
+												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
 												<p:calendar style="width:90px" value="#{taskData.endDate}"
-													navigator="true" pattern="yyyy/MM/dd HH:mm:ss">
+													navigator="true" pattern="yyyy/MM/dd HH:mm">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="taskData" value="#{taskData}" />
 													<f:attribute name="edition" value="endDate" />
@@ -273,7 +280,7 @@
 											</f:facet>
 											<f:facet name="input">
 												<p:spinner value="#{taskData.workload}" stepFactor="1"
-													min="0" />
+													min="0" size="4" />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -282,14 +289,17 @@
 										headerText="#{messages.project_gantt_table_startreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px"
-													value="#{taskData.task.startDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" />
+												<h:outputText value="#{taskData.task.startDateReal}"
+													style="width:90px">
+													<f:converter converterId="extendedDateTimeConverter" />
+													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+													<f:attribute name="timeZone" value="UCL" />
+												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
 												<p:calendar style="width:90px"
 													value="#{taskData.task.startDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss">
+													pattern="yyyy/MM/dd HH:mm">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="taskData" value="#{taskData}" />
 													<f:attribute name="edition" value="startDateReal" />
@@ -302,14 +312,17 @@
 										headerText="#{messages.project_gantt_table_endreal_title}">
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
-												<p:calendar style="width:90px"
-													value="#{taskData.task.endDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss" />
+												<h:outputText value="#{taskData.task.endDateReal}"
+													style="width:90px">
+													<f:converter converterId="extendedDateTimeConverter" />
+													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+													<f:attribute name="timeZone" value="UCL" />
+												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
 												<p:calendar style="width:90px"
 													value="#{taskData.task.endDateReal}" navigator="true"
-													pattern="yyyy/MM/dd HH:mm:ss">
+													pattern="yyyy/MM/dd HH:mm">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="edition" value="endDateReal" />
 													<f:attribute name="taskData" value="#{taskData}" />
@@ -326,7 +339,7 @@
 											</f:facet>
 											<f:facet name="input">
 												<p:spinner value="#{taskData.task.workloadReal}"
-													stepFactor="1" min="0" />
+													stepFactor="1" min="0" size="4" />
 											</f:facet>
 										</p:cellEditor>
 									</p:column>
@@ -377,7 +390,7 @@
 							<pe:layoutPane position="center"
 								styleContent="overflow-y: hidden;" id="centerLayout">
 
-								<f:facet name="header">Task TimeLine</f:facet>
+								<f:facet name="header">#{messages.project_gantt_timeline_header}</f:facet>
 
 								<pe:timeline id="timeline" value="#{jJTaskBean.model}"
 									eventMargin="10" eventMarginAxis="0" themable="false"

@@ -134,13 +134,12 @@
 									<p:column colspan="3">
 										<p:inputText id="name"
 											disabled="#{jJProfileBean.disabledProfileMode}"
-											value="#{jJProfileBean.profileAdmin.name}"
-											required="true">
+											value="#{jJProfileBean.profileAdmin.name}" required="true">
 											<f:validateLength maximum="100" />
 										</p:inputText>
-										<p:watermark  
+										<p:watermark
 											value="#{messages.admin_profile_new_name_watermark}"
-											for="name"  />
+											for="name" />
 									</p:column>
 									<p:column>
 										<p:commandButton id="addProfile"

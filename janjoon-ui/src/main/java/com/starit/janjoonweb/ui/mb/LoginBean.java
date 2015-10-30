@@ -1,18 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
@@ -27,8 +17,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -48,25 +37,8 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.html.simpleparser.StyleSheet;
-import com.starit.janjoonweb.domain.JJAuditLog;
-import com.starit.janjoonweb.domain.JJAuditLogService;
-import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.domain.JJCompanyService;
-import com.starit.janjoonweb.domain.JJConfiguration;
-import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJMessageService;
-import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
-import com.starit.janjoonweb.ui.mb.util.UsageChecker;
+import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.ui.mb.util.*;
 import com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 import com.sun.faces.component.visit.FullVisitContext;
@@ -86,6 +58,16 @@ public class LoginBean implements Serializable {
 	private String showMarquee;
 	private FacesMessage facesMessage;
 	private JJAuditLog auditLogLogin;
+	private String username = "";
+	private String password;
+	private boolean agreeTerms = false;
+	private boolean loading = false;
+	private JJContact contact;
+	private boolean enable = false;
+	private int activeTabAdminIndex;
+	private int menuIndex;
+	private PlanningConfiguration planningConfiguration;
+	private String page;
 
 	@Autowired
 	private JJContactService jJContactService;
@@ -108,18 +90,20 @@ public class LoginBean implements Serializable {
 	@Autowired
 	private JJAuditLogService jJAuditLogService;
 
-	private String username = "";
-	private String password;
-	private boolean agreeTerms = false;
-	private boolean loading = false;
-	private JJContact contact;
-	private boolean enable = false;
-	private int activeTabAdminIndex;
-	private int menuIndex;
-	private PlanningConfiguration planningConfiguration;
-
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
+
+		// Map<String, Object> requestCookieMap = FacesContext
+		// .getCurrentInstance().getExternalContext()
+		// .getRequestCookieMap();
+
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestCookieMap().get("agreeTerms") != null) {
+
+			this.agreeTerms = ((Cookie) FacesContext.getCurrentInstance()
+					.getExternalContext().getRequestCookieMap()
+					.get("agreeTerms")).getValue().equalsIgnoreCase("true");
+		}
 
 		this.authenticationManager = authenticationManager;
 		this.mobile = (((HttpServletRequest) FacesContext.getCurrentInstance()
@@ -235,15 +219,17 @@ public class LoginBean implements Serializable {
 					s = s + ".jsf?";
 					Iterator<Entry<String, String[]>> it = savedRequest
 							.getParameterMap().entrySet().iterator();
+					String[] names = { "requirement", "bug", "testcase",
+							"faces-redirect" };
 					while (it.hasNext()) {
+						@SuppressWarnings("rawtypes")
 						Map.Entry pairs = (Map.Entry) it.next();
 						for (String st : (String[]) pairs.getValue()) {
-							// System.err.println(pairs.getKey() + ":" + st);
-							s = s + pairs.getKey() + "=" + st + "&";
+							if (Arrays.asList(names).contains(pairs.getKey()))
+								s = s + pairs.getKey() + "=" + st + "&";
 						}
 					}
 					s = s.substring(0, s.length() - 1);
-					// System.out.println(s);
 				}
 				if (!s.contains("?")) {
 					s = s + ".jsf?faces-redirect=true";
@@ -298,14 +284,6 @@ public class LoginBean implements Serializable {
 	public void setLoading(boolean loading) {
 		this.loading = loading;
 	}
-
-	// public boolean isLoadMain() {
-	// return loadMain;
-	// }
-	//
-	// public void setLoadMain(boolean loadMain) {
-	// this.loadMain = loadMain;
-	// }
 
 	public int getActiveTabAdminIndex() {
 		return activeTabAdminIndex;
@@ -425,6 +403,15 @@ public class LoginBean implements Serializable {
 	public void setPlanningConfiguration(
 			PlanningConfiguration planningConfiguration) {
 		this.planningConfiguration = planningConfiguration;
+	}
+
+	public String getPage() {
+		return FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath()+ page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
 	}
 
 	public String logout() {
@@ -560,6 +547,14 @@ public class LoginBean implements Serializable {
 				auditLogLogin.setObjet("JJContact");
 
 				prevPage = getRedirectUrl(session);
+
+				HttpServletResponse response = (HttpServletResponse) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getResponse();
+				Cookie cookie = new Cookie("agreeTerms", "true");
+				cookie.setMaxAge(365 * 24 * 60 * 60 * 1000);
+				response.addCookie(cookie);
+
 			} else {
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
@@ -796,12 +791,12 @@ public class LoginBean implements Serializable {
 								context.update(":growlForm");
 							}
 						} else {
-							
-//							context.update(":contentPanel:devPanel");
-//							context.update(":contentPanel:errorPanel");
-//							context.update(":growlForm");
+
+							// context.update(":contentPanel:devPanel");
+							// context.update(":contentPanel:errorPanel");
+							// context.update(":growlForm");
 							jJDevelopment.setRender(false);
-							
+
 							FacesMessage facesMessage = MessageFactory
 									.getMessage("dev.nullVersion.label",
 											FacesMessage.SEVERITY_ERROR, "");
@@ -923,22 +918,22 @@ public class LoginBean implements Serializable {
 
 			String viewId = FacesContext.getCurrentInstance().getViewRoot()
 					.getViewId();
-//			if (!viewId.contains("development")) {
-//				HttpSession session = (HttpSession) FacesContext
-//						.getCurrentInstance().getExternalContext()
-//						.getSession(false);
-//				DevelopmentBean jJDevelopment = (DevelopmentBean) session
-//						.getAttribute("jJDevelopment");
-//				if (jJDevelopment != null) {
-//					if (jJDevelopment.isInit()) {
-//						session.setAttribute("jJDevelopment",
-//								new DevelopmentBean(jJDevelopment));
-//					}
-//				}
-//				RequestContext context = RequestContext.getCurrentInstance();
-//				context.execute("PF('blockUIWidget').unblock()");
-//
-//			}
+			// if (!viewId.contains("development")) {
+			// HttpSession session = (HttpSession) FacesContext
+			// .getCurrentInstance().getExternalContext()
+			// .getSession(false);
+			// DevelopmentBean jJDevelopment = (DevelopmentBean) session
+			// .getAttribute("jJDevelopment");
+			// if (jJDevelopment != null) {
+			// if (jJDevelopment.isInit()) {
+			// session.setAttribute("jJDevelopment",
+			// new DevelopmentBean(jJDevelopment));
+			// }
+			// }
+			// RequestContext context = RequestContext.getCurrentInstance();
+			// context.execute("PF('blockUIWidget').unblock()");
+			//
+			// }
 			String previos = getPreviousPage();
 
 			if (viewId.contains("administration")
@@ -1056,7 +1051,7 @@ public class LoginBean implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 
 			}
-			
+
 			RequestContext.getCurrentInstance().execute(
 					"PF('blockUIWidget').unblock()");
 		}
@@ -1169,13 +1164,13 @@ public class LoginBean implements Serializable {
 						} else if ((!authorisationService.isrBug() && root
 								.getViewId().contains("bug"))
 								|| ((!authorisationService.isrProject()) && (root
-										.getViewId().contains("planning") || root
-										.getViewId().contains("stats") || root
+										.getViewId().contains("planning")
+										|| root.getViewId().contains("stats") || root
 										.getViewId().contains("teams")))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
-										.contains("test"))								
+										.contains("test"))
 								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))) {
 
@@ -1224,13 +1219,13 @@ public class LoginBean implements Serializable {
 						} else if ((!authorisationService.isrBug() && root
 								.getViewId().contains("bug"))
 								|| ((!authorisationService.isrProject()) && (root
-										.getViewId().contains("planning") || root
-										.getViewId().contains("stats") || root
+										.getViewId().contains("planning")
+										|| root.getViewId().contains("stats") || root
 										.getViewId().contains("teams")))
 								|| (!authorisationService.isrBuild() && viewID
 										.contains("delivery"))
 								|| ((!authorisationService.isrTest()) && viewID
-										.contains("test"))								
+										.contains("test"))
 								|| (!authorisationService.isRenderAdmin() && root
 										.getViewId().contains("administration"))
 								|| (!authorisationService.isrRequiement() && root
@@ -1254,13 +1249,13 @@ public class LoginBean implements Serializable {
 					if ((!authorisationService.isrBug() && root.getViewId()
 							.contains("bug"))
 							|| ((!authorisationService.isrProject()) && (root
-									.getViewId().contains("planning") || root
-									.getViewId().contains("stats") || root
+									.getViewId().contains("planning")
+									|| root.getViewId().contains("stats") || root
 									.getViewId().contains("teams")))
 							|| (!authorisationService.isrBuild() && viewID
 									.contains("delivery"))
 							|| ((!authorisationService.isrTest()) && viewID
-									.contains("test"))							
+									.contains("test"))
 							|| (!authorisationService.isRenderAdmin() && root
 									.getViewId().contains("administration"))) {
 

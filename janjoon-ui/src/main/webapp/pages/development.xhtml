@@ -17,7 +17,7 @@
 	height: 450px;
 }
 </style>
-<!-- 		<h:outputScript library="js" name="codeMirror.js" /> -->
+		<!-- 		<h:outputScript library="js" name="codeMirror.js" /> -->
 		<h:form>
 			<p:remoteCommand name="updateHeader"
 				oncomplete="PF('blockUIWidget').unblock()"
@@ -227,24 +227,25 @@
 
 										<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
 											binding="#{codeMirror}" autoformat="true" theme="eclipse"
-											value="#{tab.texte}" lineNumbers="true" tabSize="150" widgetVar="myCodeMirror_#{tab.index}"
+											value="#{tab.texte}" lineNumbers="true" tabSize="150"
+											widgetVar="myCodeMirror_#{tab.index}"
 											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
 											<p:ajax event="blur" update=":form:tabView:codeMirror"
 												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 
 											<f:attribute name="cm" value="#{codeMirror}" />
 										</pe:codeMirror>
-<!-- 										<h:panelGrid columns="3"> -->
-<!-- 											<a -->
-<!-- 												href="javascript:autoFormatSelection(PF('myCodeMirror_#{tab.index}').instance)"> -->
-<!-- 												Autoformat Selected </a> -->
-<!-- 											<a -->
-<!-- 												href="javascript:commentSelection(true,PF('myCodeMirror_#{tab.index}').instance)"> -->
-<!-- 												Comment Selected </a> -->
-<!-- 											<a -->
-<!-- 												href="javascript:commentSelection(false,PF('myCodeMirror_#{tab.index}').instance)"> -->
-<!-- 												Uncomment Selected </a> -->
-<!-- 										</h:panelGrid> -->
+										<!-- 										<h:panelGrid columns="3"> -->
+										<!-- 											<a -->
+										<!-- 												href="javascript:autoFormatSelection(PF('myCodeMirror_#{tab.index}').instance)"> -->
+										<!-- 												Autoformat Selected </a> -->
+										<!-- 											<a -->
+										<!-- 												href="javascript:commentSelection(true,PF('myCodeMirror_#{tab.index}').instance)"> -->
+										<!-- 												Comment Selected </a> -->
+										<!-- 											<a -->
+										<!-- 												href="javascript:commentSelection(false,PF('myCodeMirror_#{tab.index}').instance)"> -->
+										<!-- 												Uncomment Selected </a> -->
+										<!-- 										</h:panelGrid> -->
 									</p:tab>
 								</p:tabView>
 							</p:panel></td>

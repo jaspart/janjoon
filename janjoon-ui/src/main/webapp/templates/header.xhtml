@@ -94,7 +94,7 @@
 
 					<p:splitButton
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
-						rendered="#{loginBean.enable}" style="right: 0px;">						
+						rendered="#{loginBean.enable}" style="right: 0px;">
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person"
 							url="/pages/contactConfig.jsf?faces-redirect=true" />
@@ -160,7 +160,7 @@
 						disabled="#{!loginBean.authorisationService.rwDev}"
 						title="#{loginBean.authorisationService.rwDevMSG}"
 						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
-						icon="ui-icon-wrench" 
+						icon="ui-icon-wrench"
 						rendered="#{loginBean.enable and !loginBean.mobile}" />
 
 					<p:menuitem value="#{messages.header_test_menuitem}"
@@ -180,7 +180,8 @@
 					<p:menuitem value="#{messages.header_exploitation_menuitem}"
 						title="#{messages.header_exploitation_menuitemhelp}"
 						rendered="#{!loginBean.mobile}" style="min-width: 80px;"
-						url="/pages/exploitation.jsf?faces-redirect=true" icon="ui-icon-suitcase" />
+						url="/pages/exploitation.jsf?faces-redirect=true"
+						icon="ui-icon-suitcase" />
 
 					<p:menuitem value="#{messages.header_delivery_menuitem}"
 						disabled="#{!loginBean.authorisationService.rBuild}"
@@ -194,8 +195,7 @@
 					<p:menuitem value="#{messages.header_team_menuitem}"
 						disabled="#{!loginBean.authorisationService.rProject}"
 						title="#{messages.header_team_menuitem}"
-						url="/pages/teams.jsf?faces-redirect=true"
-						icon="ui-icon-person" />
+						url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
 
 					<p:menuitem value="#{messages.header_stat_menuitem}"
 						url="/pages/stats.jsf?faces-redirect=true"

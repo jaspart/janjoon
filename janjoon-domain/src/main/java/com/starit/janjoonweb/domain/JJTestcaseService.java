@@ -9,11 +9,11 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTestcaseService {
 
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			JJChapter chapter, JJBuild build, boolean onlyActif,
+			JJChapter chapter,JJVersion version, JJBuild build, boolean onlyActif,
 			boolean sortedByOrder, boolean sortedByCreationdate);
 
 	public List<JJTestcase> getImportTestcases(JJCategory category,
-			JJProject project, JJProduct product, boolean onlyActif,
+			JJProject project, JJProduct product,JJVersion version, boolean onlyActif,
 			boolean withOutChapter);
 
 	public void saveTestcases(Set<JJTestcase> testcases);

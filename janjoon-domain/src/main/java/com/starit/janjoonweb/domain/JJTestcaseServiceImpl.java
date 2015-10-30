@@ -24,8 +24,9 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getTestcases(JJRequirement requirement,
-			JJChapter chapter, JJBuild build, boolean onlyActif,
-			boolean sortedByOrder, boolean sortedByCreationdate) {
+			JJChapter chapter, JJVersion version, JJBuild build,
+			boolean onlyActif, boolean sortedByOrder,
+			boolean sortedByCreationdate) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
@@ -47,6 +48,12 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		if (chapter != null) {
 			Path<Object> path = from.join("requirement").get("chapter");
 			predicates.add(criteriaBuilder.equal(path, chapter));
+		}
+		
+		if(version != null)
+		{
+			Path<Object> path = from.join("requirement").get("versioning");
+			predicates.add(criteriaBuilder.equal(path, version));
 		}
 
 		if (requirement != null) {
@@ -100,8 +107,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getImportTestcases(JJCategory category,
-			JJProject project, JJProduct product, boolean onlyActif,
-			boolean withOutChapter) {
+			JJProject project, JJProduct product, JJVersion version,
+			boolean onlyActif, boolean withOutChapter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcase.class);
@@ -117,7 +124,11 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(path, project));
 		}
 
-		if (product != null) {
+		if (version != null) {
+			Path<Object> path = from.join("requirement").get("versioning");
+			predicates.add(criteriaBuilder.equal(path, version));
+
+		} else if (product != null) {
 			Path<Object> path = from.join("requirement").get("product");
 			predicates.add(criteriaBuilder.equal(path, product));
 		}
@@ -177,7 +188,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement) {
-		return getTestcases(requirement, null, null, true, true, true);
+		return getTestcases(requirement, null,null, null, true, true, true);
 	}
 
 	@Override

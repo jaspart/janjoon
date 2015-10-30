@@ -152,13 +152,11 @@ public class JJChapterBean {
 
 	public List<JJChapter> getChapterList() {
 
-		if (chapter.getId() == null) {
+		if (chapter == null || chapter.getId() == null) {
 			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact().getCompany(), project,
 					category, true, new ArrayList<String>());
-		}
-
-		else {
+		}else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
@@ -784,7 +782,7 @@ public class JJChapterBean {
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), parent,
-							LoginBean.getProduct(), onlyActif);
+							LoginBean.getProduct(), LoginBean.getVersion(),onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)
@@ -812,7 +810,7 @@ public class JJChapterBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter, null, false, true, false);
+				requirement, chapter, LoginBean.getVersion(),null, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);

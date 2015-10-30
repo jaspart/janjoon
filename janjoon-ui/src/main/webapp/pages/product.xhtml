@@ -30,9 +30,9 @@ td.ui-fileupload-preview {
 		<p:panel id="productPanel" style="width:700px" columns="1"
 			cellpadding="6">
 			<p:dataTable id="productDataTable" var="product" lazy="true"
-				widgetVar="productDataTableWV" sortMode="multiple" 
+				widgetVar="productDataTableWV" sortMode="multiple"
 				value="#{jJProductBean.productListTable}" paginator="true" rows="15"
-				rowKey="#{product.id}"  paginatorPosition="bottom"
+				rowKey="#{product.id}" paginatorPosition="bottom"
 				emptyMessage="#{messages.label_notRecordFound}">
 				<f:facet name="header">#{messages.admin_product_table_title}
 				<p:inputText id="globalFilter"

@@ -145,7 +145,8 @@
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
-		<p:dialog id="taskImportDialog" header="Import Tasks" modal="true"
+		<p:dialog id="taskImportDialog"
+			header="#{messages.project_gantt_import_button}" modal="true"
 			draggable="false" styleClass="disable-scroll"
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":projecttabview"

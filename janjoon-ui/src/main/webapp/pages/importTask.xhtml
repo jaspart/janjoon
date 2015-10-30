@@ -35,9 +35,12 @@
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.importTask_selectObject}" />
 						<f:selectItems value="#{jJTaskBean.objets}" var="p"
-							itemLabel="#{p}" itemValue="#{p}" />
+							itemLabel="#{messages['importTask_selectObject_'.concat(p)]}"
+							itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectObjet}"
+							onstart="PF('taskBlockUIWidget').block()"
+							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
 				</p:column>
@@ -59,6 +62,8 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectCategory}"
+							onstart="PF('taskBlockUIWidget').block()"
+							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
 				</p:column>
@@ -78,6 +83,8 @@
 							itemLabel="#{p.name}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectStatus}"
+							onstart="PF('taskBlockUIWidget').block()"
+							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
 				</p:column>
@@ -87,7 +94,9 @@
 
 					<p:selectBooleanCheckbox value="#{jJTaskBean.checkAll}">
 						<p:ajax update="importTaskDialogForm"
-							listener="#{jJTaskBean.checkAll}" />
+							listener="#{jJTaskBean.checkAll}"
+							onstart="PF('taskBlockUIWidget').block()"
+							oncomplete="PF('taskBlockUIWidget').unblock()" />
 					</p:selectBooleanCheckbox>
 				</p:column>
 
@@ -100,18 +109,19 @@
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
 				<p:row>
-					<p:column style="width: 40%">
-						<p:commandButton id="importDate" value="Remplir Les Dates"
-							onstart="PF('taskBlockUIWidget').block()"
-							disabled="#{jJTaskBean.fillInDate}"
-							style="position: absolute;left: 10px;"
-							oncomplete="PF('taskBlockUIWidget').unblock()"
-							actionListener="#{jJTaskBean.fillInDates}"
-							update="importDataTable" />
-					</p:column>
-					<p:column style="width: 20%"></p:column>
-					<p:column style="width: 40%">
-						<h:outputText value="Import #{jJTaskBean.objet}"
+					<!-- 					<p:column style="width: 40%"> -->
+					<!-- 						<p:commandButton id="importDate" value="Remplir Les Dates"							 -->
+					<!-- 							disabled="#{jJTaskBean.fillInDate}" -->
+					<!-- 							style="position: absolute;left: 10px;" -->
+					<!-- 							onstart="PF('taskBlockUIWidget').block()" -->
+					<!-- 							oncomplete="PF('taskBlockUIWidget').unblock()" -->
+					<!-- 							actionListener="#{jJTaskBean.fillInDates}" -->
+					<!-- 							update="importDataTable" /> -->
+					<!-- 					</p:column> -->
+					<p:column style="width: 60%"></p:column>
+					<p:column style="width: 40%" rendered="#{jJTaskBean.objet != null}">
+						<h:outputText
+							value="Import #{messages['importTask_selectObject_'.concat(jJTaskBean.objet)]}"
 							style="position: absolute;right: 10px;" />
 					</p:column>
 				</p:row>
@@ -123,7 +133,9 @@
 							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}"
 								id="checkAll">
 								<p:ajax update="importDataTable" process="@this,checkAll"
-									listener="#{jJTaskBean.copyObjetsListener}" />
+									listener="#{jJTaskBean.copyObjetsListener}"
+									onstart="PF('taskBlockUIWidget').block()"
+									oncomplete="PF('taskBlockUIWidget').unblock()" />
 							</p:selectBooleanCheckbox>
 						</p:column>
 						<p:column>
@@ -133,13 +145,15 @@
 				</f:facet>
 				<p:selectBooleanCheckbox value="#{format.copyObjet}" id="checkOne">
 					<p:ajax update="importDataTable"
-						listener="#{jJTaskBean.copyObjetListener}"
+						listener="#{jJTaskBean.copyObjetListener(format)}"
+						onstart="PF('taskBlockUIWidget').block()"
+						oncomplete="PF('taskBlockUIWidget').unblock()"
 						process="@this,checkAll" />
 				</p:selectBooleanCheckbox>
 				<h:outputText value="#{format.name}" id="reqContent" />
 				<p:tooltip id="toolTipContent" for="reqContent" showEffect="fade"
 					hideEffect="fade" style="width:300px"
-					rendered="#{jJTaskBean.objet == 'Requirement'}">
+					rendered="#{jJTaskBean.objet == 'requirement'}">
 					<p:panelGrid style="width:300px">
 						<f:facet name="header">
 							<p:row>
@@ -195,7 +209,8 @@
 
 					</f:facet>
 					<f:facet name="input">
-						<p:spinner value="#{format.workload}" stepFactor="1" min="0">
+						<p:spinner value="#{format.workload}" size="4" stepFactor="1"
+							min="0">
 						</p:spinner>
 
 					</f:facet>

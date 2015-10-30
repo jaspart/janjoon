@@ -131,19 +131,17 @@
 										oncomplete="PF('blockUIWidget').unblock();" />
 								</p:column>
 								<p:column colspan="1" style="width:15% important;">
-									<p:commandButton value="#{messages.label_create} Task"
+									<p:commandButton
+										value="#{messages.project_gantt_import_button}"
 										id="createTaskttButton" icon="ui-icon-circle-plus"
 										update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :taskImportDialog :growlForm"
 										immediate="true" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()" resetValues="true"
 										actionListener="#{jJTaskBean.loadImportFormat}"
-										title="#{messages.label_create} Task">
+										title="#{messages.project_gantt_import_button}">
 										<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 										<f:attribute name="mode" value="scrum" />
 									</p:commandButton>
-									<p:tooltip for="createTaskttButton"
-										value="#{messages.label_create} Task" showEffect="fade"
-										hideEffect="fade" />
 								</p:column>
 							</p:row>
 						</f:facet>
@@ -248,7 +246,8 @@
 							<p:fieldset legend="#{messages.project_scrum_inProgress}"
 								id="progFieldset">
 								<p:outputPanel id="progdropArea">
-									<h:outputText value="!!!Drop here!!!"
+									<h:outputText
+										value="!!!#{messages.project_scrum_drop_panel}!!!"
 										rendered="#{empty jjsprint.progressTask}"
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
@@ -319,7 +318,8 @@
 							<p:fieldset legend="#{messages.project_scrum_done}"
 								id="doneFieldset">
 								<p:outputPanel id="donedropArea">
-									<h:outputText value="!!!Drop here!!!"
+									<h:outputText
+										value="!!!#{messages.project_scrum_drop_panel}!!!"
 										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
 									<p:dataTable id="done" styleClass="planning-dataTable"
 										emptyMessage="#{messages.label_notRecordFound}" var="done"

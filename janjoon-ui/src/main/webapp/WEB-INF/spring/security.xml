@@ -23,7 +23,7 @@
 		<intercept-url pattern="/pages/signup.jsf" access="!isAuthenticated()" />
 		<intercept-url pattern="/pages/**" access="isAuthenticated()" />
 		<intercept-url pattern="/templates/**" access="isAuthenticated()" />
-		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf"
+		<logout logout-url="/pages/logout.jsf" logout-success-url="/pages/login.jsf?faces-redirect=true"
 			invalidate-session="true" delete-cookies="true" />
 		<form-login login-page="/pages/login.jsf" />
 		<expression-handler ref="jsfWebExpressionHandler" />

@@ -38,6 +38,8 @@ import org.tmatesoft.svn.core.SVNURL;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -59,20 +61,14 @@ import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 @Component("jJDevelopment")
 public class DevelopmentBean implements Serializable {
 
+	static Logger logger = Logger.getLogger("DevelopmentBean");
 	private static final long serialVersionUID = 1L;
 	private boolean render;
-
-	static Logger logger = Logger.getLogger("DevelopmentBean");
 
 	@Autowired
 	private JJStatusService jJStatusService;
 
 	private JJConfigurationService jJConfigurationService;
-
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
-		this.jJConfigurationService = jJConfigurationService;
-	}
 
 	private JJTaskBean jJTaskBean;
 
@@ -81,6 +77,9 @@ public class DevelopmentBean implements Serializable {
 
 	@Autowired
 	private JJMessageService jJMessageService;
+	
+	@Autowired
+	private JJCriticityService jJCriticityService;
 
 	private boolean init;
 	private AbstractConfigManager configManager;
@@ -111,6 +110,11 @@ public class DevelopmentBean implements Serializable {
 		this.init = init;
 	}
 
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
 	public void setjJStatusService(JJStatusService jJStatusService) {
 		this.jJStatusService = jJStatusService;
 	}
@@ -125,6 +129,10 @@ public class DevelopmentBean implements Serializable {
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
+	}
+
+	public void setjJCriticityService(JJCriticityService jJCriticityService) {
+		this.jJCriticityService = jJCriticityService;
 	}
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
@@ -156,6 +164,7 @@ public class DevelopmentBean implements Serializable {
 		this.jJStatusService = devBean.jJStatusService;
 		this.jJTaskService = devBean.jJTaskService;
 		this.jJMessageService = devBean.jJMessageService;
+		this.jJCriticityService = devBean.jJCriticityService;
 	}
 
 	public void initJJDevlopment() throws FileNotFoundException, IOException {
@@ -178,7 +187,8 @@ public class DevelopmentBean implements Serializable {
 		configuration = jJConfigurationService.getConfigurations(
 				"ConfigurationManager", null, true).get(0);
 
-		if (configuration != null && getConfigManager() != null && version != null && product != null) {
+		if (configuration != null && getConfigManager() != null
+				&& version != null && product != null) {
 
 			render = true;
 			treeOperation = new TreeOperation(configManager);
@@ -190,7 +200,8 @@ public class DevelopmentBean implements Serializable {
 				selectedTree = selectedTree.getChildren().get(0);
 
 			}
-			if (selectedTree != null && selectedTree.getData() instanceof File) {
+			if (selectedTree != null && selectedTree.getData() instanceof File
+					&& ((File) selectedTree.getData()).isFile()) {
 				File file = (File) selectedTree.getData();
 				files = new ArrayList<FileMap>();
 				try (FileInputStream inputStream = new FileInputStream(file)) {
@@ -576,6 +587,7 @@ public class DevelopmentBean implements Serializable {
 		message.setVersioning(version);
 		message.setEnabled(true);
 		message.setTask(task);
+		message.setCriticity(jJCriticityService.getCriticityByName("INFO", true));
 		message.setMessage(comment);
 		message.setDescription("Message For" + task.getName() + "nl"
 				+ task.getDescription());
@@ -614,12 +626,12 @@ public class DevelopmentBean implements Serializable {
 				}
 			}
 
-		}		
-		
+		}
+
 		FacesMessage growlMessage = null;
 
-		if (configManager.checkIn(null,task.getId() + ":" + task.getName() + " : "
-				+ comment)) {
+		if (configManager.checkIn(null, task.getId() + ":" + task.getName()
+				+ " : " + comment)) {
 			FacesMessage commitMessage = MessageFactory.getMessage(
 					"dev.commitSuccess.label", FacesMessage.SEVERITY_INFO, "");
 			FacesContext.getCurrentInstance().addMessage(null, commitMessage);
@@ -629,12 +641,11 @@ public class DevelopmentBean implements Serializable {
 						"dev.pushSucces.label", FacesMessage.SEVERITY_INFO, "");
 
 				comment = "";
-				task= null;
+				task = null;
 			} else if (configManager.getType().equalsIgnoreCase("git")) {
 				growlMessage = MessageFactory.getMessage("dev.pushError.label",
 						FacesMessage.SEVERITY_ERROR, "");
-			}else
-			{
+			} else {
 				comment = null;
 				task = null;
 			}
@@ -692,17 +703,17 @@ public class DevelopmentBean implements Serializable {
 	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event)
 			throws InterruptedException, IOException {
 
-		CodeMirror cm = (CodeMirror) event.getComponent().getAttributes().get("cm");		
+		CodeMirror cm = (CodeMirror) event.getComponent().getAttributes()
+				.get("cm");
 		FileInputStream inputStream = new FileInputStream(files.get(
 				activeTabIndex).getFile());
 
 		String fileTexte = IOUtils.toString(inputStream);
-		String cmValue= cm.getValue().toString();		
+		String cmValue = cm.getValue().toString();
 
-		if (!(cmValue.contains(fileTexte)
-				&& fileTexte.contains(cmValue))) {
+		if (!(cmValue.contains(fileTexte) && fileTexte.contains(cmValue))) {
 			files.get(activeTabIndex).setChange(true);
-			//files.get(activeTabIndex).setTexte(cmValue);
+			// files.get(activeTabIndex).setTexte(cmValue);
 
 		}
 
@@ -718,7 +729,7 @@ public class DevelopmentBean implements Serializable {
 			fileIndex = j;
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('saveFileDialogWidget').show()");
-			
+
 		} else {
 
 			updatetabView(j, index);
@@ -739,7 +750,8 @@ public class DevelopmentBean implements Serializable {
 		int i = 0;
 		int j = -1;
 		while (i < files.size()) {
-			if (files.get(i).getFile().getAbsolutePath().equalsIgnoreCase(f.getAbsolutePath())) {
+			if (files.get(i).getFile().getAbsolutePath()
+					.equalsIgnoreCase(f.getAbsolutePath())) {
 				j = i;
 				i = files.size();
 			} else
@@ -756,7 +768,7 @@ public class DevelopmentBean implements Serializable {
 		selectedTree.getParent().getChildren().remove(selectedTree);
 		selectedTree.setParent(null);
 
-		treeOperation.deleteFile(f,configManager);
+		treeOperation.deleteFile(f, configManager);
 		int i = contains(f);
 		if (i != -1) {
 			updatetabView(i, files.get(i));
@@ -767,25 +779,24 @@ public class DevelopmentBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
-	private void  saveFiles(File f) throws IOException
-	{
-		if(!f.isDirectory())
-		{
-			FileMap fMap=new FileMap(f.getName(), null, f);
-			if(files.contains(fMap) && files.get(files.indexOf(fMap)).isChange())
-			{
-				configManager.setFileTexte(f,files.get(files.indexOf(fMap)).getTexte());
+
+	private void saveFiles(File f) throws IOException {
+		if (!f.isDirectory()) {
+			FileMap fMap = new FileMap(f.getName(), null, f);
+			if (files.contains(fMap)
+					&& files.get(files.indexOf(fMap)).isChange()) {
+				configManager.setFileTexte(f, files.get(files.indexOf(fMap))
+						.getTexte());
 			}
-		}else
-		{
+		} else {
 			if (f.list().length != 0) {
-			
+
 				String files[] = f.list();
 				for (String temp : files) {
 					File fileDelete = new File(f, temp);
 
 					saveFiles(fileDelete);
-				}				
+				}
 			}
 		}
 	}
@@ -794,8 +805,8 @@ public class DevelopmentBean implements Serializable {
 
 		File f = (File) selectedTree.getData();
 		saveFiles(f);
-		
-		configManager.checkIn(f,"commitFile" + f.getName());
+
+		configManager.checkIn(f, "commitFile" + f.getName());
 
 		FacesMessage msg = MessageFactory.getMessage(
 				"dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,

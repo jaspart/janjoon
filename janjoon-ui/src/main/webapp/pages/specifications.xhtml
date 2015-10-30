@@ -236,9 +236,10 @@
 												<p:column>
 													<p:commandButton
 														actionListener="#{jJChapterBean.updateCategoryId(tableDataModel,jJRequirementBean)}"
-														title="#{messages.specification_req_exportTo}" resetValues="true"
-														onclick="PF('exportMenuWidget').show();" update=":exportMenuPanel"
-														icon="ui-icon-arrowthick-1-s">
+														title="#{messages.specification_req_exportTo}"
+														resetValues="true"
+														onclick="PF('exportMenuWidget').show();"
+														update=":exportMenuPanel" icon="ui-icon-arrowthick-1-s">
 														<f:setPropertyActionListener value="#{tableDataModel}"
 															target="#{jJRequirementBean.categoryDataModel}" />
 													</p:commandButton>
@@ -588,7 +589,7 @@
 								library="images" title="#{jJRequirementBean.warnMessage}" />
 							<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 						</p:commandLink>
-						
+
 						<p:commandLink onclick="PrimeFaces.monitorDownload(start, stop);"
 							ajax="false" oncomplete="PF('exportMenuWidget').show();">
 							<p:graphicImage name="xmlButton.ico" width="64" height="64"

@@ -407,12 +407,12 @@ public class JJTaskBean {
 	public List<JJStatus> getImportStatusList() {
 		if (objet != null) {
 			List<String> names = new ArrayList<String>();
-			if (objet.equalsIgnoreCase("Bug")) {
+			if (objet.equalsIgnoreCase("bug")) {
 				names.add("CLOSED");
-			} else if (objet.equalsIgnoreCase("Requirement")) {
+			} else if (objet.equalsIgnoreCase("requirement")) {
 				names.add("DELETED");
 				names.add("CANCELED");
-			} else if (objet.equalsIgnoreCase("Testcase")) {
+			} else if (objet.equalsIgnoreCase("testcase")) {
 				return null;
 			}
 			importStatusList = jJStatusService.getStatus(objet, true, names,
@@ -438,9 +438,9 @@ public class JJTaskBean {
 	public List<String> getObjets() {
 
 		objets = new ArrayList<String>();
-		objets.add("Bug");
-		objets.add("Requirement");
-		objets.add("Testcase");
+		objets.add("bug");
+		objets.add("requirement");
+		objets.add("testcase");
 
 		return objets;
 	}
@@ -846,7 +846,7 @@ public class JJTaskBean {
 						LoginBean.getProduct(), null, chapter, true, null,
 						null, null, true, true, false, "Bug"));
 
-				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();				
+				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
 				for (JJTask tt : tasks) {
 					Tasks.put(tt.getId() + "", tt);
@@ -1049,7 +1049,7 @@ public class JJTaskBean {
 				true, false, false, "bug"));
 		allTasks.addAll(jJTaskService.getTasks(sprint, project,
 				LoginBean.getProduct(), null, null, true, null, null, null,
-				true, false, false, "testcase"));
+				true, false, false, "Testcase"));
 
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
@@ -1671,7 +1671,7 @@ public class JJTaskBean {
 
 				for (JJTestcase testcase : jJTestcaseService
 						.getImportTestcases(null, project,
-								LoginBean.getProduct(), true, false)) {
+								LoginBean.getProduct(),LoginBean.getVersion(), true, false)) {
 
 					if (!checkAll) {
 
@@ -1950,7 +1950,7 @@ public class JJTaskBean {
 		oldCopyObjects = false;
 
 		if (objet != null) {
-			if (objet.equalsIgnoreCase("Testcase")) {
+			if (objet.equalsIgnoreCase("testcase")) {
 				disabledFilter = true;
 			} else {
 				disabledFilter = false;
@@ -1998,19 +1998,6 @@ public class JJTaskBean {
 		model = null;
 	}
 
-	public void copyObjetsListener() {
-
-		if (copyObjets == oldCopyObjects)
-			copyObjets = !copyObjets;
-		for (ImportFormat importFormat : importFormats) {
-			importFormat.setCopyObjet(copyObjets);
-		}
-
-		disabledImportButton = !copyObjets;
-		oldCopyObjects = copyObjets;
-
-	}
-
 	public void saveJJTask(JJTask ttt, boolean update) {
 
 		if (update) {
@@ -2039,7 +2026,34 @@ public class JJTaskBean {
 		}
 	}
 
-	public void copyObjetListener() {
+	public void copyObjetsListener() {
+
+		if (copyObjets == oldCopyObjects)
+			copyObjets = !copyObjets;
+		for (ImportFormat importFormat : importFormats) {
+			importFormat.setCopyObjet(copyObjets);
+			if (copyObjets) {
+				if (this.sprint != null && mode.equalsIgnoreCase("planning"))
+					importFormat.setStartDate(sprint.getStartDate());
+				else if (mode.equalsIgnoreCase("planning"))
+					importFormat.setStartDate(new Date());
+				else
+					importFormat.setStartDate(((JJSprintBean) LoginBean
+							.findBean("jJSprintBean")).getSprintUtil()
+							.getSprint().getStartDate());
+
+			} else {
+				importFormat.setStartDate(null);
+			}
+
+		}
+
+		disabledImportButton = !copyObjets;
+		oldCopyObjects = copyObjets;
+
+	}
+
+	public void copyObjetListener(ImportFormat format) {
 
 		boolean copyAll = true;
 		for (ImportFormat importFormat : importFormats) {
@@ -2048,6 +2062,21 @@ public class JJTaskBean {
 				break;
 			}
 
+		}
+
+		if (format.getCopyObjet()) {
+
+			if (this.sprint != null && mode.equalsIgnoreCase("planning"))
+				format.setStartDate(sprint.getStartDate());
+			else if (mode.equalsIgnoreCase("planning"))
+				format.setStartDate(new Date());
+			else
+				format.setStartDate(((JJSprintBean) LoginBean
+						.findBean("jJSprintBean")).getSprintUtil().getSprint()
+						.getStartDate());
+
+		} else {
+			format.setStartDate(null);
 		}
 
 		copyObjets = copyAll;
@@ -3423,7 +3452,7 @@ public class JJTaskBean {
 
 						DefaultScheduleEvent ev = new DefaultScheduleEvent(
 								t.getName(), s, e, t);
-						ev.setDescription(getDialogHeader(t));					
+						ev.setDescription(getDialogHeader(t));
 						addEvent(ev);
 					}
 					scheduleInitialDate = new Date(
@@ -3664,13 +3693,13 @@ public class JJTaskBean {
 		scheduleInitialViewAll = ((Schedule) selectEvent.getComponent())
 				.getView();
 	}
-	
+
 	public void onTabTeamChange() {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		Map<String, String> paramMap = context.getExternalContext()
 				.getRequestParameterMap();
-	 if (paramMap.get("activeTeamIndex") != null) {
+		if (paramMap.get("activeTeamIndex") != null) {
 			String paramIndex = paramMap.get("activeTeamIndex");
 			setActiveTabTeamIndex(Integer.valueOf(paramIndex));
 

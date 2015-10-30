@@ -27,7 +27,7 @@ public interface JJRequirementService {
 			Map<JJProject, JJProduct> map, JJVersion version);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company, JJChapter chapter, JJProduct product,
+			JJCompany company, JJChapter chapter, JJProduct product,JJVersion version,
 			boolean onlyActif);
 
 	public List<JJRequirement> getMineRequirements(JJCompany company,

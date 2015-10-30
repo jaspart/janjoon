@@ -323,10 +323,13 @@ public class SprintUtil {
 			workload = Math.max(workload, 0);
 			chartSeries.set(f.format(staDate), workload);
 		}
-
+   
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
 		chartModel.setLegendPosition("ne");
+		chartModel.setMouseoverHighlight(false);
+		chartModel.setShowDatatip(false);
+		chartModel.setShowPointLabels(true);
 
 		chartModel.getAxis(AxisType.X).setTickAngle(-50);
 		chartModel.getAxis(AxisType.X).setTickFormat("%b %#d, %y");

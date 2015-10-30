@@ -211,6 +211,7 @@ public class JJSprintBean {
 
 	public List<SprintUtil> getSprintList() {
 
+		//System.out.println(((JJTask)LoginBean.findBean("dfgk")).getDescription());
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
@@ -338,7 +339,8 @@ public class JJSprintBean {
 						LoginBean.getProduct()), jJContactService);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		String message = "message_successfully_updated";
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Task");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, 
+				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -351,6 +353,22 @@ public class JJSprintBean {
 
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();
+		else 
+		{
+			//activeTabSprintIndex = -1;
+			Date now=new Date();
+			int i = 0;
+			while(i<sprintList.size())
+			{
+				if(now.after(sprintList.get(i).getSprint().getStartDate()) && 
+						now.before(sprintList.get(i).getSprint().getEndDate()))
+				{
+					activeTabSprintIndex = i;
+					i= sprintList.size();
+				}
+				i++;
+			}
+		}
 		JJSprint sp = new JJSprint();
 		sp.setProject(pr);
 		sprintList.add(new SprintUtil(sp, null, jJContactService));
@@ -568,7 +586,7 @@ public class JJSprintBean {
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"Task");
+					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -632,7 +650,7 @@ public class JJSprintBean {
 
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					"Task");
+					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} else {
@@ -657,7 +675,7 @@ public class JJSprintBean {
 			if (t.getBug() != null) {
 
 				bug = t.getBug();
-				context.execute("PF('blockUIWidget').block()");
+				context.execute("PF('blockUIWidget').unblock()");
 				context.execute("PF('editBugDialogWidget').show()");
 			}
 
@@ -836,7 +854,8 @@ public class JJSprintBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Task");
+				"message_successfully_deleted", 
+				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		// int i = 0;

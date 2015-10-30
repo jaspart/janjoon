@@ -15,17 +15,20 @@
 			</f:facet>
 			<p:row>
 				<p:column>
-					<p:outputLabel for="sprintCName" value="#{messages.project_scrum_sprint_name}:" />
+					<p:outputLabel for="sprintCName"
+						value="#{messages.project_scrum_sprint_name}:" />
 				</p:column>
 				<p:column>
 					<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
-						required="true" requiredMessage="#{messages.project_scrum_sprint_name_required}"
+						required="true"
+						requiredMessage="#{messages.project_scrum_sprint_name_required}"
 						readonly="#{jjsprint.neditabale}">
 						<f:validateLength maximum="100" />
 					</p:inputTextarea>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sprintcts" value="#{messages.project_scrum_sprint_contacts}:" />
+					<p:outputLabel for="sprintcts"
+						value="#{messages.project_scrum_sprint_contacts}:" />
 				</p:column>
 				<p:column>
 					<p:selectManyMenu id="sprintcts" scrollHeight="150"
@@ -41,7 +44,8 @@
 			</p:row>
 			<p:row>
 				<p:column>
-					<p:outputLabel for="sprintCSD" value="#{messages.project_scrum_new_start_label}" />
+					<p:outputLabel for="sprintCSD"
+						value="#{messages.project_scrum_new_start_label}" />
 				</p:column>
 				<p:column>
 					<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
@@ -53,7 +57,8 @@
 					</p:calendar>
 				</p:column>
 				<p:column>
-					<p:outputLabel for="sprintCED" value="#{messages.project_scrum_new_end_label}" />
+					<p:outputLabel for="sprintCED"
+						value="#{messages.project_scrum_new_end_label}" />
 				</p:column>
 				<p:column>
 					<p:calendar id="sprintCED" navigator="true" effect="slideDown"
@@ -85,23 +90,25 @@
 							oncomplete="PF('blockUIWidget').unblock();" />
 					</p:column>
 					<p:column>
-						<p:commandButton value="Done" id="doneButtonr"
-							update=":projecttabview :growlForm" immediate="true"
+						<p:commandButton value="#{messages.project_scrum_done_button}"
+							id="doneButtonr" update=":projecttabview :growlForm"
+							immediate="true"
 							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
 							actionListener="#{jJSprintBean.doneEvent}"
 							onstart="PF('blockUIWidget').block()"
+							title="#{messages.project_scrum_done_button}"
 							oncomplete="PF('blockUIWidget').unblock()">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 						</p:commandButton>
 					</p:column>
 					<p:column colspan="2">
-						<p:commandButton value="#{messages.label_create} Task"
+						<p:commandButton value="#{messages.project_gantt_import_button}"
 							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
 							icon="ui-icon-circle-plus" immediate="true"
 							onstart="PF('blockUIWidget').block()" resetValues="true"
 							oncomplete="PF('blockUIWidget').unblock()"
 							actionListener="#{jJTaskBean.loadImportFormat}"
-							title="#{messages.label_create} Task">
+							title="#{messages.project_gantt_import_button}">
 							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 							<f:attribute name="mode" value="scrum" />
 						</p:commandButton>

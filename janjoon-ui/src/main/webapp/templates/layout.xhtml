@@ -98,7 +98,7 @@
 				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
 					rowKey="#{mes.id}" var="mes" paginator="true"
 					paginatorPosition="bottom" rendered="#{loginBean.enable}"
-					style="border-spacing:0px;" selectionMode="single" rows="10"
+					style="border-spacing:0px;" selectionMode="single" rows="5"
 					paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
