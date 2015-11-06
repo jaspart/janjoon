@@ -407,7 +407,8 @@ public class LoginBean implements Serializable {
 
 	public String getPage() {
 		return FacesContext.getCurrentInstance().getExternalContext()
-				.getRequestContextPath()+ page;
+				.getRequestContextPath()
+				+ page;
 	}
 
 	public void setPage(String page) {
@@ -423,6 +424,17 @@ public class LoginBean implements Serializable {
 		SecurityContextHolder.clearContext();
 		return "loggedout";
 
+	}
+
+	public void contactConfig() throws IOException {
+
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						FacesContext.getCurrentInstance().getExternalContext()
+								.getRequestContextPath()
+								+ "/pages/contactConfig.jsf?faces-redirect=true");
 	}
 
 	public String login() {

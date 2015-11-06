@@ -39,7 +39,7 @@
 				</h:form>
 			</p:tab>
 			<p:tab title="Team Imputation Schedule"
-				rendered="#{loginBean.authorisationService.rwxProjectProduct}">
+				rendered="#{loginBean.authorisationService.viewTeamImputation}">
 				<h:form id="teamImputationForm">
 					<p:schedule value="#{jJTaskBean.lazyEventModelAll}"
 						draggable="true" clientTimeZone="local" tooltip="true"

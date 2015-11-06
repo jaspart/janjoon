@@ -417,7 +417,7 @@ public class JJContactBean {
 				.getContact();
 		contactAdmin.setUpdatedDate(new Date());
 		contactAdmin.setUpdatedBy(contact);
-		boolean changed=false;
+		boolean changed = false;
 
 		if (!contactAdmin
 				.getPassword()
@@ -427,7 +427,7 @@ public class JJContactBean {
 			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
 					.trim()));
 		}
-		
+
 		if (contact.equals(contactAdmin)) {
 			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
 			if (contactAdmin.getLastProject() == null
@@ -448,9 +448,9 @@ public class JJContactBean {
 		}
 
 		if (jJContactService.updateJJContactTransaction(contactAdmin)) {
-			
-			if (changed) {				
-				
+
+			if (changed) {
+
 				FacesContext fContext = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fContext
 						.getExternalContext().getSession(false);
@@ -458,7 +458,7 @@ public class JJContactBean {
 						.getAttribute("jJProjectBean");
 				JJProductBean jjProductBean = (JJProductBean) session
 						.getAttribute("jJProductBean");
-				
+
 				jjProjectBean.getProjectList();
 				if (jjProjectBean.getProjectList().contains(
 						contactAdmin.getLastProject()))
@@ -469,7 +469,7 @@ public class JJContactBean {
 						contactAdmin.getLastProduct())) {
 					jjProductBean.setProduct(contactAdmin.getLastProduct());
 				}
-				
+
 			}
 			List<JJPermission> permissions = jJPermissionService
 					.getPermissions(contactAdmin, true, null, null, null);
@@ -651,9 +651,33 @@ public class JJContactBean {
 
 	}
 
+	public void removeVacation(LoginBean loginBean, JJContact jJContact,Date start,Date end) {
+		calendarUtil = new ContactCalendarUtil(jJContact);
+		try {
+			jJContact.setCalendar(calendarUtil.removeVacation(
+					jJContact.getCalendar(), start,end));
+			jJContact.setUpdatedDate(new Date());
+			jJContactService.updateJJContact(jJContact);
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			loginBean.getAuthorisationService().setSession(session);
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_updated", FacesMessage.SEVERITY_INFO,
+					"Contact " + loginBean.getContact().getName());
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			session.setAttribute("jJContactBean", new JJContactBean());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public void addVacation(LoginBean loginBean, JJContact jJContact) {
 		calendarUtil = new ContactCalendarUtil(jJContact);
-		calendarUtil.addVacation(startDate, endDate, jJContactService);
+		calendarUtil.addVacation(startDate, endDate);
 		jJContact.setUpdatedDate(new Date());
 		jJContactService.updateJJContact(jJContact);
 		startDate = null;

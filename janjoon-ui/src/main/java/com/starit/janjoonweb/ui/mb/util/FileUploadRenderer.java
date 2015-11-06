@@ -8,9 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletRequest;
 
-import org.primefaces.component.fileupload.CommonsFileUploadDecoder;
 import org.primefaces.component.fileupload.FileUpload;
-import org.primefaces.component.fileupload.NativeFileUploadDecoder;
 import org.primefaces.config.ConfigContainer;
 import org.primefaces.context.RequestContext;
 import org.primefaces.expression.SearchExpressionFacade;
@@ -22,8 +20,7 @@ public class FileUploadRenderer extends CoreRenderer {
 
 	@Override
 	public void decode(FacesContext context, UIComponent component) {
-		FileUpload fileUpload = (FileUpload) component;
-
+		FileUpload fileUpload = (FileUpload) component;		
 		if (!fileUpload.isDisabled()) {
 			ConfigContainer cc = RequestContext.getCurrentInstance()
 					.getApplicationContext().getConfig();
@@ -33,10 +30,10 @@ public class FileUploadRenderer extends CoreRenderer {
 			if (uploader.equals("auto")) {
 				if (isAtLeastJSF22) {
 					if (isMultiPartRequest(context)) {
-						NativeFileUploadDecoder.decode(context, fileUpload);
+						//NativeFileUploadDecoder.decode(context, fileUpload);
 					}
 				} else {
-					CommonsFileUploadDecoder.decode(context, fileUpload);
+					//CommonsFileUploadDecoder.decode(context, fileUpload);
 				}
 			} else if (uploader.equals("native")) {
 				if (!isAtLeastJSF22) {
@@ -44,9 +41,9 @@ public class FileUploadRenderer extends CoreRenderer {
 							"native uploader requires at least a JSF 2.2 runtime");
 				}
 
-				NativeFileUploadDecoder.decode(context, fileUpload);
+				//NativeFileUploadDecoder.decode(context, fileUpload);
 			} else if (uploader.equals("commons")) {
-				CommonsFileUploadDecoder.decode(context, fileUpload);
+				//CommonsFileUploadDecoder.decode(context, fileUpload);
 			}
 		}
 	}

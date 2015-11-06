@@ -74,11 +74,10 @@
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
-		<!-- 		<h:outputScript library="js" name="scrollTab.js" />		 -->
+		<h:outputScript library="js" name="scrollTab.js" />		
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
-			listener="#{jJTaskBean.loadingData()}" />
-		<!-- 		<p:growl id="msg" sticky="true" life="3000" autoUpdate="true" /> -->
+			listener="#{jJTaskBean.loadingData()}" />		
 		<p:panelGrid style="margin-top:10px;width:100%;">
 			<p:row style="width:100%;">
 				<p:column style="width:100%;">
@@ -388,7 +387,7 @@
 							</pe:layoutPane>
 
 							<pe:layoutPane position="center"
-								styleContent="overflow-y: hidden;" id="centerLayout">
+								styleContent="overflow-y: hidden;padding: 0px;" id="centerLayout">
 
 								<f:facet name="header">#{messages.project_gantt_timeline_header}</f:facet>
 

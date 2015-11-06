@@ -75,12 +75,12 @@ public class JJMessageServiceImpl implements JJMessageService {
 		update.where(criteriaBuilder.equal(from.get("company").get("id"), 0));
 		entityManager.createQuery(update).executeUpdate();
 	}
-	
+
 	public Integer getMessagesCount(JJProject project, JJProduct product,
 			JJCompany company, JJContact contact) {
 		long r = 0;
 		if (project != null && product != null) {
-			String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.project = :proj and e.product = :prod and "
+			String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.project = :proj or e.project = null) and (e.product = :prod or e.product = null) and "
 					+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 			if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -115,7 +115,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		else {
 			if (project != null) {
-				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.project = :proj and "
+				String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.project = :proj or e.project = null) and "
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -147,7 +147,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				r = (long) q.setParameter("proj", project).getSingleResult();
 
 			} else if (product != null) {
-				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.product = :prod and "
+				String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.product = :prod or e.product = null) and "
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -243,11 +243,21 @@ public class JJMessageServiceImpl implements JJMessageService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		if (product != null)
-			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		if (product != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
+					product);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("product"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
 
-		if (project != null)
-			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		if (project != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
+					project);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("project"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
 
 		if (project == null && product == null && company != null) {
 			predicates.add(criteriaBuilder.equal(from.get("company"), company));
@@ -429,11 +439,21 @@ public class JJMessageServiceImpl implements JJMessageService {
 		predicates.add(criteriaBuilder.equal(
 				from.join("criticity").get("name"), "ALERT"));
 
-		if (product != null)
-			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+		if (product != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
+					product);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("product"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
 
-		if (project != null)
-			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		if (project != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
+					project);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("project"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
 
 		if (project == null && product == null && company != null) {
 			predicates.add(criteriaBuilder.equal(from.get("company"), company));
@@ -508,11 +528,19 @@ public class JJMessageServiceImpl implements JJMessageService {
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		if (product != null) {
-			predicates.add(criteriaBuilder.equal(from.get("product"), product));
+			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
+					product);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("product"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (project != null) {
-			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
+					project);
+			Predicate condition2 = criteriaBuilder.isNull(from
+					.get("project"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (project == null && product == null && company != null) {

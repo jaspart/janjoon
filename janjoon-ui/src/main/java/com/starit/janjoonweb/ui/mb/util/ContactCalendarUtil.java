@@ -118,15 +118,13 @@ public class ContactCalendarUtil {
 
 			if (contact.getCalendar() != null) {
 				if (!contact.getCalendar().isEmpty()) {
-					int i = 1;
-					boolean nullPointerException = false;
+					
+					String pattern = "dd/MM/yyyy HH:mm";					
 
-					while (!nullPointerException) {
-						try {
-							String pattern = "dd/MM/yyyy HH:mm";
-							String v = VACATION + "."
-									+ String.format("%02d", i);
-							String hol = properties.getProperty(v).toString()
+					for (Object key : Collections.list(properties.keys())) {
+						if (key.toString().contains(VACATION)) {
+
+							String hol = properties.getProperty((String) key).toString()
 									.trim();
 							int index = hol.indexOf("to");
 							String s = hol.substring(0, index - 1);
@@ -140,13 +138,10 @@ public class ContactCalendarUtil {
 								s = s + " 18:00";
 							Date date2 = new SimpleDateFormat(
 									"dd/MM/yyyy HH:mm").parse(s);
-							vacation.add(new ChunkPeriod(date1, date2));
-							i++;
+							vacation.add(new ChunkPeriod(date1, date2));						
 
-						} catch (NullPointerException e) {
-							nullPointerException = true;
 						}
-					}
+					}					
 				}
 			}
 		}
@@ -195,8 +190,38 @@ public class ContactCalendarUtil {
 		this.vacation = vacation;
 	}
 
-	public void addVacation(Date date1, Date date2,
-			JJContactService jJContactService) {
+	public String removeVacation(String calendar,Date date1, Date date2) throws IOException {
+
+		Properties properties = new Properties();
+
+		if (calendar == null) {
+			calendar = "";
+		}
+		properties.load(new StringReader(calendar));
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		String nl = "";	
+		
+		if (date1.before(date2)) {
+			nl =df.format(date1) + " to " + df.format(date2);
+
+		} else {
+			nl =df.format(date2) + " to " + df.format(date1);
+		}
+		
+		for (Object key : Collections.list(properties.keys())) {
+			if (key.toString().contains(VACATION)
+					&& properties.getProperty((String) key).equalsIgnoreCase(nl)) {
+				properties.remove(key);
+			}
+		}
+		
+		
+		StringWriter writer = new StringWriter();
+		properties.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
+	}
+
+	public void addVacation(Date date1, Date date2) {
 
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		String nl = "";
@@ -767,7 +792,7 @@ public class ContactCalendarUtil {
 		}
 		return periodTasks;
 	}
-	
+
 	public String editWorkday(ChunkTime day) throws IOException {
 		Properties properties = new Properties();
 		String calendar = contact.getCalendar();
@@ -800,7 +825,6 @@ public class ContactCalendarUtil {
 		return writer.getBuffer().toString();
 
 	}
-
 
 	public class SuperimposedShunkTime {
 

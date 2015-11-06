@@ -14,6 +14,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
@@ -64,19 +65,15 @@ public class ImageStreamer {
 					.getRequestParameterMap().get("rated");
 
 			if (rated.equalsIgnoreCase("true")) {
-				InputStream stream = FacesContext
-						.getCurrentInstance()
+				InputStream stream = FacesContext.getCurrentInstance()
 						.getExternalContext()
-						.getResourceAsStream(
-								"/resources/images/yelstar.ico");
+						.getResourceAsStream("/resources/images/yelstar.ico");
 				return new DefaultStreamedContent(stream);
-				
+
 			} else {
-				InputStream stream = FacesContext
-						.getCurrentInstance()
+				InputStream stream = FacesContext.getCurrentInstance()
 						.getExternalContext()
-						.getResourceAsStream(
-								"/resources/images/blackstar.ico");
+						.getResourceAsStream("/resources/images/blackstar.ico");
 				return new DefaultStreamedContent(stream);
 			}
 
@@ -136,11 +133,19 @@ public class ImageStreamer {
 			String CompId = context.getExternalContext()
 					.getRequestParameterMap().get("CompId");
 			System.out.println("Displays CompId : " + CompId);
-
-			return new DefaultStreamedContent(new ByteArrayInputStream(
-					jJCompanyService.findJJCompany(Long.valueOf(CompId))
-							.getLogo()));
-
+			JJCompany comp = null;
+			if (CompId != null && !CompId.isEmpty())
+				comp = jJCompanyService.findJJCompany(Long.valueOf(CompId));
+			if (comp != null && comp.getLogo() != null) {
+				return new DefaultStreamedContent(new ByteArrayInputStream(comp.getLogo()));
+			} else {
+				InputStream stream = FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream(
+								"/resources/images/empty_company.png");
+				return new DefaultStreamedContent(stream, "image/jpg");
+			}
 		}
 	}
 

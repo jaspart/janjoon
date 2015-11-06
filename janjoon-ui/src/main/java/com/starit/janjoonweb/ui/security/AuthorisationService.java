@@ -95,7 +95,7 @@ public class AuthorisationService implements Serializable {
 	private boolean rCompany;
 	private String rCompanyMSG;
 	private boolean renderAdmin;
-	private boolean rwxProjectProduct;
+	private boolean viewTeamImputation;
 
 	public JJContact getContact() {
 		return contact;
@@ -436,13 +436,15 @@ public class AuthorisationService implements Serializable {
 	public void setRenderAdmin(boolean renderAdmin) {
 		this.renderAdmin = renderAdmin;
 	}
+	
+	
 
-	public boolean isRwxProjectProduct() {
-		return rwxProjectProduct;
+	public boolean isViewTeamImputation() {
+		return viewTeamImputation;
 	}
 
-	public void setRwxProjectProduct(boolean rwxProjectProduct) {
-		this.rwxProjectProduct = rwxProjectProduct;
+	public void setViewTeamImputation(boolean viewTeamImputation) {
+		this.viewTeamImputation = viewTeamImputation;
 	}
 
 	public boolean isRenderCategoryConfig() {
@@ -674,10 +676,10 @@ public class AuthorisationService implements Serializable {
 					"header_admin_menuitemhelp", "").getDetail();
 		}
 
-		rwxProjectProduct = jJPermissionService.isAuthorized(contact, project,
-				product, "Project", null, true, true, true)
-				&& jJPermissionService.isAuthorized(contact, project, product,
-						"Product", null, true, true, true);
+		viewTeamImputation = jJPermissionService.isAuthorized(contact, null,
+				product, "Contact", null, null, null, true)
+				|| jJPermissionService.isAuthorized(contact, project, null,
+						"Contact", null, null, null, true);
 
 		if (project != null) {
 			wRequiement = jJPermissionService.isAuthorized(contact, project,

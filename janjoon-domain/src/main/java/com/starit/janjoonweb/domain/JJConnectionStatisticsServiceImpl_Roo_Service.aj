@@ -38,6 +38,6 @@ privileged aspect JJConnectionStatisticsServiceImpl_Roo_Service {
     
     public List<JJConnectionStatistics> JJConnectionStatisticsServiceImpl.findJJConnectionStatisticsEntries(int firstResult, int maxResults) {
         return jJConnectionStatisticsRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
-    }   
-   
+    }
+    
 }

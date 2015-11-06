@@ -91,9 +91,10 @@
 							oncomplete="PF('blockUIWidget').unblock()"
 							update=":contentPanel :growlForm" />
 					</p:selectOneMenu>
-
+					
 					<p:splitButton
 						value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
+						icon="ui-icon-person" actionListener="#{loginBean.contactConfig}"
 						rendered="#{loginBean.enable}" style="right: 0px;">
 						<p:menuitem value="#{messages.header_config_link}"
 							icon="ui-icon-person"

@@ -8,7 +8,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -102,31 +104,28 @@ public class CalendarUtil {
 
 		if (workDays.size() == i)
 			workDays = null;
-		else 
-		{
+		else {
 			i = 0;
-			while (i < workDays.size())
-			{
-				if(workDays.get(i) == null)
-				{
+			while (i < workDays.size()) {
+				if (workDays.get(i) == null) {
 					workDays.set(i, new ChunkTime(i));
 				}
 				i++;
 			}
-				
+
 		}
 
 		// initHolidays
 		String day_format = properties.getProperty("day.format");
 		if (day_format == null)
 			day_format = "dd/MM/yyyy";
-		i = 1;
-		boolean nullPointerException = false;
+		
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		holidays = new ArrayList<Date>();
-		while (!nullPointerException) {
-			try {
-				String hol = properties.getProperty(HOLIDAYS + "." + i)
+
+		for (Object key : Collections.list(properties.keys())) {
+			if (key.toString().contains(HOLIDAYS)) {
+				String hol = properties.getProperty((String) key)
 						.toString().trim()
 						+ year;
 				try {
@@ -134,13 +133,11 @@ public class CalendarUtil {
 							day_format).parse(hol)));
 				} catch (ParseException e) {
 
-				}
-				i++;
+				}		
 
-			} catch (NullPointerException e) {
-				nullPointerException = true;
 			}
 		}
+		
 
 	}
 
@@ -205,9 +202,10 @@ public class CalendarUtil {
 		return getZeroTimeDate(cal.getTime());
 	}
 
-	public static String addHoliday(Date date,String calendar,int size) throws IOException {
+	public static String addHoliday(Date date, String calendar, int size)
+			throws IOException {
 		Properties properties = new Properties();
-		//String calendar = company.getCalendar();
+		// String calendar = company.getCalendar();
 		if (calendar == null) {
 			calendar = "";
 		}
@@ -221,6 +219,30 @@ public class CalendarUtil {
 		properties.list(new PrintWriter(writer));
 		return writer.getBuffer().toString();
 
+	}
+
+	public static String removeHoliday(Date date, String calendar, int index)
+			throws IOException {
+
+		Properties properties = new Properties();
+
+		if (calendar == null) {
+			calendar = "";
+		}
+		properties.load(new StringReader(calendar));
+		DateFormat f = new SimpleDateFormat("dd/MM/");
+
+		for (Object key : Collections.list(properties.keys())) {
+			if (key.toString().contains(HOLIDAYS)
+					&& properties.getProperty((String) key).equalsIgnoreCase(
+							f.format(date))) {
+				properties.remove(key);
+			}
+		}
+
+		StringWriter writer = new StringWriter();
+		properties.list(new PrintWriter(writer));
+		return writer.getBuffer().toString();
 	}
 
 	public String editWorkday(ChunkTime day) throws IOException {

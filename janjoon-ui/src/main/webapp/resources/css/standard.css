@@ -148,6 +148,10 @@ div#contentPanel_content {
 	border: none;
 }
 
+.panelDialog .ui-panel-content {
+	padding: 0px 0px;
+}
+
 .menu {
 	width: 180px;
 	vertical-align: top;

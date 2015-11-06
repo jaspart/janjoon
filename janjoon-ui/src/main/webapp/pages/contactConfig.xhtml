@@ -317,7 +317,16 @@
 								<p:dataList var="vacation" paginator="true" rows="9"
 									paginatorPosition="bottom"
 									emptyMessage="#{messages.contact_empty_vacation}"
-									value="#{jJContactBean.calendarUtil.vacation}" type="ordered">
+									value="#{jJContactBean.calendarUtil.vacation}" type="unordered">
+
+									<p:commandButton icon="ui-icon-trash"
+										update="vacationForm :configForm :workdaysCalendar :growlForm"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()"
+										title="#{messages.label_delete}" immediate="true"
+										actionListener="#{jJContactBean.removeVacation(loginBean,loginBean.contact,vacation.startVacation,vacation.endVacation)}"
+										style="width: 20px;height: 20px;" />
+
 
 									<p:outputLabel value="#{messages.contact_from} :" />
 									<p:inputText readonly="true" value="#{vacation.startVacation}"
@@ -341,7 +350,9 @@
 								<p:calendar id="start" navigator="true" effect="slideDown"
 									required="true" pattern="dd/MM/yyyy HH:mm"
 									binding="#{startDateCreation}"
-									value="#{jJContactBean.startDate}" />
+									value="#{jJContactBean.startDate}">
+									<p:ajax event="dateSelect"  update="addVacation :growlForm" />
+								</p:calendar>
 							</p:column>
 							<p:column>
 								<p:outputLabel for="end" value="#{messages.contact_to}:" />
@@ -351,6 +362,7 @@
 									<f:validator validatorId="dateRangeValidator" />
 									<f:attribute name="startDateComponent"
 										value="#{startDateCreation}" />
+									<p:ajax event="dateSelect" update="addVacation :growlForm" />
 								</p:calendar>
 							</p:column>
 						</p:row>
@@ -359,6 +371,7 @@
 								<p:commandButton id="addVacation"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
+									disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
 									update="vacationForm :configForm :workdaysCalendar :growlForm"
 									action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
 									value="#{messages.contact_new_vacation}" />
