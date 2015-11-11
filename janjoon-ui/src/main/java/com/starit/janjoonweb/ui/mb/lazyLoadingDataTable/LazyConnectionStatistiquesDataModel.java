@@ -64,9 +64,9 @@ public class LazyConnectionStatistiquesDataModel extends
 
 		List<ConnectionStatistics> data = new ArrayList<ConnectionStatistics>();
 		MutableInt size = new MutableInt(0);
-		
+
 		data = load(size, first, pageSize, multiSortMeta, filters);
-		setRowCount(size.getValue());		
+		setRowCount(size.getValue());
 		int dataSize = data.size();
 
 		if (dataSize > pageSize) {

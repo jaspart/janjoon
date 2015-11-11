@@ -346,8 +346,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company, JJChapter chapter, JJProduct product,JJVersion version,
-			boolean onlyActif) {
+			JJCompany company, JJChapter chapter, JJProduct product,
+			JJVersion version, boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -359,11 +359,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("chapter"), chapter));
 
-		if(version != null)
-		{
-			predicates.add(criteriaBuilder.equal(from.get("versioning"), version));
-		}
-		else if (product != null) {
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		} else if (product != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		}
 

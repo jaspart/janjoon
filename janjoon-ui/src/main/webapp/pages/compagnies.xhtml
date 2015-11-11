@@ -355,140 +355,139 @@
 						<p:tab disabled="#{jJCompanyBean.companie.id == null}"
 							title="#{messages.admin_company_table_editcalendar_tooltip}">
 							<p:messages showDetail="false" closable="true" />
-							<h:panelGrid columns="2" style="width: 100%;">								
-										<p:dataTable value="#{jJCompanyBean.workDays}" var="day"
-											style="width: 450px;"
-											emptyMessage="#{messages.label_notRecordFound}"
-											rendered="#{jJCompanyBean.workDays != null}">
+							<h:panelGrid columns="2" style="width: 100%;">
+								<p:dataTable value="#{jJCompanyBean.workDays}" var="day"
+									style="width: 450px;"
+									emptyMessage="#{messages.label_notRecordFound}"
+									rendered="#{jJCompanyBean.workDays != null}">
 
-											<p:columnGroup type="header">
-												<p:row>
-													<p:column colspan="5" style="text-align: left;"
-														headerText="#{messages.contact_datatableHeader}" />
-												</p:row>
-												<p:row>
-													<p:column rowspan="2" width="40%"
-														headerText="#{messages.contact_dataTable_day}" />
-													<p:column colspan="2" rowspan="1" width="30%"
-														headerText="#{messages.contact_datatable_morning}" />
-													<p:column colspan="2" rowspan="1" width="30%"
-														headerText="#{messages.contact_datatable_afternoon}" />
-												</p:row>
-												<p:row>
-													<p:column width="15%"
-														headerText="#{messages.contact_dataTable_from}" />
-													<p:column width="15%"
-														headerText="#{messages.contact_dataTable_to}" />
-													<p:column width="15%"
-														headerText="#{messages.contact_dataTable_from}" />
-													<p:column width="15%"
-														headerText="#{messages.contact_dataTable_to}" />
-												</p:row>
-											</p:columnGroup>
-											<p:column width="40%">
-												<h:outputText value="#{day.day}" />
-											</p:column>
-											<p:column width="15%">
-												<pe:timePicker value="#{day.startDate1}"
-													locale="#{localeBean.locale}" showDeselectButton="true"
-													mode="popup">
-													<p:ajax event="timeSelect"
-														update=":tabview:companyDialogForm"
-														listener="#{jJCompanyBean.timeSelectListener(day,1)}"
-														onstart="PF('EditCalendarBlockUIWidget').block();"
-														oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
-												</pe:timePicker>
-											</p:column>
-											<p:column width="15%">
-												<pe:timePicker value="#{day.endDate1}"
-													locale="#{localeBean.locale}" showDeselectButton="true"
-													mode="popup">
-													<p:ajax event="timeSelect"
-														update=":tabview:companyDialogForm"
-														listener="#{jJCompanyBean.timeSelectListener(day,1)}"
-														onstart="PF('EditCalendarBlockUIWidget').block();"
-														oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
-												</pe:timePicker>
-											</p:column>
-											<p:column width="15%">
-												<pe:timePicker value="#{day.startDate2}"
-													locale="#{localeBean.locale}" showDeselectButton="true"
-													mode="popup">
-													<p:ajax event="timeSelect"
-														update=":tabview:companyDialogForm"
-														listener="#{jJCompanyBean.timeSelectListener(day,2)}"
-														onstart="PF('EditCalendarBlockUIWidget').block();"
-														oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
-												</pe:timePicker>
-											</p:column>
-											<p:column width="15%">
-												<pe:timePicker value="#{day.endDate2}"
-													locale="#{localeBean.locale}" showDeselectButton="true"
-													mode="popup">
-													<p:ajax event="timeSelect"
-														update=":tabview:companyDialogForm"
-														listener="#{jJCompanyBean.timeSelectListener(day,2)}"
-														onstart="PF('EditCalendarBlockUIWidget').block();"
-														oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
-												</pe:timePicker>
-											</p:column>
-										</p:dataTable>
-																			
-										<p:panelGrid>
-											<f:facet name="header">
-												<p:row>
-													<p:column colspan="2">#{jJCompanyBean.companie.name} #{messages.company_holidays}</p:column>
-												</p:row>
-											</f:facet>
-											<p:row>
-												<p:column colspan="2">
-													<p:dataList var="holy" paginator="true" rows="10"
-														paginatorPosition="bottom"
-														paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-														emptyMessage="#{messages.company_empty_holidays}"
-														value="#{jJCompanyBean.holidays}" type="unordered">
+									<p:columnGroup type="header">
+										<p:row>
+											<p:column colspan="5" style="text-align: left;"
+												headerText="#{messages.contact_datatableHeader}" />
+										</p:row>
+										<p:row>
+											<p:column rowspan="2" width="40%"
+												headerText="#{messages.contact_dataTable_day}" />
+											<p:column colspan="2" rowspan="1" width="30%"
+												headerText="#{messages.contact_datatable_morning}" />
+											<p:column colspan="2" rowspan="1" width="30%"
+												headerText="#{messages.contact_datatable_afternoon}" />
+										</p:row>
+										<p:row>
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_from}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_to}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_from}" />
+											<p:column width="15%"
+												headerText="#{messages.contact_dataTable_to}" />
+										</p:row>
+									</p:columnGroup>
+									<p:column width="40%">
+										<h:outputText value="#{day.day}" />
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.startDate1}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:companyDialogForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
+												onstart="PF('EditCalendarBlockUIWidget').block();"
+												oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.endDate1}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:companyDialogForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,1)}"
+												onstart="PF('EditCalendarBlockUIWidget').block();"
+												oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.startDate2}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:companyDialogForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,2)}"
+												onstart="PF('EditCalendarBlockUIWidget').block();"
+												oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
+										</pe:timePicker>
+									</p:column>
+									<p:column width="15%">
+										<pe:timePicker value="#{day.endDate2}"
+											locale="#{localeBean.locale}" showDeselectButton="true"
+											mode="popup">
+											<p:ajax event="timeSelect"
+												update=":tabview:companyDialogForm"
+												listener="#{jJCompanyBean.timeSelectListener(day,2)}"
+												onstart="PF('EditCalendarBlockUIWidget').block();"
+												oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);" />
+										</pe:timePicker>
+									</p:column>
+								</p:dataTable>
 
-														<p:commandButton icon="ui-icon-trash"
-															update=":tabview:companyDialogForm"
-															onstart="PF('EditCalendarBlockUIWidget').block();"
-															oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);"
-															title="#{messages.label_delete}"
-															actionListener="#{jJCompanyBean.removeHoliday(holy)}"
-															style="width: 20px;height: 20px;" />
-															
-														<h:outputText value="#{messages.company_day_holidays}: " />
-														<h:outputText value="#{holy}">
-															<f:converter converterId="extendedDateTimeConverter" />
-															<f:attribute name="pattern" value="dd/MM/yyyy" />
-															<f:attribute name="timeZone" value="UCL" />
-														</h:outputText>
+								<p:panelGrid>
+									<f:facet name="header">
+										<p:row>
+											<p:column colspan="2">#{jJCompanyBean.companie.name} #{messages.company_holidays}</p:column>
+										</p:row>
+									</f:facet>
+									<p:row>
+										<p:column colspan="2">
+											<p:dataList var="holy" paginator="true" rows="10"
+												paginatorPosition="bottom"
+												paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+												emptyMessage="#{messages.company_empty_holidays}"
+												value="#{jJCompanyBean.holidays}" type="unordered">
 
-													</p:dataList>
-												</p:column>
-											</p:row>
-											<p:row>
-												<p:column>
-													<p:outputLabel for="start"
-														value="#{messages.company_day_holidays}:" />
-													<p:calendar id="start" navigator="true" effect="slideDown"
-														pattern="dd/MM/yyyy" style="width: 90px;"
-														value="#{jJCompanyBean.day}">
-														<p:ajax event="dateSelect" update="addHoliday" />
-													</p:calendar>
-												</p:column>
-											</p:row>
-											<p:row>
-												<p:column colspan="2">
-													<p:commandButton id="addHoliday"
-														disabled="#{jJCompanyBean.day == null}"
-														update=":tabview:companyDialogForm"
-														action="#{jJCompanyBean.addHoliday}"
-														onstart="PF('EditCalendarBlockUIWidget').block();"
-														oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);"
-														value="#{messages.company_new_holiday}" />
-												</p:column>
-											</p:row>
-										</p:panelGrid>								
+												<p:commandButton icon="ui-icon-trash"
+													update=":tabview:companyDialogForm"
+													onstart="PF('EditCalendarBlockUIWidget').block();"
+													oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);"
+													title="#{messages.label_delete}"
+													actionListener="#{jJCompanyBean.removeHoliday(holy)}"
+													style="width: 20px;height: 20px;" />
+
+												<h:outputText value="#{messages.company_day_holidays}: " />
+												<h:outputText value="#{holy}">
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy" />
+												</h:outputText>
+
+											</p:dataList>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<p:outputLabel for="start"
+												value="#{messages.company_day_holidays}:" />
+											<p:calendar id="start" navigator="true" effect="slideDown"
+												pattern="dd/MM/yyyy" style="width: 90px;"
+												value="#{jJCompanyBean.day}">
+												<p:ajax event="dateSelect" update="addHoliday" />
+											</p:calendar>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton id="addHoliday"
+												disabled="#{jJCompanyBean.day == null}"
+												update=":tabview:companyDialogForm"
+												action="#{jJCompanyBean.addHoliday}"
+												onstart="PF('EditCalendarBlockUIWidget').block();"
+												oncomplete="PF('EditCalendarBlockUIWidget').unblock();PF('companyTabView').select(1);"
+												value="#{messages.company_new_holiday}" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
 							</h:panelGrid>
 						</p:tab>
 					</p:tabView>

@@ -42,7 +42,8 @@ public class LazyWorkFlowDataTable extends LazyDataModel<JJWorkflow> {
 
 		List<JJWorkflow> data = new ArrayList<JJWorkflow>();
 		MutableInt size = new MutableInt(0);
-		data = workFlowService.load(size, first, pageSize, null, null, true,multiSortMeta,filters);
+		data = workFlowService.load(size, first, pageSize, null, null, true,
+				multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

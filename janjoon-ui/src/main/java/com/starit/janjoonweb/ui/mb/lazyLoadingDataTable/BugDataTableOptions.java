@@ -19,7 +19,7 @@ public class BugDataTableOptions {
 
 	private int first;
 	private List<SortMeta> multiSortMeta;
-	private Map<String, Object> filters;	
+	private Map<String, Object> filters;
 	private String importance;
 	private String status;
 	private String criticity;
@@ -47,14 +47,14 @@ public class BugDataTableOptions {
 
 	public void setCriticity(String criticity) {
 		this.criticity = criticity;
-	}	
+	}
 
 	public BugDataTableOptions() {
-	
+
 	}
 
 	public BugDataTableOptions(int first, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters,boolean mine) {
+			Map<String, Object> filters, boolean mine) {
 
 		this.first = first;
 		this.multiSortMeta = multiSortMeta;
@@ -82,7 +82,7 @@ public class BugDataTableOptions {
 		}
 	}
 
-	public void dataTableInit(DataTable dataTable,SelectOneMenu mineBugs) {
+	public void dataTableInit(DataTable dataTable, SelectOneMenu mineBugs) {
 
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);

@@ -140,6 +140,10 @@ td.ui-fileupload-preview {
 							<h:outputText value="#{project.manager}"
 								converter="JJContactConverter" />
 						</p:column>
+						<p:column headerText="#{messages.label_company}">
+							<h:outputText value="#{project.manager.company}"
+								converter="JJCompanyConverter" />
+						</p:column>
 					</p:dataTable>
 					<f:facet name="footer">
 						<p:commandButton id="restoreButton"

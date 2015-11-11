@@ -26,6 +26,7 @@
 				completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
 				<p:ajax event="itemSelect"
 					update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
+				<f:attribute name="project" value="#{JJTask_.project}" />
 			</p:autoComplete>
 
 			<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
@@ -73,6 +74,7 @@
 					value="#{taskStartDatePlanned}" />
 				<f:attribute name="sprintComponent" value="#{sprintComponent}" />
 				<f:attribute name="task" value="#{JJTask_}" />
+				<f:attribute name="workload" value="#{workload}" />
 				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
 			</p:calendar>
 
@@ -80,8 +82,11 @@
 				value="#{messages.specification_create_workload_label}:"
 				for="taskWorkload" />
 			<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
-				stepFactor="1" min="1" required="true" size="3" />
-			<p:outputLabel value="Specification :" for="taskSpec" />
+				stepFactor="1" min="1" required="true" size="3"
+				binding="#{workload}">
+				<p:ajax update="taskEndDatePlanned" />
+			</p:spinner>
+			<p:outputLabel value="#{messages.label_requirement} :" for="taskSpec" />
 			<p:selectBooleanCheckbox id="taskSpec"
 				value="#{JJTask_.specification}" />
 		</h:panelGrid>

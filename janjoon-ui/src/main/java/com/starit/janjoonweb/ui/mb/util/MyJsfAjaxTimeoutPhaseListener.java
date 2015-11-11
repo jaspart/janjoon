@@ -47,7 +47,7 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 			logger.info("JSF Ajax Timeout Setting is not configured. Do Nothing!");
 			return;
 		}
-		
+
 		String resourceUri = request.getContextPath() + "/resources";
 
 		boolean loginRequest = request.getRequestURI().contains(timeoutPage);
@@ -59,8 +59,8 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 
 		if (session == null || session.getAttribute("password") == null
 				&& !(loginRequest || resourceRequest)) {
-			
-			if (ec.isResponseCommitted()) {				
+
+			if (ec.isResponseCommitted()) {
 				return;
 			}
 
@@ -97,7 +97,7 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 				throw new FacesException(e);
 			}
 		} else {
-			return; 
+			return;
 		}
 	}
 

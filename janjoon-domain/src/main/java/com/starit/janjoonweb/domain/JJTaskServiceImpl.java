@@ -120,23 +120,26 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		return result.getResultList();
 	}
-	
+
 	@Override
 	public List<JJTask> getTasks(JJProject project, JJProduct product,
 			JJContact assignedTo, Date startDate, Date endDate) {
 
 		Set<JJTask> returnedValue = new HashSet<JJTask>();
 
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "requirement")));
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "bug")));
-		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product, assignedTo, startDate, endDate, "testcase")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product,
+				assignedTo, startDate, endDate, "requirement")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product,
+				assignedTo, startDate, endDate, "bug")));
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(project, product,
+				assignedTo, startDate, endDate, "testcase")));
 
 		return new ArrayList<JJTask>(returnedValue);
 
 	}
 
 	private List<JJTask> getTasks(JJProject project, JJProduct product,
-			JJContact assignedTo, Date startDate, Date endDate,String objet) {
+			JJContact assignedTo, Date startDate, Date endDate, String objet) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -144,13 +147,13 @@ public class JJTaskServiceImpl implements JJTaskService {
 		Root<JJTask> from = criteriaQuery.from(JJTask.class);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		List<Predicate> orPredicate= new ArrayList<Predicate>();
+		List<Predicate> orPredicate = new ArrayList<Predicate>();
 
 		if (assignedTo != null) {
 			predicates.add(criteriaBuilder.equal(from.get("assignedTo"),
 					assignedTo));
 		}
-		
+
 		predicates.add(criteriaBuilder.isNotNull(from.get("startDateReal")));
 		predicates.add(criteriaBuilder.isNotNull(from.get("endDateReal")));
 
@@ -159,11 +162,11 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		orPredicate.add(criteriaBuilder.between(
 				from.<Date> get("startDateReal"), startDate, endDate));
-		orPredicate.add(criteriaBuilder.equal(
-				from.<Date> get("startDateReal"), startDate));
+		orPredicate.add(criteriaBuilder.equal(from.<Date> get("startDateReal"),
+				startDate));
 
-		orPredicate.add(criteriaBuilder.between(
-				from.<Date> get("endDateReal"), startDate, endDate));
+		orPredicate.add(criteriaBuilder.between(from.<Date> get("endDateReal"),
+				startDate, endDate));
 		orPredicate.add(criteriaBuilder.equal(from.<Date> get("endDateReal"),
 				endDate));
 
@@ -173,8 +176,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		orPredicate.add(criteriaBuilder.and(criteriaBuilder.lessThan(
 				from.<Date> get("startDateReal"), startDate), criteriaBuilder
-				.greaterThan(from.<Date> get("endDateReal"), endDate)));	
-		
+				.greaterThan(from.<Date> get("endDateReal"), endDate)));
+
 		if (objet != null && project != null) {
 
 			if (objet.equalsIgnoreCase("bug") || objet.equalsIgnoreCase("b")) {
@@ -244,13 +247,13 @@ public class JJTaskServiceImpl implements JJTaskService {
 			}
 
 		}
-		
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		CriteriaQuery<JJTask> select = criteriaQuery.select(from);
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})),
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[] {})),
 				criteriaBuilder.or(orPredicate.toArray(new Predicate[] {})));
 
 		select.orderBy(criteriaBuilder.asc(from.get("creationDate")));

@@ -144,7 +144,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(entityManager.createQuery(cq).getSingleResult());	
+		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
 

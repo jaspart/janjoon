@@ -436,8 +436,6 @@ public class AuthorisationService implements Serializable {
 	public void setRenderAdmin(boolean renderAdmin) {
 		this.renderAdmin = renderAdmin;
 	}
-	
-	
 
 	public boolean isViewTeamImputation() {
 		return viewTeamImputation;

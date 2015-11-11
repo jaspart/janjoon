@@ -1800,7 +1800,7 @@ public class JJRequirementBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				chapter, LoginBean.getVersion(),null, false, false, false);
+				chapter, LoginBean.getVersion(), null, false, false, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -3450,7 +3450,8 @@ public class JJRequirementBean {
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), parent,
-							LoginBean.getProduct(),LoginBean.getVersion(), onlyActif);
+							LoginBean.getProduct(), LoginBean.getVersion(),
+							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				elements.put(requirement.getOrdering(), requirement);
@@ -3478,7 +3479,7 @@ public class JJRequirementBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter,null, null, false, true, false);
+				requirement, chapter, null, null, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			if (testcase.getOrdering() != null)
@@ -4331,7 +4332,7 @@ public class JJRequirementBean {
 		return jJRequirementService
 				.getRequirementChildrenWithChapterSortedByOrder(loginBean
 						.getContact().getCompany(), chapter, LoginBean
-						.getProduct(),LoginBean.getVersion(), onlyActif);
+						.getProduct(), LoginBean.getVersion(), onlyActif);
 	}
 
 	public void reset() {
@@ -4586,7 +4587,7 @@ public class JJRequirementBean {
 
 			if (FINIS) {
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						req, null,null, null, true, false, false);
+						req, null, null, null, true, false, false);
 
 				for (JJTestcase testcase : testcases) {
 
@@ -4658,7 +4659,7 @@ public class JJRequirementBean {
 			} else if (!ENCOURS && FINIS) {
 
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null,null, null, true, false, false);
+						requirement, null, null, null, true, false, false);
 				boolean SUCCESS = true;
 
 				for (JJTestcase testcase : testcases) {
@@ -4759,7 +4760,8 @@ public class JJRequirementBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(RequirementBean.REQUIREMENT_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -4783,7 +4785,8 @@ public class JJRequirementBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(RequirementBean.REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);

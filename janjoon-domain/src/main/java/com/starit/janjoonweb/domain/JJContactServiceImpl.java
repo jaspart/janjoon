@@ -171,8 +171,8 @@ public class JJContactServiceImpl implements JJContactService {
 							"%" + pairs.getValue() + "%"), criteriaBuilder
 							.like(from.<String> get("email"),
 									"%" + pairs.getValue() + "%")));
-				} else if (pairs.getKey().toString().contains("company")) {			
-					
+				} else if (pairs.getKey().toString().contains("company")) {
+
 					predicates
 							.add(criteriaBuilder.equal(from.get("company")
 									.<String> get("name"), pairs.getValue()

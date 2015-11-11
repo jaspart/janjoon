@@ -533,16 +533,14 @@
 						</p:column>
 						<p:column headerText="#{messages.label_creationDate}">
 							<h:outputText value="#{tce.testcaseexecution.creationDate}">
-								<f:converter converterId="extendedDateTimeConverter" />
-								<f:attribute name="pattern" value="dd/MM/yyyy" />
-								<f:attribute name="timeZone" value="UCL" />
+								<f:convertDateTime type="date" locale="#{localeBean.locale}"
+									pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 						<p:column headerText="#{messages.label_updateDate}">
 							<h:outputText value="#{tce.testcaseexecution.updatedDate}">
-								<f:converter converterId="extendedDateTimeConverter" />
-								<f:attribute name="pattern" value="dd/MM/yyyy" />
-								<f:attribute name="timeZone" value="UCL" />
+								<f:convertDateTime type="date" locale="#{localeBean.locale}"
+									pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</p:column>
 						<p:column headerText="Status">
@@ -570,7 +568,7 @@
 			header="#{messages.specification_import_title} XML" modal="true"
 			widgetVar="testImportXMLDialogWidget" dynamic="true"
 			resizable="false">
-<!-- 			<p:ajax event="close" listener="#{jJTestcaseBean.closeXMLDialog}" /> -->
+			<!-- 			<p:ajax event="close" listener="#{jJTestcaseBean.closeXMLDialog}" /> -->
 			<p:outputPanel id="importXMLPanel">
 				<h:form id="importXMLForm">
 					<p:panel styleClass="panelDialog">

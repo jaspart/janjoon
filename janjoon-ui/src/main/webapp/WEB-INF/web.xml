@@ -15,6 +15,10 @@
 		<param-value>true</param-value>
 	</context-param>
 	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
 		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
 		<param-value>true</param-value>
 	</context-param>
@@ -145,7 +149,7 @@
 	<error-page>
 		<error-code>500</error-code>
 		<location>/pages/main.jsf?faces-redirect=true</location>
-	</error-page>	
+	</error-page>
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>

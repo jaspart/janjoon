@@ -45,7 +45,10 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_status_table_date_title}" />
 					</f:facet>
-					<h:outputText value="#{status.creationDate}" />
+					<h:outputText value="#{status.creationDate}">
+						<f:convertDateTime type="date" locale="#{localeBean.locale}"
+							pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
 				</p:column>
 
 				<!-- 				<p:column> -->

@@ -45,9 +45,8 @@
 						<br />
 						<h:outputText value="#{mes.creationDate}"
 							style="color: #9197a3;font-size: 10px;">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy HH:mm:ss" />
-							<f:attribute name="timeZone" value="UCL" />
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy HH:mm" />
 						</h:outputText>
 						<br />
 						<h:outputText value="#{mes.project.name} / #{mes.product.name}"
@@ -134,9 +133,8 @@
 					<p:column headerText="#{messages.project_scrum_new_start_label}"
 						style="width:100px;">
 						<h:outputText value="#{task.startDateReal}">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy" />
-							<f:attribute name="timeZone" value="UCL" />
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
 
@@ -224,7 +222,7 @@
 		</p:confirmDialog>
 
 		<p:dialog id="viewTaskDialog"
-			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="false">
@@ -243,10 +241,8 @@
 						</ui:include>
 						<f:facet name="footer">
 							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
-								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-								value="#{messages.label_update} Task"
-								onstart="PF('viewtaskBlockUIWidget').block()"
-								style="margin-top: 5px;"
+								actionListener="#{jJTaskBean.updateTask('main')}"
+								value="#{messages.label_update}" style="margin-top: 5px;"
 								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
 								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
 							<p:commandButton id="viewCloseButton"

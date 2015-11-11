@@ -137,7 +137,8 @@ public class ImageStreamer {
 			if (CompId != null && !CompId.isEmpty())
 				comp = jJCompanyService.findJJCompany(Long.valueOf(CompId));
 			if (comp != null && comp.getLogo() != null) {
-				return new DefaultStreamedContent(new ByteArrayInputStream(comp.getLogo()));
+				return new DefaultStreamedContent(new ByteArrayInputStream(
+						comp.getLogo()));
 			} else {
 				InputStream stream = FacesContext
 						.getCurrentInstance()

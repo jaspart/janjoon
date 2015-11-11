@@ -10,10 +10,11 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJAuditLog.class })
 public interface JJAuditLogService {
-	
-	public List<JJAuditLog> getAuditLogByObject(String object,JJContact contact,JJCompany company,String keyName,
-			int first,int pageSize,MutableInt size, List<SortMeta> multiSortMeta,
+
+	public List<JJAuditLog> getAuditLogByObject(String object,
+			JJContact contact, JJCompany company, String keyName, int first,
+			int pageSize, MutableInt size, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters);
-	 
-	public JJAuditLog getLogoutAuditLog(JJContact contact,Date loginDate);
+
+	public JJAuditLog getLogoutAuditLog(JJContact contact, Date loginDate);
 }

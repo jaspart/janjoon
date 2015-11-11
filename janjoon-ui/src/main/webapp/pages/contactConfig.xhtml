@@ -173,14 +173,14 @@
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()"
 										value="#{messages.contact_submit}"
-										action="#{jJContactBean.updateUserConfiguration(loginBean)}" />
+										action="#{jJContactBean.updateUserConfiguration(loginBean,jJRequirementBean)}" />
 
 								</p:column>
 							</p:row>
 						</f:facet>
 					</p:panelGrid>
 				</h:form>
-				<h:panelGrid columns="1">
+				<h:panelGrid columns="1" style="margin-top: -4px;">
 					<h:form id="workdaysCalendar">
 						<p:dataTable value="#{jJContactBean.workDays}" var="day"
 							style="width: 550px;"
@@ -331,15 +331,14 @@
 									<p:outputLabel value="#{messages.contact_from} :" />
 									<p:inputText readonly="true" value="#{vacation.startVacation}"
 										style="width: 137px;">
-										<f:converter converterId="extendedDateTimeConverter" />
-										<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
+										<f:convertDateTime type="date" locale="#{localeBean.locale}"
+											pattern="dd/MM/yyyy HH:mm" />
 									</p:inputText>
 									<p:outputLabel value=" #{messages.contact_to} :"
 										style="-webkit-padding-start: 30px;" />
 									<p:inputText readonly="true" value="#{vacation.endVacation}">
-										<f:converter converterId="extendedDateTimeConverter" />
-										<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-
+										<f:convertDateTime type="date" locale="#{localeBean.locale}"
+											pattern="dd/MM/yyyy HH:mm" />
 									</p:inputText>
 								</p:dataList>
 							</p:column>
@@ -351,7 +350,7 @@
 									required="true" pattern="dd/MM/yyyy HH:mm"
 									binding="#{startDateCreation}"
 									value="#{jJContactBean.startDate}">
-									<p:ajax event="dateSelect"  update="addVacation :growlForm" />
+									<p:ajax event="dateSelect" update="addVacation :growlForm" />
 								</p:calendar>
 							</p:column>
 							<p:column>

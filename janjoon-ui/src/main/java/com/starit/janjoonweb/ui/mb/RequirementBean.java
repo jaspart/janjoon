@@ -730,7 +730,8 @@ public class RequirementBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -755,7 +756,8 @@ public class RequirementBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -786,7 +788,8 @@ public class RequirementBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);

@@ -156,7 +156,7 @@ public class JJChapterBean {
 			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
 					.findBean("loginBean")).getContact().getCompany(), project,
 					category, true, new ArrayList<String>());
-		}else {
+		} else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
@@ -538,7 +538,8 @@ public class JJChapterBean {
 		return newNode;
 	}
 
-	public void updateCategoryId(CategoryDataModel tableDataModel,JJRequirementBean jJRequirementBean) {
+	public void updateCategoryId(CategoryDataModel tableDataModel,
+			JJRequirementBean jJRequirementBean) {
 		categoryId = tableDataModel.getCategoryId();
 		jJRequirementBean.setCategoryDataModel(tableDataModel);
 	}
@@ -782,7 +783,8 @@ public class JJChapterBean {
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), parent,
-							LoginBean.getProduct(), LoginBean.getVersion(),onlyActif);
+							LoginBean.getProduct(), LoginBean.getVersion(),
+							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)
@@ -810,7 +812,8 @@ public class JJChapterBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter, LoginBean.getVersion(),null, false, true, false);
+				requirement, chapter, LoginBean.getVersion(), null, false,
+				true, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -1392,19 +1395,19 @@ public class JJChapterBean {
 
 		chapterState = true;
 
-//		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
-//				.contains("specifications")) {
-//			ExternalContext ec = FacesContext.getCurrentInstance()
-//					.getExternalContext();
-//			try {
-//				ec.redirect(((HttpServletRequest) ec.getRequest())
-//						.getRequestURI());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
+		// if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+		// .contains("specifications")) {
+		// ExternalContext ec = FacesContext.getCurrentInstance()
+		// .getExternalContext();
+		// try {
+		// ec.redirect(((HttpServletRequest) ec.getRequest())
+		// .getRequestURI());
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		//
+		// }
 
 	}
 

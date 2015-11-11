@@ -43,7 +43,7 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 		List<JJConfiguration> data = new ArrayList<JJConfiguration>();
 		MutableInt size = new MutableInt(0);
 		data = configurationService.load(size, first, pageSize, null, null,
-				true,multiSortMeta,filters);
+				true, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

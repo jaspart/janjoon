@@ -41,7 +41,8 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 
 		List<JJCategory> data = new ArrayList<JJCategory>();
 		MutableInt size = new MutableInt(0);
-		data = jJCategoryService.load(size, first, pageSize,multiSortMeta,filters);
+		data = jJCategoryService.load(size, first, pageSize, multiSortMeta,
+				filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

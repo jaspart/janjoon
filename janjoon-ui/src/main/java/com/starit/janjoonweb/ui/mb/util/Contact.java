@@ -20,7 +20,7 @@ public class Contact {
 	private JJProduct lastProduct;
 	private JJVersion lastVersion;
 	private Set<JJCategory> categories = new HashSet<JJCategory>();
-	private Set<JJPermission> permissions= new HashSet<JJPermission>();
+	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 
 	public String getName() {
 		return name;
@@ -86,7 +86,7 @@ public class Contact {
 		this.permissions = permissions;
 	}
 
-	public Contact(JJContact contact,List<JJPermission> permissions) {
+	public Contact(JJContact contact, List<JJPermission> permissions) {
 
 		this.firstname = contact.getFirstname();
 		this.name = contact.getName();
@@ -104,7 +104,7 @@ public class Contact {
 		contact.setLastVersion(this.lastVersion);
 		contact.setLastProject(lastProject);
 		contact.setCategories(categories);
-		contact.setFirstname(firstname);		
+		contact.setFirstname(firstname);
 		return contact;
 	}
 

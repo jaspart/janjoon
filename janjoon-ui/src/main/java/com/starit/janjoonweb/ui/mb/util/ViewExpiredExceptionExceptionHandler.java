@@ -49,7 +49,7 @@ public class ViewExpiredExceptionExceptionHandler extends
 
 				try {
 					if (facesContext.getPartialViewContext().isAjaxRequest()) {
-						
+
 					}
 
 				} finally {

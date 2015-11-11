@@ -93,9 +93,11 @@ public class LoginBean implements Serializable {
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 
-		// Map<String, Object> requestCookieMap = FacesContext
-		// .getCurrentInstance().getExternalContext()
-		// .getRequestCookieMap();
+		// System.err.println(MessageFactory.getMessage(
+		// "label_tttt", "").getDetail());
+		//
+		// System.err.println(MessageFactory.getMessage(
+		// "label_ttttt", "").getDetail());
 
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestCookieMap().get("agreeTerms") != null) {

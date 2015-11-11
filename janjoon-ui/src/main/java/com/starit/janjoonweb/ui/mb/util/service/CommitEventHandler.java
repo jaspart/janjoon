@@ -31,49 +31,49 @@ import org.tmatesoft.svn.core.wc.SVNEventAction;
  * path, action performed upon the path and some other. 
  */
 public class CommitEventHandler implements ISVNEventHandler {
-    /*
-     * progress  is  currently  reserved  for future purposes and now is always
-     * ISVNEventHandler.UNKNOWN  
-     */
-    public void handleEvent(SVNEvent event, double progress) {
-        /*
-         * Gets the current action. An action is represented by SVNEventAction.
-         * In case of a commit  an  action  can  be  determined  via  comparing 
-         * SVNEvent.getAction() with SVNEventAction.COMMIT_-like constants. 
-         */
-        SVNEventAction action = event.getAction();
-        if (action == SVNEventAction.COMMIT_MODIFIED) {
-            System.out.println("Sending   " + event.getChangelistName());
-        } else if (action == SVNEventAction.COMMIT_DELETED) {
-            System.out.println("Deleting   " + event.getChangelistName());
-        } else if (action == SVNEventAction.COMMIT_REPLACED) {
-            System.out.println("Replacing   " + event.getChangelistName());
-        } else if (action == SVNEventAction.COMMIT_DELTA_SENT) {
-            System.out.println("Transmitting file data....");
-        } else if (action == SVNEventAction.COMMIT_ADDED) {
-            /*
-             * Gets the MIME-type of the item.
-             */
-            String mimeType = event.getMimeType();
-            if (SVNProperty.isBinaryMimeType(mimeType)) {
-                /*
-                 * If the item is a binary file
-                 */
-                System.out.println("Adding  (bin)  "
-                        + event.getChangelistName());
-            } else {
-                System.out.println("Adding         "
-                        + event.getChangelistName());
-            }
-        }
+	/*
+	 * progress is currently reserved for future purposes and now is always
+	 * ISVNEventHandler.UNKNOWN
+	 */
+	public void handleEvent(SVNEvent event, double progress) {
+		/*
+		 * Gets the current action. An action is represented by SVNEventAction.
+		 * In case of a commit an action can be determined via comparing
+		 * SVNEvent.getAction() with SVNEventAction.COMMIT_-like constants.
+		 */
+		SVNEventAction action = event.getAction();
+		if (action == SVNEventAction.COMMIT_MODIFIED) {
+			System.out.println("Sending   " + event.getChangelistName());
+		} else if (action == SVNEventAction.COMMIT_DELETED) {
+			System.out.println("Deleting   " + event.getChangelistName());
+		} else if (action == SVNEventAction.COMMIT_REPLACED) {
+			System.out.println("Replacing   " + event.getChangelistName());
+		} else if (action == SVNEventAction.COMMIT_DELTA_SENT) {
+			System.out.println("Transmitting file data....");
+		} else if (action == SVNEventAction.COMMIT_ADDED) {
+			/*
+			 * Gets the MIME-type of the item.
+			 */
+			String mimeType = event.getMimeType();
+			if (SVNProperty.isBinaryMimeType(mimeType)) {
+				/*
+				 * If the item is a binary file
+				 */
+				System.out.println("Adding  (bin)  "
+						+ event.getChangelistName());
+			} else {
+				System.out.println("Adding         "
+						+ event.getChangelistName());
+			}
+		}
 
-    }
-    
-    /*
-     * Should be implemented to check if the current operation is cancelled. If 
-     * it is, this method should throw an SVNCancelException. 
-     */
-    public void checkCancelled() throws SVNCancelException {
-    }
+	}
+
+	/*
+	 * Should be implemented to check if the current operation is cancelled. If
+	 * it is, this method should throw an SVNCancelException.
+	 */
+	public void checkCancelled() throws SVNCancelException {
+	}
 
 }

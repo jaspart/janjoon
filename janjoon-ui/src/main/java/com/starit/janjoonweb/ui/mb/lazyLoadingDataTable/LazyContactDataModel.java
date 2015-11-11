@@ -62,7 +62,8 @@ public class LazyContactDataModel extends LazyDataModel<JJContact> {
 
 		List<JJContact> data = new ArrayList<JJContact>();
 		MutableInt size = new MutableInt(0);
-		data = contactService.load(company, size, first,pageSize,multiSortMeta,filters);
+		data = contactService.load(company, size, first, pageSize,
+				multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

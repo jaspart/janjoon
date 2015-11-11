@@ -479,7 +479,8 @@ public class WorkFlowsActions {
 					if (mailingService == null)
 						mailingService = new MailingService();
 					String taskTitle = ((JJTaskBean) LoginBean
-							.findBean("jJTaskBean")).getDialogHeader(task);
+							.findBean("jJTaskBean"))
+							.getDialogHeader(task, null);
 
 					for (JJRequirement req : businessRequirements) {
 						System.err.println("REQUIREMENT_" + req.getName());

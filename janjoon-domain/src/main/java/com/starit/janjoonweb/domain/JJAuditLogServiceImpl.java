@@ -67,39 +67,41 @@ public class JJAuditLogServiceImpl implements JJAuditLogService {
 					&& (company == null && contact == null)) {
 				predicates.add(criteriaBuilder.isNotNull(from.get("contact")));
 			}
-		}	
-		
+		}
+
 		if (filters != null) {
 			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
 			while (it.hasNext()) {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.like(
-							from.get("contact").<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.get("contact")
+									.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 				} else if (pairs.getKey().toString().contains("company")) {
 
 					predicates.add(criteriaBuilder.equal(from.get("contact")
 							.get("company").<String> get("name"), pairs
 							.getValue().toString()));
-				} 
+				}
 
 			}
 		}
-		
+
 		select.where(predicates.toArray(new Predicate[] {}));
-		
-		
+
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
 				String sortField = sortMeta.getSortField();
 				SortOrder sortOrder = sortMeta.getSortOrder();
 				if (sortField.contains("loginDate")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get("auditLogDate")));
+						select.orderBy(criteriaBuilder.desc(from
+								.get("auditLogDate")));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get("auditLogDate")));
+						select.orderBy(criteriaBuilder.asc(from
+								.get("auditLogDate")));
 					}
 				} else if (sortField.contains("company")) {
 					Join<JJContact, JJCompany> owner = from.join("contact")
@@ -110,7 +112,7 @@ public class JJAuditLogServiceImpl implements JJAuditLogService {
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
 						select.orderBy(criteriaBuilder.asc(owner.get("name")));
 					}
-				}else if (sortField.contains("contact")) {
+				} else if (sortField.contains("contact")) {
 					Join<JJContact, JJCompany> owner = from.join("contact");
 
 					if (sortOrder.equals(SortOrder.DESCENDING))
@@ -120,7 +122,7 @@ public class JJAuditLogServiceImpl implements JJAuditLogService {
 					}
 				}
 			}
-		} else			
+		} else
 			select.orderBy(criteriaBuilder.desc(from.get("auditLogDate")));
 
 		TypedQuery<JJAuditLog> result = entityManager.createQuery(select);

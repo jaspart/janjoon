@@ -25,7 +25,8 @@ public class TestClass {
 				.createDefaultAuthenticationManager("chemakh", "taraji0000");
 		repository.setAuthenticationManager(authManager);
 		@SuppressWarnings({ "unused", "rawtypes" })
-		Collection logEntries = repository.log(new String[] { "" }, null, 0,-1, true, true);
+		Collection logEntries = repository.log(new String[] { "" }, null, 0,
+				-1, true, true);
 	}
 
 	private static SVNCommitInfo addDir(ISVNEditor editor, String dirPath,

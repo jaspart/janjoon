@@ -247,9 +247,8 @@ public class JJCompanyBean {
 		day = null;
 
 	}
-	
-	public void removeHoliday(Date holiday) throws IOException
-	{
+
+	public void removeHoliday(Date holiday) throws IOException {
 		updatedCompanyCalendar = CalendarUtil.removeHoliday(holiday,
 				updatedCompanyCalendar, holidays.indexOf(holiday));
 		disabledsaveCalendar = false;
@@ -280,7 +279,7 @@ public class JJCompanyBean {
 							.before(day.getStartDate1())) || (day.getEndDate1() != null && day
 							.getStartDate2().before(day.getEndDate1()))))
 				up = false;
-			
+
 			if (up) {
 				updatedCompanyCalendar = calendarUtil.editWorkday(day);
 				disabledsaveCalendar = false;

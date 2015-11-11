@@ -40,7 +40,7 @@ public class ConnectionStatistics {
 					this.setDuration(new Long(Math.round(this.getLogoutDate()
 							.getTime()
 							/ MINUTE_IN_MILLIS
-							- this.getLoginDate().getTime() / MINUTE_IN_MILLIS))+1);
+							- this.getLoginDate().getTime() / MINUTE_IN_MILLIS)) + 1);
 
 				} catch (ParseException e) {
 					this.logoutDate = null;

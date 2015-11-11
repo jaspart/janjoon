@@ -211,7 +211,7 @@ public class JJSprintBean {
 
 	public List<SprintUtil> getSprintList() {
 
-		//System.out.println(((JJTask)LoginBean.findBean("dfgk")).getDescription());
+		// System.out.println(((JJTask)LoginBean.findBean("dfgk")).getDescription());
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
@@ -339,7 +339,7 @@ public class JJSprintBean {
 						LoginBean.getProduct()), jJContactService);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		String message = "message_successfully_updated";
-		FacesMessage facesMessage = MessageFactory.getMessage(message, 
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
@@ -353,18 +353,16 @@ public class JJSprintBean {
 
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();
-		else 
-		{
-			//activeTabSprintIndex = -1;
-			Date now=new Date();
+		else {
+			// activeTabSprintIndex = -1;
+			Date now = new Date();
 			int i = 0;
-			while(i<sprintList.size())
-			{
-				if(now.after(sprintList.get(i).getSprint().getStartDate()) && 
-						now.before(sprintList.get(i).getSprint().getEndDate()))
-				{
+			while (i < sprintList.size()) {
+				if (now.after(sprintList.get(i).getSprint().getStartDate())
+						&& now.before(sprintList.get(i).getSprint()
+								.getEndDate())) {
 					activeTabSprintIndex = i;
-					i= sprintList.size();
+					i = sprintList.size();
 				}
 				i++;
 			}
@@ -555,7 +553,8 @@ public class JJSprintBean {
 		JJTask dropedTask = (JJTask) ddevent.getData();
 		Long sprintId = dropedTask.getSprint().getId();
 
-		if (ddevent.getDragId().contains(":todoIcon")) {
+		if (ddevent.getDragId().contains(":todoIcon")
+				|| ddevent.getDragId().contains(":todoPanel")) {
 			JJContact assignedTo = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
 			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
@@ -619,7 +618,8 @@ public class JJSprintBean {
 
 		Long sprintId = dropedTask.getSprint().getId();
 
-		if (ddevent.getDragId().contains(":progIcon")) {
+		if (ddevent.getDragId().contains(":progIcon")
+				|| ddevent.getDragId().contains(":progPanel")) {
 
 			id = dropedTask.getId();
 			JJStatus status = jJStatusService
@@ -854,7 +854,7 @@ public class JJSprintBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", 
+				"message_successfully_deleted",
 				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
@@ -910,8 +910,8 @@ public class JJSprintBean {
 
 		List<JJBug> suggestions = new ArrayList<JJBug>();
 		for (JJBug jJBug : jJBugService.getBugs(((LoginBean) LoginBean
-				.findBean("loginBean")).getContact().getCompany(), project,LoginBean.getProduct(),
-				null, null, true, true)) {
+				.findBean("loginBean")).getContact().getCompany(), project,
+				LoginBean.getProduct(), null, null, true, true)) {
 			String jJBugStr = String.valueOf(jJBug.getName());
 			if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJBug);

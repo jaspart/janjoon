@@ -42,7 +42,8 @@ public class LazyStatusDataModel extends LazyDataModel<JJStatus> {
 
 		List<JJStatus> data = new ArrayList<JJStatus>();
 		MutableInt size = new MutableInt(0);
-		data = statusService.load(size, first, pageSize,multiSortMeta,filters);
+		data = statusService
+				.load(size, first, pageSize, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

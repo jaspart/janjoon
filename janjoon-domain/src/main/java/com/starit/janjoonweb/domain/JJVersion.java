@@ -73,9 +73,8 @@ public class JJVersion {
 		return (object instanceof JJVersion) && (getId() != null) ? getId()
 				.equals(((JJVersion) object).getId()) : (object == this);
 	}
-	
-	public JJCompany getCompany()
-	{
+
+	public JJCompany getCompany() {
 		return this.getProduct().getCompany();
 	}
 

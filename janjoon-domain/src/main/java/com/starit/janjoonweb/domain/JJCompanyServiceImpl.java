@@ -37,8 +37,8 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 		Long r = (Long) entityManager.createQuery(
 				"select max(e.id) from JJCompany e").getSingleResult();
 		return r + 1;
-	} 
-	
+	}
+
 	@Override
 	public List<JJCompany> load(MutableInt size, int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
@@ -96,7 +96,6 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 
 		return result.getResultList();
 
-	
 	}
 
 	public JJCompany updateJJCompany(JJCompany JJCompany_) {

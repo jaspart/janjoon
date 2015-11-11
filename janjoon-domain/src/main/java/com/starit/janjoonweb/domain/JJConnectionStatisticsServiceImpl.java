@@ -23,27 +23,30 @@ public class JJConnectionStatisticsServiceImpl implements
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
-	public List<JJConnectionStatistics> load(JJCompany company, MutableInt size, int first,
-			int pageSize) {
+
+	public List<JJConnectionStatistics> load(JJCompany company,
+			MutableInt size, int first, int pageSize) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJConnectionStatistics> criteriaQuery = criteriaBuilder
 				.createQuery(JJConnectionStatistics.class);
 
-		Root<JJConnectionStatistics> from = criteriaQuery.from(JJConnectionStatistics.class);
+		Root<JJConnectionStatistics> from = criteriaQuery
+				.from(JJConnectionStatistics.class);
 
-		CriteriaQuery<JJConnectionStatistics> select = criteriaQuery.select(from);
+		CriteriaQuery<JJConnectionStatistics> select = criteriaQuery
+				.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (company != null)
 			predicates.add(criteriaBuilder.equal(
-					from.join("contact").get("company"), company));		
+					from.join("contact").get("company"), company));
 
 		select.where(predicates.toArray(new Predicate[] {}));
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
-		TypedQuery<JJConnectionStatistics> result = entityManager.createQuery(select);
+		TypedQuery<JJConnectionStatistics> result = entityManager
+				.createQuery(select);
 		result.setFirstResult(first);
 		result.setMaxResults(pageSize);
 
@@ -65,13 +68,15 @@ public class JJConnectionStatisticsServiceImpl implements
 
 	}
 
-
 	public void saveJJConnectionStatistics(
-			JJConnectionStatistics JJConnectionStatistics_) {		
-		
+			JJConnectionStatistics JJConnectionStatistics_) {
+
 		final long MINUTE_IN_MILLIS = 60 * 1000;
-		JJConnectionStatistics_.setDuration(Math.round(JJConnectionStatistics_.getLogoutDate().getTime()/MINUTE_IN_MILLIS-
-				JJConnectionStatistics_.getLoginDate().getTime()/MINUTE_IN_MILLIS));
+		JJConnectionStatistics_.setDuration(Math.round(JJConnectionStatistics_
+				.getLogoutDate().getTime()
+				/ MINUTE_IN_MILLIS
+				- JJConnectionStatistics_.getLoginDate().getTime()
+				/ MINUTE_IN_MILLIS));
 		jJConnectionStatisticsRepository.save(JJConnectionStatistics_);
 		JJConnectionStatistics_ = jJConnectionStatisticsRepository
 				.findOne(JJConnectionStatistics_.getId());

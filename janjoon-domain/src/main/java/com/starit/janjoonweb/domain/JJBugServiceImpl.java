@@ -151,10 +151,10 @@ public class JJBugServiceImpl implements JJBugService {
 
 	}
 
-	public List<JJBug> load(JJContact contact,JJCompany company, MutableInt size, int first,
-			int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters, JJProject project, JJProduct product,
-			JJVersion version) {
+	public List<JJBug> load(JJContact contact, JJCompany company,
+			MutableInt size, int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters,
+			JJProject project, JJProduct product, JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -180,12 +180,12 @@ public class JJBugServiceImpl implements JJBugService {
 					from.join("versioning").join("product").join("manager")
 							.get("company"), company));
 		}
-		
+
 		if (contact != null) {
-			Predicate condition1 = criteriaBuilder.equal(
-					from.get("createdBy"), contact);
-			Predicate condition2 = criteriaBuilder.equal(
-					from.get("updatedBy"), contact);
+			Predicate condition1 = criteriaBuilder.equal(from.get("createdBy"),
+					contact);
+			Predicate condition2 = criteriaBuilder.equal(from.get("updatedBy"),
+					contact);
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
@@ -294,8 +294,8 @@ public class JJBugServiceImpl implements JJBugService {
 		result.setMaxResults(pageSize);
 
 		if (size.getValue() == 0 && multiSortMeta != null)
-			return load(contact,company, size, first, pageSize, null, filters, project,
-					product, version);
+			return load(contact, company, size, first, pageSize, null, filters,
+					project, product, version);
 		else
 			return result.getResultList();
 

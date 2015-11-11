@@ -75,11 +75,12 @@ public class JJStatusServiceImpl implements JJStatusService {
 									+ "%"));
 				} else if (pairs.getKey().toString().contains("objet")) {
 
-					predicates.add(criteriaBuilder.equal(from.<String> get("objet"), pairs
-							.getValue().toString()));
+					predicates
+							.add(criteriaBuilder.equal(from
+									.<String> get("objet"), pairs.getValue()
+									.toString()));
 
-				}
-				else
+				} else
 					predicates.add(criteriaBuilder.like(
 							from.<String> get("name"), "%" + pairs.getValue()
 									+ "%"));

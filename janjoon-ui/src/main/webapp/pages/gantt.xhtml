@@ -74,10 +74,10 @@
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
-		<h:outputScript library="js" name="scrollTab.js" />		
+		<h:outputScript library="js" name="scrollTab.js" />
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock();"
-			listener="#{jJTaskBean.loadingData()}" />		
+			listener="#{jJTaskBean.loadingData()}" />
 		<p:panelGrid style="margin-top:10px;width:100%;">
 			<p:row style="width:100%;">
 				<p:column style="width:100%;">
@@ -160,7 +160,7 @@
 													value="planning" />
 											</p:menuitem>
 											<p:menuitem id="copyButton" icon="ui-icon-copy"
-												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task)}');"
+												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task,null)}');"
 												value="Copy" title="Copy" />
 										</p:splitButton>
 									</p:column>
@@ -234,13 +234,15 @@
 											<f:facet name="output">
 												<h:outputText value="#{taskData.startDate}"
 													style="width:90px">
-													<f:converter converterId="extendedDateTimeConverter" />
-													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-													<f:attribute name="timeZone" value="UCL" />
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
+													<!-- 													<f:converter converterId="extendedDateTimeConverter" /> -->
+													<!-- 													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" /> -->
+													<!-- 													<f:attribute name="timeZone" value="UCL" /> -->
 												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
-												<p:calendar size="" style="width:90px"  value="#{taskData.startDate}"
+												<p:calendar style="width:90px" value="#{taskData.startDate}"
 													navigator="true" pattern="yyyy/MM/dd HH:mm">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="taskData" value="#{taskData}" />
@@ -255,9 +257,8 @@
 										<p:cellEditor style="width: 112px;">
 											<f:facet name="output">
 												<h:outputText value="#{taskData.endDate}" style="width:90px">
-													<f:converter converterId="extendedDateTimeConverter" />
-													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-													<f:attribute name="timeZone" value="UCL" />
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
 												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
@@ -290,9 +291,8 @@
 											<f:facet name="output">
 												<h:outputText value="#{taskData.task.startDateReal}"
 													style="width:90px">
-													<f:converter converterId="extendedDateTimeConverter" />
-													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-													<f:attribute name="timeZone" value="UCL" />
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
 												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
@@ -313,9 +313,8 @@
 											<f:facet name="output">
 												<h:outputText value="#{taskData.task.endDateReal}"
 													style="width:90px">
-													<f:converter converterId="extendedDateTimeConverter" />
-													<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-													<f:attribute name="timeZone" value="UCL" />
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
 												</h:outputText>
 											</f:facet>
 											<f:facet name="input">
@@ -387,7 +386,8 @@
 							</pe:layoutPane>
 
 							<pe:layoutPane position="center"
-								styleContent="overflow-y: hidden;padding: 0px;" id="centerLayout">
+								styleContent="overflow-y: hidden;padding: 0px;"
+								id="centerLayout">
 
 								<f:facet name="header">#{messages.project_gantt_timeline_header}</f:facet>
 

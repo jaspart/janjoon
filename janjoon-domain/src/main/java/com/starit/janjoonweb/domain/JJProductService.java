@@ -14,7 +14,8 @@ public interface JJProductService {
 			boolean onlyActif, boolean all);
 
 	public List<JJProduct> load(JJCompany company, MutableInt size, int first,
-			int pageSize, List<SortMeta> multiSortMeta,Map<String, Object> filters);
+			int pageSize, List<SortMeta> multiSortMeta,
+			Map<String, Object> filters);
 
 	public JJProduct getJJProductWithName(String name);
 

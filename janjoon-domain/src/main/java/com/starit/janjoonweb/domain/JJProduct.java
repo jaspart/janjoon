@@ -71,9 +71,8 @@ public class JJProduct {
 		return (object instanceof JJProduct) && (getId() != null) ? getId()
 				.equals(((JJProduct) object).getId()) : (object == this);
 	}
-	
-	public JJCompany getCompany()
-	{
+
+	public JJCompany getCompany() {
 		return this.getManager().getCompany();
 	}
 }

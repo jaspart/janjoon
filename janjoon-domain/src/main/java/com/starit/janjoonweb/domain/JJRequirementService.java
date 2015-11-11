@@ -27,8 +27,8 @@ public interface JJRequirementService {
 			Map<JJProject, JJProduct> map, JJVersion version);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
-			JJCompany company, JJChapter chapter, JJProduct product,JJVersion version,
-			boolean onlyActif);
+			JJCompany company, JJChapter chapter, JJProduct product,
+			JJVersion version, boolean onlyActif);
 
 	public List<JJRequirement> getMineRequirements(JJCompany company,
 			JJContact creator, Map<JJProject, JJProduct> map,
@@ -37,8 +37,9 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJStatus status);
-	
-	//public List<JJRequirement> getInfinishedRequirement(JJCompany company,Map<JJProject, JJProduct> map,JJVersion version);
+
+	// public List<JJRequirement> getInfinishedRequirement(JJCompany
+	// company,Map<JJProject, JJProduct> map,JJVersion version);
 
 	public Long getReqCountByStaus(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version, JJStatus status,

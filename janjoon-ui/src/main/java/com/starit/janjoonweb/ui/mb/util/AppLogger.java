@@ -123,14 +123,14 @@ public class AppLogger {
 			Object object = args[0];
 			List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 			if (object instanceof JJBug) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
-				
-				
+
 				JJBug bug = (JJBug) object;
 				if (bug.getId() != null && bug.getEnabled()) {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
@@ -142,14 +142,14 @@ public class AppLogger {
 							bug.getStatus(), null, true);
 				}
 			} else if (object instanceof JJRequirement) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
-				
-				
+
 				JJRequirement requirement = (JJRequirement) object;
 				if (requirement.getId() != null && requirement.getEnabled()) {
 					JJRequirement oldRequirement = jJRequirementService
@@ -176,13 +176,14 @@ public class AppLogger {
 							null, message.getStatus(), null, true);
 				}
 			} else if (object instanceof JJBuild) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
-				
+
 				JJBuild build = (JJBuild) object;
 				if (build.getId() != null && build.getEnabled()) {
 					JJBuild oldTestcase = jJBuildService.findJJBuild(build
@@ -210,13 +211,14 @@ public class AppLogger {
 			Object object = args[0];
 			List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 			if (object instanceof JJBug) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
-				
+
 				JJBug bug = (JJBug) object;
 				if (bug.getId() != null) {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
@@ -227,13 +229,14 @@ public class AppLogger {
 							null, bug.getStatus(), null, true);
 				}
 			} else if (object instanceof JJRequirement) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
-				jJVersionBean.setVersionDataModelList(null);				
-				
+				jJVersionBean.setVersionDataModelList(null);
+
 				JJRequirement requirement = (JJRequirement) object;
 				if (requirement.getId() != null) {
 					JJRequirement oldRequirement = jJRequirementService
@@ -259,13 +262,14 @@ public class AppLogger {
 							null, message.getStatus(), null, true);
 				}
 			} else if (object instanceof JJBuild) {
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-						.getExternalContext().getSession(false);
+
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 				JJVersionBean jJVersionBean = (JJVersionBean) session
 						.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
-				
+
 				JJBuild build = (JJBuild) object;
 				if (build.getId() != null) {
 					JJBuild oldBuild = jJBuildService

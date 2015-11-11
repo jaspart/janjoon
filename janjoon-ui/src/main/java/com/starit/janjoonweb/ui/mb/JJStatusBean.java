@@ -67,16 +67,15 @@ public class JJStatusBean {
 	// private Boolean first;
 
 	public LazyStatusDataModel getLazyStatusList() {
-		if (lazyStatusList == null)
-		{
+		if (lazyStatusList == null) {
 			lazyStatusList = new LazyStatusDataModel(jJStatusService);
-		}			
+		}
 		return lazyStatusList;
 	}
 
 	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
 		this.lazyStatusList = lazyStatusList;
-		this.objectOptions=null;
+		this.objectOptions = null;
 	}
 
 	public String onEdit() {
@@ -134,10 +133,10 @@ public class JJStatusBean {
 	}
 
 	public SelectItem[] getObjectOptions() {
-		
+
 		if (objectOptions == null) {
-			
-			Set<String> objects=jJStatusService.getAllObject();
+
+			Set<String> objects = jJStatusService.getAllObject();
 			objectOptions = new SelectItem[objects.size() + 1];
 
 			objectOptions[0] = new SelectItem("", "Select");
@@ -146,11 +145,11 @@ public class JJStatusBean {
 				objectOptions[i + 1] = new SelectItem(comp, comp);
 				i++;
 
-			}		
+			}
 
 		}
 		return objectOptions;
-		
+
 	}
 
 	public void setObjectOptions(SelectItem[] objectOptions) {
@@ -368,14 +367,14 @@ public class JJStatusBean {
 		statusList = null;
 		pieChart = null;
 		lazyStatusList = null;
-		objectOptions=null;
+		objectOptions = null;
 
 	}
 
 	public void reset() {
 		setJJStatus_(null);
 		lazyStatusList = null;
-		objectOptions=null;
+		objectOptions = null;
 		statusList = null;
 		pieChart = null;
 		setCreateDialogVisible(false);

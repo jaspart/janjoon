@@ -30,54 +30,55 @@ import org.tmatesoft.svn.core.wc.SVNEventAction;
  * path, action performed upon the path and some other. 
  */
 public class WCEventHandler implements ISVNEventHandler {
-    /*
-     * progress  is  currently  reserved  for future purposes and now is always
-     * ISVNEventHandler.UNKNOWN  
-     */
-    public void handleEvent(SVNEvent event, double progress) {
-        /*
-         * Gets the current action. An action is represented by SVNEventAction.
-         */
-        SVNEventAction action = event.getAction();
-        if (action == SVNEventAction.ADD){
-            /*
-             * The item is scheduled for addition.
-             */
-            System.out.println("A     " + event.getChangelistName());
-            return;
-        }else if (action == SVNEventAction.COPY){
-            /*
-             * The  item  is  scheduled for addition  with history (copied,  in 
-             * other words).
-             */
-            System.out.println("A  +  " + event.getChangelistName());
-            return;
-        }else if (action == SVNEventAction.DELETE){
-            /*
-             * The item is scheduled for deletion. 
-             */
-            System.out.println("D     " + event.getChangelistName());
-            return;
-        } else if (action == SVNEventAction.LOCKED){
-            /*
-             * The item is locked.
-             */
-            System.out.println("L     " + event.getChangelistName());
-            return;
-        } else if (action == SVNEventAction.LOCK_FAILED){
-            /*
-             * Locking operation failed.
-             */
-            System.out.println("failed to lock    " + event.getChangelistName());
-            return;
-        }
-    }
+	/*
+	 * progress is currently reserved for future purposes and now is always
+	 * ISVNEventHandler.UNKNOWN
+	 */
+	public void handleEvent(SVNEvent event, double progress) {
+		/*
+		 * Gets the current action. An action is represented by SVNEventAction.
+		 */
+		SVNEventAction action = event.getAction();
+		if (action == SVNEventAction.ADD) {
+			/*
+			 * The item is scheduled for addition.
+			 */
+			System.out.println("A     " + event.getChangelistName());
+			return;
+		} else if (action == SVNEventAction.COPY) {
+			/*
+			 * The item is scheduled for addition with history (copied, in other
+			 * words).
+			 */
+			System.out.println("A  +  " + event.getChangelistName());
+			return;
+		} else if (action == SVNEventAction.DELETE) {
+			/*
+			 * The item is scheduled for deletion.
+			 */
+			System.out.println("D     " + event.getChangelistName());
+			return;
+		} else if (action == SVNEventAction.LOCKED) {
+			/*
+			 * The item is locked.
+			 */
+			System.out.println("L     " + event.getChangelistName());
+			return;
+		} else if (action == SVNEventAction.LOCK_FAILED) {
+			/*
+			 * Locking operation failed.
+			 */
+			System.out
+					.println("failed to lock    " + event.getChangelistName());
+			return;
+		}
+	}
 
-    /*
-     * Should be implemented to check if the current operation is cancelled. If 
-     * it is, this method should throw an SVNCancelException. 
-     */
-    public void checkCancelled() throws SVNCancelException {
-    }
+	/*
+	 * Should be implemented to check if the current operation is cancelled. If
+	 * it is, this method should throw an SVNCancelException.
+	 */
+	public void checkCancelled() throws SVNCancelException {
+	}
 
 }

@@ -184,32 +184,46 @@
 									var="todo" value="#{jjsprint.todoTask}"
 									emptyMessage="#{messages.label_notRecordFound}"
 									styleClass="planning-dataTable" rowKey="#{todo.id}"
-									sortOrder="DESCENDING"
+									sortOrder="DESCENDING" style="table-layout: fixed"
 									rendered="#{not empty jjsprint.todoTask}"
 									sortBy="#{todo.creationDate}">
 
-									<p:column style="width:1px">
-										<h:outputText id="todoIcon"
-											styleClass="ui-icon ui-icon-arrow-4" />
+									<p:column
+										style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
+
+										<p:panel id="todoIcon"
+											style="border: none;text-align: center;min-height: 40px;">
+											<h:outputText style="margin-left: 25%;"
+												styleClass="ui-icon ui-icon-arrow-4" />
+										</p:panel>
+										<!-- 										<p:graphicImage id="todoIcon" height="32" width="32" -->
+										<!-- 											library="images" name="drag.ico" style="margin-top: 35%;" /> -->
 										<p:draggable for="todoIcon" revert="true" scope="ProgTask"
 											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
 									</p:column>
-									<p:column style="width:80px" headerText="Task">
-										<p:graphicImage
-											rendered="#{todo.specification != null and todo.specification}"
-											library="images" name="doc.ico" width="16" height="16" />
-										<p:graphicImage rendered="#{todo.bug != null}"
-											library="images" name="bug.ico" width="16" height="16" />
-										<p:graphicImage
-											rendered="#{todo.bug == null and todo.requirement != null}"
-											library="images" name="function.ico" width="16" height="16" />
-										<p:graphicImage title="TestCase"
-											rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
-											library="images" name="test.ico" width="16" height="16" />
-										<h:outputText value="#{jJTaskBean.getDialogHeader(todo)}" />
+									<p:column style="width:80px"
+										headerText="#{messages.label_task}">
+										<h:panelGroup id="todoPanel">
+											<p:graphicImage
+												rendered="#{todo.specification != null and todo.specification}"
+												library="images" name="doc.ico" width="16" height="16" />
+											<p:graphicImage rendered="#{todo.bug != null}"
+												library="images" name="bug.ico" width="16" height="16" />
+											<p:graphicImage
+												rendered="#{todo.bug == null and todo.requirement != null}"
+												library="images" name="function.ico" width="16" height="16" />
+											<p:graphicImage title="TestCase"
+												rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
+												library="images" name="test.ico" width="16" height="16" />
+											<h:outputText
+												value="#{jJTaskBean.getDialogHeader(todo,'scrum')}" />
+										</h:panelGroup>
+										<p:draggable for="todoPanel" revert="true" scope="ProgTask"
+											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
 									</p:column>
 
-									<p:column style="width:10px" headerText="W">
+									<p:column style="width:10px" headerText="W"
+										rendered="#{!loginBean.mobile}">
 										<h:outputText value="#{todo.workloadPlanned}" />
 									</p:column>
 									<p:column style="width:20px">
@@ -235,7 +249,7 @@
 													value="scrum" />
 											</p:menuitem>
 											<p:menuitem id="copyButton" icon="ui-icon-copy"
-												onclick="copyName('#{jJTaskBean.getDialogHeader(todo)}');"
+												onclick="copyName('#{jJTaskBean.getDialogHeader(todo,null)}');"
 												value="Copy" title="Copy" />
 										</p:splitButton>
 									</p:column>
@@ -252,7 +266,8 @@
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
 										editable="true" editMode="cell" var="prog"
-										sortOrder="DESCENDING" styleClass="planning-dataTable"
+										style="table-layout: fixed" sortOrder="DESCENDING"
+										styleClass="planning-dataTable"
 										emptyMessage="#{messages.label_notRecordFound}"
 										value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
 										rendered="#{not empty jjsprint.progressTask}"
@@ -260,30 +275,43 @@
 										<p:ajax event="cellEdit"
 											listener="#{jJSprintBean.onCellEditTask}"
 											update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
-										<p:column style="width:1px">
-											<h:outputText id="progIcon"
-												styleClass="ui-icon ui-icon-arrow-4" />
+										<p:column
+											style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
+											<p:panel id="progIcon"
+												style="border: none;text-align: center;min-height: 40px;">
+												<h:outputText style="margin-left: 25%;"
+													styleClass="ui-icon ui-icon-arrow-4" />
+											</p:panel>
+											<!-- 											<p:graphicImage id="progIcon" height="32" width="32" -->
+											<!-- 												library="images" name="drag.ico" style="margin-top: 35%;" /> -->
 											<p:draggable for="progIcon" revert="true" scope="DoneTask"
 												disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
 										</p:column>
 
-										<p:column style="width:50px" headerText="Task">
-											<p:graphicImage
-												rendered="#{prog.specification != null and prog.specification}"
-												library="images" name="doc.ico" width="16" height="16" />
-											<p:graphicImage rendered="#{prog.bug != null}"
-												library="images" name="bug.ico" width="16" height="16" />
-											<p:graphicImage
-												rendered="#{prog.bug == null and prog.requirement != null}"
-												library="images" name="function.ico" width="16" height="16" />
+										<p:column style="width:50px"
+											headerText="{messages.label_task}">
+											<h:panelGroup id="progPanel">
+												<p:graphicImage
+													rendered="#{prog.specification != null and prog.specification}"
+													library="images" name="doc.ico" width="16" height="16" />
+												<p:graphicImage rendered="#{prog.bug != null}"
+													library="images" name="bug.ico" width="16" height="16" />
+												<p:graphicImage
+													rendered="#{prog.bug == null and prog.requirement != null}"
+													library="images" name="function.ico" width="16" height="16" />
 
-											<p:graphicImage
-												rendered="#{prog.bug == null and prog.requirement == null and prog.testcase != null}"
-												library="images" name="test.ico" width="16" height="16" />
-											<h:outputText value="#{jJTaskBean.getDialogHeader(prog)}" />
+												<p:graphicImage
+													rendered="#{prog.bug == null and prog.requirement == null and prog.testcase != null}"
+													library="images" name="test.ico" width="16" height="16" />
+												<h:outputText
+													value="#{jJTaskBean.getDialogHeader(prog,'scrum')}" />
+											</h:panelGroup>
+											<p:draggable for="progPanel" revert="true" scope="DoneTask"
+												disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
 										</p:column>
 
-										<p:column style="width:30px" headerText="Who">
+										<p:column style="width:30px" headerText="Who"
+											rendered="#{!loginBean.mobile}">
 											<h:outputText value="#{prog.assignedTo.name}" />
 										</p:column>
 										<p:column style="width:20px">
@@ -306,7 +334,7 @@
 														value="scrum" />
 												</p:menuitem>
 												<p:menuitem id="copyButton" icon="ui-icon-copy"
-													onclick="copyName('#{jJTaskBean.getDialogHeader(prog)}');"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(prog,null)}');"
 													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>
@@ -324,11 +352,13 @@
 									<p:dataTable id="done" styleClass="planning-dataTable"
 										emptyMessage="#{messages.label_notRecordFound}" var="done"
 										value="#{jjsprint.doneTask}" rowKey="#{done.id}"
+										style="table-layout: fixed"
 										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
 										scrollHeight="250" sortOrder="DESCENDING"
 										sortBy="#{prog.endDateReal}">
 
-										<p:column style="width:80px" headerText="Task">
+										<p:column style="width:80px"
+											headerText="#{messages.label_task}">
 											<p:graphicImage
 												rendered="#{done.specification != null and done.specification}"
 												library="images" name="doc.ico" width="16" height="16" />
@@ -342,10 +372,12 @@
 												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
 												library="images" name="test.ico" width="16" height="16" />
 
-											<h:outputText value="#{jJTaskBean.getDialogHeader(done)}" />
+											<h:outputText
+												value="#{jJTaskBean.getDialogHeader(done,'scrum')}" />
 										</p:column>
 
-										<p:column style="width:10px" headerText="Diff">
+										<p:column style="width:10px" headerText="Diff"
+											rendered="#{!loginBean.mobile}">
 											<h:outputText
 												value="#{done.workloadPlanned-done.workloadReal}" />
 										</p:column>
@@ -369,7 +401,7 @@
 														value="scrum" />
 												</p:menuitem>
 												<p:menuitem id="copyButton" icon="ui-icon-copy"
-													onclick="copyName('#{jJTaskBean.getDialogHeader(done)}');"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(done,null)}');"
 													value="Copy" title="Copy" />
 											</p:splitButton>
 										</p:column>

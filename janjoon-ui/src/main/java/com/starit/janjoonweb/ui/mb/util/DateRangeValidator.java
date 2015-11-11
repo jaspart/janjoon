@@ -11,10 +11,12 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import org.primefaces.component.calendar.Calendar;
+import org.primefaces.component.spinner.Spinner;
 
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.ui.mb.JJSprintBean;
+import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.JJTaskBean.TaskData;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
@@ -148,18 +150,18 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (taskData.getTask().getSprint() != null) {
-			if (testedDate.compareTo(taskData.getTask().getSprint()
-					.getStartDate())
-					* taskData.getTask().getSprint().getEndDate()
-							.compareTo(testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_StartAfterEndORStartBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(taskData.getTask().getSprint()
+			// .getStartDate())
+			// * taskData.getTask().getSprint().getEndDate()
+			// .compareTo(testedDate) < 0) {
+			// FacesMessage facesMessage = MessageFactory
+			// .getMessage(
+			// "validator_date_StartAfterEndORStartBeforeStart",
+			// MessageFactory.getMessage("label_task", "")
+			// .getDetail(), "Sprint");
+			// facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// throw new ValidatorException(facesMessage);
+			// }
 		} else {
 			if (taskData.getTask().getProject() != null
 					&& taskData.getTask().getProject().getStartDate() != null
@@ -201,18 +203,18 @@ public class DateRangeValidator implements Validator {
 			throw new ValidatorException(facesMessage);
 		}
 		if (taskData.getTask().getSprint() != null) {
-			if (testedDate.compareTo(taskData.getTask().getSprint()
-					.getStartDate())
-					* taskData.getTask().getSprint().getEndDate()
-							.compareTo(testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_startAfterEndORStartBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(taskData.getTask().getSprint()
+			// .getStartDate())
+			// * taskData.getTask().getSprint().getEndDate()
+			// .compareTo(testedDate) < 0) {
+			// FacesMessage facesMessage = MessageFactory
+			// .getMessage(
+			// "validator_date_startAfterEndORStartBeforeStart",
+			// MessageFactory.getMessage("label_task", "")
+			// .getDetail(), "Sprint");
+			// facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// throw new ValidatorException(facesMessage);
+			// }
 		} else {
 			if (taskData.getTask().getProject() != null
 					&& taskData.getTask().getProject().getStartDate() != null
@@ -254,18 +256,18 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (taskData.getTask().getSprint() != null) {
-			if (testedDate.compareTo(taskData.getTask().getSprint()
-					.getStartDate())
-					* taskData.getTask().getSprint().getEndDate()
-							.compareTo(testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(taskData.getTask().getSprint()
+			// .getStartDate())
+			// * taskData.getTask().getSprint().getEndDate()
+			// .compareTo(testedDate) < 0) {
+			// FacesMessage facesMessage = MessageFactory
+			// .getMessage(
+			// "validator_date_endAfterEndOREndBeforeStart",
+			// MessageFactory.getMessage("label_task", "")
+			// .getDetail(), "Sprint");
+			// facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// throw new ValidatorException(facesMessage);
+			// }
 		} else {
 			if (taskData.getTask().getProject() != null
 					&& taskData.getTask().getProject().getEndDate() != null
@@ -311,18 +313,18 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (taskData.getTask().getSprint() != null) {
-			if (testedDate.compareTo(taskData.getTask().getSprint()
-					.getStartDate())
-					* taskData.getTask().getSprint().getEndDate()
-							.compareTo(testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(taskData.getTask().getSprint()
+			// .getStartDate())
+			// * taskData.getTask().getSprint().getEndDate()
+			// .compareTo(testedDate) < 0) {
+			// FacesMessage facesMessage = MessageFactory
+			// .getMessage(
+			// "validator_date_endAfterEndOREndBeforeStart",
+			// MessageFactory.getMessage("label_task", "")
+			// .getDetail(), "Sprint");
+			// facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// throw new ValidatorException(facesMessage);
+			// }
 		} else {
 			if (taskData.getTask().getProject() != null
 					&& taskData.getTask().getProject().getEndDate() != null
@@ -375,17 +377,21 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (sprint != null) {
-			if (testedDate.compareTo(sprint.getStartDate())
-					* CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(
-							testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_startAfterEndORStartBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(sprint.getStartDate())
+			// * CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(
+			// testedDate) < 0) {
+			// // FacesMessage facesMessage = MessageFactory
+			// // .getMessage(
+			// // "validator_date_startAfterEndORStartBeforeStart",
+			// // MessageFactory.getMessage("label_task", "")
+			// // .getDetail(), "Sprint");
+			// // facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// // throw new ValidatorException(facesMessage);
+			//
+			// testedDate = sprint.getStartDate();
+			// ((Calendar) component).setValue(testedDate);
+			// task.setStartDatePlanned(testedDate);
+			// }
 		} else {
 			if (task.getProject() != null
 					&& task.getProject().getStartDate() != null
@@ -420,6 +426,7 @@ public class DateRangeValidator implements Validator {
 
 		Calendar taskStartDatePlanned = (Calendar) component.getAttributes()
 				.get("taskStartDatePlanned");
+		Spinner workload = (Spinner) component.getAttributes().get("workload");
 
 		Date start = (Date) taskStartDatePlanned.getValue();
 
@@ -437,17 +444,36 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (sprint != null) {
-			if (testedDate.compareTo(sprint.getStartDate())
-					* CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(
-							testedDate) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
-				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(facesMessage);
-			}
+			// if (testedDate.compareTo(sprint.getStartDate())
+			// * CalendarUtil.getAfterDay(sprint.getEndDate()).compareTo(
+			// testedDate) < 0) {
+			// // FacesMessage facesMessage = MessageFactory
+			// // .getMessage(
+			// // "validator_date_endAfterEndOREndBeforeStart",
+			// // MessageFactory.getMessage("label_task", "")
+			// // .getDetail(), "Sprint");
+			// // facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+			// // throw new ValidatorException(facesMessage);
+			// ContactCalendarUtil calendarUtil;
+			// if (task.getAssignedTo() != null) {
+			// calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
+			//
+			// } else {
+			// calendarUtil = new ContactCalendarUtil(task.getProject()
+			// .getManager().getCompany());
+			//
+			// }
+			//
+			// if (workload.getValue() != null)
+			// task.setWorkloadPlanned((Integer) workload.getValue());
+			//
+			// calendarUtil.getEndDate(task, JJTaskBean.Planned, null);
+			// testedDate = task.getEndDatePlanned();
+			// ((Calendar) component).setValue(testedDate);
+			//
+			// ((JJTaskBean) LoginBean.findBean("jJTaskBean")).setTask(task);
+			//
+			// }
 		} else {
 			if (task.getProject() != null
 					&& task.getProject().getEndDate() != null
@@ -520,7 +546,6 @@ public class DateRangeValidator implements Validator {
 				} else {
 					// View Task ValidatOr
 					JJSprint sprint = (JJSprint) sprintComponent.getValue();
-
 					if (edition.equalsIgnoreCase("startDatePlanned")) {
 						validateTask_startDatePlanned(component, testedDate,
 								sprint, task);

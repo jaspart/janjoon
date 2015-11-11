@@ -69,7 +69,7 @@
 		</p:tabView>
 
 		<p:dialog id="viewTaskDialog"
-			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task)}"
+			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="false">
@@ -88,8 +88,8 @@
 						</ui:include>
 						<f:facet name="footer">
 							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
-								actionListener="#{jJTaskBean.updateTask(jJTaskBean.task,'main')}"
-								value="#{messages.label_update} Task"
+								actionListener="#{jJTaskBean.updateTask('main')}"
+								value="#{messages.label_update}"
 								onstart="PF('viewtaskBlockUIWidget').block()"
 								style="margin-top: 5px;"
 								oncomplete="PF('viewtaskBlockUIWidget').unblock();"

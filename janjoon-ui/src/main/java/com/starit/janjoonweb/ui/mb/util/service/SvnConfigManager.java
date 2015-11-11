@@ -91,8 +91,8 @@ public class SvnConfigManager extends AbstractConfigManager {
 				ourClientManager.getCommitClient().doMkDir(
 						new SVNURL[] { svnURL },
 						"make " + productName + " directory");
-			} catch (SVNException e) {			
-				
+			} catch (SVNException e) {
+
 			}
 
 			try {
@@ -114,14 +114,14 @@ public class SvnConfigManager extends AbstractConfigManager {
 						svnURL = svnURL.appendPath(version, false);
 					}
 				}
-			} catch (SVNException e1) {				
+			} catch (SVNException e1) {
 				e1.printStackTrace();
 			}
 
 			try {
 				svnURL = SVNURL.parseURIDecoded(url);
 				svnURL = svnURL.appendPath(productName, false);
-			} catch (SVNException e) {				
+			} catch (SVNException e) {
 				e.printStackTrace();
 			}
 
@@ -156,7 +156,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 				return false;
 			else
 				return true;
-		} catch (SVNException e) {			
+		} catch (SVNException e) {
 			return false;
 		}
 	}

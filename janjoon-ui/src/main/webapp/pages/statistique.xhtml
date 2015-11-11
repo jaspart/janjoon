@@ -44,9 +44,8 @@
 							value="#{messages.admin_statistique_table_logindate_title}" />
 					</f:facet>
 					<h:outputText value="#{statistique.loginDate}">
-						<f:converter converterId="extendedDateTimeConverter" />
-						<f:attribute name="pattern" value="dd/MM/yyyy hh:mm" />
-						<f:attribute name="timeZone" value="UCL" />
+						<f:convertDateTime type="date" locale="#{localeBean.locale}"
+							pattern="dd/MM/yyyy HH:mm" />
 					</h:outputText>
 				</p:column>
 				<p:column>
@@ -55,9 +54,8 @@
 							value="#{messages.admin_statistique_table_logoutdate_title}" />
 					</f:facet>
 					<h:outputText value="#{statistique.logoutDate}">
-						<f:converter converterId="extendedDateTimeConverter" />
-						<f:attribute name="pattern" value="dd/MM/yyyy hh:mm" />
-						<f:attribute name="timeZone" value="UCL" />
+						<f:convertDateTime type="date" locale="#{localeBean.locale}"
+							pattern="dd/MM/yyyy HH:mm" />
 					</h:outputText>
 				</p:column>
 				<p:column>

@@ -47,7 +47,7 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 @RooSerializable
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
 public class JJBugBean {
-	
+
 	public static final String BUG_SUBSCRIPTION_RATE = "bug_subscription_rate";
 	public static final String BUG_SUBSCRIPTION_CANCEL_RATE = "bug_subscription_cancel_rate";
 
@@ -1018,7 +1018,8 @@ public class JJBugBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(BUG_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1042,7 +1043,8 @@ public class JJBugBean {
 						.setMainMessages(null);
 			}
 
-			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1072,7 +1074,8 @@ public class JJBugBean {
 						.setMainMessages(null);
 			}
 
-			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1107,7 +1110,8 @@ public class JJBugBean {
 		((JJContactBean) LoginBean.findBean("jJContactBean"))
 				.updateJJContact(contact);
 
-		FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_RATE);
+		FacesMessage facesMessage = MessageFactory
+				.getMessage(BUG_SUBSCRIPTION_RATE);
 		facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);

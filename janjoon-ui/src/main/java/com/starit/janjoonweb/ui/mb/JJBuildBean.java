@@ -228,7 +228,7 @@ public class JJBuildBean {
 		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l),
 				buildUtils);
 		BuildUtil buildUtil = buildUtils.get(i);
-		JJVersion version = buildUtil.getVersion();		
+		JJVersion version = buildUtil.getVersion();
 		JJBuild b = new JJBuild();
 		b.setName(buildName);
 		b.setEnabled(true);

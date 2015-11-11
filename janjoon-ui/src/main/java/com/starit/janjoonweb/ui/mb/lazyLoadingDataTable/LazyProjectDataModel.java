@@ -62,7 +62,8 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 
 		List<JJProject> data = new ArrayList<JJProject>();
 		MutableInt size = new MutableInt(0);
-		data = projectService.load(company, size, first, pageSize,multiSortMeta,filters);
+		data = projectService.load(company, size, first, pageSize,
+				multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

@@ -83,47 +83,45 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 		MutableInt size = new MutableInt(0);
 		SelectOneMenu mineComponent = (SelectOneMenu) LoginBean
 				.findComponent("mineBugs");
-		JJContact contact=null;		
-		System.out.println("VALUE: "+mineComponent.getValue());
-		if(mineComponent.getValue() instanceof Boolean)
-		{
-			Boolean mine= (Boolean) mineComponent.getValue();
-			if(mine != null && mine)
-				contact=((LoginBean) LoginBean.findBean("loginBean"))
+		JJContact contact = null;
+		System.out.println("VALUE: " + mineComponent.getValue());
+		if (mineComponent.getValue() instanceof Boolean) {
+			Boolean mine = (Boolean) mineComponent.getValue();
+			if (mine != null && mine)
+				contact = ((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact();
-			else if(mine == null)
-			{
-				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean.findBean("bugDataTableOptions"));
-				if(bugDataTableOptions.isMine())
-					contact=((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			else if (mine == null) {
+				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean
+						.findBean("bugDataTableOptions"));
+				if (bugDataTableOptions.isMine())
+					contact = ((LoginBean) LoginBean.findBean("loginBean"))
+							.getContact();
 			}
-		}else if(mineComponent.getValue() instanceof String)
-		{
-			String mine= (String) mineComponent.getValue();
-			if(mine != null && mine.equalsIgnoreCase("true"))
-				contact=((LoginBean) LoginBean.findBean("loginBean"))
+		} else if (mineComponent.getValue() instanceof String) {
+			String mine = (String) mineComponent.getValue();
+			if (mine != null && mine.equalsIgnoreCase("true"))
+				contact = ((LoginBean) LoginBean.findBean("loginBean"))
 						.getContact();
-			else if(mine == null)
-			{
-				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean.findBean("bugDataTableOptions"));
-				if(bugDataTableOptions.isMine())
-					contact=((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			else if (mine == null) {
+				BugDataTableOptions bugDataTableOptions = ((BugDataTableOptions) LoginBean
+						.findBean("bugDataTableOptions"));
+				if (bugDataTableOptions.isMine())
+					contact = ((LoginBean) LoginBean.findBean("loginBean"))
+							.getContact();
 			}
 		}
-		
-			
-		data = bugService.load(contact,((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact().getCompany(), size, first, pageSize,
-				multiSortMeta, filters, project, product, version);
+
+		data = bugService.load(contact, ((LoginBean) LoginBean
+				.findBean("loginBean")).getContact().getCompany(), size, first,
+				pageSize, multiSortMeta, filters, project, product, version);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
 		int dataSize = data.size();
 		((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(false)).setAttribute("bugDataTableOptions",
-				new BugDataTableOptions(first, multiSortMeta, filters,contact != null));
+				new BugDataTableOptions(first, multiSortMeta, filters,
+						contact != null));
 		if (dataSize > pageSize) {
 			try {
 				return data.subList(first, first + pageSize);

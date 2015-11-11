@@ -119,25 +119,24 @@ public class CalendarUtil {
 		String day_format = properties.getProperty("day.format");
 		if (day_format == null)
 			day_format = "dd/MM/yyyy";
-		
+
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		holidays = new ArrayList<Date>();
 
 		for (Object key : Collections.list(properties.keys())) {
 			if (key.toString().contains(HOLIDAYS)) {
-				String hol = properties.getProperty((String) key)
-						.toString().trim()
+				String hol = properties.getProperty((String) key).toString()
+						.trim()
 						+ year;
 				try {
 					holidays.add(getZeroTimeDate(new SimpleDateFormat(
 							day_format).parse(hol)));
 				} catch (ParseException e) {
 
-				}		
+				}
 
 			}
 		}
-		
 
 	}
 

@@ -118,14 +118,14 @@ public class ContactCalendarUtil {
 
 			if (contact.getCalendar() != null) {
 				if (!contact.getCalendar().isEmpty()) {
-					
-					String pattern = "dd/MM/yyyy HH:mm";					
+
+					String pattern = "dd/MM/yyyy HH:mm";
 
 					for (Object key : Collections.list(properties.keys())) {
 						if (key.toString().contains(VACATION)) {
 
-							String hol = properties.getProperty((String) key).toString()
-									.trim();
+							String hol = properties.getProperty((String) key)
+									.toString().trim();
 							int index = hol.indexOf("to");
 							String s = hol.substring(0, index - 1);
 							if (s.length() < pattern.length())
@@ -138,10 +138,10 @@ public class ContactCalendarUtil {
 								s = s + " 18:00";
 							Date date2 = new SimpleDateFormat(
 									"dd/MM/yyyy HH:mm").parse(s);
-							vacation.add(new ChunkPeriod(date1, date2));						
+							vacation.add(new ChunkPeriod(date1, date2));
 
 						}
-					}					
+					}
 				}
 			}
 		}
@@ -190,7 +190,8 @@ public class ContactCalendarUtil {
 		this.vacation = vacation;
 	}
 
-	public String removeVacation(String calendar,Date date1, Date date2) throws IOException {
+	public String removeVacation(String calendar, Date date1, Date date2)
+			throws IOException {
 
 		Properties properties = new Properties();
 
@@ -199,23 +200,23 @@ public class ContactCalendarUtil {
 		}
 		properties.load(new StringReader(calendar));
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		String nl = "";	
-		
+		String nl = "";
+
 		if (date1.before(date2)) {
-			nl =df.format(date1) + " to " + df.format(date2);
+			nl = df.format(date1) + " to " + df.format(date2);
 
 		} else {
-			nl =df.format(date2) + " to " + df.format(date1);
+			nl = df.format(date2) + " to " + df.format(date1);
 		}
-		
+
 		for (Object key : Collections.list(properties.keys())) {
 			if (key.toString().contains(VACATION)
-					&& properties.getProperty((String) key).equalsIgnoreCase(nl)) {
+					&& properties.getProperty((String) key)
+							.equalsIgnoreCase(nl)) {
 				properties.remove(key);
 			}
 		}
-		
-		
+
 		StringWriter writer = new StringWriter();
 		properties.list(new PrintWriter(writer));
 		return writer.getBuffer().toString();

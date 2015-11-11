@@ -178,9 +178,8 @@
 						sortBy="#{bug.creationDate}"
 						style="width: 15% !important;height: 5px !important;">
 						<h:outputText value="#{bug.creationDate}">
-							<f:converter converterId="extendedDateTimeConverter" />
-							<f:attribute name="pattern" value="dd/MM/yyyy HH:mm" />
-							<f:attribute name="timeZone" value="UCL" />
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy HH:mm" />
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{messages.bug_table_criticity_title}"

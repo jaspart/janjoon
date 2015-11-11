@@ -13,7 +13,7 @@ public interface JJWorkflowService {
 
 	public List<JJWorkflow> getObjectWorkFlows(String object, JJStatus source,
 			JJStatus target, String actionName, boolean enabled);
-	
+
 	public Set<String> getAllObject();
 
 	public List<JJWorkflow> load(MutableInt size, int first, int pageSize,

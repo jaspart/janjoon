@@ -77,7 +77,7 @@ public class DevelopmentBean implements Serializable {
 
 	@Autowired
 	private JJMessageService jJMessageService;
-	
+
 	@Autowired
 	private JJCriticityService jJCriticityService;
 
@@ -587,7 +587,8 @@ public class DevelopmentBean implements Serializable {
 		message.setVersioning(version);
 		message.setEnabled(true);
 		message.setTask(task);
-		message.setCriticity(jJCriticityService.getCriticityByName("INFO", true));
+		message.setCriticity(jJCriticityService
+				.getCriticityByName("INFO", true));
 		message.setMessage(comment);
 		message.setDescription("Message For" + task.getName() + "nl"
 				+ task.getDescription());
@@ -663,7 +664,8 @@ public class DevelopmentBean implements Serializable {
 
 	public void startTask() {
 		task.setStartDateReal(new Date());
-		jJTaskBean.updateTask(task, "dev");
+		jJTaskBean.setTask(task);
+		jJTaskBean.updateTask("dev");
 		// task=jJTaskService.findJJTask(task.getId());
 		// tasks = jJTaskService.getTasksByProduct(product, project);
 

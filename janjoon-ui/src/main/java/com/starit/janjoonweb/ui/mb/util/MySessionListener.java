@@ -42,14 +42,15 @@ public class MySessionListener implements HttpSessionListener {
 	 * 
 	 * @throws IOException
 	 */
-	public void prepareLogoutInfoAndLogoutActiveUser(HttpSession httpSession) throws IOException {		
-//		logger.info("Contact logged out");		
-//		ExternalContext ec = fContext.getExternalContext();	
-//		httpSession.invalidate();
-//		SecurityContextHolder.clearContext();
-//		ec.redirect(FacesContext.getCurrentInstance()
-//				.getExternalContext().getRequestContextPath()+"/"+timeoutPage);
-		
-		//HttpRequest request;
-				}
+	public void prepareLogoutInfoAndLogoutActiveUser(HttpSession httpSession)
+			throws IOException {
+		// logger.info("Contact logged out");
+		// ExternalContext ec = fContext.getExternalContext();
+		// httpSession.invalidate();
+		// SecurityContextHolder.clearContext();
+		// ec.redirect(FacesContext.getCurrentInstance()
+		// .getExternalContext().getRequestContextPath()+"/"+timeoutPage);
+
+		// HttpRequest request;
+	}
 }

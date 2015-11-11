@@ -264,12 +264,13 @@
 						<p:row>
 							<p:column>
 								<p:outputLabel for="note"
-									value="#{messages.specification_create_note_watermark}" />
+									value="#{messages.specification_create_note_watermark} : " />
 							</p:column>
 							<p:column colspan="3">
 								<p:inputTextarea id="note" rows="3" cols="100"
+									placeholder="#{messages.specification_create_note_watermark}"
 									value="#{requirementBean.requirement.note}" autoResize="false"
-									style="width: 97%; margin-left:auto; margin-right:auto;" />
+									style="resize: none;width: 97%; margin-left:auto; margin-right:auto;" />
 							</p:column>
 						</p:row>
 						<f:facet name="footer">

@@ -44,16 +44,15 @@ public class JJWorkflowBean {
 
 	public LazyWorkFlowDataTable getWorkflowList() {
 
-		if (workflowList == null)
-		{
+		if (workflowList == null) {
 			workflowList = new LazyWorkFlowDataTable(jJWorkflowService);
-		}			
+		}
 		return workflowList;
 	}
 
 	public void setWorkflowList(LazyWorkFlowDataTable workflowList) {
 		this.workflowList = workflowList;
-		this.objectOptions=null;
+		this.objectOptions = null;
 	}
 
 	public JJWorkflow getSelectedWorkFlow() {
@@ -73,10 +72,10 @@ public class JJWorkflowBean {
 	}
 
 	public SelectItem[] getObjectOptions() {
-		
+
 		if (objectOptions == null) {
-			
-			Set<String> objects=jJWorkflowService.getAllObject();
+
+			Set<String> objects = jJWorkflowService.getAllObject();
 			objectOptions = new SelectItem[objects.size() + 1];
 
 			objectOptions[0] = new SelectItem("", "Select");
@@ -85,11 +84,11 @@ public class JJWorkflowBean {
 				objectOptions[i + 1] = new SelectItem(comp, comp);
 				i++;
 
-			}		
+			}
 
 		}
 		return objectOptions;
-		
+
 	}
 
 	public void setObjectOptions(SelectItem[] objectOptions) {
@@ -105,7 +104,7 @@ public class JJWorkflowBean {
 				MessageFactory.getMessage("label_workflow", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		workflowList = null;
-		this.objectOptions=null;
+		this.objectOptions = null;
 
 	}
 
@@ -142,7 +141,7 @@ public class JJWorkflowBean {
 
 		setJJWorkflow_(null);
 		workflowList = null;
-		this.objectOptions=null;
+		this.objectOptions = null;
 		setCreateDialogVisible(false);
 	}
 

@@ -84,11 +84,13 @@ public class FileMap {
 	public void setMode(String mode) {
 		this.mode = mode;
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof FileMap) && (getFile() != null) ? getFile().getAbsolutePath().equals(
-				((FileMap) object).getFile().getAbsolutePath()) : (object == this);
+		return (object instanceof FileMap) && (getFile() != null) ? getFile()
+				.getAbsolutePath().equals(
+						((FileMap) object).getFile().getAbsolutePath())
+				: (object == this);
 	}
 
 }

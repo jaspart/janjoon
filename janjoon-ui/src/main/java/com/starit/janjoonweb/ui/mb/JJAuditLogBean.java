@@ -17,9 +17,8 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiqu
 @RooJsfManagedBean(entity = JJAuditLog.class, beanName = "jJAuditLogBean")
 public class JJAuditLogBean {
 
-	
 	private LazyConnectionStatistiquesDataModel connectionStatistiquesListTable;
-	
+
 	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {
 
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
@@ -31,13 +30,12 @@ public class JJAuditLogBean {
 			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
 					jJAuditLogService, company);
 		return connectionStatistiquesListTable;
-	}	
-	
+	}
+
 	public void setConnectionStatistiquesListTable(
 			LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
 		this.connectionStatistiquesListTable = connectionStatistiquesListTable;
 	}
-
 
 	public void saveJJAuditLog(JJAuditLog b) {
 		jJAuditLogService.saveJJAuditLog(b);

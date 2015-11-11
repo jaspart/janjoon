@@ -651,11 +651,12 @@ public class JJContactBean {
 
 	}
 
-	public void removeVacation(LoginBean loginBean, JJContact jJContact,Date start,Date end) {
+	public void removeVacation(LoginBean loginBean, JJContact jJContact,
+			Date start, Date end) {
 		calendarUtil = new ContactCalendarUtil(jJContact);
 		try {
 			jJContact.setCalendar(calendarUtil.removeVacation(
-					jJContact.getCalendar(), start,end));
+					jJContact.getCalendar(), start, end));
 			jJContact.setUpdatedDate(new Date());
 			jJContactService.updateJJContact(jJContact);
 
@@ -692,13 +693,33 @@ public class JJContactBean {
 		session.setAttribute("jJContactBean", new JJContactBean());
 	}
 
-	public void updateUserConfiguration(LoginBean loginBean) {
+	public void updateUserConfiguration(LoginBean loginBean,
+			JJRequirementBean jJRequirementBean) {
 		JJContact jJContact = contactUtil.getJJContact(jJContactService
 				.getContactByEmail(loginBean.getUsername(), true));
+		List<JJCategory> oldCategories = new ArrayList<>(
+				jJContact.getCategories());
 		jJContact.setUpdatedDate(new Date());
 		jJContact.setCategories(new HashSet<JJCategory>(this
 				.getLoggedContactCategories()));
 		jJContactService.updateJJContact(jJContact);
+
+		if (jJRequirementBean.getTableDataModelList() != null) {
+			for (JJCategory category : oldCategories) {
+				if (!this.getLoggedContactCategories().contains(category)) {
+					jJRequirementBean.updateTemplate(category.getId(), null,
+							true, false);
+				}
+			}
+
+			for (JJCategory category : this.getLoggedContactCategories()) {
+				if (!oldCategories.contains(category)) {
+					jJRequirementBean.updateTemplate(category.getId(), null,
+							true, true);
+				}
+			}
+		}
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		loginBean.getAuthorisationService().setSession(session);

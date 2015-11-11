@@ -14,7 +14,7 @@ public interface JJStatusService {
 	// New Generic
 
 	public JJStatus getOneStatus(String name, String object, boolean onlyActif);
-	
+
 	public Set<String> getAllObject();
 
 	public List<JJStatus> getStatus(String object, boolean onlyActif,
@@ -22,6 +22,6 @@ public interface JJStatusService {
 
 	public List<String> getTablesName();
 
-	public List<JJStatus> load(MutableInt size, int first, int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters);
+	public List<JJStatus> load(MutableInt size, int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters);
 }

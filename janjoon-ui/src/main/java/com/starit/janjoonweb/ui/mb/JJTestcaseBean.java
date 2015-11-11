@@ -81,10 +81,9 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
 public class JJTestcaseBean {
 
-	
 	public static final String TEST_SUBSCRIPTION_RATE = "test_subscription_rate";
 	public static final String TEST_SUBSCRIPTION_CANCEL_RATE = "test_subscription_cancel_rate";
-	
+
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
 
@@ -226,8 +225,8 @@ public class JJTestcaseBean {
 			if (rowNames == null || rowNames.isEmpty()) {
 
 				colNames = jJTestcaseService.getImportTestcases(category,
-						LoginBean.getProject(), LoginBean.getProduct(),LoginBean.getVersion(), true,
-						false);
+						LoginBean.getProject(), LoginBean.getProduct(),
+						LoginBean.getVersion(), true, false);
 				// rowNames=new ArrayList<Object>();
 				if (colNames != null && !colNames.isEmpty()) {
 
@@ -408,7 +407,7 @@ public class JJTestcaseBean {
 
 		testCaseRecaps = new ArrayList<TestCaseRecap>();
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				chapter,LoginBean.getVersion(), null, true, true, false);
+				chapter, LoginBean.getVersion(), null, true, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -479,8 +478,9 @@ public class JJTestcaseBean {
 						((LoginBean) LoginBean.findBean("loginBean"))
 								.getAuthorizedMap("testcase",
 										LoginBean.getProject(),
-										LoginBean.getProduct()), LoginBean.getVersion(), null,
-						chapter, true, true, true, false, null);
+										LoginBean.getProduct()), LoginBean
+								.getVersion(), null, chapter, true, true, true,
+						false, null);
 
 		return requirements;
 	}
@@ -1228,7 +1228,7 @@ public class JJTestcaseBean {
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
 		List<JJTestcase> testcases = jJTestcaseService.getTestcases(null,
-				requirement.getChapter(),null, null, false, false, false);
+				requirement.getChapter(), null, null, false, false, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -1293,7 +1293,8 @@ public class JJTestcaseBean {
 
 			List<JJTestcase> testWithOutChapter = jJTestcaseService
 					.getImportTestcases(category, LoginBean.getProject(),
-							LoginBean.getProduct(),LoginBean.getVersion(), true, true);
+							LoginBean.getProduct(), LoginBean.getVersion(),
+							true, true);
 			for (JJTestcase test : testWithOutChapter) {
 				String type = getType(test);
 				TreeNode newNode3 = new DefaultTreeNode(type, "TC-"
@@ -1336,8 +1337,8 @@ public class JJTestcaseBean {
 							.getCompany(), null, ((LoginBean) LoginBean
 							.findBean("loginBean")).getAuthorizedMap(
 							"testcase", LoginBean.getProject(),
-							LoginBean.getProduct()), LoginBean.getVersion(), null, chapter, true,
-					true, true, false, null);
+							LoginBean.getProduct()), LoginBean.getVersion(),
+					null, chapter, true, true, true, false, null);
 
 			if (rqs.size() > 0) {
 				int i = 0;
@@ -1421,7 +1422,8 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null,LoginBean.getVersion(), build, true, true, false);
+						requirement, null, LoginBean.getVersion(), build, true,
+						true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1569,7 +1571,8 @@ public class JJTestcaseBean {
 					.getRequirementChildrenWithChapterSortedByOrder(
 							((LoginBean) LoginBean.findBean("loginBean"))
 									.getContact().getCompany(), parent,
-							LoginBean.getProduct(),LoginBean.getVersion(), onlyActif);
+							LoginBean.getProduct(), LoginBean.getVersion(),
+							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)
@@ -1638,7 +1641,8 @@ public class JJTestcaseBean {
 		}
 
 		List<JJTestcase> withOutChapter = jJTestcaseService.getImportTestcases(
-				category, project, LoginBean.getProduct(),LoginBean.getVersion(),true, true);
+				category, project, LoginBean.getProduct(),
+				LoginBean.getVersion(), true, true);
 
 		if (withOutChapter != null && !withOutChapter.isEmpty()) {
 			paragraph.add(new Chunk("\n "
@@ -1757,7 +1761,8 @@ public class JJTestcaseBean {
 
 				JJRequirement requirement = (JJRequirement) entry.getValue();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-						requirement, null, LoginBean.getVersion(),null, true, true, false);
+						requirement, null, LoginBean.getVersion(), null, true,
+						true, false);
 				for (JJTestcase testcase : testcases) {
 					testcaseElements.put(testcase.getOrdering(), testcase);
 				}
@@ -1837,8 +1842,8 @@ public class JJTestcaseBean {
 		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
 				.getBuild();
 
-		return jJTestcaseService.getTestcases(null, chapter,LoginBean.getVersion(), build, true,
-				false, true);
+		return jJTestcaseService.getTestcases(null, chapter,
+				LoginBean.getVersion(), build, true, false, true);
 	}
 
 	public class TestCaseRecap {
@@ -1887,33 +1892,39 @@ public class JJTestcaseBean {
 
 								if (testcaseexecution.getPassed()) {
 									status = MessageFactory.getMessage(
-											"test_status_SUCCESS_label", "").getDetail();
+											"test_status_SUCCESS_label", "")
+											.getDetail();
 								} else {
 									status = MessageFactory.getMessage(
-											"test_status_FAILED_label", "").getDetail();
+											"test_status_FAILED_label", "")
+											.getDetail();
 								}
 							} else {
 								status = MessageFactory.getMessage(
-										"test_status_nonFinished_label", "").getDetail();
+										"test_status_nonFinished_label", "")
+										.getDetail();
 							}
 						} else {
-							status =MessageFactory.getMessage(
-									"test_status_nonRUNED_label", "").getDetail();
+							status = MessageFactory.getMessage(
+									"test_status_nonRUNED_label", "")
+									.getDetail();
 						}
 					} else {
 						status = MessageFactory.getMessage(
-								"test_status_BuildNonAllowed_label", "").getDetail();//"not allowed on this build";
+								"test_status_BuildNonAllowed_label", "")
+								.getDetail();// "not allowed on this build";
 					}
 
 				} else {
 					disabled = true;
 					status = MessageFactory.getMessage(
-							"test_status_BuildNonSelected_label", "").getDetail();//"Select a Build";
+							"test_status_BuildNonSelected_label", "")
+							.getDetail();// "Select a Build";
 				}
 			} else {
 				disabled = true;
 				status = MessageFactory.getMessage(
-						"test_status_NoTestStep_label", "").getDetail();//"This testcase doesn't have teststeps";
+						"test_status_NoTestStep_label", "").getDetail();// "This testcase doesn't have teststeps";
 			}
 
 		}
@@ -2057,7 +2068,8 @@ public class JJTestcaseBean {
 			String buffer = "<category name=\""
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
-					category, project, LoginBean.getProduct(), LoginBean.getVersion(),true, false);
+					category, project, LoginBean.getProduct(),
+					LoginBean.getVersion(), true, false);
 			for (JJTestcase ttt : tests) {
 				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());
@@ -2163,8 +2175,8 @@ public class JJTestcaseBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					JJTestcaseBean.TEST_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(JJTestcaseBean.TEST_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -2188,8 +2200,9 @@ public class JJTestcaseBean {
 			}
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
-			
-			FacesMessage facesMessage = MessageFactory.getMessage(JJTestcaseBean.TEST_SUBSCRIPTION_CANCEL_RATE);
+
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(JJTestcaseBean.TEST_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -2220,7 +2233,8 @@ public class JJTestcaseBean {
 			((JJContactBean) LoginBean.findBean("jJContactBean"))
 					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(JJTestcaseBean.TEST_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(JJTestcaseBean.TEST_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);

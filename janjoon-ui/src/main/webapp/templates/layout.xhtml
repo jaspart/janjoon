@@ -7,8 +7,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
-<f:view locale="#{localeBean.locale}" contentType="text/html">
+<f:view locale="#{localeBean.locale}" encoding="UTF-8"
+	contentType="text/html">
 	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="shortcut icon" type="image/png"
 			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 		<h:outputScript library="primefaces" name="jquery/jquery.js" />
@@ -74,7 +76,8 @@
 			</p:panel>
 		</h:panelGrid>
 
-		<pe:blockUI widgetVar="blockUIWidget" target="applicatinPanelGrid">
+		<pe:blockUI widgetVar="blockUIWidget" target="applicatinPanelGrid"
+			centerX="true" centerY="true">
 			<h:panelGrid columns="2">
 				<p:graphicImage library="images" name="ajax-loader.gif"
 					style="vertical-align: middle;" />

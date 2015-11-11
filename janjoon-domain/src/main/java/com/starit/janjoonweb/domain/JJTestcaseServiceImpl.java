@@ -49,9 +49,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			Path<Object> path = from.join("requirement").get("chapter");
 			predicates.add(criteriaBuilder.equal(path, chapter));
 		}
-		
-		if(version != null)
-		{
+
+		if (version != null) {
 			Path<Object> path = from.join("requirement").get("versioning");
 			predicates.add(criteriaBuilder.equal(path, version));
 		}
@@ -188,7 +187,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 	@Override
 	public List<JJTestcase> getJJtestCases(JJRequirement requirement) {
-		return getTestcases(requirement, null,null, null, true, true, true);
+		return getTestcases(requirement, null, null, null, true, true, true);
 	}
 
 	@Override

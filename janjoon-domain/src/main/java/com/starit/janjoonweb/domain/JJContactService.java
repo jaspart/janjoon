@@ -22,7 +22,7 @@ public interface JJContactService {
 	public boolean updateJJContactTransaction(JJContact contact);
 
 	public List<JJContact> load(JJCompany company, MutableInt size, int first,
-			int pageSize,List<SortMeta> multiSortMeta,
+			int pageSize, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters);
 
 }

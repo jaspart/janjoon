@@ -75,9 +75,8 @@ public class JJProject {
 		return (object instanceof JJProject) && (getId() != null) ? getId()
 				.equals(((JJProject) object).getId()) : (object == this);
 	}
-	
-	public JJCompany getCompany()
-	{
+
+	public JJCompany getCompany() {
 		return this.getManager().getCompany();
 	}
 }

@@ -73,7 +73,7 @@ public abstract class AbstractConfigManager implements Serializable {
 		this.password = password;
 	}
 
-	public abstract boolean checkIn(File file,String message);
+	public abstract boolean checkIn(File file, String message);
 
 	public abstract boolean checkOut(String branche);
 
@@ -91,7 +91,7 @@ public abstract class AbstractConfigManager implements Serializable {
 	public abstract boolean pullRepository();
 
 	public abstract ArrayList<String> getAllBranches();
-	
+
 	public boolean setFileTexte(File file, String texte) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -104,7 +104,7 @@ public abstract class AbstractConfigManager implements Serializable {
 		}
 
 	}
-	
+
 	public static void delete(File file) throws IOException {
 
 		if (file.isDirectory()) {
@@ -138,6 +138,5 @@ public abstract class AbstractConfigManager implements Serializable {
 			file.delete();
 		}
 	}
-
 
 }

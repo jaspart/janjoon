@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 public class SessionTimeoutFilter implements Filter {
 	// This should be your default Home or Login page or whatever
 	private String timeoutPage = "pages/login.jsf";
-	
+
 	static Logger logger = Logger.getLogger("MySessionListener-Logger");
 
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,7 +38,7 @@ public class SessionTimeoutFilter implements Filter {
 							+ "/" + getTimeoutPage();
 
 					logger.info("Session is invalid! redirecting to timeoutpage : "
-									+ timeoutUrl);
+							+ timeoutUrl);
 
 					httpServletResponse.sendRedirect(timeoutUrl);
 					return;

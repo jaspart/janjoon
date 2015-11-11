@@ -63,7 +63,8 @@ public class LazyProductDataModel extends LazyDataModel<JJProduct> {
 
 		List<JJProduct> data = new ArrayList<JJProduct>();
 		MutableInt size = new MutableInt(0);
-		data = productService.load(company, size, first, pageSize,multiSortMeta,filters);
+		data = productService.load(company, size, first, pageSize,
+				multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

@@ -21,7 +21,7 @@ public class TreeOperation {
 		this.configManager = configManager;
 	}
 
-	public void deleteFile(File file,AbstractConfigManager config) {
+	public void deleteFile(File file, AbstractConfigManager config) {
 
 		if (file.isDirectory() && !(config instanceof SvnConfigManager)) {
 			if (file.list().length == 0) {
@@ -31,7 +31,7 @@ public class TreeOperation {
 				for (String temp : files) {
 					File fileDelete = new File(file, temp);
 
-					deleteFile(fileDelete,config);
+					deleteFile(fileDelete, config);
 				}
 
 				if (file.list().length == 0) {
@@ -39,16 +39,14 @@ public class TreeOperation {
 				}
 			}
 
-		}else if(config instanceof SvnConfigManager)
-		{
+		} else if (config instanceof SvnConfigManager) {
 			try {
 				SvnConfigManager.delete(file, true);
 			} catch (SVNException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			file.delete();
 		}
 
@@ -72,8 +70,8 @@ public class TreeOperation {
 	public static boolean uploadFile(File parent, InputStream in, String name,
 			AbstractConfigManager configManager) throws IOException {
 
-		OutputStream out = new FileOutputStream(new File(parent.getPath() + File.separator
-				+ name));
+		OutputStream out = new FileOutputStream(new File(parent.getPath()
+				+ File.separator + name));
 		int read = 0;
 		byte[] bytes = new byte[1024];
 
@@ -108,12 +106,12 @@ public class TreeOperation {
 		OutputStream out;
 		try {
 			if (parent != null)
-				out = new FileOutputStream(new File(parent.getPath() + File.separator
-						+ uploadedFile));
+				out = new FileOutputStream(new File(parent.getPath()
+						+ File.separator + uploadedFile));
 			else
 				out = new FileOutputStream(new File(File.separator
-						+ configManager.getPath() + File.separator+ version +File.separator
-						+ uploadedFile));
+						+ configManager.getPath() + File.separator + version
+						+ File.separator + uploadedFile));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			try {

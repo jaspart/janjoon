@@ -250,7 +250,7 @@ public class JJMessageBean {
 					LoginBean.getProject(), LoginBean.getProduct(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact()
 							.getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact());			
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		}
 	}
 
@@ -447,11 +447,11 @@ public class JJMessageBean {
 	public String getObjectName(JJMessage mes) {
 
 		if (mes.getBug() != null)
-			return "BUG: "+mes.getBug().getName();
+			return "BUG: " + mes.getBug().getName();
 		else if (mes.getRequirement() != null)
-			return "SPEC: "+mes.getRequirement().getName();
+			return "SPEC: " + mes.getRequirement().getName();
 		else if (mes.getTestcase() != null)
-			return "TEST: "+mes.getTestcase().getName();
+			return "TEST: " + mes.getTestcase().getName();
 		else
 			return null;
 	}

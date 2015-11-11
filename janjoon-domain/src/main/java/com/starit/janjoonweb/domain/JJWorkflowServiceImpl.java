@@ -43,7 +43,7 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 		JJWorflow_ = jJWorkflowRepository.findOne(JJWorflow_.getId());
 		return JJWorflow_;
 	}
-	
+
 	public Set<String> getAllObject() {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

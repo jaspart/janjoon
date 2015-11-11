@@ -246,16 +246,14 @@ public class JJMessageServiceImpl implements JJMessageService {
 		if (product != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
 					product);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("product"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("product"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (project != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
 					project);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("project"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("project"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
@@ -442,16 +440,14 @@ public class JJMessageServiceImpl implements JJMessageService {
 		if (product != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
 					product);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("product"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("product"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (project != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
 					project);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("project"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("project"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
@@ -530,16 +526,14 @@ public class JJMessageServiceImpl implements JJMessageService {
 		if (product != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
 					product);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("product"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("product"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
 		if (project != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("project"),
 					project);
-			Predicate condition2 = criteriaBuilder.isNull(from
-					.get("project"));
+			Predicate condition2 = criteriaBuilder.isNull(from.get("project"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 

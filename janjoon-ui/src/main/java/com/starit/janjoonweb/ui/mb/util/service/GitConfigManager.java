@@ -168,7 +168,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 	// commit a repository
 	@Override
-	public boolean checkIn(File f,String message) {
+	public boolean checkIn(File f, String message) {
 
 		logger.info("---commit operation started!!");
 		try {
@@ -544,6 +544,6 @@ public class GitConfigManager extends AbstractConfigManager {
 			return null;
 		}
 
-	}	
-	
+	}
+
 }

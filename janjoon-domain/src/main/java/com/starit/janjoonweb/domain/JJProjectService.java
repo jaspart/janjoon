@@ -20,5 +20,6 @@ public interface JJProjectService {
 			JJContact contact);
 
 	public List<JJProject> load(JJCompany company, MutableInt size, int first,
-			int pageSize, List<SortMeta> multiSortMeta,Map<String, Object> filters);
+			int pageSize, List<SortMeta> multiSortMeta,
+			Map<String, Object> filters);
 }

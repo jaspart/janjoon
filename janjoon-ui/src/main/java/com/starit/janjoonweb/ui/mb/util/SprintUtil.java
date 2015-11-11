@@ -323,7 +323,7 @@ public class SprintUtil {
 			workload = Math.max(workload, 0);
 			chartSeries.set(f.format(staDate), workload);
 		}
-   
+
 		chartModel.addSeries(chartSeries);
 		chartModel.addSeries(lineSeries);
 		chartModel.setLegendPosition("ne");
