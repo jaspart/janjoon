@@ -18,8 +18,8 @@
 			title="#{messages.specification_video_help_title}"
 			onclick="PF('videoHelpWidget').show()" type="button"
 			style="float: right;" />
-		<p:tabView id="tabview" widgetVar="AdmintabView" dynamic="true"
-			cache="true" activeIndex="#{loginBean.activeTabAdminIndex}">
+		<p:tabView id="tabview" widgetVar="AdmintabView"
+			activeIndex="#{loginBean.activeTabAdminIndex}">
 			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
 				update="tabview " />
 

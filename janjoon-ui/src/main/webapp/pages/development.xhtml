@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
@@ -377,7 +378,7 @@
 				showEffect="fade" hideEffect="explode">
 				<p:outputPanel id="uploadFilePanel">
 					<h:form id="uploadFileForm">
-						<p:fileUpload id="uploadFileButton"
+						<p:fileUpload id="uploadFileButton" 
 							fileUploadListener="#{jJDevelopment.handleFileUpload}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" mode="advanced"

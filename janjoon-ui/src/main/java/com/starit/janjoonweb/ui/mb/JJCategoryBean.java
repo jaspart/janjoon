@@ -15,6 +15,8 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCategoryDataTable;
@@ -34,6 +36,7 @@ public class JJCategoryBean {
 
 	private JJCategory categoryAdmin;
 	private LazyCategoryDataTable categoryListTable;
+	private boolean allCompany = false;
 
 	private String message;
 
@@ -49,7 +52,8 @@ public class JJCategoryBean {
 
 	public LazyCategoryDataTable getCategoryListTable() {
 		if (categoryListTable == null)
-			categoryListTable = new LazyCategoryDataTable(jJCategoryService);
+			categoryListTable = new LazyCategoryDataTable(jJCategoryService,
+					LoginBean.getCompany());
 		return categoryListTable;
 	}
 
@@ -63,6 +67,14 @@ public class JJCategoryBean {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public boolean isAllCompany() {
+		return allCompany;
+	}
+
+	public void setAllCompany(boolean allCompany) {
+		this.allCompany = allCompany;
 	}
 
 	public void newCategory() {
@@ -101,18 +113,16 @@ public class JJCategoryBean {
 		String message = "";
 		FacesMessage facesMessage = null;
 		String name = categoryAdmin.getName().trim().toUpperCase();
-		List<JJCategory> categories = jJCategoryService.getCategories(name,
-				true, false, false);
-		if (categoryAdmin.getId() != null && !categories.isEmpty()) {
-			if (categories.size() == 1) {
-				if (categories.get(0).equals(categoryAdmin))
-					categories.remove(0);
-			}
-		}
 
-		if (categories.isEmpty()) {
+		if (!jJCategoryService.nameExist(name, categoryAdmin.getId(),
+				LoginBean.getCompany())) {
 			categoryAdmin.setName(name);
 			if (categoryAdmin.getId() == null) {
+
+				if (!allCompany
+						|| !((LoginBean) LoginBean.findBean("loginBean"))
+								.getAuthorisationService().isSuperAdmin())
+					categoryAdmin.setCompany(LoginBean.getCompany());
 
 				categoryAdmin.setDescription("This is category "
 						+ categoryAdmin.getName());
@@ -129,6 +139,7 @@ public class JJCategoryBean {
 				// closeDialog();
 			}
 			categoryListTable = null;
+			allCompany = false;
 
 			facesMessage = MessageFactory.getMessage(message, "Category");
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -150,7 +161,6 @@ public class JJCategoryBean {
 			facesMessage = MessageFactory.getMessage(message, MessageFactory
 					.getMessage("label_category", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-			throw new ValidatorException(facesMessage);
 
 		}
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -166,6 +176,29 @@ public class JJCategoryBean {
 				"category.create.saveandclose");
 	}
 
+	public void updateBeans(JJCategory category) {
+
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+				.findBean("jJRequirementBean");
+		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
+				.findBean("jJStatusBean");
+
+		if (jJStatusBean != null) {
+			jJStatusBean.setCategoryDataModel(null);
+		}
+
+		if (jJRequirementBean != null
+				&& jJRequirementBean.getTableDataModelList() != null) {
+			jJRequirementBean.setCategoryList(null);
+			jJRequirementBean.setCategoryDataModel(null);
+			if (!category.getEnabled())
+				jJRequirementBean.updateTemplate(category.getId(), null, true,
+						false);
+
+		}
+
+	}
+
 	public void saveJJCategory(JJCategory b) {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) ((HttpSession) FacesContext
@@ -173,6 +206,7 @@ public class JJCategoryBean {
 				.getAttribute("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJCategoryService.saveJJCategory(b);
+		updateBeans(b);
 	}
 
 	public void updateJJCategory(JJCategory b) {
@@ -182,5 +216,6 @@ public class JJCategoryBean {
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCategoryService.updateJJCategory(b);
+		updateBeans(b);
 	}
 }

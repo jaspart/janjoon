@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
@@ -23,19 +21,15 @@ import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJCriticity;
-import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJPermission;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import com.starit.janjoonweb.domain.JJRight;
 import com.starit.janjoonweb.domain.JJRightService;
-import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJPermissionBean.PermissionDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyContactDataModel;
-import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.ChunkTime;
 import com.starit.janjoonweb.ui.mb.util.Contact;
 import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
@@ -79,7 +73,7 @@ public class JJContactBean {
 	private JJContact contactAdmin;
 	private Contact contactUtil;
 	private ContactCalendarUtil calendarUtil;
-	private List<JJCategory> categories;
+	//private List<JJCategory> categories;
 	private List<JJCategory> loggedContactCategories;
 	private List<JJVersion> versionList;
 	private LazyContactDataModel contactsLazyModel;
@@ -98,11 +92,9 @@ public class JJContactBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
-			company = loginBean.getContact().getCompany();
-
+			company = LoginBean.getCompany();
 		if (contactsLazyModel == null) {
-			contactsLazyModel = new LazyContactDataModel(jJContactService,
-					company);
+			contactsLazyModel = new LazyContactDataModel(jJContactService,company);
 		}
 
 		return contactsLazyModel;
@@ -187,7 +179,7 @@ public class JJContactBean {
 					.getContact();
 			c.setLastVersion(null);
 			versionList = jJVersionService.getVersions(true, true,
-					c.getLastProduct(), c.getCompany(), true);
+					c.getLastProduct(), LoginBean.getCompany(), true);
 		}
 		return versionList;
 	}
@@ -220,16 +212,10 @@ public class JJContactBean {
 		this.message = message;
 	}
 
-	public List<JJCategory> getCategories() {
-
-		if (categories == null)
-			categories = jJCategoryService.getCategories(null, false, true,
-					true);
-		return categories;
-	}
-
-	public void setCategories(List<JJCategory> categories) {
-		this.categories = categories;
+	public List<JJCategory> getCategories() {		
+		return 	 jJCategoryService.getCategories(null, false, true,
+					true, LoginBean.getCompany());
+		
 	}
 
 	public List<JJCategory> getLoggedContactCategories() {
@@ -266,8 +252,8 @@ public class JJContactBean {
 	public List<JJContact> getDeletedContact() {
 		if (deletedContact == null) {
 			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-			deletedContact = jJContactService.getContacts(false, loginBean
-					.getContact().getCompany(), loginBean.getContact());
+			deletedContact = jJContactService.getContacts(false,
+					LoginBean.getCompany(), loginBean.getContact());
 		}
 
 		return deletedContact;
@@ -640,7 +626,6 @@ public class JJContactBean {
 		jJPermissionBean.setPermissionAdmin(null);
 		jJPermissionBean.setPermissionDataModel(null);
 		jJPermissionBean.setProfile(null);
-		jJPermissionBean.setProfiles(null);
 		jJPermissionBean.setProject(null);
 		jJPermissionBean.setProduct(null);
 
@@ -713,7 +698,7 @@ public class JJContactBean {
 			}
 
 			for (JJCategory category : this.getLoggedContactCategories()) {
-				if (!oldCategories.contains(category)) {
+				if (!oldCategories.contains(category) && category.getEnabled()) {
 					jJRequirementBean.updateTemplate(category.getId(), null,
 							true, true);
 				}
@@ -766,7 +751,7 @@ public class JJContactBean {
 		if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
 			JJProfile customProfile = jJProfileService.getOneProfile(
-					"CustomProfile", true);
+					"CustomProfile", null, true);
 			if (customProfile == null) {
 
 				customProfile = createCustomProfile();

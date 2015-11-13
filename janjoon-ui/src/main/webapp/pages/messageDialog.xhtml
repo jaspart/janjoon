@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<p:panelGrid id="viewPanelGrid1">
@@ -65,7 +66,7 @@
 			</p:column>
 			<p:column style="border-style: none;">
 				<p:inputText id="messageStatus" readonly="true"
-					converter="JJStatusConverter" value="#{JJMessage.status}" />
+					value="#{messages['status_'.concat(fn:replace(JJMessage.status.name, ' ', '_'))]}" />
 			</p:column>
 
 		</p:row>

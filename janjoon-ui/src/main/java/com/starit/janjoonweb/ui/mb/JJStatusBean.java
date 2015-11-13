@@ -125,6 +125,19 @@ public class JJStatusBean {
 	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
+
+		if (categoryDataModel == null) {
+			categoryDataModel = new ArrayList<CategoryDataModel>();
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true, ((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany());
+
+			for (JJCategory category : categoryList) {
+				categoryDataModel.add(new CategoryDataModel(category));
+			}
+		}
+
 		return categoryDataModel;
 	}
 
@@ -157,10 +170,12 @@ public class JJStatusBean {
 	}
 
 	public PieChartModel getPieChart() {
+
 		if (pieChart == null) {
 			pieChart = new PieChartModel();
 			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
 					true, null, false);
+			boolean render = false;
 			for (JJStatus s : statReq) {
 
 				int i = Integer.parseInt(""
@@ -169,17 +184,24 @@ public class JJStatusBean {
 										.getContact().getCompany(), project,
 								LoginBean.getProduct(), LoginBean.getVersion(),
 								s, true));
-				pieChart.set(s.getName(), i);
+				render = render || i > 0;
+				if (i > 0)
+					pieChart.set(
+							MessageFactory.getMessage("status_" + s.getName(),
+									"").getDetail(), i);
 			}
 
-			pieChart.setLegendPosition("e");
-			pieChart.setTitle("% "
-					+ MessageFactory.getMessage("label_requirement", "")
-							.getDetail());
-			pieChart.setFill(false);
-			pieChart.setShowDataLabels(true);
-			pieChart.setDiameter(150);
-			pieChart.setSliceMargin(5);
+			if (render) {
+				pieChart.setLegendPosition("e");
+				pieChart.setTitle("% "
+						+ MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
+				pieChart.setFill(false);
+				pieChart.setShowDataLabels(true);
+				pieChart.setDiameter(150);
+				pieChart.setSliceMargin(5);
+			} else
+				pieChart = null;
 		}
 		return pieChart;
 	}
@@ -233,7 +255,9 @@ public class JJStatusBean {
 				categoryDataModel = new ArrayList<CategoryDataModel>();
 
 				List<JJCategory> categoryList = jJCategoryService
-						.getCategories(null, false, true, true);
+						.getCategories(null, false, true, true,
+								((LoginBean) LoginBean.findBean("loginBean"))
+										.getContact().getCompany());
 
 				for (JJCategory category : categoryList) {
 					categoryDataModel.add(new CategoryDataModel(category));
@@ -242,6 +266,7 @@ public class JJStatusBean {
 				pieChart = new PieChartModel();
 				List<JJStatus> statReq = jJStatusService.getStatus(
 						"Requirement", true, null, false);
+				boolean render = false;
 				for (JJStatus s : statReq) {
 
 					int i = Integer.parseInt(""
@@ -251,17 +276,26 @@ public class JJStatusBean {
 											.getContact().getCompany(),
 									project, LoginBean.getProduct(), LoginBean
 											.getVersion(), s, true));
-					pieChart.set(s.getName(), i);
+					render = render || i > 0;
+					if (i > 0)
+						pieChart.set(
+								MessageFactory.getMessage(
+										"status_" + s.getName(), "")
+										.getDetail(), i);
 				}
 
-				pieChart.setLegendPosition("e");
-				pieChart.setTitle("% "
-						+ MessageFactory.getMessage("label_requirement", "")
-								.getDetail());
-				pieChart.setFill(false);
-				pieChart.setShowDataLabels(true);
-				pieChart.setDiameter(150);
-				pieChart.setSliceMargin(5);
+				if (render) {
+					pieChart.setLegendPosition("e");
+					pieChart.setTitle("% "
+							+ MessageFactory
+									.getMessage("label_requirement", "")
+									.getDetail());
+					pieChart.setFill(false);
+					pieChart.setShowDataLabels(true);
+					pieChart.setDiameter(150);
+					pieChart.setSliceMargin(5);
+				} else
+					pieChart = null;
 
 				float bugKPI = 0L;
 				float projKPI = 0;
@@ -845,7 +879,9 @@ public class JJStatusBean {
 								false, null);
 
 				List<JJCategory> categoryList = jJCategoryService
-						.getCategories(null, false, true, true);
+						.getCategories(null, false, true, true,
+								((LoginBean) LoginBean.findBean("loginBean"))
+										.getContact().getCompany());
 
 				boolean sizeIsOne = false;
 

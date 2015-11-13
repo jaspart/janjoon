@@ -236,8 +236,7 @@ public class SprintUtil {
 		BarChartSeries chartSeries = new BarChartSeries();
 		LineChartSeries lineSeries = new LineChartSeries();
 		ContactCalendarUtil calendar = new ContactCalendarUtil(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany());
+				LoginBean.getCompany());
 
 		float dayWorkload = workload
 				* 1.0f

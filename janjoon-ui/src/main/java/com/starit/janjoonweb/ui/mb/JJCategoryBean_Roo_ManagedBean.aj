@@ -6,9 +6,12 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.ui.mb.JJCategoryBean;
+import com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -49,6 +52,9 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
     
     @Autowired
     JJContactService JJCategoryBean.jJContactService;
+    
+    @Autowired
+    JJCompanyService JJCategoryBean.jJCompanyService;
     
     private String JJCategoryBean.name = "JJCategorys";
     
@@ -279,6 +285,30 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         updatedByCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByCreateInputMessage);
         
+        OutputLabel companyCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        companyCreateOutput.setFor("companyCreateInput");
+        companyCreateOutput.setId("companyCreateOutput");
+        companyCreateOutput.setValue("Company:");
+        htmlPanelGrid.getChildren().add(companyCreateOutput);
+        
+        AutoComplete companyCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        companyCreateInput.setId("companyCreateInput");
+        companyCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.company}", JJCompany.class));
+        companyCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJCategoryBean.completeCompany}", List.class, new Class[] { String.class }));
+        companyCreateInput.setDropdown(true);
+        companyCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "company", String.class));
+        companyCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{company.name} #{company.description} #{company.creationDate} #{company.updatedDate}", String.class));
+        companyCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{company}", JJCompany.class));
+        companyCreateInput.setConverter(new JJCompanyConverter());
+        companyCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(companyCreateInput);
+        
+        Message companyCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        companyCreateInputMessage.setId("companyCreateInputMessage");
+        companyCreateInputMessage.setFor("companyCreateInput");
+        companyCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(companyCreateInputMessage);
+        
         OutputLabel enabledCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         enabledCreateOutput.setFor("enabledCreateInput");
         enabledCreateOutput.setId("enabledCreateOutput");
@@ -488,6 +518,30 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         updatedByEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(updatedByEditInputMessage);
         
+        OutputLabel companyEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        companyEditOutput.setFor("companyEditInput");
+        companyEditOutput.setId("companyEditOutput");
+        companyEditOutput.setValue("Company:");
+        htmlPanelGrid.getChildren().add(companyEditOutput);
+        
+        AutoComplete companyEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        companyEditInput.setId("companyEditInput");
+        companyEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.company}", JJCompany.class));
+        companyEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJCategoryBean.completeCompany}", List.class, new Class[] { String.class }));
+        companyEditInput.setDropdown(true);
+        companyEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "company", String.class));
+        companyEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{company.name} #{company.description} #{company.creationDate} #{company.updatedDate}", String.class));
+        companyEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{company}", JJCompany.class));
+        companyEditInput.setConverter(new JJCompanyConverter());
+        companyEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(companyEditInput);
+        
+        Message companyEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        companyEditInputMessage.setId("companyEditInputMessage");
+        companyEditInputMessage.setFor("companyEditInput");
+        companyEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(companyEditInputMessage);
+        
         OutputLabel enabledEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         enabledEditOutput.setFor("enabledEditInput");
         enabledEditOutput.setId("enabledEditOutput");
@@ -636,6 +690,16 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
         updatedByValue.setConverter(new JJContactConverter());
         htmlPanelGrid.getChildren().add(updatedByValue);
         
+        HtmlOutputText companyLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        companyLabel.setId("companyLabel");
+        companyLabel.setValue("Company:");
+        htmlPanelGrid.getChildren().add(companyLabel);
+        
+        HtmlOutputText companyValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        companyValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJCategoryBean.JJCategory_.company}", JJCompany.class));
+        companyValue.setConverter(new JJCompanyConverter());
+        htmlPanelGrid.getChildren().add(companyValue);
+        
         HtmlOutputText enabledLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledLabel.setId("enabledLabel");
         enabledLabel.setValue("Enabled:");
@@ -705,6 +769,17 @@ privileged aspect JJCategoryBean_Roo_ManagedBean {
             String jJContactStr = String.valueOf(jJContact.getName() +  " "  + jJContact.getDescription() +  " "  + jJContact.getCreationDate() +  " "  + jJContact.getUpdatedDate());
             if (jJContactStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJContact);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJCompany> JJCategoryBean.completeCompany(String query) {
+        List<JJCompany> suggestions = new ArrayList<JJCompany>();
+        for (JJCompany jJCompany : jJCompanyService.findAllJJCompanys()) {
+            String jJCompanyStr = String.valueOf(jJCompany.getName() +  " "  + jJCompany.getDescription() +  " "  + jJCompany.getCreationDate() +  " "  + jJCompany.getUpdatedDate());
+            if (jJCompanyStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJCompany);
             }
         }
         return suggestions;

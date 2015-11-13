@@ -41,8 +41,7 @@ public class AuthorisationService implements Serializable {
 		jjContactBean.setContactsLazyModel(null);
 		jjContactBean.setContactUtil(null);
 		jjProductBean.setProductListTable(null);
-		jjProjectBean.setProjectListTable(null);
-		jjContactBean.setCategories(null);
+		jjProjectBean.setProjectListTable(null);		
 		jjContactBean.setVersionList(null);
 		jjContactBean.setLoggedContactCategories(null);
 		if (jjCompanyBean != null)
@@ -96,6 +95,7 @@ public class AuthorisationService implements Serializable {
 	private String rCompanyMSG;
 	private boolean renderAdmin;
 	private boolean viewTeamImputation;
+	private boolean superAdmin;
 
 	public JJContact getContact() {
 		return contact;
@@ -445,6 +445,14 @@ public class AuthorisationService implements Serializable {
 		this.viewTeamImputation = viewTeamImputation;
 	}
 
+	public boolean isSuperAdmin() {
+		return superAdmin;
+	}
+
+	public void setSuperAdmin(boolean superAdmin) {
+		this.superAdmin = superAdmin;
+	}
+
 	public boolean isRenderCategoryConfig() {
 
 		JJPermissionBean permissionBean = (JJPermissionBean) session
@@ -488,6 +496,8 @@ public class AuthorisationService implements Serializable {
 
 		JJPermissionService jJPermissionService = permissionBean
 				.getJJPermissionService();
+
+		superAdmin = jJPermissionService.isSuperAdmin(contact);
 
 		if (category == null)
 			category = jJPermissionService

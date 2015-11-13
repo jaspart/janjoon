@@ -383,7 +383,7 @@ public class JJTaskBean {
 		if (objet != null) {
 
 			importCategoryList = jJCategoryService.getCategories(null, false,
-					true, true);
+					true, true, LoginBean.getCompany());
 
 		} else {
 			importCategoryList = null;
@@ -986,8 +986,7 @@ public class JJTaskBean {
 			int k = 65;
 
 			List<JJChapter> chapters = jJChapterService.getChapters(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), project, true);
+					LoginBean.getCompany(), project, true);
 			List<JJTask> allJJtask = null;
 			if (!sortMode.equalsIgnoreCase("chapter"))
 				allJJtask = new ArrayList<JJTask>();
@@ -1810,9 +1809,8 @@ public class JJTaskBean {
 			if (objet.equalsIgnoreCase("Bug")) {
 
 				for (JJBug bug : jJBugService.getImportBugs(
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany(), project, LoginBean
-								.getProduct(), version, importCategory,
+						LoginBean.getCompany(), project,
+						LoginBean.getProduct(), version, importCategory,
 						importStatus, true)) {
 
 					if (!checkAll) {
@@ -1832,12 +1830,11 @@ public class JJTaskBean {
 				LoginBean loginBean = (LoginBean) LoginBean
 						.findBean("loginBean");
 				for (JJRequirement requirement : jJRequirementService
-						.getRequirements(((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), importCategory, loginBean
-								.getAuthorizedMap("Requirement", project,
-										product), version, importStatus, null,
-								false, true, false, false, null)) {
+						.getRequirements(LoginBean.getCompany(),
+								importCategory, loginBean.getAuthorizedMap(
+										"Requirement", project, product),
+								version, importStatus, null, false, true,
+								false, false, null)) {
 
 					if (!checkAll) {
 

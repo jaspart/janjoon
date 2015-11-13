@@ -152,7 +152,7 @@ public class JJSprintBean {
 
 		if (categoryList == null)
 			categoryList = jJCategoryService.getCategories(null, false, true,
-					false);
+					false, LoginBean.getCompany());
 
 		return categoryList;
 	}
@@ -265,11 +265,11 @@ public class JJSprintBean {
 	public List<JJContact> getContacts() {
 
 		if (contacts == null) {
-			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
-			contacts = jJPermissionService.areAuthorized(contact.getCompany(),
-					null, LoginBean.getProject(), LoginBean.getProduct(),
-					"sprintContact", null, true, null, true);
+
+			contacts = jJPermissionService.areAuthorized(
+					LoginBean.getCompany(), null, LoginBean.getProject(),
+					LoginBean.getProduct(), "sprintContact", null, true, null,
+					true);
 		}
 		return contacts;
 	}
@@ -354,7 +354,7 @@ public class JJSprintBean {
 		if (sprintList == null)
 			sprintList = new ArrayList<SprintUtil>();
 		else {
-			// activeTabSprintIndex = -1;
+			activeTabSprintIndex = -1;
 			Date now = new Date();
 			int i = 0;
 			while (i < sprintList.size()) {
@@ -365,6 +365,23 @@ public class JJSprintBean {
 					i = sprintList.size();
 				}
 				i++;
+			}
+
+			if (activeTabSprintIndex == -1) {
+				long minDiff = -1, currentTime = new Date().getTime();
+				SprintUtil minDate = null;
+				for (SprintUtil s : sprintList) {
+					long diff = Math.abs(currentTime
+							- s.getSprint().getEndDate().getTime());
+					if ((minDiff == -1) || (diff < minDiff)) {
+						minDiff = diff;
+						minDate = s;
+					}
+				}
+				if (minDate != null)
+					activeTabSprintIndex = sprintList.indexOf(minDate);
+				else
+					activeTabSprintIndex = 0;
 			}
 		}
 		JJSprint sp = new JJSprint();
@@ -909,9 +926,8 @@ public class JJSprintBean {
 	public List<JJBug> completeBug(String query) {
 
 		List<JJBug> suggestions = new ArrayList<JJBug>();
-		for (JJBug jJBug : jJBugService.getBugs(((LoginBean) LoginBean
-				.findBean("loginBean")).getContact().getCompany(), project,
-				LoginBean.getProduct(), null, null, true, true)) {
+		for (JJBug jJBug : jJBugService.getBugs(LoginBean.getCompany(),
+				project, LoginBean.getProduct(), null, null, true, true)) {
 			String jJBugStr = String.valueOf(jJBug.getName());
 			if (jJBugStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJBug);

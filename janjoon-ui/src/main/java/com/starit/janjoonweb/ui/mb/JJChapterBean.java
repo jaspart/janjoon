@@ -153,16 +153,14 @@ public class JJChapterBean {
 	public List<JJChapter> getChapterList() {
 
 		if (chapter == null || chapter.getId() == null) {
-			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(), project,
-					category, true, new ArrayList<String>());
+			chapterList = jJChapterService.getChapters(LoginBean.getCompany(),
+					project, category, true, new ArrayList<String>());
 		} else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
-			chapterList = jJChapterService.getChapters(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(), project,
-					category, true, list);
+			chapterList = jJChapterService.getChapters(LoginBean.getCompany(),
+					project, category, true, list);
 		}
 
 		return chapterList;
@@ -430,8 +428,7 @@ public class JJChapterBean {
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
 		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), project, category, true, true);
+				LoginBean.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			TreeNode node = createTree(chapter, chapterRoot, project, category,
@@ -450,8 +447,7 @@ public class JJChapterBean {
 		JJProduct product = LoginBean.getProduct();
 
 		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), category, loginBean
+				.getRequirements(LoginBean.getCompany(), category, loginBean
 						.getAuthorizedMap("Requirement", project, product),
 						version, null, null, true, true, false, false, null);
 
@@ -466,8 +462,7 @@ public class JJChapterBean {
 		rightRoot = new DefaultTreeNode("rightRoot", null);
 
 		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), project, category, true, true);
+				LoginBean.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			TreeNode node = createTree(chapter, rightRoot, project, category, 1);
@@ -592,8 +587,7 @@ public class JJChapterBean {
 		paragraph.add(phrase);
 
 		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), project, category, true, true);
+				LoginBean.getCompany(), project, category, true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			createTreeDocument(chapter, category, paragraph, fontNote,
@@ -601,8 +595,7 @@ public class JJChapterBean {
 		}
 
 		List<JJRequirement> withOutChapter = jJRequirementService
-				.getRequirementsWithOutChapter(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact().getCompany(),
+				.getRequirementsWithOutChapter(LoginBean.getCompany(),
 						category, loginBean.getAuthorizedMap("Requirement",
 								project, LoginBean.getProduct()), LoginBean
 								.getVersion(), null, true, true);
@@ -781,8 +774,7 @@ public class JJChapterBean {
 
 			List<JJRequirement> requirements = jJRequirementService
 					.getRequirementChildrenWithChapterSortedByOrder(
-							((LoginBean) LoginBean.findBean("loginBean"))
-									.getContact().getCompany(), parent,
+							LoginBean.getCompany(), parent,
 							LoginBean.getProduct(), LoginBean.getVersion(),
 							onlyActif);
 
@@ -794,8 +786,7 @@ public class JJChapterBean {
 		} else {
 
 			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), project, category, onlyActif, true);
+					LoginBean.getCompany(), project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);

@@ -30,7 +30,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 	}
 
 	public List<JJCategory> load(MutableInt size, int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+			List<SortMeta> multiSortMeta, Map<String, Object> filters,
+			JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
 				.createQuery(JJCategory.class);
@@ -42,6 +43,13 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
 
 		if (filters != null) {
 			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
@@ -63,10 +71,20 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 				String sortField = sortMeta.getSortField();
 				SortOrder sortOrder = sortMeta.getSortOrder();
 
-				if (sortOrder.equals(SortOrder.DESCENDING))
-					select.orderBy(criteriaBuilder.desc(from.get(sortField)));
-				else if (sortOrder.equals(SortOrder.ASCENDING)) {
-					select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+				if (!sortField.contains("company")) {
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+					}
+				} else {
+					Join<JJCategory, JJCompany> owner = from.join("company");
+
+					if (sortOrder.equals(SortOrder.DESCENDING))
+						select.orderBy(criteriaBuilder.desc(owner.get("name")));
+					else if (sortOrder.equals(SortOrder.ASCENDING)) {
+						select.orderBy(criteriaBuilder.asc(owner.get("name")));
+					}
 				}
 
 			}
@@ -86,8 +104,42 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 	}
 
+	public boolean nameExist(String name, Long id, JJCompany company) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
+
+		Root<JJCategory> from = select.from(JJCategory.class);
+		select.select(criteriaBuilder.count(from));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (name != null) {
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("name")),
+					name.toLowerCase()));
+		}
+
+		if (id != null) {
+			predicates.add(criteriaBuilder.notEqual(from.get("id"), id));
+		}
+
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+
+		return entityManager.createQuery(select).getSingleResult() > 0;
+
+	}
+
 	@Override
-	public JJCategory getCategory(String name, boolean onlyActif) {
+	public JJCategory getCategory(String name, JJCompany company,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
 				.createQuery(JJCategory.class);
@@ -106,6 +158,13 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		TypedQuery<JJCategory> result = entityManager.createQuery(select);
@@ -117,7 +176,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 	@Override
 	public List<JJCategory> getCategories(String name, boolean withName,
-			boolean onlyActif, boolean sortedByStage) {
+			boolean onlyActif, boolean sortedByStage, JJCompany company) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
@@ -137,6 +196,13 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		if (sortedByStage) {
@@ -147,7 +213,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		return result.getResultList();
 	}
 
-	public boolean isHighLevel(JJCategory category) {
+	public boolean isHighLevel(JJCategory category, JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
 				.createQuery(JJCategory.class);
@@ -156,6 +222,14 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
+
 		predicates.add(criteriaBuilder.greaterThan(from.<Integer> get("stage"),
 				category.getStage()));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
@@ -167,7 +241,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 	}
 
-	public boolean isLowLevel(JJCategory category) {
+	public boolean isLowLevel(JJCategory category, JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCategory> criteriaQuery = criteriaBuilder
 				.createQuery(JJCategory.class);
@@ -176,6 +250,14 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(from.get("company"),
+					company);
+			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
+			predicates.add(criteriaBuilder.or(condition1, condition2));
+		}
+
 		predicates.add(criteriaBuilder.lessThan(from.<Integer> get("stage"),
 				category.getStage()));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);

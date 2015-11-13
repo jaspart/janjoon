@@ -267,7 +267,6 @@ public class JJProfileBean {
 		jJRightBean.setRightAdmin(null);
 		jJRightBean.setRightDataModel(null);
 		jJRightBean.setCategory(null);
-		jJRightBean.setCategories(null);
 		jJRightBean.setObject(null);
 		jJRightBean.setObjects(null);
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()

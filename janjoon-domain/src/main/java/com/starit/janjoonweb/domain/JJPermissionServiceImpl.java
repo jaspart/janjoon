@@ -503,7 +503,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 							.getProfile().getRights()));
 			}
 			for (JJRight right : rights) {
-				if (right.getCategory() != null)
+				if (right.getCategory() != null && right.getCategory().getEnabled())
 					categories.add(right.getCategory());
 			}
 			Map<JJCategory, Integer> map = new HashMap<>();
@@ -584,7 +584,7 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 			for (JJRight right : rights) {
-				if (right.getCategory() != null)
+				if (right.getCategory() != null && right.getCategory().getEnabled())
 					categories.add(right.getCategory());
 			}
 			Map<JJCategory, Integer> map = new HashMap<>();

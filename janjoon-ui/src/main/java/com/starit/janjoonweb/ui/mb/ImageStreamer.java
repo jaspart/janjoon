@@ -3,7 +3,6 @@ package com.starit.janjoonweb.ui.mb;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.context.FacesContext;
@@ -18,7 +17,9 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
 
 @Named
@@ -59,6 +60,7 @@ public class ImageStreamer {
 		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 			// So, we're rendering the HTML. Return a stub StreamedContent so
 			// that it will generate right URL.
+
 			return new DefaultStreamedContent();
 		} else {
 			String rated = context.getExternalContext()
@@ -84,25 +86,28 @@ public class ImageStreamer {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-			// So, we're rendering the HTML. Return a stub StreamedContent so
-			// that it will generate right URL.
+
 			return new DefaultStreamedContent();
 		} else {
-			// So, browser is requesting the image. Return a real
-			// StreamedContent with the image bytes.
-			// for (Map.Entry<String, String> entry :
-			// context.getExternalContext()
-			// .getRequestParameterMap().entrySet()) {
-			// System.out.println("Displays ==== " + entry.getKey() + " : "
-			// + entry.getValue());
-			// }
+
 			String prodId = context.getExternalContext()
 					.getRequestParameterMap().get("ProdId");
-			System.out.println("Displays ProdId : " + prodId);
 
-			return new DefaultStreamedContent(new ByteArrayInputStream(
-					jJProductService.findJJProduct(Long.valueOf(prodId))
-							.getLogo()));
+			JJProduct proj = null;
+			if (prodId != null && !prodId.isEmpty())
+				proj = jJProductService.findJJProduct(Long.valueOf(prodId));
+			if (proj != null && proj.getLogo() != null) {
+				return new DefaultStreamedContent(new ByteArrayInputStream(
+						proj.getLogo()));
+			} else {
+				InputStream stream = FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream(
+								"/resources/images/empty_company.png");
+				return new DefaultStreamedContent(stream, "image/jpg");
+
+			}
 
 		}
 	}
@@ -115,12 +120,22 @@ public class ImageStreamer {
 		} else {
 			String projId = context.getExternalContext()
 					.getRequestParameterMap().get("ProjId");
-			System.out.println("Displays ProjId : " + projId);
 
-			return new DefaultStreamedContent(new ByteArrayInputStream(
-					jJProjectService.findJJProject(Long.valueOf(projId))
-							.getLogo()));
+			JJProject proj = null;
+			if (projId != null && !projId.isEmpty())
+				proj = jJProjectService.findJJProject(Long.valueOf(projId));
+			if (proj != null && proj.getLogo() != null) {
+				return new DefaultStreamedContent(new ByteArrayInputStream(
+						proj.getLogo()));
+			} else {
+				InputStream stream = FacesContext
+						.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream(
+								"/resources/images/empty_company.png");
+				return new DefaultStreamedContent(stream, "image/jpg");
 
+			}
 		}
 	}
 
@@ -162,9 +177,22 @@ public class ImageStreamer {
 					.getRequestParameterMap().get("contactId");
 			System.out.println("Displays contactId : " + contactId);
 			if (contactId == null) {
-				return new DefaultStreamedContent(new ByteArrayInputStream(
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getPicture()));
+
+				JJContact contact = ((LoginBean) LoginBean
+						.findBean("loginBean")).getContact();
+				if (contact.getPicture() != null) {
+					return new DefaultStreamedContent(new ByteArrayInputStream(
+							contact.getPicture()));
+				} else {
+
+					InputStream stream = FacesContext
+							.getCurrentInstance()
+							.getExternalContext()
+							.getResourceAsStream(
+									"/resources/images/default-user-2.jpg");
+					return new DefaultStreamedContent(stream, "image/jpg");
+
+				}
 			} else {
 				String company = context.getExternalContext()
 						.getRequestParameterMap().get("company");

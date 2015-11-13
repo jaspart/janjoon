@@ -692,13 +692,15 @@ public class LoginBean implements Serializable {
 
 		TabView tv = (TabView) event.getComponent();
 		this.activeTabAdminIndex = tv.getChildren().indexOf(event.getTab());
-		int i = activeTabAdminIndex;
+		int i = 0;
 		System.err.println("###### ACtive tab: " + activeTabAdminIndex);
-		while (i > 0) {
+		int j = 0;
+		while (i < activeTabAdminIndex) {
 			if (!tv.getChildren().get(i).isRendered())
-				activeTabAdminIndex--;
-			i--;
+				j++;
+			i++;
 		}
+		activeTabAdminIndex = activeTabAdminIndex - j;
 		System.out.println("###### ACtive tab: " + activeTabAdminIndex);
 
 	}
@@ -948,45 +950,45 @@ public class LoginBean implements Serializable {
 			// context.execute("PF('blockUIWidget').unblock()");
 			//
 			// }
-			String previos = getPreviousPage();
-
-			if (viewId.contains("administration")
-					&& !previos.contains("administration")) {
-
-				if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1) {
-
-					if (!authorisationService.isAdminContact()) {
-						activeTabAdminIndex = 5;
-
-						RequestContext context = RequestContext
-								.getCurrentInstance();
-						context.execute("PF('AdmintabView').select("
-								+ activeTabAdminIndex + ")");
-					}
-				} else if (activeTabAdminIndex == 2) {
-					if (!authorisationService.isAdminCompany())
-						activeTabAdminIndex = 5;
-					RequestContext context = RequestContext
-							.getCurrentInstance();
-					context.execute("PF('AdmintabView').select("
-							+ activeTabAdminIndex + ")");
-				} else if (activeTabAdminIndex == 3) {
-					if (!authorisationService.isAdminProduct())
-						activeTabAdminIndex = 5;
-					RequestContext context = RequestContext
-							.getCurrentInstance();
-					context.execute("PF('AdmintabView').select("
-							+ activeTabAdminIndex + ")");
-				} else if (activeTabAdminIndex == 4) {
-					if (!authorisationService.isAdminProject())
-						activeTabAdminIndex = 5;
-					RequestContext context = RequestContext
-							.getCurrentInstance();
-					context.execute("PF('AdmintabView').select("
-							+ activeTabAdminIndex + ")");
-				}
-
-			}
+			// String previos = getPreviousPage();
+			//
+			// if (viewId.contains("administration")
+			// && !previos.contains("administration")) {
+			//
+			// if (activeTabAdminIndex == 0 || activeTabAdminIndex == 1) {
+			//
+			// if (!authorisationService.isAdminContact()) {
+			// activeTabAdminIndex = 5;
+			//
+			// RequestContext context = RequestContext
+			// .getCurrentInstance();
+			// context.execute("PF('AdmintabView').select("
+			// + activeTabAdminIndex + ")");
+			// }
+			// } else if (activeTabAdminIndex == 2) {
+			// if (!authorisationService.isAdminCompany())
+			// activeTabAdminIndex = 5;
+			// RequestContext context = RequestContext
+			// .getCurrentInstance();
+			// context.execute("PF('AdmintabView').select("
+			// + activeTabAdminIndex + ")");
+			// } else if (activeTabAdminIndex == 3) {
+			// if (!authorisationService.isAdminProduct())
+			// activeTabAdminIndex = 5;
+			// RequestContext context = RequestContext
+			// .getCurrentInstance();
+			// context.execute("PF('AdmintabView').select("
+			// + activeTabAdminIndex + ")");
+			// } else if (activeTabAdminIndex == 4) {
+			// if (!authorisationService.isAdminProject())
+			// activeTabAdminIndex = 5;
+			// RequestContext context = RequestContext
+			// .getCurrentInstance();
+			// context.execute("PF('AdmintabView').select("
+			// + activeTabAdminIndex + ")");
+			// }
+			//
+			// }
 
 		}
 	}
@@ -1530,6 +1532,14 @@ public class LoginBean implements Serializable {
 	public static JJVersion getVersion() {
 		if (((JJVersionBean) findBean("jJVersionBean")) != null)
 			return ((JJVersionBean) findBean("jJVersionBean")).getVersion();
+		else
+			return null;
+	}
+
+	public static JJCompany getCompany() {
+		if (((LoginBean) findBean("loginBean")) != null)
+			return ((LoginBean) findBean("loginBean")).getContact()
+					.getCompany();
 		else
 			return null;
 	}

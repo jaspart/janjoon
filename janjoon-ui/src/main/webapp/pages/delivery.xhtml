@@ -72,7 +72,7 @@
 							</p:column>
 							<p:column headerText="Status">
 								<p:autoComplete id="status" dropdown="true"
-									value="#{build.status}" itemLabel="#{status.name}"
+									value="#{build.status}" itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
 									itemValue="#{status}" var="status" size="10"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 									completeMethod="#{jJBuildBean.completeStatus}">

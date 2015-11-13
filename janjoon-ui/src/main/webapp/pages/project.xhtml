@@ -44,6 +44,8 @@ td.ui-fileupload-preview {
 						value="#{imageStreamer.imageProj}">
 						<f:param name="ProjId" value="#{project.id}" />
 					</p:graphicImage>
+					<p:graphicImage styleClass="avatar" library="images"
+						name="empty_company.png" rendered="#{project.logo == null}" />
 				</p:column>
 				<p:column sortBy="#{project.name}">
 					<f:facet name="header">
@@ -228,9 +230,15 @@ td.ui-fileupload-preview {
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column colspan="3">
+							<p:column style="text-align: center;">
+								<p:graphicImage styleClass="avatar" cache="false"
+									value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
+									<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
+								</p:graphicImage>
+							</p:column>
+							<p:column colspan="2">
 								<h:outputLabel for="projLogo" value="Logo:" />
-								<p:fileUpload id="projLogo"
+								<p:fileUpload id="projLogo" fileLimit="1"	
 									disabled="#{empty jJProjectBean.projectAdmin.name}"
 									fileUploadListener="#{licenseBean.handleProjLogoUpload}"
 									mode="advanced" dragDropSupport="true" update="msg"

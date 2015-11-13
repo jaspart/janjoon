@@ -8,7 +8,6 @@ import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJVersion;
@@ -62,9 +61,6 @@ privileged aspect JJBuildBean_Roo_ManagedBean {
     
     @Autowired
     JJVersionService JJBuildBean.jJVersionService;
-    
-    @Autowired
-    JJStatusService JJBuildBean.jJStatusService;
     
     private String JJBuildBean.name = "JJBuilds";
     

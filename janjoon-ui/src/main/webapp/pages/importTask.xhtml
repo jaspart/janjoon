@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:p="http://primefaces.org/ui">
@@ -80,7 +81,8 @@
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.importTask_selectStatus}" />
 						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
-							itemLabel="#{p.name}" itemValue="#{p}" />
+							itemLabel="#{messages['status_'.concat(fn:replace(p.name, ' ', '_'))]}"
+							itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectStatus}"
 							onstart="PF('taskBlockUIWidget').block()"

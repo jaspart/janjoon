@@ -45,10 +45,12 @@
 				</f:facet>
 				<p:column style="width: 70px !important;text-align: center;">
 					<p:graphicImage styleClass="avatar" cache="false"
-						value="#{imageStreamer.imageComp}">
+						value="#{imageStreamer.imageComp}" rendered="#{company.logo != null}">
 						<f:param name="CompId" value="#{company.id}" />
 					</p:graphicImage>
-				</p:column>
+					<p:graphicImage styleClass="avatar" library="images" name="empty_company.png" 
+					rendered="#{company.logo == null}"/>
+					</p:column>
 				<p:column sortBy="#{company.name}">
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_company_table_name_title}" />
@@ -322,7 +324,7 @@
 									</p:column>
 									<p:column colspan="1">
 										<h:outputLabel for="compLogo" value="Logo:" />
-										<p:fileUpload id="compLogo"
+										<p:fileUpload id="compLogo" fileLimit="1"	
 											disabled="#{empty jJCompanyBean.companie.name}"
 											fileUploadListener="#{licenseBean.handleCompLogoUpload}"
 											mode="advanced" dragDropSupport="true" update="msg"
@@ -364,7 +366,7 @@
 									<p:columnGroup type="header">
 										<p:row>
 											<p:column colspan="5" style="text-align: left;"
-												headerText="#{messages.contact_datatableHeader}" />
+												headerText="#{messages.admin_company_calendarHeader}" />
 										</p:row>
 										<p:row>
 											<p:column rowspan="2" width="40%"

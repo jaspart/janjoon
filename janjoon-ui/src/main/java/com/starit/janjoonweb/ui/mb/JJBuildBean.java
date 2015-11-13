@@ -18,6 +18,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhaseService;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -41,6 +42,9 @@ public class JJBuildBean {
 	@Autowired
 	private JJPhaseService jJPhaseService;
 
+	@Autowired
+	private JJStatusService jJStatusService;
+
 	public void setjJPhaseService(JJPhaseService jJPhaseService) {
 		this.jJPhaseService = jJPhaseService;
 	}
@@ -51,6 +55,10 @@ public class JJBuildBean {
 
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
+	}
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
 	}
 
 	public int getIndex() {

@@ -131,7 +131,9 @@ public class JJStatusServiceImpl implements JJStatusService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (name != null) {
-			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("name")),
+					name.toLowerCase()));
 		}
 
 		if (object != null) {

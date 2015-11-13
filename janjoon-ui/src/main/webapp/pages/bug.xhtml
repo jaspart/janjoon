@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/layout.xhtml">
@@ -139,7 +140,8 @@
 								<p:column colspan="1">
 									<p:outputLabel for="jJbugStatus" value="Status : " />
 									<p:autoComplete id="jJbugStatus"
-										value="#{jJBugBean.viewBug.status}" itemLabel="#{status.name}"
+										value="#{jJBugBean.viewBug.status}" 
+										itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
 										itemValue="#{status}" styleClass="bugAutoComplete"
 										scrollHeight="200" style="float: right;margin-right: 20px;"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"

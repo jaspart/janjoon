@@ -31,7 +31,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 	public List<JJProfile> load(MutableInt size, int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, Object> filters,
-			boolean isSuperAdmin) {
+			boolean isSuperAdmin, JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
 				.createQuery(JJProfile.class);
@@ -55,6 +55,17 @@ public class JJProfileServiceImpl implements JJProfileService {
 					fromRight.get("x"), true), criteriaBuilder.equal(
 					criteriaBuilder.lower(fromRight.<String> get("objet")),
 					"*".toLowerCase())));
+
+			if (company != null) {
+				Predicate condition1 = criteriaBuilder.notEqual(
+						fromRight.get("category").get("company"), company);
+				Predicate condition2 = criteriaBuilder.isNull(fromRight.get(
+						"category").get("company"));
+				predicatesRight.add(criteriaBuilder.or(condition1, condition2));
+			} else {
+				predicatesRight.add(criteriaBuilder.isNull(fromRight.get(
+						"category").get("company")));
+			}
 
 			subquery.where(criteriaBuilder.and(criteriaBuilder
 					.or(predicatesRight.toArray(new Predicate[] {})),
@@ -106,19 +117,6 @@ public class JJProfileServiceImpl implements JJProfileService {
 				predicatesRight.add(criteriaBuilder.and(allpredicates
 						.toArray(new Predicate[] {})));
 
-				// predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-				// fromRight.get("x"), xComponent), criteriaBuilder.equal(
-				// fromRight.get("w"), wComponent), criteriaBuilder.equal(
-				// fromRight.get("r"), rComponent), criteriaBuilder.equal(
-				// criteriaBuilder.lower(fromRight.<String> get("objet")),
-				// objectComponent.toLowerCase())));
-				// predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-				// fromRight.get("x"), xComponent), criteriaBuilder.equal(
-				// fromRight.get("w"), wComponent), criteriaBuilder.equal(
-				// fromRight.get("r"), rComponent), criteriaBuilder.equal(
-				// criteriaBuilder.lower(fromRight.<String> get("objet")),
-				// "*".toLowerCase())));
-
 				subquery.where(criteriaBuilder.and(criteriaBuilder
 						.or(predicatesRight.toArray(new Predicate[] {})),
 						criteriaBuilder.equal(fromRight.get("enabled"), true)));
@@ -159,7 +157,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 	}
 
 	@Override
-	public JJProfile getOneProfile(String name, boolean onlyActif) {
+	public JJProfile getOneProfile(String name, JJCompany company,
+			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
@@ -174,6 +173,29 @@ public class JJProfileServiceImpl implements JJProfileService {
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
+
+		Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+		Root<JJRight> fromRight = subquery.from(JJRight.class);
+		List<Predicate> predicatesRight = new ArrayList<Predicate>();
+		subquery.select(fromRight.get("profile").<Long> get("id"));
+
+		if (company != null) {
+			Predicate condition1 = criteriaBuilder.equal(
+					fromRight.get("category").get("company"), company);
+			Predicate condition2 = criteriaBuilder.isNull(fromRight.get(
+					"category").get("company"));
+			predicatesRight.add(criteriaBuilder.or(condition1, condition2));
+		} else {
+			predicatesRight.add(criteriaBuilder.isNull(fromRight
+					.get("category").get("company")));
+		}
+
+		subquery.where(criteriaBuilder.and(
+				criteriaBuilder.or(predicatesRight.toArray(new Predicate[] {})),
+				criteriaBuilder.equal(fromRight.get("enabled"), true)));
+
+		predicates
+				.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		if (name != null) {
 
@@ -194,7 +216,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 
 	}
 
-	public List<JJProfile> getProfiles(boolean onlyActif, boolean isSuperAdmin) {
+	public List<JJProfile> getProfiles(boolean onlyActif, boolean isSuperAdmin,
+			JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJProfile> criteriaQuery = criteriaBuilder
 				.createQuery(JJProfile.class);
@@ -219,6 +242,17 @@ public class JJProfileServiceImpl implements JJProfileService {
 					criteriaBuilder.lower(fromRight.<String> get("objet")),
 					"*".toLowerCase())));
 
+			if (company != null) {
+				Predicate condition1 = criteriaBuilder.notEqual(
+						fromRight.get("category").get("company"), company);
+				Predicate condition2 = criteriaBuilder.isNull(fromRight.get(
+						"category").get("company"));
+				predicatesRight.add(criteriaBuilder.or(condition1, condition2));
+			} else {
+				predicatesRight.add(criteriaBuilder.isNull(fromRight.get(
+						"category").get("company")));
+			}
+
 			subquery.where(criteriaBuilder.and(criteriaBuilder
 					.or(predicatesRight.toArray(new Predicate[] {})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
@@ -226,6 +260,29 @@ public class JJProfileServiceImpl implements JJProfileService {
 			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
 					.not());
 
+		} else {
+			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+			Root<JJRight> fromRight = subquery.from(JJRight.class);
+			List<Predicate> predicatesRight = new ArrayList<Predicate>();
+			subquery.select(fromRight.get("profile").<Long> get("id"));
+
+			if (company != null) {
+				Predicate condition1 = criteriaBuilder.equal(
+						fromRight.get("category").get("company"), company);
+				Predicate condition2 = criteriaBuilder.isNull(fromRight.get(
+						"category").get("company"));
+				predicatesRight.add(criteriaBuilder.or(condition1, condition2));
+			} else {
+				predicatesRight.add(criteriaBuilder.isNull(fromRight.get(
+						"category").get("company")));
+			}
+
+			subquery.where(criteriaBuilder.and(criteriaBuilder
+					.or(predicatesRight.toArray(new Predicate[] {})),
+					criteriaBuilder.equal(fromRight.get("enabled"), true)));
+
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
+					.not());
 		}
 
 		if (onlyActif) {

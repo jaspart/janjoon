@@ -26,7 +26,7 @@ public class JJPermissionBean {
 	private List<PermissionDataModel> permissionDataModel;
 
 	private JJProfile profile;
-	private List<JJProfile> profiles;
+	// private List<JJProfile> profiles;
 	private JJProject project;
 	private JJProduct product;
 	private boolean checkPermission;
@@ -64,15 +64,20 @@ public class JJPermissionBean {
 	}
 
 	public List<JJProfile> getProfiles() {
-		profiles = jJProfileService.getProfiles(true, jJPermissionService
-				.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact()));
-		return profiles;
+
+		JJContact contactAdmin = ((JJContactBean) LoginBean
+				.findBean("jJContactBean")).getContactAdmin();
+		if (contactAdmin.getId() != null) {
+			return jJProfileService.getProfiles(true, jJPermissionService
+					.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
+							.getContact()), contactAdmin.getCompany());
+		} else
+			return new ArrayList<JJProfile>();
 	}
 
-	public void setProfiles(List<JJProfile> profiles) {
-		this.profiles = profiles;
-	}
+	// public void setProfiles(List<JJProfile> profiles) {
+	// this.profiles = profiles;
+	// }
 
 	public JJProject getProject() {
 		return project;

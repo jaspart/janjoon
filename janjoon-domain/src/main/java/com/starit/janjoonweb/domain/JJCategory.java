@@ -49,6 +49,9 @@ public class JJCategory {
 	@ManyToOne
 	private JJContact updatedBy;
 
+	@ManyToOne
+	private JJCompany company;
+
 	private Boolean enabled;
 
 	private Integer stage;

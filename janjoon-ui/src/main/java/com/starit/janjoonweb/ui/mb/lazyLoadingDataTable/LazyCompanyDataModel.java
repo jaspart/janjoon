@@ -56,8 +56,7 @@ public class LazyCompanyDataModel extends LazyDataModel<JJCompany> {
 			data = jJCompanyService.load(size, first, pageSize, multiSortMeta,
 					filters);
 		else
-			data.add(((LoginBean) LoginBean.findBean("loginBean")).getContact()
-					.getCompany());
+			data.add(LoginBean.getCompany());
 
 		System.err.println("SIZE :" + data.size());
 		setRowCount(size.getValue());

@@ -81,8 +81,7 @@ public class JJProjectBean {
 	public List<JJProject> getProjectList() {
 
 		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
-			return jJProjectService.getProjects(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(),
+			return jJProjectService.getProjects(LoginBean.getCompany(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
 					true, false);
 		else
@@ -102,7 +101,7 @@ public class JJProjectBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
-			company = loginBean.getContact().getCompany();
+			company = LoginBean.getCompany();
 
 		if (projectListTable == null)
 			projectListTable = new LazyProjectDataModel(jJProjectService,
@@ -126,9 +125,9 @@ public class JJProjectBean {
 
 		if (projectAdmin.getId() == null)
 			projectManagerList = jJPermissionService.getManagers(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), ((LoginBean) LoginBean
-							.findBean("loginBean")).getContact(), "Project");
+					LoginBean.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Project");
 		else
 			projectManagerList = jJPermissionService.getManagers(projectAdmin
 					.getManager().getCompany(), ((LoginBean) LoginBean
@@ -152,8 +151,8 @@ public class JJProjectBean {
 	public List<JJProject> getDeletedProject() {
 		if (deletedProject == null) {
 			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-			deletedProject = jJProjectService.getProjectList(false, loginBean
-					.getContact().getCompany(), loginBean.getContact());
+			deletedProject = jJProjectService.getProjectList(false,
+					LoginBean.getCompany(), loginBean.getContact());
 		}
 
 		return deletedProject;

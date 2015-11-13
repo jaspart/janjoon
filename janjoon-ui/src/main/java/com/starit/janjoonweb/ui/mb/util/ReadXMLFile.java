@@ -58,7 +58,7 @@ public class ReadXMLFile {
 			System.out.println("Root element :"
 					+ doc.getDocumentElement().getNodeName());
 			JJCategory category = jJCategoryService.getCategory(doc
-					.getDocumentElement().getAttribute("name"), true);
+					.getDocumentElement().getAttribute("name"), company, true);
 
 			NodeList nList = doc.getElementsByTagName("requirement");
 
@@ -119,7 +119,7 @@ public class ReadXMLFile {
 			InputStream stream, JJTestcaseService jjTestcaseService,
 			JJCategoryService jJCategoryService,
 			JJRequirementService jJRequirementService, JJProject project,
-			JJProduct product) throws SAXParseException {
+			JJProduct product, JJCompany company) throws SAXParseException {
 
 		List<JJTestcase> testests = new ArrayList<JJTestcase>();
 		List<JJTeststep> teststeps = new ArrayList<JJTeststep>();
@@ -134,7 +134,7 @@ public class ReadXMLFile {
 			System.out.println("Root element :"
 					+ doc.getDocumentElement().getNodeName());
 			JJCategory category = jJCategoryService.getCategory(doc
-					.getDocumentElement().getAttribute("name"), true);
+					.getDocumentElement().getAttribute("name"), company, true);
 
 			NodeList nList = doc.getElementsByTagName("testcase");
 

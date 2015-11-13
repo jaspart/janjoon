@@ -10,9 +10,9 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJRight.class, beanName = "jJRightBean")
@@ -22,8 +22,6 @@ public class JJRightBean {
 	private List<RightDataModel> rightDataModel;
 
 	private JJCategory category;
-	private List<JJCategory> categories;
-
 	private String object;
 	private List<String> objects;
 
@@ -57,12 +55,12 @@ public class JJRightBean {
 	}
 
 	public List<JJCategory> getCategories() {
-		return categories = jJCategoryService.getCategories(null, false, true,
-				true);
-	}
 
-	public void setCategories(List<JJCategory> categories) {
-		this.categories = categories;
+		return jJCategoryService.getCategories(null, false, true, true,
+				((LoginBean) LoginBean.findBean("loginBean"))
+						.getAuthorisationService().isSuperAdmin() ? null
+						: LoginBean.getCompany());
+
 	}
 
 	public String getObject() {

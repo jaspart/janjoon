@@ -390,7 +390,8 @@ public class JJBugBean {
 			} else if (data.get(i) instanceof JJStatus) {
 				JJStatus status = (JJStatus) data.get(i);
 				options[i + 1] = new SelectItem(status.getName(),
-						status.getName());
+						MessageFactory.getMessage("status_" + status.getName(),
+								"").getDetail());
 
 			} else if (data.get(i) instanceof JJImportance) {
 				JJImportance importance = (JJImportance) data.get(i);

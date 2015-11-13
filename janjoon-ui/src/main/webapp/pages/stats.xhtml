@@ -3,6 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/layout.xhtml">
@@ -21,15 +22,17 @@
 			<p:tab id="specTab" title="Status">
 				<h:form id="specForm">
 					<h:panelGrid id="statPanel" columns="3">
-						<p:chart id="custom" responsive="true"
+						<p:chart id="custom" responsive="true" rendered="#{jJStatusBean.pieChart != null}"
 							model="#{jJStatusBean.pieChart}" style="width:400px;height:300px"
 							type="pie" />
 
 						<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
-							style="width:400px;height:300px" responsive="true" />
+							style="width:400px;height:300px"  rendered="#{jJStatusBean.bugMetergauge != null}"
+							responsive="true" />
 
 						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
-							style="width:400px;height:300px" responsive="true" />
+							style="width:400px;height:300px" responsive="true"
+							rendered="#{jJStatusBean.prjMetergauge != null}" />
 					</h:panelGrid>
 					<p:dataTable id="categoryTable" var="categoryModel"
 						emptyMessage="#{messages.label_notRecordFound}"

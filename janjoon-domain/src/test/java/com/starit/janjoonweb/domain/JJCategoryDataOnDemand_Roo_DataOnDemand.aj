@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJCategoryRepository;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompanyDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ privileged aspect JJCategoryDataOnDemand_Roo_DataOnDemand {
     private Random JJCategoryDataOnDemand.rnd = new SecureRandom();
     
     private List<JJCategory> JJCategoryDataOnDemand.data;
+    
+    @Autowired
+    JJCompanyDataOnDemand JJCategoryDataOnDemand.jJCompanyDataOnDemand;
     
     @Autowired
     JJContactDataOnDemand JJCategoryDataOnDemand.jJContactDataOnDemand;

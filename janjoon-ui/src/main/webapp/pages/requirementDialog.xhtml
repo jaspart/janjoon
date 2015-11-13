@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<style type="text/css">
@@ -61,7 +62,8 @@
 							<f:converter
 								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 							<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
-								var="req" itemLabel="#{req.name}" itemValue="#{req}" />
+								var="req" itemLabel="#{messages['status_'.concat(fn:replace(req.name, ' ', '_'))]}"
+								itemValue="#{req}" />
 							<p:ajax partialSubmit="true"
 								listener="#{jJRequirementBean.handleSelectStatus()}" />
 						</p:selectOneMenu>

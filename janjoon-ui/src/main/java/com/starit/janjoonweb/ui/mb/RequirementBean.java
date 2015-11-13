@@ -225,7 +225,7 @@ public class RequirementBean {
 
 		if (categories == null)
 			categories = jJCategoryService.getCategories(null, false, true,
-					true);
+					true, LoginBean.getCompany());
 
 		return categories;
 	}
@@ -448,7 +448,7 @@ public class RequirementBean {
 				categorieRequirements = CategorieRequirement
 						.initCategorieRequirement(requirement,
 								jJCategoryService.getCategories(null, false,
-										true, true));
+										true, true, LoginBean.getCompany()));
 
 			} else {
 				requirement = null;
@@ -488,8 +488,7 @@ public class RequirementBean {
 		categoryNode.setExpanded(true);
 
 		List<JJChapter> chapters = jJChapterService.getParentsChapter(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), project, category, true, true);
+				LoginBean.getCompany(), project, category, true, true);
 
 		for (JJChapter ch : chapters) {
 			createTreeNode(ch, categoryNode, category, project, product,
@@ -497,8 +496,7 @@ public class RequirementBean {
 		}
 
 		List<JJRequirement> requirements = jJRequirementService
-				.getRequirementsWithOutChapter(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact().getCompany(),
+				.getRequirementsWithOutChapter(LoginBean.getCompany(),
 						category, loginBean.getAuthorizedMap("Requirement",
 								project, product), version, null, true, true);
 
@@ -518,8 +516,7 @@ public class RequirementBean {
 		TreeNode newNode = new DefaultTreeNode("chapter", chapter, categoryNode);
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		List<JJRequirement> requirements = jJRequirementService
-				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), cat, loginBean
+				.getRequirements(LoginBean.getCompany(), cat, loginBean
 						.getAuthorizedMap("Requirement", project, product),
 						version, null, chapter, true, true, true, false, null);
 
@@ -557,7 +554,7 @@ public class RequirementBean {
 			throws IOException {
 
 		JJCategory linkCategory = jJCategoryService.getCategory(categoryName,
-				true);
+				LoginBean.getCompany(), true);
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
 
@@ -630,15 +627,14 @@ public class RequirementBean {
 		linkReqList = new ArrayList<JJRequirement>();
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCategory selectedCategory = jJCategoryService.getCategory(
-				categoryName, true);
+				categoryName, LoginBean.getCompany(), true);
 		linkReqList = jJRequirementService.getRequirements(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), selectedCategory, loginBean
-						.getAuthorizedMap("Requirement",
-								requirement.getProject(),
-								requirement.getProduct()), requirement
-						.getVersioning(), null, null, false, true, true, false,
-				null);
+				LoginBean.getCompany(),
+				selectedCategory,
+				loginBean.getAuthorizedMap("Requirement",
+						requirement.getProject(), requirement.getProduct()),
+				requirement.getVersioning(), null, null, false, true, true,
+				false, null);
 		linkReq = cateRequirement.getRequirements();
 
 	}

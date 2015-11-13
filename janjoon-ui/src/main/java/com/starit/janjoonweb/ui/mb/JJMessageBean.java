@@ -56,11 +56,10 @@ public class JJMessageBean {
 
 		if (alertMessages == null
 				&& ((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
-			alertMessages = jJMessageService.getAlertMessages(LoginBean
-					.getProject(), LoginBean.getProduct(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), ((LoginBean) LoginBean
-							.findBean("loginBean")).getContact());
+			alertMessages = jJMessageService.getAlertMessages(
+					LoginBean.getProject(), LoginBean.getProduct(),
+					LoginBean.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		}
 		return alertMessages;
 	}
@@ -248,8 +247,7 @@ public class JJMessageBean {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(),
+					LoginBean.getCompany(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		}
 	}
@@ -270,18 +268,16 @@ public class JJMessageBean {
 
 			mainMessages = new LazyMessageDataModel(jJMessageService,
 					LoginBean.getProject(), LoginBean.getProduct(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(),
+					LoginBean.getCompany(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			// // if (!login.isCollapsedMesPanel()) {
 			// RequestContext context = RequestContext.getCurrentInstance();
 			// context.update("messagePanel");
 			// // }
 
-			for (JJMessage mes : jJMessageService.getActifMessages(LoginBean
-					.getProject(), LoginBean.getProduct(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany())) {
+			for (JJMessage mes : jJMessageService.getActifMessages(
+					LoginBean.getProject(), LoginBean.getProduct(),
+					LoginBean.getCompany())) {
 				if (mes.getCreatedBy() != null
 						&& !listContaines(contactes, mes.getCreatedBy()))
 					contactes.add(mes.getCreatedBy());

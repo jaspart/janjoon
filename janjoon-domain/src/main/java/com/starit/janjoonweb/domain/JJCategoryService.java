@@ -10,15 +10,19 @@ import org.springframework.roo.addon.layers.service.RooService;
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJCategory.class })
 public interface JJCategoryService {
 
-	public JJCategory getCategory(String name, boolean onlyActif);
+	public JJCategory getCategory(String name, JJCompany company,
+			boolean onlyActif);
 
 	public List<JJCategory> getCategories(String name, boolean withName,
-			boolean onlyActif, boolean sortedByStage);
+			boolean onlyActif, boolean sortedByStage, JJCompany company);
 
 	public List<JJCategory> load(MutableInt size, int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters);
+			List<SortMeta> multiSortMeta, Map<String, Object> filters,
+			JJCompany company);
 
-	public boolean isHighLevel(JJCategory category);
+	public boolean isHighLevel(JJCategory category, JJCompany company);
 
-	public boolean isLowLevel(JJCategory category);
+	public boolean isLowLevel(JJCategory category, JJCompany company);
+
+	public boolean nameExist(String name, Long id, JJCompany company);
 }

@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <ui:composition>
 
 	<h:form id="statusForm">
@@ -28,7 +29,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_status_table_name_title}" />
 					</f:facet>
-					<h:outputText value="#{status.name}" />
+					<h:outputText value="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}" />
 				</p:column>
 
 				<p:column sortBy="#{status.objet}" id="objet"

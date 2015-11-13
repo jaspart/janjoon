@@ -522,9 +522,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 			if (finished
 					&& (entityManager.createQuery(select).getSingleResult() > 0 || (object instanceof JJRequirement
-							&& !jJCategoryService
-									.isHighLevel(((JJRequirement) object)
-											.getCategory()) && jJRequirementService
+							&& !jJCategoryService.isHighLevel(
+									((JJRequirement) object).getCategory(),
+									((JJRequirement) object).getProject()
+											.getCompany()) && jJRequirementService
 								.haveLinkUp((JJRequirement) object))))
 				return isFinished(object, onlyActif);
 			else
@@ -571,8 +572,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 			if (object instanceof JJRequirement
 					&& entityManager.createQuery(select).getSingleResult() == 0
-					&& !jJCategoryService.isHighLevel(((JJRequirement) object)
-							.getCategory())
+					&& !jJCategoryService.isHighLevel(
+							((JJRequirement) object).getCategory(),
+							((JJRequirement) object).getProject().getCompany())
 					&& jJRequirementService.haveLinkUp((JJRequirement) object)) {
 				boolean isFinished = true;
 				List<JJRequirement> requirements = new ArrayList<JJRequirement>(

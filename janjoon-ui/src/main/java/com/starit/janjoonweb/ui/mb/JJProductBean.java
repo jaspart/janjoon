@@ -86,8 +86,7 @@ public class JJProductBean {
 	public List<JJProduct> getProductList() {
 
 		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
-			return jJProductService.getProducts(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact().getCompany(),
+			return jJProductService.getProducts(LoginBean.getCompany(),
 					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
 					true, false);
 		else
@@ -107,7 +106,7 @@ public class JJProductBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
-			company = loginBean.getContact().getCompany();
+			company = LoginBean.getCompany();
 
 		if (productListTable == null)
 			productListTable = new LazyProductDataModel(jJProductService,
@@ -131,9 +130,9 @@ public class JJProductBean {
 
 		if (productAdmin.getId() == null)
 			productManagerList = jJPermissionService.getManagers(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), ((LoginBean) LoginBean
-							.findBean("loginBean")).getContact(), "Product");
+					LoginBean.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Product");
 		else
 			productManagerList = jJPermissionService.getManagers(productAdmin
 					.getManager().getCompany(), ((LoginBean) LoginBean
@@ -248,8 +247,7 @@ public class JJProductBean {
 		resetVersionProductList();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				productAdmin, ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), true);
+				productAdmin, LoginBean.getCompany(), true);
 
 		List<VersionDataModel> versionDataModels = jJVersionBean
 				.getVersionDataModel();

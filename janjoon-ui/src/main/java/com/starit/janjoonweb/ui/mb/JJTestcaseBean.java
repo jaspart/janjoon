@@ -473,8 +473,7 @@ public class JJTestcaseBean {
 	public List<JJRequirement> getRequirements() {
 
 		List<JJRequirement> requirements = jJRequirementService
-				.getRequirements(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), null,
+				.getRequirements(LoginBean.getCompany(), null,
 						((LoginBean) LoginBean.findBean("loginBean"))
 								.getAuthorizedMap("testcase",
 										LoginBean.getProject(),
@@ -552,9 +551,9 @@ public class JJTestcaseBean {
 	public List<CategoryUtil> getCategoryList() {
 
 		if (categoryList == null)
-			categoryList = CategoryUtil.getCategoryList(
-					jJCategoryService.getCategories(null, false, true, true),
-					category);
+			categoryList = CategoryUtil.getCategoryList(jJCategoryService
+					.getCategories(null, false, true, true,
+							LoginBean.getCompany()), category);
 		return categoryList;
 	}
 
@@ -1264,9 +1263,8 @@ public class JJTestcaseBean {
 			categoryNode.setExpanded(true);
 
 			List<JJChapter> parentChapters = jJChapterService
-					.getParentsChapter(((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany(),
-							project, category, true, true);
+					.getParentsChapter(LoginBean.getCompany(), project,
+							category, true, true);
 
 			for (JJChapter ch : parentChapters) {
 				TreeNode node = createTree(ch, categoryNode, category, build);
@@ -1275,8 +1273,7 @@ public class JJTestcaseBean {
 			}
 
 			List<JJRequirement> withOutChapter = jJRequirementService
-					.getRequirementsWithOutChapter(((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany(),
+					.getRequirementsWithOutChapter(LoginBean.getCompany(),
 							category, ((LoginBean) LoginBean
 									.findBean("loginBean")).getAuthorizedMap(
 									"Requirement", project,
@@ -1333,8 +1330,7 @@ public class JJTestcaseBean {
 			long id = Long.parseLong(getSubString(selectedNode, 1, "-"));
 			chapter = jJChapterService.findJJChapter(id);
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), null, ((LoginBean) LoginBean
+					LoginBean.getCompany(), null, ((LoginBean) LoginBean
 							.findBean("loginBean")).getAuthorizedMap(
 							"testcase", LoginBean.getProject(),
 							LoginBean.getProduct()), LoginBean.getVersion(),
@@ -1569,8 +1565,7 @@ public class JJTestcaseBean {
 
 			List<JJRequirement> requirements = jJRequirementService
 					.getRequirementChildrenWithChapterSortedByOrder(
-							((LoginBean) LoginBean.findBean("loginBean"))
-									.getContact().getCompany(), parent,
+							LoginBean.getCompany(), parent,
 							LoginBean.getProduct(), LoginBean.getVersion(),
 							onlyActif);
 
@@ -1584,8 +1579,7 @@ public class JJTestcaseBean {
 		} else {
 
 			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany(), project, category, onlyActif, true);
+					LoginBean.getCompany(), project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
@@ -1630,8 +1624,7 @@ public class JJTestcaseBean {
 		paragraph.add(phrase);
 
 		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				((LoginBean) LoginBean.findBean("loginBean")).getContact()
-						.getCompany(), project, category, true, true);
+				LoginBean.getCompany(), project, category, true, true);
 
 		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
 				.getBuild();
@@ -1997,7 +1990,8 @@ public class JJTestcaseBean {
 		try {
 			List<Object> objects = ReadXMLFile.getTestcasesFromXml(this, event
 					.getFile().getInputstream(), jJTestcaseService,
-					jJCategoryService, jJRequirementService, proj, prod);
+					jJCategoryService, jJRequirementService, proj, prod, proj
+							.getCompany());
 			@SuppressWarnings("unchecked")
 			List<JJTestcase> testcases = (List<JJTestcase>) objects.get(0);
 			@SuppressWarnings("unchecked")

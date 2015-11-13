@@ -111,8 +111,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 			}
 		}
 
-		data = bugService.load(contact, ((LoginBean) LoginBean
-				.findBean("loginBean")).getContact().getCompany(), size, first,
+		data = bugService.load(contact, LoginBean.getCompany(), size, first,
 				pageSize, multiSortMeta, filters, project, product, version);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());

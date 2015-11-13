@@ -76,7 +76,8 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 		MutableInt size = new MutableInt(0);
 		data = profileService.load(size, first, pageSize, multiSortMeta,
 				filters, permissionService.isSuperAdmin(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact()));
+						.findBean("loginBean")).getContact()), LoginBean
+						.getCompany());
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

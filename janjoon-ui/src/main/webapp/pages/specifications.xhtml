@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
@@ -563,7 +564,7 @@
 						fileUploadListener="#{jJRequirementBean.handleImportXML}"
 						mode="advanced" dragDropSupport="false"
 						oncomplete="updateDataTable();" update=":growlForm :categoryForm"
-						sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(xml)$/" />
+						sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(xml)$/" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -727,7 +728,8 @@
 									<f:selectItem itemValue="#{null}"
 										itemLabel="#{messages.specification_import_select_label}" />
 									<f:selectItems value="#{jJRequirementBean.importStatusList}"
-										var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+										var="p" itemLabel="#{messages['status_'.concat(fn:replace(p.name, ' ', '_'))]}"
+										itemValue="#{p}" />
 									<p:ajax partialSubmit="true"
 										onstart="PF('importBlockUIWidget').block()"
 										oncomplete="PF('importBlockUIWidget').unblock()"

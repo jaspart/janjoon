@@ -589,7 +589,8 @@ public class ConfigListener implements ServletContextListener {
 		//
 		// }
 
-		if (jJCategoryService.getCategories(null, false, true, true).isEmpty()) {
+		if (jJCategoryService.getCategories(null, false, true, true, null)
+				.isEmpty()) {
 			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL",
 					"ARCHITECTURE", "SECURITY" };
 			for (String name : names) {
@@ -631,26 +632,28 @@ public class ConfigListener implements ServletContextListener {
 		if (jJRightService.findAllJJRights().isEmpty()) {
 
 			JJCategory businessCategory = jJCategoryService.getCategory(
-					"BUSINESS", true);
+					"BUSINESS", null, true);
 			JJCategory functionalCategory = jJCategoryService.getCategory(
-					"FUNCTIONAL", true);
+					"FUNCTIONAL", null, true);
 			JJCategory technicalCategory = jJCategoryService.getCategory(
-					"TECHNICAL", true);
+					"TECHNICAL", null, true);
 			JJCategory architectureCategory = jJCategoryService.getCategory(
-					"ARCHITECTURE", true);
+					"ARCHITECTURE", null, true);
 
 			JJProfile projectManagerProfile = jJProfileService.getOneProfile(
-					"ProjectManager", true);
+					"ProjectManager", null, true);
 			JJProfile productManagerProfile = jJProfileService.getOneProfile(
-					"ProductManager", true);
-			JJProfile ceoProfile = jJProfileService.getOneProfile("CEO", true);
-			JJProfile ctoProfile = jJProfileService.getOneProfile("CTO", true);
-			JJProfile testerProfile = jJProfileService.getOneProfile("Tester",
+					"ProductManager", null, true);
+			JJProfile ceoProfile = jJProfileService.getOneProfile("CEO", null,
 					true);
+			JJProfile ctoProfile = jJProfileService.getOneProfile("CTO", null,
+					true);
+			JJProfile testerProfile = jJProfileService.getOneProfile("Tester",
+					null, true);
 			JJProfile developerProfile = jJProfileService.getOneProfile(
-					"Developer", true);
+					"Developer", null, true);
 			JJProfile customProfile = jJProfileService.getOneProfile(
-					"CustomProfile", true);
+					"CustomProfile", null, true);
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
@@ -968,7 +971,7 @@ public class ConfigListener implements ServletContextListener {
 			// true));
 			// profiles.add(jJProfileService.getOneProfile("ProductManager",
 			// true));
-			profiles.add(jJProfileService.getOneProfile("CTO", true));
+			profiles.add(jJProfileService.getOneProfile("CTO", null, true));
 
 			for (JJProfile profile : profiles) {
 				JJPermission permission = new JJPermission();

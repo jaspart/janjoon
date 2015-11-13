@@ -24,7 +24,7 @@ public class JJAuditLogBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJCompany company = null;
 		if (!loginBean.getAuthorisationService().isAdminCompany())
-			company = loginBean.getContact().getCompany();
+			company = LoginBean.getCompany();
 		connectionStatistiquesListTable = null;
 		if (connectionStatistiquesListTable == null)
 			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(

@@ -5,6 +5,7 @@ package com.starit.janjoonweb.domain;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
+import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import java.util.Date;
 import java.util.Set;
@@ -57,6 +58,14 @@ privileged aspect JJCategory_Roo_JavaBean {
     
     public void JJCategory.setUpdatedBy(JJContact updatedBy) {
         this.updatedBy = updatedBy;
+    }
+    
+    public JJCompany JJCategory.getCompany() {
+        return this.company;
+    }
+    
+    public void JJCategory.setCompany(JJCompany company) {
+        this.company = company;
     }
     
     public Boolean JJCategory.getEnabled() {

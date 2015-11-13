@@ -45,6 +45,8 @@ td.ui-fileupload-preview {
 						value="#{imageStreamer.imageProd}">
 						<f:param name="ProdId" value="#{product.id}" />
 					</p:graphicImage>
+					<p:graphicImage styleClass="avatar" library="images"
+						name="empty_company.png" rendered="#{product.logo == null}" />
 				</p:column>
 				<p:column sortBy="#{product.name}">
 					<f:facet name="header">
@@ -180,9 +182,15 @@ td.ui-fileupload-preview {
 									</p:column>
 								</p:row>
 								<p:row>
-									<p:column colspan="2">
+									<p:column style="text-align: center;">
+										<p:graphicImage styleClass="avatar" cache="false"
+											value="#{imageStreamer.imageProd}" style="margin-top: 15%;">
+											<f:param name="ProdId" value="#{jJProductBean.productAdmin.id}" />
+										</p:graphicImage>
+									</p:column>
+									<p:column >
 										<h:outputLabel for="prodLogo" value="Logo:" />
-										<p:fileUpload id="prodLogo"
+										<p:fileUpload id="prodLogo" fileLimit="1"										
 											disabled="#{empty jJProductBean.productAdmin.name}"
 											fileUploadListener="#{licenseBean.handleProdLogoUpload}"
 											mode="advanced" dragDropSupport="true" update="msg"

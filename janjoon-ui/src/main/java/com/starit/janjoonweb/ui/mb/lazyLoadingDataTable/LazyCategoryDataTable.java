@@ -18,10 +18,13 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 	 */
 	private static final long serialVersionUID = 1L;
 	JJCategoryService jJCategoryService;
+	JJCompany company;
 
-	public LazyCategoryDataTable(JJCategoryService jJCategoryService) {
+	public LazyCategoryDataTable(JJCategoryService jJCategoryService,
+			JJCompany company) {
 
 		this.jJCategoryService = jJCategoryService;
+		this.company = company;
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 		List<JJCategory> data = new ArrayList<JJCategory>();
 		MutableInt size = new MutableInt(0);
 		data = jJCategoryService.load(size, first, pageSize, multiSortMeta,
-				filters);
+				filters, company);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

@@ -136,8 +136,7 @@ public class JJCompanyBean {
 				companies = jJCompanyService.getActifCompanies();
 			else if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
 				companies = new ArrayList<JJCompany>();
-				companies.add(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany());
+				companies.add(LoginBean.getCompany());
 			} else {
 				companies = jJCompanyService.getActifCompanies();
 			}
@@ -339,7 +338,7 @@ public class JJCompanyBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		if (loginBean.getContact().getCompany().equals(companie))
+		if (LoginBean.getCompany().equals(companie))
 			loginBean.getAuthorisationService().setSession(session);
 
 		companies = null;
@@ -391,7 +390,7 @@ public class JJCompanyBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		if (loginBean.getContact().getCompany().equals(companie))
+		if (LoginBean.getCompany().equals(companie))
 			loginBean.getAuthorisationService().setSession(session);
 
 		companies = null;

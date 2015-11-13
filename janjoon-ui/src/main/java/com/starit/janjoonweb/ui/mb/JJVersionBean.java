@@ -82,9 +82,7 @@ public class JJVersionBean {
 		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
 			if (versionList == null) {
 				versionList = jJVersionService.getVersions(true, true,
-						LoginBean.getProduct(), ((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), true);
+						LoginBean.getProduct(), LoginBean.getCompany(), true);
 
 			}
 		}
@@ -162,16 +160,10 @@ public class JJVersionBean {
 	}
 
 	public void initVersionDataModelList() {
-		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		versionDataModelList = new ArrayList<VersionDataModelUtil>();
 
-		// if (LoginBean.getProduct() == null) {
-		//
-		// for (JJProduct prod : jJProductService.getProducts(loginBean
-		// .getContact().getCompany(), LoginBean.getProject())) {
+		versionDataModelList = new ArrayList<VersionDataModelUtil>();
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				LoginBean.getProduct(), loginBean.getContact().getCompany(),
-				true);
+				LoginBean.getProduct(), LoginBean.getCompany(), true);
 		for (JJVersion version : versions) {
 			versionDataModelList.add(new VersionDataModelUtil(version,
 					jJBuildService));
@@ -215,8 +207,7 @@ public class JJVersionBean {
 		versionDataModel = new ArrayList<VersionDataModel>();
 
 		List<JJVersion> versions = jJVersionService.getVersions(true, true,
-				product, ((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact().getCompany(), true);
+				product, LoginBean.getCompany(), true);
 
 		for (JJVersion version : versions) {
 			versionDataModel.add(new VersionDataModel(version, true, true));

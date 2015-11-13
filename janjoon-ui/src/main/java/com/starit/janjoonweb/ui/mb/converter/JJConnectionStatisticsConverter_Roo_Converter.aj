@@ -3,7 +3,6 @@
 
 package com.starit.janjoonweb.ui.mb.converter;
 
-import com.starit.janjoonweb.domain.JJConnectionStatistics;
 import com.starit.janjoonweb.domain.JJConnectionStatisticsService;
 import com.starit.janjoonweb.ui.mb.converter.JJConnectionStatisticsConverter;
 import javax.faces.component.UIComponent;
@@ -27,7 +26,6 @@ privileged aspect JJConnectionStatisticsConverter_Roo_Converter {
         }
         Long id = Long.parseLong(value);
         return jJConnectionStatisticsService.findJJConnectionStatistics(id);
-    }  
-    
+    }
     
 }
