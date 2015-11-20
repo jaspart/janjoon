@@ -104,8 +104,16 @@ public class SprintUtil {
 		return workload;
 	}
 
-	public void setWorkload(Integer workload) {
+	public void ogress(Integer workload) {
 		this.workload = workload;
+	}
+
+	public Integer getProgressBarValue() {
+		if (workload == 0)
+			return 0;
+		else {
+			return Math.round(100 * consumed / workload);
+		}
 	}
 
 	public Integer getPriseReal() {
@@ -198,9 +206,6 @@ public class SprintUtil {
 						if (task.getWorkloadPlanned() != null)
 							i = i + task.getWorkloadPlanned();
 
-						if (task.getWorkloadReal() != null)
-							j = j + task.getWorkloadReal();
-
 						if (task.getStatus() != null) {
 							if (task.getStatus().getName()
 									.equalsIgnoreCase("DONE"))
@@ -216,6 +221,13 @@ public class SprintUtil {
 							todoTask.add(task);
 						}
 					}
+
+					for (JJTask task : doneTask) {
+						if (task.getWorkloadPlanned() != null)
+							j = j + task.getWorkloadPlanned();
+						else
+							j++;
+					}
 				}
 			}
 		}
@@ -229,7 +241,7 @@ public class SprintUtil {
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 		int workload = this.workload;
-		int diff = 0;
+		float diff = 0;
 
 		diff = workload;
 		List<JJTask> removedTasks = new ArrayList<JJTask>();
@@ -297,7 +309,8 @@ public class SprintUtil {
 			} else {
 				if (!calendar.isHoliday(staDate)
 						&& !calendar.isWeekEnd(staDate)) {
-					diff = Math.round(diff - dayWorkload);
+					// diff = Math.round(diff - dayWorkload);
+					diff = diff - dayWorkload;
 				}
 				diff = Math.max(diff, 0);
 				lineSeries.set(f.format(staDate), diff);

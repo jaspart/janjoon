@@ -68,6 +68,7 @@
 							value="#{messages.admin_project_new_startDate_label}" />
 						<p:calendar id="projectSD" navigator="true" effect="slideDown"
 							pattern="dd/MM/yyyy" required="true"
+							readonly="#{!loginBean.authorisationService.adminProject}"
 							binding="#{startDateProjectEdition}"
 							requiredMessage="#{messages.admin_project_new_startDate_alert}"
 							value="#{jJProjectBean.project.startDate}" />
@@ -77,6 +78,7 @@
 							value="#{messages.admin_project_new_endDate_label}" />
 						<p:calendar id="projectED" navigator="true" effect="slideDown"
 							pattern="dd/MM/yyyy" required="true"
+							readonly="#{!loginBean.authorisationService.adminProject}"
 							requiredMessage="#{messages.admin_project_new_endDate_alert}"
 							value="#{jJProjectBean.project.endDate}">
 							<f:validator validatorId="dateRangeValidator" />
@@ -88,6 +90,7 @@
 						<p:commandButton id="submitButton"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"
+							disabled="#{!loginBean.authorisationService.adminProject}"
 							value="#{messages.admin_project_new_save_button}"
 							update=":projectForm :headerForm :growlForm"
 							action="#{jJProjectBean.savePlanning}" />

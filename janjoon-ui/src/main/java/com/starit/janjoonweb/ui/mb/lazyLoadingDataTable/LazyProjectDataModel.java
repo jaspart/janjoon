@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJProject;

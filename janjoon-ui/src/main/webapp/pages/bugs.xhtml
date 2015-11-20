@@ -119,6 +119,12 @@
 					<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
 						oncomplete="PF('blockUIWidget2').unblock()" />
 
+					<p:ajax event="rowDblselect" onstart="PF('blockUIWidget2').block()"
+						update=":editForm" resetValues="true"
+						listener="#{jJBugBean.onRowDblClckSelect}"
+						oncomplete="PF('blockUIWidget2').unblock();PF('editDialogWidget').show()"
+						title="#{messages.label_edit}" />
+
 					<f:facet name="header">
 						<p:outputPanel>
 							<p:row>

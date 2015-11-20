@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
 import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.starit.janjoonweb.domain.JJBug.class })
@@ -20,6 +19,10 @@ public interface JJBugService {
 
 	public List<JJBug> getBugs(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version);
+
+	public Long getBugsCountByStaus(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,
+			boolean onlyActif);
 
 	public Long requirementBugCount(JJRequirement requirement);
 

@@ -80,7 +80,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 			JJCompany company, JJContact contact) {
 		long r = 0;
 		if (project != null && product != null) {
-			String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.project = :proj or e.project = null) and (e.product = :prod or e.product = null) and "
+			String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.company = :comp and (e.project = :proj or e.project = null) and (e.product = :prod or e.product = null) and "
 					+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 			if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -97,6 +97,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 			query = query + ")";
 
 			Query q = entityManager.createQuery(query);
+			q.setParameter("comp", company);
 
 			if (contact.getBugs() != null && !contact.getBugs().isEmpty())
 				q.setParameter("bugs", contact.getBugs());
@@ -115,7 +116,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		else {
 			if (project != null) {
-				String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.project = :proj or e.project = null) and "
+				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.company = :comp and (e.project = :proj or e.project = null) and "
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -132,6 +133,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				query = query + ")";
 
 				Query q = entityManager.createQuery(query);
+				q.setParameter("comp", company);
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
 					q.setParameter("bugs", contact.getBugs());
@@ -147,7 +149,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				r = (long) q.setParameter("proj", project).getSingleResult();
 
 			} else if (product != null) {
-				String query = "select count(e.id) from JJMessage e Where e.enabled = true and (e.product = :prod or e.product = null) and "
+				String query = "select count(e.id) from JJMessage e Where e.enabled = true and e.company = :comp and (e.product = :prod or e.product = null) and "
 						+ "((e.bug = null and e.requirement = null and e.testcase = null)";
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
@@ -164,6 +166,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				query = query + ")";
 
 				Query q = entityManager.createQuery(query);
+				q.setParameter("comp", company);
 
 				if (contact.getBugs() != null && !contact.getBugs().isEmpty())
 					q.setParameter("bugs", contact.getBugs());
@@ -257,9 +260,9 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
-		if (project == null && product == null && company != null) {
-			predicates.add(criteriaBuilder.equal(from.get("company"), company));
-		}
+		// if (project == null && product == null && company != null) {
+		predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		// }
 
 		if (filters != null) {
 			Iterator<Entry<String, Object>> it = filters.entrySet().iterator();
@@ -451,9 +454,9 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
-		if (project == null && product == null && company != null) {
-			predicates.add(criteriaBuilder.equal(from.get("company"), company));
-		}
+		// if (project == null && product == null && company != null) {
+		predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		// }
 
 		List<Predicate> oRPredicate = new ArrayList<Predicate>();
 		if (contact != null) {
@@ -500,9 +503,9 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (company != null) {
-			predicates.add(criteriaBuilder.equal(from.get("company"), company));
-		}
+		// if (company != null) {
+		predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		// }
 
 		select.where(predicates.toArray(new Predicate[] {}));
 
@@ -537,9 +540,9 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
-		if (project == null && product == null && company != null) {
-			predicates.add(criteriaBuilder.equal(from.get("company"), company));
-		}
+		// if (project == null && product == null && company != null) {
+		predicates.add(criteriaBuilder.equal(from.get("company"), company));
+		// }
 
 		select.where(predicates.toArray(new Predicate[] {}));
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);

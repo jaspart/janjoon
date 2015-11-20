@@ -761,7 +761,7 @@ public class LoginBean implements Serializable {
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					if (session.getAttribute("jJStatusBean") != null)
 						((JJStatusBean) session.getAttribute("jJStatusBean"))
-								.setFirst(true);
+								.setProject(null);
 
 				} else if (event.getComponent().getClientId()
 						.contains("versionSelectOneMenu")) {
@@ -769,7 +769,7 @@ public class LoginBean implements Serializable {
 					jJVersionBean.setVersion((JJVersion) event.getNewValue());
 					if (session.getAttribute("jJStatusBean") != null)
 						((JJStatusBean) session.getAttribute("jJStatusBean"))
-								.setFirst(true);
+								.setProject(null);
 				}
 
 				if (viewId.contains("development")) {

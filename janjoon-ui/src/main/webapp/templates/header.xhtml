@@ -24,7 +24,7 @@
 
 				<p:graphicImage style="width:75px; height:75px;float: left;"
 					styleClass="banner" value="#{imageStreamer.image}"
-					alt="JanJoon Home"
+					alt="JanJoon Home" cache="false"
 					rendered="#{loginBean.contact.company.logo != null}">
 					<f:param name="contactId" value="#{loginBean.contact.id}" />
 					<f:param name="company" value="true" />
@@ -180,7 +180,8 @@
 
 					<p:menuitem value="#{messages.header_exploitation_menuitem}"
 						title="#{messages.header_exploitation_menuitemhelp}"
-						rendered="#{!loginBean.mobile}" style="min-width: 80px;"
+						rendered="#{!loginBean.mobile}" 
+						disabled="true" style="min-width: 80px;"
 						url="/pages/exploitation.jsf?faces-redirect=true"
 						icon="ui-icon-suitcase" />
 

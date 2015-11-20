@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class CalendarUtil {
 
@@ -102,9 +103,33 @@ public class CalendarUtil {
 		while (i < workDays.size() && workDays.get(i) == null)
 			i++;
 
-		if (workDays.size() == i)
-			workDays = null;
-		else {
+		if (workDays.size() == i) {
+
+			Date starDate1, endDate1, starDate2, endDate2;
+			workDays = new ArrayList<ChunkTime>();
+
+			try {
+				starDate1 = new SimpleDateFormat(getHour_format())
+						.parse("08:00");
+				endDate1 = new SimpleDateFormat(getHour_format())
+						.parse("12:00");
+
+				starDate2 = new SimpleDateFormat(getHour_format())
+						.parse("13:00");
+				endDate2 = new SimpleDateFormat(getHour_format())
+						.parse("18:00");
+
+				workDays.add(new ChunkTime(0));
+				for (int k = 1; k < 6; k++) {
+					workDays.add(new ChunkTime(k, starDate1, endDate1,
+							starDate2, endDate2));
+				}
+				workDays.add(new ChunkTime(6));
+			} catch (ParseException e) {
+
+			}
+
+		} else {
 			i = 0;
 			while (i < workDays.size()) {
 				if (workDays.get(i) == null) {
@@ -136,6 +161,23 @@ public class CalendarUtil {
 				}
 
 			}
+		}
+
+		LocaleBean localBean = (LocaleBean) LoginBean.findBean("localeBean");
+
+		if (workDays != null
+				&& localBean != null
+				&& localBean.getLocale() != null
+				&& localBean.getLocale().toString().toLowerCase()
+						.contains("fr") && workDays.get(0).getDayNumber() == 0) {
+			List<ChunkTime> work = new ArrayList<ChunkTime>();
+			i = 1;
+			while (i < 7) {
+				work.add(workDays.get(i));
+				i++;
+			}
+			work.add(6, workDays.get(0));
+			workDays = work;
 		}
 
 	}

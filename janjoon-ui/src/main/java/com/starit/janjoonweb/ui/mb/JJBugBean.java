@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -42,6 +43,7 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @RooSerializable
@@ -467,6 +469,7 @@ public class JJBugBean {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		session.setAttribute("jJBugBean", new JJBugBean());
+
 	}
 
 	public void saveBug() {
@@ -753,10 +756,6 @@ public class JJBugBean {
 								.setCategory(cat);
 					}
 
-					// authorisationService = new
-					// AuthorisationService(session,contact);
-
-					// messageListener(session);
 					bugList = null;
 					session.setAttribute("jJMessageBean", null);
 					session.setAttribute("jJRequirementBean", null);
@@ -806,6 +805,15 @@ public class JJBugBean {
 		bugProjectSelected = null;
 	}
 
+	public void onRowDblClckSelect(SelectEvent event) {
+
+		if (event.getObject() != null && event.getObject() instanceof JJBug) {
+			JJBug_ = ((JJBug) event.getObject());
+			bugProjectSelected = JJBug_.getProject();
+		}
+
+	}
+
 	public boolean hideBugDialog() {
 		if (jJConfigurationService.getConfigurations("BugDialog",
 				"bugs.bug.create.saveandclose", true).isEmpty()) {
@@ -834,6 +842,11 @@ public class JJBugBean {
 				.getContact();
 		b.setCreatedBy(contact);
 		jJBugService.saveJJBug(b);
+
+		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
+				.findBean("jJStatusBean");
+		if (jJStatusBean != null)
+			jJStatusBean.setBugPieChart(null);
 	}
 
 	public void updateJJBug(JJBug b) {
@@ -853,6 +866,11 @@ public class JJBugBean {
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJBugService.updateJJBug(b);
+
+		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
+				.findBean("jJStatusBean");
+		if (jJStatusBean != null)
+			jJStatusBean.setBugPieChart(null);
 	}
 
 	public void changeEvent(String field, JJBug b) {
@@ -871,7 +889,7 @@ public class JJBugBean {
 
 		for (JJBug b : jJBugService.getBugs(null, LoginBean.getProject(), null,
 				jJversion)) {
-			if (!jJTaskService.haveTask(b, true, true)
+			if (!jJTaskService.haveTask(b, true, true, false)
 					&& jJversion == b.getVersioning())
 				infinshedBugs.add(b);
 		}

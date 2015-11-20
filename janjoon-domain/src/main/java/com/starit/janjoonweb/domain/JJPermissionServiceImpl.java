@@ -67,134 +67,212 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
 	public boolean isAuthorized(JJContact contact, JJProject project,
 			JJProduct product, String objet, JJCategory category, Boolean r,
 			Boolean w, Boolean x) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-
-		Path<Object> path = from.join("profile");
-
-		from.fetch("profile");
-
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-
-		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
-		Root fromRight = subquery.from(JJRight.class);
-		subquery.select(fromRight.get("profile"));
-
+		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
+		Root<JJPermission> from = select.from(JJPermission.class);
+		select.select(criteriaBuilder.count(from));
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		List<Predicate> orPredicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
-
-		if (objet != null) {
-			orPredicates.add(criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					objet.toLowerCase()));
-			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						"JJ" + objet.toLowerCase()));
-			orPredicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
-
-		} else
-			orPredicates
-					.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
-
-		Predicate orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-		predicates.add(orPredicate);
-
-		orPredicates = new ArrayList<Predicate>();
-
-		if (category != null)
-
-		{
-			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
-					category));
-			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
-		} else
-			orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
-
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-		predicates.add(orPredicate);
-
-		if (r != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
-
-		}
-
-		if (w != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
-
-		}
-
-		if (x != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
-
-		}
-
-		subquery.where(criteriaBuilder.and(predicates
-				.toArray(new Predicate[] {})));
-
-		predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(
+				from.get("profile").get("enabled"), true));
 
 		if (contact != null) {
 			predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 		}
-		orPredicates = new ArrayList<Predicate>();
-
-		if (project != null) {
-			orPredicates
-					.add(criteriaBuilder.equal(from.get("project"), project));
-			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
-		} else
-			orPredicates.add(criteriaBuilder.isNull(from.get("project")));
-
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-		predicates.add(criteriaBuilder.and(orPredicate));
-
-		orPredicates = new ArrayList<Predicate>();
 
 		if (product != null) {
-			orPredicates
-					.add(criteriaBuilder.equal(from.get("product"), product));
-			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+			predicates.add(criteriaBuilder.or(
+					criteriaBuilder.equal(from.get("product"), product),
+					criteriaBuilder.isNull(from.get("product"))));
 		} else
-			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+			predicates.add(criteriaBuilder.isNull(from.get("product")));
 
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
+		if (project != null) {
+			predicates.add(criteriaBuilder.or(
+					criteriaBuilder.equal(from.get("project"), project),
+					criteriaBuilder.isNull(from.get("project"))));
+		} else
+			predicates.add(criteriaBuilder.isNull(from.get("project")));
 
-		predicates.add(criteriaBuilder.and(orPredicate));
+		Subquery<Long> subquery = select.subquery(Long.class);
+		Root<JJRight> fromRight = subquery.from(JJRight.class);
+		List<Predicate> predicatesRight = new ArrayList<Predicate>();
+		subquery.select(fromRight.get("profile").<Long> get("id"));
 
-		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+		if (x != null) {
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("x"), x));
+		}
+		if (w != null) {
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("w"), w));
+		}
+		if (r != null) {
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("r"), r));
+		}
+		if (category != null) {
+			predicatesRight.add(criteriaBuilder.or(
+					criteriaBuilder.equal(fromRight.get("category"), category),
+					criteriaBuilder.isNull(fromRight.get("category"))));
+		} else
+			predicatesRight.add(criteriaBuilder.isNull(fromRight
+					.get("category")));
 
-		predicates.add(criteriaBuilder.in(path).value(subquery));
+		if (objet != null) {
+			predicatesRight.add(criteriaBuilder.or(criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					objet.toLowerCase()), criteriaBuilder.equal(
+					fromRight.get("objet"), "*"), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"JJ" + objet.toLowerCase())));
+
+		} else
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("objet"),
+					"*"));
+
+		subquery.where(criteriaBuilder.and(criteriaBuilder.and(predicatesRight
+				.toArray(new Predicate[] {})), criteriaBuilder.equal(
+				fromRight.get("enabled"), true)));
+
+		predicates.add(criteriaBuilder.in(from.join("profile").get("id"))
+				.value(subquery));
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
-
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
-
-		List<JJPermission> permissions = result.getResultList();
-
-		if (permissions.isEmpty()) {
-			return false;
-		} else {
-			return true;
-		}
-
+		return entityManager.createQuery(select).getSingleResult() > 0;
 	}
+
+	// @SuppressWarnings({ "rawtypes", "unchecked" })
+	// @Override
+	// public boolean isAuthorized(JJContact contact, JJProject project,
+	// JJProduct product, String objet, JJCategory category, Boolean r,
+	// Boolean w, Boolean x) {
+	//
+	// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	// CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+	// .createQuery(JJPermission.class);
+	// Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+	//
+	// Path<Object> path = from.join("profile");
+	//
+	// from.fetch("profile");
+	//
+	// CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+	//
+	// Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+	// Root fromRight = subquery.from(JJRight.class);
+	// subquery.select(fromRight.get("profile"));
+	//
+	// List<Predicate> predicates = new ArrayList<Predicate>();
+	// List<Predicate> orPredicates = new ArrayList<Predicate>();
+	//
+	// predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+	//
+	// if (objet != null) {
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// objet.toLowerCase()));
+	// if (!objet.contains("*"))
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// "JJ" + objet.toLowerCase()));
+	// orPredicates
+	// .add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+	//
+	// } else
+	// orPredicates
+	// .add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+	//
+	// Predicate orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	// predicates.add(orPredicate);
+	//
+	// orPredicates = new ArrayList<Predicate>();
+	//
+	// if (category != null)
+	//
+	// {
+	// orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
+	// category));
+	// orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+	// } else
+	// orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	// predicates.add(orPredicate);
+	//
+	// if (r != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+	//
+	// }
+	//
+	// if (w != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+	//
+	// }
+	//
+	// if (x != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+	//
+	// }
+	//
+	// subquery.where(criteriaBuilder.and(predicates
+	// .toArray(new Predicate[] {})));
+	//
+	// predicates = new ArrayList<Predicate>();
+	// predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+	//
+	// if (contact != null) {
+	// predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
+	// }
+	// orPredicates = new ArrayList<Predicate>();
+	//
+	// if (project != null) {
+	// orPredicates
+	// .add(criteriaBuilder.equal(from.get("project"), project));
+	// orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+	// } else
+	// orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	// predicates.add(criteriaBuilder.and(orPredicate));
+	//
+	// orPredicates = new ArrayList<Predicate>();
+	//
+	// if (product != null) {
+	// orPredicates
+	// .add(criteriaBuilder.equal(from.get("product"), product));
+	// orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+	// } else
+	// orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	//
+	// predicates.add(criteriaBuilder.and(orPredicate));
+	//
+	// predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+	//
+	// predicates.add(criteriaBuilder.in(path).value(subquery));
+	//
+	// select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]
+	// {})));
+	//
+	// TypedQuery<JJPermission> result = entityManager.createQuery(select);
+	//
+	// List<JJPermission> permissions = result.getResultList();
+	//
+	// if (permissions.isEmpty()) {
+	// return false;
+	// } else {
+	// return true;
+	// }
+	//
+	// }
 
 	@Override
 	public boolean isAuthorized(JJContact contact, String objet,
@@ -235,181 +313,270 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 				null);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
 	public List<JJContact> areAuthorized(JJCompany company, JJContact contact,
 			JJProject project, JJProduct product, String objet,
 			JJCategory category, Boolean r, Boolean w, Boolean x) {
 
-		List<JJContact> contacts = new ArrayList<JJContact>();
-
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
-				.createQuery(JJPermission.class);
-		Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
-
-		Path<Object> path = from.join("profile");
-
-		from.fetch("profile");
-
-		CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
-
-		Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
-		Root fromRight = subquery.from(JJRight.class);
-		subquery.select(fromRight.get("profile"));
-
+		CriteriaQuery<JJContact> select = criteriaBuilder
+				.createQuery(JJContact.class);
+		Root<JJPermission> from = select.from(JJPermission.class);
+		select.select(from.<JJContact> get("contact"));
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		List<Predicate> orPredicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(
+				from.get("profile").get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(
+				from.get("contact").get("enabled"), true));
 
-		if (objet != null && !objet.equalsIgnoreCase("sprintContact")) {
-			orPredicates.add(criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					objet.toLowerCase()));
-			if (!objet.contains("*"))
-				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						"JJ" + objet.toLowerCase()));
-		} else {
-			if (objet != null && objet.equalsIgnoreCase("sprintContact")) {
-				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						"Task".toLowerCase()));
-				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						"JJTask".toLowerCase()));
-			}
-
+		if (contact != null) {
+			predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
 		}
 
-		orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+		if (product != null) {
+			predicates.add(criteriaBuilder.or(
+					criteriaBuilder.equal(from.get("product"), product),
+					criteriaBuilder.isNull(from.get("product"))));
+		} else
+			predicates.add(criteriaBuilder.isNull(from.get("product")));
 
-		Predicate orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-		predicates.add(orPredicate);
+		if (project != null) {
+			predicates.add(criteriaBuilder.or(
+					criteriaBuilder.equal(from.get("project"), project),
+					criteriaBuilder.isNull(from.get("project"))));
+		} else
+			predicates.add(criteriaBuilder.isNull(from.get("project")));
 
-		orPredicates = new ArrayList<Predicate>();
-
-		if (category != null)
-
-			orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
-					category));
-
-		orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
-
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-		predicates.add(orPredicate);
-
-		if (r != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
-
-		}
-
-		if (w != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
-
-		}
+		Subquery<Long> subquery = select.subquery(Long.class);
+		Root<JJRight> fromRight = subquery.from(JJRight.class);
+		List<Predicate> predicatesRight = new ArrayList<Predicate>();
+		subquery.select(fromRight.get("profile").<Long> get("id"));
 
 		if (x != null) {
-			predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
-
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("x"), x));
 		}
-
-		subquery.where(criteriaBuilder.and(predicates
-				.toArray(new Predicate[] {})));
-
-		predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-
-		orPredicates = new ArrayList<Predicate>();
-
-		if (project != null)
-			orPredicates
-					.add(criteriaBuilder.equal(from.get("project"), project));
-
-		orPredicates.add(criteriaBuilder.isNull(from.get("project")));
-
-		orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
-
-		predicates.add(criteriaBuilder.and(orPredicate));
-
-		if (!(objet != null && objet.equalsIgnoreCase("sprintContact"))) {
-			orPredicates = new ArrayList<Predicate>();
-			if (product != null)
-				orPredicates.add(criteriaBuilder.equal(from.get("product"),
-						product));
-
-			orPredicates.add(criteriaBuilder.isNull(from.get("product")));
-
-			orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
-
-			predicates.add(criteriaBuilder.and(orPredicate));
+		if (w != null) {
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("w"), w));
 		}
+		if (r != null) {
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("r"), r));
+		}
+		if (category != null) {
+			predicatesRight.add(criteriaBuilder.or(
+					criteriaBuilder.equal(fromRight.get("category"), category),
+					criteriaBuilder.isNull(fromRight.get("category"))));
+		} else
+			predicatesRight.add(criteriaBuilder.isNull(fromRight
+					.get("category")));
 
-		predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
-		predicates.add(criteriaBuilder.equal(from.join("contact")
-				.get("enabled"), true));
+		if (objet != null) {
+			if (objet.equalsIgnoreCase("sprintContact"))
+				objet = "Task";
+			predicatesRight.add(criteriaBuilder.or(criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					objet.toLowerCase()), criteriaBuilder.equal(
+					fromRight.get("objet"), "*"), criteriaBuilder.equal(
+					criteriaBuilder.lower(fromRight.<String> get("objet")),
+					"JJ" + objet.toLowerCase())));
 
-		predicates.add(criteriaBuilder.in(path).value(subquery));
+		} else
+			predicatesRight.add(criteriaBuilder.equal(fromRight.get("objet"),
+					"*"));
+
+		subquery.where(criteriaBuilder.and(criteriaBuilder.and(predicatesRight
+				.toArray(new Predicate[] {})), criteriaBuilder.equal(
+				fromRight.get("enabled"), true)));
+
+		predicates.add(criteriaBuilder.in(from.join("profile").get("id"))
+				.value(subquery));
 
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
-		TypedQuery<JJPermission> result = entityManager.createQuery(select);
+		TypedQuery<JJContact> result = entityManager.createQuery(select);
 
-		List<JJPermission> permissions = result.getResultList();
-
-		if (company == null)
-			for (JJPermission permission : permissions) {
-				if (!contacts.contains(permission.getContact())) {
-					contacts.add(permission.getContact());
-				}
-			}
-		else {
-			if (contact == null)
-				for (JJPermission permission : permissions) {
-					if (permission.getContact().getCompany().equals(company)
-							&& !contacts.contains(permission.getContact())) {
-						contacts.add(permission.getContact());
-					}
-				}
-			else {
-				if (isSuperAdmin(contact)) {
-					if (objet != null
-							&& objet.equalsIgnoreCase("sprintContact")) {
-						for (JJPermission permission : permissions) {
-							if (permission.getContact().getCompany()
-									.equals(company)
-									&& !contacts.contains(permission
-											.getContact())) {
-								contacts.add(permission.getContact());
-							}
-						}
-
-					} else
-						for (JJPermission permission : permissions) {
-							if (!contacts.contains(permission.getContact())) {
-								contacts.add(permission.getContact());
-							}
-						}
-				} else
-					for (JJPermission permission : permissions) {
-						if (permission.getContact().getCompany()
-								.equals(company)
-								&& !contacts.contains(permission.getContact())) {
-							contacts.add(permission.getContact());
-						}
-					}
-
-			}
-		}
-
-		return contacts;
+		return new ArrayList<JJContact>(new HashSet<JJContact>(
+				result.getResultList()));
 
 	}
+
+	// @SuppressWarnings({ "rawtypes", "unchecked" })
+	// @Override
+	// public List<JJContact> areAuthorized(JJCompany company, JJContact
+	// contact,
+	// JJProject project, JJProduct product, String objet,
+	// JJCategory category, Boolean r, Boolean w, Boolean x) {
+	//
+	// List<JJContact> contacts = new ArrayList<JJContact>();
+	//
+	// CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+	// CriteriaQuery<JJPermission> criteriaQuery = criteriaBuilder
+	// .createQuery(JJPermission.class);
+	// Root<JJPermission> from = criteriaQuery.from(JJPermission.class);
+	//
+	// Path<Object> path = from.join("profile");
+	//
+	// from.fetch("profile");
+	//
+	// CriteriaQuery<JJPermission> select = criteriaQuery.select(from);
+	//
+	// Subquery<JJRight> subquery = criteriaQuery.subquery(JJRight.class);
+	// Root fromRight = subquery.from(JJRight.class);
+	// subquery.select(fromRight.get("profile"));
+	//
+	// List<Predicate> predicates = new ArrayList<Predicate>();
+	// List<Predicate> orPredicates = new ArrayList<Predicate>();
+	//
+	// predicates.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+	//
+	// if (objet != null && !objet.equalsIgnoreCase("sprintContact")) {
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// objet.toLowerCase()));
+	// if (!objet.contains("*"))
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// "JJ" + objet.toLowerCase()));
+	// } else {
+	// if (objet != null && objet.equalsIgnoreCase("sprintContact")) {
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// "Task".toLowerCase()));
+	// orPredicates.add(criteriaBuilder.equal(
+	// criteriaBuilder.lower(fromRight.<String> get("objet")),
+	// "JJTask".toLowerCase()));
+	// }
+	//
+	// }
+	//
+	// orPredicates.add(criteriaBuilder.equal(fromRight.get("objet"), "*"));
+	//
+	// Predicate orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	// predicates.add(orPredicate);
+	//
+	// orPredicates = new ArrayList<Predicate>();
+	//
+	// if (category != null)
+	//
+	// orPredicates.add(criteriaBuilder.equal(fromRight.get("category"),
+	// category));
+	//
+	// orPredicates.add(criteriaBuilder.isNull(fromRight.get("category")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	// predicates.add(orPredicate);
+	//
+	// if (r != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("r"), r));
+	//
+	// }
+	//
+	// if (w != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("w"), w));
+	//
+	// }
+	//
+	// if (x != null) {
+	// predicates.add(criteriaBuilder.equal(fromRight.get("x"), x));
+	//
+	// }
+	//
+	// subquery.where(criteriaBuilder.and(predicates
+	// .toArray(new Predicate[] {})));
+	//
+	// predicates = new ArrayList<Predicate>();
+	// predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+	//
+	// orPredicates = new ArrayList<Predicate>();
+	//
+	// if (project != null)
+	// orPredicates
+	// .add(criteriaBuilder.equal(from.get("project"), project));
+	//
+	// orPredicates.add(criteriaBuilder.isNull(from.get("project")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	//
+	// predicates.add(criteriaBuilder.and(orPredicate));
+	//
+	// if (!(objet != null && objet.equalsIgnoreCase("sprintContact"))) {
+	// orPredicates = new ArrayList<Predicate>();
+	// if (product != null)
+	// orPredicates.add(criteriaBuilder.equal(from.get("product"),
+	// product));
+	//
+	// orPredicates.add(criteriaBuilder.isNull(from.get("product")));
+	//
+	// orPredicate = criteriaBuilder.or(orPredicates
+	// .toArray(new Predicate[] {}));
+	//
+	// predicates.add(criteriaBuilder.and(orPredicate));
+	// }
+	//
+	// predicates.add(criteriaBuilder.equal(path.get("enabled"), true));
+	// predicates.add(criteriaBuilder.equal(from.join("contact")
+	// .get("enabled"), true));
+	//
+	// predicates.add(criteriaBuilder.in(path).value(subquery));
+	//
+	// select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]
+	// {})));
+	//
+	// TypedQuery<JJPermission> result = entityManager.createQuery(select);
+	//
+	// List<JJPermission> permissions = result.getResultList();
+	//
+	// if (company == null)
+	// for (JJPermission permission : permissions) {
+	// if (!contacts.contains(permission.getContact())) {
+	// contacts.add(permission.getContact());
+	// }
+	// }
+	// else {
+	// if (contact == null)
+	// for (JJPermission permission : permissions) {
+	// if (permission.getContact().getCompany().equals(company)
+	// && !contacts.contains(permission.getContact())) {
+	// contacts.add(permission.getContact());
+	// }
+	// }
+	// else {
+	// if (isSuperAdmin(contact)) {
+	// if (objet != null
+	// && objet.equalsIgnoreCase("sprintContact")) {
+	// for (JJPermission permission : permissions) {
+	// if (permission.getContact().getCompany()
+	// .equals(company)
+	// && !contacts.contains(permission
+	// .getContact())) {
+	// contacts.add(permission.getContact());
+	// }
+	// }
+	//
+	// } else
+	// for (JJPermission permission : permissions) {
+	// if (!contacts.contains(permission.getContact())) {
+	// contacts.add(permission.getContact());
+	// }
+	// }
+	// } else
+	// for (JJPermission permission : permissions) {
+	// if (permission.getContact().getCompany()
+	// .equals(company)
+	// && !contacts.contains(permission.getContact())) {
+	// contacts.add(permission.getContact());
+	// }
+	// }
+	//
+	// }
+	// }
+	//
+	// return contacts;
+	//
+	// }
 
 	@SuppressWarnings("unchecked")
 	public JJProject getDefaultProject(JJContact contact) {
@@ -503,7 +670,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 							.getProfile().getRights()));
 			}
 			for (JJRight right : rights) {
-				if (right.getCategory() != null && right.getCategory().getEnabled())
+				if (right.getCategory() != null
+						&& right.getCategory().getEnabled())
 					categories.add(right.getCategory());
 			}
 			Map<JJCategory, Integer> map = new HashMap<>();
@@ -584,7 +752,8 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 			}
 
 			for (JJRight right : rights) {
-				if (right.getCategory() != null && right.getCategory().getEnabled())
+				if (right.getCategory() != null
+						&& right.getCategory().getEnabled())
 					categories.add(right.getCategory());
 			}
 			Map<JJCategory, Integer> map = new HashMap<>();

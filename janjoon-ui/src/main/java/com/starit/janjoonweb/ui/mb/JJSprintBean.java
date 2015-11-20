@@ -211,7 +211,6 @@ public class JJSprintBean {
 
 	public List<SprintUtil> getSprintList() {
 
-		// System.out.println(((JJTask)LoginBean.findBean("dfgk")).getDescription());
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 

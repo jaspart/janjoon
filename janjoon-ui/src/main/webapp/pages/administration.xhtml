@@ -20,8 +20,7 @@
 			style="float: right;" />
 		<p:tabView id="tabview" widgetVar="AdmintabView"
 			activeIndex="#{loginBean.activeTabAdminIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"
-				update="tabview " />
+			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"/>
 
 			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
 				titletip="#{loginBean.authorisationService.adminContactMSG}"

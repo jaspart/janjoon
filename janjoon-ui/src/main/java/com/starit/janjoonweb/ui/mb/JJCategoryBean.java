@@ -183,8 +183,16 @@ public class JJCategoryBean {
 		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
 				.findBean("jJStatusBean");
 
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) LoginBean
+				.findBean("jJTestcaseBean");
+
 		if (jJStatusBean != null) {
 			jJStatusBean.setCategoryDataModel(null);
+		}
+
+		if (jJTestcaseBean != null) {
+			jJTestcaseBean.setCategoryList(null);
+			jJTestcaseBean.setCategory(null);
 		}
 
 		if (jJRequirementBean != null

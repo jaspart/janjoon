@@ -1815,7 +1815,7 @@ public class JJTaskBean {
 
 					if (!checkAll) {
 
-						if (!jJTaskService.haveTask(bug, true, false)) {
+						if (!jJTaskService.haveTask(bug, true, false, false)) {
 							importFormats.add(new ImportFormat(bug.getName(),
 									bug, copyObjets));
 						}
@@ -1838,7 +1838,8 @@ public class JJTaskBean {
 
 					if (!checkAll) {
 
-						if (!jJTaskService.haveTask(requirement, true, false)) {
+						if (!jJTaskService.haveTask(requirement, true, false,
+								true)) {
 							importFormats.add(new ImportFormat(requirement
 									.getName(), requirement, copyObjets));
 						}
@@ -1858,7 +1859,8 @@ public class JJTaskBean {
 
 					if (!checkAll) {
 
-						if (!jJTaskService.haveTask(testcase, true, false)) {
+						if (!jJTaskService
+								.haveTask(testcase, true, false, true)) {
 							importFormats.add(new ImportFormat(testcase
 									.getName(), testcase, copyObjets));
 						}

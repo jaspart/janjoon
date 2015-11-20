@@ -73,7 +73,7 @@ public class JJContactBean {
 	private JJContact contactAdmin;
 	private Contact contactUtil;
 	private ContactCalendarUtil calendarUtil;
-	//private List<JJCategory> categories;
+	// private List<JJCategory> categories;
 	private List<JJCategory> loggedContactCategories;
 	private List<JJVersion> versionList;
 	private LazyContactDataModel contactsLazyModel;
@@ -94,7 +94,8 @@ public class JJContactBean {
 		if (!loginBean.getAuthorisationService().isAdminCompany())
 			company = LoginBean.getCompany();
 		if (contactsLazyModel == null) {
-			contactsLazyModel = new LazyContactDataModel(jJContactService,company);
+			contactsLazyModel = new LazyContactDataModel(jJContactService,
+					company);
 		}
 
 		return contactsLazyModel;
@@ -212,10 +213,10 @@ public class JJContactBean {
 		this.message = message;
 	}
 
-	public List<JJCategory> getCategories() {		
-		return 	 jJCategoryService.getCategories(null, false, true,
-					true, LoginBean.getCompany());
-		
+	public List<JJCategory> getCategories() {
+		return jJCategoryService.getCategories(null, false, true, true,
+				LoginBean.getCompany());
+
 	}
 
 	public List<JJCategory> getLoggedContactCategories() {
@@ -662,6 +663,7 @@ public class JJContactBean {
 	}
 
 	public void addVacation(LoginBean loginBean, JJContact jJContact) {
+		jJContact = jJContactService.findJJContact(jJContact.getId());
 		calendarUtil = new ContactCalendarUtil(jJContact);
 		calendarUtil.addVacation(startDate, endDate);
 		jJContact.setUpdatedDate(new Date());

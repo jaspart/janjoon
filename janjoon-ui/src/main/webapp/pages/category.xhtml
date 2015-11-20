@@ -20,9 +20,13 @@
 				</f:facet>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_category_table_company_title}" />
+						<h:outputText
+							value="#{messages.admin_category_table_company_title}" />
 					</f:facet>
-					<h:outputText value="#{category.company.name}" />
+					<h:outputText value="#{category.company.name}"
+						rendered="#{category.company != null}" />
+					<h:outputText value="#{messages.admin_profile_table_filter_all}"
+						rendered="#{category.company == null}" />
 				</p:column>
 				<p:column sortBy="#{category.name}">
 					<f:facet name="header">
@@ -85,33 +89,33 @@
 					</f:facet>
 					<p:panelGrid>
 						<p:row>
-							<p:column colspan="2">		
-							<h:outputLabel for="name"
-									value="#{messages.admin_category_new_name_label}" />								
-								<p:inputText id="name" placeholder="#{messages.admin_category_new_name_watermark}"
+							<p:column colspan="2">
+								<h:outputLabel for="name"
+									value="#{messages.admin_category_new_name_label}" />
+								<p:inputText id="name"
+									placeholder="#{messages.admin_category_new_name_watermark}"
 									value="#{jJCategoryBean.categoryAdmin.name}"
 									label="#{messages.admin_category_new_name_label}"
 									required="true" widgetVar="nameWidget">
 									<f:validateLength maximum="100" />
 								</p:inputText>
-								<p:message for="name" id="msgName" />								
+								<p:message for="name" id="msgName" />
 							</p:column>
 							<p:column colspan="2">
 								<h:outputLabel for="stage"
-									value="#{messages.admin_category_new_stage_label}" />							
-									<p:spinner id="stage"
-										value="#{jJCategoryBean.categoryAdmin.stage}" min="0"
-										max="100"/>									
-								
+									value="#{messages.admin_category_new_stage_label}" />
+								<p:spinner id="stage"
+									value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100" />
+
 							</p:column>
 						</p:row>
-						<p:row rendered="#{loginBean.authorisationService.superAdmin and jJCategoryBean.categoryAdmin.id == null}">
+						<p:row
+							rendered="#{loginBean.authorisationService.superAdmin and jJCategoryBean.categoryAdmin.id == null}">
 							<p:column colspan="4">
-								<p:selectBooleanButton
-									value="#{jJCategoryBean.allCompany}"
+								<p:selectBooleanButton value="#{jJCategoryBean.allCompany}"
 									onLabel="#{messages.admin_category_new_all_button}"
 									offLabel="#{messages.admin_category_new_notall_button}"
-									onIcon="ui-icon-check" offIcon="ui-icon-close"/>
+									onIcon="ui-icon-check" offIcon="ui-icon-close" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>

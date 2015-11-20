@@ -16,11 +16,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ejb.LocalBean;
+
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class ContactCalendarUtil {
 
@@ -53,7 +56,7 @@ public class ContactCalendarUtil {
 		this.calendarUtil = new CalendarUtil(company);
 		this.workDays = this.calendarUtil.getWorkDays();
 		this.contact = null;
-		vacation = new ArrayList<ChunkPeriod>();
+		this.vacation = new ArrayList<ChunkPeriod>();
 
 	}
 
@@ -124,28 +127,40 @@ public class ContactCalendarUtil {
 					for (Object key : Collections.list(properties.keys())) {
 						if (key.toString().contains(VACATION)) {
 
-							String hol = properties.getProperty((String) key)
-									.toString().trim();
-							int index = hol.indexOf("to");
-							String s = hol.substring(0, index - 1);
-							if (s.length() < pattern.length())
-								s = s + " 09:00";
-							Date date1 = new SimpleDateFormat(
-									"dd/MM/yyyy HH:mm").parse(s);
+							try {
+								String hol = properties
+										.getProperty((String) key).toString()
+										.trim();
+								int index = hol.indexOf("to");
+								String s = hol.substring(0, index - 1);
+								if (s.length() < pattern.length())
+									s = s + " 09:00";
+								Date date1 = new SimpleDateFormat(
+										"dd/MM/yyyy HH:mm").parse(s);
 
-							s = hol.substring(index + 2, hol.length());
-							if (s.length() < pattern.length())
-								s = s + " 18:00";
-							Date date2 = new SimpleDateFormat(
-									"dd/MM/yyyy HH:mm").parse(s);
-							vacation.add(new ChunkPeriod(date1, date2));
+								s = hol.substring(index + 2, hol.length());
+								if (s.length() < pattern.length())
+									s = s + " 18:00";
+								Date date2 = new SimpleDateFormat(
+										"dd/MM/yyyy HH:mm").parse(s);
+								vacation.add(new ChunkPeriod(date1, date2));
+							} catch (ParseException e) {
+
+							}
 
 						}
 					}
 				}
 			}
 		}
-		if (workDays != null) {
+
+		LocaleBean localBean = (LocaleBean) LoginBean.findBean("localeBean");
+
+		if (workDays != null
+				&& localBean != null
+				&& localBean.getLocale() != null
+				&& localBean.getLocale().toString().toLowerCase()
+						.contains("fr") && workDays.get(0).getDayNumber() == 0) {
 			List<ChunkTime> work = new ArrayList<ChunkTime>();
 			int i = 1;
 			while (i < 7) {

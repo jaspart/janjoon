@@ -156,7 +156,10 @@ public class JJVersionBean {
 	}
 
 	public boolean isScrollable() {
-		return this.versionDataModelList.size() > 7;
+
+		return this.versionDataModelList != null
+				&& this.versionDataModelList.size() > 7;
+
 	}
 
 	public void initVersionDataModelList() {

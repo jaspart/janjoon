@@ -141,7 +141,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 		result.setMaxResults(pageSize);
 
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
+		cq.select(criteriaBuilder.count(cq.from(JJProject.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());

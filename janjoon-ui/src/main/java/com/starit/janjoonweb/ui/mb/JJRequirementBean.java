@@ -1227,8 +1227,8 @@ public class JJRequirementBean {
 					}
 
 					tableDataModelList.get(i).setWrappedData(listRes);
-					tableDataModelList.get(i).setCompletionProgress(0);
-					tableDataModelList.get(i).setCoverageProgress(0);
+					tableDataModelList.get(i).setCompletionProgress(-1);
+					tableDataModelList.get(i).setCoverageProgress(-1);
 					tableDataModelList.get(i).setActiveIndex(-1);
 
 					if (LoginBean.findBean("jJStatusBean") != null) {
@@ -1248,9 +1248,9 @@ public class JJRequirementBean {
 								if (jJStatusBean.getCategoryDataModel().get(j)
 										.getCategory().equals(cat)) {
 									jJStatusBean.getCategoryDataModel().get(j)
-											.setCompletionProgress(0);
+											.setCompletionProgress(-1);
 									jJStatusBean.getCategoryDataModel().get(j)
-											.setCoverageProgress(0);
+											.setCoverageProgress(-1);
 									j = jJStatusBean.getCategoryDataModel()
 											.size();
 								}
@@ -2366,7 +2366,8 @@ public class JJRequirementBean {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 
-		List<JJCategory> categories = new ArrayList<JJCategory>(jJContactService.findJJContact(contact.getId()).getCategories());
+		List<JJCategory> categories = new ArrayList<JJCategory>(
+				jJContactService.findJJContact(contact.getId()).getCategories());
 		Collections.sort(categories, new Comparator<JJCategory>() {
 			@Override
 			public int compare(JJCategory o1, JJCategory o2) {
@@ -3793,8 +3794,8 @@ public class JJRequirementBean {
 		private String nameDataModel;
 		private long categoryId;
 		private int activeIndex;
-		private float coverageProgress = 0;
-		private float completionProgress = 0;
+		private float coverageProgress = -1;
+		private float completionProgress = -1;
 		private List<RequirementUtil> filtredRequirements;
 		private boolean rendered;
 		private TreeNode chapterTree;
@@ -3812,6 +3813,10 @@ public class JJRequirementBean {
 		}
 
 		public int getActiveIndex() {
+			if (completionProgress == -1 && activeIndex != -1) {
+				calculCompletionProgress();
+				calculCoverageProgress();
+			}
 			return activeIndex;
 		}
 
@@ -3916,7 +3921,6 @@ public class JJRequirementBean {
 			this.categoryId = categoryId;
 			this.nameDataModel = nameDataModel;
 			this.rendered = rendered;
-			// this.mine = false;
 			this.activeIndex = -1;
 			this.expanded = false;
 			chapterTree = null;
@@ -3930,146 +3934,164 @@ public class JJRequirementBean {
 		}
 
 		@SuppressWarnings("unchecked")
-		private void calculCoverageProgress() {
+		public void calculCoverageProgress() {
 			long t = System.currentTimeMillis();
 			if (categoryId != 0) {
 
 				float compteur = 0;
+				JJCategory category = jJCategoryService
+						.findJJCategory(categoryId);
+				boolean containCategory = false;
 
-				List<JJCategory> categoryList = jJCategoryService
-						.getCategories(null, false, true, true,
-								LoginBean.getCompany());
+				JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
+						.findBean("jJStatusBean");
+
+				if (jJStatusBean != null
+						&& jJStatusBean.getCategoryDataModel() != null
+						&& !jJStatusBean.getCategoryDataModel().isEmpty()) {
+					for (int i = 0; i < jJStatusBean.getCategoryDataModel()
+							.size(); i++) {
+						if (jJStatusBean.getCategoryDataModel().get(i)
+								.getCategory().equals(category)
+								&& jJStatusBean.getCategoryDataModel().get(i)
+										.getCoverageProgress() > -1) {
+							coverageProgress = jJStatusBean
+									.getCategoryDataModel().get(i)
+									.getCoverageProgress();
+							containCategory = true;
+							i = jJStatusBean.getCategoryDataModel().size();
+						}
+
+					}
+				}
+				if (!containCategory) {
+					boolean sizeIsOne = false;
+
+					List<JJRequirement> requirements = new ArrayList<JJRequirement>();
+					for (RequirementUtil r : (List<RequirementUtil>) getWrappedData()) {
+						requirements.add(r.getRequirement());
+					}
+
+					if (jJCategoryService.isLowLevel(category,
+							LoginBean.getCompany())) {
+
+						for (JJRequirement requirement : requirements) {
+
+							if (jJRequirementService.haveLinkUp(requirement))
+								compteur++;
+
+						}
+
+						sizeIsOne = true;
+					} else if (jJCategoryService.isHighLevel(category,
+							LoginBean.getCompany()) && !sizeIsOne) {
+
+						for (JJRequirement requirement : requirements) {
+							boolean linkUp = false;
+							boolean linkDown = false;
+
+							linkDown = jJRequirementService
+									.haveLinkDown(requirement);
+							linkUp = jJTaskService.haveTask(requirement, true,
+									false, false);
+
+							if (linkUp && linkDown) {
+								compteur++;
+							} else if (linkUp || linkDown) {
+								compteur += 0.5;
+							}
+
+						}
+					} else {
+
+						for (JJRequirement requirement : requirements) {
+							requirement = jJRequirementService
+									.findJJRequirement(requirement.getId());
+							boolean linkUp = false;
+							boolean linkDown = false;
+
+							linkUp = jJRequirementService
+									.haveLinkUp(requirement);
+							linkDown = jJRequirementService
+									.haveLinkDown(requirement);
+
+							if (linkUp && linkDown) {
+								compteur++;
+							} else if (linkUp || linkDown) {
+								compteur += 0.5;
+							}
+						}
+					}
+
+					if (requirements.isEmpty()) {
+						coverageProgress = 0;
+					} else {
+						coverageProgress = compteur / requirements.size();
+					}
+
+					coverageProgress = coverageProgress * 100;
+				}
+
+			}
+			logger.error("calculCoverageProgress_TaskTracker="
+					+ (System.currentTimeMillis() - t));
+		}
+
+		@SuppressWarnings("unchecked")
+		public void calculCompletionProgress() {
+			long t = System.currentTimeMillis();
+			if (categoryId != 0) {
 
 				JJCategory category = jJCategoryService
 						.findJJCategory(categoryId);
 
-				boolean sizeIsOne = false;
+				JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
+						.findBean("jJStatusBean");
+				boolean containCategory = false;
 
-				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
-				for (RequirementUtil r : (List<RequirementUtil>) getWrappedData()) {
-					requirements.add(r.getRequirement());
-				}
-
-				if (category.getStage() == categoryList.get(0).getStage()) {
-
-					for (JJRequirement requirement : requirements) {
-
-						requirement = jJRequirementService
-								.findJJRequirement(requirement.getId());
-						for (JJRequirement req : requirement
-								.getRequirementLinkUp()) {
-							if (req.getEnabled()) {
-								compteur++;
-								break;
-							}
+				if (jJStatusBean != null
+						&& jJStatusBean.getCategoryDataModel() != null
+						&& !jJStatusBean.getCategoryDataModel().isEmpty()) {
+					for (int i = 0; i < jJStatusBean.getCategoryDataModel()
+							.size(); i++) {
+						if (jJStatusBean.getCategoryDataModel().get(i)
+								.getCategory().equals(category)
+								&& jJStatusBean.getCategoryDataModel().get(i)
+										.getCompletionProgress() > -1) {
+							completionProgress = jJStatusBean
+									.getCategoryDataModel().get(i)
+									.getCompletionProgress();
+							containCategory = true;
+							i = jJStatusBean.getCategoryDataModel().size();
 						}
 
 					}
-
-					sizeIsOne = true;
-				} else if (category.getStage() == categoryList.get(
-						categoryList.size() - 1).getStage()
-						&& !sizeIsOne) {
-
-					for (JJRequirement requirement : requirements) {
-						boolean linkUp = false;
-						boolean linkDown = false;
-						requirement = jJRequirementService
-								.findJJRequirement(requirement.getId());
-						for (JJRequirement req : requirement
-								.getRequirementLinkDown()) {
-							if (req.getEnabled()) {
-								linkDown = true;
-								break;
-							}
-						}
-
-						for (JJTask task : requirement.getTasks()) {
-							if (task.getEnabled()) {
-								linkUp = true;
-								break;
-							}
-						}
-
-						if (linkUp && linkDown) {
-							compteur++;
-						} else if (linkUp || linkDown) {
-							compteur += 0.5;
-						}
+				}
+				if (!containCategory) {
+					float compteur = 0;
+					for (RequirementUtil r : (List<RequirementUtil>) getWrappedData()) {
+						compteur = compteur
+								+ calculCompletion(r.getRequirement());
 
 					}
-				} else {
 
-					for (JJRequirement requirement : requirements) {
-						requirement = jJRequirementService
-								.findJJRequirement(requirement.getId());
-						boolean linkUp = false;
-						boolean linkDown = false;
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkUp()) {
-							if (req.getEnabled()) {
-								linkUp = true;
-								break;
-							}
-						}
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkDown()) {
-							if (req.getEnabled()) {
-								linkDown = true;
-								break;
-							}
-						}
-
-						if (linkUp && linkDown) {
-							compteur++;
-						} else if (linkUp || linkDown) {
-							compteur += 0.5;
-						}
+					if (((List<RequirementUtil>) getWrappedData()).isEmpty()) {
+						completionProgress = 0;
+					} else {
+						completionProgress = compteur
+								/ ((List<RequirementUtil>) getWrappedData())
+										.size();
 					}
+
+					completionProgress = completionProgress * 100;
 				}
 
-				if (requirements.isEmpty()) {
-					coverageProgress = 0;
-				} else {
-					coverageProgress = compteur / requirements.size();
-				}
-
-				coverageProgress = coverageProgress * 100;
 			}
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-		}
-
-		@SuppressWarnings("unchecked")
-		private void calculCompletionProgress() {
-			long t = System.currentTimeMillis();
-			if (categoryId != 0) {
-
-				float compteur = 0;
-				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
-
-				for (RequirementUtil r : (List<RequirementUtil>) getWrappedData()) {
-					requirements.add(r.getRequirement());
-				}
-				for (JJRequirement requirement : requirements) {
-					compteur = compteur + calculCompletion(requirement);
-
-				}
-
-				if (requirements.isEmpty()) {
-					completionProgress = 0;
-				} else {
-					completionProgress = compteur / requirements.size();
-				}
-
-				completionProgress = completionProgress * 100;
-			}
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+			logger.error("calculCompletionProgress_TaskTracker="
+					+ (System.currentTimeMillis() - t));
 		}
 
 		private float calculCompletion(JJRequirement r) {
-			long t = System.currentTimeMillis();
 			float compteur = 0;
 			int size = 0;
 			r = jJRequirementService.findJJRequirement(r.getId());
@@ -4083,30 +4105,15 @@ public class JJRequirementBean {
 
 			}
 
-			Set<JJTask> tasks = r.getTasks();
 			int hasTaskCompleted = 0;
-			if (!tasks.isEmpty()) {
-				boolean completed = false;
-				for (JJTask task : tasks) {
-					if (task.getEnabled()) {
-						if (task.getEndDateReal() != null) {
-							completed = true;
-						} else {
-							completed = false;
-							break;
-						}
-
-					}
-				}
-				if (completed) {
-					compteur++;
-					hasTaskCompleted = 1;
-				}
+			if (jJTaskService.haveTask(r, true, true, false)) {
+				compteur++;
+				hasTaskCompleted = 1;
 			}
 			if (size > 0) {
 				compteur = compteur / (size + hasTaskCompleted);
 			}
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+
 			return compteur;
 		}
 
@@ -4510,7 +4517,7 @@ public class JJRequirementBean {
 
 		if (j != -1) {
 			tableDataModelList.get(j).setActiveIndex(0);
-			if (tableDataModelList.get(j).getCoverageProgress() == 0) {
+			if (tableDataModelList.get(j).getCoverageProgress() == -1) {
 				tableDataModelList.get(j).calculCompletionProgress();
 				tableDataModelList.get(j).calculCoverageProgress();
 			}
@@ -5045,7 +5052,7 @@ public class JJRequirementBean {
 				loginBean.getAuthorizedMap("Requirement",
 						LoginBean.getProject(), LoginBean.getProduct()),
 				jJversion)) {
-			if (!jJTaskService.haveTask(req, true, true)
+			if (!jJTaskService.haveTask(req, true, true, true)
 					&& jJversion == req.getVersioning())
 				infinshedRequirement.add(req);
 		}

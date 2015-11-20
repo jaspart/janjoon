@@ -24,6 +24,44 @@ public class JJBugServiceImpl implements JJBugService {
 		this.entityManager = entityManager;
 	}
 
+	public Long getBugsCountByStaus(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,
+			boolean onlyActif) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
+		Root<JJBug> from = select.from(JJBug.class);
+		select.select(criteriaBuilder.count(from));
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (status != null) {
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(from.get("versioning"),
+					version));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("versioning").join("product").join("manager")
+							.get("company"), company));
+		}
+
+		if (onlyActif) {
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		return entityManager.createQuery(select).getSingleResult();
+
+	}
+
 	@Override
 	public List<JJBug> getBugs(JJCompany company, JJProject project,
 			JJProduct product, JJTeststep teststep, JJBuild build,

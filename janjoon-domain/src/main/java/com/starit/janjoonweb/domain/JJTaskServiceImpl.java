@@ -489,7 +489,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 	}
 
-	public boolean haveTask(Object object, boolean onlyActif, boolean finished) {
+	public boolean haveTask(Object object, boolean onlyActif, boolean finished,
+			boolean checkLinkUp) {
 		if (object != null
 				&& (object instanceof JJBug || object instanceof JJRequirement || object instanceof JJTestcase)) {
 			CriteriaBuilder criteriaBuilder = entityManager
@@ -521,13 +522,14 @@ public class JJTaskServiceImpl implements JJTaskService {
 					.toArray(new Predicate[] {})));
 
 			if (finished
-					&& (entityManager.createQuery(select).getSingleResult() > 0 || (object instanceof JJRequirement
+					&& (entityManager.createQuery(select).getSingleResult() > 0 || (checkLinkUp
+							&& object instanceof JJRequirement
 							&& !jJCategoryService.isHighLevel(
 									((JJRequirement) object).getCategory(),
 									((JJRequirement) object).getProject()
 											.getCompany()) && jJRequirementService
 								.haveLinkUp((JJRequirement) object))))
-				return isFinished(object, onlyActif);
+				return isFinished(object, onlyActif, checkLinkUp);
 			else
 				return entityManager.createQuery(select).getSingleResult() > 0;
 
@@ -535,7 +537,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 			return false;
 	}
 
-	private boolean isFinished(Object object, boolean onlyActif) {
+	private boolean isFinished(Object object, boolean onlyActif,
+			boolean checkLinkUp) {
 		if (object != null
 				&& (object instanceof JJBug || object instanceof JJRequirement || object instanceof JJTestcase)) {
 			CriteriaBuilder criteriaBuilder = entityManager
@@ -570,7 +573,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 			select.where(criteriaBuilder.and(predicates
 					.toArray(new Predicate[] {})));
 
-			if (object instanceof JJRequirement
+			if (checkLinkUp
+					&& object instanceof JJRequirement
 					&& entityManager.createQuery(select).getSingleResult() == 0
 					&& !jJCategoryService.isHighLevel(
 							((JJRequirement) object).getCategory(),
@@ -583,7 +587,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 								.getRequirementLinkUp());
 				int i = 0;
 				while (isFinished && i < requirements.size()) {
-					isFinished = haveTask(requirements.get(i), onlyActif, true);
+					isFinished = haveTask(requirements.get(i), onlyActif, true,
+							checkLinkUp);
 					i++;
 				}
 				return isFinished;

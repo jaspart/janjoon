@@ -3,6 +3,7 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.el.ELContext;
@@ -21,7 +22,6 @@ import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.chart.MeterGaugeChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +35,13 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJTask;
+import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
@@ -54,15 +56,24 @@ public class JJStatusBean {
 	@Autowired
 	private JJBugService jJBugService;
 
+	@Autowired
+	private JJTaskService jJTaskService;
+
+	@Autowired
+	private JJSprintService jJSprintService;
+
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel pieChart;
+	private PieChartModel bugPieChart;
 	private SelectItem[] objectOptions;
 	private MeterGaugeChartModel bugMetergauge;
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
+	private int activeTabIndex;
+	private int activeTabSprintIndex;
 
 	// private Boolean first;
 
@@ -95,6 +106,14 @@ public class JJStatusBean {
 		this.jJBugService = jJBugService;
 	}
 
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJSprintService(JJSprintService jJSprintService) {
+		this.jJSprintService = jJSprintService;
+	}
+
 	public List<JJStatus> getStatusList() {
 
 		if (statusList == null)
@@ -122,22 +141,19 @@ public class JJStatusBean {
 
 	public void setProject(JJProject project) {
 		this.project = project;
+		if (this.project == null) {
+			categoryDataModel = null;
+			activeTabIndex = 0;
+			activeTabSprintIndex = 0;
+			prjMetergauge = null;
+			bugPieChart = null;
+			bugMetergauge = null;
+
+		}
+
 	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
-
-		if (categoryDataModel == null) {
-			categoryDataModel = new ArrayList<CategoryDataModel>();
-
-			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					null, false, true, true, ((LoginBean) LoginBean
-							.findBean("loginBean")).getContact().getCompany());
-
-			for (JJCategory category : categoryList) {
-				categoryDataModel.add(new CategoryDataModel(category));
-			}
-		}
-
 		return categoryDataModel;
 	}
 
@@ -206,8 +222,102 @@ public class JJStatusBean {
 		return pieChart;
 	}
 
+	public PieChartModel getBugPieChart() {
+
+		if (activeTabIndex == 1) {
+			if (bugPieChart == null) {
+				bugPieChart = new PieChartModel();
+				List<JJStatus> statBug = jJStatusService.getStatus("Bug", true,
+						null, false);
+				boolean render = false;
+				for (JJStatus s : statBug) {
+
+					int i = Integer.parseInt(""
+							+ jJBugService.getBugsCountByStaus(
+									((LoginBean) LoginBean
+											.findBean("loginBean"))
+											.getContact().getCompany(),
+									project, LoginBean.getProduct(), LoginBean
+											.getVersion(), s, true));
+					render = render || i > 0;
+					if (i > 0)
+						bugPieChart.set(
+								MessageFactory.getMessage(
+										"status_" + s.getName(), "")
+										.getDetail(), i);
+				}
+
+				if (render) {
+					bugPieChart.setLegendPosition("e");
+					bugPieChart.setTitle("% Bug");
+					bugPieChart.setFill(false);
+					bugPieChart.setShowDataLabels(true);
+					bugPieChart.setDiameter(150);
+					bugPieChart.setSliceMargin(5);
+				} else
+					bugPieChart = null;
+			}
+			return bugPieChart;
+		} else
+			return null;
+
+	}
+
+	public void setBugPieChart(PieChartModel bugPieChart) {
+		this.bugPieChart = bugPieChart;
+	}
+
 	public MeterGaugeChartModel getBugMetergauge() {
-		return bugMetergauge;
+		if (activeTabIndex == 1) {
+			if (bugMetergauge == null) {
+
+				float bugKPI = 0L;
+
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+						.findBean("jJRequirementBean");
+
+				if (jJRequirementBean == null)
+					jJRequirementBean = new JJRequirementBean();
+
+				List<JJRequirement> requirements = jJRequirementService
+						.getRequirements(null, ((LoginBean) LoginBean
+								.findBean("loginBean")).getAuthorizedMap(
+								"Requirement", LoginBean.getProject(),
+								LoginBean.getProduct()), LoginBean.getVersion());
+
+				for (JJRequirement req : requirements) {
+
+					bugKPI = bugKPI
+							+ (1 / (1 + jJBugService.requirementBugCount(req)));
+				}
+
+				if (requirements != null && !requirements.isEmpty())
+					bugKPI = bugKPI / requirements.size();
+
+				@SuppressWarnings("serial")
+				List<Number> bugIntervalls = new ArrayList<Number>() {
+					{
+						add(0.5);
+						add(0.75);
+						add(0.85);
+						add(0.925);
+						add(1);
+					}
+				};
+				bugMetergauge = new MeterGaugeChartModel(bugKPI, bugIntervalls);
+				bugMetergauge.setTitle("Bug KPI");
+				bugMetergauge.setGaugeLabel("KPI");
+				bugMetergauge.setMin(0.5);
+				bugMetergauge.setMax(1);
+				bugMetergauge.setShowTickLabels(true);
+				bugMetergauge
+						.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000");
+
+			}
+			return bugMetergauge;
+		} else
+			return null;
+
 	}
 
 	public void setBugMetergauge(MeterGaugeChartModel bugMetergauge) {
@@ -222,33 +332,69 @@ public class JJStatusBean {
 		this.prjMetergauge = prjMetergauge;
 	}
 
+	public int getActiveTabIndex() {
+		return activeTabIndex;
+	}
+
+	public void setActiveTabIndex(int activeTabSprintIndex) {
+		this.activeTabIndex = activeTabSprintIndex;
+	}
+
+	public int getActiveTabSprintIndex() {
+		return activeTabSprintIndex;
+	}
+
+	public void setActiveTabSprintIndex(int activeTabSprintIndex) {
+		this.activeTabSprintIndex = activeTabSprintIndex;
+	}
+
 	public void setFirst(Boolean bb) {
 		// this.first = bb;
 	}
 
-	public void onTabStatChange(TabChangeEvent event) {
-		//
-		// TabView tv = (TabView) event.getComponent();
-		// if (tv.getChildren().indexOf(event.getTab()) == 1 && first) {
-		// RequestContext.getCurrentInstance().execute(
-		// "PF('statsTabView').select(0)");
-		// RequestContext.getCurrentInstance().execute(
-		// "PF('statsTabView').select(1)");
-		// first = false;
-		// }
+	public List<SprintUtil> getSprintList() {
+
+		if (activeTabIndex == 2) {
+			JJSprintBean jJSprintBean = ((JJSprintBean) LoginBean
+					.findBean("jJSprintBean"));
+			if (jJSprintBean == null)
+				jJSprintBean = new JJSprintBean();
+			return jJSprintBean.getSprintList();
+		} else
+			return new ArrayList<SprintUtil>();
+
+	}
+
+	public Boolean emptysprintList;
+
+	public boolean isEmptysprintList() {
+		if (emptysprintList == null)
+			emptysprintList = jJSprintService.getSprints(
+					LoginBean.getProject(), true).isEmpty();
+		return emptysprintList;
+	}
+
+	public void onTabStatChange() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map<String, String> paramMap = context.getExternalContext()
+				.getRequestParameterMap();
+		if (paramMap.get("activeIndex") != null) {
+
+			String paramIndex = paramMap.get("activeIndex");
+			setActiveTabIndex(Integer.valueOf(paramIndex));
+			System.out.println("###### ACtive tab: " + activeTabIndex);
+		} else if (paramMap.get("activeSprintIndex") != null) {
+
+			String paramIndex = paramMap.get("activeSprintIndex");
+			setActiveTabSprintIndex(Integer.valueOf(paramIndex));
+			System.out.println("###### ACtive tab: " + activeTabSprintIndex);
+		}
 	}
 
 	@SuppressWarnings("serial")
 	public void loadData() {
 
 		if (project == null) {
-			// first = true;
-			if (((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-					.getSprintList() == null
-					|| ((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-							.getSprintList().isEmpty())
-				((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-						.iniSprintChart();
 			getProject();
 
 			if (project != null) {
@@ -297,7 +443,7 @@ public class JJStatusBean {
 				} else
 					pieChart = null;
 
-				float bugKPI = 0L;
+				// float bugKPI = 0L;
 				float projKPI = 0;
 				LoginBean loginBean = (LoginBean) LoginBean
 						.findBean("loginBean");
@@ -314,8 +460,8 @@ public class JJStatusBean {
 
 				for (JJRequirement req : requirements) {
 
-					bugKPI = bugKPI
-							+ (1 / (1 + jJBugService.requirementBugCount(req)));
+					// bugKPI = bugKPI
+					// + (1 / (1 + jJBugService.requirementBugCount(req)));
 
 					if (project.getStartDate() != null
 							&& project.getEndDate() != null
@@ -335,8 +481,8 @@ public class JJStatusBean {
 							- (tmpsProj / (1 + tmps));
 				}
 
-				if (requirements != null && !requirements.isEmpty())
-					bugKPI = bugKPI / requirements.size();
+				// if (requirements != null && !requirements.isEmpty())
+				// bugKPI = bugKPI / requirements.size();
 
 				List<Number> prjIntervalls = new ArrayList<Number>() {
 					{
@@ -362,28 +508,38 @@ public class JJStatusBean {
 				prjMetergauge
 						.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000,FFD000,FF7700,FF0000");
 
-				List<Number> bugIntervalls = new ArrayList<Number>() {
-					{
-						add(0.5);
-						add(0.75);
-						add(0.85);
-						add(0.925);
-						add(1);
-					}
-				};
-				bugMetergauge = new MeterGaugeChartModel(bugKPI, bugIntervalls);
-				bugMetergauge.setTitle("Bug KPI");
-				bugMetergauge.setGaugeLabel("KPI");
-				bugMetergauge.setMin(0.5);
-				bugMetergauge.setMax(1);
-				bugMetergauge.setShowTickLabels(true);
-				bugMetergauge
-						.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000");
+				// List<Number> bugIntervalls = new ArrayList<Number>() {
+				// {
+				// add(0.5);
+				// add(0.75);
+				// add(0.85);
+				// add(0.925);
+				// add(1);
+				// }
+				// };
+				// bugMetergauge = new MeterGaugeChartModel(bugKPI,
+				// bugIntervalls);
+				// bugMetergauge.setTitle("Bug KPI");
+				// bugMetergauge.setGaugeLabel("KPI");
+				// bugMetergauge.setMin(0.5);
+				// bugMetergauge.setMax(1);
+				// bugMetergauge.setShowTickLabels(true);
+				// bugMetergauge
+				// .setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000");
 
 			}
 
-		} else {
-			// first = !LoginBean.isEqualPreviousPage("stats");
+		} else if (categoryDataModel == null) {
+
+			categoryDataModel = new ArrayList<CategoryDataModel>();
+
+			List<JJCategory> categoryList = jJCategoryService.getCategories(
+					null, false, true, true, ((LoginBean) LoginBean
+							.findBean("loginBean")).getContact().getCompany());
+
+			for (JJCategory category : categoryList) {
+				categoryDataModel.add(new CategoryDataModel(category));
+			}
 		}
 	}
 
@@ -834,9 +990,16 @@ public class JJStatusBean {
 
 		private JJCategory category;
 
-		private float coverageProgress = 0;
-		private float completionProgress = 0;
+		private float coverageProgress = -1;
+		private float completionProgress = -1;
 		private PieChartModel categoryPieChart;
+
+		public CategoryDataModel(JJCategory category) {
+			this.category = category;
+			this.coverageProgress = calculateCoverageProgress();
+			this.completionProgress = calculateCompletionProgress();
+
+		}
 
 		public JJCategory getCategory() {
 			return category;
@@ -848,10 +1011,9 @@ public class JJStatusBean {
 
 		public PieChartModel getCategoryPieChart() {
 
-			getCompletionProgress();
 			categoryPieChart = new PieChartModel();
-			categoryPieChart.set("Done", completionProgress * 100);
-			categoryPieChart.set("Not", 100 - completionProgress * 100);
+			categoryPieChart.set("Done", completionProgress);
+			categoryPieChart.set("Not", 100 - completionProgress);
 			categoryPieChart.setShowDataLabels(true);
 			categoryPieChart.setFill(true);
 			categoryPieChart.setSeriesColors("8BADC6,FFFDF6");
@@ -864,112 +1026,7 @@ public class JJStatusBean {
 		}
 
 		public float getCoverageProgress() {
-
-			if (coverageProgress == 0) {
-				float compteur = 0;
-				LoginBean loginBean = (LoginBean) LoginBean
-						.findBean("loginBean");
-				List<JJRequirement> dataList = jJRequirementService
-						.getRequirements(((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), category, loginBean
-								.getAuthorizedMap("Requirement", project,
-										LoginBean.getProduct()), LoginBean
-								.getVersion(), null, null, false, true, false,
-								false, null);
-
-				List<JJCategory> categoryList = jJCategoryService
-						.getCategories(null, false, true, true,
-								((LoginBean) LoginBean.findBean("loginBean"))
-										.getContact().getCompany());
-
-				boolean sizeIsOne = false;
-
-				if (category.getId() == categoryList.get(0).getId()) {
-
-					for (JJRequirement requirement : dataList) {
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkUp()) {
-							if (req.getEnabled()) {
-								compteur++;
-								break;
-							}
-						}
-
-					}
-
-					sizeIsOne = true;
-				} else if (category.getId() == categoryList.get(
-						categoryList.size() - 1).getId()
-						&& !sizeIsOne) {
-
-					for (JJRequirement requirement : dataList) {
-						boolean linkUp = false;
-						boolean linkDown = false;
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkDown()) {
-							if (req.getEnabled()) {
-								linkDown = true;
-								break;
-							}
-						}
-
-						for (JJTask task : requirement.getTasks()) {
-							if (task.getEnabled()) {
-								linkUp = true;
-								break;
-							}
-						}
-
-						if (linkUp && linkDown) {
-							compteur++;
-						} else if (linkUp || linkDown) {
-							compteur += 0.5;
-						}
-
-					}
-				} else {
-
-					for (JJRequirement requirement : dataList) {
-
-						boolean linkUp = false;
-						boolean linkDown = false;
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkUp()) {
-							if (req.getEnabled()) {
-								linkUp = true;
-								break;
-							}
-						}
-
-						for (JJRequirement req : requirement
-								.getRequirementLinkDown()) {
-							if (req.getEnabled()) {
-								linkDown = true;
-								break;
-							}
-						}
-
-						if (linkUp && linkDown) {
-							compteur++;
-						} else if (linkUp || linkDown) {
-							compteur += 0.5;
-						}
-					}
-				}
-
-				if (dataList.isEmpty()) {
-					coverageProgress = 0;
-				} else {
-					coverageProgress = compteur / dataList.size();
-				}
-			}
-
-			return coverageProgress * 100;
-
+			return coverageProgress;
 		}
 
 		public void setCoverageProgress(float coverageProgress) {
@@ -978,27 +1035,174 @@ public class JJStatusBean {
 
 		public float getCompletionProgress() {
 
-			if (completionProgress == 0) {
-				float compteur = 0;
-				LoginBean loginBean = (LoginBean) LoginBean
-						.findBean("loginBean");
-				List<JJRequirement> dataList = jJRequirementService
-						.getRequirements(((LoginBean) LoginBean
-								.findBean("loginBean")).getContact()
-								.getCompany(), category, loginBean
-								.getAuthorizedMap("Requirement", project,
-										LoginBean.getProduct()), LoginBean
-								.getVersion(), null, null, false, true, false,
-								false, null);
+			return completionProgress;
 
-				for (JJRequirement requirement : dataList) {
-					compteur = compteur + calculCompletion(requirement);
+		}
+
+		public void setCompletionProgress(float completionProgress) {
+			this.completionProgress = completionProgress;
+		}
+
+		public float calculateCoverageProgress() {
+
+			if (coverageProgress == -1) {
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+						.findBean("jJRequirementBean");
+				boolean containCategory = false;
+				if (jJRequirementBean != null
+						&& jJRequirementBean.getTableDataModelList() != null
+						&& !jJRequirementBean.getTableDataModelList().isEmpty()) {
+
+					for (int i = 0; i < jJRequirementBean
+							.getTableDataModelList().size(); i++) {
+						if (jJRequirementBean.getTableDataModelList().get(i)
+								.getCategoryId() != 0
+								&& category.getId().equals(
+										jJRequirementBean
+												.getTableDataModelList().get(i)
+												.getCategoryId())) {
+							if (jJRequirementBean.getTableDataModelList()
+									.get(i).getCoverageProgress() == -1)
+								jJRequirementBean.getTableDataModelList()
+										.get(i).calculCoverageProgress();
+							coverageProgress = jJRequirementBean
+									.getTableDataModelList().get(i)
+									.getCoverageProgress() / 100;
+							containCategory = true;
+							i = jJRequirementBean.getTableDataModelList()
+									.size();
+						}
+					}
+				}
+				if (!containCategory) {
+					float compteur = 0;
+					LoginBean loginBean = (LoginBean) LoginBean
+							.findBean("loginBean");
+					List<JJRequirement> dataList = jJRequirementService
+							.getRequirements(((LoginBean) LoginBean
+									.findBean("loginBean")).getContact()
+									.getCompany(), category, loginBean
+									.getAuthorizedMap("Requirement", project,
+											LoginBean.getProduct()), LoginBean
+									.getVersion(), null, null, false, true,
+									false, false, null);
+
+					boolean sizeIsOne = false;
+
+					if (jJCategoryService.isLowLevel(category,
+							LoginBean.getCompany())) {
+
+						for (JJRequirement requirement : dataList) {
+							if (jJRequirementService.haveLinkUp(requirement))
+								compteur++;
+						}
+
+						sizeIsOne = true;
+					} else if (jJCategoryService.isHighLevel(category,
+							LoginBean.getCompany()) && !sizeIsOne) {
+
+						for (JJRequirement requirement : dataList) {
+							boolean linkUp = false;
+							boolean linkDown = false;
+							linkDown = jJRequirementService
+									.haveLinkDown(requirement);
+							linkUp = jJTaskService.haveTask(requirement, true,
+									false, false);
+
+							if (linkUp && linkDown) {
+								compteur++;
+							} else if (linkUp || linkDown) {
+								compteur += 0.5;
+							}
+
+						}
+					} else {
+
+						for (JJRequirement requirement : dataList) {
+
+							boolean linkUp = false;
+							boolean linkDown = false;
+
+							linkUp = jJRequirementService
+									.haveLinkUp(requirement);
+							linkDown = jJRequirementService
+									.haveLinkDown(requirement);
+
+							if (linkUp && linkDown) {
+								compteur++;
+							} else if (linkUp || linkDown) {
+								compteur += 0.5;
+							}
+						}
+					}
+
+					if (dataList.isEmpty()) {
+						coverageProgress = 0;
+					} else {
+						coverageProgress = compteur / dataList.size();
+					}
 				}
 
-				if (dataList.isEmpty()) {
-					completionProgress = 0;
-				} else {
-					completionProgress = compteur / dataList.size();
+			}
+
+			return coverageProgress * 100;
+
+		}
+
+		public float calculateCompletionProgress() {
+
+			if (completionProgress == -1) {
+
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+						.findBean("jJRequirementBean");
+				boolean containCategory = false;
+				if (jJRequirementBean != null
+						&& jJRequirementBean.getTableDataModelList() != null
+						&& !jJRequirementBean.getTableDataModelList().isEmpty()) {
+
+					for (int i = 0; i < jJRequirementBean
+							.getTableDataModelList().size(); i++) {
+						if (jJRequirementBean.getTableDataModelList().get(i)
+								.getCategoryId() != 0
+								&& category.getId().equals(
+										jJRequirementBean
+												.getTableDataModelList().get(i)
+												.getCategoryId())) {
+							if (jJRequirementBean.getTableDataModelList()
+									.get(i).getCompletionProgress() == -1)
+								jJRequirementBean.getTableDataModelList()
+										.get(i).calculCompletionProgress();
+							completionProgress = jJRequirementBean
+									.getTableDataModelList().get(i)
+									.getCompletionProgress() / 100;
+							containCategory = true;
+							i = jJRequirementBean.getTableDataModelList()
+									.size();
+						}
+					}
+				}
+				if (!containCategory) {
+					float compteur = 0;
+					LoginBean loginBean = (LoginBean) LoginBean
+							.findBean("loginBean");
+					List<JJRequirement> dataList = jJRequirementService
+							.getRequirements(((LoginBean) LoginBean
+									.findBean("loginBean")).getContact()
+									.getCompany(), category, loginBean
+									.getAuthorizedMap("Requirement", project,
+											LoginBean.getProduct()), LoginBean
+									.getVersion(), null, null, false, true,
+									false, false, null);
+
+					for (JJRequirement requirement : dataList) {
+						compteur = compteur + calculCompletion(requirement);
+					}
+
+					if (dataList.isEmpty()) {
+						completionProgress = 0;
+					} else {
+						completionProgress = compteur / dataList.size();
+					}
 				}
 
 			}
@@ -1017,45 +1221,17 @@ public class JJStatusBean {
 				}
 			}
 
-			Set<JJTask> tasks = requirement.getTasks();
 			int hasTaskCompleted = 0;
-			if (!tasks.isEmpty()) {
-				boolean isCompleted = false;
-				for (JJTask task : tasks) {
-					if (task.getEnabled()) {
-						if (task.getCompleted() != null) {
-							if (task.getCompleted()) {
-								isCompleted = true;
-							} else {
-								isCompleted = false;
-								break;
-							}
-						} else {
-							isCompleted = false;
-							break;
-						}
 
-					}
-				}
-				if (isCompleted) {
-					compteur++;
-					hasTaskCompleted = 1;
-				}
+			if (jJTaskService.haveTask(requirement, true, true, false)) {
+				compteur++;
+				hasTaskCompleted = 1;
 			}
 			if (size > 0) {
 				compteur = compteur / (size + hasTaskCompleted);
 			}
 
 			return compteur;
-		}
-
-		public void setCompletionProgress(float completionProgress) {
-			this.completionProgress = completionProgress;
-		}
-
-		public CategoryDataModel(JJCategory category) {
-			this.category = category;
-
 		}
 
 		@Override

@@ -41,7 +41,7 @@ public class AuthorisationService implements Serializable {
 		jjContactBean.setContactsLazyModel(null);
 		jjContactBean.setContactUtil(null);
 		jjProductBean.setProductListTable(null);
-		jjProjectBean.setProjectListTable(null);		
+		jjProjectBean.setProjectListTable(null);
 		jjContactBean.setVersionList(null);
 		jjContactBean.setLoggedContactCategories(null);
 		if (jjCompanyBean != null)
@@ -700,7 +700,6 @@ public class AuthorisationService implements Serializable {
 						"specification_table_requirement_new", "").getDetail();
 		} else {
 			wRequiement = false;
-			// wRequiementMSG = "Select a project to create requirement";
 			wRequiementMSG = MessageFactory.getMessage(
 					"specification_warning_lackProject", "").getDetail();
 		}

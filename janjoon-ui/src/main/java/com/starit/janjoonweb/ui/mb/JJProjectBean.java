@@ -131,8 +131,8 @@ public class JJProjectBean {
 		else
 			projectManagerList = jJPermissionService.getManagers(projectAdmin
 					.getManager().getCompany(), ((LoginBean) LoginBean
-					.findBean("loginBean")).getContact(), "Product");
-		;
+					.findBean("loginBean")).getContact(), "Project");
+
 		return projectManagerList;
 	}
 

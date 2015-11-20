@@ -278,7 +278,7 @@
 	<p:dialog id="companyDialog" height="510" width="740"
 		header="#{messages[jJCompanyBean.headerMessage]}" modal="true"
 		widgetVar="companyDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false"
+		hideEffect="explode" resizable="false" onHide="PF('companyTabView').select(0);"
 		onShow="PF('companyTabView').select(0);">
 		<p:ajax event="close" update=":tabview:companyForm"
 			listener="#{jJCompanyBean.closeDialog}" />

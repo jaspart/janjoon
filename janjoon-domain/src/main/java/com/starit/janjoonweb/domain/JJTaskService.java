@@ -24,7 +24,8 @@ public interface JJTaskService {
 	public List<JJTask> getImportTasks(JJBug bug, JJRequirement requirement,
 			JJTestcase testcase, boolean onlyActif);
 
-	public boolean haveTask(Object object, boolean onlyActif, boolean finished);
+	public boolean haveTask(Object object, boolean onlyActif, boolean finished,
+			boolean checkLinkUp);
 
 	public void saveTasks(Set<JJTask> tasks);
 
