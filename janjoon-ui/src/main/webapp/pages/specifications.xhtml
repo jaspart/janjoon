@@ -166,7 +166,7 @@
 						<p:column rendered="#{tableDataModel.expanded}"
 							style="width: 34%;" styleClass="noPadding">
 							<p:tree id="chapterTree" value="#{tableDataModel.chapterTree}"
-								style="float: left;width: 100%;height: 460px;/*background: #F2F2F2;*/border: none;"
+								style="float: left;width: 100%;height: 540px;/*background: #F2F2F2;*/border: none;"
 								var="node" selectionMode="single"
 								rendered="#{tableDataModel.expanded}" dynamic="true">
 								<p:ajax event="select"
@@ -189,7 +189,7 @@
 						<p:column style="#{tableDataModel.tableStyle}"
 							styleClass="noPadding">
 							<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
-								value="#{tableDataModel}" scrollable="true" scrollHeight="300"
+								value="#{tableDataModel}" scrollable="true" scrollHeight="400"
 								sortMode="multiple" resizableColumns="true"
 								styleClass="requirement-table"
 								emptyMessage="#{messages.label_notRecordFound}"
@@ -212,6 +212,30 @@
 										oncomplete="PF('blockUIWidget').unblock();updateDataTable();"
 										actionListener="#{jJRequirementBean.expandTable(tableDataModel)}"
 										title="Expand" />
+<!-- 									<p:selectOneMenu id="sortMode" var="type" value="#{tableDataModel.rowStyleClassFilter}" -->
+<!-- 										style="float: left;left: 25%;width: 25%;"> -->
+<!-- 										<f:attribute name="optionClasses" value="true" /> -->
+<!-- 										<f:selectItem itemValue="#{null}" -->
+<!-- 											itemLabel="#{messages.label_select}" /> -->
+<!-- 										<f:selectItem itemValue="UnLinked" -->
+<!-- 											itemLabel="#{messages.specification_UnLinked}" /> -->
+<!-- 										<f:selectItem itemValue="Progress" -->
+<!-- 											itemLabel="#{messages.specification_Progress}" /> -->
+<!-- 										<f:selectItem itemValue="Finished" -->
+<!-- 											itemLabel="#{messages.specification_Finished}" /> -->
+<!-- 										<f:selectItem itemValue="InTesting" -->
+<!-- 											itemLabel="#{messages.specification_InTesting}" /> -->
+<!-- 										<f:selectItem itemValue="Specified" -->
+<!-- 											itemLabel="#{messages.specification_Specified}" /> -->
+<!-- 										<p:column> -->
+<!-- 											<h:outputText -->
+<!-- 												value="#{type != null ? messages['specification_'.concat(type)] : messages.label_select}" /> -->
+<!-- 										</p:column> -->
+<!-- 										<p:ajax event="change" -->
+<!-- 											listener="#{jJRequirementBean.SortBySelectionChanged(tableDataModel)}" -->
+<!-- 											onstart="PF('blockUIWidget').block()" -->
+<!-- 											oncomplete="PF('blockUIWidget').unblock();updateDataTable();" /> -->
+<!-- 									</p:selectOneMenu> -->
 									<p:panelGrid style="margin-top: 15px;">
 										<f:facet name="header">
 											<p:row>
@@ -552,7 +576,7 @@
 			</video>
 		</p:dialog>
 
-		<p:hotkey bind="esc"
+		<p:hotkey bind="esc" 
 			handler="PF('requirementImportDialogWidget').hide()" />
 		<p:dialog id="requirementImportXMLDialog" draggable="false"
 			modal="true" header="#{messages.specification_import_title} XML"
@@ -728,7 +752,8 @@
 									<f:selectItem itemValue="#{null}"
 										itemLabel="#{messages.specification_import_select_label}" />
 									<f:selectItems value="#{jJRequirementBean.importStatusList}"
-										var="p" itemLabel="#{messages['status_'.concat(fn:replace(p.name, ' ', '_'))]}"
+										var="p"
+										itemLabel="#{messages['status_'.concat(fn:replace(p.name, ' ', '_'))]}"
 										itemValue="#{p}" />
 									<p:ajax partialSubmit="true"
 										onstart="PF('importBlockUIWidget').block()"
@@ -758,7 +783,7 @@
 											<p:ajax update="importDataTable :importForm:importButton"
 												onstart="PF('importBlockUIWidget').block()"
 												oncomplete="PF('importBlockUIWidget').unblock()"
-												listener="#{jJRequirementBean.copyRequirements}" />
+												listener="#{jJRequirementBean.copyRequirementsListener}" />
 										</p:selectBooleanCheckbox>
 									</p:column>
 									<p:column>
@@ -769,7 +794,7 @@
 							</f:facet>
 							<p:selectBooleanCheckbox value="#{format.copyRequirement}">
 								<p:ajax update="importDataTable :importForm:importButton"
-									listener="#{jJRequirementBean.copyRequirement}" />
+									listener="#{jJRequirementBean.copyRequirementListener}" />
 							</p:selectBooleanCheckbox>
 							<h:outputText value="#{format.requirement.name}" />
 						</p:column>
@@ -777,15 +802,15 @@
 						<p:column style="width:30%">
 							<f:facet name="header">
 								<p:row>
-									<p:column>
-										<p:selectBooleanCheckbox
-											value="#{jJRequirementBean.copyTestcases}">
-											<p:ajax update="importDataTable"
-												onstart="PF('importBlockUIWidget').block()"
-												oncomplete="PF('importBlockUIWidget').unblock()"
-												listener="#{jJRequirementBean.copyTestcases}" />
-										</p:selectBooleanCheckbox>
-									</p:column>
+<!-- 									<p:column> -->
+<!-- 										<p:selectBooleanCheckbox -->
+<!-- 											value="#{jJRequirementBean.copyTestcases}"> -->
+<!-- 											<p:ajax update="importDataTable" -->
+<!-- 												onstart="PF('importBlockUIWidget').block()" -->
+<!-- 												oncomplete="PF('importBlockUIWidget').unblock()" -->
+<!-- 												listener="#{jJRequirementBean.copyTestcases}" /> -->
+<!-- 										</p:selectBooleanCheckbox> -->
+<!-- 									</p:column> -->
 									<p:column>
 										<h:outputText
 											value="#{messages.specification_import_testcase_header}" />
@@ -801,15 +826,15 @@
 						<p:column style="width:30%">
 							<f:facet name="header">
 								<p:row>
-									<p:column>
-										<p:selectBooleanCheckbox
-											value="#{jJRequirementBean.copyChapters}">
-											<p:ajax update="importDataTable"
-												onstart="PF('importBlockUIWidget').block()"
-												oncomplete="PF('importBlockUIWidget').unblock()"
-												listener="#{jJRequirementBean.copyChapters}" />
-										</p:selectBooleanCheckbox>
-									</p:column>
+<!-- 									<p:column> -->
+<!-- 										<p:selectBooleanCheckbox -->
+<!-- 											value="#{jJRequirementBean.copyChapters}"> -->
+<!-- 											<p:ajax update="importDataTable" -->
+<!-- 												onstart="PF('importBlockUIWidget').block()" -->
+<!-- 												oncomplete="PF('importBlockUIWidget').unblock()" -->
+<!-- 												listener="#{jJRequirementBean.copyChapters}" /> -->
+<!-- 										</p:selectBooleanCheckbox> -->
+<!-- 									</p:column> -->
 									<p:column>
 										<h:outputText
 											value="#{messages.specification_import_chapter_header}" />

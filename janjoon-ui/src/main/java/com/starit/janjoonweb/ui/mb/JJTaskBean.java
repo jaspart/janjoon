@@ -959,22 +959,22 @@ public class JJTaskBean {
 
 			if (sprint == null) {
 				// Before 4 hours for now
-				cal.setTimeInMillis(now.getTime() - 24 * 60 * 60 * 1000);
-				start = cal.getTime();
+				// cal.setTimeInMillis(LoginBean.getProject().getStartDate().getTime());
+				start = LoginBean.getProject().getStartDate();
 
 				// After 8 hours for now
-				cal.setTimeInMillis(now.getTime() + 24 * 60 * 60 * 1000);
-				end = cal.getTime();
+				// cal.setTimeInMillis(now.getTime() + 24 * 60 * 60 * 1000);
+				end = LoginBean.getProject().getEndDate();
 			} else {
 				start = sprint.getStartDate();
 				end = sprint.getEndDate();
 			}
 
-			// one day in milliseconds for zoomMin
-			zoomMin = 1000L * 60 * 60 * 24;
+			// seven day in milliseconds for zoomMin
+			zoomMin = 1000L * 60 * 60 * 24 * 3;
 
-			// one day in milliseconds for zoomMax
-			zoomMax = 1000L * 60 * 60 * 24 * 31 * 5;
+			// 3 months in milliseconds for zoomMax
+			zoomMax = 1000L * 60 * 60 * 24 * 31 * 3;
 
 			// Create timeline model
 			model = new TimelineModel();

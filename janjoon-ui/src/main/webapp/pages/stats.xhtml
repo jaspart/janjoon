@@ -29,7 +29,7 @@
 			<p:tab id="specTab" title="#{messages.label_requirement}">
 				<p:commandButton id="infoBtnSpec" icon="ui-icon-info"
 					title="#{messages.specification_video_help_title}" type="button"
-					style="float: right;" />
+					style="float: right;right: 30%;" />
 				<p:overlayPanel id="infoPanelSpec" for="infoBtnSpec"
 					hideEffect="fade" style="width:30%">
 					<p:panelGrid style="width: 100%;" columns="1">
@@ -37,6 +37,26 @@
 							<li>#{messages.statistique_spec_projectKpi_help}</li>
 							<li>#{messages.statistique_spec_pieChart_help}</li>
 						</ul>
+					</p:panelGrid>
+					<p:panelGrid style="width: 100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="6">Code des Couleurs</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column colspan="2" styleClass="DELAY">
+								<p:outputLabel value="#{messages.statistique_help_project_delay}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="ONTIME">
+								<p:outputLabel value="#{messages.statistique_help_project_time}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="INADVANCE">
+								<p:outputLabel value="#{messages.statistique_help_project_advance}" />
+							</p:column>
+						</p:row>
 					</p:panelGrid>
 				</p:overlayPanel>
 				<h:form id="specForm">
@@ -86,7 +106,7 @@
 			<p:tab id="bugTab" title="Bug">
 				<p:commandButton id="infoBtnBug" icon="ui-icon-info"
 					title="#{messages.specification_video_help_title}" type="button"
-					style="float: right;" />
+					style="float: right;right: 30%;" />
 				<p:overlayPanel id="infoPanelBug" for="infoBtnBug" hideEffect="fade"
 					style="width:30%">
 					<p:panelGrid style="width: 100%;" columns="1">
@@ -117,9 +137,8 @@
 					onTabChange="tabChangeHelper([{name: 'activeSprintIndex', value: index}])"
 					activeIndex="#{jJStatusBean.activeTabSprintIndex}">
 					<p:tab title="#{jjsprint.sprint.name}"
-						rendered="#{!jjsprint.render}"
 						titletip="#{!jjsprint.render and jjsprint.chartModel == null ? messages.statistique_disabled_sprint_titletip :''}"
-						disabled="#{jjsprint.render or jjsprint.chartModel == null}">
+						disabled="#{jjsprint.render}">
 						<h3>#{messages.statistique_completion_progress_title}</h3>
 						<p:progressBar value="#{jjsprint.progressBarValue}"
 							labelTemplate="{value}%" displayOnly="true" />

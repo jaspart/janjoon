@@ -332,6 +332,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		if (contact != null) {
 			predicates.add(criteriaBuilder.equal(from.get("contact"), contact));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.get("contact").get("company"), company));
 		}
 
 		if (product != null) {

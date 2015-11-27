@@ -196,6 +196,7 @@ public class JJRequirementBean {
 	private boolean copyTestcases;
 	private boolean copyChapters;
 	private boolean copyRequirements;
+	private boolean oldCopyRequirements;
 	private boolean disableImportButton;
 
 	private MindmapNode reqRoot;
@@ -433,7 +434,8 @@ public class JJRequirementBean {
 
 	public boolean getExpand() {
 
-		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
+		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()
+				&& tableDataModelList != null) {
 			boolean r = false;
 			int tableNb = 0;
 			for (int i = 0; i < tableDataModelList.size(); i++) {
@@ -1301,11 +1303,12 @@ public class JJRequirementBean {
 						tableDataModelList.get(i).setFiltredRequirements(null);
 
 				} else {
-					tableDataModelList
-							.get(i)
-							.setFiltredRequirements(
-									getFiltredListValue((List<RequirementUtil>) tableDataModelList
-											.get(i).getWrappedData()));
+					tableDataModelList.get(i).setFiltredRequirements(
+							getFiltredListValue(
+									(List<RequirementUtil>) tableDataModelList
+											.get(i).getWrappedData(),
+									tableDataModelList.get(i)
+											.getRowStyleClassFilter()));
 				}
 
 			}
@@ -1315,9 +1318,11 @@ public class JJRequirementBean {
 		// RequestContext.getCurrentInstance().execute("updateDataTable()");
 	}
 
-	public List<RequirementUtil> getFiltredListValue(List<RequirementUtil> list) {
+	public List<RequirementUtil> getFiltredListValue(
+			List<RequirementUtil> list, String rowStyleClass) {
 
-		if ((filterValue == null || filterValue.isEmpty()) && !mine)
+		if ((filterValue == null || filterValue.isEmpty()) && !mine
+				&& rowStyleClass == null)
 			return list;
 		else {
 			List<RequirementUtil> filtredList = new ArrayList<RequirementUtil>();
@@ -1336,7 +1341,9 @@ public class JJRequirementBean {
 										.equals(mineContact)) || (req
 								.getRequirement().getCreatedBy() != null && req
 								.getRequirement().getCreatedBy()
-								.equals(mineContact))))
+								.equals(mineContact)))
+						&& (rowStyleClass == null || rowStyleClass.isEmpty() || req
+								.getStyle().equalsIgnoreCase(rowStyleClass)))
 					filtredList.add(req);
 			}
 			return filtredList;
@@ -1834,6 +1841,7 @@ public class JJRequirementBean {
 		copyTestcases = false;
 		copyChapters = false;
 		copyRequirements = false;
+		oldCopyRequirements = false;
 		disableImportButton = true;
 
 		int i = 0;
@@ -2498,20 +2506,27 @@ public class JJRequirementBean {
 											category, version, true, true)));
 						else {
 							categoryDataModel
-									.setFiltredRequirements(getFiltredListValue(getListOfRequiremntUtils(jJRequirementService.getMineRequirements(
-											LoginBean.getCompany(),
-											((LoginBean) LoginBean
-													.findBean("loginBean"))
-													.getContact(), loginBean
-													.getAuthorizedMap(
-															"Requirement",
-															project, product),
-											category, version, true, true))));
+									.setFiltredRequirements(getFiltredListValue(
+											getListOfRequiremntUtils(jJRequirementService
+													.getMineRequirements(
+															LoginBean
+																	.getCompany(),
+															((LoginBean) LoginBean
+																	.findBean("loginBean"))
+																	.getContact(),
+															loginBean
+																	.getAuthorizedMap(
+																			"Requirement",
+																			project,
+																			product),
+															category, version,
+															true, true)), null));
 						}
 					} else if (!(filterValue == null || filterValue.isEmpty())) {
 						categoryDataModel
-								.setFiltredRequirements(getFiltredListValue((List<RequirementUtil>) categoryDataModel
-										.getWrappedData()));
+								.setFiltredRequirements(getFiltredListValue(
+										(List<RequirementUtil>) categoryDataModel
+												.getWrappedData(), null));
 					}
 
 					// categoryDataModel.calculCompletionProgress();
@@ -3554,17 +3569,22 @@ public class JJRequirementBean {
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
-	public void copyRequirements() {
+	public void copyRequirementsListener() {
 		long t = System.currentTimeMillis();
+
+		if (copyRequirements == oldCopyRequirements)
+			copyRequirements = !copyRequirements;
+
 		for (ImportFormat importFormat : importFormats) {
 			importFormat.setCopyRequirement(copyRequirements);
 		}
 
+		oldCopyRequirements = copyRequirements;
 		disableImportButton = !copyRequirements;
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
-	public void copyRequirement() {
+	public void copyRequirementListener() {
 		long t = System.currentTimeMillis();
 		boolean copyAll = true;
 		for (ImportFormat importFormat : importFormats) {
@@ -3575,6 +3595,7 @@ public class JJRequirementBean {
 		}
 
 		copyRequirements = copyAll;
+		oldCopyRequirements = copyAll;
 
 		for (ImportFormat importFormat : importFormats) {
 			if (importFormat.getCopyRequirement()) {
@@ -3640,6 +3661,14 @@ public class JJRequirementBean {
 							.getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void SortBySelectionChanged(CategoryDataModel tableDataModel) {
+		tableDataModel.setFiltredRequirements(getFiltredListValue(
+				(List<RequirementUtil>) tableDataModel.getWrappedData(),
+				tableDataModel.getRowStyleClassFilter()));
 
 	}
 
@@ -3763,10 +3792,11 @@ public class JJRequirementBean {
 
 					}
 
-					tableDataModelList
-							.get(i)
-							.setFiltredRequirements(
-									getFiltredListValue(getListOfRequiremntUtils(requirements)));
+					tableDataModelList.get(i).setFiltredRequirements(
+							getFiltredListValue(
+									getListOfRequiremntUtils(requirements),
+									tableDataModelList.get(i)
+											.getRowStyleClassFilter()));
 
 				}
 
@@ -3793,13 +3823,14 @@ public class JJRequirementBean {
 
 		private String nameDataModel;
 		private long categoryId;
-		private int activeIndex;
+		private int activeIndex = -1;
 		private float coverageProgress = -1;
 		private float completionProgress = -1;
 		private List<RequirementUtil> filtredRequirements;
 		private boolean rendered;
 		private TreeNode chapterTree;
 		private boolean expanded;
+		private String rowStyleClassFilter = null;
 
 		public boolean isExpanded() {
 			return expanded;
@@ -3915,6 +3946,16 @@ public class JJRequirementBean {
 			this.chapterTree = chapterTree;
 		}
 
+		public String getRowStyleClassFilter() {
+
+			return rowStyleClassFilter;
+
+		}
+
+		public void setRowStyleClassFilter(String rowStyleClassFilter) {
+			this.rowStyleClassFilter = rowStyleClassFilter;
+		}
+
 		public CategoryDataModel(List<RequirementUtil> data, long categoryId,
 				String nameDataModel, boolean rendered) {
 			super(data);
@@ -3923,7 +3964,8 @@ public class JJRequirementBean {
 			this.rendered = rendered;
 			this.activeIndex = -1;
 			this.expanded = false;
-			chapterTree = null;
+			this.chapterTree = null;
+			// this.rowStyleClassFilter = null;
 		}
 
 		public String getTableStyle() {
@@ -4832,10 +4874,11 @@ public class JJRequirementBean {
 							true, this.mine, ((LoginBean) LoginBean
 									.findBean("loginBean")).getContact()));
 				}
-				tableDataModelList
-						.get(i)
-						.setFiltredRequirements(
-								getFiltredListValue(getListOfRequiremntUtils(requirements)));
+				tableDataModelList.get(i).setFiltredRequirements(
+						getFiltredListValue(
+								getListOfRequiremntUtils(requirements),
+								tableDataModelList.get(i)
+										.getRowStyleClassFilter()));
 
 			} else if (event.getTreeNode().getData() instanceof String
 					&& (((String) event.getTreeNode().getData())
@@ -4867,7 +4910,8 @@ public class JJRequirementBean {
 
 				}
 				tableDataModelList.get(i).setFiltredRequirements(
-						getFiltredListValue(list));
+						getFiltredListValue(list, tableDataModelList.get(i)
+								.getRowStyleClassFilter()));
 
 			} else
 				mineChangeEvent(i);
@@ -4888,10 +4932,9 @@ public class JJRequirementBean {
 						.findJJCategory(tableDataModelList.get(i)
 								.getCategoryId());
 				this.setMine(true);
-				tableDataModelList
-						.get(i)
-						.setFiltredRequirements(
-								getFiltredListValue(getListOfRequiremntUtils(jJRequirementService
+				tableDataModelList.get(i).setFiltredRequirements(
+						getFiltredListValue(
+								getListOfRequiremntUtils(jJRequirementService
 										.getMineRequirements(LoginBean
 												.getCompany(),
 												((LoginBean) LoginBean
@@ -4900,7 +4943,9 @@ public class JJRequirementBean {
 												loginBean.getAuthorizedMap(
 														"Requirement", project,
 														product), category,
-												version, true, true))));
+												version, true, true)),
+								tableDataModelList.get(i)
+										.getRowStyleClassFilter()));
 			}
 
 		} else {
@@ -4924,11 +4969,12 @@ public class JJRequirementBean {
 					}
 
 				} else {
-					tableDataModelList
-							.get(i)
-							.setFiltredRequirements(
-									getFiltredListValue((List<RequirementUtil>) tableDataModelList
-											.get(i).getWrappedData()));
+					tableDataModelList.get(i).setFiltredRequirements(
+							getFiltredListValue(
+									(List<RequirementUtil>) tableDataModelList
+											.get(i).getWrappedData(),
+									tableDataModelList.get(i)
+											.getRowStyleClassFilter()));
 				}
 
 			}
@@ -5033,8 +5079,13 @@ public class JJRequirementBean {
 						tableDataModelList
 								.get(i)
 								.setFiltredRequirements(
-										getFiltredListValue((List<RequirementUtil>) tableDataModelList
-												.get(i).getWrappedData()));
+										getFiltredListValue(
+												(List<RequirementUtil>) tableDataModelList
+														.get(i)
+														.getWrappedData(),
+												tableDataModelList
+														.get(i)
+														.getRowStyleClassFilter()));
 					}
 
 				}

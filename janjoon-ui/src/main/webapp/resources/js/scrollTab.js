@@ -5,17 +5,19 @@ $(document).ready(
 						$(".ui-layout-content").scrollTop($(this).scrollTop());
 						var scroll = $(this).scrollTop();
 						$(".stickyHeader").css('transform',
-								'translate(0px,' + scroll + 'px)');
+								'translateY(' + scroll + 'px)');
 						// $(".stickyHeader").css('z-index', '50');
+						$(".timeline-navigation").css('transform',
+								'translateY(' + scroll + 'px)');
 						$(".timeline-axis").css('transform',
-								'translate(0px,' + scroll + 'px)');
+								'translateY(' + scroll + 'px)');
 						// $(".timeline-axis").css('z-index', '50');
 						$(".timeline-axis-text").css('transform',
-								'translate(0px,' + scroll + 'px)');
+								'translateY(' + scroll + 'px)');
 						$(".timeline-groups-axis-onleft").css('transform',
-								'translate(0px,' + scroll + 'px)');
+								'translateY(' + scroll + 'px)');
 						$(".timeline-axis-grid-major").css('transform',
-								'translate(0px,' + scroll + 'px)');
+								'translateY(' + scroll + 'px)');
 						// $(".ui-splitbutton").css('display','none');
 
 						// var elementArray =

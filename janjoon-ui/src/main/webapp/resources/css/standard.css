@@ -420,7 +420,7 @@ div#contentPanel_content {
 	width: 100%;
 	min-width: 200px !important;
 	margin: auto;
-	border: 1px solid #a4a4a4;
+	/*border: 1px solid #a4a4a4;*/
 }
 
 .requirement-column {
@@ -766,6 +766,12 @@ div.timeline-navigation-delete {
 	display: none;
 }
 
+div.timeline-navigation {
+	bottom: initial !important;
+    top: 40px;    
+    left: initial;
+}
+
 div.planned1 {
 	background: #5882FA none !important; /* blue */
 	border-color: white; /* white */
@@ -1108,6 +1114,46 @@ div.revised2 {
 	border-radius: .25em;
 	font-weight: bold;
 	font-size: 10px;
+}
+
+/*stats page*/
+.DELAY {
+	background-color: #FF0000 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+
+.ONTIME {
+	background-color: #008000 !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+
+.INADVANCE {
+	background-color: #0000FF !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
 }
 
 /* .ALERT { */

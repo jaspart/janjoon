@@ -233,9 +233,25 @@ public class JJMessageBean {
 		updateJJMessage(resolvedJJMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				resolvedJJMessage.getName());
+				"Message");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
+	}
+
+	public void deleteMessage() {
+		viewedMessage.setEnabled(false);
+		JJStatus status = jJStatusService.getOneStatus("CLOSED", "Message",
+				true);
+		if (status != null) {
+			viewedMessage.setStatus(status);
+		}
+		updateJJMessage(viewedMessage);
+		String message = "message_successfully_disabled";
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Message");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
+
 	}
 
 	public void initJJMessageLayout(ComponentSystemEvent e) {
@@ -526,6 +542,8 @@ public class JJMessageBean {
 		setJJMessage_(null);
 		setCreateDialogVisible(false);
 		loadFiltredJJmessage = false;
+		resolvedJJMessage = null;
+		viewedMessage = null;
 		mainMessages = null;
 		alertMessages = null;
 		// comMessages = null;

@@ -530,7 +530,8 @@ public class JJContactBean {
 					&& !jJSprintBean.getSprintList().isEmpty()) {
 
 				for (SprintUtil sprintUtil : jJSprintBean.getSprintList()) {
-					if (sprintUtil.getContacts().contains(contactAdmin)) {
+					if (sprintUtil.getContacts() != null
+							&& sprintUtil.getContacts().contains(contactAdmin)) {
 						sprintUtil.setPriseReal(null);
 						sprintUtil.setPriseSold(null);
 					}

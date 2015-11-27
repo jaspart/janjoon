@@ -73,7 +73,7 @@ public class JJStatusBean {
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
 	private int activeTabIndex;
-	private int activeTabSprintIndex;
+	private int activeTabSprintIndex = -1;
 
 	// private Boolean first;
 
@@ -144,7 +144,7 @@ public class JJStatusBean {
 		if (this.project == null) {
 			categoryDataModel = null;
 			activeTabIndex = 0;
-			activeTabSprintIndex = 0;
+			activeTabSprintIndex = -1;
 			prjMetergauge = null;
 			bugPieChart = null;
 			bugMetergauge = null;
@@ -383,6 +383,43 @@ public class JJStatusBean {
 			String paramIndex = paramMap.get("activeIndex");
 			setActiveTabIndex(Integer.valueOf(paramIndex));
 			System.out.println("###### ACtive tab: " + activeTabIndex);
+
+			if (activeTabIndex == 2 && activeTabSprintIndex == -1) {
+				Date now = new Date();
+				int i = 0;
+				while (i < getSprintList().size()) {
+					if (!getSprintList().get(i).isRender()
+							&& now.after(getSprintList().get(i).getSprint()
+									.getStartDate())
+							&& now.before(getSprintList().get(i).getSprint()
+									.getEndDate())) {
+						activeTabSprintIndex = i;
+						i = getSprintList().size();
+					}
+					i++;
+				}
+
+				if (activeTabSprintIndex == -1) {
+					long minDiff = -1, currentTime = new Date().getTime();
+					SprintUtil minDate = null;
+					for (SprintUtil s : getSprintList()) {
+						if (!s.isRender()) {
+							long diff = Math.abs(currentTime
+									- s.getSprint().getEndDate().getTime());
+							if ((minDiff == -1) || (diff < minDiff)) {
+								minDiff = diff;
+								minDate = s;
+							}
+						}
+
+					}
+					if (minDate != null)
+						activeTabSprintIndex = getSprintList().indexOf(minDate);
+					else
+						activeTabSprintIndex = 0;
+				}
+
+			}
 		} else if (paramMap.get("activeSprintIndex") != null) {
 
 			String paramIndex = paramMap.get("activeSprintIndex");
@@ -485,14 +522,20 @@ public class JJStatusBean {
 				// bugKPI = bugKPI / requirements.size();
 
 				List<Number> prjIntervalls = new ArrayList<Number>() {
+					// {
+					// add(-1);
+					// add(-0.50);
+					// add(-0.30);
+					// add(-0.15);
+					// add(0.15);
+					// add(0.30);
+					// add(0.50);
+					// add(1);
+					// }
 					{
 						add(-1);
-						add(-0.50);
-						add(-0.30);
-						add(-0.15);
-						add(0.15);
-						add(0.30);
-						add(0.50);
+						add(-0.25);
+						add(0.25);
 						add(1);
 					}
 				};
@@ -505,8 +548,7 @@ public class JJStatusBean {
 				prjMetergauge.setShowTickLabels(true);
 				prjMetergauge.setMin(-1);
 				prjMetergauge.setMax(1);
-				prjMetergauge
-						.setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000,FFD000,FF7700,FF0000");
+				prjMetergauge.setSeriesColors("FF0000,FF0000,008000,0000FF");
 
 				// List<Number> bugIntervalls = new ArrayList<Number>() {
 				// {

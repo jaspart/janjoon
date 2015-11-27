@@ -22,6 +22,7 @@ import javax.servlet.http.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dialog.Dialog;
+import org.primefaces.component.tabmenu.TabMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
@@ -593,7 +594,7 @@ public class LoginBean implements Serializable {
 
 	}
 
-	public void initMenuIndexvalue(ComponentSystemEvent e) {
+	public void initMenuIndexvalue(TabMenu menu) {
 
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		String viewId = ctx.getViewRoot().getViewId();
@@ -651,6 +652,14 @@ public class LoginBean implements Serializable {
 		default:
 			menuIndex = 0;
 			break;
+		}
+
+		int i = 0;
+		int max = menuIndex;
+		while (i < max) {
+			if (!menu.getChildren().get(i).isRendered())
+				menuIndex--;
+			i++;
 		}
 
 	}

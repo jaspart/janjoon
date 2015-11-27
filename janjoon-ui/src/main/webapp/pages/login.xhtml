@@ -61,7 +61,7 @@
 					<p:row style="padding: 4px 1px;">
 						<p:column colspan="2">
 							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
-								<p:ajax event="change" update="submit" />
+								<p:ajax event="change" update="submit submit2" />
 							</p:selectBooleanCheckbox>
 							<h:outputLink target="_blank"
 								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
@@ -69,6 +69,15 @@
 								<h:outputLabel value="#{messages.login_terms_label}" />
 							</h:outputLink>
 							<br />
+							<h:panelGroup id="submit2">
+								<p:hotkey bind="enter"
+									update=":login:mdp,:login:mail :login:auth"
+									action="#{loginBean.login}"
+									onstart="PF('blockUIWidget').block()"
+									onerror="PF('blockUIWidget').unblock()"
+									rendered="#{loginBean.agreeTerms}"
+									oncomplete="PF('blockUIWidget').unblock()" />
+							</h:panelGroup>
 							<p:commandButton id="submit"
 								value="#{messages.login_login_button}"
 								onstart="PF('blockUIWidget').block()"
