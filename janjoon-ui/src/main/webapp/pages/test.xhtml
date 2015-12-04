@@ -95,7 +95,7 @@
 		<!-- 				style="min-width:200px;min-height:500px;height:600px !important;width:320px !important;" -->
 		<!-- 				resizable="true"> -->
 		<h:panelGrid columns="2" style="margin-top: 10px;width: 100%;"
-			columnClasses="thirtyPercent,seventyPercent">
+			columnClasses="twentyFivePercent,seventyFivePercent">
 			<h:form id="testFormWest">
 				<p:panelGrid style="width: 100%;">
 					<p:row>
@@ -146,50 +146,58 @@
 									update=":testFormCenter :container :rate :testcaseDialog"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()" />
-
-								<p:treeNode>
-									<h:outputText value="#{node}" styleClass="TestcaseChapter" />
+								<p:treeNode type="project">
+									<h:outputText value="P-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
 								</p:treeNode>
-
+								<p:treeNode type="category">
+									<h:outputText value="C-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
+								</p:treeNode>
+								<p:treeNode>
+									<h:outputText value="CH-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
+								</p:treeNode>
+								<p:treeNode type="withOutChapter">
+									<h:outputText value="#{messages.test_tree_withOutChapter}"
+										styleClass="TestcaseChapter" />
+								</p:treeNode>
 								<p:treeNode type="TestcaseRequirement">
 									<p:graphicImage library="images" name="add.ico" width="14"
 										height="14" />
-									<h:outputText value="#{node}" styleClass="TestcaseRequirement" />
+									<h:outputText value="REQ-#{node.id}-#{node.name}" styleClass="TestcaseRequirement" />
 								</p:treeNode>
 
 								<p:treeNode type="TWT">
-									<h:outputText value="#{node}"
+									<h:outputText value="TC-#{node.id}-#{node.name}"
 										styleClass="TestcaseWithoutTeststep" />
 								</p:treeNode>
 
 								<p:treeNode type="TNE">
-									<h:outputText value="#{node}" styleClass="TestcaseNotExecuted" />
+									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseNotExecuted" />
 								</p:treeNode>
 
 								<p:treeNode type="TF">
-									<h:outputText value="#{node}" styleClass="TestcaseFailed" />
+									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseFailed" />
 								</p:treeNode>
 
 								<p:treeNode type="TFWB">
-									<h:outputText value="#{node}"
+									<h:outputText value="TC-#{node.id}-#{node.name}"
 										styleClass="TestcaseFailedWithoutBuild" />
 								</p:treeNode>
 
 								<p:treeNode type="TS">
-									<h:outputText value="#{node}" styleClass="TestcaseSuccess" />
+									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseSuccess" />
 								</p:treeNode>
 
 								<p:treeNode type="TSWB">
-									<h:outputText value="#{node}"
+									<h:outputText value="TC-#{node.id}-#{node.name}"
 										styleClass="TestcaseSuccessWithoutBuild" />
 								</p:treeNode>
 
 								<p:treeNode type="TNF">
-									<h:outputText value="#{node}" styleClass="TestcaseNonFini" />
+									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseNonFini" />
 								</p:treeNode>
 
 								<p:treeNode type="TNFWB">
-									<h:outputText value="#{node}"
+									<h:outputText value="TC-#{node.id}-#{node.name}"
 										styleClass="TestcaseNonFiniWithoutBuild" />
 								</p:treeNode>
 							</p:tree>
@@ -367,13 +375,16 @@
 							rows="5" style="width:100%;" rowKey="#{tcr.testcase.id}"
 							rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 							<f:facet name="header">
-								<h:outputText value="#{jJTestcaseBean.chapter.name}" />
+								<h:outputText rendered="#{jJTestcaseBean.chapter !=  null}"
+									value="#{jJTestcaseBean.chapter.name}" />
+								<h:outputText value="#{messages.test_tree_withOutChapter}"
+									rendered="#{jJTestcaseBean.chapter ==  null}" />
 							</f:facet>
 							<p:column exportable="false">
 								<f:facet name="header">
 									<h:outputText value="#{messages.test_table_testcase_title}" />
 								</f:facet>
-								<h:outputText value="#{tcr.testcase.name}" />
+								<h:outputText value="TC-#{tcr.testcase.id}-#{tcr.testcase.name}" />
 							</p:column>
 							<p:column exportable="false">
 								<f:facet name="header">
@@ -445,18 +456,18 @@
 							</p:panelGrid>
 
 							<p:panelGrid columns="1" style="width:100%"
-								rendered="#{jJTestcaseBean.rendredTestCaseRecaps and chartBean.pieChart != null}">
+								rendered="#{jJTestcaseBean.rendredTestCaseRecaps and jJTestcaseBean.pieChart != null}">
 								<f:facet name="header">
 								#{messages.test_requirement_pieChart}
 								</f:facet>
-								<p:chart type="pie" id="custom" model="#{chartBean.pieChart}"
+								<p:chart type="pie" id="custom" model="#{jJTestcaseBean.pieChart}"
 									style="height:200px;margin: auto;width:300px;"
 									responsive="true"
-									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and chartBean.pieChart != null}" />
+									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and jJTestcaseBean.pieChart != null}" />
 							</p:panelGrid>
 						</h:panelGrid>
 					</h:panelGrid>
-					<p:chart id="filled" model="#{chartBean.categoryModel}"
+					<p:chart id="filled" model="#{jJTestcaseBean.categoryModel}"
 						style="height:300px;margin-top:2%;" responsive="true" type="line"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
 
@@ -469,7 +480,7 @@
 							<p:row>
 								<p:column>
 									<h:outputText
-										value="TC #{jJTestcaseBean.testcase.ordering}: #{jJTestcaseBean.testcase.name}" />
+										value="TC #{jJTestcaseBean.testcase.id}: #{jJTestcaseBean.testcase.name}" />
 									<br />
 								</p:column>
 								<p:column>

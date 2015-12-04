@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -26,6 +27,7 @@ import org.primefaces.component.tabmenu.TabMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.extensions.model.layout.LayoutOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -92,14 +94,9 @@ public class LoginBean implements Serializable {
 	private JJAuditLogService jJAuditLogService;
 
 	@Autowired
-	public LoginBean(AuthenticationManager authenticationManager) {
+	public LoginBean(AuthenticationManager authenticationManager) {		
 
-		// System.err.println(MessageFactory.getMessage(
-		// "label_tttt", "").getDetail());
-		//
-		// System.err.println(MessageFactory.getMessage(
-		// "label_ttttt", "").getDetail());
-
+		initialize();
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestCookieMap().get("agreeTerms") != null) {
 
@@ -1575,6 +1572,51 @@ public class LoginBean implements Serializable {
 	// return bbbb;
 	//
 	// }
+	
+	//InitLayout
+	private String state;
+	private LayoutOptions layoutOptions;
+	
+	protected void initialize() {
+
+		// options for all panes (center and west)
+		LayoutOptions panes = new LayoutOptions();
+		
+		layoutOptions = new LayoutOptions();
+
+		// options for all panes
+		panes = new LayoutOptions();
+		panes.addOption("slidable", false);
+		panes.addOption("resizeWhileDragging", true);
+		panes.addOption("resizable", true);
+		panes.addOption("closable", false);
+		layoutOptions.setPanesOptions(panes);
+
+		// options for east pane
+		LayoutOptions pane = new LayoutOptions();
+		pane.addOption("resizable", true);
+		pane.addOption("closable", false);
+		pane.addOption("size", "33%");
+		layoutOptions.setNorthOptions(pane);
+		layoutOptions.setSouthOptions(pane);
+		
+
+	}
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public LayoutOptions getLayoutOptions() {
+		return layoutOptions;
+	}
+
+	public void setLayoutOptions(LayoutOptions layoutOptions) {
+		this.layoutOptions = layoutOptions;
+	}
 
 	public String getStyleClass() {
 		FacesContext ctx = FacesContext.getCurrentInstance();

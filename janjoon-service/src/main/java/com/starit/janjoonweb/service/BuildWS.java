@@ -103,7 +103,7 @@ public class BuildWS {
 		InputStream is = null;
 		try {
 
-			@SuppressWarnings({ "resource", "deprecation" })
+			@SuppressWarnings({ "resource" })
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpget = null;
 			if (svnVersion != null)

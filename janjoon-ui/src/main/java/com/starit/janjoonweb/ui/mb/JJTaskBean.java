@@ -1854,7 +1854,7 @@ public class JJTaskBean {
 
 				for (JJTestcase testcase : jJTestcaseService
 						.getImportTestcases(null, project,
-								LoginBean.getProduct(), LoginBean.getVersion(),
+								LoginBean.getProduct(), LoginBean.getVersion(),null,
 								true, false)) {
 
 					if (!checkAll) {

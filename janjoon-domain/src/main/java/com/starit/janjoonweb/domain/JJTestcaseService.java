@@ -14,7 +14,7 @@ public interface JJTestcaseService {
 			boolean sortedByCreationdate);
 
 	public List<JJTestcase> getImportTestcases(JJCategory category,
-			JJProject project, JJProduct product, JJVersion version,
+			JJProject project, JJProduct product, JJVersion version,JJBuild build,
 			boolean onlyActif, boolean withOutChapter);
 
 	public void saveTestcases(Set<JJTestcase> testcases);

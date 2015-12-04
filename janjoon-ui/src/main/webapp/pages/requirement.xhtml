@@ -205,7 +205,11 @@
 						style="width : 100%;">
 						<f:facet name="header">
 							<p:row>
-								<p:column colspan="4">
+								<p:column>
+									<h:outputText
+										value="ID:#{requirementBean.requirement.category.id}" />
+								</p:column>
+								<p:column colspan="3">
 									<h:outputText id="nombres"
 										value="#{requirementBean.requirement.category.name} #{messages.label_requirement}"
 										style="text-transform: uppercase" />

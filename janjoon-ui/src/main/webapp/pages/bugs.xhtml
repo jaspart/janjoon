@@ -178,7 +178,7 @@
 						<h:outputText
 							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
 							styleClass="#{bug.status.name}" />
-						<h:outputText value=" #{bug.name}" />
+						<h:outputText value=" ID:#{bug.id} #{bug.name}" />
 					</p:column>
 					<p:column headerText="#{messages.bug_table_creation_title}"
 						sortBy="#{bug.creationDate}"

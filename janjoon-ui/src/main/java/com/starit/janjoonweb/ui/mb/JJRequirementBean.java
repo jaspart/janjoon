@@ -3131,9 +3131,9 @@ public class JJRequirementBean {
 						for (Map.Entry<Integer, Object> entry : subElements
 								.entrySet()) {
 
-							String className = entry.getValue().getClass()
-									.getSimpleName();
-							if (className.equalsIgnoreCase("JJChapter")) {
+//							String className = entry.getValue().getClass()
+//									.getSimpleName();
+							if (entry.getValue() instanceof JJChapter) {
 
 								JJChapter chapter = (JJChapter) entry
 										.getValue();
@@ -3144,8 +3144,7 @@ public class JJRequirementBean {
 										.findBean("jJChapterBean"))
 										.updateJJChapter(chapter);
 
-							} else if (className
-									.equalsIgnoreCase("JJRequirement")) {
+							} else if (entry.getValue() instanceof JJRequirement) {
 
 								JJRequirement r = (JJRequirement) entry
 										.getValue();
@@ -3308,9 +3307,9 @@ public class JJRequirementBean {
 					for (Map.Entry<Integer, Object> entry : subElements
 							.entrySet()) {
 
-						String className = entry.getValue().getClass()
-								.getSimpleName();
-						if (className.equalsIgnoreCase("JJChapter")) {
+//						String className = entry.getValue().getClass()
+//								.getSimpleName();
+						if (entry.getValue() instanceof JJChapter) {
 
 							JJChapter chapter = (JJChapter) entry.getValue();
 
@@ -3321,7 +3320,7 @@ public class JJRequirementBean {
 									.findBean("jJChapterBean"))
 									.updateJJChapter(chapter);
 
-						} else if (className.equalsIgnoreCase("JJRequirement")) {
+						} else if (entry.getValue() instanceof JJRequirement) {
 
 							JJRequirement r = (JJRequirement) entry.getValue();
 
@@ -3905,6 +3904,20 @@ public class JJRequirementBean {
 		public void setRendered(boolean rendered) {
 			this.rendered = rendered;
 		}
+		
+		public void settingSousChapter(JJChapter ch,TreeNode chapterNode)
+		{
+			TreeNode node = new DefaultTreeNode("chapter", ch,
+					chapterNode);
+			List<JJChapter> sous_Chapters = jJChapterService
+					.getChildrenOfParentChapter(ch, true, true);
+			for (JJChapter c : sous_Chapters) {
+				settingSousChapter(c, node);
+			}
+
+			chapterNode.setExpanded(true);
+
+		}
 
 		public TreeNode getChapterTree() {
 
@@ -3931,7 +3944,7 @@ public class JJRequirementBean {
 					List<JJChapter> sous_Chapters = jJChapterService
 							.getChildrenOfParentChapter(ch, true, true);
 					for (JJChapter c : sous_Chapters) {
-						new DefaultTreeNode("chapter", c, chapterNode);
+						settingSousChapter(c, chapterNode);
 					}
 
 					chapterNode.setExpanded(true);
@@ -4377,6 +4390,11 @@ public class JJRequirementBean {
 
 		JJStatusBean jJStatusBean = (JJStatusBean) session
 				.getAttribute("jJStatusBean");
+		
+		JJTestcaseBean jJTestcaseBean =(JJTestcaseBean) session.getAttribute("jJTestcaseBean");
+		
+		if(jJTestcaseBean != null)
+			jJTestcaseBean.setProject(null);
 		if (jJStatusBean != null)
 			jJStatusBean.setPieChart(null);
 

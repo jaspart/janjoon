@@ -10,12 +10,17 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
+import com.starit.janjoonweb.domain.JJVersion;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJTestcaseexecution.class, beanName = "jJTestcaseexecutionBean")
@@ -180,9 +185,11 @@ public class JJTestcaseexecutionBean {
 		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
 				.getAttribute("jJTestcaseBean");
 
-		return jJTestcaseexecutionService
-				.getTestcaseexecutions(jJTestcaseBean.getChapter(),
-						jJBuildBean.getBuild(), true, true);
+		return jJTestcaseexecutionService.getTestcaseexecutions(
+				LoginBean.getProject(), LoginBean.getProduct(),
+				LoginBean.getVersion(), jJTestcaseBean.getCategory(),
+				jJTestcaseBean.getChapter(), jJBuildBean.getBuild(), true,
+				true, jJTestcaseBean.getChapter() == null);
 	}
 
 	public void saveJJTestcaseexecution(JJTestcaseexecution b) {

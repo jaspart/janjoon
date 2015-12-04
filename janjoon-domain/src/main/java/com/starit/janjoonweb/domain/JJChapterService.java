@@ -11,6 +11,8 @@ public interface JJChapterService {
 	public List<JJChapter> getParentsChapter(JJCompany company,
 			JJProject project, JJCategory category, boolean onlyActif,
 			boolean sortedByOrder);
+	
+	public boolean haveRequirements(JJChapter chapter);
 
 	public List<JJChapter> getChapters(JJCompany company, JJProject project,
 			JJCategory category, boolean onlyActif, List<String> ids);
