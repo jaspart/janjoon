@@ -45,6 +45,7 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.extensions.component.timeline.Timeline;
 import org.primefaces.extensions.event.timeline.TimelineAddEvent;
 import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
 import org.primefaces.extensions.model.layout.LayoutOptions;
@@ -659,13 +660,10 @@ public class JJTaskBean {
 
 		updateView(jJTaskService.findJJTask(task.getId()), UPDATE_OPERATION);
 		task = jJTaskService.findJJTask(task.getId());
-		taskTreeNode = null;
-		selectedReq = null;
-		selectedTree = null;
-		getTaskTreeNode();
-		// FaceletContext faceletContext = (FaceletContext)
-		// FacesContext.getCurrentInstance().getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-		// faceletContext.setAttribute("JJTask_", task);
+		// taskTreeNode = null;
+		// selectedReq = null;
+		// selectedTree = null;
+		// getTaskTreeNode();
 
 		if (operation.equalsIgnoreCase("main")) {
 			toDoTasks = null;
@@ -684,6 +682,8 @@ public class JJTaskBean {
 					"message_successfully_updated",
 					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			RequestContext.getCurrentInstance().execute(
+					"PF('viewTaskDialogWidget').hide()");
 		}
 
 	}
@@ -946,15 +946,14 @@ public class JJTaskBean {
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 
 		if (loginBean.getAuthorisationService().isrProject()) {
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			// Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
-			Date now = new Date();
+			// Date now = new Date();
 			if (sortMode == null) {
 				sortMode = "chapter";
 
 			} else if (sortMode.isEmpty()) {
 				sortMode = "chapter";
-
 			}
 
 			if (sprint == null) {
@@ -1486,6 +1485,11 @@ public class JJTaskBean {
 		}
 
 		if (valid) {
+
+			String[] keys = columnKey.split(":");
+			RequestContext.getCurrentInstance().execute(
+					"setRowIndex(" + keys[keys.length - 2] + ")");
+
 			saveJJTask(task, true);
 			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, UPDATE_OPERATION);
@@ -1854,8 +1858,8 @@ public class JJTaskBean {
 
 				for (JJTestcase testcase : jJTestcaseService
 						.getImportTestcases(null, project,
-								LoginBean.getProduct(), LoginBean.getVersion(),null,
-								true, false)) {
+								LoginBean.getProduct(), LoginBean.getVersion(),
+								null, true, false)) {
 
 					if (!checkAll) {
 
@@ -2874,13 +2878,11 @@ public class JJTaskBean {
 
 		for (JJTask t : listTasks) {
 
-			if (t.getStartDatePlanned() != null) {
-				min.put(t.getStartDatePlanned(), t.getStartDatePlanned()
-						.toString());
-			}
-
 			if (t.getStartDateRevised() != null) {
 				min.put(t.getStartDateRevised(), t.getStartDateRevised()
+						.toString());
+			} else if (t.getStartDatePlanned() != null) {
+				min.put(t.getStartDatePlanned(), t.getStartDatePlanned()
 						.toString());
 			}
 
@@ -2888,12 +2890,10 @@ public class JJTaskBean {
 				min.put(t.getStartDateReal(), t.getStartDateReal().toString());
 			}
 
-			if (t.getEndDatePlanned() != null) {
-				max.put(t.getEndDatePlanned(), t.getEndDatePlanned().toString());
-			}
-
 			if (t.getEndDateRevised() != null) {
 				max.put(t.getEndDateRevised(), t.getEndDateRevised().toString());
+			} else if (t.getEndDatePlanned() != null) {
+				max.put(t.getEndDatePlanned(), t.getEndDatePlanned().toString());
 			}
 
 			if (t.getEndDateReal() != null) {
@@ -2901,7 +2901,6 @@ public class JJTaskBean {
 			}
 		}
 
-		// findTimelineChapter
 		i = 0;
 		int j = -1;
 		String group = "";
@@ -2939,8 +2938,10 @@ public class JJTaskBean {
 						false, group, "chapter");
 
 				events.add(event);
-				// model.addAll(events,TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));
-				// model.add(event,TimelineUpdater.getCurrentInstance(":projecttabview:planningForm:timeline"));
+
+				// this.start = start;
+				// this.end = end;
+
 			} else {
 				int j1 = -1;
 				int i1 = 0;
@@ -2966,8 +2967,6 @@ public class JJTaskBean {
 			model.setEvents(events);
 
 		}
-		this.start = null;
-		this.end = null;
 
 	}
 
@@ -2979,7 +2978,10 @@ public class JJTaskBean {
 		mode = "planning";
 	}
 
-	public void onCreateTimelineEvent(TimelineAddEvent event) {
+	public void onCreateTimelineEvent(TimelineAddEvent ev) {
+
+		this.start = ev.getStartDate();
+		this.end = ev.getEndDate();
 
 		this.mode = "planning";
 		disabledImportButton = true;
@@ -2995,8 +2997,11 @@ public class JJTaskBean {
 		importFormats = new ArrayList<ImportFormat>();
 	}
 
-	public void onEditTimelineEvent(TimelineModificationEvent e) {
-		this.task = (JJTask) e.getTimelineEvent().getData();
+	public void onEditTimelineEvent(TimelineModificationEvent ev) {
+
+		this.start = ev.getTimelineEvent().getStartDate();
+		this.end = ev.getTimelineEvent().getEndDate();
+		this.task = (JJTask) ev.getTimelineEvent().getData();
 		taskTreeNode = null;
 		selectedReq = null;
 		selectedTree = null;
@@ -3010,10 +3015,35 @@ public class JJTaskBean {
 		tt = jJTaskService.findJJTask(tt.getId());
 		String group = ev.getTimelineEvent().getStyleClass().toUpperCase();
 
+		this.start = ev.getTimelineEvent().getStartDate();
+		this.end = ev.getTimelineEvent().getEndDate();
+
+		// ev.getComponent().
+
+		ContactCalendarUtil calendarUtil;
+
+		if (tt.getAssignedTo() != null) {
+			calendarUtil = new ContactCalendarUtil(tt.getAssignedTo());
+
+		} else {
+
+			calendarUtil = new ContactCalendarUtil(jJProjectService
+					.findJJProject(LoginBean.getProject().getId()).getManager()
+					.getCompany());
+
+		}
+
 		if (group.equalsIgnoreCase(Real)) {
 
-			tt.setStartDateReal(ev.getTimelineEvent().getStartDate());
-			tt.setEndDateReal(ev.getTimelineEvent().getEndDate());
+			tt.setStartDateReal(calendarUtil.nextWorkingDate(ev
+					.getTimelineEvent().getStartDate()));
+			tt.setEndDateReal(calendarUtil.nextWorkingDate(ev
+					.getTimelineEvent().getEndDate()));
+
+			tt.setWorkloadReal(Math.round(calendarUtil.calculateWorkLoad(
+					tt.getStartDateReal(), tt.getEndDateReal(), jJTaskService,
+					tt)));
+
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, UPDATE_OPERATION);
@@ -3021,8 +3051,14 @@ public class JJTaskBean {
 		} else if (group.toLowerCase().contains(Planned.toLowerCase())
 				|| group.toLowerCase().contains(Revised.toLowerCase())) {
 
-			tt.setStartDateRevised(ev.getTimelineEvent().getStartDate());
-			tt.setEndDateRevised(ev.getTimelineEvent().getEndDate());
+			tt.setStartDateRevised(calendarUtil.nextWorkingDate(ev
+					.getTimelineEvent().getStartDate()));
+			tt.setEndDateRevised(calendarUtil.nextWorkingDate(ev
+					.getTimelineEvent().getEndDate()));
+
+			tt.setWorkloadRevised(Math.round(calendarUtil.calculateWorkLoad(
+					tt.getStartDateRevised(), tt.getEndDateRevised(), null,
+					null)));
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
 			updateView(tt, UPDATE_OPERATION);
@@ -3274,9 +3310,7 @@ public class JJTaskBean {
 			Date startDate = null, endDate = null;
 
 			if (!operation.equalsIgnoreCase(DELETE_OPERATION) && j != -1) {
-
 				if (tt.getStartDateRevised() != null) {
-
 					if (tt.getStartDateReal() == null)
 						styleClass = "revised1";
 					else

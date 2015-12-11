@@ -18,6 +18,7 @@ public class SprintUtil {
 	private List<JJTask> doneTask;
 	private List<JJTask> progressTask;
 	private List<JJContact> contacts;
+	private boolean disableDragDrop;
 
 	private Integer consumed;
 	private Integer workload;
@@ -32,6 +33,7 @@ public class SprintUtil {
 		this.jJContactService = jJContactService;
 		this.neditabale = false;
 		this.chartModel = new BarChartModel();
+		this.disableDragDrop = true;
 		calculateField(tasks);
 		if (tasks != null && !tasks.isEmpty())
 			initChartModel(tasks);
@@ -92,6 +94,14 @@ public class SprintUtil {
 		this.contacts = contacts;
 	}
 
+	public boolean isDisableDragDrop() {
+		return disableDragDrop;
+	}
+
+	public void setDisableDragDrop(boolean disableDragDrop) {
+		this.disableDragDrop = disableDragDrop;
+	}
+
 	public Integer getConsumed() {
 		return consumed;
 	}
@@ -133,9 +143,8 @@ public class SprintUtil {
 									.getPriceReal();
 				}
 			}
-			return priseReal;
-		} else
-			return priseReal;
+		}
+		return priseReal;
 
 	}
 
@@ -154,10 +163,8 @@ public class SprintUtil {
 									.getPriceSold();
 				}
 			}
-
-			return priseSold;
-		} else
-			return priseSold;
+		}
+		return priseSold;
 
 	}
 
@@ -193,6 +200,8 @@ public class SprintUtil {
 		if (!render) {
 
 			contacts = new ArrayList<JJContact>(sprint.getContacts());
+			disableDragDrop = !contacts.contains(((LoginBean) LoginBean
+					.findBean("loginBean")).getContact());
 
 			if (tasks != null) {
 				if (!tasks.isEmpty()) {

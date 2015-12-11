@@ -115,7 +115,7 @@
 								<p:column style="width:20% important;">
 									<p:commandButton id="editSprintButton"
 										disabled="{!loginBean.authorisationService.wProject}"
-										value="#{messages.label_edit}"
+										value="#{messages.label_save}"
 										process="@this,sprintName,sprintED,sprintSD,sprintcts"
 										actionListener="#{jJSprintBean.attrListener}"
 										onstart="PF('blockUIWidget').block()"
@@ -180,89 +180,95 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_todo}"
 								id="todoFieldset">
-								<p:dataTable scrollable="true" scrollHeight="250" id="todo"
-									var="todo" value="#{jjsprint.todoTask}"
-									emptyMessage="#{messages.label_notRecordFound}"
-									styleClass="planning-dataTable" rowKey="#{todo.id}"
-									sortOrder="DESCENDING" style="table-layout: fixed"
-									rendered="#{not empty jjsprint.todoTask}"
-									sortBy="#{todo.creationDate}">
+								<p:outputPanel id="tododropArea" style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
+									<h:outputText
+										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+										rendered="#{empty jjsprint.todoTask and !jjsprint.disableDragDrop}"
+										style="font-size:24px;" />
+									<p:dataTable scrollable="true" scrollHeight="250" id="todo"
+										var="todo" value="#{jjsprint.todoTask}"
+										emptyMessage="#{messages.label_notRecordFound}"
+										styleClass="planning-dataTable" rowKey="#{todo.id}"
+										sortOrder="DESCENDING" style="table-layout: fixed"
+										rendered="#{not empty jjsprint.todoTask}"
+										sortBy="#{todo.creationDate}">
 
-									<p:column
-										style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
+										<p:column rendered="#{!jjsprint.disableDragDrop}"
+											style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
 
-										<p:panel id="todoIcon"
-											style="border: none;text-align: center;min-height: 40px;">
-											<h:outputText style="margin-left: 25%;"
-												styleClass="ui-icon ui-icon-arrow-4" />
-										</p:panel>
-										<!-- 										<p:graphicImage id="todoIcon" height="32" width="32" -->
-										<!-- 											library="images" name="drag.ico" style="margin-top: 35%;" /> -->
-										<p:draggable for="todoIcon" revert="true" scope="ProgTask"
-											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
-									</p:column>
-									<p:column style="width:80px"
-										headerText="#{messages.label_task}">
-										<h:panelGroup id="todoPanel">
-											<p:graphicImage
-												rendered="#{todo.specification != null and todo.specification}"
-												library="images" name="doc.ico" width="16" height="16" />
-											<p:graphicImage rendered="#{todo.bug != null}"
-												library="images" name="bug.ico" width="16" height="16" />
-											<p:graphicImage
-												rendered="#{todo.bug == null and todo.requirement != null}"
-												library="images" name="function.ico" width="16" height="16" />
-											<p:graphicImage title="TestCase"
-												rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
-												library="images" name="test.ico" width="16" height="16" />
-											<h:outputText
-												value="#{jJTaskBean.getDialogHeader(todo,'scrum')}" />
-										</h:panelGroup>
-										<p:draggable for="todoPanel" revert="true" scope="ProgTask"
-											disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
-									</p:column>
+											<p:panel id="todoIcon"
+												style="border: none;text-align: center;min-height: 40px;">
+												<h:outputText style="margin-left: 25%;"
+													styleClass="ui-icon ui-icon-arrow-4" />
+											</p:panel>
+											<!-- 										<p:graphicImage id="todoIcon" height="32" width="32" -->
+											<!-- 											library="images" name="drag.ico" style="margin-top: 35%;" /> -->
+											<p:draggable for="todoIcon" revert="true" scope="TodoTask"
+												disabled="#{jjsprint.disableDragDrop}" />
+										</p:column>
+										<p:column style="width:80px"
+											headerText="#{messages.label_task}">
+											<h:panelGroup id="todoPanel">
+												<p:graphicImage
+													rendered="#{todo.specification != null and todo.specification}"
+													library="images" name="doc.ico" width="16" height="16" />
+												<p:graphicImage rendered="#{todo.bug != null}"
+													library="images" name="bug.ico" width="16" height="16" />
+												<p:graphicImage
+													rendered="#{todo.bug == null and todo.requirement != null}"
+													library="images" name="function.ico" width="16" height="16" />
+												<p:graphicImage title="TestCase"
+													rendered="#{todo.bug == null and todo.requirement == null and todo.testcase != null}"
+													library="images" name="test.ico" width="16" height="16" />
+												<h:outputText
+													value="#{jJTaskBean.getDialogHeader(todo,'scrum')}" />
+											</h:panelGroup>
+											<p:draggable for="todoPanel" revert="true" scope="TodoTask"
+												disabled="#{jjsprint.disableDragDrop}" />
+										</p:column>
 
-									<p:column style="width:10px" headerText="W"
-										rendered="#{!loginBean.mobile}">
-										<h:outputText value="#{todo.workloadPlanned}" />
-									</p:column>
-									<p:column style="width:20px">
-										<f:facet name="header">
-											<h:outputText value="#{messages.bug_table_action_title}" />
-										</f:facet>
-										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm :viewTaskDialog" immediate="true"
-											resetValues="true"
-											title="#{messages.project_gantt_table_actions_viewMenuItem}"
-											action="#{jJTaskBean.initiateReqTreeNode}">
-											<f:setPropertyActionListener value="#{todo}"
-												target="#{jJTaskBean.task}" />
-											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
-												value="scrum" />
-
-											<p:menuitem id="deleteButton" icon="ui-icon-trash"
-												oncomplete="PF('deleteDialogWidget').show()"
-												value="#{messages.label_delete}">
+										<p:column style="width:10px" headerText="W"
+											rendered="#{!loginBean.mobile}">
+											<h:outputText value="#{todo.workloadPlanned}" />
+										</p:column>
+										<p:column style="width:20px">
+											<f:facet name="header">
+												<h:outputText value="#{messages.bug_table_action_title}" />
+											</f:facet>
+											<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
+												title="#{messages.project_gantt_table_actions_viewMenuItem}"
+												action="#{jJTaskBean.initiateReqTreeNode}">
 												<f:setPropertyActionListener value="#{todo}"
-													target="#{jJSprintBean.task}" />
+													target="#{jJTaskBean.task}" />
 												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
 													value="scrum" />
-											</p:menuitem>
-											<p:menuitem id="copyButton" icon="ui-icon-copy"
-												onclick="copyName('#{jJTaskBean.getDialogHeader(todo,null)}');"
-												value="Copy" title="Copy" />
-										</p:splitButton>
-									</p:column>
-								</p:dataTable>
+
+												<p:menuitem id="deleteButton" icon="ui-icon-trash"
+													oncomplete="PF('deleteDialogWidget').show()"
+													value="#{messages.label_delete}">
+													<f:setPropertyActionListener value="#{todo}"
+														target="#{jJSprintBean.task}" />
+													<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+														value="scrum" />
+												</p:menuitem>
+												<p:menuitem id="copyButton" icon="ui-icon-copy"
+													onclick="copyName('#{jJTaskBean.getDialogHeader(todo,null)}');"
+													value="Copy" title="Copy" />
+											</p:splitButton>
+										</p:column>
+									</p:dataTable>
+								</p:outputPanel>
 							</p:fieldset>
 						</p:column>
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_inProgress}"
 								id="progFieldset">
-								<p:outputPanel id="progdropArea">
+								<p:outputPanel id="progdropArea" style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
 									<h:outputText
-										value="!!!#{messages.project_scrum_drop_panel}!!!"
-										rendered="#{empty jjsprint.progressTask}"
+										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+										rendered="#{empty jjsprint.progressTask and !jjsprint.disableDragDrop}"
 										style="font-size:24px;" />
 									<p:dataTable scrollable="true" scrollHeight="250" id="prog"
 										editable="true" editMode="cell" var="prog"
@@ -275,7 +281,7 @@
 										<p:ajax event="cellEdit"
 											listener="#{jJSprintBean.onCellEditTask}"
 											update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
-										<p:column
+										<p:column rendered="#{!jjsprint.disableDragDrop}"
 											style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
 											<p:panel id="progIcon"
 												style="border: none;text-align: center;min-height: 40px;">
@@ -284,8 +290,8 @@
 											</p:panel>
 											<!-- 											<p:graphicImage id="progIcon" height="32" width="32" -->
 											<!-- 												library="images" name="drag.ico" style="margin-top: 35%;" /> -->
-											<p:draggable for="progIcon" revert="true" scope="DoneTask"
-												disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
+											<p:draggable for="progIcon" revert="true" scope="ProgTask"
+												disabled="#{jjsprint.disableDragDrop}" />
 										</p:column>
 
 										<p:column style="width:50px"
@@ -306,8 +312,8 @@
 												<h:outputText
 													value="#{jJTaskBean.getDialogHeader(prog,'scrum')}" />
 											</h:panelGroup>
-											<p:draggable for="progPanel" revert="true" scope="DoneTask"
-												disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}" />
+											<p:draggable for="progPanel" revert="true" scope="ProgTask"
+												disabled="#{jjsprint.disableDragDrop}" />
 										</p:column>
 
 										<p:column style="width:30px" headerText="Who"
@@ -345,10 +351,11 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_done}"
 								id="doneFieldset">
-								<p:outputPanel id="donedropArea">
+								<p:outputPanel id="donedropArea" style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
 									<h:outputText
-										value="!!!#{messages.project_scrum_drop_panel}!!!"
-										rendered="#{empty jjsprint.doneTask}" style="font-size:24px;" />
+										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+										rendered="#{empty jjsprint.doneTask and !jjsprint.disableDragDrop}"
+										style="font-size:24px;" />
 									<p:dataTable id="done" styleClass="planning-dataTable"
 										emptyMessage="#{messages.label_notRecordFound}" var="done"
 										value="#{jjsprint.doneTask}" rowKey="#{done.id}"
@@ -357,23 +364,40 @@
 										scrollHeight="250" sortOrder="DESCENDING"
 										sortBy="#{prog.endDateReal}">
 
+										<p:column rendered="#{!jjsprint.disableDragDrop}"
+											style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
+											<p:panel id="doneIcon"
+												style="border: none;text-align: center;min-height: 40px;">
+												<h:outputText style="margin-left: 25%;"
+													styleClass="ui-icon ui-icon-arrow-4" />
+											</p:panel>
+											<!-- 											<p:graphicImage id="progIcon" height="32" width="32" -->
+											<!-- 												library="images" name="drag.ico" style="margin-top: 35%;" /> -->
+											<p:draggable for="doneIcon" revert="true" scope="DoneTask"
+												disabled="#{jjsprint.disableDragDrop}" />
+										</p:column>
+
 										<p:column style="width:80px"
 											headerText="#{messages.label_task}">
-											<p:graphicImage
-												rendered="#{done.specification != null and done.specification}"
-												library="images" name="doc.ico" width="16" height="16" />
-											<p:graphicImage rendered="#{done.bug != null}"
-												library="images" name="bug.ico" width="16" height="16" />
-											<p:graphicImage
-												rendered="#{done.bug == null and done.requirement != null}"
-												library="images" name="function.ico" width="16" height="16" />
+											<h:panelGroup id="donePanel">
+												<p:graphicImage
+													rendered="#{done.specification != null and done.specification}"
+													library="images" name="doc.ico" width="16" height="16" />
+												<p:graphicImage rendered="#{done.bug != null}"
+													library="images" name="bug.ico" width="16" height="16" />
+												<p:graphicImage
+													rendered="#{done.bug == null and done.requirement != null}"
+													library="images" name="function.ico" width="16" height="16" />
 
-											<p:graphicImage
-												rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
-												library="images" name="test.ico" width="16" height="16" />
+												<p:graphicImage
+													rendered="#{done.bug == null and done.requirement == null and done.testcase != null}"
+													library="images" name="test.ico" width="16" height="16" />
 
-											<h:outputText
-												value="#{jJTaskBean.getDialogHeader(done,'scrum')}" />
+												<h:outputText
+													value="#{jJTaskBean.getDialogHeader(done,'scrum')}" />
+											</h:panelGroup>
+											<p:draggable for="donePanel" revert="true" scope="DoneTask"
+												disabled="#{jjsprint.disableDragDrop}" />
 										</p:column>
 
 										<p:column style="width:10px" headerText="Diff"
@@ -412,9 +436,9 @@
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-				<p:droppable id="addTaskToProg" for="progFieldset" tolerance="touch"
-					scope="ProgTask"
-					disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}"
+				<p:droppable id="addTaskToProg_FromTodo" for="progFieldset"
+					tolerance="touch" scope="TodoTask"
+					disabled="#{jjsprint.disableDragDrop}"
 					activeStyleClass="ui-state-highlight" datasource="todo">
 					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
 						onstart="PF('blockUIWidget').block()"
@@ -422,14 +446,49 @@
 						update=":projecttabview :growlForm">
 					</p:ajax>
 				</p:droppable>
-				<p:droppable id="addTaskToDone" for="doneFieldset" tolerance="touch"
-					scope="DoneTask"
-					disabled="#{jJSprintBean.isDisableDragDrop(jjsprint)}"
+
+				<p:droppable id="addTaskToDone_FromProg" for="doneFieldset"
+					tolerance="touch" scope="ProgTask"
+					disabled="#{jjsprint.disableDragDrop}"
 					activeStyleClass="ui-state-highlight" datasource="prog">
 					<p:ajax listener="#{jJSprintBean.addTaskToDone}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock()"
 						update=":projecttabview :editBugDialog :growlForm">
+					</p:ajax>
+				</p:droppable>
+
+				<p:droppable id="addTaskToTodo_FromProg" for="todoFieldset"
+					tolerance="touch" scope="ProgTask"
+					disabled="#{jjsprint.disableDragDrop}"
+					activeStyleClass="ui-state-highlight" datasource="prog">
+					<p:ajax listener="#{jJSprintBean.addTaskToTodo}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":projecttabview :growlForm">
+					</p:ajax>
+				</p:droppable>
+
+				<p:droppable id="addTaskToTodo_FromDone" for="tododropArea"
+					tolerance="touch" scope="DoneTask"
+					disabled="#{jjsprint.disableDragDrop}"
+					activeStyleClass="ui-state-highlight" datasource="done">
+					<p:ajax listener="#{jJSprintBean.addTaskToTodo}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":projecttabview :growlForm">
+					</p:ajax>
+				</p:droppable>
+
+
+				<p:droppable id="addTaskToProg_FromDone" for="progdropArea"
+					tolerance="touch" scope="DoneTask"
+					disabled="#{jjsprint.disableDragDrop}"
+					activeStyleClass="ui-state-highlight" datasource="done">
+					<p:ajax listener="#{jJSprintBean.addTaskToProg}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":projecttabview :growlForm">
 					</p:ajax>
 				</p:droppable>
 			</h:form>

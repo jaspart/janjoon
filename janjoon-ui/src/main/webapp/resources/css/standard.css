@@ -724,10 +724,11 @@ div.timeline-event-line {
 
 div.timeline-event-content {
 	text-align: center;
+	margin: 0px !important;
 }
 
 div.timeline-event-content span {
-	height: 30px !important;
+	/* 	height: 30px !important; */
 	font-size: small;
 	width: 100%;
 	display: inline-block;
@@ -768,8 +769,8 @@ div.timeline-navigation-delete {
 
 div.timeline-navigation {
 	bottom: initial !important;
-    top: 40px;    
-    left: initial;
+	top: 40px;
+	left: initial;
 }
 
 div.planned1 {
@@ -793,6 +794,14 @@ div.planned2 {
 
 div.real div.timeline-event-content span {
 	font-size: smaller !important;
+}
+
+.timeline-event-range-drag-left {
+	height: 40px !important;
+}
+
+.timeline-event-range-drag-right {
+	height: 40px !important;
 }
 
 div.planned2 div.timeline-event-content span {
@@ -1156,6 +1165,9 @@ div.revised2 {
 	border-radius: .25em;
 }
 
+.splitButtonDisplayNone {
+	display: none;
+}
 /* .ALERT { */
 /* 	background-color: #F2DEDE !important; */
 /* 	background-image: none !important; */

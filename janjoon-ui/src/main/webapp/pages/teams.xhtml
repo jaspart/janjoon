@@ -88,15 +88,15 @@
 							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
 						</ui:include>
 						<f:facet name="footer">
-							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm :growlForm"
 								actionListener="#{jJTaskBean.updateTask('main')}"
-								value="#{messages.label_update}"
+								value="#{messages.label_save}"
 								onstart="PF('viewtaskBlockUIWidget').block()"
 								style="margin-top: 5px;"
 								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
 								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
 							<p:commandButton id="viewCloseButton"
-								value="#{messages.label_close}"
+								value="#{messages.label_cancel}"
 								style="margin-left: 20px;margin-top: 5px;"
 								oncomplete="PF('blockUIWidget').unblock()"
 								onstart="PF('blockUIWidget').block()"

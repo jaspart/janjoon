@@ -84,7 +84,7 @@
 										onchange="jJbugBuild.val('');"
 										value="#{jJBugBean.viewBug.versioning}"
 										styleClass="bugAutoComplete"
-										itemLabel="#{version.name} : #{version.product.name}"
+										itemLabel="#{version != null ? version.name.concat(' : ').concat(version.product.name) : messages.label_select}"
 										itemValue="#{version}"
 										style="float: right;margin-right: 20px;"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
@@ -98,7 +98,7 @@
 									<p:outputLabel for="jJbugBuild" value="Build : " />
 									<p:autoComplete id="jJbugBuild" scrollHeight="200"
 										styleClass="bugAutoComplete" widgetVar="jJbugBuild"
-										value="#{jJBugBean.viewBug.build}" itemLabel="#{build.name}"
+										value="#{jJBugBean.viewBug.build}" itemLabel="#{build != null ? build.name : messages.label_select}"
 										itemValue="#{build}"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
 										dropdown="true" var="build"
@@ -118,7 +118,7 @@
 									<p:autoComplete id="jJbugCriticity" scrollHeight="200"
 										styleClass="bugAutoComplete"
 										value="#{jJBugBean.viewBug.criticity}"
-										itemLabel="#{criticity.name}" itemValue="#{criticity}"
+										itemLabel="#{criticity != null ? criticity.name :  messages.label_select}" itemValue="#{criticity}"
 										style="float: right;margin-right: 20px;"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
 										dropdown="true" var="criticity"
@@ -130,7 +130,7 @@
 									<p:autoComplete id="jJbugImportance" scrollHeight="200"
 										styleClass="bugAutoComplete"
 										value="#{jJBugBean.viewBug.importance}"
-										itemLabel="#{importance.name}" itemValue="#{importance}"
+										itemLabel="#{importance != null ? importance.name : messages.label_select}" itemValue="#{importance}"
 										style="float: right;margin-right: 20px;"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
 										dropdown="true" var="importance"
@@ -203,7 +203,7 @@
 										value="#{jJBugBean.viewBug.requirement}"
 										widgetVar="jJbugRequirement"
 										disabled="#{jJBugBean.viewBug.project == null}"
-										itemLabel="#{requirement.name}" itemValue="#{requirement}"
+										itemLabel="#{requirement != null ? requirement.name : messages.label_select}" itemValue="#{requirement}"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 										dropdown="true" var="requirement"
 										onchange="jJbugTeststep.val('');"
@@ -228,7 +228,7 @@
 										value="#{jJBugBean.viewBug.teststep}" itemValue="#{teststep}"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 										disabled="#{jJBugBean.viewBug.project == null and jJBugBean.viewBug.requirement==null}"
-										dropdown="true" var="teststep" itemLabel="#{teststep.name}"
+										dropdown="true" var="teststep" itemLabel="#{teststep != null ? teststep.name :  messages.label_select}"
 										completeMethod="#{jJBugBean.completeTestStepsBug}">
 										<p:column>
 											<h:outputText value="#{teststep.name}" escape="false" />
@@ -298,7 +298,7 @@
 								value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 								update="createPanelGrid,:growlForm" />
 							<p:commandButton id="createCloseButton"
-								value="#{messages.label_close}"
+								value="#{messages.label_cancel}"
 								onclick="PF('createDialogWidget').hide()" type="button" />
 						</f:facet>
 					</p:panel>

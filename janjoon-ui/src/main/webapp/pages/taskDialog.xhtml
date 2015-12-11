@@ -21,7 +21,7 @@
 		<h:panelGrid columns="6" style="width: 100%">
 			<p:outputLabel value="Sprint :" for="taskSprint" />
 			<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
-				itemLabel="#{sprint.name}" itemValue="#{sprint}" scrollHeight="200"
+				itemLabel="#{sprint != null ? sprint.name : messages.label_select}" itemValue="#{sprint}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
 				dropdown="true" var="sprint" binding="#{sprintComponent}"
 				completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
@@ -33,8 +33,8 @@
 			<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
 				for="taskAssignedTo" />
 			<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
-				size="15" itemLabel="#{assignedTo.name}" itemValue="#{assignedTo}"
-				scrollHeight="200"
+				size="15" itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
+				itemValue="#{assignedTo}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 				dropdown="true" var="assignedTo"
 				completeMethod="#{jJTaskBean.completeAssignedToTask}">

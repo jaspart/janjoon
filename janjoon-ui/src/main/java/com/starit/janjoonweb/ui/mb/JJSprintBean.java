@@ -185,12 +185,12 @@ public class JJSprintBean {
 		this.project = project;
 	}
 
-	public boolean isDisableDragDrop(SprintUtil jJSprint) {
-		JJContact loginContact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		return !jJSprint.getContacts().contains(loginContact);
-
-	}
+	// public boolean isDisableDragDrop(SprintUtil jJSprint) {
+	// JJContact loginContact = ((LoginBean) LoginBean.findBean("loginBean"))
+	// .getContact();
+	// return !jJSprint.getContacts().contains(loginContact);
+	//
+	// }
 
 	public JJTask getTask() {
 		if (task == null) {
@@ -564,6 +564,58 @@ public class JJSprintBean {
 
 	}
 
+	public void addTaskToTodo(DragDropEvent ddevent) {
+
+		JJTask dropedTask = (JJTask) ddevent.getData();
+		Long sprintId = dropedTask.getSprint().getId();
+
+		if (ddevent.getDragId().contains(":progIcon")
+				|| ddevent.getDragId().contains(":progPanel")
+				|| ddevent.getDragId().contains(":doneIcon")
+				|| ddevent.getDragId().contains(":donePanel")) {
+
+			JJStatus status = jJStatusService
+					.getOneStatus("TODO", "Task", true);
+
+			dropedTask.setStatus(status);
+			dropedTask.setStartDateReal(null);
+			dropedTask.setEndDateReal(null);
+			dropedTask.setWorkloadReal(null);
+			dropedTask.setAssignedTo(null);
+			dropedTask.setCompleted(false);
+			jJTaskBean.saveJJTask(dropedTask, true);
+			// resetJJTaskBean();
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJTaskBean jJTaskBean = (JJTaskBean) session
+					.getAttribute("jJTaskBean");
+			if (jJTaskBean == null)
+				jJTaskBean = new JJTaskBean();
+			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
+					JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
+					LoginBean.getProduct()), jJContactService);
+
+			sprintList
+					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail());
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+
+		else {
+
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+	}
+
 	public void addTaskToProg(DragDropEvent ddevent) {
 
 		JJTask dropedTask = (JJTask) ddevent.getData();
@@ -603,28 +655,44 @@ public class JJSprintBean {
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
 					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		}
+		} else if (ddevent.getDragId().contains(":doneIcon")
+				|| ddevent.getDragId().contains(":donePanel")) {
 
-		else {
+			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
+					"Task", true);
+
+			dropedTask.setStatus(status);
+			dropedTask.setEndDateReal(null);
+			dropedTask.setCompleted(false);
+			jJTaskBean.saveJJTask(dropedTask, true);
+			// resetJJTaskBean();
+
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			JJTaskBean jJTaskBean = (JJTaskBean) session
+					.getAttribute("jJTaskBean");
+			if (jJTaskBean == null)
+				jJTaskBean = new JJTaskBean();
+			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
+					JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
+					LoginBean.getProduct()), jJContactService);
+
+			sprintList
+					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail());
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
 
 			FacesMessage facesMessage = new FacesMessage(
 					FacesMessage.SEVERITY_WARN, "non autorisée", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
-
-		// RequestContext context = RequestContext.getCurrentInstance();
-		//
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
-
-		// context.execute("PF('projectTabView').select(" + i + ")");
-		// update = false;
-		// context.execute("PF('SprintTab').select(" + contains(sprintId) +
-		// ")");
-
 	}
 
 	public void addTaskToDone(DragDropEvent ddevent) {
@@ -674,18 +742,8 @@ public class JJSprintBean {
 					FacesMessage.SEVERITY_WARN, "non autorisée", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
-
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		// context.execute("PF('projectTabView').select(" + i + ")");
-		// update = false;
-		// context.execute("PF('SprintTab').select(" + contains(sprintId) +
-		// ")");
 		if (id != null) {
 			JJTask t = jJTaskService.findJJTask(id);
 			if (t.getBug() != null) {

@@ -140,8 +140,10 @@ public class JJTestcaseexecutionServiceImpl implements
 	}
 
 	@Override
-	public Set<JJTestcaseexecution> getTestcaseexecutions(JJProject project,JJProduct product,JJVersion version,JJCategory category,JJChapter chapter,
-			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate,boolean withOutChapter) {
+	public Set<JJTestcaseexecution> getTestcaseexecutions(JJProject project,
+			JJProduct product, JJVersion version, JJCategory category,
+			JJChapter chapter, JJBuild build, boolean onlyActif,
+			boolean sortedByUpdatedDate, boolean withOutChapter) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcaseexecution> criteriaQuery = criteriaBuilder
@@ -170,32 +172,41 @@ public class JJTestcaseexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		}
-		predicates.add(criteriaBuilder.equal(from.get("testcase").get("enabled"), true));
-		
-		if (project != null) {			
-			predicates.add(criteriaBuilder.equal( from.join("testcase").join("requirement").get("project"), project));
+		predicates.add(criteriaBuilder.equal(from.get("testcase")
+				.get("enabled"), true));
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("testcase").join("requirement").get("project"),
+					project));
 		}
 
-		if (version != null) {			
-			predicates.add(criteriaBuilder.equal( from.join("testcase").join("requirement").get("versioning"), version));
+		if (version != null) {
+			predicates.add(criteriaBuilder
+					.equal(from.join("testcase").join("requirement")
+							.get("versioning"), version));
 
-		} else if (product != null) {			
-			predicates.add(criteriaBuilder.equal(from.join("testcase").join("requirement").get("product"), product));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("testcase").join("requirement").get("product"),
+					product));
 		}
 
 		if (withOutChapter) {
-			predicates.add(criteriaBuilder.isNull(from.join("testcase").join("requirement").get(
-					"chapter")));
+			predicates.add(criteriaBuilder.isNull(from.join("testcase")
+					.join("requirement").get("chapter")));
 
-		}	
+		}
 
 		if (category != null) {
-			predicates.add(criteriaBuilder.isNotNull(from.join("testcase").join("requirement")
-					.get("category")));
+			predicates.add(criteriaBuilder.isNotNull(from.join("testcase")
+					.join("requirement").get("category")));
 			predicates.add(criteriaBuilder.equal(
-					from.join("testcase").join("requirement").get("category"), category));
+					from.join("testcase").join("requirement").get("category"),
+					category));
 			predicates.add(criteriaBuilder.equal(
-					from.join("testcase").join("requirement").get("enabled"), true));
+					from.join("testcase").join("requirement").get("enabled"),
+					true));
 
 		}
 

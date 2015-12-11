@@ -29,10 +29,9 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
 	@Autowired
 	private JJBuildService jJBuildService;
-	
 
 	public void setjJBuildService(JJBuildService jJBuildService) {
 		this.jJBuildService = jJBuildService;
@@ -73,7 +72,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (build != null && (build.getAllTestcases() == null || !build.getAllTestcases())) {
+		if (build != null
+				&& (build.getAllTestcases() == null || !build.getAllTestcases())) {
 			predicates.add(criteriaBuilder.or(
 					criteriaBuilder.isMember(build,
 							from.<Set<JJBuild>> get("builds")),
@@ -93,7 +93,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
 			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
 					result.getResultList()));
-		} else if (build == null && version != null && !jJBuildService.haveAllTestCases(version)) {
+		} else if (build == null && version != null
+				&& !jJBuildService.haveAllTestCases(version)) {
 
 			List<Predicate> predicates2 = new ArrayList<Predicate>(predicates);
 
@@ -240,7 +241,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (build != null && (build.getAllTestcases() == null || !build.getAllTestcases()) ) {
+		if (build != null
+				&& (build.getAllTestcases() == null || !build.getAllTestcases())) {
 			predicates.add(criteriaBuilder.or(
 					criteriaBuilder.isMember(build,
 							from.<Set<JJBuild>> get("builds")),
@@ -252,9 +254,9 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
 					result.getResultList()));
 
-		} else if (build == null && version != null && !jJBuildService.haveAllTestCases(version)) {
+		} else if (build == null && version != null
+				&& !jJBuildService.haveAllTestCases(version)) {
 
-			
 			List<Predicate> predicates2 = new ArrayList<Predicate>(predicates);
 
 			predicates.add(criteriaBuilder.equal(from.get("allBuilds"), true));

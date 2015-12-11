@@ -70,19 +70,7 @@
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
 				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-					style="float: right;" />
-				<!-- 				<p:rating id="rate" value="#{requirementBean.rated}" -->
-				<!-- 					style="float: right;margin-top: 3%;margin-right: -2%;" stars="1" -->
-				<!-- 					rendered="#{requirementBean.requirement != null}"> -->
-				<!-- 					<p:ajax event="rate" listener="#{requirementBean.onrate}" -->
-				<!-- 						onstart="PF('blockUIWidget').block()" -->
-				<!-- 						oncomplete="PF('blockUIWidget').unblock()" -->
-				<!-- 						update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
-				<!-- 					<p:ajax event="cancel" listener="#{requirementBean.oncancel}" -->
-				<!-- 						onstart="PF('blockUIWidget').block()" -->
-				<!-- 						oncomplete="PF('blockUIWidget').unblock()" -->
-				<!-- 						update=":growlForm :messageCreationForm :headerForm:communicationButton" /> -->
-				<!-- 				</p:rating> -->
+					style="float: right;" />			
 
 				<p:commandLink actionListener="#{requirementBean.onrate}" id="rate"
 					update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate"
@@ -135,8 +123,7 @@
 							<p:column colspan="2">
 								<p:selectOneMenu id="category"
 									value="#{requirementBean.category}" effect="fade"
-									style="width: 50%;text-transform: uppercase" filter="true"
-									filterMatchMode="startsWith"
+									style="width: 50%;text-transform: uppercase"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
 
 									<f:selectItems value="#{requirementBean.categories}" var="cat"
@@ -235,7 +222,7 @@
 									value="#{messages.specification_create_chapter_label}" />
 								<p:autoComplete id="chapter" scrollHeight="200"
 									value="#{requirementBean.requirement.chapter}"
-									itemLabel="#{chapter.name}" itemValue="#{chapter}"
+									itemLabel="#{chapter != null ? chapter.name : messages.label_select}" itemValue="#{chapter}"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter"
 									dropdown="true" var="chapter"
 									completeMethod="#{requirementBean.completeChapterRequirement}" />

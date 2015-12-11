@@ -12,8 +12,10 @@ public interface JJTestcaseexecutionService {
 			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate,
 			boolean sortedByCreationdDate);
 
-	public Set<JJTestcaseexecution> getTestcaseexecutions(JJProject project,JJProduct product,JJVersion version,JJCategory category,JJChapter chapter,
-			JJBuild build, boolean onlyActif, boolean sortedByUpdatedDate,boolean withOutChapter);
+	public Set<JJTestcaseexecution> getTestcaseexecutions(JJProject project,
+			JJProduct product, JJVersion version, JJCategory category,
+			JJChapter chapter, JJBuild build, boolean onlyActif,
+			boolean sortedByUpdatedDate, boolean withOutChapter);
 
 	public boolean haveTestcaseExec(JJTestcase testcase, JJBuild build,
 			JJVersion version);

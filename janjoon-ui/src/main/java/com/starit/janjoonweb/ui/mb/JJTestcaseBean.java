@@ -237,8 +237,8 @@ public class JJTestcaseBean {
 			if (rowNames == null || rowNames.isEmpty()) {
 
 				colNames = jJTestcaseService.getImportTestcases(category,
-						LoginBean.getProject(), LoginBean.getProduct(),
-						null, null, true, false);
+						LoginBean.getProject(), LoginBean.getProduct(), null,
+						null, true, false);
 				// rowNames=new ArrayList<Object>();
 				if (colNames != null && !colNames.isEmpty()) {
 
@@ -269,17 +269,26 @@ public class JJTestcaseBean {
 							boolean val = (colNames.get(i).getAllBuilds() != null && colNames
 									.get(i).getAllBuilds());
 							for (int j = 0; j < rowNames.size(); j++) {
-//								boolean vall = val;
-//								if (!vall)
-//									vall = (rowNames.get(j).getAllTestcases() != null && rowNames
-//											.get(j).getAllTestcases());
-//
-//								if (!vall)
-//									vall = colNames.get(i).getBuilds()
-//											.contains(rowNames.get(j));							
-								value.get(i).add(val || (rowNames.get(j).getAllTestcases() != null && rowNames
-										.get(j).getAllTestcases()) || colNames.get(i).getBuilds()
-										.contains(rowNames.get(j)));
+								// boolean vall = val;
+								// if (!vall)
+								// vall = (rowNames.get(j).getAllTestcases() !=
+								// null && rowNames
+								// .get(j).getAllTestcases());
+								//
+								// if (!vall)
+								// vall = colNames.get(i).getBuilds()
+								// .contains(rowNames.get(j));
+								value.get(i)
+										.add(val
+												|| (rowNames.get(j)
+														.getAllTestcases() != null && rowNames
+														.get(j)
+														.getAllTestcases())
+												|| colNames
+														.get(i)
+														.getBuilds()
+														.contains(
+																rowNames.get(j)));
 							}
 						}
 					} else {
@@ -420,15 +429,15 @@ public class JJTestcaseBean {
 		// List<JJTestcase> testcases = new ArrayList<>();
 		if (rendredTestCaseRecaps) {
 
-//			if (testcases == null && chapter != null) {
-//				testcases = jJTestcaseService.getTestcases(null, chapter,
-//						LoginBean.getVersion(), null, true, true, false);
-//
-//			} else if (testcases == null) {
-//				testcases = jJTestcaseService.getImportTestcases(category,
-//						LoginBean.getProject(), LoginBean.getProduct(),
-//						LoginBean.getVersion(), null, true, true);
-//			}	
+			// if (testcases == null && chapter != null) {
+			// testcases = jJTestcaseService.getTestcases(null, chapter,
+			// LoginBean.getVersion(), null, true, true, false);
+			//
+			// } else if (testcases == null) {
+			// testcases = jJTestcaseService.getImportTestcases(category,
+			// LoginBean.getProject(), LoginBean.getProduct(),
+			// LoginBean.getVersion(), null, true, true);
+			// }
 
 			for (JJTestcase testcase : getTestcases()) {
 				TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -613,7 +622,7 @@ public class JJTestcaseBean {
 
 		JJBuild build = jJBuildBean.getBuild();
 		boolean disabled = true;
-		
+
 		if (build != null) {
 			disabled = false;
 			disabled = build.getAllTestcases() == null

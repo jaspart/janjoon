@@ -113,7 +113,7 @@
 					action="#{jJStatusBean.persistStatus}"
 					update="createPanelGrid,:growlForm" />
 				<p:commandButton id="createCloseButton"
-					value="#{messages.admin_status_new_close_button}"
+					value="#{messages.label_cancel}"
 					onclick="PF('createSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>
@@ -135,7 +135,7 @@
 					action="#{jJStatusBean.persistStatus}"
 					update="editPanelGrid,:growlForm" />
 				<p:commandButton id="editCloseButton"
-					value="#{messages.admin_status_edit_close_button}"
+					value="#{messages.label_cancel}"
 					onclick="PF('editSatDialogWidget').hide()" type="button" />
 			</h:form>
 		</p:outputPanel>

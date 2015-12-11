@@ -1,10 +1,20 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -18,7 +28,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.servlet.ServletContext;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -40,8 +53,26 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.html.simpleparser.StyleSheet;
-import com.starit.janjoonweb.domain.*;
-import com.starit.janjoonweb.ui.mb.util.*;
+import com.starit.janjoonweb.domain.JJAuditLog;
+import com.starit.janjoonweb.domain.JJAuditLogService;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyService;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
+import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
+import com.starit.janjoonweb.ui.mb.util.UsageChecker;
 import com.starit.janjoonweb.ui.mb.util.service.CKEditorUploadServlet;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 import com.sun.faces.component.visit.FullVisitContext;
@@ -94,7 +125,7 @@ public class LoginBean implements Serializable {
 	private JJAuditLogService jJAuditLogService;
 
 	@Autowired
-	public LoginBean(AuthenticationManager authenticationManager) {		
+	public LoginBean(AuthenticationManager authenticationManager) {
 
 		initialize();
 		if (FacesContext.getCurrentInstance().getExternalContext()
@@ -938,8 +969,8 @@ public class LoginBean implements Serializable {
 			// .replace(".xhtml", ".jsf"));
 			// }
 
-			String viewId = FacesContext.getCurrentInstance().getViewRoot()
-					.getViewId();
+			// String viewId = FacesContext.getCurrentInstance().getViewRoot()
+			// .getViewId();
 			// if (!viewId.contains("development")) {
 			// HttpSession session = (HttpSession) FacesContext
 			// .getCurrentInstance().getExternalContext()
@@ -1572,16 +1603,16 @@ public class LoginBean implements Serializable {
 	// return bbbb;
 	//
 	// }
-	
-	//InitLayout
+
+	// InitLayout
 	private String state;
 	private LayoutOptions layoutOptions;
-	
+
 	protected void initialize() {
 
 		// options for all panes (center and west)
 		LayoutOptions panes = new LayoutOptions();
-		
+
 		layoutOptions = new LayoutOptions();
 
 		// options for all panes
@@ -1589,19 +1620,23 @@ public class LoginBean implements Serializable {
 		panes.addOption("slidable", false);
 		panes.addOption("resizeWhileDragging", true);
 		panes.addOption("resizable", true);
-		panes.addOption("closable", false);
+		panes.addOption("closable", true);
 		layoutOptions.setPanesOptions(panes);
 
 		// options for east pane
 		LayoutOptions pane = new LayoutOptions();
 		pane.addOption("resizable", true);
-		pane.addOption("closable", false);
-		pane.addOption("size", "33%");
+		pane.addOption("closable", true);
+		pane.addOption("size", "45%");
 		layoutOptions.setNorthOptions(pane);
+		pane = new LayoutOptions();
+		pane.addOption("resizable", true);
+		pane.addOption("closable", true);
+		pane.addOption("size", "27%");
 		layoutOptions.setSouthOptions(pane);
-		
 
 	}
+
 	public String getState() {
 		return state;
 	}
@@ -1651,14 +1686,11 @@ public class LoginBean implements Serializable {
 				String[] styleKeyValue = tag.trim()
 						.substring(1, tag.trim().length() - 1).split(",");
 				HashMap<String, String> styleMap = new HashMap<>();
-				for (String stylePair : styleKeyValue) // iterate over the pais
-				{
+				for (String stylePair : styleKeyValue) {
 					String[] styleEntry = stylePair.split("=");
-					// System.err.println(styleEntry[0].trim() + "="
-					// + styleEntry[1].trim());
 					styleMap.put(styleEntry[0].trim(), styleEntry[1].trim());
 				}
-				// System.err.println(entry[0].replace("'", " ") + "= XXX");
+
 				if (!entry[0].replace("'", " ").startsWith("."))
 					style.loadTagStyle(entry[0].replace("'", " ").trim(),
 							styleMap);

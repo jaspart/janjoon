@@ -6,52 +6,69 @@ $(document).ready(
 						var scroll = $(this).scrollTop();
 						$(".stickyHeader").css('transform',
 								'translateY(' + scroll + 'px)');
-						// $(".stickyHeader").css('z-index', '50');
+						// $(".stickyHeader").css('z-index',
+						// '50');
 						$(".timeline-navigation").css('transform',
 								'translateY(' + scroll + 'px)');
 						$(".timeline-axis").css('transform',
 								'translateY(' + scroll + 'px)');
-						// $(".timeline-axis").css('z-index', '50');
+						// $(".timeline-axis").css('z-index',
+						// '50');
 						$(".timeline-axis-text").css('transform',
 								'translateY(' + scroll + 'px)');
 						$(".timeline-groups-axis-onleft").css('transform',
 								'translateY(' + scroll + 'px)');
 						$(".timeline-axis-grid-major").css('transform',
 								'translateY(' + scroll + 'px)');
-						// $(".ui-splitbutton").css('display','none');
 
 						// var elementArray =
 						// $(".ui-splitbutton").map(function() {
 						// return this.innerHTML;
 						// }).get();
-						//				
-						// for (var i = 0; i < elementArray.length; ++i) {
-						// $(elementArray[i]).css('display','none');
+						//
+						// for (var i = 0; i <
+						// elementArray.length; ++i) {
+						// $(elementArray[i]).css('display',
+						// 'none');
 						// }
-//						var max = $(".stickyHeader").offset().top + 37;
-//						$(".ui-splitbutton").each(
-//								function(i) {
-//									// $(this).css('display', 'none');
-//
-//									// console.log($(this).attr('id') + ':' +
-//									// offset.top);
-//									// var str = $(this).attr('id');
-//									if ($(this).attr('id').indexOf(
-//											"viewTaskButton") >= 0) {
-//										var offset = $(this).offset();
-//										if (offset.top == 0) {
-//											$(this).css('display','inline-block');
-//										} else if (offset.top < max) {
-//											$(this).css('display', 'none');
-//											// $(this).hide();
-//										} else {
-//											$(this).css('display',
-//													'inline-block');
-//											// $(this).show();
-//										}
-//									}
-//								});
-
+						// var max = $(".stickyHeader").offset().top + 37;
+						//
+						// $(".ui-splitbutton")
+						// .each(
+						// function(i) {
+						// if ($(this)
+						// .attr('id')
+						// .indexOf(
+						// "viewTaskButton") >= 0) {
+						// var offset = $(
+						// this)
+						// .offset();
+						// if (offset.top == 0) {
+						// if ($(this)
+						// .hasClass(
+						// "splitButtonDisplayNone"))
+						// $(this)
+						// .removeClass(
+						// "splitButtonDisplayNone");
+						// } else if (offset.top < max) {
+						// if (!$(this)
+						// .hasClass(
+						// "splitButtonDisplayNone"))
+						// $(this)
+						// .addClass(
+						// "splitButtonDisplayNone");
+						// } else {
+						// if ($(this)
+						// .hasClass(
+						// "splitButtonDisplayNone"))
+						// $(this)
+						// .removeClass(
+						// "splitButtonDisplayNone");
+						//
+						// }
+						// }
+						// });
+						//
 					});
 
 		});
@@ -67,11 +84,10 @@ $(document).ready(
 // }
 // });
 // });
-
 $(function() {
-	 var width= $(window).width()*95/100;
-	  $("#layoutsGrid").width(width);
-	});
+	var width = $(window).width() * 95 / 100;
+	$("#layoutsGrid").width(width);
+});
 
 $(function() {
 	$(".wmd-view-topscroll").scroll(function() {

@@ -13,9 +13,9 @@
 		<h:panelGroup id="layoutsContainer">
 			<h:panelGrid id="layoutsGrid" columns="2">
 
-				<pe:layout fullPage="false" style="height:800px;"
-					options="#{loginBean.layoutOptions}"
-					state="#{loginBean.state}" rendered="#{loginBean.enable}">
+				<pe:layout fullPage="false" style="height: 900px;"
+					options="#{loginBean.layoutOptions}" state="#{loginBean.state}"
+					rendered="#{loginBean.enable}" stateCookie="true">				
 
 					<pe:layoutPane position="north">
 						<f:facet name="header">
@@ -97,7 +97,7 @@
 								type="preRenderComponent" />
 							<p:dataTable id="taskTable" value="#{jJTaskBean.toDoTasks}"
 								rowKey="#{task.id}" var="task" widgetVar="taskTable"
-								scrollable="true" scrollHeight="200"
+								scrollable="true" scrollHeight="180"
 								style="table-layout: fixed;"
 								emptyMessage="#{messages.label_notRecordFound}">
 
@@ -168,7 +168,7 @@
 						<h:form id="specForm">
 							<p:dataTable id="specTable" value="#{loginBean.noCouvretReq}"
 								rowKey="#{req.id}" var="req" widgetVar="specTable"
-								scrollable="true" scrollHeight="200"
+								scrollable="true" scrollHeight="180"
 								emptyMessage="#{messages.label_notRecordFound}">
 
 								<p:column headerText="#{messages.label_requirement}">
@@ -247,13 +247,13 @@
 							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
 						</ui:include>
 						<f:facet name="footer">
-							<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+							<p:commandButton id="updateTaskButton" update=":viewTaskForm :growlForm"
 								actionListener="#{jJTaskBean.updateTask('main')}"
-								value="#{messages.label_update}" style="margin-top: 5px;"
+								value="#{messages.label_save}" style="margin-top: 5px;"
 								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
 								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec" />
 							<p:commandButton id="viewCloseButton"
-								value="#{messages.label_close}"
+								value="#{messages.label_cancel}"
 								style="margin-left: 20px;margin-top: 5px;"
 								oncomplete="PF('blockUIWidget').unblock()"
 								onstart="PF('blockUIWidget').block()"

@@ -181,8 +181,8 @@ public class JJConfigurationBean {
 		setJJConfiguration_(null);
 		configList = null;
 		setCreateDialogVisible(false);
-		jJconfiguration = jJConfigurationService.getConfigurations(
-				"ConfigurationManager", "git", true).get(0);
+		// jJconfiguration = jJConfigurationService.getConfigurations(
+		// "ConfigurationManager", "git", true).get(0);
 	}
 
 	public void beforeDialogShow(ActionEvent event) {

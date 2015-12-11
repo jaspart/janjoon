@@ -21,7 +21,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 	}
 
-	public boolean haveAllTestCases(JJVersion version){
+	public boolean haveAllTestCases(JJVersion version) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
 
@@ -30,11 +30,11 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));	
-		predicates.add(criteriaBuilder.equal(from.get("version"), version));	
-		predicates.add(criteriaBuilder.equal(from.get("allTestcases"), true));	
-		predicates.add(criteriaBuilder.isNotNull(from.get("allTestcases")));	
-		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(from.get("version"), version));
+		predicates.add(criteriaBuilder.equal(from.get("allTestcases"), true));
+		predicates.add(criteriaBuilder.isNotNull(from.get("allTestcases")));
+
 		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
 
 		return entityManager.createQuery(select).getSingleResult() > 0;

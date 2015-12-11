@@ -22,7 +22,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 	// New generic Request
 
-	public boolean haveRequirements(JJChapter chapter){
+	public boolean haveRequirements(JJChapter chapter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -30,28 +30,30 @@ public class JJChapterServiceImpl implements JJChapterService {
 		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.or(criteriaBuilder.equal(from.get("chapter"),chapter)));
+		predicates.add(criteriaBuilder.or(criteriaBuilder.equal(
+				from.get("chapter"), chapter)));
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
 		cq.where(predicates.toArray(new Predicate[] {}));
-		boolean have= entityManager.createQuery(cq).getSingleResult() > 0;
-		if(have)
+		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
+		if (have)
 			return have;
-		else
-		{
-			int i=0;
-			List<JJChapter> chapters = getChildrenOfParentChapter(chapter, true, true);
-			
-			while(chapters != null && !chapters.isEmpty() && i<chapters.size() && !have)
-			{
-				have= haveRequirements(chapters.get(i));
+		else {
+			int i = 0;
+			List<JJChapter> chapters = getChildrenOfParentChapter(chapter,
+					true, true);
+
+			while (chapters != null && !chapters.isEmpty()
+					&& i < chapters.size() && !have) {
+				have = haveRequirements(chapters.get(i));
 			}
-			
+
 			return have;
 		}
 	}
+
 	@Override
 	public List<JJChapter> getParentsChapter(JJCompany company,
 			JJProject project, JJCategory category, boolean onlyActif,

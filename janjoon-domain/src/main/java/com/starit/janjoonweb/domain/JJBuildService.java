@@ -14,6 +14,6 @@ public interface JJBuildService {
 			boolean onlyActif);
 
 	public JJBuild getBuildByName(JJVersion version, String buildName);
-	
+
 	public boolean haveAllTestCases(JJVersion version);
 }
