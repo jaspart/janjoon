@@ -110,8 +110,9 @@
 			<p:commandButton icon="ui-icon-arrowthick-1-n" value="XML"
 				style="float: right;" disabled="#{jJProjectBean.project == null}"
 				update=":importXMLForm" onstart="PF('blockUIWidget').block()"
+				rendered="#{loginBean.authorisationService.wRequiement}"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()"
-				title="#{messages.specification_import_button} XML" />
+				title="#{messages.specification_importxml_button}" />
 
 			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
 				onstart="PF('blockUIWidget').block()" style="float: right;"

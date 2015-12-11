@@ -147,7 +147,7 @@ public class WorkFlowsActions {
 							+ requirement.getName()
 									.substring(
 											0,
-											Math.min(85, requirement.getName()
+											Math.min(70, requirement.getName()
 													.length()))
 							+ " status changed");
 					mes.setCreatedBy(contact);
@@ -189,7 +189,7 @@ public class WorkFlowsActions {
 					JJMessage mes = new JJMessage();
 					mes.setName("Bug :"
 							+ bug.getName().substring(0,
-									Math.min(85, bug.getName().length()))
+									Math.min(70, bug.getName().length()))
 							+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
@@ -230,7 +230,7 @@ public class WorkFlowsActions {
 					JJMessage mes = new JJMessage();
 					mes.setName("Task :"
 							+ task.getName().substring(0,
-									Math.min(85, task.getName().length()))
+									Math.min(70, task.getName().length()))
 							+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
@@ -271,7 +271,7 @@ public class WorkFlowsActions {
 					JJMessage mes = new JJMessage();
 					mes.setName("Build :"
 							+ build.getName().substring(0,
-									Math.min(85, build.getName().length()))
+									Math.min(70, build.getName().length()))
 							+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
