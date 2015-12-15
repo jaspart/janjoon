@@ -74,14 +74,6 @@ privileged aspect JJTask_Roo_JavaBean {
         this.enabled = enabled;
     }
     
-    public Boolean JJTask.getSpecification() {
-        return this.specification;
-    }
-    
-    public void JJTask.setSpecification(Boolean specification) {
-        this.specification = specification;
-    }
-    
     public Date JJTask.getStartDatePlanned() {
         return this.startDatePlanned;
     }
@@ -256,6 +248,14 @@ privileged aspect JJTask_Roo_JavaBean {
     
     public void JJTask.setStatus(JJStatus status) {
         this.status = status;
+    }
+    
+    public JJStatus JJTask.getTaskType() {
+        return this.taskType;
+    }
+    
+    public void JJTask.setTaskType(JJStatus taskType) {
+        this.taskType = taskType;
     }
     
     public Set<JJMessage> JJTask.getMessages() {

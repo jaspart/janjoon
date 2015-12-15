@@ -106,20 +106,11 @@
 		</p:panelGrid>
 
 		<p:dataTable id="importDataTable" var="format" scrollable="true"
-			style="width:700px;table-layout: fixed;" scrollHeight="350"
+			style="width:750px;table-layout: fixed;" scrollHeight="350"
 			emptyMessage="#{messages.label_notRecordFound}"
 			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
 			<f:facet name="header">
 				<p:row>
-					<!-- 					<p:column style="width: 40%"> -->
-					<!-- 						<p:commandButton id="importDate" value="Remplir Les Dates"							 -->
-					<!-- 							disabled="#{jJTaskBean.fillInDate}" -->
-					<!-- 							style="position: absolute;left: 10px;" -->
-					<!-- 							onstart="PF('taskBlockUIWidget').block()" -->
-					<!-- 							oncomplete="PF('taskBlockUIWidget').unblock()" -->
-					<!-- 							actionListener="#{jJTaskBean.fillInDates}" -->
-					<!-- 							update="importDataTable" /> -->
-					<!-- 					</p:column> -->
 					<p:column style="width: 60%"></p:column>
 					<p:column style="width: 40%" rendered="#{jJTaskBean.objet != null}">
 						<h:outputText
@@ -128,7 +119,7 @@
 					</p:column>
 				</p:row>
 			</f:facet>
-			<p:column style="width:40%" id="checkBox">
+			<p:column style="width:35%" id="checkBox">
 				<f:facet name="header">
 					<p:row>
 						<p:column>
@@ -194,14 +185,28 @@
 				</p:cellEditor>
 			</p:column>
 
-			<p:column style="width:15%"
+			<p:column style="width:20%"
 				headerText="#{messages.importTask_headerTable_requirement}">
-				<p:panel style="height: 25px;width: 30px; margin: auto;">
-					<p:commandButton id="specButton"
-						value="#{format.specification ? 'X' : ' '}"
-						styleClass="checkBoxButton" update="specButton"
-						actionListener="#{format.setSpecification(!format.specification)}" />
-				</p:panel>
+				<!-- 				<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
+				<!-- 					<p:commandButton id="specButton" -->
+				<!-- 						value="#{format.specification ? 'X' : ' '}" -->
+				<!-- 						styleClass="checkBoxButton" update="specButton" -->
+				<!-- 						actionListener="#{format.setSpecification(!format.specification)}" /> -->
+				<!-- 				</p:panel> -->
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText
+							value="#{format.taskType.name}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:autoComplete id="taskType" value="#{format.taskType}" size="15"
+							itemValue="#{taskType}" scrollHeight="200"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+							dropdown="true" var="taskType"
+							itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+							completeMethod="#{jJTaskBean.completeTaskType}" />
+					</f:facet>
+				</p:cellEditor>
 			</p:column>
 			<p:column style="width:15%"
 				headerText="#{messages.importTask_headerTable_workload}">

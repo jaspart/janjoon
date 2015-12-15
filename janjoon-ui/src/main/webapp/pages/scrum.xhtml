@@ -180,7 +180,8 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_todo}"
 								id="todoFieldset">
-								<p:outputPanel id="tododropArea" style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
+								<p:outputPanel id="tododropArea"
+									style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
 									<h:outputText
 										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
 										rendered="#{empty jjsprint.todoTask and !jjsprint.disableDragDrop}"
@@ -210,7 +211,7 @@
 											headerText="#{messages.label_task}">
 											<h:panelGroup id="todoPanel">
 												<p:graphicImage
-													rendered="#{todo.specification != null and todo.specification}"
+													rendered="#{todo.taskType.name == 'specifier'}"
 													library="images" name="doc.ico" width="16" height="16" />
 												<p:graphicImage rendered="#{todo.bug != null}"
 													library="images" name="bug.ico" width="16" height="16" />
@@ -265,7 +266,8 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_inProgress}"
 								id="progFieldset">
-								<p:outputPanel id="progdropArea" style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
+								<p:outputPanel id="progdropArea"
+									style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
 									<h:outputText
 										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
 										rendered="#{empty jjsprint.progressTask and !jjsprint.disableDragDrop}"
@@ -297,8 +299,12 @@
 										<p:column style="width:50px"
 											headerText="{messages.label_task}">
 											<h:panelGroup id="progPanel">
+												<!-- 												<p:graphicImage -->
+												<!-- 													rendered="#{prog.specification != null and prog.specification}" -->
+												<!-- 													library="images" name="doc.ico" width="16" height="16" /> -->
+
 												<p:graphicImage
-													rendered="#{prog.specification != null and prog.specification}"
+													rendered="#{prog.taskType.name == 'specifier'}"
 													library="images" name="doc.ico" width="16" height="16" />
 												<p:graphicImage rendered="#{prog.bug != null}"
 													library="images" name="bug.ico" width="16" height="16" />
@@ -351,7 +357,8 @@
 						<p:column style="width: 33.33%;">
 							<p:fieldset legend="#{messages.project_scrum_done}"
 								id="doneFieldset">
-								<p:outputPanel id="donedropArea" style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
+								<p:outputPanel id="donedropArea"
+									style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
 									<h:outputText
 										value="!!!  #{messages.project_scrum_drop_panel}  !!!"
 										rendered="#{empty jjsprint.doneTask and !jjsprint.disableDragDrop}"
@@ -362,7 +369,7 @@
 										style="table-layout: fixed"
 										rendered="#{not empty jjsprint.doneTask}" scrollable="true"
 										scrollHeight="250" sortOrder="DESCENDING"
-										sortBy="#{prog.endDateReal}">
+										sortBy="#{done.endDateReal}">
 
 										<p:column rendered="#{!jjsprint.disableDragDrop}"
 											style="text-align: center;width: 40px;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
@@ -371,8 +378,6 @@
 												<h:outputText style="margin-left: 25%;"
 													styleClass="ui-icon ui-icon-arrow-4" />
 											</p:panel>
-											<!-- 											<p:graphicImage id="progIcon" height="32" width="32" -->
-											<!-- 												library="images" name="drag.ico" style="margin-top: 35%;" /> -->
 											<p:draggable for="doneIcon" revert="true" scope="DoneTask"
 												disabled="#{jjsprint.disableDragDrop}" />
 										</p:column>
@@ -380,8 +385,11 @@
 										<p:column style="width:80px"
 											headerText="#{messages.label_task}">
 											<h:panelGroup id="donePanel">
+												<!-- 												<p:graphicImage -->
+												<!-- 													rendered="#{done.specification != null and done.specification}" -->
+												<!-- 													library="images" name="doc.ico" width="16" height="16" /> -->
 												<p:graphicImage
-													rendered="#{done.specification != null and done.specification}"
+													rendered="#{done.taskType.name == 'specifier'}"
 													library="images" name="doc.ico" width="16" height="16" />
 												<p:graphicImage rendered="#{done.bug != null}"
 													library="images" name="bug.ico" width="16" height="16" />

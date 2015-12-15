@@ -29,6 +29,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -61,6 +62,8 @@ public class JJStatusBean {
 
 	@Autowired
 	private JJSprintService jJSprintService;
+
+	private List<String> tableNames;
 
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
@@ -614,7 +617,18 @@ public class JJStatusBean {
 
 	public List<String> completeObject(String query) {
 
-		return jJStatusService.getTablesName();
+		List<String> suggestions = new ArrayList<String>();
+		if (tableNames == null)
+			tableNames = jJStatusService.getTablesName();
+
+		suggestions.add(null);
+		for (String req : tableNames) {
+
+			if (req.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(req);
+			}
+		}
+		return suggestions;
 	}
 
 	public String persistStatus() {
@@ -743,26 +757,6 @@ public class JJStatusBean {
 		levelStatusCreateInputMessage.setFor("levelStatusCreateInput");
 		levelStatusCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(levelStatusCreateInputMessage);
-
-		HtmlOutputText messagesCreateOutput = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesCreateOutput.setId("messagesStatCreateOutput");
-		messagesCreateOutput.setValue("Messages:");
-		htmlPanelGrid.getChildren().add(messagesCreateOutput);
-
-		HtmlOutputText messagesCreateInput = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		messagesCreateInput.setId("messagesStatCreateInput");
-		messagesCreateInput
-				.setValue("This relationship is managed from the JJMessage side");
-		htmlPanelGrid.getChildren().add(messagesCreateInput);
-
-		Message messagesCreateInputMessage = (Message) application
-				.createComponent(Message.COMPONENT_TYPE);
-		messagesCreateInputMessage.setId("messagesStatCreateInputMessage");
-		messagesCreateInputMessage.setFor("messagesStatCreateInput");
-		messagesCreateInputMessage.setDisplay("icon");
-		htmlPanelGrid.getChildren().add(messagesCreateInputMessage);
 
 		return htmlPanelGrid;
 	}

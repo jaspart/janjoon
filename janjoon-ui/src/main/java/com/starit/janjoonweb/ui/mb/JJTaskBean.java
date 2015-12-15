@@ -873,6 +873,19 @@ public class JJTaskBean {
 		return suggestions;
 	}
 
+	public List<JJStatus> completeTaskType(String query) {
+		List<JJStatus> suggestions = new ArrayList<JJStatus>();
+		suggestions.add(null);
+		for (JJStatus jJStatus : jJStatusService.getStatus("TaskType", true,
+				null, true)) {
+			String jJCriticityStr = String.valueOf(jJStatus.getName());
+			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJStatus);
+			}
+		}
+		return suggestions;
+	}
+
 	public List<JJContact> completeAssignedToTask(String query) {
 
 		List<JJContact> suggestions = new ArrayList<JJContact>();
@@ -1936,7 +1949,7 @@ public class JJTaskBean {
 
 				JJTask task = new JJTask();
 				task.setEnabled(true);
-				task.setSpecification(format.getSpecification());
+				task.setTaskType(format.getTaskType());
 				if (mode.equalsIgnoreCase("planning"))
 					task.setSprint(this.sprint);
 
@@ -2290,7 +2303,8 @@ public class JJTaskBean {
 		private boolean copyObjet;
 		private Date startDate;
 		private Integer workload;
-		private boolean specification;
+		// private boolean specification;
+		private JJStatus taskType;
 
 		public ImportFormat() {
 			super();
@@ -2327,12 +2341,12 @@ public class JJTaskBean {
 			this.copyObjet = copyObjet;
 		}
 
-		public boolean getSpecification() {
-			return specification;
+		public JJStatus getTaskType() {
+			return taskType;
 		}
 
-		public void setSpecification(boolean specification) {
-			this.specification = specification;
+		public void setTaskType(JJStatus taskType) {
+			this.taskType = taskType;
 		}
 
 		public Date getStartDate() {
@@ -2979,9 +2993,16 @@ public class JJTaskBean {
 	}
 
 	public void onCreateTimelineEvent(TimelineAddEvent ev) {
-
-		this.start = ev.getStartDate();
-		this.end = ev.getEndDate();
+		
+		Calendar cal = Calendar.getInstance(); 
+		
+		cal.setTime(ev.getStartDate());
+		cal.add(Calendar.MONTH, -1);			
+		this.start = cal.getTime();
+		
+		cal.setTime(ev.getEndDate());
+		cal.add(Calendar.MONTH, 1);			
+		this.end = cal.getTime();
 
 		this.mode = "planning";
 		disabledImportButton = true;
@@ -2998,9 +3019,17 @@ public class JJTaskBean {
 	}
 
 	public void onEditTimelineEvent(TimelineModificationEvent ev) {
-
-		this.start = ev.getTimelineEvent().getStartDate();
-		this.end = ev.getTimelineEvent().getEndDate();
+		
+		Calendar cal = Calendar.getInstance(); 
+		
+		cal.setTime(ev.getTimelineEvent().getStartDate());
+		cal.add(Calendar.MONTH, -1);			
+		this.start = cal.getTime();
+		
+		cal.setTime(ev.getTimelineEvent().getEndDate());
+		cal.add(Calendar.MONTH, 1);			
+		this.end = cal.getTime();
+		
 		this.task = (JJTask) ev.getTimelineEvent().getData();
 		taskTreeNode = null;
 		selectedReq = null;
@@ -3015,8 +3044,8 @@ public class JJTaskBean {
 		tt = jJTaskService.findJJTask(tt.getId());
 		String group = ev.getTimelineEvent().getStyleClass().toUpperCase();
 
-		this.start = ev.getTimelineEvent().getStartDate();
-		this.end = ev.getTimelineEvent().getEndDate();
+//		this.start = ev.getTimelineEvent().getStartDate();
+//		this.end = ev.getTimelineEvent().getEndDate();
 
 		// ev.getComponent().
 
@@ -3046,6 +3075,17 @@ public class JJTaskBean {
 
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
+			
+			Calendar cal = Calendar.getInstance(); 
+			
+			cal.setTime(tt.getStartDateReal());
+			cal.add(Calendar.MONTH, -1);			
+			this.start = cal.getTime();
+			
+			cal.setTime( tt.getEndDateReal());
+			cal.add(Calendar.MONTH, 1);			
+			this.end = cal.getTime();
+			
 			updateView(tt, UPDATE_OPERATION);
 
 		} else if (group.toLowerCase().contains(Planned.toLowerCase())
@@ -3061,6 +3101,17 @@ public class JJTaskBean {
 					null)));
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
+			
+			Calendar cal = Calendar.getInstance(); 
+			
+			cal.setTime(tt.getStartDateRevised());
+			cal.add(Calendar.MONTH, -1);			
+			this.start = cal.getTime();
+			
+			cal.setTime(tt.getEndDateRevised());
+			cal.add(Calendar.MONTH, 1);			
+			this.end = cal.getTime();
+			
 			updateView(tt, UPDATE_OPERATION);
 
 		} else {
@@ -3092,14 +3143,11 @@ public class JJTaskBean {
 		}
 
 		reset();
-		if (tt != null) {
-			String message = "";
-			FacesMessage facesMessage = null;
+		if (tt != null) {		
 
-			message = "Success Update " + group + " Date";
-			facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					message, MessageFactory.getMessage("label_task", "")
-							.getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_successfully_updated",
+					MessageFactory.getMessage("label_task", "").getDetail());
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -3762,11 +3810,8 @@ public class JJTaskBean {
 
 		}
 
-		String message = "";
-		FacesMessage facesMessage = null;
-
-		message = "Success Update " + Real + " Date";
-		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
 				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
@@ -3806,12 +3851,8 @@ public class JJTaskBean {
 			}
 
 		}
-
-		String message = "";
-		FacesMessage facesMessage = null;
-
-		message = "Success Update " + Real + " Date";
-		facesMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, message,
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
 				MessageFactory.getMessage("label_task", "").getDetail());
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 

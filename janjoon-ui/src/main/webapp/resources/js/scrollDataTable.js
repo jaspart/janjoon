@@ -2,6 +2,9 @@ var scrollTop = 0;
 var scrollLeft = 0;
 var row = null;
 var column = null;
+var isReal = false;
+var isRevised1 = false;
+var timelineContentIndex = null;
 
 function saveScrollPos() {
 	var area = $("#projecttabview\\:planningForm\\:westLayout").children()
@@ -43,6 +46,61 @@ function autoScroll() {
 	column = null;
 }
 
+function getTimelineEvent() {
+	var timelineEvent = $(".timeline-event-selected.ui-state-active");
+	// timelineEventIndex = timelineEvent.index();
+	timelineContentIndex = timelineEvent.parent().index();
+	isReal = timelineEvent.hasClass("real");
+	if (!isReal)
+		isRevised1 = timelineEvent.hasClass("revised1")
+				|| timelineEvent.hasClass("planned1");
+	else
+		isRevised1 = false;
+}
+
+function highlightEvent() {
+
+	if (timelineContentIndex != -1) {
+		var highLitedRow;
+		var className;
+		var highlightClass;
+		if (isReal) {
+			highLitedRow = $(".timeline-content").children().eq(
+					timelineContentIndex).find(".real").last();
+			className = "real";
+			highlightClass = "highLightReal";
+		} else if (isRevised1) {
+			highLitedRow = $(".timeline-content").children().eq(
+					timelineContentIndex).find(".revised1").last();
+
+			className = "revised1";
+			highlightClass = "highLightRevised1";
+		} else {
+			highLitedRow = $(".timeline-content").children().eq(
+					timelineContentIndex).find(".revised2").last();
+
+			className = "revised2";
+			highlightClass = "highLightRevised2";
+		}
+
+		if (highLitedRow != null) {
+
+			highLitedRow.removeClass(className);
+			highLitedRow.addClass(highlightClass);
+
+			setTimeout(function() {
+				highLitedRow.removeClass(highlightClass);
+				highLitedRow.addClass(className);
+			}, 1000);
+		}
+	}
+
+	timelineContentIndex == -1;
+	isReal = false;
+	isRevised1 = false;
+
+}
+
 function setRowIndex(rowIndex) {
 	var highLitedRow = $("#projecttabview\\:planningForm\\:taskDataTable_data");
 
@@ -50,8 +108,6 @@ function setRowIndex(rowIndex) {
 
 	while (i <= rowIndex) {
 
-		//var className = highLitedRow.children().eq(i);
-		//console.log(className.attr('class'));
 		if (highLitedRow.children().eq(i).hasClass(
 				"ui-datatable-summaryrow ui-widget-header"))
 			rowIndex++;

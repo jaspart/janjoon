@@ -27,16 +27,16 @@
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugCriticity" scrollHeight="200"
-					value="#{JJBug_.criticity}" itemLabel="#{criticity != null ? criticity.name :  messages.label_select}"
+					value="#{JJBug_.criticity}" itemLabel="#{criticity.name}"
 					itemValue="#{criticity}" placeholder="#{messages.label_criticity}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
-					dropdown="true" var="criticity"
+					dropdown="true" var="criticity" 
 					completeMethod="#{jJBugBean.completeCriticityBug}" />
 			</p:column>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugImportance" scrollHeight="200"
-					value="#{JJBug_.importance}" itemLabel="#{importance != null ? importance.name : messages.label_select}"
-					itemValue="#{importance}" placeholder="Importance : "
+					value="#{JJBug_.importance}" itemLabel="#{importance.name}"
+					itemValue="#{importance}" placeholder="Importance"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
 					dropdown="true" var="importance"
 					completeMethod="#{jJBugBean.completeImportance}" />
@@ -45,7 +45,7 @@
 		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
-					placeholder="Status : " itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+					placeholder="Status" itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
 					itemValue="#{status}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 					dropdown="true" var="status" readonly="#{JJBug_.id == null}"
@@ -55,10 +55,10 @@
 				<p:autoComplete id="jJbugRequirement" scrollHeight="200"
 					value="#{JJBug_.requirement}" widgetVar="jJbugRequirementWV"
 					disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
-					itemLabel="#{requirement != null ? requirement.name : messages.label_select}" itemValue="#{requirement}"
+					itemLabel="#{requirement.name}" itemValue="#{requirement}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 					dropdown="true" var="requirement"
-					placeholder="#{messages.label_requirement} :"
+					placeholder="#{messages.label_requirement}"
 					onchange="jJbugTeststepWV.val('');"
 					completeMethod="#{jJBugBean.completeReqBug}">
 					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
@@ -68,10 +68,10 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugTeststep" scrollHeight="200"
 					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
-					itemValue="#{teststep}" placeholder="TestStep : "
+					itemValue="#{teststep}" placeholder="TestStep"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
 					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
-					dropdown="true" var="teststep" itemLabel="#{teststep != null ? teststep.name :  messages.label_select}"
+					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
 					completeMethod="#{jJBugBean.completeTestStepsBug}">
 					<p:column>
 						<h:outputText rendered="#{teststep != null}"
@@ -87,7 +87,7 @@
 				<p:autoComplete id="jJbugProject"
 					placeholder="#{messages.lable_project}"
 					onchange="jJbugRequirementWV.val('');"
-					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project != null ? project.name : messages.label_select}"
+					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
 					dropdown="true" var="project" scrollHeight="200"
@@ -114,11 +114,11 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugVersion" scrollHeight="200"
 					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{JJBug_.versioning}" placeholder="Version :"
+					value="#{JJBug_.versioning}" placeholder="Version"
 					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 					dropdown="true" var="version"
-					itemLabel="#{version != null ? version.name.concat(' : ').concat(version.product.name) : messages.label_select}"										
+					itemLabel="#{version.name.concat(' : ').concat(version.product.name)}"										
 					completeMethod="#{jJBugBean.completeVersioningBug}">
 					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
 						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
@@ -136,7 +136,7 @@
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugBuild" scrollHeight="200" 
 					widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
-					itemLabel="#{build != null ? build.name : messages.label_select}" itemValue="#{build}"
+					itemLabel="#{build.name}" itemValue="#{build}"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
 					dropdown="true" var="build" placeholder="#{messages.label_build}"
 					completeMethod="#{jJBugBean.completeBuildBug}">

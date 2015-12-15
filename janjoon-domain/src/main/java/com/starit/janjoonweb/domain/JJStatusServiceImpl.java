@@ -242,6 +242,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 			tableNames.add(entityType.getName().substring(2));
 		}
 
+		tableNames.add("TaskType");
 		return tableNames;
 	}
 

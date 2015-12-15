@@ -72,7 +72,9 @@ public class JJRightBean {
 	}
 
 	public List<String> getObjects() {
-		return objects = jJRightService.getTablesName();
+		if (objects == null)
+			objects = jJRightService.getTablesName();
+		return objects;
 	}
 
 	public void setObjects(List<String> objects) {

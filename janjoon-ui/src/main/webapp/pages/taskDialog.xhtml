@@ -18,10 +18,11 @@
 	</pe:blockUI>
 	<p:panelGrid id="viewTaskPanelGrid" columns="1"
 		style="height: #{jJTaskBean.height}px ; width: #{jJTaskBean.width}px;">
-		<h:panelGrid columns="6" style="width: 100%">
+		<h:panelGrid columns="8" style="width: 100%">
 			<p:outputLabel value="Sprint :" for="taskSprint" />
 			<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
-				itemLabel="#{sprint != null ? sprint.name : messages.label_select}" itemValue="#{sprint}" scrollHeight="200"
+				itemLabel="#{sprint != null ? sprint.name : messages.label_select}"
+				itemValue="#{sprint}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
 				dropdown="true" var="sprint" binding="#{sprintComponent}"
 				completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
@@ -33,7 +34,8 @@
 			<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
 				for="taskAssignedTo" />
 			<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
-				size="15" itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
+				size="15"
+				itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
 				itemValue="#{assignedTo}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 				dropdown="true" var="assignedTo"
@@ -42,14 +44,24 @@
 
 			<p:outputLabel value="Status :" for="taskStatus" />
 			<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
-				itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}" 
+				itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
 				itemValue="#{status}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 				dropdown="true" var="status" size="15"
 				completeMethod="#{jJTaskBean.completeStatusTask}" />
+				
+				<p:outputLabel value="#{messages.label_requirement} :" for="taskType" />
+			<!-- 			<p:selectBooleanCheckbox id="taskSpec" -->
+			<!-- 				value="#{JJTask_.specification}" /> -->
+			<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
+				itemValue="#{taskType}" scrollHeight="200"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+				dropdown="true" var="taskType"
+				itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+				completeMethod="#{jJTaskBean.completeTaskType}" />
 
 		</h:panelGrid>
-		<h:panelGrid columns="8" style="width: 100%">
+		<h:panelGrid columns="6" style="width: 100%">
 			<p:outputLabel value="#{messages.project_scrum_new_start_label}"
 				for="taskStartDatePlanned" />
 			<p:calendar id="taskStartDatePlanned" style="width:90px"
@@ -87,10 +99,7 @@
 				stepFactor="1" min="1" required="true" size="3"
 				binding="#{workload}">
 				<p:ajax update="taskEndDatePlanned" />
-			</p:spinner>
-			<p:outputLabel value="#{messages.label_requirement} :" for="taskSpec" />
-			<p:selectBooleanCheckbox id="taskSpec"
-				value="#{JJTask_.specification}" />
+			</p:spinner>			
 		</h:panelGrid>
 		<p:panelGrid>
 			<p:row rowspan="5" rendered="#{JJTask_.bug != null}">

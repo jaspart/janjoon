@@ -185,7 +185,7 @@
 							<p:commandButton id="updateTaskButton" update=":viewTaskForm :growlForm"
 								actionListener="#{jJTaskBean.updateTask('planning')}"
 								value="#{messages.label_save}"
-								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskSpec"
+								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType"
 								onstart="PF('viewtaskBlockUIWidget').block()"
 								style="margin-top: 5px;"
 								oncomplete="PF('viewtaskBlockUIWidget').unblock();" />

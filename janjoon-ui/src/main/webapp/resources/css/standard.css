@@ -865,6 +865,54 @@ div.revised2 {
 	border-radius: 0px !important;
 }
 
+/* highlightEvent Timeline */
+div.highLightRevised2 div.timeline-event-content span {
+	font-size: smaller !important;
+	color: #026890;
+}
+
+div.highLightReal div.timeline-event-content span {
+	font-size: smaller !important;
+	color: #026890;
+}
+
+div.highLightReal {
+	border: 1px solid #448dae !important; background : #79c9ec
+	url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+	50% 50% repeat-x !important;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+	height: 17px !important;
+	transform: translate(0px, 18px);
+	border-radius: 0px !important;
+	background: #79c9ec
+		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		50% 50% repeat-x !important;
+}
+
+div.highLightRevised1 {
+	border: 1px solid #448dae !important;
+	background: #79c9ec
+		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		50% 50% repeat-x !important;
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	height: 35px !important;
+	border-radius: 0px !important;
+}
+
+div.highLightRevised2 {
+	border: 1px solid #448dae !important;
+	background: #79c9ec
+		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		50% 50% repeat-x !important;
+	opacity: 0.5;
+	filter: alpha(opacity = 50);
+	height: 17px !important;
+	transform: translate(0px, -3px);
+	border-radius: 0px !important;
+}
+
 /*.task {
 	width:180px !important;
 	height:30,8px !important;

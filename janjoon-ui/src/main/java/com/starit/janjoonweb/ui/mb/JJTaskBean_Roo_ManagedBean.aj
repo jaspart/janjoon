@@ -341,24 +341,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledCreateInputMessage);
         
-        OutputLabel specificationCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        specificationCreateOutput.setFor("specificationCreateInput");
-        specificationCreateOutput.setId("specificationCreateOutput");
-        specificationCreateOutput.setValue("Specification:");
-        htmlPanelGrid.getChildren().add(specificationCreateOutput);
-        
-        SelectBooleanCheckbox specificationCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        specificationCreateInput.setId("specificationCreateInput");
-        specificationCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", Boolean.class));
-        specificationCreateInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(specificationCreateInput);
-        
-        Message specificationCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        specificationCreateInputMessage.setId("specificationCreateInputMessage");
-        specificationCreateInputMessage.setFor("specificationCreateInput");
-        specificationCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(specificationCreateInputMessage);
-        
         OutputLabel startDatePlannedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedCreateOutput.setFor("startDatePlannedCreateInput");
         startDatePlannedCreateOutput.setId("startDatePlannedCreateOutput");
@@ -828,6 +810,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
+        OutputLabel taskTypeCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        taskTypeCreateOutput.setFor("taskTypeCreateInput");
+        taskTypeCreateOutput.setId("taskTypeCreateOutput");
+        taskTypeCreateOutput.setValue("Task Type:");
+        htmlPanelGrid.getChildren().add(taskTypeCreateOutput);
+        
+        AutoComplete taskTypeCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        taskTypeCreateInput.setId("taskTypeCreateInput");
+        taskTypeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.taskType}", JJStatus.class));
+        taskTypeCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeTaskType}", List.class, new Class[] { String.class }));
+        taskTypeCreateInput.setDropdown(true);
+        taskTypeCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "taskType", String.class));
+        taskTypeCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{taskType.name} #{taskType.description} #{taskType.creationDate} #{taskType.updatedDate}", String.class));
+        taskTypeCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{taskType}", JJStatus.class));
+        taskTypeCreateInput.setConverter(new JJStatusConverter());
+        taskTypeCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(taskTypeCreateInput);
+        
+        Message taskTypeCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        taskTypeCreateInputMessage.setId("taskTypeCreateInputMessage");
+        taskTypeCreateInputMessage.setFor("taskTypeCreateInput");
+        taskTypeCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(taskTypeCreateInputMessage);
+        
         OutputLabel messagesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesCreateOutput.setFor("messagesCreateInput");
         messagesCreateOutput.setId("messagesCreateOutput");
@@ -1118,24 +1124,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         enabledEditInputMessage.setFor("enabledEditInput");
         enabledEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(enabledEditInputMessage);
-        
-        OutputLabel specificationEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        specificationEditOutput.setFor("specificationEditInput");
-        specificationEditOutput.setId("specificationEditOutput");
-        specificationEditOutput.setValue("Specification:");
-        htmlPanelGrid.getChildren().add(specificationEditOutput);
-        
-        SelectBooleanCheckbox specificationEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
-        specificationEditInput.setId("specificationEditInput");
-        specificationEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", Boolean.class));
-        specificationEditInput.setRequired(false);
-        htmlPanelGrid.getChildren().add(specificationEditInput);
-        
-        Message specificationEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        specificationEditInputMessage.setId("specificationEditInputMessage");
-        specificationEditInputMessage.setFor("specificationEditInput");
-        specificationEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(specificationEditInputMessage);
         
         OutputLabel startDatePlannedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         startDatePlannedEditOutput.setFor("startDatePlannedEditInput");
@@ -1606,6 +1594,30 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
+        OutputLabel taskTypeEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        taskTypeEditOutput.setFor("taskTypeEditInput");
+        taskTypeEditOutput.setId("taskTypeEditOutput");
+        taskTypeEditOutput.setValue("Task Type:");
+        htmlPanelGrid.getChildren().add(taskTypeEditOutput);
+        
+        AutoComplete taskTypeEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        taskTypeEditInput.setId("taskTypeEditInput");
+        taskTypeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.taskType}", JJStatus.class));
+        taskTypeEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJTaskBean.completeTaskType}", List.class, new Class[] { String.class }));
+        taskTypeEditInput.setDropdown(true);
+        taskTypeEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "taskType", String.class));
+        taskTypeEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{taskType.name} #{taskType.description} #{taskType.creationDate} #{taskType.updatedDate}", String.class));
+        taskTypeEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{taskType}", JJStatus.class));
+        taskTypeEditInput.setConverter(new JJStatusConverter());
+        taskTypeEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(taskTypeEditInput);
+        
+        Message taskTypeEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        taskTypeEditInputMessage.setId("taskTypeEditInputMessage");
+        taskTypeEditInputMessage.setFor("taskTypeEditInput");
+        taskTypeEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(taskTypeEditInputMessage);
+        
         OutputLabel messagesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         messagesEditOutput.setFor("messagesEditInput");
         messagesEditOutput.setId("messagesEditOutput");
@@ -1826,15 +1838,6 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         HtmlOutputText enabledValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         enabledValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.enabled}", String.class));
         htmlPanelGrid.getChildren().add(enabledValue);
-        
-        HtmlOutputText specificationLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specificationLabel.setId("specificationLabel");
-        specificationLabel.setValue("Specification:");
-        htmlPanelGrid.getChildren().add(specificationLabel);
-        
-        HtmlOutputText specificationValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specificationValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.specification}", String.class));
-        htmlPanelGrid.getChildren().add(specificationValue);
         
         HtmlOutputText startDatePlannedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         startDatePlannedLabel.setId("startDatePlannedLabel");
@@ -2065,6 +2068,16 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
         statusValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(statusValue);
         
+        HtmlOutputText taskTypeLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        taskTypeLabel.setId("taskTypeLabel");
+        taskTypeLabel.setValue("Task Type:");
+        htmlPanelGrid.getChildren().add(taskTypeLabel);
+        
+        HtmlOutputText taskTypeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        taskTypeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJTaskBean.JJTask_.taskType}", JJStatus.class));
+        taskTypeValue.setConverter(new JJStatusConverter());
+        htmlPanelGrid.getChildren().add(taskTypeValue);
+        
         HtmlOutputText messagesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         messagesLabel.setId("messagesLabel");
         messagesLabel.setValue("Messages:");
@@ -2253,7 +2266,8 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }
+    } 
+   
     
     public List<JJTask> JJTaskBean.completeParent(String query) {
         List<JJTask> suggestions = new ArrayList<JJTask>();
