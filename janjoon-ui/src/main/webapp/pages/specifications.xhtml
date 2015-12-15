@@ -7,7 +7,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 
 	<ui:define name="content">
 		<style type="text/css">
@@ -17,6 +17,18 @@
 .mineSelect .ui-selectonemenu-trigger {
 	display: none;
 }
+
+/*
+.ui-datatable .ui-datagrid-header, .ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-subtable-header, .ui-datatable .ui-datatable-summaryrow {
+    color: #171111;
+    background-color: #B5CEDD;
+    border-radius: 0px !important;
+    font-size: 17px;
+    padding: 0px 10px !important;
+    font-weight: normal;
+    font-family: "roboto_condensedlight";
+}
+*/
 
 /* .ui-accordion .ui-accordion-header { */
 /* 	background: #E6E6E6; */
@@ -88,11 +100,11 @@
 
 
 			<p:commandButton title="#{messages.specification_video_help_title}"
-				style="float: right;" id="videoHelpBtn" icon="ui-icon-video"
+				style="float: right;" id="videoHelpBtn" icon="fa fa-youtube-play Fs20"
 				onclick="PF('videoHelpWidget').show()" type="button"
 				styleClass="BlueTextButton GrayButton" />
 
-			<p:commandButton icon="ui-icon-arrowthick-1-sw" style="float: right;"
+			<p:commandButton icon="fa  fa-cloud-download" style="float: right;"
 				disabled="#{jJRequirementBean.disabledExport}"
 				actionListener="#{jJRequirementBean.loadImportFormat()}"
 				update=":requirementImportDialog" resetValues="true"
@@ -101,20 +113,23 @@
 				title="#{messages.specification_import_button}"
 				styleClass="BlueTextButton GrayButton" />
 
-			<p:commandButton icon="ui-icon-arrowthick-1-n" style="float: right;"
+			<p:commandButton icon="fa fa-arrow-circle-o-up" style="float: right;"
 				disabled="#{jJProjectBean.project == null}" update=":importXMLForm"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()"
-				title="#{messages.specification_import_button} XML" />
+				title="#{messages.specification_import_button} XML" 
+				styleClass="BlueTextButton GrayButton" />
 
-			<p:commandButton id="reloadBtn" icon="ui-icon-refresh"
+			<p:commandButton id="reloadBtn" icon="fa fa-refresh"
 				onstart="PF('blockUIWidget').block()" style="float: right;"
 				actionListener="#{jJRequirementBean.reloadPage}"
-				title="#{messages.label_refresh}" />
+				title="#{messages.label_refresh}" 
+				styleClass="BlueTextButton GrayButton" />
 
-			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
+			<p:commandButton id="colorBtn" icon="fa fa-info-circle" type="button"
 				style="float: right;"
-				title="#{messages.specification_video_help_title}" />
+				title="#{messages.specification_video_help_title}" 
+				styleClass="BlueTextButton GrayButton" />
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 				dynamic="true" style="width:600px">
 				<p:panelGrid>
@@ -153,8 +168,11 @@
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<p:panelGrid
-					style="min-width:200px;margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};#{jJRequirementBean.getDisplay(tableDataModel)}
-							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
+					style="min-width:200px;margin-top: 10px;width: 
+						#{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};
+						#{jJRequirementBean.getDisplay(tableDataModel)}
+						float: #{jJRequirementBean.tableDataModelFloatLeft};
+						#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:row>
 						<p:column rendered="#{tableDataModel.expanded}"
 							style="width: 34%;">
@@ -184,7 +202,7 @@
 									<p:dataTable id="categoryTable_#{loop.index}" var="reqUtil"
 										value="#{tableDataModel}" scrollable="true" scrollHeight="300"
 										sortMode="multiple" resizableColumns="true"
-										styleClass="requirement-table"
+										styleClass="requirement-table BlueTextButton GrayButton"
 										filteredValue="#{tableDataModel.filtredRequirements}"
 										rowKey="#{reqUtil.requirement.id}" editable="true"
 										editMode="cell" rendered="#{tableDataModel.rendered}"
@@ -199,7 +217,7 @@
 
 										<f:facet name="header">
 											<h:outputText value="#{tableDataModel.nameDataModel}" />
-											<p:commandButton icon="ui-icon-arrowthick-2-e-w"
+											<p:commandButton icon="ui-icon-arrowthick-2-e-w fa fa-arrows-h Fs15"
 												style="float:left;" onstart="PF('blockUIWidget').block()"
 												oncomplete="PF('blockUIWidget').unblock()"
 												actionListener="#{jJRequirementBean.expandTable(tableDataModel)}"
@@ -210,7 +228,7 @@
 													<p:row>
 														<p:column colspan="1">
 															<p:commandButton id="manageChapterButton"
-																icon="ui-icon-document"
+																icon="fa  fa-indent Fs20"
 																title="#{jJChapterBean.warnMessage}"
 																update=":chapterDialogPanel" resetValues="true"
 																disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null}"
@@ -222,7 +240,7 @@
 															<p:commandButton ajax="false" id="xml"
 																title="Export To XML"
 																onclick="PrimeFaces.monitorDownload(start, stop);"
-																icon="ui-icon-arrowthick-1-s">
+																icon="ui-icon-circle-arrow-s fa fa-arrow-down Fs20">
 																<p:fileDownload value="#{tableDataModel.file}" />
 															</p:commandButton>
 															<!-- 													<p:tooltip for="xml" value="Export To XML" -->
@@ -231,7 +249,7 @@
 
 														<p:column colspan="1">
 															<p:commandButton id="newRequirementButton"
-																icon="ui-icon-plusthick" resetValues="true"
+																icon="ui-icon-plusthick fa   fa-plus Fs20" resetValues="true"
 																title="#{loginBean.authorisationService.wRequiementMSG}"
 																disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement}"
 																actionListener="#{jJRequirementBean.newRequirement(tableDataModel.categoryId)}"
@@ -246,7 +264,7 @@
 																disabled="#{jJRequirementBean.disabledExport}"
 																actionListener="#{jJChapterBean.updateCategoryId(tableDataModel.categoryId)}"
 																onclick="PrimeFaces.monitorDownload(start, stop);"
-																icon="ui-icon-pdf fa fa-file-pdf-o Fs15">
+																icon="ui-icon-pdf fa fa-file-pdf-o Fs20">
 																<p:fileDownload value="#{jJChapterBean.preProcessPDF}" />
 															</p:commandButton>
 

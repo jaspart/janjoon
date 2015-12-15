@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<ui:composition 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    
+    <div id="layout-topbar">
+    	<div id="logo" class="Fleft">
+        	<!--a href="#"-->
+        		<h:link outcome="main">
+				<p:graphicImage library="images" name="janjoon_logo.png"
+					rendered="#{loginBean.contact.company.logo == null}"
+					styleClass="banner" alt="JanJoon Home" style="float: left;" />
+
+				<p:graphicImage style="width:75px; height:75px;float: left;"
+					styleClass="banner" value="#{imageStreamer.image}"
+					alt="JanJoon Home"
+					rendered="#{loginBean.contact.company.logo != null}">
+					<f:param name="contactId" value="#{loginBean.contact.id}" />
+					<f:param name="company" value="true" />
+				</p:graphicImage>
+			</h:link>
+		<!--h:graphicImage name="images/logo.svg" styleClass="Fleft" library="rio-layout" /></a-->
+            <a id="mobile-menu-button" class="Fright ShowOnMobile ripplelink Unselectable ShadowEffect"><i class="icon-add186"></i></a>
+        </div>
+        
+        <a class="ripplelink WhiteBlue Fright ShowOnMobile" id="show-top-menu"><i class="icon-show8"></i></a>
+        
+        <ul id="top-menu" class="ShowOnDesktop">
+            <li>
+			<p:splitButton
+				value="#{loginBean.contact.firstname} #{loginBean.contact.name}"
+				rendered="#{loginBean.enable}" style="right: 0px;">
+				<p:menuitem value="#{messages.header_config_link}"
+					icon="ui-icon-person"
+					url="/pages/contactConfig.jsf?faces-redirect=true" />
+				<p:menuitem value="#{messages.header_logout_link}"
+					url="logout.jsf" actionListener="#{loginBean.logout}"
+					icon="ui-icon-extlink" />
+			</p:splitButton>
+            </li>
+
+            <li>
+			<p:commandButton id="communicationButton" icon="ui-icon-comment"
+				value="#{loginBean.messageCount}"
+				oncomplete="PF('communicationPanel').show();"
+				title="#{message.header_communication_label}"
+				rendered="#{loginBean.enable}" />
+            </li>
+
+            <li>
+                <a class="ripplelink"><i class="icon-search100"></i> <span class="Txt">Search</span></a>
+                <ul>
+                    <li><input type="text" placeholder="Search"/></li>
+                </ul>
+            </li>
+            <li>
+                <a class="ripplelink"><i class="icon-set6"></i> <span class="Txt">Tasks</span></a>
+                <ul>
+                    <li><a href="#">23 New Tasks</a></li>
+                </ul>
+            </li>
+            <li>
+                <a class="ripplelink"><i class="icon-notifications1"></i> <span class="Txt">Alerts</span></a>
+                <ul>
+                    <li><a href="#">18 Alerts</a></li>
+                </ul>
+            </li>
+            <li><a href="#" class="ripplelink"><i class="icon-wifi83"></i> <span class="Txt">System Settings</span></a></li>
+        </ul>
+    </div>
+    
+</ui:composition>

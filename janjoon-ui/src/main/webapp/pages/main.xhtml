@@ -4,7 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 		<p:panel id="dataPanel" rendered="#{loginBean.enable}"
 			header="#{messages.main_communication_title}"
@@ -22,14 +22,14 @@
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notFound}"
 					rowClasses="order-table-odd-row,order-table-even-row">
-					<!--f:facet name="header">
+					<f:facet name="header">
 						<p:outputPanel>
 							<h:outputText value="#{messages.main_communication_search_label}" />
 							<p:inputText id="globalFilter"
 								onkeyup="PF('messageTable').filter()" style="width:200px"
 								placeholder="#{messages.main_communication_search_watermark}" />
 						</p:outputPanel>
-					</f:facet-->
+					</f:facet>
 					<p:column style="width: 70px !important;text-align: center;">
 						<f:facet name="header">
 							<p:commandButton id="createButton" icon="ui-icon-plusthick"
@@ -177,8 +177,9 @@
 						<p:commandButton id="deleteYesButton"
 							value="#{messages.label_yes}"
 							action="#{jJMessageBean.resolveJJMessage}"
-							update=":messageForm :growlForm :headerForm:communicationButton"
+							update=":messageForm :growlForm "
 							oncomplete="PF('resolveDialogWidget').hide()" />
+                            <!--:headerForm:communicationButton-->
 						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 							onclick="PF('resolveDialogWidget').hide()" type="button" />
 					</h:form>

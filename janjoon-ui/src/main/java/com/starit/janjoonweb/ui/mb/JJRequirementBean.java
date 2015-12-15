@@ -2356,19 +2356,15 @@ public class JJRequirementBean {
 			}
 		});
 		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
-
 			for (int i = 0; i < 3; i++) {
 				CategoryDataModel requirementDataModel = new CategoryDataModel(
 						new ArrayList<RequirementUtil>(), 0, "", false);
 				tableDataModelList.add(requirementDataModel);
 			}
-
 			for (JJCategory cat : categories) {
 				updateTemplate(cat.getId(), null, true, true);
 			}
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		} else {
-
 			for (int i = 0; i < 3; i++) {
 				CategoryDataModel requirementDataModel = new CategoryDataModel(
 						new ArrayList<RequirementUtil>(), 0, "", false);
@@ -2381,10 +2377,8 @@ public class JJRequirementBean {
 			updateTemplate(((LoginBean) LoginBean.findBean("loginBean"))
 					.getAuthorisationService().getCategory().getId(), null,
 					true, true);
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
-
 		}
-
+		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void editOneColumn(JJCategory category) {

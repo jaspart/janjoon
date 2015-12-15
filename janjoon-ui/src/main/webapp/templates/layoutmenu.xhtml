@@ -1,0 +1,185 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pr="http://primefaces.org/rio">
+
+	<title>#{messages.label_appName}</title>
+	<h:outputStylesheet library="css" name="standard.css" />
+	<h:outputScript library="js" name="calendar.js" />
+    <h:outputScript library="js" name="ckEditor.js" />
+	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
+
+	<h:form id="headerForm">
+		<!--p:remoteCommand name="updateCommunicationButton"
+			update=":messageCreationForm communicationButton" />
+		<h:panelGrid id="panelHeader" columns="#{loginBean.columns}"
+			cellpadding="2" style="background-color:white;width:100%;"-->
+
+
+
+			<div class="Animated05" id="layout-menu-cover">
+				<!--div id="panelMenu"-->
+				<div style="height:100px"></div>
+				<p:selectOneMenu id="projectSelectOneMenu"
+					value="#{jJProjectBean.project}" panelStyle="width:120px"
+					effect="fade" style="width:160px" filter="true"
+					valueChangeListener="#{loginBean.changeEvent}"
+					filterMatchMode="startsWith"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+					<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
+					<f:selectItems value="#{jJProjectBean.projectList}" var="p"
+						itemLabel="#{p.name}" itemValue="#{p}" />
+					<p:ajax onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":contentPanel tabMenu :scrollRight communicationButton :growlForm" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu id="productSelectOneMenu"
+					value="#{jJProductBean.product}" panelStyle="width:120px"
+					effect="fade" style="width:160px" filter="true"
+					valueChangeListener="#{loginBean.changeEvent}"
+					filterMatchMode="startsWith"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+					<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
+					<f:selectItems value="#{jJProductBean.productList}" var="p"
+						itemLabel="#{p.name}" itemValue="#{p}" />
+					<p:ajax onstart="PF('blockUIWidget').block()"
+						update="versionSelectOneMenu :contentPanel tabMenu :scrollRight communicationButton :growlForm"
+						oncomplete="PF('blockUIWidget').unblock()" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu id="versionSelectOneMenu"
+					value="#{jJVersionBean.version}" panelStyle="width:120px"
+					effect="fade" style="width:160px" filter="true"
+					valueChangeListener="#{loginBean.changeEvent}"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
+					filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
+
+					<f:selectItem itemValue="#{null}" itemLabel="AnyVersion" />
+
+					<f:selectItems value="#{jJVersionBean.versionList}" var="v"
+						itemLabel="#{v.name}" itemValue="#{v}" />
+
+					<p:ajax onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						update=":contentPanel :growlForm" />
+				</p:selectOneMenu>
+
+				<div class="Separator"></div>
+				
+				<pr:menu id="tabMenu" name="content" style="float: none;"
+					activeIndex="#{loginBean.menuIndex}"
+					rendered="#{loginBean.enable and !loginBean.mobile}">
+
+					<p:menuitem value="Home" icon="icon-planet29"
+						rendered="#{!loginBean.mobile}"
+						url="/pages/main.jsf?faces-redirect=true"/>
+
+					<p:menuitem value="#{messages.header_project_menuitem}"
+						url="/pages/planning.jsf?faces-redirect=true" style="min-width: 80px;"
+						icon="icon-calendar" update=":contentPanel"
+						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem id="proAction"
+						value="#{messages.header_project_menuitem}"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{loginBean.authorisationService.rProjectMSG}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="icon-calendar" style="min-width: 80px;"
+						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_spec_menuitem}"
+						disabled="#{!loginBean.authorisationService.rRequiement}"
+						title="#{loginBean.authorisationService.rRequiementMSG}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="icon-list"
+						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_spec_menuitem}"
+						url="/pages/specifications.jsf?faces-redirect=true"
+						icon="icon-list"
+						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_bug_menuitem}"
+						rendered="#{!loginBean.mobile}"
+						disabled="#{!loginBean.authorisationService.rBug}"
+						title="#{loginBean.authorisationService.rBugMSG}"
+						url="/pages/bugs.jsf?faces-redirect=true" icon="icon-bug18" />
+
+					<p:menuitem value="#{messages.header_dev_menuitem}"
+						url="/pages/development.jsf?faces-redirect=true"
+						icon="icon-developer2"
+						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						disabled="#{!loginBean.authorisationService.rwDev}"
+						title="#{loginBean.authorisationService.rwDevMSG}"
+						actionListener="#{loginBean.redirectToDev}" update=":growlForm"
+						icon="icon-developer2"
+						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_test_menuitem}"
+						url="/pages/test.jsf?faces-redirect=true" icon="icon-check51"
+						update=":contentPanel"
+						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem id="testAction"
+						disabled="#{!loginBean.authorisationService.rTest}"
+						title="#{loginBean.authorisationService.rTestMSG}"
+						value="#{messages.header_test_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="icon-clipboard"
+						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_delivery_menuitem}"
+						disabled="#{!loginBean.authorisationService.rBuild}"
+						title="#{loginBean.authorisationService.rBuildMSG}"
+						url="/pages/delivery.jsf?faces-redirect=true" icon="icon-inbox-alt" />
+
+					<p:menuitem value="#{messages.header_delivery_menuitem}"
+						rendered="#{!loginBean.enable and !loginBean.mobile}"
+						url="/pages/delivery.jsf?faces-redirect=true" icon="icon-inbox-alt" />
+
+					<p:menuitem value="#{messages.header_team_menuitem}"
+						disabled="#{!loginBean.authorisationService.rContact}"
+						title="#{loginBean.authorisationService.rContactMSG}"
+						rendered="false" url="/pages/teams.jsf?faces-redirect=true"
+						icon="icon-person" />
+
+					<p:menuitem value="#{messages.header_stat_menuitem}"
+						url="/pages/stats.jsf?faces-redirect=true"
+						icon="icon-arrowreturnthick-1-n"
+						rendered="#{!loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem id="statsAction"
+						disabled="#{!loginBean.authorisationService.rProject}"
+						title="#{loginBean.authorisationService.rProjectMSG}"
+						value="#{messages.header_stat_menuitem}"
+						onstart="PF('blockUIWidget').block()"
+						actionListener="#{loginBean.redirection}" update=":growlForm"
+						icon="icon-calculator"
+						rendered="#{loginBean.enable and !loginBean.mobile}" />
+
+					<p:menuitem value="#{messages.header_admin_menuitem}"
+						rendered="#{loginBean.authorisationService.renderAdmin}"
+						url="/pages/administration.jsf?faces-redirect=true"
+						icon="icon-https" update=":contentPanel" />
+
+				</pr:menu>
+				<p:commandButton value="&#9776;" id="pnl-basic"
+					oncomplete="PF('headerPanel').show();"
+					style="font-weight: bold;font-size: x-large;"
+					rendered="#{loginBean.mobile}" />
+				<!--/div-->
+			</div>
+		<!--/h:panelGrid-->
+	</h:form>
+</ui:composition>

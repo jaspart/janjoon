@@ -1,9 +1,9 @@
-body,div,td {
+/*body,div,td {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	word-wrap: break-word;
 	vertical-align: top;
-}
+}*/
 
 body {
 	background-color: #fff;
@@ -262,6 +262,11 @@ a:visited {
 	margin-bottom: 5px;
 }
 
+#logo img {
+	height: 50px;
+	width: 157px;
+}
+
 .preformatted {
 	white-space: pre-wrap;
 	font-size: 90%;
@@ -269,8 +274,7 @@ a:visited {
 }
 
 .login-body {
-	background: url('../resources/images/background.jpg') no-repeat bottom
-		center fixed transparent;
+	background: url('../resources/images/background.jpg') no-repeat bottom center fixed transparent;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -441,6 +445,8 @@ a:visited {
 
 .ui-datatable-header {
 	text-align: right !important;
+	background-color: #EFF3F5;
+	color: #26A69A;
 }
 
 .cleanMenu .ui-tabmenu .ui-tabmenu-nav.ui-widget-header {

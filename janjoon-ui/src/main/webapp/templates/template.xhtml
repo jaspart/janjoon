@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
+<f:view locale="#{localeBean.locale}" contentType="text/html">
+    <h:head>
+<!-- InsertJanjoon -->
+	    <h:outputStylesheet library="css" name="standard.css" />
+	    <h:outputScript library="js" name="calendar.js" />
+		<link rel="shortcut icon" type="image/png"
+			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<script type="text/javascript">
+			function updateRowExapansion() {
+				$(".rowExpansion").slideUp("fast");
+			}
+
+			function copyName(copiedText) {
+
+				var copyDiv = document.createElement('div');
+				copyDiv.contentEditable = true;
+				document.body.appendChild(copyDiv);
+				copyDiv.innerHTML = copiedText;
+				copyDiv.unselectable = "off";
+				copyDiv.focus();
+				document.execCommand('SelectAll');
+				document.execCommand("Copy", false, null);
+				document.body.removeChild(copyDiv);
+				//alert(copiedText+" Copied");
+			}
+		</script>
+<!-- Fin InsertJanjoon -->
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces Rio</title>
+        
+        <h:outputScript name="js/ripple-effect.js" library="rio-layout" />
+        <h:outputScript name="js/perfect-scrollbar.js" library="rio-layout" />
+        <h:outputScript name="js/layout.js" library="rio-layout" />
+
+        <ui:insert name="head" />
+    </h:head>
+
+    <h:body>
+        
+        <ui:include src="topbar.xhtml" />
+        
+        <div id="wrapper">
+            <div id="wrapperIndent">
+
+                <ui:include src="layoutmenu.xhtml" />
+
+                <div id="layout-portlets-cover">
+                    
+                    <h:panelGrid id="applicatinPanelGrid" columns="3" styleClass="wrapper">
+
+			            <p:panel styleClass="content">
+				            <p:dialog widgetVar="communicationPanel" id="communicationPanel"
+					            styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
+					            closable="true" style="width:400px" rendered="#{loginBean.enable}">
+					            <f:event listener="#{jJMessageBean.initJJMessageLayout}"
+						            type="preRenderView" />
+					            <h:form id="messageCreationForm">
+						            <p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+							            rowKey="#{mes.id}" var="mes" paginator="true"
+							            paginatorPosition="bottom" rendered="#{loginBean.enable}"
+							            rowStyleClass="#{mes.criticity.name}" style="border-spacing:0px;"
+							            selectionMode="single" rows="10" lazy="true"
+							            sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+							            <p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+								            listener="#{jJMessageBean.onRowSelect}" immediate="true"
+								            oncomplete="PF('viewDialogWidget1').show()" />
+
+							            <p:column headerText="Messages" sortBy="#{mes.creationDate}">
+								            <h:outputText id="viewButton" value="#{mes.message}" />
+								            <p:tooltip for="viewButton"
+									            value="#{messages.label_view} #{mes.name}" showEffect="fade"
+									            hideEffect="fade" />
+							            </p:column>
+
+							            <f:facet name="footer">
+								            <h:panelGrid columns="1" border="0">
+									            <p:outputLabel for="messagedsc" value="Message :" />
+									            <p:inputTextarea id="messagedsc" cols="20" rows="6"
+										            value="#{jJMessageBean.message.message}" required="true" />
+									            <h:panelGrid columns="2" border="0" style="border:hidden;">
+										            <p:selectBooleanButton id="alert"
+											            value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+											            offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+										            </p:selectBooleanButton>
+										            <p:commandButton id="submitMes" value="OK"
+											            process="@this,alert,messagedsc"
+											            actionListener="#{jJMessageBean.createMessage(false,null)}"
+											            update=":messageCreationForm :headerForm:communicationButton :growlForm" />
+									            </h:panelGrid>
+								            </h:panelGrid>
+
+							            </f:facet>
+						            </p:dataTable>
+					            </h:form>
+				            </p:dialog>
+
+				            <p:dialog widgetVar="headerPanel" id="headerPanel"
+					            styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
+					            closable="true">
+					            <h:form>
+						            <p:menu>
+							            <p:menuitem value="" icon="ui-icon-home"
+								            url="/pages/main.jsf?faces-redirect=true" />
+
+							            <p:menuitem value="#{messages.header_project_menuitem}"
+								            url="/pages/planning.jsf?faces-redirect=true"
+								            icon="ui-icon-clipboard" update=":contentPanel"
+								            rendered="#{!loginBean.enable}" style="min-width: 80px;" />
+
+							            <p:menuitem id="proAction" style="min-width: 80px;"
+								            value="#{messages.header_project_menuitem}"
+								            disabled="#{!loginBean.authorisationService.rProject}"
+								            title="#{loginBean.authorisationService.rProjectMSG}"
+								            onstart="PF('blockUIWidget').block()"
+								            actionListener="#{loginBean.redirection}" update=":growlForm"
+								            icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_spec_menuitem}"
+								            disabled="#{!loginBean.authorisationService.rRequiement}"
+								            title="#{loginBean.authorisationService.rRequiementMSG}"
+								            url="/pages/specifications.jsf?faces-redirect=true"
+								            icon="ui-icon-document" rendered="#{loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_spec_menuitem}"
+								            url="/pages/specifications.jsf?faces-redirect=true"
+								            icon="ui-icon-document" rendered="#{!loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_bug_menuitem}"
+								            disabled="#{!loginBean.authorisationService.rBug}"
+								            title="#{loginBean.authorisationService.rBugMSG}"
+								            url="/pages/bugs.jsf?faces-redirect=true" icon="ui-icon-gear" />
+
+							            <p:menuitem value="#{messages.header_dev_menuitem}"
+								            url="/pages/development.jsf?faces-redirect=true"
+								            icon="ui-icon-wrench" rendered="#{!loginBean.enable}" />
+
+							            <p:menuitem id="devAction"
+								            value="#{messages.header_dev_menuitem}"
+								            onstart="PF('blockUIWidget').block()"
+								            disabled="#{!loginBean.authorisationService.rwDev}"
+								            title="#{loginBean.authorisationService.rwDevMSG}"
+								            actionListener="#{loginBean.redirectToDev}" update=":growlForm"
+								            icon="ui-icon-wrench" rendered="#{loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_test_menuitem}"
+								            url="/pages/test.jsf?faces-redirect=true" icon="ui-icon-check"
+								            update=":contentPanel" rendered="#{!loginBean.enable}" />
+
+							            <p:menuitem id="testAction"
+								            disabled="#{!loginBean.authorisationService.rTest}"
+								            title="#{loginBean.authorisationService.rTestMSG}"
+								            value="#{messages.header_test_menuitem}"
+								            onstart="PF('blockUIWidget').block()"
+								            actionListener="#{loginBean.redirection}" update=":growlForm"
+								            icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_delivery_menuitem}"
+								            disabled="#{!loginBean.authorisationService.rBuild}"
+								            title="#{loginBean.authorisationService.rBuildMSG}"
+								            rendered="#{loginBean.enable}"
+								            url="/pages/delivery.jsf?faces-redirect=true"
+								            icon="ui-icon-star" />
+
+							            <p:menuitem value="#{messages.header_delivery_menuitem}"
+								            rendered="#{!loginBean.enable}"
+								            url="/pages/delivery.jsf?faces-redirect=true"
+								            icon="ui-icon-star" />
+
+							            <p:menuitem value="#{messages.header_team_menuitem}"
+								            disabled="#{!loginBean.authorisationService.rContact}"
+								            title="#{loginBean.authorisationService.rContactMSG}"
+								            url="/pages/teams.jsf?faces-redirect=true" icon="ui-icon-person" />
+
+							            <p:menuitem value="#{messages.header_stat_menuitem}"
+								            url="/pages/stats.jsf?faces-redirect=true"
+								            icon="ui-icon-arrowreturnthick-1-n"
+								            rendered="#{!loginBean.enable}" />
+
+							            <p:menuitem id="statsAction"
+								            disabled="#{!loginBean.authorisationService.rProject}"
+								            title="#{messages.header_stat_menuitem}"
+								            value="#{messages.header_stat_menuitem}"
+								            onstart="PF('blockUIWidget').block()"
+								            actionListener="#{loginBean.redirection}" update=":growlForm"
+								            icon="ui-icon-clipboard" rendered="#{loginBean.enable}" />
+
+							            <p:menuitem value="#{messages.header_admin_menuitem}"
+								            rendered="#{loginBean.authorisationService.renderAdmin}"
+								            url="/pages/administration.jsf?faces-redirect=true"
+								            icon="ui-icon-key" update=":contentPanel" />
+						            </p:menu>
+					            </h:form>
+				            </p:dialog>
+				            <p:dialog id="viewDialog1" header="#{messages.label_view} Message"
+					            modal="true" widgetVar="viewDialogWidget1" dynamic="true"
+					            resizable="true" maximizable="true" showEffect="fade"
+					            hideEffect="fade">
+					            <p:outputPanel id="viewPanel1">
+						            <h:form id="viewForm1">
+							            <ui:include src="/pages/messageDialog.xhtml">
+								            <ui:param name="JJMessage"
+									            value="#{jJMessageBean.viewedMessage}" />
+							            </ui:include>
+							            <p:commandButton id="viewCloseButton1"
+								            value="#{messages.label_close}" style="margin-top: 10px;"
+								            onclick="PF('viewDialogWidget1').hide()" type="button" />
+						            </h:form>
+					            </p:outputPanel>
+				            </p:dialog>
+
+				            <ui:insert name="header">
+					            <ui:include src="header.xhtml" />
+				            </ui:insert>
+
+				            <p:imageSwitch id="scrollRight" effect="scrollRight"
+					            style="width:100%;height:25px;" speed="10000" slideshowSpeed="250"
+					            rendered="#{loginBean.showMarquee == 'true'}">
+					            <ui:repeat var="data" value="#{jJMessageBean.alertMessages}">
+						            <p:outputPanel style="width:100px;">
+							            <h:outputText style="color:red;" value="Alert: #{data.name}" />
+						            </p:outputPanel>
+					            </ui:repeat>
+				            </p:imageSwitch>
+
+				            <h:form id="growlForm">
+					            <p:panel styleClass="panelDialog">
+						            <f:facet name="header">
+							            <f:event listener="#{loginBean.updateGrowl}"
+								            type="preRenderComponent" />
+							            <p:remoteCommand name="updateGrowl" />
+							            <p:messages id="auth" showDetail="false" closable="true" />
+						            </f:facet>
+					            </p:panel>
+				            </h:form>
+
+				            <p:panel id="contentPanel" styleClass="content">
+					            <f:event listener="#{loginBean.initMenuIndexvalue}"
+						            type="preRenderView" />
+					            <ui:insert name="content" />
+				            </p:panel>
+				            <ui:insert name="footer">
+					            <ui:include src="footer.xhtml" />
+				            </ui:insert>
+			            </p:panel>
+
+			            <pe:blockUI widgetVar="blockUIWidget">
+				            <h:panelGrid columns="2">
+					            <p:graphicImage library="images" name="ajax-loader.gif"
+						            style="vertical-align: middle;" />
+					            <h:outputText value="#{messages.label_refresh}"
+						            style="white-space: nowrap;" />
+				            </h:panelGrid>
+			            </pe:blockUI>
+
+		            </h:panelGrid>
+                    
+                    <div class="Container100">
+                        <div class="ContainerIndent Fs12 BoldGray FontRobotoRegular">
+                            <div class="EmptyBox10"></div>
+                            <i class="icon-mountains14 Fs16 Fleft"></i> PrimeFaces Rio Theme And Layout  |  All rights reserved.
+                            <div class="EmptyBox10"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+                    <f:facet name="start">
+                        <p:graphicImage name="images/preloader.gif" library="rio-layout"/>
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+            </div>
+        </div>
+
+
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+
+			jQuery("div.ui-growl").remove();
+		</script>
+
+        <h:outputStylesheet name="css/core-layout.css" library="rio-layout" />
+        <h:outputStylesheet name="css/animate.css" library="rio-layout" />
+        <h:outputStylesheet name="css/rio-font.css" library="rio-layout" />
+        <h:outputStylesheet name="css/ripple-effect.css" library="rio-layout" />
+        <h:outputStylesheet name="css/perfect-scrollbar.css" library="rio-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="rio-layout" />
+        <h:outputStylesheet name="css/rio-layout.css" library="rio-layout" />
+    </h:body>
+</f:view>
+</html>
