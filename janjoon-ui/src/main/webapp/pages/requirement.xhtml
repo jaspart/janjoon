@@ -94,26 +94,26 @@
 							</p:row>
 						</f:facet>
 						<p:row>
-							<p:column colspan="2" styleClass="UnLinked">
+							<div styleClass="UnLinked Wid20">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementNotLinked_label}" />
-							</p:column>
-							<p:column colspan="2" styleClass="Specified">
+							</div>
+							<div styleClass="Specified Wid20">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementNoTask_label}" />
-							</p:column>
-							<p:column colspan="2" styleClass="Progress">
+							</div>
+							<div styleClass="Progress Wid20">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementInProcess_label}" />
-							</p:column>
-							<p:column colspan="2" styleClass="InTesting">
+							</div>
+							<div styleClass="InTesting Wid20">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
-							</p:column>
-							<p:column colspan="2" styleClass="Finished">
+							</div>
+							<div styleClass="Finished Wid20">
 								<p:outputLabel
 									value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
-							</p:column>
+							</div>
 						</p:row>
 					</p:panelGrid>
 				</p:overlayPanel>
@@ -292,16 +292,16 @@
 									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
 									itemType="none" paginator="true" rows="5"
 									emptyMessage="#{messages.label_notRecordFound}"
-									styleClass="paginated">
+									styleClass="paginated GrayBack Blue ">
 									<f:facet name="header">
-           				 #{categorieRequirement.category.name}
-       				 </f:facet>
-									<p:commandLink value="#{req.id}-#{fn:substring(req.name,0,25)}"
+										#{categorieRequirement.category.name}
+									</f:facet>
+									<p:commandLink value="[#{req.id}]-#{fn:substring(req.name,0,25)}"
 										action="#{jJRequirementBean.requirementInfo}" ajax="false">
 										<f:setPropertyActionListener value="#{req}"
 											target="#{jJRequirementBean.requirement}" />
 									</p:commandLink>
-									<!-- 							<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
+									<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
 									<f:facet name="footer">
 										<p:commandButton id="createButton" style="width: 100%;"
 											icon="ui-icon-circle-plus" resetValues="true"
@@ -411,21 +411,22 @@
 				<ui:param name="cols" value="170" />
 			</ui:include>
 		</p:fieldset>
-
-
+		
 		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center" style="padding:0px;">
-			<p:ajax event="close"
-				listener="#{jJRequirementBean.closeDialog(false,false)}"
-				onstart="PF('requirementBlockUIWidget').block()"
-				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
-			<p:outputPanel id="requirementDialogPanel">
-				<ui:include src="requirementDialog.xhtml" />
-			</p:outputPanel>
+			position="center" style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
+			<p:scrollPanel rendered="#{jJRequirementBean.requirement != null}" styleClass="Container100 Responsive">
+				<p:ajax event="close"
+					listener="#{jJRequirementBean.closeDialog(false,false)}"
+					onstart="PF('requirementBlockUIWidget').block()"
+					oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
+				<p:outputPanel id="requirementDialogPanel">
+					<ui:include src="requirementDialog.xhtml" />
+				</p:outputPanel>
+			</p:scrollPanel>
 		</p:dialog>
-
+		
 		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
 			header="#{messages.requirement_dialog_linkHeader}" modal="true"
 			widgetVar="linkDialogWidget" dynamic="true" resizable="false">

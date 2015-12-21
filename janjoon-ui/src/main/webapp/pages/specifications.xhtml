@@ -49,14 +49,9 @@
 							update="@form" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 					</p:selectBooleanButton>
-					<br />
-					<br />
-					<br />
 				</c:forEach>
 			</p:overlayPanel>
-			<h:panelGrid styleClass="ShowOnDesktop"
-				style="width: 60%;margin-left: 20%;"
-				columns="#{fn:length(jJRequirementBean.categoryList)}">
+			<div styleClass="ShowOnDesktop">
 				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 					<p:selectBooleanButton value="#{category.checked}"
 						id="category_#{category.category.id}"
@@ -71,13 +66,11 @@
 							oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 					</p:selectBooleanButton>
 				</c:forEach>
-			</h:panelGrid>
-			<br />
-			<br />
-			<h:panelGrid columns="6" style="width: 80%;margin-left: 10%;">
+			</div>
+			<div styleClass="ShowOnMobile">
 				<p:inputText id="globalFilter"
 					placeholder="#{messages.specification_table_requirement_filter}"
-					value="#{jJRequirementBean.filterValue}" style="width: 60%;">
+					value="#{jJRequirementBean.filterValue}" style="width: 100px;">
 					<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"
 						onstart="PF('blockUIWidget').block()"
 						oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
@@ -129,25 +122,26 @@
 					disabled="#{jJRequirementBean.disabledExport}"
 					actionListener="#{jJRequirementBean.loadImportFormat()}"
 					update=":requirementImportDialog" resetValues="true"
-					onstart="PF('blockUIWidget').block()"
+					onstart="PF('blockUIWidget').block()" style="float: right;"
 					oncomplete="PF('blockUIWidget').unblock();PF('requirementImportDialogWidget').show()"
 					title="#{messages.specification_import_button}" />
 
 				<p:commandButton icon="fa  fa-arrow-up Gray Fs20"
 					disabled="#{jJProjectBean.project == null}" update=":importXMLForm"
-					onstart="PF('blockUIWidget').block()"
+					onstart="PF('blockUIWidget').block()" style="float: right;"
 					rendered="#{loginBean.authorisationService.wRequiement}"
 					oncomplete="PF('blockUIWidget').unblock();PF('requirementImportXMLDialogWidget').show()"
 					title="#{messages.specification_importxml_button}" />
 
 				<p:commandButton id="reloadBtn" icon="fa fa-refresh Gray Fs20"
-					onstart="PF('blockUIWidget').block()"
+					onstart="PF('blockUIWidget').block()" style="float: right;"
 					actionListener="#{jJRequirementBean.reloadPage}"
 					title="#{messages.label_refresh}" update="globalFilter" />
-				<p:commandButton id="colorBtn" icon="fa fa-info-circle  Gray Fs20"
+					
+				<p:commandButton id="colorBtn" icon="fa fa-info-circle Gray Fs20"
 					styleClass="Fright BlueButton" type="button" style="float: right;"
 					title="#{messages.specification_video_help_title}" />
-			</h:panelGrid>
+			</div>
 
 
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
@@ -570,7 +564,7 @@
 		<p:dialog id="requirementDialog" draggable="false" 
 			header="#{messages[jJRequirementBean.message]}" modal="true" responsive="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center" style="padding:0px;">
+			position="center" style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
 			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,true)}"
 				onstart="PF('blockUIWidget').block()"
