@@ -77,13 +77,13 @@ PrimeFacesExt.locales.Timeline['fr'] = {
 };
 
 PrimeFacesExt.locales.TimePicker['fr'] = {
-	    hourText: 'Heures',
-	    minuteText: 'Minutes',
-	    amPmText: ['AM', 'PM'],
-	    closeButtonText: 'Fermer',
-	    nowButtonText: 'Maintenant',
-	    deselectButtonText: 'Désélectionner'
-	};
+	hourText : 'Heures',
+	minuteText : 'Minutes',
+	amPmText : [ 'AM', 'PM' ],
+	closeButtonText : 'Fermer',
+	nowButtonText : 'Maintenant',
+	deselectButtonText : 'Désélectionner'
+};
 
 PrimeFaces.locales['fr'] = {
 	closeText : 'Fermer',
@@ -114,6 +114,39 @@ PrimeFaces.locales['fr'] = {
 	day : 'Jour',
 	allDayText : 'Toute la journée'
 };
+
+function setMenuActiveIndex(activeIndex) {
+
+	var tabMenuPanel = $("#headerForm\\:tabMenu");
+
+	if (tabMenuPanel.hasClass("rio-menu")) {
+
+		tabMenuPanel.children().eq(activeIndex).addClass("active-menu-parent");
+		tabMenuPanel.children().eq(activeIndex).children().eq(0).addClass(
+				"active-menu active-menu-restore");
+	}
+
+}
+
+function removeMenuActiveIndex() {
+
+	var tabMenuPanel = $("#headerForm\\:tabMenu");
+
+	if (tabMenuPanel.hasClass("rio-menu")) {
+
+		var i = 0;
+		while (i < tabMenuPanel.children().length) {
+			if (tabMenuPanel.children().eq(i).hasClass("active-menu-parent")) {
+				tabMenuPanel.children().eq(i).removeClass("active-menu-parent");
+				tabMenuPanel.children().eq(i).children().eq(0).removeClass(
+						"active-menu active-menu-restore");
+			}
+
+			i++;
+		}
+	}
+
+}
 
 $(document).ready(function() {
 	$("#rowToggler").click(function() {

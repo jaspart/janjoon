@@ -1362,10 +1362,8 @@ public class JJTaskBean {
 
 		}
 		Object newValue = event.getNewValue();
-		String message = "";
 		FacesMessage facesMessage = null;
-
-		boolean valid = true;
+				boolean valid = true;
 
 		if (columnKey.contains("sdpr")) {
 			if (newValue != null) {
@@ -1532,16 +1530,14 @@ public class JJTaskBean {
 			reset();
 
 			if (!validation_error)
-				facesMessage = new FacesMessage(
-						FacesMessage.SEVERITY_INFO,
-						MessageFactory.getMessage(
-								"message_successfully_updated", "").getDetail(),
-						MessageFactory.getMessage("label_task", "").getDetail());
+				facesMessage = MessageFactory.getMessage(
+						"message_successfully_updated",
+						MessageFactory.getMessage("label_task", "").getDetail());				
 			// RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					message, MessageFactory.getMessage("label_task", "")
+					"message_unsuccessfully_updated", MessageFactory.getMessage("label_task", "")
 							.getDetail());
 		}
 		if (facesMessage != null)
@@ -2421,11 +2417,11 @@ public class JJTaskBean {
 			selectedTasks = convertTaskListToStringList(storeTasks);
 
 			if (this.task.getRequirement() != null)
-				this.icone = "function.ico";
+				this.icone = "function";
 			else if (this.task.getBug() != null)
-				this.icone = "bug.ico";
+				this.icone = "bug";
 			else if (this.task.getTestcase() != null)
-				this.icone = "test.ico";
+				this.icone = "test";
 		}
 
 		public JJTask getTask() {
@@ -2506,11 +2502,11 @@ public class JJTaskBean {
 			if (this.icone.isEmpty()) {
 				icone = "";
 				if (this.task.getRequirement() != null)
-					this.icone = "function.ico";
+					this.icone = "function";
 				else if (this.task.getBug() != null)
-					this.icone = "bug.ico";
+					this.icone = "bug";
 				else if (this.task.getTestcase() != null)
-					this.icone = "test.ico";
+					this.icone = "test";
 			}
 			return icone;
 		}

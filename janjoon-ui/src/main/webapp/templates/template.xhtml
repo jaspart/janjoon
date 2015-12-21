@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView" />
+<f:view locale="#{localeBean.locale}" contentType="text/html">
+	<h:head>
+		<!-- InsertJanjoon -->
+		<h:outputStylesheet library="css" name="standard.css" />
+		<h:outputScript library="js" name="calendar.js" />
+		<link rel="shortcut icon" type="image/png"
+			href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<script type="text/javascript">
+			function updateRowExapansion() {
+				$(".rowExpansion").slideUp("fast");
+			}
+
+			function copyName(copiedText) {
+				var copyDiv = document.createElement('div');
+				copyDiv.contentEditable = true;
+				document.body.appendChild(copyDiv);
+				copyDiv.innerHTML = copiedText;
+				copyDiv.unselectable = "off";
+				copyDiv.focus();
+				document.execCommand('SelectAll');
+				document.execCommand("Copy", false, null);
+				document.body.removeChild(copyDiv);				
+			}			
+		</script>
+		<!-- Fin InsertJanjoon -->
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<meta name="viewport"
+				content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+			<meta name="apple-mobile-web-app-capable" content="yes" />
+		</f:facet>
+		<title>#{messages.label_appName}</title>
+		<h:outputScript name="js/ripple-effect.js" library="rioLayout" />
+		<h:outputScript name="js/perfect-scrollbar.js" library="rioLayout" />
+		<h:outputScript name="js/layout.js" library="rioLayout" />
+
+		<ui:insert name="head" />
+	</h:head>
+
+	<h:body>
+
+		<ui:include src="topbar.xhtml" />
+
+		<div id="wrapper">
+			<div id="wrapperIndent">
+
+				<ui:include src="layoutmenu.xhtml" />
+				<div id="layout-portlets-cover">
+					<h:panelGrid id="applicatinPanelGrid" columns="3"
+						styleClass="wrapper">
+						<p:panel styleClass="content">
+							<p:dialog id="viewDialog1"
+								header="#{messages.label_view} Message" modal="true"
+								widgetVar="viewDialogWidget1" dynamic="true" resizable="true"
+								maximizable="true" showEffect="fade" hideEffect="fade">
+								<p:outputPanel id="viewPanel1">
+									<h:form id="viewForm1">
+										<ui:include src="/pages/messageDialog.xhtml">
+											<ui:param name="JJMessage"
+												value="#{jJMessageBean.viewedMessage}" />
+										</ui:include>
+										<p:commandButton id="viewCloseButton1"
+											value="#{messages.label_close}" style="margin-top: 10px;"
+											onclick="PF('viewDialogWidget1').hide()" type="button" />
+									</h:form>
+								</p:outputPanel>
+							</p:dialog>
+							<p:imageSwitch id="scrollRight" effect="scrollRight"
+								style="width:100%;height:25px;" speed="10000"
+								slideshowSpeed="250"
+								rendered="#{loginBean.showMarquee == 'true'}">
+								<ui:repeat var="data" value="#{jJMessageBean.alertMessages}">
+									<p:outputPanel style="width:100px;">
+										<h:outputText style="color:red;" value="Alert: #{data.name}" />
+									</p:outputPanel>
+								</ui:repeat>
+							</p:imageSwitch>
+
+							<h:form id="growlForm">
+								<p:panel styleClass="panelDialog">
+									<f:facet name="header">
+										<f:event listener="#{loginBean.updateGrowl}"
+											type="preRenderComponent" />
+										<p:remoteCommand name="updateGrowl" />
+										<p:messages id="auth" showDetail="false" closable="true" />
+									</f:facet>
+								</p:panel>
+							</h:form>
+
+							<p:panel id="contentPanel" styleClass="content">
+								<f:event listener="#{loginBean.initMenuIndex(tab)}"
+									type="preRenderComponent" />
+								<ui:insert name="content" />
+							</p:panel>
+						</p:panel>
+
+						<pe:blockUI widgetVar="blockUIWidget">
+							<h:panelGrid columns="2">
+								<p:graphicImage name="images/preloader.gif" library="rioLayout"
+									style="vertical-align: middle;" />
+								<h:outputText value="#{messages.label_refresh}"
+									style="white-space: nowrap;" />
+							</h:panelGrid>
+						</pe:blockUI>
+
+					</h:panelGrid>
+
+					<ui:insert name="footer">
+						<ui:include src="footer.xhtml" />
+					</ui:insert>
+
+					<!--                     <div class="Container100"> -->
+					<!--                         <div class="ContainerIndent Fs12 BoldGray FontRobotoRegular"> -->
+					<!--                             <div class="EmptyBox10"></div> -->
+					<!--                             <i class="icon-mountains14 Fs16 Fleft"></i> PrimeFaces Rio Theme And Layout  |  All rights reserved. -->
+					<!--                             <div class="EmptyBox10"></div> -->
+					<!--                         </div> -->
+					<!--                     </div> -->
+				</div>
+
+				<p:ajaxStatus
+					style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+					<f:facet name="start">
+						<p:graphicImage name="images/preloader.gif" library="rioLayout" />
+					</f:facet>
+
+					<f:facet name="complete">
+						<h:outputText value="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</div>
+		</div>
+
+
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+
+			jQuery("div.ui-growl").remove();
+		</script>
+
+		<h:outputStylesheet name="css/core-layout.css" library="rioLayout" />
+		<h:outputStylesheet name="css/animate.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-font.css" library="rioLayout" />
+		<h:outputStylesheet name="css/ripple-effect.css" library="rioLayout" />
+		<h:outputStylesheet name="css/perfect-scrollbar.css"
+			library="rioLayout" />
+		<h:outputStylesheet name="css/font-awesome.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-layout.css" library="rioLayout" />
+	</h:body>
+</f:view>
+</html>

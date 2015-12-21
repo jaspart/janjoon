@@ -40,7 +40,8 @@ import org.primefaces.component.tabmenu.TabMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.extensions.model.layout.LayoutOptions;
+import org.primefaces.model.menu.MenuModel;
+import org.primefaces.rio.component.menu.RioMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -127,7 +128,7 @@ public class LoginBean implements Serializable {
 	@Autowired
 	public LoginBean(AuthenticationManager authenticationManager) {
 
-		initialize();
+		//initialize();
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestCookieMap().get("agreeTerms") != null) {
 
@@ -363,7 +364,6 @@ public class LoginBean implements Serializable {
 	// }
 
 	public boolean isMobile() {
-
 		return mobile;
 	}
 
@@ -620,6 +620,79 @@ public class LoginBean implements Serializable {
 			return prevPage;
 		}
 
+	}
+	public void initMenuIndex(RioMenu menu){		
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		String viewId = ctx.getViewRoot().getViewId();
+		String path = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();
+		String view = viewId.replace(path, "");
+		view = view.replace("/pages/", "");
+		if (view.indexOf(".jsf") != -1)
+			view = view.substring(0, view.indexOf(".jsf"));
+		view = view.replace(".jsf?faces-redirect=true", "");
+		view = view.replace(".jsf", "");
+		view = view.replace(".xhtml", "");
+
+		switch (view) {
+		case "main":
+			menuIndex = 0;
+			break;
+		case "planning":
+			menuIndex = 1;
+			break;
+		case "specifications":
+			menuIndex = 2;
+			break;
+		case "requirement":
+			menuIndex = 2;
+			break;
+		case "bugs":
+			menuIndex = 3;
+			break;
+		case "bug":
+			menuIndex = 3;
+			break;
+		case "development":
+			menuIndex = 4;
+			break;
+		case "test":
+			menuIndex = 5;
+			break;
+		case "exploitation":
+			menuIndex = 6;
+			break;
+		case "delivery":
+			menuIndex = 7;
+			break;
+		case "teams":
+			menuIndex = 8;
+			break;
+		case "stats":
+			menuIndex = 9;
+			break;
+		case "administration":
+			menuIndex = 10;
+			break;
+
+		default:
+			menuIndex = 0;
+			break;
+		}
+
+		int i = 0;
+		int max = menuIndex;
+		while (i < max) {
+			if (!menu.getChildren().get(i).isRendered())
+				menuIndex--;
+			i++;
+		}
+		
+		RequestContext.getCurrentInstance().execute(
+				"removeMenuActiveIndex()");
+		
+		RequestContext.getCurrentInstance().execute(
+				"setMenuActiveIndex(" + menuIndex + ")");
 	}
 
 	public void initMenuIndexvalue(TabMenu menu) {
@@ -1606,36 +1679,36 @@ public class LoginBean implements Serializable {
 
 	// InitLayout
 	private String state;
-	private LayoutOptions layoutOptions;
+	//private LayoutOptions layoutOptions;
 
-	protected void initialize() {
-
-		// options for all panes (center and west)
-		LayoutOptions panes = new LayoutOptions();
-
-		layoutOptions = new LayoutOptions();
-
-		// options for all panes
-		panes = new LayoutOptions();
-		panes.addOption("slidable", false);
-		panes.addOption("resizeWhileDragging", true);
-		panes.addOption("resizable", true);
-		panes.addOption("closable", true);
-		layoutOptions.setPanesOptions(panes);
-
-		// options for east pane
-		LayoutOptions pane = new LayoutOptions();
-		pane.addOption("resizable", true);
-		pane.addOption("closable", true);
-		pane.addOption("size", "45%");
-		layoutOptions.setNorthOptions(pane);
-		pane = new LayoutOptions();
-		pane.addOption("resizable", true);
-		pane.addOption("closable", true);
-		pane.addOption("size", "27%");
-		layoutOptions.setSouthOptions(pane);
-
-	}
+//	protected void initialize() {
+//
+//		// options for all panes (center and west)
+//		LayoutOptions panes = new LayoutOptions();
+//
+//		layoutOptions = new LayoutOptions();
+//
+//		// options for all panes
+//		panes = new LayoutOptions();
+//		panes.addOption("slidable", false);
+//		panes.addOption("resizeWhileDragging", true);
+//		panes.addOption("resizable", true);
+//		panes.addOption("closable", true);
+//		layoutOptions.setPanesOptions(panes);
+//
+//		// options for east pane
+//		LayoutOptions pane = new LayoutOptions();
+//		pane.addOption("resizable", true);
+//		pane.addOption("closable", true);
+//		pane.addOption("size", "45%");
+//		layoutOptions.setNorthOptions(pane);
+//		pane = new LayoutOptions();
+//		pane.addOption("resizable", true);
+//		pane.addOption("closable", true);
+//		pane.addOption("size", "10%");
+//		layoutOptions.setSouthOptions(pane);
+//
+//	}
 
 	public String getState() {
 		return state;
@@ -1645,13 +1718,13 @@ public class LoginBean implements Serializable {
 		this.state = state;
 	}
 
-	public LayoutOptions getLayoutOptions() {
-		return layoutOptions;
-	}
-
-	public void setLayoutOptions(LayoutOptions layoutOptions) {
-		this.layoutOptions = layoutOptions;
-	}
+//	public LayoutOptions getLayoutOptions() {
+//		return layoutOptions;
+//	}
+//
+//	public void setLayoutOptions(LayoutOptions layoutOptions) {
+//		this.layoutOptions = layoutOptions;
+//	}
 
 	public String getStyleClass() {
 		FacesContext ctx = FacesContext.getCurrentInstance();

@@ -7,17 +7,16 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 		<h:outputScript library="js" name="scrollTab.js" />
-		<h:panelGroup id="layoutsContainer">
-			<h:panelGrid id="layoutsGrid" columns="2">
+<!-- 		<h:panelGroup id="layoutsContainer"> -->
+<!-- 			<h:panelGrid id="layoutsGrid" columns="2"> -->
 
-				<pe:layout fullPage="false" style="height: 900px;"
-					options="#{loginBean.layoutOptions}" state="#{loginBean.state}"
-					rendered="#{loginBean.enable}" stateCookie="true">
+				<p:layout id="layoutsGrid" fullPage="false" style="height: 1200px;" stateful="true"
+					rendered="#{loginBean.enable}" >
 
-					<pe:layoutPane position="north">
+					<p:layoutUnit resizable="true" position="north" collapsible="true">
 						<f:facet name="header">
                         #{messages.main_communication_title}
                     </f:facet>
@@ -87,8 +86,8 @@
 								</p:column>
 							</p:dataTable>
 						</h:form>
-					</pe:layoutPane>
-					<pe:layoutPane position="center">
+					</p:layoutUnit>
+					<p:layoutUnit position="center" resizable="true">
 						<f:facet name="header">
                         #{messages.main_taskPanel_header}
                     </f:facet>
@@ -161,8 +160,8 @@
 								</p:column>
 							</p:dataTable>
 						</h:form>
-					</pe:layoutPane>
-					<pe:layoutPane position="south"
+					</p:layoutUnit>
+					<p:layoutUnit position="south" resizable="true"  collapsible="true"
 						rendered="#{loginBean.noCouvretReq != null}">
 						<f:facet name="header">
                        #{messages.main_specPanel_header}
@@ -207,12 +206,10 @@
 								</p:column>
 							</p:dataTable>
 						</h:form>
-					</pe:layoutPane>
-
-
-				</pe:layout>
-			</h:panelGrid>
-		</h:panelGroup>
+					</p:layoutUnit>
+				</p:layout>
+<!-- 			</h:panelGrid> -->
+<!-- 		</h:panelGroup> -->
 
 		<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
 			message="#{messages.label_disable_record}" showEffect="fade"
@@ -222,7 +219,7 @@
 				<h:form id="deleteForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{jJMessageBean.resolveJJMessage}"
-						update=":messageForm :growlForm :headerForm:communicationButton"
+						update=":messageForm :growlForm :headerForm:communicationButton :communicationButton"
 						oncomplete="PF('resolveDialogWidget').hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="PF('resolveDialogWidget').hide()" type="button" />
@@ -283,7 +280,7 @@
 						<p:commandButton id="submitMes" value="OK"
 							process="@this,alert,messagedsc"
 							actionListener="#{jJMessageBean.createMessage(false,null)}"
-							update="messageDialogForm :headerForm:communicationButton :growlForm" />
+							update="messageDialogForm :headerForm:communicationButton :growlForm :communicationButton" />
 					</p:panelGrid>
 				</p:panelGrid>
 			</h:form>

@@ -6,7 +6,7 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 
 		<h:form style="width:100%;display:none;">
@@ -15,10 +15,10 @@
 				actionListener="#{jJStatusBean.onTabStatChange}"
 				oncomplete="PF('blockUIWidget').unblock()" />
 		</h:form>
-		<p:commandButton value="#{messages.specification_video_help_title}"
-			id="videoHelpBtn" icon="ui-icon-video"
-			onclick="PF('videoHelpWidget').show()" type="button"
-			style="float: right;" />
+		<!-- 		<p:commandButton value="#{messages.specification_video_help_title}" -->
+		<!-- 			id="videoHelpBtn" icon="ui-icon-video" -->
+		<!-- 			onclick="PF('videoHelpWidget').show()" type="button" -->
+		<!-- 			style="float: right;" /> -->
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJStatusBean.loadData()}" />
@@ -27,9 +27,11 @@
 			onTabChange="tabChangeHelper([{name: 'activeIndex', value: index}])"
 			cache="true">
 			<p:tab id="specTab" title="#{messages.label_requirement}">
-				<p:commandButton id="infoBtnSpec" icon="ui-icon-info"
-					title="#{messages.specification_video_help_title}" type="button"
-					style="float: right;right: 30%;" />
+
+				<p:commandButton id="infoBtnSpec"
+					icon="fa fa-info-circle  Gray Fs20" styleClass="Fright GrayButton"
+					type="button" style="float: right;"
+					title="#{messages.specification_video_help_title}" />
 				<p:overlayPanel id="infoPanelSpec" for="infoBtnSpec"
 					hideEffect="fade" style="width:30%">
 					<p:panelGrid style="width: 100%;" columns="1">
@@ -46,15 +48,18 @@
 						</f:facet>
 						<p:row>
 							<p:column colspan="2" styleClass="DELAY">
-								<p:outputLabel value="#{messages.statistique_help_project_delay}" />
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.statistique_help_project_delay}" />
 							</p:column>
 
 							<p:column colspan="2" styleClass="ONTIME">
-								<p:outputLabel value="#{messages.statistique_help_project_time}" />
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.statistique_help_project_time}" />
 							</p:column>
 
 							<p:column colspan="2" styleClass="INADVANCE">
-								<p:outputLabel value="#{messages.statistique_help_project_advance}" />
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.statistique_help_project_advance}" />
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -104,9 +109,9 @@
 				</h:form>
 			</p:tab>
 			<p:tab id="bugTab" title="Bug">
-				<p:commandButton id="infoBtnBug" icon="ui-icon-info"
-					title="#{messages.specification_video_help_title}" type="button"
-					style="float: right;right: 30%;" />
+				<p:commandButton id="infoBtnBug" icon="fa fa-info-circle  Gray Fs20"
+					styleClass="Fright GrayButton" type="button" style="float: right;"
+					title="#{messages.specification_video_help_title}" />
 				<p:overlayPanel id="infoPanelBug" for="infoBtnBug" hideEffect="fade"
 					style="width:30%">
 					<p:panelGrid style="width: 100%;" columns="1">

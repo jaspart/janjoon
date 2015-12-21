@@ -129,24 +129,27 @@
 										</p:column>
 									</p:summaryRow>
 
-									<p:column headerText="Actions" style="width:100px;">
-										<!-- 										<p:graphicImage -->
-										<!-- 											rendered="#{taskData.task.specification != null and taskData.task.specification}" -->
-										<!-- 											library="images" name="doc.ico" width="16" height="16" /> -->
-										<p:graphicImage
-											rendered="#{taskData.task.taskType.name == 'specifier'}"
-											library="images" name="doc.ico" width="16" height="16" />
-										<p:graphicImage library="images" name="#{taskData.icone}"
-											width="16" height="16" />
-										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin"
-											update=":viewTaskForm :viewTaskDialog" immediate="true"
-											resetValues="true"
-											title="#{messages.project_gantt_table_actions_viewMenuItem}"
-											action="#{jJTaskBean.initiateReqTreeNode}">
-											<f:setPropertyActionListener value="#{taskData.task}"
-												target="#{jJTaskBean.task}" />
-											<f:setPropertyActionListener target="#{jJTaskBean.mode}"
-												value="planning" />
+									<p:column headerText="Actions"
+										style="width:100px;">
+											<p:graphicImage
+												rendered="#{taskData.task.taskType.name == 'specifier'}"
+												library="images" name="doc.ico" width="16" height="16" />
+										<p:commandButton id="optionsButton" type="button" icon="ui-icon-#{taskData.icone}">										
+<!-- 											<p:graphicImage library="images" name="#{taskData.icone}" -->
+<!-- 												width="16" height="16" /> -->
+										</p:commandButton>
+										<p:menu overlay="true" trigger="optionsButton" my="left top"
+											at="left bottom" style="width:11%;">
+											<p:menuitem id="viewTaskButton" icon="ui-icon-zoomin"
+												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												resetValues="true"
+												value="#{messages.project_gantt_table_actions_viewMenuItem}"
+												action="#{jJTaskBean.initiateReqTreeNode}">
+												<f:setPropertyActionListener value="#{taskData.task}"
+													target="#{jJTaskBean.task}" />
+												<f:setPropertyActionListener target="#{jJTaskBean.mode}"
+													value="planning" />
+											</p:menuitem>
 											<p:menuitem id="duplicate" icon="ui-icon-copy"
 												oncomplete="PF('duplicateTaskDialogWidget').show()"
 												value="#{messages.project_gantt_task_dupplicate_button}">
@@ -165,7 +168,35 @@
 											<p:menuitem id="copyButton" icon="ui-icon-copy"
 												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task,null)}');"
 												value="Copy" title="Copy" />
-										</p:splitButton>
+										</p:menu>
+										<!-- 										<p:splitButton id="viewTaskButton" icon="ui-icon-zoomin" -->
+										<!-- 											update=":viewTaskForm :viewTaskDialog" immediate="true" -->
+										<!-- 											resetValues="true" -->
+										<!-- 											title="#{messages.project_gantt_table_actions_viewMenuItem}" -->
+										<!-- 											action="#{jJTaskBean.initiateReqTreeNode}"> -->
+										<!-- 											<f:setPropertyActionListener value="#{taskData.task}" -->
+										<!-- 												target="#{jJTaskBean.task}" /> -->
+										<!-- 											<f:setPropertyActionListener target="#{jJTaskBean.mode}" -->
+										<!-- 												value="planning" /> -->
+										<!-- 											<p:menuitem id="duplicate" icon="ui-icon-copy" -->
+										<!-- 												oncomplete="PF('duplicateTaskDialogWidget').show()" -->
+										<!-- 												value="#{messages.project_gantt_task_dupplicate_button}"> -->
+										<!-- 												<f:setPropertyActionListener value="#{taskData.task}" -->
+										<!-- 													target="#{jJTaskBean.task}" /> -->
+										<!-- 											</p:menuitem> -->
+										<!-- 											<p:menuitem id="deleteButton" icon="ui-icon-trash" -->
+										<!-- 												oncomplete="PF('deleteDialogWidget').show()" -->
+										<!-- 												value="#{messages.label_delete}" resetValues="true" -->
+										<!-- 												title="#{messages.label_delete}"> -->
+										<!-- 												<f:setPropertyActionListener value="#{taskData}" -->
+										<!-- 													target="#{jJTaskBean.selectedTaskData}" /> -->
+										<!-- 												<f:setPropertyActionListener target="#{jJTaskBean.mode}" -->
+										<!-- 													value="planning" /> -->
+										<!-- 											</p:menuitem> -->
+										<!-- 											<p:menuitem id="copyButton" icon="ui-icon-copy" -->
+										<!-- 												onclick="copyName('#{jJTaskBean.getDialogHeader(taskData.task,null)}');" -->
+										<!-- 												value="Copy" title="Copy" /> -->
+										<!-- 										</p:splitButton> -->
 									</p:column>
 
 									<p:column style="width: 130px;" rendered="false"

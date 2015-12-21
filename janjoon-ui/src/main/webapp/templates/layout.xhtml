@@ -92,9 +92,9 @@
 				style="vertical-align: middle;" />
 		</p:dialog>
 
-		<p:dialog widgetVar="communicationPanel" id="communicationPanel"
-			styleClass="overlayPanelDialog" showEffect="fade" dynamic="true"
-			closable="true" style="width:400px" rendered="#{loginBean.enable}">
+		<p:overlayPanel id="mPanel" for=":headerForm:communicationButton"
+			hideEffect="clip"  dynamic="true" style="width:300px"
+			widgetVar="mPanel">
 			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 				type="preRenderView" />
 			<h:form id="messageCreationForm">
@@ -108,24 +108,14 @@
 					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
 						listener="#{jJMessageBean.onRowSelect}" immediate="true"
 						oncomplete="PF('viewDialogWidget1').show()" />
-					<!--									update=":viewForm1:viewPanelGrid1"-->
-					<p:column headerText="Messages" sortBy="#{mes.creationDate}">
+					<p:column headerText="Messages" sortBy="#{mes.creationDate}"
+						style="text-align: center;">
 
 						<h:outputText value="#{mes.criticity.name}"
 							styleClass="#{mes.criticity.name}" />
 
-						<!-- 						<h:outputText value="Spec" rendered="#{mes.requirement != null}" -->
-						<!-- 							styleClass="ALERT" /> -->
-						<!-- 						<h:outputText value="Bug" rendered="#{mes.bug != null}" -->
-						<!-- 							styleClass="OBJECT" /> -->
-						<!-- 						<h:outputText value="Test" rendered="#{mes.testcase != null}" -->
-						<!-- 							styleClass="OBJECT" /> -->
-
 						<h:outputText id="viewButton" value=" #{mes.message}"
 							title="#{messages.label_view} #{mes.name}" />
-						<!-- 						<p:tooltip for="viewButton" -->
-						<!-- 							value="#{messages.label_view} #{mes.name}" showEffect="fade" -->
-						<!-- 							hideEffect="fade" /> -->
 					</p:column>
 
 					<f:facet name="footer">
@@ -148,7 +138,7 @@
 					</f:facet>
 				</p:dataTable>
 			</h:form>
-		</p:dialog>
+		</p:overlayPanel>
 
 		<p:dialog widgetVar="headerPanel" id="headerPanel"
 			styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
@@ -261,15 +251,14 @@
 					<ui:include src="/pages/messageDialog.xhtml">
 						<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
 					</ui:include>
-					<p:commandButton id="deleteButton1"
-						value="#{messages.label_close}" style="float: right;margin-top: 10px;"
+					<p:commandButton id="deleteButton1" value="#{messages.label_close}"
+						style="float: right;margin-top: 10px;"
 						onclick="PF('viewDialogWidget1').hide()" type="button" />
-					<p:commandButton id="viewCloseButton1"
-						immediate="true"
+					<p:commandButton id="viewCloseButton1" immediate="true"
 						actionListener="#{jJMessageBean.deleteMessage}"
 						update=":growlForm :headerForm:communicationButton"
 						value="#{messages.label_delete}" style="margin-top: 10px;"
-						oncomplete="PF('viewDialogWidget1').hide()"  />				
+						oncomplete="PF('viewDialogWidget1').hide()" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

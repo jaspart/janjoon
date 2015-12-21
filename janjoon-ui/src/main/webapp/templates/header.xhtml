@@ -104,8 +104,8 @@
 							icon="ui-icon-extlink" />
 					</p:splitButton>
 					<p:commandButton id="communicationButton" icon="ui-icon-comment"
-						value="#{loginBean.messageCount}"
-						oncomplete="PF('communicationPanel').show();"
+						value="#{loginBean.messageCount}" type="button"		
+						onclick="PF('mPanel').loadContents()" immediate="true"				
 						title="#{message.header_communication_label}"
 						rendered="#{loginBean.enable}" />
 				</h:panelGrid>

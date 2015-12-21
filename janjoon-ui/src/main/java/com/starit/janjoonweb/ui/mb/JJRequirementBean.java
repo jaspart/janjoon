@@ -387,7 +387,7 @@ public class JJRequirementBean {
 					.equals(cc.getCategory().getStage()))
 				return "";
 			else
-				return "margin-left: 20px;";
+				return "margin-left: 20px !important;";
 		}
 	}
 

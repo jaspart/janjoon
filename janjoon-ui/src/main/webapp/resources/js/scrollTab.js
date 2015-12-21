@@ -85,7 +85,7 @@ $(document).ready(
 // });
 // });
 $(function() {
-	var width = $(window).width() * 95 / 100;
+	var width = $(window).width() * 82 / 100;
 	$("#layoutsGrid").width(width);
 });
 

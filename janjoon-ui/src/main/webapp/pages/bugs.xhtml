@@ -7,22 +7,23 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 		<style type="text/css">
-.mineSelect .ui-selectonemenu-trigger {
-	display: none;
-}
+/* .mineSelect .ui-selectonemenu-trigger { */
+/* 	display: none; */
+/* } */
 </style>
 		<p:panel id="bugPanel" header="BUG" style="width: 99.5%;valign: top;">
-			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
-
-			<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-				style="float: right;" />
-			<p:commandButton value="#{messages.specification_video_help_title}"
-				id="videoHelpBtn" icon="ui-icon-video"
-				onclick="PF('videoHelpWidget').show()"
-				style="float: right;position: relative;" type="button" />
+			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />			
+			<br />
+			<p:commandButton id="colorBtn" icon="fa fa-info-circle  Gray Fs20"
+				styleClass="Fright GrayButton" type="button" style="float: right;"
+				title="#{messages.specification_video_help_title}" />
+			<!-- 			<p:commandButton value="#{messages.specification_video_help_title}" -->
+			<!-- 				id="videoHelpBtn" icon="ui-icon-video" -->
+			<!-- 				onclick="PF('videoHelpWidget').show()" -->
+			<!-- 				style="float: right;position: relative;" type="button" /> -->
 			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
 				dynamic="true" style="width:600px">
 				<p:panelGrid style="width: 100%;">
@@ -33,53 +34,64 @@
 					</f:facet>
 					<p:row>
 						<p:column colspan="2" styleClass="NEW">
-							<p:outputLabel value="#{messages.status_NEW}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_NEW}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="CLOSED">
-							<p:outputLabel value="#{messages.status_CLOSED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_CLOSED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="VERIFIED">
-							<p:outputLabel value="#{messages.status_VERIFIED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_VERIFIED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="RESOLVED">
-							<p:outputLabel value="#{messages.status_RESOLVED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_RESOLVED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="DUPLICATE">
-							<p:outputLabel value="#{messages.status_DUPLICATE}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_DUPLICATE}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="WONTFIX">
-							<p:outputLabel value="#{messages.status_WONTFIX}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_WONTFIX}" />
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column colspan="2" styleClass="INVALID">
-							<p:outputLabel value="#{messages.status_INVALID}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_INVALID}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="FIXED">
-							<p:outputLabel value="#{messages.status_FIXED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_FIXED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="READY">
-							<p:outputLabel value="#{messages.status_READY}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_READY}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="REOPENED">
-							<p:outputLabel value="#{messages.status_REOPENED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_REOPENED}" />
 						</p:column>
 
 						<p:column colspan="2" styleClass="ASSIGNED">
-							<p:outputLabel value="#{messages.status_ASSIGNED}" />
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.status_ASSIGNED}" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
 			</p:overlayPanel>
-
+			<br />
 			<br />
 			<br />
 			<h:form id="bugForm">
@@ -147,7 +159,9 @@
 										placeholder="#{messages.bug_table_search_watermark}" />
 								</p:column>
 								<p:column colspan="1">
-									<p:commandButton id="createButton" icon="ui-icon-plusthick"
+									<p:commandButton id="createButton"
+										icon="fa fa-plus-square  Gray Fs20"
+										styleClass="Fright GrayButton"
 										value="#{messages.bug_table_add_label}" update=":createForm "
 										style="margin-left: 20px;" resetValues="true"
 										oncomplete="PF('createDialogWidget').show()"
@@ -157,7 +171,7 @@
 						</p:outputPanel>
 					</f:facet>
 
-					<p:column selectionMode="multiple" style="width:5%">
+					<p:column selectionMode="multiple" style="width:8%">
 						<p:commandLink actionListener="#{jJBugBean.onrate(bug)}"
 							onstart="PF('blockUIWidget').block()" style="margin-left:25%;"
 							oncomplete="PF('blockUIWidget').unblock()"
@@ -174,7 +188,7 @@
 					<p:column headerText="#{messages.bug_table_title_title}"
 						filterMatchMode="contains" sortBy="#{bug.name}"
 						filterStyle="width: 90%;"
-						style="width: 25% !important;height: 5px !important;">
+						style="width: 22% !important;height: 5px !important;">
 						<h:outputText
 							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
 							styleClass="#{bug.status.name}" />
@@ -222,9 +236,9 @@
 						</f:facet>
 						<p:splitButton id="viewButton" action="#{jJBugBean.bugInfo}"
 							title="#{messages.specification_table_actions_viewButton}"
-							value="#{messages.label_view}" ajax="false" icon="ui-icon-eye"
-							onclick="target='_blank'">
-							<p:menuitem id="editButton" icon="ui-icon-pencil"
+							value="#{messages.label_view}" ajax="false"
+							icon="ui-icon-disk fa fa-eye" onclick="target='_blank'">
+							<p:menuitem id="editButton" icon="ui-icon-disk fa fa-pencil"
 								value="#{messages.label_edit}" update=":editForm"
 								oncomplete="PF('editDialogWidget').show()"
 								title="#{messages.label_edit}" resetValues="true">
@@ -233,7 +247,7 @@
 								<f:setPropertyActionListener value="#{bug.project}"
 									target="#{jJBugBean.bugProjectSelected}" />
 							</p:menuitem>
-							<p:menuitem id="deleteButton" icon="ui-icon-trash"
+							<p:menuitem id="deleteButton" icon="ui-icon-disk fa fa-trash"
 								oncomplete="PF('deleteDialogWidget').show()"
 								value="#{messages.label_delete}"
 								title="#{messages.label_delete}">
@@ -246,13 +260,14 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton value="#{messages.bug_delete_button}"
-							id="deleteMButton" icon="ui-icon-trash" update=":createForm"
+							id="deleteMButton" icon="ui-icon-disk fa fa-trash"
+							update=":createForm"
 							oncomplete="PF('deleteMDialogWidget').show()"
 							disabled="#{empty jJBugBean.selectedBugList}"
 							title="#{messages.label_delete}" />
 
 						<p:commandButton value="#{messages.bug_favoris_button}"
-							id="subscribeMButton" icon="ui-icon-star"
+							id="subscribeMButton" icon="ui-icon-disk fa fa-star"
 							update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()"

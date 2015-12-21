@@ -109,6 +109,34 @@ div#contentPanel_content {
 	top: 0px !important;
 }
 
+.ui-icon-test {
+	background-image: url("#{resource['images/test.ico']}") !important;
+	width: 25px !important;
+	height: 25px !important;
+	left: 25% !important;
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+    top: 15% !important;
+}
+
+.ui-icon-function {
+	background-image: url("#{resource['images/function.ico']}") !important;
+	width: 25px !important;
+	height: 25px !important;
+	left: 25% !important;
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+    top: 15% !important;
+}
+
+.ui-icon-bug {
+	background-image: url("#{resource['images/bug.ico']}") !important;
+	left: 25% !important;
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+    top: 15% !important;
+}
+
 .ui-icon-restore {
 	background-image: url("#{resource['images/restore.ico']}") !important;
 	width: 16px !important;
@@ -144,8 +172,10 @@ div#contentPanel_content {
 }
 
 .panelDialog .ui-panel-titlebar {
-	padding: 0 0 0 0;
+	padding: 0 0 0 0 !important;
 	border: none;
+	background: white;
+	/*     padding: 0px 0px !important; */
 }
 
 .panelDialog .ui-panel-content {
@@ -178,19 +208,19 @@ div#contentPanel_content {
 	font-size: small;
 }
 
-.ui-state-default {
-	padding-top: 0px !important;
-}
+/* .ui-state-default { */
+/* 	padding-top: 0px !important; */
+/* } */
 
-.ui-state-hover {
-	border-top: 1px solid #0083D7 !important;
-	padding-top: 0px !important;
-}
+/* .ui-state-hover { */
+/* 	border-top: 1px solid #0083D7 !important; */
+/* 	padding-top: 0px !important; */
+/* } */
 
-.ui-state-active {
-	border-top: 1px solid #0072C6 !important;
-	padding-top: 0px !important;
-}
+/* .ui-state-active { */
+/* 	border-top: 1px solid #0072C6 !important; */
+/* 	padding-top: 0px !important; */
+/* } */
 
 .rowExpansion {
 	
@@ -877,9 +907,10 @@ div.highLightReal div.timeline-event-content span {
 }
 
 div.highLightReal {
-	border: 1px solid #448dae !important; background : #79c9ec
-	url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
-	50% 50% repeat-x !important;
+	border: 1px solid #448dae !important;
+	background: #79c9ec
+		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		50% 50% repeat-x !important;
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 17px !important;
@@ -953,7 +984,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -966,7 +997,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -979,7 +1010,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -992,7 +1023,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1006,7 +1037,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1019,7 +1050,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1032,7 +1063,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1045,7 +1076,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1058,7 +1089,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1071,7 +1102,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1084,7 +1115,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1097,7 +1128,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1110,7 +1141,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1123,7 +1154,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1136,7 +1167,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1149,7 +1180,7 @@ div.highLightRevised2 {
 	/* 	font-size: 80%; */
 	/* 	font-weight: 700; */
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1164,7 +1195,7 @@ div.highLightRevised2 {
 	/* 	font-size: 80%; */
 	/* 	font-weight: 700; */
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1180,7 +1211,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1193,7 +1224,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1206,7 +1237,7 @@ div.highLightRevised2 {
 	font-size: 80%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
+	color: #fff !important;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -1216,6 +1247,91 @@ div.highLightRevised2 {
 .splitButtonDisplayNone {
 	display: none;
 }
+
+.ui-timepicker-table .ui-widget-header {
+	border: solid 1px #175787 !important;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	background: #1578c9;
+	background: -moz-linear-gradient(top, #1578c9 0%, #0b66b1 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, #1578c9),
+		color-stop(100%, #0b66b1));
+	background: -webkit-linear-gradient(top, #1578c9 0%, #0b66b1 100%);
+	background: -o-linear-gradient(top, #1578c9 0%, #0b66b1 100%);
+	background: -ms-linear-gradient(top, #1578c9 0%, #0b66b1 100%);
+	background: linear-gradient(to bottom, #1578c9 0%, #0b66b1 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1578c9',
+		endColorstr='#0b66b1', GradientType=0);
+	padding: 2px;
+	font-size: 14px;
+}
+
+.ui-timepicker-table table.ui-timepicker {
+	padding-top: 2px;
+}
+
+.ui-timepicker-table {
+	background-color: #fbfcfd !important;
+	border: 1px solid #c0c5c7;
+	padding: 2px !important;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.ui-timepicker-table:focus {
+	border: 1px solid #27aae1;
+}
+
+.ui-timepicker-table table {
+	border-collapse: inherit !important;
+	font-size: 0.9em;
+}
+
+.ui-timepicker-table table a {
+	color: #72828b;
+}
+
+.ui-timepicker-table td {
+	padding: 0px;
+}
+
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a.ui-state-active,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a.ui-state-active
+	{
+	border: 1px solid #27aae1;
+	color: #27aae1;
+}
+
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a:hover,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a:hover
+	{
+	color: #27AAE1;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	border: 1px solid #27aae1;
+}
+
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a
+	{
+	border: 1px solid #e5ebf0;
+	border-radius: 3px;
+	cursor: default;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	padding: 0.5em;
+	color: #93a8b0;
+}
+
+.ui-timepicker-table .ui-timepicker-hours,.ui-timepicker-table .ui-timepicker-minutes
+	{
+	padding: 0.2em;
+}
+
+/* .ui-splitbutton .ui-button.ui-splitbutton-menubutton {    */
+/*     top: inherit !important;;    */
+/* } */
 /* .ALERT { */
 /* 	background-color: #F2DEDE !important; */
 /* 	background-image: none !important; */

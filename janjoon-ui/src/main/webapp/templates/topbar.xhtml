@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+	<div id="layout-topbar">
+		<div id="logo" class="Fleft">
+			<!--a href="#"-->
+			<h:link outcome="main">
+				<p:graphicImage library="images" name="janjoon_logo.png"
+					rendered="#{loginBean.contact.company.logo == null}"
+					styleClass="banner" alt="JanJoon Home"
+					style="float: left;margin: auto;margin-left: 25%;" />
+
+				<p:graphicImage
+					style="width:70px; height:70px;float: left;margin: auto;margin-left: 25%;"
+					styleClass="banner" value="#{imageStreamer.image}"
+					alt="JanJoon Home"
+					rendered="#{loginBean.contact.company.logo != null}">
+					<f:param name="contactId" value="#{loginBean.contact.id}" />
+					<f:param name="company" value="true" />
+				</p:graphicImage>
+			</h:link>
+			<!--h:graphicImage name="images/logo.svg" styleClass="Fleft" library="rio-layout" /></a-->
+			<a id="mobile-menu-button"
+				class="Fright ShowOnMobile ripplelink Unselectable ShadowEffect"><i
+				class="icon-add186"></i></a>
+		</div>
+
+		<a class="ripplelink WhiteBlue Fright ShowOnMobile" id="show-top-menu"><i
+			class="icon-show8"></i></a>
+
+		<ul id="top-menu" class="ShowOnDesktop">
+
+			<li><a class="ripplelink"> <i class="icon-person325"></i> <span
+					class="Txt">#{loginBean.contact.firstname}
+						#{loginBean.contact.name}</span></a>
+				<ul>
+					<li><a
+						href="#{request.contextPath}/pages/contactConfig.jsf?faces-redirect=true">#{loginBean.contact.firstname}
+							#{loginBean.contact.name}</a></li>
+				</ul></li>
+			<li><a class="ripplelink"><i class="icon-notifications1"></i>
+					<span class="Txt">Messages</span></a>
+				<ul>
+					<li><p:commandLink id="communicationButton"
+							style="color: #E1F5FE !important;" type="button"
+							title="#{message.header_communication_label}"
+							onclick="PF('mPanel').loadContents()" immediate="true">
+							#{loginBean.messageCount} Message</p:commandLink></li>
+				</ul></li>
+			<li><a class="ripplelink"><i class="icon-thermostat1"></i> <span
+					class="Txt">#{messages.header_logout_link}</span></a>
+				<ul>
+					<li><a href="logout.jsf">#{messages.header_logout_link}</a></li>
+				</ul></li>
+			<li><a href="#" class="ripplelink"><i class="icon-wifi83"></i>
+					<span class="Txt">System Settings</span></a></li>
+		</ul>
+		<p:overlayPanel id="mPanel" for="communicationButton"
+			hideEffect="clip" dynamic="true" style="width:300px"
+			widgetVar="mPanel">
+			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
+				type="preRenderView" />
+			<h:form id="messageCreationForm">
+				<p:dataTable id="dataTable1" value="#{jJMessageBean.mainMessages}"
+					rowKey="#{mes.id}" var="mes" paginator="true"
+					paginatorPosition="bottom" rendered="#{loginBean.enable}"
+					style="border-spacing:0px;" selectionMode="single" rows="5"
+					paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+					lazy="true" emptyMessage="#{messages.label_notRecordFound}"
+					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
+					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+						listener="#{jJMessageBean.onRowSelect}" immediate="true"
+						oncomplete="PF('viewDialogWidget1').show()" />
+					<p:column headerText="Messages" sortBy="#{mes.creationDate}"
+						style="text-align: center;">
+						<h:outputText value="#{mes.criticity.name}" style="color: #fff;"
+							styleClass="#{mes.criticity.name}" />
+						<h:outputText id="viewButton" value=" #{mes.message}"
+							title="#{messages.label_view} #{mes.name}" />
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGrid columns="1" border="0">
+							<p:outputLabel for="messagedsc" value="Message :" />
+							<p:inputTextarea id="messagedsc" cols="20" rows="6"
+								value="#{jJMessageBean.message.message}" required="true" />
+							<h:panelGrid columns="2" border="0" style="border:hidden;">
+								<p:selectBooleanButton id="alert"
+									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+									offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+								</p:selectBooleanButton>
+								<p:commandButton id="submitMes" value="OK"
+									process="@this,alert,messagedsc"
+									actionListener="#{jJMessageBean.createMessage(false,null)}"
+									update=":messageCreationForm :headerForm:communicationButton :communicationButton :growlForm" />
+							</h:panelGrid>
+						</h:panelGrid>
+
+					</f:facet>
+				</p:dataTable>
+			</h:form>
+		</p:overlayPanel>
+	</div>
+</ui:composition>
