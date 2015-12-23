@@ -3,7 +3,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 
 	<div id="layout-topbar">
@@ -80,7 +81,7 @@
 						style="text-align: center;">
 						<h:outputText value="#{mes.criticity.name}" style="color: #fff;"
 							styleClass="#{mes.criticity.name}" />
-						<h:outputText id="viewButton" value=" #{mes.message}"
+						<h:outputText id="viewButton" value=" #{fn:substring(mes.message,0, 10)}"
 							title="#{messages.label_view} #{mes.name}" />
 					</p:column>
 					<f:facet name="footer">
@@ -91,7 +92,8 @@
 							<h:panelGrid columns="2" border="0" style="border:hidden;">
 								<p:selectBooleanButton id="alert"
 									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-									offLabel="Info" onIcon="ui-icon-alert" offIcon="ui-icon-info">
+									offLabel="Info" offIcon="fa fa-info-circle Fs20"
+									onIcon="fa fa-minus-circle Fs20 Red">
 								</p:selectBooleanButton>
 								<p:commandButton id="submitMes" value="OK"
 									process="@this,alert,messagedsc"

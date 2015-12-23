@@ -7,7 +7,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<ui:composition template="../templates/layout.xhtml">
+<ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 		<f:event listener="#{requirementBean.checkRequirement}"
 			type="preRenderView" />
@@ -43,7 +43,7 @@
 
 .ui-tree {
 	height: 700px;
-	width: 100%;
+	width: 95%;
 	max-width: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -55,7 +55,7 @@
 }
 
 .customPanel {
-	/*height: 200px;*/
+	height: 400px;
 	width: 100%;
 	float: left;
 	margin-top: 10px;
@@ -66,341 +66,342 @@
 /* } */
 </style>
 		<h:outputScript library="js" name="scrollTab.js" />
-		<p:panel style="height:800px;">
-			<h:form id="treeForm">
-				<p:remoteCommand name="updateTree" update="@form" />
-				<p:commandButton id="colorBtn" icon="ui-icon-info" type="button"
-					style="float: right;" />			
 
-				<p:commandLink actionListener="#{requirementBean.onrate}" id="rate"
-					update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate"
-					rendered="#{requirementBean.requirement != null}"
-					style="float: right;margin-top: 3%;margin-right: -2%;"
-					onstart="PF('blockUIWidget').block()"
-					oncomplete="PF('blockUIWidget').unblock()">
+		<h:form id="treeForm">
+			<p:remoteCommand name="updateTree" update="@form" />
 
-					<p:graphicImage
-						name="#{!requirementBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
-						width="32" height="32" cache="false" library="images"
-						title="#{!requirementBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
-
-				</p:commandLink>
-				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
-					dynamic="true" style="width:40%">
-					<p:panelGrid>
-						<f:facet name="header">
-							<p:row>
-								<p:column colspan="12">#{messages.specification_color_title}</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<div styleClass="UnLinked Wid20">
-								<p:outputLabel
-									value="#{messages.specification_color_RequirementNotLinked_label}" />
-							</div>
-							<div styleClass="Specified Wid20">
-								<p:outputLabel
-									value="#{messages.specification_color_RequirementNoTask_label}" />
-							</div>
-							<div styleClass="Progress Wid20">
-								<p:outputLabel
-									value="#{messages.specification_color_RequirementInProcess_label}" />
-							</div>
-							<div styleClass="InTesting Wid20">
-								<p:outputLabel
-									value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
-							</div>
-							<div styleClass="Finished Wid20">
-								<p:outputLabel
-									value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
-							</div>
-						</p:row>
-					</p:panelGrid>
-				</p:overlayPanel>
-				<p:panelGrid style="float: left;height: 100%;width: 30%;">
+			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
+				style="width:40%">
+				<p:panelGrid>
 					<f:facet name="header">
 						<p:row>
-							<p:column colspan="2">
-								<p:selectOneMenu id="category"
-									value="#{requirementBean.category}" effect="fade"
-									style="width: 50%;text-transform: uppercase"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
-
-									<f:selectItems value="#{requirementBean.categories}" var="cat"
-										itemLabel="#{cat.name}" itemValue="#{cat}" />
-									<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-										listener="#{requirementBean.categorySelectionChanged}"
-										update=":treeForm" oncomplete="PF('blockUIWidget').unblock()" />
-
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="1">
-								<p:commandButton id="manageChapterButton" resetValues="true"
-									icon="ui-icon-document" title="#{jJChapterBean.warnMessage}"
-									update=":chapterDialogPanel"
-									disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null or requirementBean.category == null}"
-									actionListener="#{jJChapterBean.loadData(requirementBean.category.id)}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
-							</p:column>
-							<p:column colspan="1">
-								<p:commandButton id="newRequirementButton" icon="ui-icon-plus"
-									title="#{loginBean.authorisationService.wRequiementMSG}"
-									disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement or requirementBean.category == null}"
-									actionListener="#{jJRequirementBean.newRequirement(requirementBean.category.id)}"
-									update=":requirementDialog" resetValues="true"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
-							</p:column>
+							<p:column colspan="12">#{messages.specification_color_title}</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column colspan="2">
-							<p:tree id="reqTree" value="#{requirementBean.rootNode}"
-								var="node" selectionMode="single"
-								selection="#{requirementBean.selectedNode}" dynamic="true">
-								<p:ajax event="select"
-									listener="#{requirementBean.onNodeSelect}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()" />
-
-								<p:treeNode type="projet">
-									<h:outputText value="P-#{node.id}-#{node.name}" />
-								</p:treeNode>
-								<p:treeNode type="chapter">
-									<h:outputText value="CH-#{node.id}-#{node.name}" />
-								</p:treeNode>
-								<p:treeNode type="category">
-									<h:outputText value="C-#{node.id}-#{node.name}" />
-								</p:treeNode>
-								<p:treeNode type="Requirement">
-									<h:outputText style="#{requirementBean.underligne(node)}"
-										value="R-#{node.requirement.id}-#{node.requirement.name}"
-										styleClass="#{node.style}" />
-								</p:treeNode>
-							</p:tree>
+						<p:column styleClass="UnLinked Wid20">
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.specification_color_RequirementNotLinked_label}" />
+						</p:column>
+						<p:column styleClass="Specified Wid20">
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.specification_color_RequirementNoTask_label}" />
+						</p:column>
+						<p:column styleClass="Progress Wid20">
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.specification_color_RequirementInProcess_label}" />
+						</p:column>
+						<p:column styleClass="InTesting Wid20">
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
+						</p:column>
+						<p:column styleClass="Finished Wid20">
+							<p:outputLabel style="color: #fff;"
+								value="#{messages.specification_color_RequirementFinishedSuccessed_label}" />
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-			</h:form>
-			<h:panelGrid columns="1" styleClass="customPanelGrid" border="0"
-				rendered="#{requirementBean.requirement != null}">
-				<h:form id="requirementForm">
-					<p:panelGrid rendered="#{requirementBean.requirement != null}"
-						style="width : 100%;">
-						<f:facet name="header">
-							<p:row>
-								<p:column>
-									<h:outputText
-										value="ID:#{requirementBean.requirement.category.id}" />
-								</p:column>
-								<p:column colspan="3">
-									<h:outputText id="nombres"
-										value="#{requirementBean.requirement.category.name} #{messages.label_requirement}"
-										style="text-transform: uppercase" />
-								</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<p:column>
-								<p:outputLabel for="nameReq"
-									value="#{messages.specification_create_name_watermark}" />
-							</p:column>
-							<p:column>
-								<p:inputText id="nameReq"
-									label="#{messages.specification_create_name_label}"
-									value="#{requirementBean.requirement.name}" required="true"
-									requiredMessage="#{messages.specification_create_name_alert}"
-									style="width: 97%;">
-									<f:validateLength maximum="100" />
-								</p:inputText>
-							</p:column>
-							<p:column>
-								<h:outputText for="chapter"
-									value="#{messages.specification_create_chapter_label}" />
-								<p:autoComplete id="chapter" scrollHeight="200"
-									value="#{requirementBean.requirement.chapter}"
-									itemLabel="#{chapter != null ? chapter.name : messages.label_select}" itemValue="#{chapter}"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter"
-									dropdown="true" var="chapter"
-									completeMethod="#{requirementBean.completeChapterRequirement}" />
-							</p:column>
-						</p:row>
+			</p:overlayPanel>
+			<p:panelGrid style="float: left;height: 100%;width: 30%;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<p:selectOneMenu id="category"
+								value="#{requirementBean.category}" effect="fade"
+								style="width: 50%;text-transform: uppercase"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
+
+								<f:selectItems value="#{requirementBean.categories}" var="cat"
+									itemLabel="#{cat.name}" itemValue="#{cat}" />
+								<p:ajax onstart="PF('blockUIWidget').block()" event="change"
+									listener="#{requirementBean.categorySelectionChanged}"
+									update=":treeForm" oncomplete="PF('blockUIWidget').unblock()" />
+
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="1">
+							<p:commandButton id="colorBtn" icon="fa fa-info-circle Fs20"
+								type="button" />
+
+						</p:column>
+						<p:column colspan="1">
+							<p:commandLink actionListener="#{requirementBean.onrate}"
+								id="rate"
+								update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate"
+								rendered="#{requirementBean.requirement != null}"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()">
+
+								<p:graphicImage
+									name="#{!requirementBean.rated ? 'blackstar.ico' : 'yelstar.ico'}"
+									width="32" height="32" cache="false" library="images"
+									title="#{!requirementBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+							</p:commandLink>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="1">
+							<p:commandButton id="manageChapterButton" resetValues="true"
+								icon="fa fa-folder Fs20" title="#{jJChapterBean.warnMessage}"
+								update=":chapterDialogPanel"
+								disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null or requirementBean.category == null}"
+								actionListener="#{jJChapterBean.loadData(requirementBean.category.id)}"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
+						</p:column>
+						<p:column colspan="1">
+							<p:commandButton id="newRequirementButton"
+								icon="fa fa-plus-square Fs20"
+								title="#{loginBean.authorisationService.wRequiementMSG}"
+								disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement or requirementBean.category == null}"
+								actionListener="#{jJRequirementBean.newRequirement(requirementBean.category.id)}"
+								update=":requirementDialog" resetValues="true"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column colspan="2">
+						<p:tree id="reqTree" value="#{requirementBean.rootNode}"
+							var="node" selectionMode="single"
+							selection="#{requirementBean.selectedNode}" dynamic="true">
+							<p:ajax event="select" listener="#{requirementBean.onNodeSelect}"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" />
+
+							<p:treeNode type="projet">
+								<h:outputText value="P-#{node.id}-#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="chapter">
+								<h:outputText value="CH-#{node.id}-#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="category">
+								<h:outputText value="C-#{node.id}-#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="Requirement">
+								<h:outputText style="#{requirementBean.underligne(node)}"
+									value="R-#{node.requirement.id}-#{node.requirement.name}"
+									styleClass="#{node.style}" />
+							</p:treeNode>
+						</p:tree>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+		<h:panelGrid columns="1" styleClass="customPanelGrid Responsive" border="0"
+			rendered="#{requirementBean.requirement != null}">
+			<h:form id="requirementForm">
+				<p:panelGrid rendered="#{requirementBean.requirement != null}"
+					style="width : 100%;">
+					<f:facet name="header">
 						<p:row>
 							<p:column>
 								<h:outputText
-									value="#{messages.specification_create_description_label}" />
+									value="ID:#{requirementBean.requirement.category.id}" />
 							</p:column>
 							<p:column colspan="3">
-								<pe:ckEditor id="description"
-									toolbar="#{imageStreamer.ckEditorToolBar}" height="60%"
-									width="98%"
-									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-									value="#{requirementBean.requirement.description}"
-									required="true" rendered="#{!loginBean.mobile}"
-									requiredMessage="Requirement Description is a required value" />
-
-								<p:editor id="descriptionMobile" style="width: 98%;height:60px;"
-									value="#{requirementBean.requirement.description}"
-									required="true" rendered="#{loginBean.mobile}"
-									requiredMessage="Requirement Description is a required value" />
-
-								<p:message for="description" rendered="#{!loginBean.mobile}" />
-								<p:message for="descriptionMobile"
-									rendered="#{loginBean.mobile}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel for="note"
-									value="#{messages.specification_create_note_watermark} : " />
-							</p:column>
-							<p:column colspan="3">
-								<p:inputTextarea id="note" rows="3" cols="100"
-									placeholder="#{messages.specification_create_note_watermark}"
-									value="#{requirementBean.requirement.note}" autoResize="false"
-									style="resize: none;width: 97%; margin-left:auto; margin-right:auto;" />
-							</p:column>
-						</p:row>
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="4">
-									<p:commandButton onstart="PF('blockUIWidget').block()"
-										action="#{requirementBean.save(jJRequirementBean)}"
-										oncomplete="PF('blockUIWidget').unblock()"
-										value="#{messages.specification_create_save_button}"
-										style="float:right;" />
-								</p:column>
-							</p:row>
-						</f:facet>
-					</p:panelGrid>
-				</h:form>
-				<h:form>
-					<p:panelGrid columns="4" styleClass="customPanel"
-						rendered="#{requirementBean.requirement != null}">
-						<f:facet name="header">
-							<h:outputText value="Links" />
-						</f:facet>
-						<ui:repeat value="#{requirementBean.categorieRequirements}"
-							var="categorieRequirement" varStatus="loop">
-							<div style="width: 24%; margin-left: 5px; float: left;">
-								<p:dataList value="#{categorieRequirement.requirements}"
-									var="req" type="unordered" paginatorPosition="bottom"
-									rendered="#{categorieRequirement.requirements != null}"
-									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-									itemType="none" paginator="true" rows="5"
-									emptyMessage="#{messages.label_notRecordFound}"
-									styleClass="paginated GrayBack Blue ">
-									<f:facet name="header">
-										#{categorieRequirement.category.name}
-									</f:facet>
-									<p:commandLink value="[#{req.id}]-#{fn:substring(req.name,0,25)}"
-										action="#{jJRequirementBean.requirementInfo}" ajax="false">
-										<f:setPropertyActionListener value="#{req}"
-											target="#{jJRequirementBean.requirement}" />
-									</p:commandLink>
-									<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
-									<f:facet name="footer">
-										<p:commandButton id="createButton" style="width: 100%;"
-											icon="ui-icon-circle-plus" resetValues="true"
-											actionListener="#{requirementBean.loadData(categorieRequirement)}"
-											onstart="PF('blockUIWidget').block()" update=":linkForm"
-											oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />
-									</f:facet>
-								</p:dataList>
-							</div>
-						</ui:repeat>
-					</p:panelGrid>
-				</h:form>
-				<p:panelGrid style="height: 150px;margin-top: 10px;"
-					rendered="#{requirementBean.requirement != null}">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="2">
-								<h:outputText value="Relations" />
+								<h:outputText id="nombres"
+									value="#{requirementBean.requirement.category.name} #{messages.label_requirement}"
+									style="text-transform: uppercase" />
 							</p:column>
 						</p:row>
 					</f:facet>
 					<p:row>
-						<p:column style="width:50%">
-							<p:dataTable id="taskDatalist"
-								emptyMessage="#{messages.label_notRecordFound}"
-								value="#{requirementBean.requirementTasks}" var="task"
-								paginatorPosition="bottom"
-								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
-								paginator="true" rows="5" styleClass="paginated">
-								<f:facet name="header">
-							#{messages.label_task}
-						</f:facet>
-								<p:column
-									headerText="#{messages.project_gantt_table_name_title}"
-									width="70%">
-									<h:outputText
-										value="#{task.id}-#{fn:substring(task.name,0,30)}" />
-								</p:column>
-								<p:column
-									headerText="#{messages.project_gantt_table_assigned_title}"
-									width="30%">
-									<h:outputText value="#{task.assignedTo}"
-										converter="JJContactConverter" />
-								</p:column>
-							</p:dataTable>
+						<p:column>
+							<p:outputLabel for="nameReq"
+								value="#{messages.specification_create_name_watermark}" />
 						</p:column>
-
-						<p:column style="width:50%">
-							<h:form id="testCaseForm">
-								<!-- 								<p:growl id="msg" /> -->
-								<p:dataTable id="testCaseDataTable" var="testCaseModel"
-									selection="#{requirementBean.reqSelectedtestCases}"
-									rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
-									emptyMessage="#{messages.label_notRecordFound}"
-									scrollable="true" scrollHeight="100"
-									value="#{requirementBean.reqtestCases}">
-									<p:column selectionMode="multiple"
-										style="width:30%;text-align:center;" />
-									<p:column style="width:70%" headerText="TestCases:">
-
-										<p:commandLink target="_blank" value="#{testCaseModel.name}"
-											action="#{jJTestcaseBean.testCaseInfo(testCaseModel.id)}"
-											ajax="false">
-										</p:commandLink>
-
-									</p:column>
-
-									<f:facet name="footer">
-										<p:commandButton onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()" id="update"
-											disabled="#{empty requirementBean.reqtestCases}"
-											update="testCaseDataTable :growlForm"
-											value="#{messages.label_update}" process="testCaseDataTable"
-											action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
-										<br />
-										<br />
-										<p:inputText id="testcase" style="width:50%;"
-											value="#{requirementBean.testCaseName}" label="TestCase Name">
-											<f:validateLength maximum="100" />
-											<p:ajax event="keyup" update="addTestCase" />
-										</p:inputText>
-										<p:watermark for="testcase" value="TestCase Name" />
-										<p:commandButton id="addTestCase"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()"
-											style="font-size: 1.0em !important;float:right;top: -3px;"
-											update="@form :growlForm"
-											disabled="#{empty requirementBean.testCaseName}"
-											action="#{requirementBean.addTestCase(jJTestcaseBean)}"
-											value="Ajouter TestCase" />
-									</f:facet>
-								</p:dataTable>
-							</h:form>
+						<p:column>
+							<p:inputText id="nameReq"
+								label="#{messages.specification_create_name_label}"
+								value="#{requirementBean.requirement.name}" required="true"
+								requiredMessage="#{messages.specification_create_name_alert}">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:outputLabel for="chapter"
+								value="#{messages.specification_create_chapter_label}" />
+							<p:autoComplete id="chapter" scrollHeight="200"
+								value="#{requirementBean.requirement.chapter}"
+								itemLabel="#{chapter != null ? chapter.name : messages.label_select}"
+								itemValue="#{chapter}"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter"
+								dropdown="true" var="chapter"
+								completeMethod="#{requirementBean.completeChapterRequirement}" />
 						</p:column>
 					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel
+								value="#{messages.specification_create_description_label}" />
+						</p:column>
+						<p:column colspan="3">
+							<pe:ckEditor id="description"
+								toolbar="#{imageStreamer.ckEditorToolBar}" height="60%"
+								width="98%"
+								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+								value="#{requirementBean.requirement.description}"
+								required="true" rendered="#{!loginBean.mobile}"
+								requiredMessage="Requirement Description is a required value" />
 
+							<p:editor id="descriptionMobile" style="width: 98%;height:60px;"
+								value="#{requirementBean.requirement.description}"
+								required="true" rendered="#{loginBean.mobile}"
+								requiredMessage="Requirement Description is a required value" />
+
+							<p:message for="description" rendered="#{!loginBean.mobile}" />
+							<p:message for="descriptionMobile" rendered="#{loginBean.mobile}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:outputLabel for="note"
+								value="#{messages.specification_create_note_watermark} : " />
+						</p:column>
+						<p:column colspan="3">
+							<p:inputTextarea id="note" rows="3" cols="100"
+								placeholder="#{messages.specification_create_note_watermark}"
+								value="#{requirementBean.requirement.note}" autoResize="false"
+								style="resize: none;width: 97%; margin-left:auto; margin-right:auto;" />
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton onstart="PF('blockUIWidget').block()"
+									action="#{requirementBean.save(jJRequirementBean)}"
+									oncomplete="PF('blockUIWidget').unblock()"
+									value="#{messages.specification_create_save_button}"
+									style="float:right;" />
+							</p:column>
+						</p:row>
+					</f:facet>
 				</p:panelGrid>
-			</h:panelGrid>
-		</p:panel>
+			</h:form>
+			<h:form>
+				<p:panelGrid columns="4" styleClass="customPanel"
+					rendered="#{requirementBean.requirement != null}">
+					<f:facet name="header">
+						<h:outputText value="Links" />
+					</f:facet>
+					<ui:repeat value="#{requirementBean.categorieRequirements}"
+						var="categorieRequirement" varStatus="loop">
+						<div style="width: 24%; margin-left: 5px; float: left;">
+							<p:dataList value="#{categorieRequirement.requirements}"
+								var="req" type="unordered" paginatorPosition="bottom"
+								rendered="#{categorieRequirement.requirements != null}"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
+								itemType="none" paginator="true" rows="5"
+								emptyMessage="#{messages.label_notRecordFound}"
+								styleClass="paginated GrayBack Blue ">
+								<f:facet name="header">
+										#{categorieRequirement.category.name}
+									</f:facet>
+								<p:commandLink
+									value="[#{req.id}]-#{fn:substring(req.name,0,25)}"
+									action="#{jJRequirementBean.requirementInfo}" ajax="false">
+									<f:setPropertyActionListener value="#{req}"
+										target="#{jJRequirementBean.requirement}" />
+								</p:commandLink>
+								<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
+								<f:facet name="footer">
+									<p:commandButton id="createButton" style="width: 100%;"
+										icon="fa fa-plus-square Fs20" resetValues="true"
+										actionListener="#{requirementBean.loadData(categorieRequirement)}"
+										onstart="PF('blockUIWidget').block()" update=":linkForm"
+										oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />
+								</f:facet>
+							</p:dataList>
+						</div>
+					</ui:repeat>
+				</p:panelGrid>
+			</h:form>
+			<p:panelGrid style="height: 150px;margin-top: 10px;"
+				rendered="#{requirementBean.requirement != null}">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<h:outputText value="Relations" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column style="width:50%">
+						<p:dataTable id="taskDatalist"
+							emptyMessage="#{messages.label_notRecordFound}"
+							value="#{requirementBean.requirementTasks}" var="task"
+							paginatorPosition="bottom"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} "
+							paginator="true" rows="5" styleClass="paginated">
+							<f:facet name="header">
+							#{messages.label_task}
+						</f:facet>
+							<p:column headerText="#{messages.project_gantt_table_name_title}"
+								width="70%">
+								<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
+							</p:column>
+							<p:column
+								headerText="#{messages.project_gantt_table_assigned_title}"
+								width="30%">
+								<h:outputText value="#{task.assignedTo}"
+									converter="JJContactConverter" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+
+					<p:column style="width:50%">
+						<h:form id="testCaseForm">
+							<!-- 								<p:growl id="msg" /> -->
+							<p:dataTable id="testCaseDataTable" var="testCaseModel"
+								selection="#{requirementBean.reqSelectedtestCases}"
+								rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
+								emptyMessage="#{messages.label_notRecordFound}"
+								scrollable="true" scrollHeight="100"
+								value="#{requirementBean.reqtestCases}">
+								<p:column selectionMode="multiple"
+									style="width:30%;text-align:center;" />
+								<p:column style="width:70%" headerText="TestCases:">
+									<h:outputText value="#{testCaseModel.name}" />
+								</p:column>
+
+								<f:facet name="footer">
+									<p:commandButton onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()" id="update"
+										disabled="#{empty requirementBean.reqtestCases}"
+										update="testCaseDataTable :growlForm"
+										value="#{messages.label_update}" process="testCaseDataTable"
+										action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
+									<br />
+									<br />
+									<p:inputText id="testcase" style="width:50%;"
+										placeholder="#{messages.label_name}"
+										value="#{requirementBean.testCaseName}"
+										label="#{messages.label_name}">
+										<f:validateLength maximum="100" />
+										<p:ajax event="keyup" update="addTestCase" />
+									</p:inputText>
+									<p:commandButton id="addTestCase"
+										onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()"
+										style="font-size: 1.0em !important;float:right;top: -3px;"
+										update="@form :growlForm"
+										disabled="#{empty requirementBean.testCaseName}"
+										action="#{requirementBean.addTestCase(jJTestcaseBean)}"
+										value="Ajouter TestCase" />
+								</f:facet>
+							</p:dataTable>
+						</h:form>
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+		</h:panelGrid>
+		<!-- 		</p:panel> -->
 		<p:fieldset id="container" legend="Comments" toggleable="true"
 			style="margin-top: 10px;width:95%;"
 			rendered="#{loginBean.enable and requirementBean.requirement != null}">
@@ -411,22 +412,20 @@
 				<ui:param name="cols" value="170" />
 			</ui:include>
 		</p:fieldset>
-		
-		<p:dialog id="requirementDialog" draggable="false"
+
+		<p:dialog id="requirementDialog" draggable="true" 
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center" style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
-			<p:scrollPanel rendered="#{jJRequirementBean.requirement != null}" styleClass="Container100 Responsive">
-				<p:ajax event="close"
-					listener="#{jJRequirementBean.closeDialog(false,false)}"
-					onstart="PF('requirementBlockUIWidget').block()"
-					oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
-				<p:outputPanel id="requirementDialogPanel">
-					<ui:include src="requirementDialog.xhtml" />
-				</p:outputPanel>
-			</p:scrollPanel>
+			responsive="true" >
+			<p:ajax event="close"
+				listener="#{jJRequirementBean.closeDialog(false,false)}"
+				onstart="PF('requirementBlockUIWidget').block()"
+				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />		
+			<p:outputPanel id="requirementDialogPanel">
+				<ui:include src="requirementDialog.xhtml" />
+			</p:outputPanel>
 		</p:dialog>
-		
+
 		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
 			header="#{messages.requirement_dialog_linkHeader}" modal="true"
 			widgetVar="linkDialogWidget" dynamic="true" resizable="false">
@@ -438,7 +437,7 @@
 				<pe:blockUI widgetVar="requirementBlockUIWidget"
 					target="requirementDialogPanel">
 					<h:panelGrid columns="2">
-						<p:graphicImage library="images" name="ajax-loader.gif"
+						<p:graphicImage name="images/preloader.gif" library="rioLayout"
 							style="vertical-align: middle;" />
 						<h:outputText value="#{messages.label_refresh}"
 							style="white-space: nowrap;" />
@@ -468,16 +467,6 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-		<!-- 		<p:dialog widgetVar="communication" id="communication" -->
-		<!-- 			styleClass="communicationPanelDialog" showEffect="fade" -->
-		<!-- 			dynamic="true" closable="true" style="width:400px" -->
-		<!-- 			rendered="#{loginBean.enable}"> -->
-		<!-- 			<ui:include src="/pages/communication.xhtml"> -->
-		<!-- 				<ui:param name="communicationList" -->
-		<!-- 					value="#{requirementBean.communicationMessages}" /> -->
-		<!-- 				<ui:param name="field" value="#{requirementBean.requirement}" /> -->
-		<!-- 			</ui:include> -->
-		<!-- 		</p:dialog> -->
 
 
 		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"

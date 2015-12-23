@@ -148,6 +148,31 @@ function removeMenuActiveIndex() {
 
 }
 
+$(window)
+		.on(
+				'resize',
+				function() {
+					var width = $(window).width() * 82 / 100;
+
+					if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+							.test(navigator.userAgent)) {
+						width = $(window).width() * 95 / 100;
+					} else if ($(window).width() < 960)
+						width = $(window).width() * 95 / 100;
+					$("#layoutsGrid").width(width);
+				});
+
+$(function() {
+	var width = $(window).width() * 82 / 100;
+
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+			.test(navigator.userAgent)) {
+		width = $(window).width() * 95 / 100;
+	} else if ($(window).width() < 960)
+		width = $(window).width() * 95 / 100;
+	$("#layoutsGrid").width(width);
+});
+
 $(document).ready(function() {
 	$("#rowToggler").click(function() {
 		$("#rowExpansion").slideUp("fast");

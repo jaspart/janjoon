@@ -114,9 +114,9 @@ div#contentPanel_content {
 	width: 25px !important;
 	height: 25px !important;
 	left: 25% !important;
-    margin-left: 0px !important;
-    margin-top: 0px !important;
-    top: 15% !important;
+	margin-left: 0px !important;
+	margin-top: 0px !important;
+	top: 15% !important;
 }
 
 .ui-icon-function {
@@ -124,17 +124,17 @@ div#contentPanel_content {
 	width: 25px !important;
 	height: 25px !important;
 	left: 25% !important;
-    margin-left: 0px !important;
-    margin-top: 0px !important;
-    top: 15% !important;
+	margin-left: 0px !important;
+	margin-top: 0px !important;
+	top: 15% !important;
 }
 
 .ui-icon-bug {
 	background-image: url("#{resource['images/bug.ico']}") !important;
 	left: 25% !important;
-    margin-left: 0px !important;
-    margin-top: 0px !important;
-    top: 15% !important;
+	margin-left: 0px !important;
+	margin-top: 0px !important;
+	top: 15% !important;
 }
 
 .ui-icon-restore {
@@ -221,7 +221,6 @@ div#contentPanel_content {
 /* 	border-top: 1px solid #0072C6 !important; */
 /* 	padding-top: 0px !important; */
 /* } */
-
 .rowExpansion {
 	
 }
@@ -311,6 +310,7 @@ div#contentPanel_content {
 	height: auto;
 	vertical-align: top;
 	text-align: left;
+	border: none !important;
 }
 
 .rsh {
@@ -334,6 +334,16 @@ div#contentPanel_content {
 	white-space: pre-wrap;
 	font-size: 90%;
 	margin-left: 7px;
+}
+
+.loginbodyjanjoon {
+	background-image: url("#{resource['images:background.jpg']}");
+	background-size: cover;
+	background-attachment: fixed;
+	background-position: center;
+	background-color: #0288D1;
+	background-repeat: no-repeat;
+	height: auto;
 }
 
 .login-body {
@@ -450,8 +460,34 @@ div#contentPanel_content {
 	width: 100%;
 	min-width: 200px !important;
 	margin: auto;
-	/*border: 1px solid #a4a4a4;*/
+	border: 1px solid #a4a4a4;
 }
+
+.requirement-table table tbody .ui-state-highlight > td {
+    background-color: #E1F5FE !important;
+    color: #0288D1;
+}
+
+.requirement-table .ui-datatable-header {
+	text-align: right !important;
+	background-color: #ffffff !important;
+    color: #0288d1 !important;
+}
+
+.mineAccordion .ui-accordion-content {
+	height: 80px;
+}
+
+.mineAccordion .ui-accordion-header {
+	 background-color: #E1F5FE !important;
+   	 color: #0288D1 !important;
+}
+
+.mineAccordion .ui-accordion-header .ui-icon{ 		
+ 		background-image:url("#{resource['rioLayout:images/rightarrow-navy.svg']}");
+}
+
+
 
 .requirement-column {
 	text-align: left;
@@ -619,7 +655,7 @@ div#contentPanel_content {
 	line-height: 1;
 	background-color: #fff;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -632,7 +668,7 @@ div#contentPanel_content {
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -645,7 +681,7 @@ div#contentPanel_content {
 	line-height: 1;
 	background-color: #fff;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -658,7 +694,7 @@ div#contentPanel_content {
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -670,7 +706,7 @@ div#contentPanel_content {
 	font-size: 80%;
 	line-height: 1;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -680,7 +716,7 @@ div#contentPanel_content {
 	font-size: 80%;
 	line-height: 1;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -908,23 +944,19 @@ div.highLightReal div.timeline-event-content span {
 
 div.highLightReal {
 	border: 1px solid #448dae !important;
-	background: #79c9ec
-		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+	background: #79c9ec url("#{resource['images/ui-bg_glass_75_79c9ec_1x400.png']}")
 		50% 50% repeat-x !important;
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
 	height: 17px !important;
 	transform: translate(0px, 18px);
-	border-radius: 0px !important;
-	background: #79c9ec
-		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
-		50% 50% repeat-x !important;
+	border-radius: 0px !important;	
 }
 
 div.highLightRevised1 {
 	border: 1px solid #448dae !important;
 	background: #79c9ec
-		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		url("#{resource['images/ui-bg_glass_75_79c9ec_1x400.png']}")
 		50% 50% repeat-x !important;
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
@@ -935,7 +967,7 @@ div.highLightRevised1 {
 div.highLightRevised2 {
 	border: 1px solid #448dae !important;
 	background: #79c9ec
-		url("/janjoon-ui/javax.faces.resource/images/ui-bg_glass_75_79c9ec_1x400.png.jsf?ln=primefaces-start")
+		url("#{resource['images/ui-bg_glass_75_79c9ec_1x400.png']}")
 		50% 50% repeat-x !important;
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
@@ -973,7 +1005,7 @@ div.highLightRevised2 {
 	line-height: 1;
 	color: #fff;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #666666 !important;
@@ -986,7 +1018,7 @@ div.highLightRevised2 {
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #FF3333 !important;
@@ -999,7 +1031,7 @@ div.highLightRevised2 {
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #9E33FF !important;
@@ -1012,7 +1044,7 @@ div.highLightRevised2 {
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #24B324 !important;
@@ -1025,7 +1057,7 @@ div.highLightRevised2 {
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
-	white-space: pre-line;
+/* 	white-space: pre-line; */
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #00A5F7 !important;

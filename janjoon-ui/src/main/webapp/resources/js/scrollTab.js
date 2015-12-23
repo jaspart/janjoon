@@ -85,11 +85,6 @@ $(document).ready(
 // });
 // });
 $(function() {
-	var width = $(window).width() * 82 / 100;
-	$("#layoutsGrid").width(width);
-});
-
-$(function() {
 	$(".wmd-view-topscroll").scroll(function() {
 		$(".ui-tree").scrollLeft($(".wmd-view-topscroll").scrollLeft());
 	});

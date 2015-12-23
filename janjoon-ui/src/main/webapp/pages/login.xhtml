@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -6,99 +6,102 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<ui:composition template="../templates/layout-login.xhtml">
-	<ui:define name="title">#{messages.login_title}</ui:define>
-	<ui:define name="content">
-		<!-- 		<f:event listener="#{loginBean.checkAuthorities}" type="preRenderView"  /> -->
-		<h:form id="login" method="post">
-			<p:growl showDetail="true" id="auth" />
-			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="2">
-							<p:outputLabel value="#{messages.login_pleaseLogin_header}" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<h:outputLabel for="username"
-							value="#{messages.login_username_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
-						<p:inputText id="username" value="#{loginBean.username}"
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>#{messages.login_title}</title>
+	<ui:insert name="head" />
+</h:head>
+
+<h:body styleClass="loginbodyjanjoon">
+	<h:form id="login" method="post">
+		<p:growl showDetail="true" id="auth" />
+		<div class="Wid90 DispBlock MarAuto TexAlCenter">
+			<div class="Wid33 MarAuto WidAutoOnMobile">
+				<h:graphicImage name="janjoon_logo.ico" library="images"
+					style="width:40%; max-width:200px;" />
+				<div class="EmptyBox10"></div>
+				<div class="Card ShadowEffect">
+					<div class="EmptyBox20"></div>
+					<div class="Wid100 OvHidden BigTopic Fs30">
+						<i class="icon-users Fs40"></i>
+						#{messages.login_pleaseLogin_header}
+					</div>
+					<div class="EmptyBox20"></div>
+					<div class="Wid100">
+						<p:inputText id="username"
+							placeholder="#{messages.login_username_label}"
+							styleClass="Wid80 TexAlCenter Fs18" value="#{loginBean.username}"
 							required="true"
 							requiredMessage="#{messages.login_necessaryUsername_label}">
 							<f:validator validatorId="emailValidator" />
 						</p:inputText>
-
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:message for="username" id="mail" closable="true" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<h:outputLabel for="password"
-							value="#{messages.login_password_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+					</div>
+					<div class="EmptyBox10"></div>
+					<div class="Wid100">
 						<p:password id="password" value="#{loginBean.password}"
-							required="true"
+							required="true" styleClass="Wid80 TexAlCenter Fs18"
+							placeholder="#{messages.login_password_label}"
 							requiredMessage="#{messages.login_necessaryPassword_label}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:message for="password" id="mdp" closable="true" />
-					</p:column>
-				</p:row>
-				<f:facet name="footer">
-					<p:row style="padding: 4px 1px;">
-						<p:column colspan="2">
-							<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
-								<p:ajax event="change" update="submit submit2" />
-							</p:selectBooleanCheckbox>
-							<h:outputLink target="_blank"
-								value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
-								styleClass="preformatted">
-								<h:outputLabel value="#{messages.login_terms_label}" />
-							</h:outputLink>
-							<br />
-							<h:panelGroup id="submit2">
-								<p:hotkey bind="enter"
-									update=":login:mdp,:login:mail :login:auth"
-									action="#{loginBean.login}"
-									onstart="PF('blockUIWidget').block()"
-									onerror="PF('blockUIWidget').unblock()"
-									rendered="#{loginBean.agreeTerms}"
-									oncomplete="PF('blockUIWidget').unblock()" />
-							</h:panelGroup>
-							<p:commandButton id="submit"
-								value="#{messages.login_login_button}"
-								onstart="PF('blockUIWidget').block()"
-								onerror="PF('blockUIWidget').unblock()"
-								oncomplete="PF('blockUIWidget').unblock()"
-								action="#{loginBean.login}" style="margin-top:20px;"
-								disabled="#{!loginBean.agreeTerms}"
-								update=":login:mdp,:login:mail :login:auth" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:panelGrid>
-		</h:form>
-		<!-- 		<pe:blockUI widgetVar="blockUIWidget"> -->
-		<!-- 			<h:panelGrid columns="2"> -->
-		<!-- 				<p:graphicImage library="images" name="ajax-loader.gif" -->
-		<!-- 					style="vertical-align: middle;" /> -->
-		<!-- 				<h:outputText value="#{messages.label_refresh}" -->
-		<!-- 					style="white-space: nowrap;" /> -->
-		<!-- 			</h:panelGrid> -->
-		<!-- 		</pe:blockUI> -->
-	</ui:define>
-</ui:composition>
+					</div>
+					<div class="EmptyBox30"></div>
+					<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
+						<p:ajax event="change" update="submit" />
+					</p:selectBooleanCheckbox>
+					<h:outputLink target="_blank"
+						value="../resources/ConfidentialityTermsAndConditions_BetaUsers.pdf"
+						styleClass="preformatted">
+						<h:outputLabel value="#{messages.login_terms_label}" />
+					</h:outputLink>
+					<div class="EmptyBox30"></div>
+					<div class="Wid100">
+						<p:commandButton id="submit"
+							value="#{messages.login_login_button}"
+							onstart="PF('blockUIWidget').block()"
+							onerror="PF('blockUIWidget').unblock()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							action="#{loginBean.login}" icon="fa fa-key"
+							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
+							disabled="#{!loginBean.agreeTerms}" update=":login:auth" />
+					</div>
+					<div class="EmptyBox5"></div>
+					<div class="Wid100">
+						<p:button value="Sign In / Sign Up" icon="fa fa-sign-in"
+							styleClass="Wid60 Fs18 White RaisedButton"
+							href="/pages/signup.jsf?faces-redirect=true" />
+					</div>
+					<!-- 					<div class="EmptyBox20"></div> -->
+					<div class="Separator"></div>
+					<!-- 					<div class="EmptyBox10"></div> -->
+					<div class="Wid100">
+						<ui:insert name="footer">
+							<ui:include src="../templates/footer.xhtml" />
+						</ui:insert>
+					</div>
+					<pe:blockUI widgetVar="blockUIWidget">
+						<h:panelGrid columns="2">
+							<p:graphicImage name="images/preloader.gif" library="rioLayout"
+								style="vertical-align: middle;" />
+							<h:outputText value="#{messages.label_refresh}"
+								style="white-space: nowrap;" />
+						</h:panelGrid>
+					</pe:blockUI>
+				</div>
+			</div>
+		</div>
+		<h:outputStylesheet name="css/core-layout.css" library="rioLayout" />
+		<h:outputStylesheet name="standard.css" library="css" />
+		<h:outputStylesheet name="css/animate.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-font.css" library="rioLayout" />
+		<h:outputStylesheet name="css/ripple-effect.css" library="rioLayout" />
+		<h:outputStylesheet name="css/font-awesome.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-layout.css" library="rioLayout" />
+	</h:form>
+</h:body>
+
 </html>

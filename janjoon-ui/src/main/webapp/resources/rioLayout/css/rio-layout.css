@@ -52,11 +52,11 @@
 html{height:100%;}
 body{margin:0px; height:100%; width:100%; background-color:#F5F5F5;}
 
-.loginbodyblue{background-image:url("#{resource['rio-layout:images/blue-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#0288D1;
+.loginbodyblue{background-image:url("#{resource['rioLayout:images/blue-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#0288D1;
           background-repeat:no-repeat; height:auto; border-top: solid 10px #0288D1;}
-.loginbodyorange{background-image:url("#{resource['rio-layout:images/orange-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#FB8C00;
+.loginbodyorange{background-image:url("#{resource['rioLayout:images/orange-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#FB8C00;
           background-repeat:no-repeat; height:auto; border-top: solid 10px #FB8C00;}
-.loginbodyred{background-image:url("#{resource['rio-layout:images/red-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#E53935;
+.loginbodyred{background-image:url("#{resource['rioLayout:images/red-background.svg']}"); background-size:cover; background-attachment:fixed; background-position:center; background-color:#E53935;
           background-repeat:no-repeat; height:auto; border-top: solid 10px #E53935;}
 
 /* topbar */

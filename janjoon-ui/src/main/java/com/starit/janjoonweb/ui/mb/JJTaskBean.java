@@ -1363,7 +1363,7 @@ public class JJTaskBean {
 		}
 		Object newValue = event.getNewValue();
 		FacesMessage facesMessage = null;
-				boolean valid = true;
+		boolean valid = true;
 
 		if (columnKey.contains("sdpr")) {
 			if (newValue != null) {
@@ -1531,14 +1531,14 @@ public class JJTaskBean {
 
 			if (!validation_error)
 				facesMessage = MessageFactory.getMessage(
-						"message_successfully_updated",
-						MessageFactory.getMessage("label_task", "").getDetail());				
+						"message_successfully_updated", MessageFactory
+								.getMessage("label_task", "").getDetail());
 			// RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
 			facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"message_unsuccessfully_updated", MessageFactory.getMessage("label_task", "")
-							.getDetail());
+					"message_unsuccessfully_updated", MessageFactory
+							.getMessage("label_task", "").getDetail());
 		}
 		if (facesMessage != null)
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -2989,15 +2989,15 @@ public class JJTaskBean {
 	}
 
 	public void onCreateTimelineEvent(TimelineAddEvent ev) {
-		
-		Calendar cal = Calendar.getInstance(); 
-		
+
+		Calendar cal = Calendar.getInstance();
+
 		cal.setTime(ev.getStartDate());
-		cal.add(Calendar.MONTH, -1);			
+		cal.add(Calendar.MONTH, -1);
 		this.start = cal.getTime();
-		
+
 		cal.setTime(ev.getEndDate());
-		cal.add(Calendar.MONTH, 1);			
+		cal.add(Calendar.MONTH, 1);
 		this.end = cal.getTime();
 
 		this.mode = "planning";
@@ -3015,17 +3015,17 @@ public class JJTaskBean {
 	}
 
 	public void onEditTimelineEvent(TimelineModificationEvent ev) {
-		
-		Calendar cal = Calendar.getInstance(); 
-		
+
+		Calendar cal = Calendar.getInstance();
+
 		cal.setTime(ev.getTimelineEvent().getStartDate());
-		cal.add(Calendar.MONTH, -1);			
+		cal.add(Calendar.MONTH, -1);
 		this.start = cal.getTime();
-		
+
 		cal.setTime(ev.getTimelineEvent().getEndDate());
-		cal.add(Calendar.MONTH, 1);			
+		cal.add(Calendar.MONTH, 1);
 		this.end = cal.getTime();
-		
+
 		this.task = (JJTask) ev.getTimelineEvent().getData();
 		taskTreeNode = null;
 		selectedReq = null;
@@ -3040,8 +3040,8 @@ public class JJTaskBean {
 		tt = jJTaskService.findJJTask(tt.getId());
 		String group = ev.getTimelineEvent().getStyleClass().toUpperCase();
 
-//		this.start = ev.getTimelineEvent().getStartDate();
-//		this.end = ev.getTimelineEvent().getEndDate();
+		// this.start = ev.getTimelineEvent().getStartDate();
+		// this.end = ev.getTimelineEvent().getEndDate();
 
 		// ev.getComponent().
 
@@ -3071,17 +3071,17 @@ public class JJTaskBean {
 
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
-			
-			Calendar cal = Calendar.getInstance(); 
-			
+
+			Calendar cal = Calendar.getInstance();
+
 			cal.setTime(tt.getStartDateReal());
-			cal.add(Calendar.MONTH, -1);			
+			cal.add(Calendar.MONTH, -1);
 			this.start = cal.getTime();
-			
-			cal.setTime( tt.getEndDateReal());
-			cal.add(Calendar.MONTH, 1);			
+
+			cal.setTime(tt.getEndDateReal());
+			cal.add(Calendar.MONTH, 1);
 			this.end = cal.getTime();
-			
+
 			updateView(tt, UPDATE_OPERATION);
 
 		} else if (group.toLowerCase().contains(Planned.toLowerCase())
@@ -3097,17 +3097,17 @@ public class JJTaskBean {
 					null)));
 			saveJJTask(tt, true);
 			tt = jJTaskService.findJJTask(tt.getId());
-			
-			Calendar cal = Calendar.getInstance(); 
-			
+
+			Calendar cal = Calendar.getInstance();
+
 			cal.setTime(tt.getStartDateRevised());
-			cal.add(Calendar.MONTH, -1);			
+			cal.add(Calendar.MONTH, -1);
 			this.start = cal.getTime();
-			
+
 			cal.setTime(tt.getEndDateRevised());
-			cal.add(Calendar.MONTH, 1);			
+			cal.add(Calendar.MONTH, 1);
 			this.end = cal.getTime();
-			
+
 			updateView(tt, UPDATE_OPERATION);
 
 		} else {
@@ -3139,7 +3139,7 @@ public class JJTaskBean {
 		}
 
 		reset();
-		if (tt != null) {		
+		if (tt != null) {
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated",

@@ -331,6 +331,58 @@ public class JJRequirementBean {
 			return "";
 	}
 
+	// public String getTabaleDataModelStyleClass(CategoryDataModel dataModel) {
+	//
+	// int nbOpenedTables = 0;
+	// int expand = -1;
+	// if (tableDataModelList != null) {
+	// for (int i = 0; i < tableDataModelList.size(); i++) {
+	// if (tableDataModelList.get(i).getCategoryId() != 0
+	// && tableDataModelList.get(i).getRendered()) {
+	// nbOpenedTables++;
+	// if (tableDataModelList.get(i).isExpanded())
+	// expand = i;
+	// }
+	// }
+	// }
+	//
+	// double tableDataModelSizePct = 0;
+	// String styleClass = "";
+	// if (nbOpenedTables > 0) {
+	//
+	// if (nbOpenedTables != 2) {
+	// tableDataModelSizePct = 100 / nbOpenedTables;
+	// if(nbOpenedTables == 3)
+	// styleClass = "Container33";
+	// } else {
+	// tableDataModelSizePct = 49.5;
+	// styleClass= "Container50";
+	// }
+	//
+	// }
+	// if (((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
+	// tableDataModelSizePct = 100;
+	// }
+	//
+	// if (tableDataModelSizePct == 100)
+	// return "Container100";
+	// else {
+	// if (expand != -1) {
+	// if (dataModel.equals(tableDataModelList.get(expand)))
+	// return "Container60";
+	// else if (nbOpenedTables == 2) {
+	// if (dataModel.getRendered())
+	// return "Container40";
+	// else
+	// return "";
+	// } else
+	// return "Container20";
+	//
+	// } else
+	// return styleClass;
+	// }
+	// }
+
 	public String getTableDataModelSizePct(CategoryDataModel dataModel) {
 
 		int nbOpenedTables = 0;

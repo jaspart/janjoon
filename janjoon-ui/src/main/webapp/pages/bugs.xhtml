@@ -101,9 +101,9 @@
 					widgetVar="blockUIWidget2" />
 				<h:panelGrid id="blockUIContent" columns="2"
 					style="display:none;table-layout:auto;">
-					<h:graphicImage library="images" name="ajax-loader.gif"
-						style="margin-right: 12px; vertical-align: middle;" />
-					<h:outputText value="Please wait, data is being processed..."
+					<p:graphicImage name="images/preloader.gif" library="rioLayout"
+						style="vertical-align: middle;" />
+					<h:outputText value="#{messages.label_refresh}"
 						style="white-space: nowrap;" />
 				</h:panelGrid>
 				<p:dataTable id="bugTable2" sortMode="multiple"
