@@ -70,9 +70,9 @@
 				<!-- 			<br /> -->
 				<!-- 			<br /> -->
 				<h:panelGrid columns="6" styleClass="Responsive50">
-					<p:inputText id="globalFilter"
+					<p:inputText id="globalFilter" style="width: 100px;"
 						placeholder="#{messages.specification_table_requirement_filter}"
-						value="#{jJRequirementBean.filterValue}" style="width: 100px;">
+						value="#{jJRequirementBean.filterValue}" >
 						<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"
 							onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
@@ -80,7 +80,7 @@
 
 					<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
 						title="#{messages.specification_table_requirement_filter}"
-						styleClass="mineSelect" effect="fade" style="left: 5%;">
+						styleClass="mineSelect" effect="fade">
 						<f:selectItem itemValue="#{false}"
 							itemLabel="#{messages.specification_table_requirement_all}" />
 						<f:selectItem itemValue="#{true}"
@@ -574,19 +574,17 @@
 		<p:hotkey bind="esc" handler="PF('requirementDialogWidget').hide()" />
 		<p:hotkey bind="alt+enter"
 			handler="PF('requirementSaveWidget').jq.click()" />
-		<p:dialog id="requirementDialog" draggable="false"
-			header="#{messages[jJRequirementBean.message]}" modal="true"
-			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center"
-			style="padding:0px;min-height:320px;height:60%;max-height:600px;min-width:300px;width:60% !important;max-width:1200px !important;">
+		<p:dialog id="requirementDialog" draggable="false" 
+			header="#{messages[jJRequirementBean.message]}" modal="true" responsive="true"
+			widgetVar="requirementDialogWidget" dynamic="true" resizable="false" position="center" 
+			style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
 			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,true)}"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()" />
-			<p:scrollPanel id="requirementDialogPanel"
-				style="height: 500px;width: 500px;" styleClass="Container100">
+			<p:outputPanel id="requirementDialogPanel">
 				<ui:include src="requirementDialog.xhtml" />
-			</p:scrollPanel>
+			</p:outputPanel>
 		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('chapterDialogWidget').hide()" />

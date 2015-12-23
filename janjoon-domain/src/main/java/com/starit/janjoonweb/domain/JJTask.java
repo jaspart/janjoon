@@ -28,7 +28,7 @@ public class JJTask {
 
 	@NotNull
 	@Size(max = 100)
-	private String name;//add task type field
+	private String name;// add task type field
 
 	@NotNull
 	@Lob
@@ -51,7 +51,7 @@ public class JJTask {
 
 	private Boolean enabled;
 
-	//private Boolean specification;
+	// private Boolean specification;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
@@ -117,7 +117,7 @@ public class JJTask {
 
 	@ManyToOne
 	private JJStatus status;
-	
+
 	@ManyToOne
 	private JJStatus taskType;
 

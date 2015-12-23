@@ -192,8 +192,8 @@
 				</p:row>
 			</p:panelGrid>
 		</h:form>
-		<h:panelGrid columns="1" styleClass="customPanelGrid Responsive" border="0"
-			rendered="#{requirementBean.requirement != null}">
+		<h:panelGrid columns="1" styleClass="customPanelGrid Responsive"
+			border="0" rendered="#{requirementBean.requirement != null}">
 			<h:form id="requirementForm">
 				<p:panelGrid rendered="#{requirementBean.requirement != null}"
 					style="width : 100%;">
@@ -413,17 +413,19 @@
 			</ui:include>
 		</p:fieldset>
 
-		<p:dialog id="requirementDialog" draggable="true" 
+		<p:dialog id="requirementDialog" draggable="false"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			responsive="true" >
+			position="center"
+			style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
 			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,false)}"
 				onstart="PF('requirementBlockUIWidget').block()"
-				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />		
+				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
 			<p:outputPanel id="requirementDialogPanel">
 				<ui:include src="requirementDialog.xhtml" />
 			</p:outputPanel>
+
 		</p:dialog>
 
 		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
