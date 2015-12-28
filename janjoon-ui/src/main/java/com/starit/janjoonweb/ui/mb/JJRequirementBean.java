@@ -2036,14 +2036,15 @@ public class JJRequirementBean {
 	}
 
 	public boolean getDisabledEdit(JJRequirement requirement) {
-		if (requirement.getStatus() != null) {
-			if (requirement.getStatus().getName().equalsIgnoreCase("RELEASED")) {
-				return true;
-			} else {
-				return false;
-			}
-		} else
-			return false;
+		// if (requirement.getStatus() != null) {
+		// if (requirement.getStatus().getName().equalsIgnoreCase("RELEASED")) {
+		// return true;
+		// } else {
+		// return false;
+		// }
+		// } else
+		// return false;
+		return false;
 
 	}
 

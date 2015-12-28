@@ -29,8 +29,8 @@
 				copyDiv.focus();
 				document.execCommand('SelectAll');
 				document.execCommand("Copy", false, null);
-				document.body.removeChild(copyDiv);				
-			}			
+				document.body.removeChild(copyDiv);
+			}
 		</script>
 		<!-- Fin InsertJanjoon -->
 		<f:facet name="first">
@@ -52,12 +52,12 @@
 
 		<ui:include src="topbar.xhtml" />
 
-		<div id="wrapper">
-			<div id="wrapperIndent">
+		<h:panelGroup layout="block" id="wrapper">
+			<h:panelGroup layout="block" id="wrapperIndent">
 
 				<ui:include src="layoutmenu.xhtml" />
-				<div id="layout-portlets-cover">
-					<h:panelGrid id="applicatinPanelGrid" columns="3"
+				<h:panelGroup layout="block" id="layout-portlets-cover">
+					<h:panelGrid id="applicatinPanelGrid" columns="1"
 						styleClass="wrapper">
 						<p:panel styleClass="content">
 							<p:dialog id="viewDialog1"
@@ -104,22 +104,21 @@
 								<ui:insert name="content" />
 							</p:panel>
 						</p:panel>
-						
 
-						<pe:blockUI widgetVar="blockUIWidget">
-							<h:panelGrid columns="2">
-								<p:graphicImage name="images/preloader.gif" library="rioLayout"
-									style="vertical-align: middle;" />
-								<h:outputText value="#{messages.label_refresh}"
-									style="white-space: nowrap;" />
-							</h:panelGrid>
-						</pe:blockUI>
+						<ui:insert name="footer">
+							<ui:include src="footer.xhtml" />
+						</ui:insert>
 
 					</h:panelGrid>
 
-					<ui:insert name="footer">
-						<ui:include src="footer.xhtml" />
-					</ui:insert>
+					<pe:blockUI widgetVar="blockUIWidget">
+						<h:panelGrid columns="2">
+							<p:graphicImage name="images/preloader.gif" library="rioLayout"
+								style="vertical-align: middle;" />
+							<h:outputText value="#{messages.label_refresh}"
+								style="white-space: nowrap;" />
+						</h:panelGrid>
+					</pe:blockUI>
 
 					<!--                     <div class="Container100"> -->
 					<!--                         <div class="ContainerIndent Fs12 BoldGray FontRobotoRegular"> -->
@@ -128,7 +127,7 @@
 					<!--                             <div class="EmptyBox10"></div> -->
 					<!--                         </div> -->
 					<!--                     </div> -->
-				</div>
+				</h:panelGroup>
 
 				<p:ajaxStatus
 					style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
@@ -140,8 +139,8 @@
 						<h:outputText value="" />
 					</f:facet>
 				</p:ajaxStatus>
-			</div>
-		</div>
+			</h:panelGroup>
+		</h:panelGroup>
 
 
 		<script type="text/javascript">

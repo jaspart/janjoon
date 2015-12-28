@@ -24,24 +24,21 @@
 								<f:param name="contactId" value="#{loginBean.contact.id}" />
 							</p:graphicImage>
 						</p:column>
-						<p:column colspan="5">
-							<p:outputLabel for="messagedsc" value="Message :"
-								style="float:left;" />
-							<br />
+						<p:column colspan="5">							
 							<p:inputTextarea id="messagedsc" cols="#{cols}" rows="3"
 								style="float:left;" value="#{jJMessageBean.message.message}"
-								required="true" />
+								required="true" placeholder="Message"/>
 						</p:column>
 					</p:row>
 					<f:facet name="footer">
 						<p:row>
 							<p:column colspan="6">
-								<p:selectBooleanButton id="alert" style="float: left;"
+								<p:inputSwitch id="alert" style="float: left;"
 									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-									offLabel="Info" offIcon="fa fa-info-circle Fs20" onIcon="fa fa-minus-circle Fs20 Red">
-								</p:selectBooleanButton>
-								<p:commandButton id="submitMes" value="OK"
-									process="@this,alert,messagedsc" style="float: left;"
+									offLabel="Info">
+								</p:inputSwitch>
+								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
+									process="@this,alert,messagedsc" style="float: left;left: 1%;"
 									actionListener="#{jJMessageBean.createMessage(true,field)}"
 									update=":comForm :headerForm:communicationButton :growlForm" />
 							</p:column>
@@ -55,7 +52,7 @@
 					<f:param name="contactId" value="#{mes.createdBy.id}" />
 				</p:graphicImage>
 			</p:column>
-			<p:column style="width: 20%;min-width: 200px !important; ">
+			<p:column style="width: 20%;min-width: 200px !important;text-align: center; ">
 				<h:outputText
 					value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
 					style="font-weight: bold;color: #3b5998;" />
@@ -65,14 +62,14 @@
 					<f:convertDateTime type="date" locale="#{localeBean.locale}"
 						pattern="dd/MM/yyyy HH:mm" />
 				</h:outputText>
+				<br />
+				<h:outputText value="#{mes.criticity.name}"
+							styleClass="#{mes.criticity.name}" />
 			</p:column>
 			<p:column style="width: 65%;min-width: 200px">
 				<h:outputText id="viewButton"
 					style="width: 100% !important;color: #22222222;font-size: 14px;white-space: pre-wrap;"
-					value="#{mes.message}" />
-				<p:tooltip for="viewButton"
-					value="#{messages.label_view} #{mes.name}" showEffect="fade"
-					hideEffect="fade" />
+					value="#{mes.message}" title="#{messages.label_view} #{mes.name}" />				
 			</p:column>
 
 		</p:dataTable>

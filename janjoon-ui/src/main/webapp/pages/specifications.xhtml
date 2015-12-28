@@ -187,7 +187,7 @@
 				var="tableDataModel" varStatus="loop">
 				<p:panelGrid styleClass="Responsive"
 					rendered="#{tableDataModel.rendered}"
-					style="min-width:200px;margin-top: 10px;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};#{jJRequirementBean.getDisplay(tableDataModel)}
+					style="min-width:200px;/*margin-top: 10px*/;width: #{jJRequirementBean.getTableDataModelSizePct(tableDataModel)};#{jJRequirementBean.getDisplay(tableDataModel)}
 							float: #{jJRequirementBean.tableDataModelFloatLeft};#{jJRequirementBean.getTableDataModelMargin(tableDataModel)}">
 					<p:row>
 						<p:column rendered="#{tableDataModel.expanded}"
@@ -321,7 +321,7 @@
 								<p:column width="5%">
 									<p:commandLink
 										actionListener="#{jJRequirementBean.onrate(reqUtil.requirement)}"
-										id="rate"
+										id="rate" 
 										update=":growlForm :messageCreationForm :headerForm:communicationButton categoryTable_#{loop.index}:rate"
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock()">
@@ -353,7 +353,7 @@
 										<f:facet name="output">
 											<h:outputText
 												value="#{messages['specification_'.concat(reqUtil.style)]}"
-												styleClass="#{reqUtil.style}" />
+												styleClass="#{reqUtil.style} Fs14" />
 
 											<h:outputText id="reqContent"
 												style="white-space: normal;Line-Height: 2;"
@@ -433,11 +433,11 @@
 								<p:column exportable="false" styleClass="action-column"
 									style="width: 50px !important;"
 									rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
-									<f:facet name="header">
-										<h:outputText value="Actions" />
-									</f:facet>
+<!-- 									<f:facet name="header"> -->
+<!-- 										<h:outputText value="Actions" /> -->
+<!-- 									</f:facet> -->
 									<p:commandButton id="viewButton" type="button"
-										icon="fa fa-ellipsis-v Fs20" styleClass="BlueButton"
+										icon="fa fa-list Fs20" styleClass="BlueButton"
 										style="min-width: 20px !important;min-height: 20px !important;height: 30px; width: 30px;" />
 									<p:menu overlay="true" trigger="viewButton" my="left top"
 										at="left bottom">

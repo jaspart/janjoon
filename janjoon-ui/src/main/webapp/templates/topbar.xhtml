@@ -7,8 +7,8 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 
-	<div id="layout-topbar">
-		<div id="logo" class="Fleft">
+	<h:panelGroup layout="block" id="layout-topbar">
+		<h:panelGroup layout="block" id="logo" styleClass="Fleft">
 			<!--a href="#"-->
 			<h:link outcome="main">
 				<p:graphicImage library="images" name="janjoon_logo.png"
@@ -29,14 +29,14 @@
 			<a id="mobile-menu-button"
 				class="Fright ShowOnMobile ripplelink Unselectable ShadowEffect"><i
 				class="icon-add186"></i></a>
-		</div>
+		</h:panelGroup>
 
 		<a class="ripplelink WhiteBlue Fright ShowOnMobile" id="show-top-menu"><i
 			class="icon-show8"></i></a>
 
 		<ul id="top-menu" class="ShowOnDesktop">
 
-			<li><a class="ripplelink"> <i class="icon-person325"></i> <span
+			<li><a class="ripplelink"> <i class="icon-settings50"></i> <span
 					class="Txt">#{loginBean.contact.firstname}
 						#{loginBean.contact.name}</span></a>
 				<ul>
@@ -44,7 +44,7 @@
 						href="#{request.contextPath}/pages/contactConfig.jsf?faces-redirect=true">#{loginBean.contact.firstname}
 							#{loginBean.contact.name}</a></li>
 				</ul></li>
-			<li><a class="ripplelink"><i class="icon-notifications1"></i>
+			<li><a class="ripplelink"><i class="icon-bubble8"></i>
 					<span class="Txt">Messages</span></a>
 				<ul>
 					<li><p:commandLink id="communicationButton" 
@@ -53,13 +53,11 @@
 							onclick="PF('mPanel').loadContents()" immediate="true">
 							#{loginBean.messageCount} Message</p:commandLink></li>
 				</ul></li>
-			<li><a class="ripplelink"><i class="icon-thermostat1"></i> <span
+			<li><a class="ripplelink"><i class="icon-in-alt"></i> <span
 					class="Txt">#{messages.header_logout_link}</span></a>
 				<ul>
 					<li><a href="logout.jsf">#{messages.header_logout_link}</a></li>
-				</ul></li>
-			<li><a href="#" class="ripplelink"><i class="icon-wifi83"></i>
-					<span class="Txt">System Settings</span></a></li>
+				</ul></li>		
 		</ul>
 		<p:overlayPanel id="mPanel" for="communicationButton"
 			hideEffect="clip" dynamic="true" style="width:300px"
@@ -85,17 +83,15 @@
 							title="#{messages.label_view} #{mes.name}" />
 					</p:column>
 					<f:facet name="footer">
-						<h:panelGrid columns="1" border="0">
-							<p:outputLabel for="messagedsc" value="Message :" />
-							<p:inputTextarea id="messagedsc" cols="20" rows="6"
+						<h:panelGrid columns="1" border="0" style="text-align: center;">							
+							<p:inputTextarea id="messagedsc" cols="20" rows="6" placeholder="Message"
 								value="#{jJMessageBean.message.message}" required="true" />
 							<h:panelGrid columns="2" border="0" style="border:hidden;">
-								<p:selectBooleanButton id="alert"
+								<p:inputSwitch id="alert" style="float: left;"
 									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-									offLabel="Info" offIcon="fa fa-info-circle Fs20"
-									onIcon="fa fa-minus-circle Fs20 Red">
-								</p:selectBooleanButton>
-								<p:commandButton id="submitMes" value="OK"
+									offLabel="Info" >
+								</p:inputSwitch>
+								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
 									process="@this,alert,messagedsc"
 									actionListener="#{jJMessageBean.createMessage(false,null)}"
 									update=":messageCreationForm :headerForm:communicationButton :communicationButton :growlForm" />
@@ -106,5 +102,5 @@
 				</p:dataTable>
 			</h:form>
 		</p:overlayPanel>
-	</div>
+	</h:panelGroup>
 </ui:composition>

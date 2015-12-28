@@ -24,13 +24,14 @@
 			<!--div id="panelMenu"-->
 			<div style="height: 100px"></div>
 			<p:selectOneMenu id="projectSelectOneMenu"
-				value="#{jJProjectBean.project}" panelStyle="width:120px"
-				effect="fade" style="width:160px" filter="true"
-				valueChangeListener="#{loginBean.changeEvent}"
+				panelStyleClass="headerSelectOneMenuClass"
+				value="#{jJProjectBean.project}" effect="fade" style="width:160px"
+				filter="true" valueChangeListener="#{loginBean.changeEvent}"
 				filterMatchMode="startsWith"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
-				<f:selectItem itemValue="#{null}" itemLabel="AnyProject" />
+				<f:selectItem itemValue="#{null}"
+					itemLabel="#{messages.header_any_project}" />
 				<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 					itemLabel="#{p.name}" itemValue="#{p}" />
 				<p:ajax onstart="PF('blockUIWidget').block()"
@@ -39,13 +40,15 @@
 			</p:selectOneMenu>
 
 			<p:selectOneMenu id="productSelectOneMenu"
-				value="#{jJProductBean.product}" panelStyle="width:120px"
-				effect="fade" style="width:160px" filter="true"
+				value="#{jJProductBean.product}"
+				panelStyleClass="headerSelectOneMenuClass" effect="fade"
+				style="width:160px" filter="true"
 				valueChangeListener="#{loginBean.changeEvent}"
 				filterMatchMode="startsWith"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
-				<f:selectItem itemValue="#{null}" itemLabel="AnyProduct" />
+				<f:selectItem itemValue="#{null}"
+					itemLabel="#{messages.header_any_product}" />
 				<f:selectItems value="#{jJProductBean.productList}" var="p"
 					itemLabel="#{p.name}" itemValue="#{p}" />
 				<p:ajax onstart="PF('blockUIWidget').block()"
@@ -54,13 +57,14 @@
 			</p:selectOneMenu>
 
 			<p:selectOneMenu id="versionSelectOneMenu"
-				value="#{jJVersionBean.version}" panelStyle="width:120px"
-				effect="fade" style="width:160px" filter="true"
-				valueChangeListener="#{loginBean.changeEvent}"
+				value="#{jJVersionBean.version}" style="width:160px;"
+				panelStyleClass="headerSelectOneMenuClass" effect="fade"
+				filter="true" valueChangeListener="#{loginBean.changeEvent}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 				filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
 
-				<f:selectItem itemValue="#{null}" itemLabel="AnyVersion" />
+				<f:selectItem itemValue="#{null}"
+					itemLabel="#{messages.header_any_version}" />
 
 				<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 					itemLabel="#{v.name}" itemValue="#{v}" />
@@ -74,32 +78,33 @@
 			<pr:menu id="tabMenu" name="content" style="float: none;"
 				binding="#{tab}" rendered="#{loginBean.enable}">
 
-				<p:menuitem value="Home" icon="icon-planet29"
+				<p:menuitem value="Home" icon="icon-planet29 Gray"
 					url="/pages/main.jsf?faces-redirect=true" />
 
-				<p:menuitem id="proAction" 
+				<p:menuitem id="proAction"
 					value="#{messages.header_project_menuitem}"
 					title="#{loginBean.authorisationService.rProjectMSG}"
 					onstart="PF('blockUIWidget').block()"
 					actionListener="#{loginBean.redirection}" update=":growlForm"
-					icon="icon-calendar" style="min-width: 80px;"
+					icon="icon-connection21 Purple" style="min-width: 80px;"
 					rendered="#{loginBean.authorisationService.rProject}" />
 
 				<p:menuitem value="#{messages.header_spec_menuitem}"
 					title="#{loginBean.authorisationService.rRequiementMSG}"
 					url="/pages/specifications.jsf?faces-redirect=true"
-					icon="icon-list"
+					icon="icon-underline6 Blue"
 					rendered="#{loginBean.authorisationService.rRequiement}" />
 
 				<p:menuitem value="#{messages.header_bug_menuitem}"
 					rendered="#{loginBean.authorisationService.rBug}"
 					title="#{loginBean.authorisationService.rBugMSG}"
-					url="/pages/bugs.jsf?faces-redirect=true" icon="icon-bug18" />
+					url="/pages/bugs.jsf?faces-redirect=true" icon="icon-bug18 Red" />
+
 				<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
 					onstart="PF('blockUIWidget').block()"
 					title="#{loginBean.authorisationService.rwDevMSG}"
 					actionListener="#{loginBean.redirectToDev}" update=":growlForm"
-					icon="icon-developer2"
+					icon="icon-browser"
 					rendered="#{loginBean.authorisationService.rwDev}" />
 
 				<p:menuitem id="testAction"
@@ -107,7 +112,7 @@
 					value="#{messages.header_test_menuitem}"
 					onstart="PF('blockUIWidget').block()"
 					actionListener="#{loginBean.redirection}" update=":growlForm"
-					icon="icon-check51"
+					icon="icon-tick7 Green"
 					rendered="#{loginBean.authorisationService.rTest}" />
 
 				<p:menuitem value="#{messages.header_exploitation_menuitem}"
@@ -119,26 +124,28 @@
 				<p:menuitem value="#{messages.header_delivery_menuitem}"
 					rendered="#{loginBean.authorisationService.rBuild}"
 					title="#{loginBean.authorisationService.rBuildMSG}"
-					url="/pages/delivery.jsf?faces-redirect=true" icon="icon-inbox-alt" />
+					url="/pages/delivery.jsf?faces-redirect=true"
+					icon="icon-inbox-alt Marron" />
 
 				<p:menuitem value="#{messages.header_team_menuitem}"
 					rendered="#{loginBean.authorisationService.rProject}"
 					title="#{messages.header_team_menuitem}"
-					url="/pages/teams.jsf?faces-redirect=true" icon="icon-round58" />
+					url="/pages/teams.jsf?faces-redirect=true"
+					icon="icon-round58 GoldYellow" />
 
 				<p:menuitem id="statsAction"
 					title="#{messages.header_stat_menuitemhelp}"
 					value="#{messages.header_stat_menuitem}"
 					onstart="PF('blockUIWidget').block()"
 					actionListener="#{loginBean.redirection}" update=":growlForm"
-					icon="icon-calculator"
+					icon="icon-thermostat1 Khaki"
 					rendered="#{loginBean.authorisationService.rProject}" />
 
 				<p:menuitem value="#{messages.header_admin_menuitem}"
 					title="#{messages.header_admin_menuitemhelp}"
 					rendered="#{loginBean.authorisationService.renderAdmin}"
 					url="/pages/administration.jsf?faces-redirect=true"
-					icon="icon-https" update=":contentPanel" />
+					icon="icon-https Marron" update=":contentPanel" />
 			</pr:menu>
 		</div>
 		<!--/h:panelGrid-->
