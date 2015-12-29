@@ -191,13 +191,13 @@
 					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 					value="#{jJRequirementBean.requirement.description}"
 					required="true" rendered="#{!loginBean.mobile}"
-					requiredMessage="#{messages.specification_create_name_alert}" />
+					requiredMessage="#{messages.specification_create_description_alert}" />
 
 				<p:editor id="descriptionMobile" styleClass="ShowOnMobile"
 					style="width:100%;height:25%;margin-left:auto;margin-right:auto;"
 					value="#{jJRequirementBean.requirement.description}"
 					required="true" rendered="#{loginBean.mobile}"
-					requiredMessage="#{messages.specification_create_name_alert}" />
+					requiredMessage="#{messages.specification_create_description_alert}" />
 
 				<p:message for="description" rendered="#{!loginBean.mobile}" />
 				<p:message for="descriptionMobile" rendered="#{loginBean.mobile}" />

@@ -484,20 +484,28 @@ div#contentPanel_content {
 	font-weight: bold;
 }
 
+.reqAction-column {
+	text-align: center;
+	vertical-align: middle;
+	padding-bottom: 1px !important;
+	padding-top: 1px !important;
+	padding-right: 1px !important;
+	padding-left: 1px !important;
+}
+
 .requirement-table .ui-datatable-empty-message td {
 	font-size: 16px !important;
 }
 
-.link-datatable .ui-datatable-header{
+.link-datatable .ui-datatable-header {
 	background-color: #d1d3d4;
 	color: #0288d1;
 	text-align: center !important;
 }
 
-.link-datatable .ui-datatable-scrollable-header{
+.link-datatable .ui-datatable-scrollable-header {
 	display: none;
 }
-
 
 .mineAccordion .ui-accordion-content {
 	height: 80px;
@@ -511,6 +519,19 @@ div#contentPanel_content {
 .mineAccordion .ui-accordion-header .ui-icon {
 	background-image:
 		url("#{resource['rioLayout:images/rightarrow-navy.svg']}");
+}
+
+.accordionTreePanel {
+	float: left;
+	height: 100%;
+	width: 30% !important;
+}
+
+.accordionTreePanel .ui-accordion-content {
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
 }
 
 .requirement-column {
@@ -540,6 +561,7 @@ div#contentPanel_content {
 	min-width: 70px !important;
 }
 
+}
 .taskDataTable td:nth-child(1) {
 	width: 160px;
 }

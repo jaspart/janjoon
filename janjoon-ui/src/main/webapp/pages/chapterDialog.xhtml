@@ -7,7 +7,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<style type="text/css">
-.ui-tree {
+	
+.chapterTree {
 	height: 350px;
 	width: 350px;
 	overflow-y: auto;
@@ -116,7 +117,7 @@
 								value="#{messages.specification_chapter_tree_label}" />
 							<p:tree id="chapterTreeSingle" style="width:250px"
 								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
-								selectionMode="single"
+								selectionMode="single" 
 								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
 								<!-- 								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" update=":chapterDialogForm" /> -->
 								<p:treeNode>
@@ -140,7 +141,7 @@
 				</p:panelGrid>
 			</p:tab>
 			<p:tab title="Document">
-				<p:panelGrid style="margin-top:10px;height: 500px;width: 950px;">
+				<p:panelGrid style="margin-top:10px;height: 450px;width: 950px;">
 					<p:row>
 						<p:column colspan="3">
 							<p:outputLabel for="leftTreeIncorporated"
@@ -148,7 +149,7 @@
 								value="#{messages.specification_chapter_unordered_tree}" />
 							<p:tree id="leftTreeIncorporated"  style="height: 90%;"
 								value="#{jJChapterBean.leftRoot}" var="nodeLeft"
-								selectionMode="single"
+								selectionMode="single" styleClass="chapterTree"
 								selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
 								droppable="true" dragdropScope="demo" cache="false">
 								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"
@@ -171,7 +172,7 @@
 								value="#{messages.specification_chapter_ordered_tree}" />
 							<p:tree id="RightTreeIncorporated" style="height: 90%;"
 								value="#{jJChapterBean.rightRoot}" var="nodeRight"
-								selectionMode="single"
+								selectionMode="single" styleClass="chapterTree"
 								selection="#{jJChapterBean.selectedRightNode}" draggable="true"
 								droppable="true" dragdropScope="demo" cache="false">
 								<p:ajax event="dragdrop" listener="#{jJChapterBean.onDragDrop}"

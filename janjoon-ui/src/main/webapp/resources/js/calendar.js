@@ -160,7 +160,16 @@ $(window)
 					} else if ($(window).width() < 960)
 						width = $(window).width() * 95 / 100;
 					$("#layoutsGrid").width(width);
+					
+					var width1 = $("#treeForm\\:accordionTreePanel").width() * 89 / 100;	
+					$(".reqTree").width(width1);
 				});
+
+$(function() {	
+
+	var width = $("#treeForm\\:accordionTreePanel").width() * 89 / 100;	
+	$(".reqTree").width(width);
+});
 
 $(function() {
 	var width = $(window).width() * 82 / 100;

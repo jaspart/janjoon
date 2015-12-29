@@ -69,7 +69,9 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
 import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
@@ -1608,6 +1610,38 @@ public class LoginBean implements Serializable {
 			RequestContext.getCurrentInstance().execute("updateGrowl()");
 			facesMessage = null;
 		}
+
+	}
+
+	public String checkMessage(Object obj) {
+
+		if (obj instanceof CategoryUtil) {
+
+			JJCategory cat = ((CategoryUtil) obj).getCategory();
+			return MessageFactory.getMessage(
+					"category_" + cat.getName().replace(" ", "_"), "")
+					.getDetail() != null ? MessageFactory.getMessage(
+					"category_" + cat.getName().replace(" ", "_"), "")
+					.getDetail() : cat.getName();
+		} else if (obj instanceof JJCategory) {
+
+			JJCategory cat = (JJCategory) obj;
+			return MessageFactory.getMessage(
+					"category_" + cat.getName().replace(" ", "_"), "")
+					.getDetail() != null ? MessageFactory.getMessage(
+					"category_" + cat.getName().replace(" ", "_"), "")
+					.getDetail() : cat.getName();
+		} else if (obj instanceof JJStatus) {
+
+			JJStatus sta = (JJStatus) obj;
+			return MessageFactory.getMessage(
+					"status_" + sta.getName().replace(" ", "_"), "")
+					.getDetail() != null ? MessageFactory.getMessage(
+					"category_" + sta.getName().replace(" ", "_"), "")
+					.getDetail() : sta.getName();
+
+		} else
+			return obj.toString();
 
 	}
 

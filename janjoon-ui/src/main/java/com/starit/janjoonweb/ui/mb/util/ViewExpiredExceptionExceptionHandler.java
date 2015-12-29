@@ -57,21 +57,26 @@ public class ViewExpiredExceptionExceptionHandler extends
 				}
 			} else if (LoginBean.findBean("loginBean") != null) {
 
-				FacesContext ctx = FacesContext.getCurrentInstance();
-				String viewId = ctx.getViewRoot().getViewId();
-				String path = FacesContext.getCurrentInstance()
-						.getExternalContext().getRequestContextPath();
-				String view = viewId.replace(path, "");
-				view = view.replace("/pages/", "");
-				if (view.indexOf(".jsf") != -1)
-					view = view.substring(0, view.indexOf(".jsf"));
-				else
-					view = view.replace(".xhtml", "");
-				LoginBean loginBean = (LoginBean) LoginBean
-						.findBean("loginBean");
-				loginBean.setFacesMessage(MessageFactory.getMessage(
-						"label_exceptionHandler", FacesMessage.SEVERITY_ERROR,
-						view));
+				if (FacesContext.getCurrentInstance().getViewRoot() != null) {
+					String viewId = FacesContext.getCurrentInstance()
+							.getViewRoot().getViewId();
+					String path = FacesContext.getCurrentInstance()
+							.getExternalContext().getRequestContextPath();
+					String view = viewId.replace(path, "");
+					view = view.replace("/pages/", "");
+					if (view.indexOf(".jsf") != -1)
+						view = view.substring(0, view.indexOf(".jsf"));
+					else
+						view = view.replace(".xhtml", "");
+
+				} else {
+					LoginBean loginBean = (LoginBean) LoginBean
+							.findBean("loginBean");
+					loginBean.setFacesMessage(MessageFactory.getMessage(
+							"label_exceptionHandler",
+							FacesMessage.SEVERITY_ERROR));
+				}
+
 			}
 
 		}

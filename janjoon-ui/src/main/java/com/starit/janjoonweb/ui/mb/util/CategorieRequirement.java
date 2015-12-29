@@ -39,32 +39,34 @@ public class CategorieRequirement {
 		List<CategorieRequirement> categorieRequirements = new ArrayList<CategorieRequirement>();
 
 		for (JJCategory category : categories) {
-			CategorieRequirement cateReq = new CategorieRequirement(category);
-			for (JJRequirement req : requirement.getRequirementLinkDown()) {
+			if (!category.equals(requirement.getCategory())) {
+				CategorieRequirement cateReq = new CategorieRequirement(
+						category);
+				for (JJRequirement req : requirement.getRequirementLinkDown()) {
 
-				if (req.getCategory().getName()
-						.equalsIgnoreCase(category.getName())
-						&& req.getEnabled())
-					cateReq.getRequirements().add(req);
+					if (req.getCategory().getName()
+							.equalsIgnoreCase(category.getName())
+							&& req.getEnabled())
+						cateReq.getRequirements().add(req);
+
+				}
+
+				for (JJRequirement req : requirement.getRequirementLinkUp()) {
+
+					if (req.getCategory().getName()
+							.equalsIgnoreCase(category.getName())
+							&& req.getEnabled())
+						cateReq.getRequirements().add(req);
+
+				}
+				categorieRequirements.add(cateReq);
 
 			}
-
-			for (JJRequirement req : requirement.getRequirementLinkUp()) {
-
-				if (req.getCategory().getName()
-						.equalsIgnoreCase(category.getName())
-						&& req.getEnabled())
-					cateReq.getRequirements().add(req);
-
-			}
-			categorieRequirements.add(cateReq);
-
 		}
-
-		for (CategorieRequirement cc : categorieRequirements) {
-			if (requirement.getCategory().equals(cc.getCategory()))
-				cc.setRequirements(null);
-		}
+//		for (CategorieRequirement cc : categorieRequirements) {
+//			if (requirement.getCategory().equals(cc.getCategory()))
+//				cc.setRequirements(null);
+//		}
 
 		return categorieRequirements;
 
