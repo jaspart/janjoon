@@ -161,14 +161,15 @@ $(window)
 						width = $(window).width() * 95 / 100;
 					$("#layoutsGrid").width(width);
 					
-					var width1 = $("#treeForm\\:accordionTreePanel").width() * 89 / 100;	
+					var width1 = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
 					$(".reqTree").width(width1);
 				});
 
-$(function() {	
-
-	var width = $("#treeForm\\:accordionTreePanel").width() * 89 / 100;	
+$(function() {		
+//	var height = $("#requirementForm\\:requirementFormPanelGrid").height() * 81.1 / 100;	
+	var width = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
 	$(".reqTree").width(width);
+//	$(".reqTree").height(height);
 });
 
 $(function() {

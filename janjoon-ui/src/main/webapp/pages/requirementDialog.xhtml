@@ -61,7 +61,7 @@
 						converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
 					<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
 						var="req"
-						itemLabel="#{messages['status_'.concat(fn:replace(req.name, ' ', '_'))]}"
+						itemLabel="#{loginBean.checkMessage(req)}"
 						itemValue="#{req}" />
 					<p:ajax partialSubmit="true"
 						listener="#{jJRequirementBean.handleSelectStatus()}" />

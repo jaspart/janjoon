@@ -29,7 +29,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{messages.admin_status_table_name_title}" />
 					</f:facet>
-					<h:outputText value="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}" />
+					<h:outputText value="#{loginBean.checkMessage(status)}" />
 				</p:column>
 
 				<p:column sortBy="#{status.objet}" id="objet"

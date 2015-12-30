@@ -214,7 +214,7 @@
 							converter="JJBugConverter" value="#{jJSprintBean.bug}" />
 						<p:outputLabel for="taskBugStatus" value="Status : " />
 						<p:autoComplete id="taskBugStatus"
-							value="#{jJSprintBean.bug.status}" itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+							value="#{jJSprintBean.bug.status}" itemLabel="#{loginBean.checkMessage(status)}"
 							itemValue="#{status}" scrollHeight="200"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 							dropdown="true" var="status" style="width:200px;"

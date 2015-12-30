@@ -200,7 +200,7 @@
 
 						<p:column headerText="Status">
 							<h:outputText
-								value="#{messages['status_'.concat(fn:replace(req.status.name, ' ', '_'))]}" />
+								value="#{loginBean.checkMessage(req.status)}" />
 						</p:column>
 					</p:dataTable>
 				</h:form>

@@ -1329,30 +1329,33 @@ public class JJRequirementBean {
 	@SuppressWarnings("unchecked")
 	public void filterTable() {
 		int i = 0;
-		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+		// LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		while (i < tableDataModelList.size()) {
 			if (tableDataModelList.get(i).getRendered()) {
 
-				if (filterValue == null || filterValue.isEmpty()) {
+				if ((filterValue == null || filterValue.isEmpty())
+						&& !mine
+						&& (tableDataModelList.get(i).getRowStyleClassFilter() == null || tableDataModelList
+								.get(i).getRowStyleClassFilter().isEmpty())) {
 
-					if (this.mine) {
-						JJCategory category = jJCategoryService
-								.findJJCategory(tableDataModelList.get(i)
-										.getCategoryId());
-						this.setMine(true);
-						tableDataModelList.get(i).setFiltredRequirements(
-								getListOfRequiremntUtils(jJRequirementService
-										.getMineRequirements(LoginBean
-												.getCompany(),
-												((LoginBean) LoginBean
-														.findBean("loginBean"))
-														.getContact(),
-												loginBean.getAuthorizedMap(
-														"Requirement", project,
-														product), category,
-												version, true, true)));
-					} else
-						tableDataModelList.get(i).setFiltredRequirements(null);
+					// if (this.mine) {
+					// JJCategory category = jJCategoryService
+					// .findJJCategory(tableDataModelList.get(i
+					// .getCategoryId());
+					// this.setMine(true);
+					// tableDataModelList.get(i).setFiltredRequirements(
+					// getListOfRequiremntUtils(jJRequirementService
+					// .getMineRequirements(LoginBean
+					// .getCompany(),
+					// ((LoginBean) LoginBean
+					// .findBean("loginBean"))
+					// .getContact(),
+					// loginBean.getAuthorizedMap(
+					// "Requirement", project,
+					// product), category,
+					// version, true, true)));
+					// } else
+					tableDataModelList.get(i).setFiltredRequirements(null);
 
 				} else {
 					tableDataModelList.get(i).setFiltredRequirements(
@@ -2546,35 +2549,25 @@ public class JJRequirementBean {
 					categoryDataModel.setActiveIndex(-1);
 
 					if (mine) {
-						if (filterValue == null || filterValue.isEmpty())
-							categoryDataModel
-									.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService.getMineRequirements(
-											LoginBean.getCompany(),
-											((LoginBean) LoginBean
-													.findBean("loginBean"))
-													.getContact(), loginBean
-													.getAuthorizedMap(
-															"Requirement",
-															project, product),
-											category, version, true, true)));
-						else {
-							categoryDataModel
-									.setFiltredRequirements(getFiltredListValue(
-											getListOfRequiremntUtils(jJRequirementService
-													.getMineRequirements(
-															LoginBean
-																	.getCompany(),
-															((LoginBean) LoginBean
-																	.findBean("loginBean"))
-																	.getContact(),
-															loginBean
-																	.getAuthorizedMap(
-																			"Requirement",
-																			project,
-																			product),
-															category, version,
-															true, true)), null));
-						}
+						// if (filterValue == null || filterValue.isEmpty())
+						// categoryDataModel
+						// .setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService.getMineRequirements(
+						// LoginBean.getCompany(),
+						// ((LoginBean) LoginBean
+						// .findBean("loginBean"))
+						// .getContact(), loginBean
+						// .getAuthorizedMap(
+						// "Requirement",
+						// project, product),
+						// category, version, true, true)));
+						// else {
+						categoryDataModel
+								.setFiltredRequirements(getFiltredListValue(
+										(List<RequirementUtil>) categoryDataModel
+												.getWrappedData(),
+										categoryDataModel
+												.getRowStyleClassFilter()));
+						// }
 					} else if (!(filterValue == null || filterValue.isEmpty())) {
 						categoryDataModel
 								.setFiltredRequirements(getFiltredListValue(
@@ -2601,16 +2594,9 @@ public class JJRequirementBean {
 						requirements != null);
 				if (mine && requirements != null)
 					categoryDataModel
-							.setFiltredRequirements(getListOfRequiremntUtils(jJRequirementService
-									.getMineRequirements(
-											LoginBean.getCompany(),
-											((LoginBean) LoginBean
-													.findBean("loginBean"))
-													.getContact(), loginBean
-													.getAuthorizedMap(
-															"Requirement",
-															project, product),
-											category, version, true, true)));
+							.setFiltredRequirements(getFiltredListValue(
+									(List<RequirementUtil>) categoryDataModel
+											.getWrappedData(), null));
 				tableDataModelList.set(i, categoryDataModel);
 
 			}
@@ -3958,6 +3944,11 @@ public class JJRequirementBean {
 			this.rendered = rendered;
 		}
 
+		public JJCategory getCategory() {
+
+			return jJCategoryService.findJJCategory(categoryId);
+		}
+
 		public void settingSousChapter(JJChapter ch, TreeNode chapterNode) {
 			TreeNode node = new DefaultTreeNode("chapter", ch, chapterNode);
 			List<JJChapter> sous_Chapters = jJChapterService
@@ -5004,18 +4995,12 @@ public class JJRequirementBean {
 				this.setMine(true);
 				tableDataModelList.get(i).setFiltredRequirements(
 						getFiltredListValue(
-								getListOfRequiremntUtils(jJRequirementService
-										.getMineRequirements(LoginBean
-												.getCompany(),
-												((LoginBean) LoginBean
-														.findBean("loginBean"))
-														.getContact(),
-												loginBean.getAuthorizedMap(
-														"Requirement", project,
-														product), category,
-												version, true, true)),
-								tableDataModelList.get(i)
-										.getRowStyleClassFilter()));
+								(List<RequirementUtil>) tableDataModelList.get(
+										i).getWrappedData(), tableDataModelList
+										.get(i).getRowStyleClassFilter()));
+				// RequestContext.getCurrentInstance().execute(
+				// "PF('dataTable_" + i
+				// + "_Widget').clearFilters();");
 			}
 
 		} else {
@@ -5196,6 +5181,7 @@ public class JJRequirementBean {
 									+ "------");
 				} else
 					System.out.println("SIZE: -----NULL------");
+
 			}
 
 			RequestContext.getCurrentInstance().execute("updateDataTable();");

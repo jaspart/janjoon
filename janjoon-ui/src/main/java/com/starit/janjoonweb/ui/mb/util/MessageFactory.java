@@ -23,6 +23,23 @@ public class MessageFactory {
 		return facesMessage;
 	}
 
+	public static String checkMessage(final String messageId, final Object... params) {
+
+		String summary = null;
+		final FacesContext context = FacesContext.getCurrentInstance();
+		final ResourceBundle bundle = context.getApplication()
+				.getResourceBundle(context, "messages");
+
+		try {
+			summary = getFormattedText(getLocale(), bundle.getString(messageId),
+					params);
+		} catch (final MissingResourceException e) {
+			summary = null;
+		}
+
+		return summary;
+	}
+
 	public static FacesMessage getMessage(final Locale locale,
 			final String messageId, final Object... params) {
 		String summary = null;

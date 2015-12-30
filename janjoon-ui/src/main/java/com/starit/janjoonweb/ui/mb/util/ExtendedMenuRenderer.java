@@ -10,8 +10,53 @@ import javax.faces.model.SelectItem;
 import org.primefaces.component.column.Column;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.selectonemenu.SelectOneMenuRenderer;
+import org.primefaces.util.ComponentUtils;
 
 public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
+
+	protected void encodeLabel(FacesContext context, SelectOneMenu menu,
+			List<SelectItem> selectItems) throws IOException {
+		ResponseWriter writer = context.getResponseWriter();
+		String valueToRender = ComponentUtils.getValueToRender(context, menu);
+
+		if (menu.isEditable()) {
+			writer.startElement("input", null);
+			writer.writeAttribute("type", "text", null);
+			writer.writeAttribute("name", menu.getClientId(context)
+					+ "_editableInput", null);
+			writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS, null);
+
+			if (menu.getTabindex() != null) {
+				writer.writeAttribute("tabindex", menu.getTabindex(), null);
+			}
+
+			if (menu.isDisabled()) {
+				writer.writeAttribute("disabled", "disabled", null);
+			}
+
+			if (valueToRender != null) {
+				writer.writeAttribute("value", valueToRender, null);
+			}
+
+			if (menu.getMaxlength() != Integer.MAX_VALUE) {
+				writer.writeAttribute("maxlength", menu.getMaxlength(), null);
+			}
+
+			writer.endElement("input");
+		} else {
+			writer.startElement("label", null);
+			writer.writeAttribute("id", menu.getClientId(context) + "_label",
+					null);
+			if (valueToRender != null
+					&& menu.getAttributes().get("optionClasses") != null)
+				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS + " "
+						+ valueToRender.toString()+"_select", null);
+			else
+				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS, null);
+			writer.write("&nbsp;");
+			writer.endElement("label");
+		}
+	}
 
 	protected void encodeOptionsAsTable(FacesContext context,
 			SelectOneMenu menu, List<SelectItem> selectItems)
@@ -58,6 +103,9 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 			if (itemValue instanceof String) {
 				writer.startElement("td", null);
 				writer.writeAttribute("colspan", columns.size(), null);
+				if (itemValue != null
+						&& menu.getAttributes().get("optionClasses") != null)
+					writer.writeAttribute("style", "color: white;", null);
 				writer.writeText(selectItem.getLabel(), null);
 				writer.endElement("td");
 			} else {

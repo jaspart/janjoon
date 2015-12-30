@@ -81,7 +81,7 @@
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.importTask_selectStatus}" />
 						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
-							itemLabel="#{messages['status_'.concat(fn:replace(p.name, ' ', '_'))]}"
+							itemLabel="#{loginBean.checkMessage(p)}"
 							itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectStatus}"

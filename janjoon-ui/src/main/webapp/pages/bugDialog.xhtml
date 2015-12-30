@@ -45,7 +45,7 @@
 		<p:row>
 			<p:column colspan="1">
 				<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
-					placeholder="Status" itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+					placeholder="Status" itemLabel="#{loginBean.checkMessage(status)}"
 					itemValue="#{status}" scrollHeight="200"
 					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 					dropdown="true" var="status" readonly="#{JJBug_.id == null}"

@@ -524,7 +524,7 @@ div#contentPanel_content {
 .accordionTreePanel {
 	float: left;
 	height: 100%;
-	width: 30% !important;
+	width: 100% !important;
 }
 
 .accordionTreePanel .ui-accordion-content {
@@ -1057,7 +1057,6 @@ div.highLightRevised2 {
 	border-radius: .25em;
 	background-color: #666666 !important;
 }
-
 .UnLinked {
 	padding: .2em .6em .3em;
 	font-size: 80%;
@@ -1108,6 +1107,47 @@ div.highLightRevised2 {
 	vertical-align: baseline;
 	border-radius: .25em;
 	background-color: #00A5F7 !important;
+}
+
+.Specified_select {	
+	color: #fff;
+	text-align: center;	
+	background-color: #666666 !important;
+}
+
+.UnLinked_select {
+	color: #fff !important;
+	text-align: center;	
+	background-color: #FF3333 !important;
+}
+
+.Progress_select {
+	
+	color: #fff !important;
+	text-align: center;	
+	background-color: #9E33FF !important;
+}
+
+.Finished_select {
+	color: #fff !important;
+	background-color: #24B324 !important;
+	text-align: center;
+}
+
+.InTesting_select {	
+	color: #fff !important;	
+	text-align: center;
+	background-color: #00A5F7 !important;
+}
+
+.specSelectOneMenuPanel tr.ui-state-highlight td {
+    color: #026591 !important;
+    background-color: initial;
+}
+
+.specSelectOneMenu.ui-state-focus .ui-selectonemenu-label {
+ 	background-color: inherit !important;
+  	color: #03a9f4 !important;
 }
 
 .NEW {

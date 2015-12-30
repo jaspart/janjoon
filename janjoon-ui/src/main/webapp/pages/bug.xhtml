@@ -141,7 +141,7 @@
 									<p:outputLabel for="jJbugStatus" value="Status : " />
 									<p:autoComplete id="jJbugStatus"
 										value="#{jJBugBean.viewBug.status}" 
-										itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+										itemLabel="#{loginBean.checkMessage(status)}"
 										itemValue="#{status}" styleClass="bugAutoComplete"
 										scrollHeight="200" style="float: right;margin-right: 20px;"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"

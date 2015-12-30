@@ -56,7 +56,7 @@
 							value="#{messages.admin_workflow_table_source_title}" />
 					</f:facet>
 					<h:outputText
-							value="#{messages['status_'.concat(fn:replace(workflow.source.name, ' ', '_'))]}" />
+							value="#{loginBean.checkMessage(workflow.source)}" />
 				</p:column>
 
 				<p:column sortBy="#{workflow.target.name}">
@@ -65,7 +65,7 @@
 							value="#{messages.admin_workflow_table_target_title}" />
 					</f:facet>
 					<h:outputText
-							value="#{messages['status_'.concat(fn:replace(workflow.target.name, ' ', '_'))]}" />
+							value="#{loginBean.checkMessage(workflow.target)}" />
 
 				</p:column>
 
@@ -187,7 +187,7 @@
 							value="#{jJWorkflowBean.JJWorkflow_.source}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 							itemValue="#{source}" required="true" dropdown="true"
-							var="source" itemLabel="#{messages['status_'.concat(fn:replace(source.name, ' ', '_'))]}"
+							var="source" itemLabel="#{loginBean.checkMessage(source)}"
 							completeMethod="#{jJWorkflowBean.completeSource}">
 							<f:attribute name="objet"
 								value="#{jJWorkflowBean.JJWorkflow_.objet}" />
@@ -200,7 +200,7 @@
 							widgetVar="workFlowTarget"
 							value="#{jJWorkflowBean.JJWorkflow_.target}"
 							itemValue="#{target}" required="true" dropdown="true"
-							var="target" itemLabel="#{messages['status_'.concat(fn:replace(target.name, ' ', '_'))]}"
+							var="target" itemLabel="#{loginBean.checkMessage(target)}"
 							completeMethod="#{jJWorkflowBean.completeTarget}">
 							<f:attribute name="objet"
 								value="#{jJWorkflowBean.JJWorkflow_.objet}" />

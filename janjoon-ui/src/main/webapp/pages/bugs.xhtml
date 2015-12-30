@@ -190,7 +190,7 @@
 						filterStyle="width: 90%;"
 						style="width: 22% !important;height: 5px !important;">
 						<h:outputText
-							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
+							value="#{loginBean.checkMessage(bug.status)}"
 							styleClass="#{bug.status.name}" />
 						<h:outputText value=" ID:#{bug.id} #{bug.name}" />
 					</p:column>
@@ -227,7 +227,7 @@
 						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
 						filterStyle="width: 90%;">
 						<h:outputText
-							value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
+							value="#{loginBean.checkMessage(bug.status)}"
 							styleClass="#{bug.status.name}" />
 					</p:column>
 					<p:column styleClass="action-column" style="width: 100px;">

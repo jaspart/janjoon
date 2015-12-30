@@ -44,7 +44,7 @@
 
 			<p:outputLabel value="Status :" for="taskStatus" />
 			<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
-				itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+				itemLabel="#{loginBean.checkMessage(status)}"
 				itemValue="#{status}" scrollHeight="200"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 				dropdown="true" var="status" size="15"

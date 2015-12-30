@@ -73,7 +73,7 @@
 							<p:column headerText="Status">
 								<p:autoComplete id="status" dropdown="true"
 									value="#{build.status}"
-									itemLabel="#{messages['status_'.concat(fn:replace(status.name, ' ', '_'))]}"
+									itemLabel="#{loginBean.checkMessage(status)}"
 									itemValue="#{status}" var="status" size="10"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 									completeMethod="#{jJBuildBean.completeStatus}">
@@ -160,7 +160,7 @@
 
 							<p:column id="reqStatus" headerText="Status">
 								<h:outputText
-									value="#{messages['status_'.concat(fn:replace(req.status.name, ' ', '_'))]}" />
+									value="#{loginBean.checkMessage(req.status)}" />
 							</p:column>
 						</p:dataTable>
 						<p:dataTable id="bugTable" value="#{versionDataModel.bugRoadMap}"
@@ -192,7 +192,7 @@
 							<p:column id="bugStatus"
 								headerText="#{messages.bug_table_status_title}" width="15%">
 								<h:outputText
-									value="#{messages['status_'.concat(fn:replace(bug.status.name, ' ', '_'))]}"
+									value="#{loginBean.checkMessage(bug.status)}"
 									styleClass="#{bug.status.name}" />
 							</p:column>
 						</p:dataTable>

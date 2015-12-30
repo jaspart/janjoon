@@ -1617,30 +1617,32 @@ public class LoginBean implements Serializable {
 
 		if (obj instanceof CategoryUtil) {
 
-			JJCategory cat = ((CategoryUtil) obj).getCategory();
-			return MessageFactory.getMessage(
-					"category_" + cat.getName().replace(" ", "_"), "")
-					.getDetail() != null ? MessageFactory.getMessage(
-					"category_" + cat.getName().replace(" ", "_"), "")
-					.getDetail() : cat.getName();
+			JJCategory cat = ((CategoryUtil) obj).getCategory();			
+			return MessageFactory.checkMessage("category_"
+					+ cat.getName().replace(" ", "_"), "") != null ? MessageFactory
+					.checkMessage(
+							"category_" + cat.getName().replace(" ", "_"), "")
+					: cat.getName();
 		} else if (obj instanceof JJCategory) {
 
 			JJCategory cat = (JJCategory) obj;
-			return MessageFactory.getMessage(
-					"category_" + cat.getName().replace(" ", "_"), "")
-					.getDetail() != null ? MessageFactory.getMessage(
-					"category_" + cat.getName().replace(" ", "_"), "")
-					.getDetail() : cat.getName();
+			return MessageFactory.checkMessage("category_"
+					+ cat.getName().replace(" ", "_"), "") != null ? MessageFactory
+					.checkMessage(
+							"category_" + cat.getName().replace(" ", "_"), "")
+					: cat.getName();
 		} else if (obj instanceof JJStatus) {
 
 			JJStatus sta = (JJStatus) obj;
-			return MessageFactory.getMessage(
-					"status_" + sta.getName().replace(" ", "_"), "")
-					.getDetail() != null ? MessageFactory.getMessage(
-					"category_" + sta.getName().replace(" ", "_"), "")
-					.getDetail() : sta.getName();
+			return MessageFactory.checkMessage("status_"
+					+ sta.getName().replace(" ", "_"), "") != null ? MessageFactory
+					.checkMessage("status_" + sta.getName().replace(" ", "_"),
+							"") : sta.getName();
 
+		} else if (obj == null) {
+			return MessageFactory.checkMessage("label_select", "");
 		} else
+
 			return obj.toString();
 
 	}
