@@ -712,7 +712,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"Build"));
+							"Build",""));
 
 		} else if (object instanceof JJTestcase) {
 
@@ -747,7 +747,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"TestCase"));
+							"Test",""));
 
 		}
 	}
@@ -776,7 +776,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"Testcase"));
+							"Test",""));
 		}
 
 	}
@@ -1197,7 +1197,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_created",
-							"Testcase"));
+							"Test",""));
 
 		}
 
@@ -1234,7 +1234,7 @@ public class JJTestcaseBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"Testcase"));
+							"Test",""));
 
 			context.execute("PF('testcaseDialogWidget').hide()");
 

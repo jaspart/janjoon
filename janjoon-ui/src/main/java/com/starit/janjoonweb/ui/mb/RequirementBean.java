@@ -264,6 +264,39 @@ public class RequirementBean {
 		this.communicationMessages = communicationMessages;
 	}
 
+	public String getContainerType() {
+
+		switch (categorieRequirements.size()) {
+
+		case 1:
+			return "Container100";
+		case 2:
+			return "Container55";
+		case 3:
+			return "Container33";
+		case 4:
+			return "Container25";
+		case 5:
+			return "Container20";
+		default:
+			return "Container20";
+		}
+
+	}
+
+	// private String activeIndex;
+
+	public String getActiveIndex() {
+
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
+				: "0";
+
+	}
+
+	public void setActiveIndex(String index) {
+
+	}
+
 	public boolean isReqDialogReqListrender() {
 
 		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
@@ -299,7 +332,7 @@ public class RequirementBean {
 		testCaseName = null;
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail());
+				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -604,7 +637,7 @@ public class RequirementBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail());
+				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))
@@ -681,7 +714,7 @@ public class RequirementBean {
 			if (requirement != null
 					&& ((RequirementUtil) node).getRequirement().equals(
 							requirement))
-				return "text-decoration: underline;";
+				return "text-decoration: underline;background-color: #03a9f4 !important;";
 			else
 				return "";
 		} else
@@ -804,7 +837,7 @@ public class RequirementBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail());
+				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))

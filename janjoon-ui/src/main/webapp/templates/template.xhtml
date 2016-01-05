@@ -77,12 +77,13 @@
 								</p:outputPanel>
 							</p:dialog>
 							<p:imageSwitch id="scrollRight" effect="scrollRight"
-								style="width:100%;height:25px;" speed="10000"
-								slideshowSpeed="250"
-								rendered="#{loginBean.showMarquee == 'true'}">
+								style="width:100%;height:25px;" speed="10000" 
+								slideshowSpeed="250" rendered="#{loginBean.showMarquee }">
 								<ui:repeat var="data" value="#{jJMessageBean.alertMessages}">
 									<p:outputPanel style="width:100px;">
-										<h:outputText style="color:red;" value="Alert: #{data.name}" />
+										<h:outputText value="#{data.criticity.name}"
+											style="color: #fff;" styleClass="#{data.criticity.name}" />
+										<h:outputText value=" :#{data.name}" />
 									</p:outputPanel>
 								</ui:repeat>
 							</p:imageSwitch>

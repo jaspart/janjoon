@@ -78,7 +78,7 @@
 												update=":form:taskSelectOneMenu startTaskPanel :growlForm" />
 
 											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialog" resetValues="true"
+												update=":viewTaskForm :viewTaskDialogHeader" resetValues="true"
 												disabled="#{jJDevelopment.task == null}" immediate="true"
 												oncomplete="PF('viewTaskDialogWidget').show()"
 												actionListener="#{jJTaskBean.gettingTaskValue}"
@@ -335,13 +335,16 @@
 			</p:dialog>
 
 			<p:dialog id="viewTaskDialog"
-				header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 				resizable="true" maximizable="true" showEffect="fade"
 				hideEffect="explode" draggable="false">
 				<p:ajax event="close"
 					update=":form:taskSelectOneMenu :form:startTaskPanel"
 					listener="#{jJTaskBean.closeEvent('dev')}" />
+				<f:facet name="header">
+					<p:outputLabel id="viewTaskDialogHeader"
+						value="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}" />
+				</f:facet>
 				<p:outputPanel id="viewTaskPanel">
 					<h:form id="viewTaskForm" enctype="multipart/form-data">
 						<p:panel styleClass="panelDialog">

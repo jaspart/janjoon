@@ -322,6 +322,13 @@ div#contentPanel_content {
 	border: none !important;
 }
 
+.content .ui-panel-content {
+	padding-top: 0px !important;
+	padding-left: 0px !important;
+	padding-bottom: 0px !important;
+	padding-right: 0px !important;
+}
+
 .rsh {
 	height: 8px;
 	background-color: red;
@@ -536,7 +543,7 @@ div#contentPanel_content {
 
 .requirement-column {
 	text-align: left;
-	width: 40%;
+	width: 75%;
 	height: 37px;
 	min-width: 200px !important;
 }
@@ -1057,6 +1064,7 @@ div.highLightRevised2 {
 	border-radius: .25em;
 	background-color: #666666 !important;
 }
+
 .UnLinked {
 	padding: .2em .6em .3em;
 	font-size: 80%;
@@ -1109,22 +1117,21 @@ div.highLightRevised2 {
 	background-color: #00A5F7 !important;
 }
 
-.Specified_select {	
+.Specified_select {
 	color: #fff;
-	text-align: center;	
+	text-align: center;
 	background-color: #666666 !important;
 }
 
 .UnLinked_select {
 	color: #fff !important;
-	text-align: center;	
+	text-align: center;
 	background-color: #FF3333 !important;
 }
 
 .Progress_select {
-	
 	color: #fff !important;
-	text-align: center;	
+	text-align: center;
 	background-color: #9E33FF !important;
 }
 
@@ -1134,20 +1141,20 @@ div.highLightRevised2 {
 	text-align: center;
 }
 
-.InTesting_select {	
-	color: #fff !important;	
+.InTesting_select {
+	color: #fff !important;
 	text-align: center;
 	background-color: #00A5F7 !important;
 }
 
 .specSelectOneMenuPanel tr.ui-state-highlight td {
-    color: #026591 !important;
-    background-color: initial;
+	color: #026591 !important;
+	background-color: initial;
 }
 
 .specSelectOneMenu.ui-state-focus .ui-selectonemenu-label {
- 	background-color: inherit !important;
-  	color: #03a9f4 !important;
+	background-color: inherit !important;
+	color: #03a9f4 !important;
 }
 
 .NEW {
@@ -1463,6 +1470,36 @@ div.highLightRevised2 {
 
 .GoldYellow {
 	color: #FFD700;
+}
+
+.ReqContainer20 {
+	width: 19%;
+	float: left;
+	min-width: 200px;
+}
+
+.ReqContainer33 {
+	width: 33%;
+	float: left;
+	min-width: 200px;
+}
+
+.ReqContainer40 {
+	width: 39%;
+	float: left;
+	min-width: 200px;
+}
+
+.ReqContainer50 {
+	width: 49.5%;
+	float: left;
+	min-width: 200px;
+}
+
+.ReqContainer60 {
+	width: 60%;
+	float: left;
+	min-width: 200px;
 }
 
 /* .ALERT { */

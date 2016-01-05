@@ -101,7 +101,7 @@ public class JJWorkflowBean {
 		updateJJWorkflow(selectedWorkFlow);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted",
-				MessageFactory.getMessage("label_workflow", "").getDetail());
+				MessageFactory.getMessage("label_workflow", "").getDetail(),"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		workflowList = null;
 		this.objectOptions = null;
@@ -131,7 +131,7 @@ public class JJWorkflowBean {
 		context.execute("PF('createWorkFlowDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_workflow", "").getDetail());
+				MessageFactory.getMessage("label_workflow", "").getDetail(),"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		return findAllJJWorkflows();

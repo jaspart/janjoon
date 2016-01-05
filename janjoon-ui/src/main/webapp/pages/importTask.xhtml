@@ -60,7 +60,7 @@
 							itemLabel="#{messages.importTask_selectCategory}" />
 
 						<f:selectItems value="#{jJTaskBean.importCategoryList}" var="p"
-							itemLabel="#{p.name}" itemValue="#{p}" />
+							itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectCategory}"
 							onstart="PF('taskBlockUIWidget').block()"

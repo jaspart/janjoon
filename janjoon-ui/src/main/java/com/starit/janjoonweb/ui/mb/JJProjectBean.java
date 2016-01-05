@@ -180,7 +180,7 @@ public class JJProjectBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
-				MessageFactory.getMessage("label_project", "").getDetail());
+				MessageFactory.getMessage("label_project", "").getDetail(),"");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedProject = null;
@@ -247,7 +247,7 @@ public class JJProjectBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_project", "").getDetail());
+				MessageFactory.getMessage("label_project", "").getDetail(),"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -274,7 +274,7 @@ public class JJProjectBean {
 		projectListTable = null;
 		message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_project", "").getDetail());
+				MessageFactory.getMessage("label_project", "").getDetail(),"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

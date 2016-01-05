@@ -163,6 +163,9 @@ $(window)
 					
 					var width1 = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
 					$(".reqTree").width(width1);
+					
+					$(".ui-dialog-content").css( "maxWidth", ( $( window ).width() * 90 /100 ) + "px" );
+					$(".ui-dialog-content").css( "maxHeight", ( $( window ).height() * 90 /100 ) + "px" );
 				});
 
 $(function() {		
@@ -170,6 +173,11 @@ $(function() {
 	var width = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
 	$(".reqTree").width(width);
 //	$(".reqTree").height(height);
+	
+	//ui-dialog-content
+	
+	$(".ui-dialog-content").css( "maxWidth", ( $( window ).width() * 80 /100 ) + "px" );
+	$(".ui-dialog-content").css( "maxHeight", ( $( window ).height() * 80 /100 ) + "px" );
 });
 
 $(function() {

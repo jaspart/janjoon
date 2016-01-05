@@ -91,7 +91,7 @@ public class LicenseBean implements Serializable {
 							(HttpSession) FacesContext.getCurrentInstance()
 									.getExternalContext().getSession(false));
 			facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Photo");
+					"message_successfully_uploded", "Photo","e");
 
 		} catch (FileNotFoundException e) {
 
@@ -175,7 +175,7 @@ public class LicenseBean implements Serializable {
 							(HttpSession) FacesContext.getCurrentInstance()
 									.getExternalContext().getSession(false));
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Photo");
+					"message_successfully_uploded", "Photo","e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -204,14 +204,14 @@ public class LicenseBean implements Serializable {
 			project.setLogo(bFile);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Logo");
+					"message_successfully_uploded", "Logo","");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (IOException e) {
 
 			e.printStackTrace();
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_unsuccessfully_uploded", "Logo");
+					"message_unsuccessfully_uploded", "Logo","du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -233,14 +233,14 @@ public class LicenseBean implements Serializable {
 			product.setLogo(bFile);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Logo");
+					"message_successfully_uploded", "Logo","");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (IOException e) {
 
 			e.printStackTrace();
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_unsuccessfully_uploded", "Logo");
+					"message_unsuccessfully_uploded", "Logo","du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -262,14 +262,14 @@ public class LicenseBean implements Serializable {
 			company.setLogo(bFile);
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Logo");
+					"message_successfully_uploded", "Logo","");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (IOException e) {
 
 			e.printStackTrace();
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_unsuccessfully_uploded", "Logo");
+					"message_unsuccessfully_uploded", "Logo","du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -317,14 +317,14 @@ public class LicenseBean implements Serializable {
 
 			out.close();
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_uploded", "Licence");
+					"message_successfully_uploded", "Licence","e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (IOException e) {
 
 			e.printStackTrace();
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_unsuccessfully_uploded", "Licence");
+					"message_unsuccessfully_uploded", "Licence","de la");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}

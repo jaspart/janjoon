@@ -24,7 +24,7 @@
 						resizable="true" initialDate="#{jJTaskBean.scheduleInitialDate}"
 						view="#{jJTaskBean.scheduleInitialView}" timeFormat="HH:mm">
 						<p:ajax event="eventSelect" listener="#{jJTaskBean.onEventSelect}"
-							update=":viewTaskForm :viewTaskDialog" immediate="true"
+							update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
 							resetValues="true" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
 						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}"
@@ -49,7 +49,7 @@
 						view="#{jJTaskBean.scheduleInitialViewAll}" timeFormat="HH:mm">
 						<p:ajax event="eventSelect"
 							listener="#{jJTaskBean.onEventSelectAll}"
-							update=":viewTaskForm :viewTaskDialog" immediate="true"
+							update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
 							resetValues="true" onstart="PF('blockUIWidget').block()"
 							oncomplete="PF('blockUIWidget').unblock()" />
 						<p:ajax event="viewChange"
@@ -70,12 +70,15 @@
 		</p:tabView>
 
 		<p:dialog id="viewTaskDialog"
-			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="false">
 			<p:ajax event="close" update=":teamTabView"
 				listener="#{jJTaskBean.closeEvent('team')}" />
+			<f:facet name="header">
+				<p:outputLabel id="viewTaskDialogHeader"
+					value="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}" />
+			</f:facet>
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">
 					<p:remoteCommand name="updateForm" update=":viewTaskForm" />

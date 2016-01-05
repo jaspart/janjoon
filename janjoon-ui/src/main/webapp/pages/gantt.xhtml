@@ -141,7 +141,7 @@
 										<p:menu overlay="true" trigger="optionsButton" my="left top"
 											at="left bottom" style="width:11%;">
 											<p:menuitem id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialog" immediate="true"
+												update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
 												resetValues="true"
 												value="#{messages.project_gantt_table_actions_viewMenuItem}"
 												action="#{jJTaskBean.initiateReqTreeNode}">
@@ -449,7 +449,7 @@
 										listener="#{jJTaskBean.onChangeTimelineEvent}"
 										onstart="getTimelineEvent();saveScrollPos();PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();autoScroll();highlightEvent();" />
-									<p:ajax event="edit" update=":viewTaskForm :viewTaskDialog"
+									<p:ajax event="edit" update=":viewTaskForm :viewTaskDialogHeader"
 										resetValues="true"
 										listener="#{jJTaskBean.onEditTimelineEvent}"
 										onstart="PF('blockUIWidget').block()"

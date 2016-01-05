@@ -339,7 +339,7 @@ public class JJSprintBean {
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_task", "").getDetail());
+				MessageFactory.getMessage("label_task", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -411,7 +411,7 @@ public class JJSprintBean {
 
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "Sprint");
+				.getMessage(message, "Sprint","");
 		jJTaskBean.setSprints(null);
 		jJTaskBean.setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -518,7 +518,7 @@ public class JJSprintBean {
 		}
 		String message = "message_successfully_created";
 		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "Sprint");
+				.getMessage(message, "Sprint","");
 
 		sprintUtil.setSprint(getJJSprint_());
 		sprintUtil.setNeditabale(true);
@@ -604,7 +604,7 @@ public class JJSprintBean {
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail());
+					MessageFactory.getMessage("label_task", "").getDetail(),"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -653,7 +653,7 @@ public class JJSprintBean {
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail());
+					MessageFactory.getMessage("label_task", "").getDetail(),"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else if (ddevent.getDragId().contains(":doneIcon")
 				|| ddevent.getDragId().contains(":donePanel")) {
@@ -685,7 +685,7 @@ public class JJSprintBean {
 					.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail());
+					MessageFactory.getMessage("label_task", "").getDetail(),"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
 
@@ -734,7 +734,7 @@ public class JJSprintBean {
 
 			String message = "message_successfully_updated";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail());
+					MessageFactory.getMessage("label_task", "").getDetail(),"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} else {
@@ -929,7 +929,7 @@ public class JJSprintBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted",
-				MessageFactory.getMessage("label_task", "").getDetail());
+				MessageFactory.getMessage("label_task", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		// int i = 0;
@@ -1033,7 +1033,7 @@ public class JJSprintBean {
 		jJbugBean.updateJJBug(bug);
 		message = "message_successfully_updated";
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug","");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		jJbugBean.reset();
 		// RequestContext context = RequestContext.getCurrentInstance();

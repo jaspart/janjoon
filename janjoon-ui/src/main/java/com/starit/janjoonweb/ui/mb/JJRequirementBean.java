@@ -331,57 +331,15 @@ public class JJRequirementBean {
 			return "";
 	}
 
-	// public String getTabaleDataModelStyleClass(CategoryDataModel dataModel) {
-	//
-	// int nbOpenedTables = 0;
-	// int expand = -1;
-	// if (tableDataModelList != null) {
-	// for (int i = 0; i < tableDataModelList.size(); i++) {
-	// if (tableDataModelList.get(i).getCategoryId() != 0
-	// && tableDataModelList.get(i).getRendered()) {
-	// nbOpenedTables++;
-	// if (tableDataModelList.get(i).isExpanded())
-	// expand = i;
-	// }
-	// }
-	// }
-	//
-	// double tableDataModelSizePct = 0;
-	// String styleClass = "";
-	// if (nbOpenedTables > 0) {
-	//
-	// if (nbOpenedTables != 2) {
-	// tableDataModelSizePct = 100 / nbOpenedTables;
-	// if(nbOpenedTables == 3)
-	// styleClass = "Container33";
-	// } else {
-	// tableDataModelSizePct = 49.5;
-	// styleClass= "Container50";
-	// }
-	//
-	// }
-	// if (((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
-	// tableDataModelSizePct = 100;
-	// }
-	//
-	// if (tableDataModelSizePct == 100)
-	// return "Container100";
-	// else {
-	// if (expand != -1) {
-	// if (dataModel.equals(tableDataModelList.get(expand)))
-	// return "Container60";
-	// else if (nbOpenedTables == 2) {
-	// if (dataModel.getRendered())
-	// return "Container40";
-	// else
-	// return "";
-	// } else
-	// return "Container20";
-	//
-	// } else
-	// return styleClass;
-	// }
-	// }
+	public String getCategoryContainerType() {
+
+		if (categoryList.size() <= 5)
+			return "Container60";
+		else if (categoryList.size() <= 8)
+			return "Container80";
+		else
+			return "Container100";
+	}
 
 	public String getTableDataModelSizePct(CategoryDataModel dataModel) {
 
@@ -412,21 +370,26 @@ public class JJRequirementBean {
 		}
 
 		if (tableDataModelSizePct == 100)
-			return tableDataModelSizePct + "%";
+			return "Container100 Responsive100";
 		else {
 			if (expand != -1) {
 				if (dataModel.equals(tableDataModelList.get(expand)))
-					return 60 + "%";
+					return "ReqContainer60 Responsive100";
 				else if (nbOpenedTables == 2) {
 					if (dataModel.getRendered())
-						return 39 + "%";
+						return "ReqContainer40 Responsive100";
 					else
-						return "0%";
+						return "";
 				} else
-					return 19 + "%";
+					return "ReqContainer20 Responsive50";
 
-			} else
-				return tableDataModelSizePct + "%";
+			} else {
+				if (nbOpenedTables != 2)
+					return "ReqContainer33 Responsive50";
+				else
+					return "ReqContainer50 Responsive50";
+			}
+
 		}
 	}
 
@@ -456,7 +419,7 @@ public class JJRequirementBean {
 			}
 
 			if (nbOpenedTables == 3 || nbOpenedTables == 2)
-				return "margin-left: 5px;";
+				return "margin-left: 0.2%;";
 			else
 				return "";
 		} else
@@ -1124,7 +1087,7 @@ public class JJRequirementBean {
 		reqSelectedtestCases = reqtestCases;
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "TestCase");
+				"message_successfully_created", "Test", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -1812,7 +1775,8 @@ public class JJRequirementBean {
 								JJTeststep importTeststep = new JJTeststep();
 
 								importTeststep.setOrdering(teststep
-										.getOrdering());
+										.getOrdering() != null ? teststep
+										.getOrdering() : 0);
 
 								importTeststep.setTestcase(tc1);
 								tc1.getTeststeps().add(importTeststep);
@@ -1856,7 +1820,9 @@ public class JJRequirementBean {
 				chapter, LoginBean.getVersion(), null, false, false, false);
 
 		for (JJTestcase testcase : testcases) {
-			elements.put(testcase.getOrdering(), testcase);
+			elements.put(
+					testcase.getOrdering() != null ? testcase.getOrdering() : 0,
+					testcase);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return elements;
@@ -2635,7 +2601,7 @@ public class JJRequirementBean {
 
 	private void fullRequirementsList() {
 		long t = System.currentTimeMillis();
-
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		if (lowCategory != null
 				&& requirementCategory.getId().equals(lowCategory.getId())) {
 			disabledLowRequirements = true;
@@ -2659,7 +2625,7 @@ public class JJRequirementBean {
 			lowCategoryName = "Low Category :";
 			disabledLowRequirements = true;
 		} else {
-			lowCategoryName = lowCategory.getName() + " :";
+			lowCategoryName = loginBean.checkMessage(lowCategory) + " :";
 			lowRequirementsList = getRequirementsList(lowCategory, product,
 					null, requirementProject, true);
 		}
@@ -2668,7 +2634,7 @@ public class JJRequirementBean {
 			mediumCategoryName = "Medium Category :";
 			disabledMediumRequirements = true;
 		} else {
-			mediumCategoryName = mediumCategory.getName() + " :";
+			mediumCategoryName = loginBean.checkMessage(mediumCategory) + " :";
 			mediumRequirementsList = getRequirementsList(mediumCategory,
 					product, null, requirementProject, true);
 		}
@@ -2677,7 +2643,7 @@ public class JJRequirementBean {
 			highCategoryName = "High Category :";
 			disabledHighRequirements = true;
 		} else {
-			highCategoryName = highCategory.getName() + " :";
+			highCategoryName = loginBean.checkMessage(highCategory) + " :";
 			highRequirementsList = getRequirementsList(highCategory, product,
 					null, requirementProject, true);
 		}
@@ -3484,7 +3450,9 @@ public class JJRequirementBean {
 					.getChildrenOfParentChapter(parent, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
-				elements.put(chapter.getOrdering(), chapter);
+				elements.put(
+						chapter.getOrdering() != null ? chapter.getOrdering()
+								: 0, chapter);
 			}
 
 			List<JJRequirement> requirements = jJRequirementService
@@ -3494,7 +3462,9 @@ public class JJRequirementBean {
 							onlyActif);
 
 			for (JJRequirement requirement : requirements) {
-				elements.put(requirement.getOrdering(), requirement);
+				elements.put(
+						requirement.getOrdering() != null ? requirement
+								.getOrdering() : 0, requirement);
 
 			}
 		} else {
@@ -3503,7 +3473,9 @@ public class JJRequirementBean {
 					LoginBean.getCompany(), project, category, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
-				elements.put(chapter.getOrdering(), chapter);
+				elements.put(
+						chapter.getOrdering() != null ? chapter.getOrdering()
+								: 0, chapter);
 			}
 		}
 
@@ -3521,10 +3493,10 @@ public class JJRequirementBean {
 				requirement, chapter, null, null, false, true, false);
 
 		for (JJTestcase testcase : testcases) {
-			if (testcase.getOrdering() != null)
-				elements.put(testcase.getOrdering(), testcase);
-			else
-				elements.put(0, testcase);
+
+			elements.put(
+					testcase.getOrdering() != null ? testcase.getOrdering() : 0,
+					testcase);
 
 		}
 
@@ -5043,8 +5015,9 @@ public class JJRequirementBean {
 		if (requirementChapterList == null || requirementChapterList.isEmpty()) {
 			warn = true;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					SPECIFICATION_ERROR_NOCATEGORYCHAPTER, req.getCategory()
-							.getName());
+					SPECIFICATION_ERROR_NOCATEGORYCHAPTER,
+					((LoginBean) LoginBean.findBean("loginBean"))
+							.checkMessage(req.getCategory()));
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
@@ -5088,7 +5061,7 @@ public class JJRequirementBean {
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					MESSAGE_SUCCESSFULLY_UPDATED,
 					MessageFactory.getMessage("label_requirement", "")
-							.getDetail());
+							.getDetail(), "e");
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 			FacesContext.getCurrentInstance().addMessage(
 					MessageFactory.getMessage("label_requirement", "")

@@ -27,7 +27,8 @@
 						<p:column colspan="5">							
 							<p:inputTextarea id="messagedsc" cols="#{cols}" rows="3"
 								style="float:left;" value="#{jJMessageBean.message.message}"
-								required="true" placeholder="Message"/>
+								required="true" requiredMessage="#{messages.label_alert_message_null}"
+								placeholder="Message" />							
 						</p:column>
 					</p:row>
 					<f:facet name="footer">

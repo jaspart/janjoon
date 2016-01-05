@@ -348,7 +348,7 @@ public class JJCompanyBean {
 		context.execute("PF('companyDialogWidget').hide()");
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_company", "").getDetail());
+				MessageFactory.getMessage("label_company", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -360,7 +360,7 @@ public class JJCompanyBean {
 			companyOptions = null;
 			String message = "message_successfully_deleted";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_company", "").getDetail());
+					MessageFactory.getMessage("label_company", "").getDetail(),"e");
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -399,7 +399,7 @@ public class JJCompanyBean {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('companyDialogWidget').hide()");
 		facesMessage = MessageFactory.getMessage(message, MessageFactory
-				.getMessage("label_company", "").getDetail());
+				.getMessage("label_company", "").getDetail(),"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}

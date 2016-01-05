@@ -233,7 +233,7 @@ public class JJMessageBean {
 		updateJJMessage(resolvedJJMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message");
+				"Message","");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -248,7 +248,7 @@ public class JJMessageBean {
 		updateJJMessage(viewedMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message");
+				"Message","");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 
@@ -391,7 +391,7 @@ public class JJMessageBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message");
+				"Message","");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}

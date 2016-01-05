@@ -85,12 +85,12 @@
 					<f:facet name="footer">
 						<h:panelGrid columns="1" border="0" style="text-align: center;">							
 							<p:inputTextarea id="messagedsc" cols="20" rows="6" placeholder="Message"
-								value="#{jJMessageBean.message.message}" required="true" />
+								value="#{jJMessageBean.message.message}" 
+								requiredMessage="#{messages.label_alert_message_null}" required="true" />								
 							<h:panelGrid columns="2" border="0" style="border:hidden;">
 								<p:inputSwitch id="alert" style="float: left;"
 									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-									offLabel="Info" >
-								</p:inputSwitch>
+									offLabel="Info" />
 								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
 									process="@this,alert,messagedsc"
 									actionListener="#{jJMessageBean.createMessage(false,null)}"

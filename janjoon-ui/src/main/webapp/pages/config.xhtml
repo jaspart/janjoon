@@ -17,7 +17,8 @@
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				rowsPerPageTemplate="5,10,15" widgetVar="configDataTableWV">
 				<f:facet name="header">  
-           #{messages.admin_config_table_header}  <p:inputText
+           #{messages.admin_config_table_header}  
+           <p:inputText
 						id="globalFilter" onkeyup="PF('configDataTableWV').filter()"
 						style="width:200px"
 						placeholder="#{messages.bug_table_search_watermark}" />
@@ -102,19 +103,18 @@
 		</f:facet>
 		<p:outputPanel id="createPanel">
 			<h:form id="createForm" enctype="multipart/form-data"
-				style="height: 470px;width: 710px;">
+				style="/*height: 470px;width: 710px;*/">
 				<p:panel styleClass="panelDialog">
 					<f:facet name="header">
 						<p:messages id="msg" showDetail="false" closable="true" />
 					</f:facet>
-					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog"
-						columnClasses="col1,col2,col3">
+					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog">
 						<p:outputLabel for="confName"
 							value="#{messages.admin_config_table_name_title}:" />
 						<p:inputTextarea
 							value="#{jJConfigurationBean.JJConfiguration_.name}"
-							id="confName" required="true"
-							requiredMessage="Name field is requiered">
+							id="confName" required="true" rows="2"
+							requiredMessage="#{messages.admin_config_new_name_required}">
 							<f:validateLength maximum="100" />
 						</p:inputTextarea>
 
@@ -126,7 +126,7 @@
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
 							required="true" width="580px"
-							requiredMessage="Config Description is a required value" />
+							requiredMessage="#{messages.admin_config_new_desc_required}" />
 
 						<p:outputLabel for="confMobileDesc" value="Description :"
 							rendered="#{loginBean.mobile}" />
@@ -134,7 +134,7 @@
 							rendered="#{loginBean.mobile}"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
 							required="true"
-							requiredMessage="Config Description is a required value" />
+							requiredMessage="#{messages.admin_config_new_desc_required}" />
 
 
 						<p:outputLabel for="confParam"

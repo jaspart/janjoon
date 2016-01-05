@@ -92,7 +92,7 @@ public class LoginBean implements Serializable {
 	private AuthorisationService authorisationService;
 	static Logger logger = Logger.getLogger("loginBean-Logger");
 	private boolean mobile;
-	private String showMarquee;
+	private Boolean showMarquee;
 	private FacesMessage facesMessage;
 	private JJAuditLog auditLogLogin;
 	private String username = "";
@@ -373,7 +373,7 @@ public class LoginBean implements Serializable {
 		this.mobile = mobile;
 	}
 
-	public String getShowMarquee() {
+	public boolean getShowMarquee() {
 
 		if (showMarquee == null)
 			if (jJConfigurationService.getConfigurations("MarqueeAlertMessage",
@@ -387,19 +387,20 @@ public class LoginBean implements Serializable {
 				config.setVal("true");
 				config.setParam("header.showMarquee");
 				jJConfigurationService.saveJJConfiguration(config);
-				showMarquee = "true";
+				showMarquee =true;
 			} else {
 				if (jJConfigurationService
 						.getConfigurations("MarqueeAlertMessage", null, true)
 						.get(0).getVal().equalsIgnoreCase("true"))
-					showMarquee = "true";
+					showMarquee = true;
 				else
-					showMarquee = "false";
+					showMarquee = false;
 			}
 		return showMarquee;
 	}
+	
 
-	public void setShowMarquee(String showMarquee) {
+	public void setShowMarquee(Boolean showMarquee) {
 		this.showMarquee = showMarquee;
 	}
 

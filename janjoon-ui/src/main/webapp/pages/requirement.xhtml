@@ -40,7 +40,7 @@
 	
 }
 
-.customPanelGrid .ui-panelgrid-cell{
+.customPanelGrid .ui-panelgrid-cell {
 	
 }
 
@@ -76,6 +76,10 @@
 	
 }
 
+.customPanel .ui-panel-titlebar {
+	text-align: center;
+}
+
 /* .cke_contents { */
 /* 	height: 150px !important; */
 /* } */
@@ -85,8 +89,8 @@
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
 
-				<p:overlayPanel id="colorPanel" for="colorBtn"
-					hideEffect="fade" style="width:40%">
+				<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
+					styleClass="Container40 Responsive50">
 					<p:panelGrid>
 						<f:facet name="header">
 							<p:row>
@@ -118,17 +122,20 @@
 					</p:panelGrid>
 				</p:overlayPanel>
 
-				<h:panelGroup layout="block"
+				<h:panelGroup id="treePanelGrid" layout="block"
 					styleClass="Container30 MarAuto Responsive100">
 					<!-- 					<p:accordionPanel id="accordionTreePanel" activeIndex="0" -->
 					<!-- 						styleClass="accordionTreePanel" -->
 					<!-- 						style="/*float: left;height: 100%;width: 30% !important;*/"> -->
 					<!-- 						<p:tab title="#{messages.specification_progress_footer}"> -->
-					<p:panelGrid id="treePanelGrid" styleClass="customPanelGrid" style="width: 100%;" >
+					<p:panelGrid styleClass="customPanelGrid" style="width: 100%;">
 						<f:facet name="header">
 							<p:row>
 								<p:column colspan="2" style="text-align: left;">
-									<p:commandLink id="rate"
+
+									<p:commandButton id="colorBtn" icon="fa fa-info-circle Fs20"
+										type="button" />
+									<p:commandLink id="rate" style="margin-left: 2%;"
 										actionListener="#{requirementBean.onrate}"
 										update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate"
 										rendered="#{requirementBean.requirement != null}"
@@ -148,16 +155,13 @@
 										onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 
-									<p:commandButton id="colorBtn" icon="fa fa-info-circle Fs20"
-										type="button" style="margin-left: 2%;" />
-
 									<p:commandButton id="newRequirementButton"
 										icon="fa fa-plus-square Fs20" style="margin-left: 2%;"
 										title="#{loginBean.authorisationService.wRequiementMSG}"
 										disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement or requirementBean.category == null}"
 										actionListener="#{jJRequirementBean.newRequirement(requirementBean.category.id)}"
-										update=":requirementDialog" resetValues="true"
-										onstart="PF('blockUIWidget').block()"
+										update=":requirementDialogPanel :requirementDialogHeader"
+										resetValues="true" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
 
 									<p:selectOneMenu id="category"
@@ -173,12 +177,13 @@
 
 									</p:selectOneMenu>
 								</p:column>
-							</p:row>							
+							</p:row>
 						</f:facet>
 						<p:row>
-							<p:column colspan="2" 
-							style="padding-left: 0px !important;padding-right: 0px !important;padding-top: 0px !important;padding-bottom: 0px !important;">
-								<p:accordionPanel id="accordionTreePanel" activeIndex="#{loginBean.mobile ? -1 : 0}"
+							<p:column colspan="2"
+								style="padding-left: 0px !important;padding-right: 0px !important;padding-top: 0px !important;padding-bottom: 0px !important;">
+								<p:accordionPanel id="accordionTreePanel"
+									activeIndex="#{requirementBean.activeIndex}"
 									styleClass="accordionTreePanel">
 									<p:tab title="#{messages.specification_tree_panel_header}">
 										<p:tree id="reqTree" value="#{requirementBean.rootNode}"
@@ -206,7 +211,7 @@
 											</p:treeNode>
 										</p:tree>
 									</p:tab>
-									</p:accordionPanel>
+								</p:accordionPanel>
 							</p:column>
 						</p:row>
 					</p:panelGrid>
@@ -219,8 +224,9 @@
 			<h:panelGroup layout="block"
 				styleClass="Container70 MarAuto Responsive100">
 				<h:form id="requirementForm">
-					<p:panelGrid id="requirementFormPanelGrid" rendered="#{requirementBean.requirement != null}"
-						style="width : 100%;" >
+					<p:panelGrid id="requirementFormPanelGrid"
+						rendered="#{requirementBean.requirement != null}"
+						style="width : 100%;">
 						<f:facet name="header">
 							<p:row>
 								<p:column colspan="2">
@@ -310,153 +316,166 @@
 					</p:panelGrid>
 				</h:form>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="EmptyBox10" />
-			<h:panelGroup layout="block"
-				styleClass="Container100 MarAuto Responsive">
-				<h:form>
-					<p:panelGrid styleClass="customPanel"
-						rendered="#{requirementBean.requirement != null}">
-						<f:facet name="header">
-							<p:row>
-								<p:column
-									colspan="#{fn:length(requirementBean.categorieRequirements)}">
-									<h:outputText styleClass="Fs14"
-										value="#{messages.specification_link_panel_header}" />
-								</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<c:forEach items="#{requirementBean.categorieRequirements}"
-								var="categorieRequirement">
-								<!-- 					<h:panelGroup layout="block" -->
-								<!-- 						style="width: 24.5%; margin-left: 2px; float: left;" -->
-								<!-- 						rendered="#{categorieRequirement.requirements != null}"> -->
-								<p:column style="padding-left: 2px;padding-right: 2px;">
-									<p:dataTable value="#{categorieRequirement.requirements}"
-										var="req" paginatorPosition="bottom"
-										styleClass="link-datatable" scrollable="true"
-										scrollHeight="200"
-										emptyMessage="#{messages.label_notRecordFound}">
-										<f:facet name="header">
-											<p:commandButton id="createButton" style="width: 100%;"
-												icon="fa fa-plus-square Fs20" resetValues="true"
-												actionListener="#{requirementBean.loadData(categorieRequirement)}"
-												onstart="PF('blockUIWidget').block()" update=":linkForm"
-												oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />
+			<h:panelGroup layout="block" styleClass="EmptyBox20" />
+			<!-- 			<h:panelGroup layout="block" -->
+			<!-- 				styleClass="Container100 MarAuto Responsive100"> -->
+			<h:form>
+				<p:panel styleClass="customPanel Container100 Responsive100"
+					rendered="#{requirementBean.requirement != null}">
+					<f:facet name="header">
+						<!-- 							<p:row> -->
+						<!-- 								<p:column -->
+						<!-- 									colspan="#{fn:length(requirementBean.categorieRequirements)}"> -->
+						<h:outputText styleClass="Fs18"
+							value="#{messages.specification_link_panel_header}" />
+						<!-- 								</p:column> -->
+						<!-- 							</p:row> -->
+					</f:facet>
+					<!-- 						<p:row> -->
+					<!-- 					<c:forEach items="#{requirementBean.categorieRequirements}" -->
+					<!-- 						var="categorieRequirement"> -->
+					<ui:repeat var="categorieRequirement"
+						value="#{requirementBean.categorieRequirements}">
+						<!-- 					<h:panelGroup layout="block" -->
+						<!-- 						style="width: 24.5%; margin-left: 2px; float: left;" -->
+						<!-- 						rendered="#{categorieRequirement.requirements != null}"> -->
+						<!-- 								<p:column style="padding-left: 2px;padding-right: 2px;"> -->
+						<h:panelGroup layout="block" style="margin-top: 0.5%;"
+							styleClass="#{requirementBean.containerType} MarAuto Responsive">
+							<p:dataTable value="#{categorieRequirement.requirements}"
+								var="req" paginatorPosition="bottom" styleClass="link-datatable"
+								scrollable="true" scrollHeight="200"
+								emptyMessage="#{messages.label_notRecordFound}">
+								<f:facet name="header">
+									<p:commandButton id="createButton" style="width: 100%;"
+										icon="fa fa-plus-square Fs20" resetValues="true"
+										actionListener="#{requirementBean.loadData(categorieRequirement)}"
+										onstart="PF('blockUIWidget').block()" update=":linkForm"
+										oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />
 										#{loginBean.checkMessage(categorieRequirement.category)}									
 								</f:facet>
-										<p:column>
-											<p:commandLink
-												value="[#{req.id}]-#{fn:substring(req.name,0,25)}"
-												action="#{jJRequirementBean.requirementInfo}" ajax="false">
-												<f:setPropertyActionListener value="#{req}"
-													target="#{jJRequirementBean.requirement}" />
-											</p:commandLink>
-										</p:column>
-										<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
-										<!-- 								<f:facet name="footer"> -->
-										<!-- 									<p:commandButton id="createButton" style="width: 100%;" -->
-										<!-- 										icon="fa fa-plus-square Fs20" resetValues="true" -->
-										<!-- 										actionListener="#{requirementBean.loadData(categorieRequirement)}" -->
-										<!-- 										onstart="PF('blockUIWidget').block()" update=":linkForm" -->
-										<!-- 										oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" /> -->
-										<!-- 								</f:facet> -->
-									</p:dataTable>
+								<p:column>
+									<p:commandLink
+										value="[#{req.id}]-#{fn:substring(req.name,0,25)}"
+										action="#{jJRequirementBean.requirementInfo}" ajax="false">
+										<f:setPropertyActionListener value="#{req}"
+											target="#{jJRequirementBean.requirement}" />
+									</p:commandLink>
 								</p:column>
-								<!-- 						</h:panelGroup> -->
-							</c:forEach>
-						</p:row>
-					</p:panelGrid>
-				</h:form>
-			</h:panelGroup>
+								<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
+								<!-- 								<f:facet name="footer"> -->
+								<!-- 									<p:commandButton id="createButton" style="width: 100%;" -->
+								<!-- 										icon="fa fa-plus-square Fs20" resetValues="true" -->
+								<!-- 										actionListener="#{requirementBean.loadData(categorieRequirement)}" -->
+								<!-- 										onstart="PF('blockUIWidget').block()" update=":linkForm" -->
+								<!-- 										oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" /> -->
+								<!-- 								</f:facet> -->
+							</p:dataTable>
+						</h:panelGroup>
+						<!-- 								</p:column> -->
+						<!-- 						</h:panelGroup> -->
+						<!-- 					</c:forEach> -->
+					</ui:repeat>
+					<!-- 						</p:row> -->
+				</p:panel>
+			</h:form>
+			<!-- 			</h:panelGroup> -->
+			<h:panelGroup layout="block" styleClass="EmptyBox10" />
+			<!-- 			<h:panelGroup layout="block" -->
+			<!-- 				styleClass="Container100 MarAuto Responsive100"> -->
+			<!-- 				<h:panelGrid style="height: 150px;" columns="2" -->
+			<!-- 					rendered="#{requirementBean.requirement != null}" -->
+			<!-- 					styleClass="customPanel"> -->
+			<!-- 				<f:facet name="header"> -->
+			<!-- 					<p:row> -->
+			<!-- 						<p:column colspan="2"> -->
+			<!-- 							<h:outputText value="Relations" /> -->
+			<!-- 						</p:column> -->
+			<!-- 					</p:row> -->
+			<!-- 				</f:facet> -->
+			<!-- 				<p:row> -->
+			<!-- 					<p:column style="width:50%"> -->
 			<h:panelGroup layout="block"
-				styleClass="Container100 MarAuto Responsive">
-				<h:panelGrid style="height: 150px;margin-top: 10px;" columns="2"
-					rendered="#{requirementBean.requirement != null}"
-					styleClass="customPanel">
-					<!-- 				<f:facet name="header"> -->
-					<!-- 					<p:row> -->
-					<!-- 						<p:column colspan="2"> -->
-					<!-- 							<h:outputText value="Relations" /> -->
-					<!-- 						</p:column> -->
-					<!-- 					</p:row> -->
-					<!-- 				</f:facet> -->
-					<!-- 				<p:row> -->
-					<!-- 					<p:column style="width:50%"> -->
-					<p:dataTable id="taskDatalist"
-						emptyMessage="#{messages.label_notRecordFound}"
-						value="#{requirementBean.requirementTasks}" var="task"
-						scrollable="true" scrollHeight="160">
-						<f:facet name="header">
+				rendered="#{requirementBean.requirement != null}"
+				styleClass="Container50 MarAuto Responsive50">
+				<p:dataTable id="taskDatalist"
+					emptyMessage="#{messages.label_notRecordFound}"
+					value="#{requirementBean.requirementTasks}" var="task"
+					scrollable="true" scrollHeight="160">
+					<f:facet name="header">
 							#{messages.label_task}
 						</f:facet>
-						<p:column headerText="#{messages.project_gantt_table_name_title}"
-							width="70%">
-							<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
-						</p:column>
-						<p:column
-							headerText="#{messages.project_gantt_table_assigned_title}"
-							width="30%">
-							<h:outputText value="#{task.assignedTo}"
-								converter="JJContactConverter" />
-						</p:column>
-					</p:dataTable>
-					<!-- 					</p:column> -->
-
-					<!-- 					<p:column style="width:50%"> -->
-					<h:form id="testCaseForm">
-						<!-- 								<p:growl id="msg" /> -->
-						<p:dataTable id="testCaseDataTable" var="testCaseModel"
-							selection="#{requirementBean.reqSelectedtestCases}"
-							rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
-							emptyMessage="#{messages.label_notRecordFound}" scrollable="true"
-							scrollHeight="100" value="#{requirementBean.reqtestCases}">
-							<p:column selectionMode="multiple"
-								style="width:30%;text-align:center;" />
-							<p:column style="width:70%"
-								headerText="#{messages.label_testcase}s">
-								<h:outputText value="#{testCaseModel.name}" />
-							</p:column>
-
-							<f:facet name="footer">
-								<p:commandButton onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()" id="update"
-									disabled="#{empty requirementBean.reqtestCases}"
-									update="testCaseDataTable :growlForm"
-									value="#{messages.label_update}" process="testCaseDataTable"
-									action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
-								<br />
-								<br />
-								<p:inputText id="testcase" style="width:50%;"
-									placeholder="#{messages.label_name}"
-									value="#{requirementBean.testCaseName}"
-									label="#{messages.label_name}">
-									<f:validateLength maximum="100" />
-									<p:ajax event="keyup" update="addTestCase" />
-								</p:inputText>
-								<p:commandButton id="addTestCase"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
-									style="font-size: 1.0em !important;float:right;top: -3px;"
-									update="@form :growlForm"
-									disabled="#{empty requirementBean.testCaseName}"
-									action="#{requirementBean.addTestCase(jJTestcaseBean)}"
-									value="#{messages.test_new_addtest_label}" />
-							</f:facet>
-						</p:dataTable>
-					</h:form>
-					<!-- 					</p:column> -->
-					<!-- 				</p:row> -->
-
-				</h:panelGrid>
+					<p:column headerText="#{messages.project_gantt_table_name_title}"
+						width="70%">
+						<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
+					</p:column>
+					<p:column
+						headerText="#{messages.project_gantt_table_assigned_title}"
+						width="30%">
+						<h:outputText value="#{task.assignedTo}"
+							converter="JJContactConverter" />
+					</p:column>
+				</p:dataTable>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="EmptyBox10" />
+			<!-- 					</p:column> -->
+
+			<!-- 					<p:column style="width:50%"> -->
+			<h:panelGroup layout="block"
+				rendered="#{requirementBean.requirement != null}"
+				styleClass="Container50 MarAuto Responsive50">
+				<h:form id="testCaseForm">
+					<!-- 								<p:growl id="msg" /> -->
+					<p:dataTable id="testCaseDataTable" var="testCaseModel"
+						selection="#{requirementBean.reqSelectedtestCases}"
+						rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"
+						emptyMessage="#{messages.label_notRecordFound}" scrollable="true"
+						scrollHeight="100" value="#{requirementBean.reqtestCases}">
+						<p:column selectionMode="multiple"
+							style="width:30%;text-align:center;" />
+						<p:column style="width:70%"
+							headerText="#{messages.label_testcase}s">
+							<h:outputText value="#{testCaseModel.name}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" id="update"
+								disabled="#{empty requirementBean.reqtestCases}"
+								update="testCaseDataTable :growlForm"
+								value="#{messages.label_update}" process="testCaseDataTable"
+								action="#{requirementBean.updateReqTestCases(jJTestcaseBean)}" />
+							<h:panelGroup layout="block" styleClass="EmptyBox10" />
+							<p:inputText id="testcase" style="width:50%;"
+								placeholder="#{messages.label_name}"
+								value="#{requirementBean.testCaseName}"
+								label="#{messages.label_name}">
+								<f:validateLength maximum="100" />
+								<p:ajax event="keyup" update="addTestCase" />
+							</p:inputText>
+							<p:commandButton id="addTestCase"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								style="font-size: 1.0em !important;float:right;top: -3px;"
+								update="@form :growlForm"
+								disabled="#{empty requirementBean.testCaseName}"
+								action="#{requirementBean.addTestCase(jJTestcaseBean)}"
+								value="#{messages.test_new_addtest_label}" />
+						</f:facet>
+					</p:dataTable>
+				</h:form>
+			</h:panelGroup>
+			<!-- 					</p:column> -->
+			<!-- 				</p:row> -->
+
+			<!-- 				</h:panelGrid> -->
+			<!-- 			</h:panelGroup> -->
+			<h:panelGroup layout="block" styleClass="EmptyBox20" />
 			<!-- 		</h:panelGrid> -->
 			<!-- 		</p:panel> -->
-			<h:panelGroup id="container" layout="block" style="margin-top: 10px;"
-				styleClass="Container100 MarAuto Responsive"
+			<h:panelGroup id="container" layout="block"
+				styleClass="Container100 MarAuto Responsive100"
 				rendered="#{loginBean.enable and requirementBean.requirement != null}">
-				<ui:include src="/pages/communication.xhtml">
+				<ui:include src="communication.xhtml">
 					<ui:param name="communicationList"
 						value="#{requirementBean.communicationMessages}" />
 					<ui:param name="field" value="#{requirementBean.requirement}" />
@@ -465,14 +484,15 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		<p:dialog id="requirementDialog" draggable="false"
-			header="#{messages[jJRequirementBean.message]}" modal="true"
-			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
-			position="center"
-			style="padding:0px;min-height:320px;height:80%;max-height:700px;min-width:300px;width:80% !important;max-width:1200px !important;">
+			widgetVar="requirementDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,false)}"
 				onstart="PF('requirementBlockUIWidget').block()"
 				oncomplete="PF('requirementBlockUIWidget').unblock();updateTree()" />
+			<f:facet name="header">
+				<p:outputLabel id="requirementDialogHeader"
+					value="#{messages[jJRequirementBean.message]}" />
+			</f:facet>
 			<p:outputPanel id="requirementDialogPanel">
 				<ui:include src="requirementDialog.xhtml" />
 			</p:outputPanel>

@@ -148,7 +148,7 @@
 						<p:column styleClass="action-column" style="width:80px;"
 							headerText="#{messages.bug_table_action_title}">
 							<p:commandButton id="viewTaskButton" icon="fa fa-eye Fs20"
-								update=":viewTaskForm :viewTaskDialog" immediate="true"
+								update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
 								resetValues="true"
 								title="#{messages.project_gantt_table_actions_viewMenuItem}"
 								action="#{jJTaskBean.initiateReqTreeNode}">
@@ -226,12 +226,15 @@
 		</p:confirmDialog>
 
 		<p:dialog id="viewTaskDialog"
-			header="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}"
 			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 			resizable="true" maximizable="true" showEffect="fade"
 			hideEffect="explode" draggable="false">
 			<p:ajax event="close" update=":taskForm"
 				listener="#{jJTaskBean.closeEvent('main')}" />
+			<f:facet name="header">
+				<p:outputLabel id="viewTaskDialogHeader"
+					value="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}" />
+			</f:facet>
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">
 					<p:remoteCommand name="updateForm" update=":viewTaskForm" />
@@ -264,18 +267,16 @@
 
 		<p:dialog widgetVar="messageDialog" id="messageDialog"
 			header="#{messages.main_message_header}" showEffect="fade"
-			dynamic="true" closable="true">
+			dynamic="true" closable="true" resizable="false">
 			<h:form id="messageDialogForm">
-				<p:panelGrid columns="1">
-					<p:outputLabel for="messagedsc" value="Message :" />
-					<p:inputTextarea id="messagedsc" cols="40" rows="6"
+				<p:panelGrid columns="1">					
+					<p:inputTextarea id="messagedsc" cols="40" rows="6" placeholder="Message"
+						requiredMessage="#{messages.label_alert_message_null}"
 						value="#{jJMessageBean.message.message}" required="true" />
-					<p:panelGrid columns="2">
-						<p:selectBooleanButton id="alert"
-							value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-							offLabel="Info" offIcon="fa fa-info-circle Fs20" onIcon="fa fa-minus-circle Fs20 Red">
-						</p:selectBooleanButton>
-						<p:commandButton id="submitMes" value="OK"
+					<p:panelGrid columns="2" styleClass="Container100" style="text-align: center;">
+						<p:inputSwitch id="alert" value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+									offLabel="Info" />
+						<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
 							process="@this,alert,messagedsc"
 							actionListener="#{jJMessageBean.createMessage(false,null)}"
 							update="messageDialogForm :headerForm:communicationButton :growlForm :communicationButton" />

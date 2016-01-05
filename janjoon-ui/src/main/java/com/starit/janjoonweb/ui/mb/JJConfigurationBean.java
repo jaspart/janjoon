@@ -139,7 +139,7 @@ public class JJConfigurationBean {
 		selectedConf.setEnabled(false);
 		updateJJConfiguration(selectedConf);
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Configuration");
+				"message_successfully_deleted", "Configuration","e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		configList = null;
 
@@ -170,13 +170,18 @@ public class JJConfigurationBean {
 		context.execute("PF('createDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Configuration");
+				"Configuration","e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		return findAllJJConfigurations();
 	}
 
 	public void reset() {
+		
+		if(getJJConfiguration_().getName() != null && getJJConfiguration_().getName().equalsIgnoreCase("MarqueeAlertMessage"))
+		{
+			((LoginBean) LoginBean.findBean("loginBean")).setShowMarquee(null);
+		}
 
 		setJJConfiguration_(null);
 		configList = null;

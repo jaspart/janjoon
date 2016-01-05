@@ -7,7 +7,6 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<style type="text/css">
-	
 .chapterTree {
 	height: 350px;
 	width: 350px;
@@ -48,9 +47,10 @@
 		</p:panel>
 		<p:tabView widgetVar="chapterTabView">
 			<p:tab title="Chapitre">
-				<p:panelGrid style="margin-top:10px;height: 400px;">
-					<p:row>
-						<p:column colspan="2">
+				<h:panelGroup layout="block" styleClass="Container">
+					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+						<h:panelGroup layout="block"
+							styleClass="Container100 Responsive100">
 							<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
 								required="true" style="margin: 15px;"
 								placeholder="#{messages.chapter_create_name_watermark}"
@@ -58,12 +58,31 @@
 								requiredMessage="#{messages.specification_chapter_name_alert}">
 								<f:validateLength maximum="100" />
 							</p:inputText>
-						</p:column>
-						<p:column>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="EmptyBox10" />
+						<h:panelGroup layout="block"
+							styleClass="Container100 Responsive100"
+							style="min-height: 250px;min-width: 300px;">
+							<p:outputLabel
+								value="#{messages.specification_chapter_description_label}" />
+							<pe:ckEditor id="description" rendered="#{!loginBean.mobile}"
+								width="300px" height="200px"
+								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+								toolbar="#{imageStreamer.ckEditorToolBar}"
+								value="#{jJChapterBean.chapter.description}" required="true"
+								requiredMessage="#{messages.specification_chapter_description_alert}" />
+							<p:editor id="descriptionMobile" style="width:600px !important"
+								rendered="#{loginBean.mobile}"
+								value="#{jJChapterBean.chapter.description}" required="true"
+								requiredMessage="#{messages.specification_chapter_description_alert}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+						<h:panelGroup layout="block"
+							styleClass="Container100 Responsive100">
 							<p:outputLabel for="parent"
 								value="#{messages.specification_chapter_parent_label}" />
-						</p:column>
-						<p:column>
+
 							<p:selectOneMenu id="parent"
 								value="#{jJChapterBean.parentChapter}" panelStyle="width:140px"
 								effect="fade" style="width:160px" filter="true"
@@ -79,24 +98,11 @@
 									oncomplete="PF('chapterBlockUIWidget').unblock()"
 									listener="#{jJChapterBean.handleSelectParentChapter()}" />
 							</p:selectOneMenu>
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column style="width:600px;" colspan="2">
-							<p:outputLabel
-								value="#{messages.specification_chapter_description_label}" />
-							<pe:ckEditor id="description" height="250px" width="600px"
-								rendered="#{!loginBean.mobile}"
-								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-								toolbar="#{imageStreamer.ckEditorToolBar}"
-								value="#{jJChapterBean.chapter.description}" required="true"
-								requiredMessage="#{messages.specification_chapter_description_alert}" />
-							<p:editor id="descriptionMobile" style="width:600px !important"
-								rendered="#{loginBean.mobile}"
-								value="#{jJChapterBean.chapter.description}" required="true"
-								requiredMessage="#{messages.specification_chapter_description_alert}" />
-						</p:column>
-						<p:column colspan="2">
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="EmptyBox20" />
+						<h:panelGroup layout="block"
+							styleClass="Container100 Responsive100"
+							style="min-height: 250px;min-width: 250px;">
 							<p:contextMenu id="chapterContextMenu" for="chapterTreeSingle">
 								<p:menuitem
 									value="#{messages.specification_chapter_edit_menuitem}"
@@ -117,28 +123,21 @@
 								value="#{messages.specification_chapter_tree_label}" />
 							<p:tree id="chapterTreeSingle" style="width:250px"
 								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
-								selectionMode="single" 
+								selectionMode="single"
 								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-								<!-- 								<p:ajax event="select" listener="#{jJChapterBean.onNodeSelect}" update=":chapterDialogForm" /> -->
 								<p:treeNode>
 									<h:outputText value="#{nodeChapter}" />
 								</p:treeNode>
 							</p:tree>
-						</p:column>
-					</p:row>
-					<f:facet name="footer">
-						<p:row>
-							<p:column colspan="4">
-								<p:commandButton
-									value="#{messages.specification_chapter_save_button}"
-									action="#{jJChapterBean.save}" update=":chapterDialogForm"
-									style="float: right;"
-									onstart="PF('chapterBlockUIWidget').block()"
-									oncomplete="PF('chapterBlockUIWidget').unblock()" />
-							</p:column>
-						</p:row>
-					</f:facet>
-				</p:panelGrid>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<p:commandButton
+						value="#{messages.specification_chapter_save_button}"
+						action="#{jJChapterBean.save}" update=":chapterDialogForm"
+						style="float: right;" onstart="PF('chapterBlockUIWidget').block()"
+						oncomplete="PF('chapterBlockUIWidget').unblock()" />
+				</h:panelGroup>
 			</p:tab>
 			<p:tab title="Document">
 				<p:panelGrid style="margin-top:10px;height: 450px;width: 950px;">
@@ -147,7 +146,7 @@
 							<p:outputLabel for="leftTreeIncorporated"
 								style="font-weight: bold;text-decoration: underline;"
 								value="#{messages.specification_chapter_unordered_tree}" />
-							<p:tree id="leftTreeIncorporated"  style="height: 90%;"
+							<p:tree id="leftTreeIncorporated" style="height: 90%;"
 								value="#{jJChapterBean.leftRoot}" var="nodeLeft"
 								selectionMode="single" styleClass="chapterTree"
 								selection="#{jJChapterBean.selectedLeftNode}" draggable="true"
