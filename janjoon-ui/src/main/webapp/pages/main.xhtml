@@ -99,9 +99,9 @@
 						emptyMessage="#{messages.label_notRecordFound}">
 
 						<p:column headerText="#{messages.label_task}">
-							<!-- 									<p:graphicImage -->
-							<!-- 										rendered="#{task.specification != null and task.specification}" -->
-							<!-- 										library="images" name="doc.ico" width="16" height="16" /> -->
+							<!-- 	<p:graphicImage -->
+							<!-- 		rendered="#{task.specification != null and task.specification}" -->
+							<!-- 		library="images" name="doc.ico" width="16" height="16" /> -->
 							<p:graphicImage rendered="#{task.taskType.name == 'specifier'}"
 								library="images" name="doc.ico" width="16" height="16" />
 							<p:graphicImage rendered="#{task.bug != null}" library="images"
@@ -115,23 +115,23 @@
 							<h:outputText value="#{task}" converter="JJTaskConverter" />
 						</p:column>
 
-						<p:column headerText="#{messages.label_requirement}">
+						<p:column headerText="#{messages.label_requirement}" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{task.requirement}"
 								converter="JJRequirementConverter" />
 						</p:column>
 
-						<p:column headerText="Bug">
+						<p:column headerText="Bug" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{task.bug}" converter="JJBugConverter" />
 						</p:column>
 
 						<p:column headerText="#{messages.label_project}"
-							style="width:100px;">
+							style="width:100px;" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{task.project}"
 								converter="JJProjectConverter" />
 						</p:column>
 
 						<p:column headerText="#{messages.project_scrum_new_start_label}"
-							style="width:100px;">
+							style="width:100px;" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{task.startDateReal}">
 								<f:convertDateTime type="date" locale="#{localeBean.locale}"
 									pattern="dd/MM/yyyy" />
@@ -141,7 +141,7 @@
 
 						<p:column
 							headerText="#{messages.specification_create_workload_label}"
-							style="width:100px;">
+							style="width:100px;"  rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{task.workloadPlanned}" />
 						</p:column>
 
@@ -178,7 +178,7 @@
 							</p:commandLink>
 						</p:column>
 
-						<p:column headerText="#{messages.label_chapter}">
+						<p:column headerText="#{messages.label_chapter}" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{req.chapter}"
 								converter="JJChapterConverter" />
 						</p:column>
@@ -188,12 +188,12 @@
 								converter="JJProjectConverter" />
 						</p:column>
 
-						<p:column headerText="#{messages.label_category}">
+						<p:column headerText="#{messages.label_category}" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{req.category}"
 								converter="JJCategoryConverter" />
 						</p:column>
 
-						<p:column headerText="Version">
+						<p:column headerText="Version" rendered="#{!loginBean.mobile}">
 							<h:outputText value="#{req.versioning}"
 								converter="JJVersionConverter" />
 						</p:column>

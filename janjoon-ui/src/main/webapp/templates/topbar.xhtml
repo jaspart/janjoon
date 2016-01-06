@@ -25,7 +25,6 @@
 					<f:param name="company" value="true" />
 				</p:graphicImage>
 			</h:link>
-			<!--h:graphicImage name="images/logo.svg" styleClass="Fleft" library="rio-layout" /></a-->
 			<a id="mobile-menu-button"
 				class="Fright ShowOnMobile ripplelink Unselectable ShadowEffect"><i
 				class="icon-add186"></i></a>
@@ -36,7 +35,7 @@
 
 		<ul id="top-menu" class="ShowOnDesktop">
 
-			<li><a class="ripplelink"> <i class="icon-settings50"></i> <span
+			<li><a class="ripplelink"> <i class="icon-settings49"></i> <span
 					class="Txt">#{loginBean.contact.firstname}
 						#{loginBean.contact.name}</span></a>
 				<ul>
@@ -53,7 +52,7 @@
 							onclick="PF('mPanel').loadContents()" immediate="true">
 							#{loginBean.messageCount} Message</p:commandLink></li>
 				</ul></li>
-			<li><a class="ripplelink"><i class="icon-in-alt"></i> <span
+				<li><a class="ripplelink"><i class="icon-in-alt"></i> <span
 					class="Txt">#{messages.header_logout_link}</span></a>
 				<ul>
 					<li><a href="logout.jsf">#{messages.header_logout_link}</a></li>

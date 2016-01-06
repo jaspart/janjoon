@@ -131,14 +131,14 @@
 					rendered="#{loginBean.authorisationService.rProject}"
 					title="#{messages.header_team_menuitem}"
 					url="/pages/teams.jsf?faces-redirect=true"
-					icon="icon-round58 GoldYellow" />
+					icon="icon-users GoldYellow" />
 
 				<p:menuitem id="statsAction"
 					title="#{messages.header_stat_menuitemhelp}"
 					value="#{messages.header_stat_menuitem}"
 					onstart="PF('blockUIWidget').block()"
 					actionListener="#{loginBean.redirection}" update=":growlForm"
-					icon="icon-thermostat1 Khaki"
+					icon="icon-google130 Khaki"
 					rendered="#{loginBean.authorisationService.rProject}" />
 
 				<p:menuitem value="#{messages.header_admin_menuitem}"
@@ -147,7 +147,21 @@
 					url="/pages/administration.jsf?faces-redirect=true"
 					icon="icon-https Marron" update=":contentPanel" />
 			</pr:menu>
+			<div class="ContainerIndent Fs12 BoldGray FontRobotoRegular">
+				<h:panelGrid columns="2" cellspacing="0" cellpadding="0" width="100%">
+					<p:row>
+						<p:column width="50%">
+							<h:outputText value=" Version 3.0-BUILD_NUMBER Lithium" />
+						</p:column>
+						<p:column width="50%" style="text-align: right;">
+							<h:outputLink value="https://www.starit.fr">
+								<h:graphicImage library="images" name="starit-logo.png"
+									alt="StarIT - Janjoon" />
+							</h:outputLink>
+						</p:column>
+					</p:row>
+				</h:panelGrid>
+			</div>
 		</div>
-		<!--/h:panelGrid-->
 	</h:form>
 </ui:composition>
