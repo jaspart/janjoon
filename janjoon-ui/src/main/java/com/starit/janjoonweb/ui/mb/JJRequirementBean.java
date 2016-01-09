@@ -333,12 +333,12 @@ public class JJRequirementBean {
 
 	public String getCategoryContainerType() {
 
-		if (categoryList.size() <= 5)
+		//if (categoryList.size() <= 5)
 			return "Container60";
-		else if (categoryList.size() <= 8)
-			return "Container80";
-		else
-			return "Container100";
+		//else if (categoryList.size() <= 8)
+		//	return "Container80";
+		//else
+		//	return "Container100";
 	}
 
 	public String getTableDataModelSizePct(CategoryDataModel dataModel) {

@@ -124,10 +124,6 @@
 
 				<h:panelGroup id="treePanelGrid" layout="block"
 					styleClass="Container30 MarAuto Responsive100">
-					<!-- 					<p:accordionPanel id="accordionTreePanel" activeIndex="0" -->
-					<!-- 						styleClass="accordionTreePanel" -->
-					<!-- 						style="/*float: left;height: 100%;width: 30% !important;*/"> -->
-					<!-- 						<p:tab title="#{messages.specification_progress_footer}"> -->
 					<p:panelGrid styleClass="customPanelGrid" style="width: 100%;">
 						<f:facet name="header">
 							<p:row>
@@ -215,12 +211,8 @@
 							</p:column>
 						</p:row>
 					</p:panelGrid>
-					<!-- 						</p:tab> -->
-					<!-- 					</p:accordionPanel> -->
 				</h:panelGroup>
 			</h:form>
-			<!-- 		<h:panelGrid columns="1" styleClass="customPanelGrid Responsive" -->
-			<!-- 			border="0" rendered="#{requirementBean.requirement != null}"> -->
 			<h:panelGroup layout="block"
 				styleClass="Container70 MarAuto Responsive100">
 				<h:form id="requirementForm">
@@ -232,8 +224,6 @@
 								<p:column colspan="2">
 									<h:outputText style="float: left;"
 										value="ID:#{requirementBean.requirement.category.id}" />
-									<!-- 							</p:column> -->
-									<!-- 							<p:column> -->
 									<h:outputText id="nombres"
 										value="#{loginBean.checkMessage(requirementBean.requirement.category)}"
 										style="text-transform: uppercase;" />
@@ -241,10 +231,6 @@
 							</p:row>
 						</f:facet>
 						<p:row>
-							<!-- 						<p:column> -->
-							<!-- 							<p:outputLabel for="nameReq" -->
-							<!-- 								value="#{messages.specification_create_name_watermark}" /> -->
-							<!-- 						</p:column> -->
 							<p:column>
 								<p:inputText id="nameReq" style="width: 90%;"
 									label="#{messages.label_name}" title="#{messages.label_name}"
@@ -254,8 +240,6 @@
 								</p:inputText>
 							</p:column>
 							<p:column>
-								<!-- 							<p:outputLabel for="chapter" -->
-								<!-- 								value="#{messages.specification_create_chapter_label}" /> -->
 								<p:autoComplete id="chapter" scrollHeight="200"
 									value="#{requirementBean.requirement.chapter}"
 									itemLabel="#{chapter != null ? chapter.name : messages.label_selectChapter}"
@@ -267,10 +251,6 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<!-- 						<p:column> -->
-							<!-- 							<p:outputLabel -->
-							<!-- 								value="#{messages.specification_create_description_label}" /> -->
-							<!-- 						</p:column> -->
 							<p:column colspan="2">
 								<pe:ckEditor id="description"
 									toolbar="#{imageStreamer.ckEditorToolBar}" height="60%"
@@ -291,10 +271,6 @@
 							</p:column>
 						</p:row>
 						<p:row>
-							<!-- 						<p:column> -->
-							<!-- 							<p:outputLabel for="note" -->
-							<!-- 								value="#{messages.specification_create_note_watermark} : " /> -->
-							<!-- 						</p:column> -->
 							<p:column colspan="2">
 								<p:inputTextarea id="note" rows="3" cols="100"
 									placeholder="#{messages.specification_create_note_watermark}"
@@ -317,29 +293,15 @@
 				</h:form>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="EmptyBox20" />
-			<!-- 			<h:panelGroup layout="block" -->
-			<!-- 				styleClass="Container100 MarAuto Responsive100"> -->
 			<h:form>
 				<p:panel styleClass="customPanel Container100 Responsive100"
 					rendered="#{requirementBean.requirement != null}">
 					<f:facet name="header">
-						<!-- 							<p:row> -->
-						<!-- 								<p:column -->
-						<!-- 									colspan="#{fn:length(requirementBean.categorieRequirements)}"> -->
 						<h:outputText styleClass="Fs18"
 							value="#{messages.specification_link_panel_header}" />
-						<!-- 								</p:column> -->
-						<!-- 							</p:row> -->
 					</f:facet>
-					<!-- 						<p:row> -->
-					<!-- 					<c:forEach items="#{requirementBean.categorieRequirements}" -->
-					<!-- 						var="categorieRequirement"> -->
 					<ui:repeat var="categorieRequirement"
 						value="#{requirementBean.categorieRequirements}">
-						<!-- 					<h:panelGroup layout="block" -->
-						<!-- 						style="width: 24.5%; margin-left: 2px; float: left;" -->
-						<!-- 						rendered="#{categorieRequirement.requirements != null}"> -->
-						<!-- 								<p:column style="padding-left: 2px;padding-right: 2px;"> -->
 						<h:panelGroup layout="block" style="margin-top: 0.5%;"
 							styleClass="#{requirementBean.containerType} MarAuto Responsive">
 							<p:dataTable value="#{categorieRequirement.requirements}"
@@ -362,39 +324,12 @@
 											target="#{jJRequirementBean.requirement}" />
 									</p:commandLink>
 								</p:column>
-								<!-- 	<h:outputText value="#{req.id}-#{fn:substring(req.name,0,25)}" /> -->
-								<!-- 								<f:facet name="footer"> -->
-								<!-- 									<p:commandButton id="createButton" style="width: 100%;" -->
-								<!-- 										icon="fa fa-plus-square Fs20" resetValues="true" -->
-								<!-- 										actionListener="#{requirementBean.loadData(categorieRequirement)}" -->
-								<!-- 										onstart="PF('blockUIWidget').block()" update=":linkForm" -->
-								<!-- 										oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" /> -->
-								<!-- 								</f:facet> -->
 							</p:dataTable>
 						</h:panelGroup>
-						<!-- 								</p:column> -->
-						<!-- 						</h:panelGroup> -->
-						<!-- 					</c:forEach> -->
 					</ui:repeat>
-					<!-- 						</p:row> -->
 				</p:panel>
 			</h:form>
-			<!-- 			</h:panelGroup> -->
 			<h:panelGroup layout="block" styleClass="EmptyBox10" />
-			<!-- 			<h:panelGroup layout="block" -->
-			<!-- 				styleClass="Container100 MarAuto Responsive100"> -->
-			<!-- 				<h:panelGrid style="height: 150px;" columns="2" -->
-			<!-- 					rendered="#{requirementBean.requirement != null}" -->
-			<!-- 					styleClass="customPanel"> -->
-			<!-- 				<f:facet name="header"> -->
-			<!-- 					<p:row> -->
-			<!-- 						<p:column colspan="2"> -->
-			<!-- 							<h:outputText value="Relations" /> -->
-			<!-- 						</p:column> -->
-			<!-- 					</p:row> -->
-			<!-- 				</f:facet> -->
-			<!-- 				<p:row> -->
-			<!-- 					<p:column style="width:50%"> -->
 			<h:panelGroup layout="block"
 				rendered="#{requirementBean.requirement != null}"
 				styleClass="Container50 MarAuto Responsive50">
@@ -417,14 +352,10 @@
 					</p:column>
 				</p:dataTable>
 			</h:panelGroup>
-			<!-- 					</p:column> -->
-
-			<!-- 					<p:column style="width:50%"> -->
 			<h:panelGroup layout="block"
 				rendered="#{requirementBean.requirement != null}"
 				styleClass="Container50 MarAuto Responsive50">
 				<h:form id="testCaseForm">
-					<!-- 								<p:growl id="msg" /> -->
 					<p:dataTable id="testCaseDataTable" var="testCaseModel"
 						selection="#{requirementBean.reqSelectedtestCases}"
 						rowKey="#{testCaseModel.id}" styleClass="testCaseDataTable"

@@ -476,7 +476,7 @@ div#contentPanel_content {
 	width: 100%;
 	min-width: 200px !important;
 	margin: auto;
-	border: 1px solid #a4a4a4;
+	border: 0px solid #a4a4a4;
 }
 
 .requirement-table table tbody .ui-state-highlight>td {
