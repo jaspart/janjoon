@@ -7,27 +7,12 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<style type="text/css">
-/* .cke_chrome { */
-/* 	visibility: inherit; */
-/* 	width: 600px !important; */
-/* } */
-.ui-editor {
-	height: 250px !important;
-}
 
-/* .cke_contents { */
-/* 	height: 200px !important; */
-/* } */
-.cke_bottom {
-	display: block;
-}
-</style>
 	<pe:blockUI widgetVar="requirementBlockUIWidget"
 		target="requirementDialogPanel">
 		<h:panelGrid columns="2">
 			<p:graphicImage name="images/preloader.gif" library="rioLayout"
-								style="vertical-align: middle;" />
+				style="vertical-align: middle;" />
 			<h:outputText value="#{messages.label_refresh}"
 				style="white-space: nowrap;" />
 		</h:panelGrid>
@@ -35,173 +20,219 @@
 
 	<h:form id="requirementDialogForm" style="padding:0px;">
 		<p:panel styleClass="panelDialog ui-fluid">
-			<!-- 			<f:facet name="header"> -->
-			<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
-			<!-- 			</f:facet> -->
-			<h:panelGroup layout="block" styleClass="Container100">
-				<p:inputText id="nameReq"
-					placeholder="#{messages.specification_create_name_watermark}"
-					label="#{messages.specification_create_name_label}"
-					value="#{jJRequirementBean.requirement.name}" required="true"
-					requiredMessage="#{messages.specification_create_name_alert}">
-					<f:validateLength maximum="100" />
-				</p:inputText>
+			<f:facet name="header">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</f:facet>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="nameReq"
+						placeholder="#{messages.specification_create_name_watermark}"
+						label="#{messages.specification_create_name_label}"
+						value="#{jJRequirementBean.requirement.name}" required="true"
+						requiredMessage="#{messages.specification_create_name_alert}">
+						<f:validateLength maximum="100" />
+					</p:inputText>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container25">
-				<p:outputLabel for="status" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_status_label}" />
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container20">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel for="status"
+						value="#{messages.specification_create_status_label}" /></h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container80">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="status"
+							value="#{jJRequirementBean.requirementStatus}" required="true"
+							requiredMessage="#{messages.specification_create_status_alert}"
+							effect="fade" filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledStatus}">
+							<f:converter
+								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+							<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
+								var="req" itemLabel="#{loginBean.checkMessage(req)}"
+								itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectStatus()}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container25">
-				<p:selectOneMenu id="status"
-					value="#{jJRequirementBean.requirementStatus}" required="true"
-					requiredMessage="#{messages.specification_create_status_alert}"
-					effect="fade" filter="true" filterMatchMode="startsWith"
-					disabled="#{jJRequirementBean.disabledStatus}">
-					<f:converter
-						converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
-					<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
-						var="req"
-						itemLabel="#{loginBean.checkMessage(req)}"
-						itemValue="#{req}" />
-					<p:ajax partialSubmit="true"
-						listener="#{jJRequirementBean.handleSelectStatus()}" />
-				</p:selectOneMenu>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container25">
-				<p:outputLabel for="project" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_project_label} *" />
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container25">
-				<p:selectOneMenu id="project"
-					value="#{jJRequirementBean.requirementProject}" effect="fade"
-					filter="true" filterMatchMode="startsWith"
-					disabled="#{jJRequirementBean.disabledProject}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container20"><h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel for="project"
+						value="#{messages.specification_create_project_label} *" /></h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container80">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="project"
+							value="#{jJRequirementBean.requirementProject}" effect="fade"
+							filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledProject}"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
-					<f:selectItems value="#{jJRequirementBean.requirementProjectList}"
-						var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-					<p:ajax partialSubmit="true"
-						onstart="PF('requirementBlockUIWidget').block()"
-						oncomplete="PF('requirementBlockUIWidget').unblock()"
-						update="lowRequirement mediumRequirement highRequirement chapter"
-						listener="#{jJRequirementBean.handleSelectProject()}" />
-				</p:selectOneMenu>
+							<f:selectItems
+								value="#{jJRequirementBean.requirementProjectList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								onstart="PF('requirementBlockUIWidget').block()"
+								oncomplete="PF('requirementBlockUIWidget').unblock()"
+								update="lowRequirement mediumRequirement highRequirement chapter"
+								listener="#{jJRequirementBean.handleSelectProject()}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container33">
-				<p:outputLabel for="product" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_product_label}" />
-				<p:selectOneMenu id="product"
-					value="#{jJRequirementBean.requirementProduct}" effect="fade"
-					filter="true" filterMatchMode="startsWith"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container20"><h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel for="chapter"
+						value="#{messages.specification_create_chapter_label}:" /></h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container80">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="chapter"
+							value="#{jJRequirementBean.requirementChapter}" effect="fade"
+							filter="true" filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
 
-					<f:selectItem itemValue="#{null}"
-						itemLabel="#{messages.specification_create_select_label}" />
-					<f:selectItems value="#{jJRequirementBean.requirementProductList}"
-						var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-					<p:ajax partialSubmit="true" update="version"
-						onstart="PF('requirementBlockUIWidget').block()"
-						oncomplete="PF('requirementBlockUIWidget').unblock()"
-						listener="#{jJRequirementBean.handleSelectProduct()}" />
-				</p:selectOneMenu>			
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementChapterList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectChapter()}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container33">
-				<p:outputLabel for="version" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_version_label}" />
-				<p:selectOneMenu id="version"
-					value="#{jJRequirementBean.requirementVersion}" effect="fade"
-					filter="true" filterMatchMode="startsWith"
-					disabled="#{jJRequirementBean.disabledVersion}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container20"><h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel for="product"
+						value="#{messages.specification_create_product_label}" /></h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container80">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="product"
+							value="#{jJRequirementBean.requirementProduct}" effect="fade"
+							filter="true" filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
-					<f:selectItem itemValue="#{null}"
-						itemLabel="#{messages.specification_create_select_label}" />
-					<f:selectItems value="#{jJRequirementBean.requirementVersionList}"
-						var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-					<p:ajax partialSubmit="true"
-						listener="#{jJRequirementBean.handleSelectVersion()}" />
-				</p:selectOneMenu>
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementProductList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true" update="version"
+								onstart="PF('requirementBlockUIWidget').block()"
+								oncomplete="PF('requirementBlockUIWidget').unblock()"
+								listener="#{jJRequirementBean.handleSelectProduct()}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container33">
-				<p:outputLabel for="chapter" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_chapter_label}:" />
-				<p:selectOneMenu id="chapter"
-					value="#{jJRequirementBean.requirementChapter}" effect="fade"
-					filter="true" filterMatchMode="startsWith"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container20">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel for="version"
+						value="#{messages.specification_create_version_label}" /></h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container80">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="version"
+							value="#{jJRequirementBean.requirementVersion}" effect="fade"
+							filter="true" filterMatchMode="startsWith"
+							disabled="#{jJRequirementBean.disabledVersion}"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
-					<f:selectItem itemValue="#{null}"
-						itemLabel="#{messages.specification_create_select_label}" />
-					<f:selectItems value="#{jJRequirementBean.requirementChapterList}"
-						var="req" itemLabel="#{req.name}" itemValue="#{req}" />
-					<p:ajax partialSubmit="true"
-						listener="#{jJRequirementBean.handleSelectChapter()}" />
-				</p:selectOneMenu>
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.specification_create_select_label}" />
+							<f:selectItems
+								value="#{jJRequirementBean.requirementVersionList}" var="req"
+								itemLabel="#{req.name}" itemValue="#{req}" />
+							<p:ajax partialSubmit="true"
+								listener="#{jJRequirementBean.handleSelectVersion()}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block"
 				rendered="#{requirementBean.reqDialogReqListrender}"
-				styleClass="Container33">
-				<p:selectCheckboxMenu id="lowRequirement"
-					value="#{jJRequirementBean.selectedLowRequirementsList}"
-					label="#{jJRequirementBean.lowCategoryName}" filter="true"
-					filterText="Filter" filterMatchMode="contains"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
-					disabled="#{jJRequirementBean.disabledLowRequirements}">
-					<f:selectItems value="#{jJRequirementBean.lowRequirementsList}"
-						var="requirement" itemLabel="#{requirement.name}"
-						itemValue="#{requirement}" />
-					<p:ajax listener="#{jJRequirementBean.handleChangeLow}" />
-				</p:selectCheckboxMenu>
+				styleClass="Container33 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:selectCheckboxMenu id="lowRequirement"
+						value="#{jJRequirementBean.selectedLowRequirementsList}"
+						label="#{jJRequirementBean.lowCategoryName}" filter="true"
+						filterText="Filter" filterMatchMode="contains"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+						disabled="#{jJRequirementBean.disabledLowRequirements}">
+						<f:selectItems value="#{jJRequirementBean.lowRequirementsList}"
+							var="requirement" itemLabel="#{requirement.name}"
+							itemValue="#{requirement}" />
+						<p:ajax listener="#{jJRequirementBean.handleChangeLow}" />
+					</p:selectCheckboxMenu>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container33"
+			<h:panelGroup layout="block" styleClass="Container33 Responsive100"
 				rendered="#{requirementBean.reqDialogReqListrender}">
-				<p:selectCheckboxMenu id="mediumRequirement"
-					value="#{jJRequirementBean.selectedMediumRequirementsList}"
-					label="#{jJRequirementBean.mediumCategoryName}" filter="true"
-					filterText="Filter" filterMatchMode="contains"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
-					disabled="#{jJRequirementBean.disabledMediumRequirements}">
-					<f:selectItems value="#{jJRequirementBean.mediumRequirementsList}"
-						var="requirement" itemLabel="#{requirement.name}"
-						itemValue="#{requirement}" />
-					<p:ajax listener="#{jJRequirementBean.handleChangeMedium}" />
-				</p:selectCheckboxMenu>
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:selectCheckboxMenu id="mediumRequirement"
+						value="#{jJRequirementBean.selectedMediumRequirementsList}"
+						label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+						filterText="Filter" filterMatchMode="contains"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+						disabled="#{jJRequirementBean.disabledMediumRequirements}">
+						<f:selectItems value="#{jJRequirementBean.mediumRequirementsList}"
+							var="requirement" itemLabel="#{requirement.name}"
+							itemValue="#{requirement}" />
+						<p:ajax listener="#{jJRequirementBean.handleChangeMedium}" />
+					</p:selectCheckboxMenu>
+				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block"
 				rendered="#{requirementBean.reqDialogReqListrender}"
-				styleClass="Container33">
-				<p:selectCheckboxMenu id="highRequirement"
-					value="#{jJRequirementBean.selectedHighRequirementsList}"
-					label="#{jJRequirementBean.highCategoryName}" filter="true"
-					filterText="Filter" filterMatchMode="contains"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
-					disabled="#{jJRequirementBean.disabledHighRequirements}">
-					<f:selectItems value="#{jJRequirementBean.highRequirementsList}"
-						var="requirement" itemLabel="#{requirement.name}"
-						itemValue="#{requirement}" />
-					<p:ajax listener="#{jJRequirementBean.handleChangeHigh}" />
-				</p:selectCheckboxMenu>
+				styleClass="Container33 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:selectCheckboxMenu id="highRequirement"
+						value="#{jJRequirementBean.selectedHighRequirementsList}"
+						label="#{jJRequirementBean.highCategoryName}" filter="true"
+						filterText="Filter" filterMatchMode="contains"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+						disabled="#{jJRequirementBean.disabledHighRequirements}">
+						<f:selectItems value="#{jJRequirementBean.highRequirementsList}"
+							var="requirement" itemLabel="#{requirement.name}"
+							itemValue="#{requirement}" />
+						<p:ajax listener="#{jJRequirementBean.handleChangeHigh}" />
+					</p:selectCheckboxMenu>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container100" style="height: 250px;">
-				<p:outputLabel for="description" styleClass="ShowOnDesktop"
-					value="#{messages.specification_create_description_label}" />
-				<pe:ckEditor id="description"
-					toolbar="#{imageStreamer.ckEditorToolBar}" height="25%"
-					width="100%"
-					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-					value="#{jJRequirementBean.requirement.description}"
-					required="true" rendered="#{!loginBean.mobile}"
-					requiredMessage="#{messages.specification_create_description_alert}" />
+			<h:panelGroup layout="block" styleClass="Container100"
+				style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel
+						value="#{messages.specification_create_description_label}" />
+					<pe:ckEditor id="description"
+						toolbar="#{imageStreamer.ckEditorToolBar}" width="95%;"
+						customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+						value="#{jJRequirementBean.requirement.description}"
+						required="true" rendered="#{!loginBean.mobile}"
+						requiredMessage="#{messages.specification_create_description_alert}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container100"
+				rendered="#{loginBean.mobile}">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
 
-				<p:editor id="descriptionMobile" styleClass="ShowOnMobile"
-					style="width:100%;height:25%;margin-left:auto;margin-right:auto;"
-					value="#{jJRequirementBean.requirement.description}"
-					required="true" rendered="#{loginBean.mobile}"
-					requiredMessage="#{messages.specification_create_description_alert}" />
-
-				<p:message for="description" rendered="#{!loginBean.mobile}" />
-				<p:message for="descriptionMobile" rendered="#{loginBean.mobile}" />
-				<!--h:outputLabel for="description" value="#{request.contextPath}" /-->
+					<p:inputTextarea id="descriptionMobile"
+						value="#{jJRequirementBean.requirement.description}"
+						required="true" rendered="#{loginBean.mobile}"
+						requiredMessage="#{messages.specification_create_description_alert}" />
+				</h:panelGroup>
 			</h:panelGroup>
 			<!--div class="Container100" rendered="#{jJRequirementBean.requirement.id != null}">
 					<p:dataTable id="testCaseDataTable" var="testCaseModel"
@@ -244,13 +275,16 @@
 					</p:dataTable>
 			</div-->
 			<h:panelGroup layout="block" styleClass="Container100">
-				<p:inputTextarea id="note" rows="3" cols="100"
-					placeholder="#{messages.specification_create_note_watermark}"
-					value="#{jJRequirementBean.requirement.note}" autoResize="false"
-					style="resize: none;width: 600px;margin-left:auto;margin-right:auto;" />
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputTextarea id="note" rows="3"
+						placeholder="#{messages.specification_create_note_watermark}"
+						value="#{jJRequirementBean.requirement.note}" autoResize="false"
+						style="resize: none;" />
+				</h:panelGroup>
 			</h:panelGroup>
-			<f:facet name="footer">
-				<h:panelGroup layout="block" styleClass="Container33">
+			<h:panelGroup layout="block" rendered="#{!loginBean.mobile}"
+				styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:commandButton
 						value="#{messages.specification_create_save_button}"
 						onstart="PF('requirementBlockUIWidget').block()"
@@ -259,7 +293,10 @@
 						process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement,note"
 						widgetVar="requirementSaveWidget" update="@form :growlForm" />
 				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="MarRight20 Container33">
+			</h:panelGroup>
+			<h:panelGroup layout="block" rendered="#{loginBean.mobile}"
+				styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:commandButton
 						value="#{messages.specification_create_save_button}"
 						onstart="PF('requirementBlockUIWidget').block()"
@@ -268,14 +305,18 @@
 						process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note"
 						widgetVar="requirementSaveWidget" update="@form :growlForm" />
 				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="Container33">
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:commandButton id="viewCloseButton" styleClass="GrayBack"
 						value="#{messages.label_cancel}"
 						oncomplete="PF('blockUIWidget').unblock()"
 						onstart="PF('blockUIWidget').block()"
 						onclick="PF('requirementDialogWidget').hide()" type="button" />
 				</h:panelGroup>
-			</f:facet>
+			</h:panelGroup>
+
 		</p:panel>
 
 	</h:form>

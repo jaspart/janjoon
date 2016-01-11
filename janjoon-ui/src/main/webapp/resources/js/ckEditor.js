@@ -5,3 +5,5 @@ CKEDITOR.editorConfig = function(config) {
 	config.filebrowserImageUploadUrl = "ckeditor/uploadimage";
 	config.image_previewText = '#{messages.header_noPermission_menuitem}';
 };
+
+CKEDITOR.env.isCompatible = true;

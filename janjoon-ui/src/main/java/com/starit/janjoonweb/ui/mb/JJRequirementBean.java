@@ -3997,9 +3997,9 @@ public class JJRequirementBean {
 
 		public String getTableStyle() {
 			if (expanded)
-				return "width: 65%;";
+				return "Container66";
 			else
-				return "";
+				return "Container100";
 		}
 
 		@SuppressWarnings("unchecked")

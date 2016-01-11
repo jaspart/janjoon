@@ -115,9 +115,8 @@
 						toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
 						value="#{JJTask_.bug.description}" readOnly="true"
 						rendered="#{!loginBean.mobile}" />
-					<p:editor id="BugMobiledescription" style="width:680px"
-						value="#{JJTask_.bug.description}" readOnly="true"
-						rendered="#{loginBean.mobile}" />
+					<h:outputText escape="false" id="BugMobiledescription" style="width:680px"
+						value="#{JJTask_.bug.description}" rendered="#{loginBean.mobile}" />
 				</p:column>
 			</p:row>
 			<p:row rowspan="5"
@@ -134,9 +133,8 @@
 						toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
 						value="#{JJTask_.testcase.description}" readOnly="true"
 						rendered="#{!loginBean.mobile}" />
-					<p:editor id="testcaseMobiledescription" style="width:680px"
-						value="#{JJTask_.testcase.description}" readOnly="true"
-						rendered="#{loginBean.mobile}" />
+					<h:outputText escape="false" id="testcaseMobiledescription" style="width:680px"
+						value="#{JJTask_.testcase.description}" rendered="#{loginBean.mobile}" />
 				</p:column>
 			</p:row>
 
@@ -196,9 +194,8 @@
 									rendered="#{!loginBean.mobile}"
 									value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
 
-								<p:editor id="descriptionMobile" style="width:680px"
-									rendered="#{loginBean.mobile}"
-									value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
+								<h:outputText escape="false" id="descriptionMobile" style="width:680px"
+									rendered="#{loginBean.mobile}" value="#{jJTaskBean.selectedReq.description}"  />
 							</p:column>
 						</p:row>
 					</p:panelGrid>

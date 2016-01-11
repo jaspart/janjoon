@@ -149,47 +149,53 @@ function removeMenuActiveIndex() {
 }
 
 $(window)
-		.on(
-				'resize',
+		.resize(
 				function() {
-					var width = $(window).width() * 82 / 100;
+					
+					$(".ui-dialog-content").css("maxWidth",($(window).width() * 90 / 100) + "px");
+					$(".ui-dialog-content").css("maxHeight",($(window).height() * 80 / 100) + "px");
 
-					if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-							.test(navigator.userAgent)) {
-						width = $(window).width() * 95 / 100;
-					} else if ($(window).width() < 960)
-						width = $(window).width() * 95 / 100;
-					$("#layoutsGrid").width(width);
-					
-					var width1 = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
-					$(".reqTree").width(width1);
-					
-					$(".ui-dialog-content").css( "maxWidth", ( $( window ).width() * 90 /100 ) + "px" );
-					$(".ui-dialog-content").css( "maxHeight", ( $( window ).height() * 90 /100 ) + "px" );
+					var $dlg = $(".ui-dialog:visible");
+					// $dlg.dialog("option", "position", {my: "center", at:
+					// "center", of: window});
+
+					$dlg.position({my : "center center",at : "center center",of : window});
+
+//					var width = $(window).width() * 82 / 100;
+//
+//					if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+//							.test(navigator.userAgent)) {
+//						width = $(window).width() * 95 / 100;
+//					} else if ($(window).width() < 960)
+//						width = $(window).width() * 95 / 100;
+//					$("#layoutsGrid").width(width);
 				});
-
-$(function() {		
-//	var height = $("#requirementForm\\:requirementFormPanelGrid").height() * 81.1 / 100;	
-	var width = $("#treeForm\\:treePanelGrid").width() * 93 / 100;	
-	$(".reqTree").width(width);
-//	$(".reqTree").height(height);
-	
-	//ui-dialog-content
-	
-	$(".ui-dialog-content").css( "maxWidth", ( $( window ).width() * 80 /100 ) + "px" );
-	$(".ui-dialog-content").css( "maxHeight", ( $( window ).height() * 80 /100 ) + "px" );
-});
-
 $(function() {
-	var width = $(window).width() * 82 / 100;
+	// var height = $("#requirementForm\\:requirementFormPanelGrid").height() *
+	// 81.1 / 100;
+	// var width = $("#treeForm\\:treePanelGrid").width() * 96 / 100;
+	// $(".reqTree").css( "maxWidth", ( $("#treeForm\\:treePanelGrid").width() *
+	// 95/100) + "px" );
+	// $(".reqTree").height(height);
 
-	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-			.test(navigator.userAgent)) {
-		width = $(window).width() * 95 / 100;
-	} else if ($(window).width() < 960)
-		width = $(window).width() * 95 / 100;
-	$("#layoutsGrid").width(width);
+	// ui-dialog-content
+
+	$(".ui-dialog-content").css("maxWidth",
+			($(window).width() * 90 / 100) + "px");
+	$(".ui-dialog-content").css("maxHeight",
+			($(window).height() * 80 / 100) + "px");
 });
+
+//$(function() {
+//	var width = $(window).width() * 82 / 100;
+//
+//	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+//			.test(navigator.userAgent)) {
+//		width = $(window).width() * 95 / 100;
+//	} else if ($(window).width() < 960)
+//		width = $(window).width() * 95 / 100;
+//	$("#layoutsGrid").width(width);
+//});
 
 $(document).ready(function() {
 	$("#rowToggler").click(function() {

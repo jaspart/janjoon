@@ -35,6 +35,16 @@ h1, h2, h3, h4, h5, h6{ margin:0px !important;}
 .Responsive50{}
 .Responsive100{}
 
+/* .ui-dialog { */
+/* 	max-height: 90% !important; */
+/* 	max-width: 90% !important; */
+/* } */
+
+/* .ui-dialog-content { */
+/* 	max-height: 85% !important; */
+/* 	max-width: 100% !important; */
+/* } */
+
 /* Text Decoration */
 .Underline{ text-decoration:underline;}
 
@@ -187,18 +197,22 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 /* Containers */
 .Container100{ width:100%; float:left;}
 .Container96{ width:96%; float:left;}
+.Container95{ width:95%; float:left;}
 .Container90{ width:90%; float:left;}
 .Container85{ width:85%; float:left;}
 .Container80{ width:80%; float:left;}
 .Container75{ width:75%; float:left;}
 .Container70{ width:70%; float:left;}
+.Container66{ width:66.6%; float:left;}
 .Container60{ width:60%; float:left;}
 .Container50{ width:50%; float:left;}
 .Container40{ width:40%; float:left;}
 .Container33{ width:33.3%; float:left;}
+.Container35{ width:35%; float:left;}
 .Container30{ width:30%; float:left;}
 .Container25{ width:25%; float:left;}
 .Container20{ width:20%; float:left;}
+.Container15{ width:15%; float:left;}
 .Container10{ width:10%; float:left;}
 .Container5{ width:5%; float:left;}
 
@@ -273,7 +287,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
  
 @media (min-width: 960px) and (max-width:1200px){
 	/* responsive support */
-	.Responsive{width:33.3%; float:left; margin-left:0px !important; margin-right:0px !important;}
+	.Responsive{width:33.3%; float:left; margin-left:0px !important; margin-right:0px !important;}	
 	.Responsive50{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
     
@@ -290,7 +304,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .FloatNoneOnMobile{float:none !important;}
 	
 	/* responsive support */
-	.Responsive{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
+	.Responsive{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}	
 	.Responsive50{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
@@ -334,7 +348,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .FloatNoneOnMobile{float:none !important;}
 	
 	/* responsive support */
-	.Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
+	.Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}	
 	.Responsive50{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
@@ -380,7 +394,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .FloatNoneOnMobile{float:none !important;}
 	
 	/* responsive support */
-	.Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
+	.Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}	
 	.Responsive50{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	

@@ -763,8 +763,8 @@
 											customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 											toolbar="[['Source','Image','Table']]" readOnly="true"
 											rendered="#{!loginBean.mobile}" />
-										<p:editor id="descriptionMobile" style="width:300px;"
-											rendered="#{loginBean.mobile}" readOnly="true"
+										<h:outputText escape="false" id="descriptionMobile" style="width:300px;"
+											rendered="#{loginBean.mobile}" 
 											value="#{jJTestcaseBean.testcase.description}" />
 									</p:column>
 								</p:row>

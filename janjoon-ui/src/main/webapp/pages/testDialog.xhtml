@@ -95,9 +95,9 @@
 									toolbar="#{imageStreamer.ckEditorToolBar}"
 									value="#{jJTestcaseBean.testcase.description}" required="true"
 									requiredMessage="#{messages.test_new_description_alert}" />
-								<p:editor id="descriptionMobile" style="width:680px;"
+								<p:inputTextarea id="descriptionMobile" style="width:680px;"
 									rendered="#{loginBean.mobile}"
-									readOnly="#{jJTestcaseBean.disabledTestcaseMode}"
+									readonly="#{jJTestcaseBean.disabledTestcaseMode}"
 									value="#{jJTestcaseBean.testcase.description}" required="true"
 									requiredMessage="#{messages.test_new_description_alert}" />
 							</p:column>

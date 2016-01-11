@@ -652,9 +652,9 @@ div#contentPanel_content {
 	background-color: #666666;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	color: #fff !important;;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -665,9 +665,9 @@ div#contentPanel_content {
 	background-color: #00A5F7;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	color: #fff !important;;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -675,12 +675,12 @@ div#contentPanel_content {
 }
 
 .TestcaseFailed {
-	color: #FF0000;
+	color: #FF0000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	background-color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	background-color: #fff !important;;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -688,12 +688,12 @@ div#contentPanel_content {
 }
 
 .TestcaseFailedWithoutBuild {
-	background-color: #FF0000;
+	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	color: #fff !important;;
 	text-align: center;
 	white-space: pre-line;
 	vertical-align: baseline;
@@ -701,14 +701,14 @@ div#contentPanel_content {
 }
 
 .TestcaseNonFini {
-	color: #FFD500;
+	color: #FFD500 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
+	/* 	font-weight: 700; */
+	line-height: 2;
 	background-color: #fff;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -717,24 +717,24 @@ div#contentPanel_content {
 	background-color: #FFD500;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	color: #fff !important;;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
 
 .TestcaseSuccess {
-	color: #008800;
+	color: #008800 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
+	/* 	font-weight: 700; */
+	line-height: 2;
 	background-color: #fff;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -743,33 +743,33 @@ div#contentPanel_content {
 	background-color: #008800;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
-	line-height: 1;
-	color: #fff;
+	/* 	font-weight: 700; */
+	line-height: 2;
+	color: #fff !important;;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
 
 .TestcaseChapter {
-	color: black;
+	color: black !important;
 	font-weight: bold;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	line-height: 1;
+	line-height: 2;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
 
 .TestcaseRequirement {
-	color: black;
+	color: black !important;
 	font-size: 80%;
-	line-height: 1;
+	line-height: 2;
 	text-align: center;
-	/* 	white-space: pre-line; */
+	white-space: pre-line;
 	vertical-align: baseline;
 	border-radius: .25em;
 }
@@ -1055,7 +1055,7 @@ div.highLightRevised2 {
 .Specified {
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff;
 	text-align: center;
@@ -1068,7 +1068,7 @@ div.highLightRevised2 {
 .UnLinked {
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1081,7 +1081,7 @@ div.highLightRevised2 {
 .Progress {
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1094,7 +1094,7 @@ div.highLightRevised2 {
 .Finished {
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1107,7 +1107,7 @@ div.highLightRevised2 {
 .InTesting {
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1161,7 +1161,7 @@ div.highLightRevised2 {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1174,7 +1174,7 @@ div.highLightRevised2 {
 	background-color: #00A5F7 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1187,7 +1187,7 @@ div.highLightRevised2 {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1200,7 +1200,7 @@ div.highLightRevised2 {
 	background-color: #00A5F7 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1213,7 +1213,7 @@ div.highLightRevised2 {
 	background-color: #008800 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1226,7 +1226,7 @@ div.highLightRevised2 {
 	background-color: #8600FF !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1239,7 +1239,7 @@ div.highLightRevised2 {
 	background-color: #666666 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1252,7 +1252,7 @@ div.highLightRevised2 {
 	background-color: #8600FF !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1265,7 +1265,7 @@ div.highLightRevised2 {
 	background-color: #008800 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1278,7 +1278,7 @@ div.highLightRevised2 {
 	background-color: #8600FF !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1291,7 +1291,7 @@ div.highLightRevised2 {
 	background-color: #666666 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1335,7 +1335,7 @@ div.highLightRevised2 {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1348,7 +1348,7 @@ div.highLightRevised2 {
 	background-color: #008000 !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1361,7 +1361,7 @@ div.highLightRevised2 {
 	background-color: #0000FF !important;
 	padding: .2em .6em .3em;
 	font-size: 80%;
-	font-weight: 700;
+	/* 	font-weight: 700; */
 	line-height: 1;
 	color: #fff !important;
 	text-align: center;
@@ -1502,6 +1502,26 @@ div.highLightRevised2 {
 	min-width: 200px;
 }
 
+/* ckEditor */
+.cke_contents {
+	height: 150px !important;
+}
+
+.cke_bottom {
+	display: none !important;
+}
+
+.ui-editor {
+    height: 200px !important;
+}
+
+/* littleButton */
+.littleButton {
+	min-width: 20px !important;
+	min-height: 20px !important;
+	height: 30px;
+	width: 30px;
+}
 /* .ALERT { */
 /* 	background-color: #F2DEDE !important; */
 /* 	background-image: none !important; */

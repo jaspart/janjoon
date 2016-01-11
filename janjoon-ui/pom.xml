@@ -323,11 +323,11 @@
 			<artifactId>primefaces</artifactId>
 			<version>5.3</version>
 		</dependency>
-<!-- 		PrimeFaces Theme dependencies -->
+		<!-- PrimeFaces Theme dependencies -->
 		<dependency>
-		<groupId>org.primefaces.themes</groupId>
-		<artifactId>all-themes</artifactId>
-		<version>1.0.10</version>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
 		</dependency>
 		<dependency>
 			<groupId>com.starit.janjoonweb</groupId>
@@ -348,12 +348,12 @@
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>resources-ckeditor</artifactId>
-			<version>3.2.0</version>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>resources-codemirror</artifactId>
-			<version>3.2.0</version>
+			<version>4.0.0</version>
 		</dependency>
 		<!-- PDF Exporter dependencies -->
 
@@ -620,8 +620,10 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-
-			<plugin>
+			
+			<!-- 	StartproguardPlugin -->
+			
+			<plugin>			
 				<groupId>com.github.wvengen</groupId>
 				<artifactId>proguard-maven-plugin</artifactId>
 				<executions>
@@ -653,6 +655,8 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			
+			<!-- 	endproguardPlugin -->
 
 			<!-- <plugin> -->
 			<!-- <groupId>org.codehaus.mojo</groupId> -->

@@ -82,9 +82,7 @@
 					rendered="#{!loginBean.mobile}" width="650"
 					value="#{JJMessage.message}" readOnly="true" />
 
-				<p:editor id="messageMessMobile" width="650"
-					rendered="#{loginBean.mobile}" value="#{JJMessage.message}"
-					readOnly="true" />
+				<h:outputText id="messageMessMobile" escape="true" rendered="#{loginBean.mobile}" value="#{JJMessage.message}"  />
 			</p:column>
 		</p:row>
 	</p:panelGrid>

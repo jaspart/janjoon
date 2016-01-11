@@ -14,21 +14,6 @@
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
 }
-
-/* .cke_chrome { */
-/* 	visibility: inherit; */
-/* 	width: 600px !important; */
-/* } */
-.ui-editor {
-	height: 250px !important;
-}
-
-/* .cke_contents { */
-/* 	height: 200px !important; */
-/* } */
-.cke_bottom {
-	display: block;
-}
 </style>
 	<pe:blockUI widgetVar="chapterBlockUIWidget"
 		target="chapterDialogPanel">
@@ -47,96 +32,135 @@
 		</p:panel>
 		<p:tabView widgetVar="chapterTabView">
 			<p:tab title="Chapitre">
-				<h:panelGroup layout="block" styleClass="Container">
-					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<h:panelGroup layout="block" styleClass="Container ui-fluid">
+					<h:panelGroup layout="block" styleClass="Container50 Responsive100" style="max-width: 400px;">
 						<h:panelGroup layout="block"
 							styleClass="Container100 Responsive100">
-							<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
-								required="true" style="margin: 15px;"
-								placeholder="#{messages.chapter_create_name_watermark}"
-								label="#{messages.specification_chapter_name_label}"
-								requiredMessage="#{messages.specification_chapter_name_alert}">
-								<f:validateLength maximum="100" />
-							</p:inputText>
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:inputText id="name" value="#{jJChapterBean.chapter.name}"
+									required="true"
+									placeholder="#{messages.chapter_create_name_watermark}"
+									label="#{messages.specification_chapter_name_label}"
+									requiredMessage="#{messages.specification_chapter_name_alert}">
+									<f:validateLength maximum="100" />
+								</p:inputText>
+							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="EmptyBox10" />
+						<h:panelGroup layout="block" rendered="#{!loginBean.mobile}"
+							styleClass="Container100 Responsive100"
+							style="min-height: 230px;">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel
+									value="#{messages.specification_chapter_description_label}" />
+								<pe:ckEditor id="description" rendered="#{!loginBean.mobile}"
+									customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+									toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
+									value="#{jJChapterBean.chapter.description}" required="true"
+									requiredMessage="#{messages.specification_chapter_description_alert}" />
+							</h:panelGroup>
+						</h:panelGroup>
 						<h:panelGroup layout="block"
 							styleClass="Container100 Responsive100"
-							style="min-height: 250px;min-width: 300px;">
-							<p:outputLabel
-								value="#{messages.specification_chapter_description_label}" />
-							<pe:ckEditor id="description" rendered="#{!loginBean.mobile}"
-								width="300px" height="200px"
-								customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-								toolbar="#{imageStreamer.ckEditorToolBar}"
-								value="#{jJChapterBean.chapter.description}" required="true"
-								requiredMessage="#{messages.specification_chapter_description_alert}" />
-							<p:editor id="descriptionMobile" style="width:600px !important"
-								rendered="#{loginBean.mobile}"
-								value="#{jJChapterBean.chapter.description}" required="true"
-								requiredMessage="#{messages.specification_chapter_description_alert}" />
+							rendered="#{loginBean.mobile}">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:inputTextarea id="descriptionMobile"
+									rendered="#{loginBean.mobile}"
+									value="#{jJChapterBean.chapter.description}" required="true"
+									requiredMessage="#{messages.specification_chapter_description_alert}" />
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 						<h:panelGroup layout="block"
 							styleClass="Container100 Responsive100">
-							<p:outputLabel for="parent"
-								value="#{messages.specification_chapter_parent_label}" />
+							<h:panelGroup layout="block" styleClass="Container30"
+								style="/*margin-top: 3%;*/">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel for="parent"
+										value="#{messages.specification_chapter_parent_label}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container70">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:selectOneMenu id="parent"
+										value="#{jJChapterBean.parentChapter}" effect="fade"
+										filter="true" filterMatchMode="startsWith"
+										widgetVar="parentWidget"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
 
-							<p:selectOneMenu id="parent"
-								value="#{jJChapterBean.parentChapter}" panelStyle="width:140px"
-								effect="fade" style="width:160px" filter="true"
-								filterMatchMode="startsWith" widgetVar="parentWidget"
-								converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
-
-								<f:selectItem itemValue="#{null}"
-									itemLabel="#{messages.specification_create_select_label}" />
-								<f:selectItems value="#{jJChapterBean.chapterList}" var="chap"
-									itemLabel="#{chap.name}" itemValue="#{chap}" />
-								<p:ajax partialSubmit="true"
-									onstart="PF('chapterBlockUIWidget').block()"
-									oncomplete="PF('chapterBlockUIWidget').unblock()"
-									listener="#{jJChapterBean.handleSelectParentChapter()}" />
-							</p:selectOneMenu>
+										<f:selectItem itemValue="#{null}"
+											itemLabel="#{messages.specification_create_select_label}" />
+										<f:selectItems value="#{jJChapterBean.chapterList}" var="chap"
+											itemLabel="#{chap.name}" itemValue="#{chap}" />
+										<p:ajax partialSubmit="true"
+											onstart="PF('chapterBlockUIWidget').block()"
+											oncomplete="PF('chapterBlockUIWidget').unblock()"
+											listener="#{jJChapterBean.handleSelectParentChapter()}" />
+									</p:selectOneMenu>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="EmptyBox20" />
 						<h:panelGroup layout="block"
 							styleClass="Container100 Responsive100"
-							style="min-height: 250px;min-width: 250px;">
-							<p:contextMenu id="chapterContextMenu" for="chapterTreeSingle">
-								<p:menuitem
-									value="#{messages.specification_chapter_edit_menuitem}"
-									actionListener="#{jJChapterBean.editChapter}"
-									process="@this,chapterTreeSingle" icon="ui-icon-pencil"
-									onstart="PF('chapterBlockUIWidget').block()"
-									oncomplete="PF('chapterBlockUIWidget').unblock()"
-									update=":chapterDialogForm" />
-								<p:menuitem
-									value="#{messages.specification_chapter_delete_menuitem}"
-									actionListener="#{jJChapterBean.deleteChapter}"
-									process="@this,chapterTreeSingle" icon="ui-icon-close"
-									onstart="PF('chapterBlockUIWidget').block()"
-									oncomplete="PF('chapterBlockUIWidget').unblock()"
-									update=":chapterDialogForm" />
-							</p:contextMenu>
-							<p:outputLabel for="chapterTreeSingle"
-								value="#{messages.specification_chapter_tree_label}" />
-							<p:tree id="chapterTreeSingle" style="width:250px"
-								value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
-								selectionMode="single"
-								selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
-								<p:treeNode>
-									<h:outputText value="#{nodeChapter}" />
-								</p:treeNode>
-							</p:tree>
+							style="min-height: 150px;">
+							<h:panelGroup layout="block" styleClass="Container30"
+								style="/*margin-top: 3%;*/">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel for="chapterTreeSingle"
+										value="#{messages.specification_chapter_tree_label}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container70" >
+								<p:contextMenu id="chapterContextMenu" for="chapterTreeSingle">
+									<p:menuitem
+										value="#{messages.specification_chapter_edit_menuitem}"
+										actionListener="#{jJChapterBean.editChapter}"
+										process="@this,chapterTreeSingle" icon="fa fa-pencil Fs20"
+										onstart="PF('chapterBlockUIWidget').block()"
+										oncomplete="PF('chapterBlockUIWidget').unblock()"
+										update=":chapterDialogForm" />
+									<p:menuitem
+										value="#{messages.specification_chapter_delete_menuitem}"
+										actionListener="#{jJChapterBean.deleteChapter}"
+										process="@this,chapterTreeSingle" icon="fa fa-close Fs20"
+										onstart="PF('chapterBlockUIWidget').block()"
+										oncomplete="PF('chapterBlockUIWidget').unblock()"
+										update=":chapterDialogForm" />
+								</p:contextMenu>
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:tree id="chapterTreeSingle"  style="max-width: 300px;"
+									value="#{jJChapterBean.chapterRoot}" var="nodeChapter"
+									selectionMode="single"
+									selection="#{jJChapterBean.selectedChapterNode}" dynamic="true">
+									<p:treeNode>
+										<h:outputText value="#{nodeChapter}" />
+									</p:treeNode>
+								</p:tree>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="EmptyBox10" />
-					<p:commandButton
-						value="#{messages.specification_chapter_save_button}"
-						action="#{jJChapterBean.save}" update=":chapterDialogForm"
-						style="float: right;" onstart="PF('chapterBlockUIWidget').block()"
-						oncomplete="PF('chapterBlockUIWidget').unblock()" />
+					<h:panelGroup layout="block" styleClass="EmptyBox5" />
+					<h:panelGroup layout="block"
+						styleClass="Container50 Responsive50 ">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton
+								value="#{messages.specification_chapter_save_button}"
+								action="#{jJChapterBean.save}" update=":chapterDialogForm"
+								onstart="PF('chapterBlockUIWidget').block()"
+								oncomplete="PF('chapterBlockUIWidget').unblock()" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block"
+						styleClass="Container50 Responsive50 ">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+								value="#{messages.label_cancel}"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('chapterDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
 				</h:panelGroup>
 			</p:tab>
 			<p:tab title="Document">

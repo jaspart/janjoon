@@ -13,6 +13,7 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.RateEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -481,7 +482,7 @@ public class RequirementBean {
 				categorieRequirements = CategorieRequirement
 						.initCategorieRequirement(requirement,
 								jJCategoryService.getCategories(null, false,
-										true, true, LoginBean.getCompany()));
+										true, true, LoginBean.getCompany()));			
 
 			} else {
 				requirement = null;
@@ -714,7 +715,7 @@ public class RequirementBean {
 			if (requirement != null
 					&& ((RequirementUtil) node).getRequirement().equals(
 							requirement))
-				return "text-decoration: underline;background-color: #03a9f4 !important;";
+				return "opacity: 0.7;filter: alpha(opacity=70);";
 			else
 				return "";
 		} else
