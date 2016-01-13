@@ -680,7 +680,8 @@ public class JJTaskBean {
 		if (!validation_error) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated",
-					MessageFactory.getMessage("label_task", "").getDetail(),"e");
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext.getCurrentInstance().execute(
 					"PF('viewTaskDialogWidget').hide()");
@@ -1532,13 +1533,13 @@ public class JJTaskBean {
 			if (!validation_error)
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_updated", MessageFactory
-								.getMessage("label_task", "").getDetail(),"e");
+								.getMessage("label_task", "").getDetail(), "e");
 			// RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
-			facesMessage =	MessageFactory.getMessage(
+			facesMessage = MessageFactory.getMessage(
 					"message_unsuccessfully_updated", MessageFactory
-							.getMessage("label_task", "").getDetail(),"de la");
+							.getMessage("label_task", "").getDetail(), "de la");
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 		}
 		if (facesMessage != null)
@@ -2107,7 +2108,8 @@ public class JJTaskBean {
 			String message = "message_successfully_created";
 
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail(),"e");
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
@@ -2390,14 +2392,13 @@ public class JJTaskBean {
 
 			storeTasks = new ArrayList<JJTask>();
 			Set<JJTask> taskList = task.getBeforeTasks();
-			for (JJTask Task : taskList) {
-				if (Task.getEnabled()
-						&& Task.getRequirement().getChapter()
-								.equals(task.getRequirement().getChapter())) {
-					storeTasks.add(Task);
+			for (JJTask tt : taskList) {
+				if (tt.getEnabled() && (tt.getChapter() != null)
+						&& (task.getChapter() != null)
+						&& tt.getChapter().equals(task.getChapter())) {
+					storeTasks.add(tt);
 				}
 			}
-
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(sprint, null,
 					LoginBean.getProduct(), null, chapter, true, null, null,
@@ -2524,7 +2525,10 @@ public class JJTaskBean {
 		private List<String> convertTaskListToStringList(List<JJTask> tasks) {
 			List<String> list = new ArrayList<String>();
 			for (JJTask task : tasks) {
-				String entry = task.getId() + "-" + task.getName();
+				String entry = task.getId()
+						+ "-"
+						+ task.getName().substring(0,
+								Math.min(10, task.getName().length()));
 				list.add(entry);
 			}
 
@@ -2597,7 +2601,8 @@ public class JJTaskBean {
 			}
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_deleted",
-					MessageFactory.getMessage("label_task", "").getDetail(),"e");
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			context.execute("PF('deleteDialogWidget').hide()");
 		} else {
@@ -3144,7 +3149,8 @@ public class JJTaskBean {
 
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated",
-					MessageFactory.getMessage("label_task", "").getDetail(),"e");
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -3809,7 +3815,7 @@ public class JJTaskBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_task", "").getDetail(),"e");
+				MessageFactory.getMessage("label_task", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -3850,7 +3856,7 @@ public class JJTaskBean {
 		}
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_task", "").getDetail(),"e");
+				MessageFactory.getMessage("label_task", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -3992,12 +3998,12 @@ public class JJTaskBean {
 		panes.addOption("resizeWhileDragging", true);
 		layoutOptionsOne.setPanesOptions(panes);
 		panes = new LayoutOptions();
-		panes.addOption("size", 800);
+		panes.addOption("size", "50%");
 		panes.addOption("maxSize", 1200);
 		panes.addOption("minsize", 300);
 		layoutOptionsOne.setWestOptions(panes);
 		panes = new LayoutOptions();
-		panes.addOption("size", 500);
+		panes.addOption("size", "50%");
 		panes.addOption("closable", true);
 		panes.addOption("maxSize", 1000);
 		panes.addOption("minsize", 300);
@@ -4022,6 +4028,32 @@ public class JJTaskBean {
 			return 490;
 		else
 			return 410;
+	}
+
+	public String getActiveIndex() {
+
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
+				: "0";
+
+	}
+
+	public void setActiveIndex(String index) {
+
+	}
+
+	public String getTaskIcone(JJTask tt) {
+
+		String icon = "";
+
+		if (tt.getRequirement() != null)
+			icon = "function";
+		else if (tt.getBug() != null)
+			icon = "bug";
+		else if (tt.getTestcase() != null)
+			icon = "test";
+
+		return icon;
+
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {

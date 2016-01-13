@@ -229,9 +229,8 @@
 		</p:confirmDialog>
 
 		<p:dialog id="viewTaskDialog" modal="true"
-			widgetVar="viewTaskDialogWidget" dynamic="true" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode"
-			draggable="false">
+			widgetVar="viewTaskDialogWidget" dynamic="true" resizable="false" 
+			maximizable="false" showEffect="fade" hideEffect="explode" draggable="false">
 			<p:ajax event="close" update=":taskForm"
 				listener="#{jJTaskBean.closeEvent('main')}" />
 			<f:facet name="header">
@@ -241,29 +240,10 @@
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">
 					<p:remoteCommand name="updateForm" update=":viewTaskForm" />
-
-					<p:panel styleClass="panelDialog">
-						<f:facet name="header">
-							<p:messages id="msg" closable="true" />
-						</f:facet>
-						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-						</ui:include>
-						<f:facet name="footer">
-							<p:commandButton id="updateTaskButton"
-								update=":viewTaskForm :growlForm"
-								actionListener="#{jJTaskBean.updateTask('main')}"
-								value="#{messages.label_save}" style="margin-top: 5px;"
-								oncomplete="PF('viewtaskBlockUIWidget').unblock();"
-								process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType" />
-							<p:commandButton id="viewCloseButton"
-								value="#{messages.label_cancel}"
-								style="margin-left: 20px;margin-top: 5px;"
-								oncomplete="PF('blockUIWidget').unblock()"
-								onstart="PF('blockUIWidget').block()"
-								onclick="PF('viewTaskDialogWidget').hide()" type="button" />
-						</f:facet>
-					</p:panel>
+					<ui:include src="taskDialog.xhtml">
+						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						<ui:param name="View" value="main" />
+					</ui:include>	
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

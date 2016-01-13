@@ -196,6 +196,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
 /* Containers */
 .Container100{ width:100%; float:left;}
+.Container99{ width:99%; float:left;}
 .Container96{ width:96%; float:left;}
 .Container95{ width:95%; float:left;}
 .Container90{ width:90%; float:left;}

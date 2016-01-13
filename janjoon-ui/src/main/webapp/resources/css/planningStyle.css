@@ -1,0 +1,59 @@
+.planning-dataTable table {
+	table-layout: fixed;
+	border-collapse: separate;
+}
+
+.planning-dataTable thead {
+	display: none;
+}
+
+.pe-layout-pane-header {
+	background: #2391B2;
+}
+
+.ui-layout-pane {
+	border: 1px solid #9d9d9d;
+	color: #000000;
+	background-color: #ffffff;
+	background: -moz-radial-gradient(50% 75%, circle, #ffffff, #e6e6e6);
+	background: -webkit-radial-gradient(50% 75%, circle, #ffffff, #e6e6e6);
+}
+
+.pe-layout-pane-content {
+	padding: 0px !important;	
+}
+
+.ui-layout-resizer {
+	background-color: #d1d3d4;
+}
+
+.stickyHeader {
+	width: 1700px;
+	margin-top: -0.5%;
+}
+
+.ui-datatable-tablewrapper {
+	margin: auto;
+}
+
+.planning-dataTable .ui-datatable-data th {
+	height: 37px;
+	overflow: hidden;
+}
+
+.planning-dataTable .ui-datatable-data td {
+	overflow: hidden;
+	navigator
+}
+
+.planning-dataTable .ui-datatable-data tr {
+	height: 44px;
+	overflow: hidden;
+	width: 1700px;
+}
+
+.planning-action-column {
+	width: 50px;
+	padding: 3px 0px 0px 0px !important;
+	text-align: center;
+}

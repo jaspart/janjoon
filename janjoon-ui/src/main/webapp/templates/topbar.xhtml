@@ -43,11 +43,11 @@
 						href="#{request.contextPath}/pages/contactConfig.jsf?faces-redirect=true">#{loginBean.contact.firstname}
 							#{loginBean.contact.name}</a></li>
 				</ul></li>
-			<li><a class="ripplelink"><i class="icon-bubble8"></i>
-					<span class="Txt">Messages</span></a>
+			<li class="ShowOnDesktop"><a class="ShowOnDesktop ripplelink"><i class="ShowOnDesktop icon-bubble8"></i>
+					<span class="ShowOnDesktop Txt">Messages</span></a>
 				<ul>
 					<li><p:commandLink id="communicationButton" 
-							style="/*color: #E1F5FE !important;*/" type="button"
+							styleClass="ShowOnDesktop" type="button"
 							title="#{message.header_communication_label}"
 							onclick="PF('mPanel').loadContents()" immediate="true">
 							#{loginBean.messageCount} Message</p:commandLink></li>
@@ -59,7 +59,7 @@
 				</ul></li>		
 		</ul>
 		<p:overlayPanel id="mPanel" for="communicationButton"
-			hideEffect="clip" dynamic="true" style="width:300px"
+			hideEffect="clip" dynamic="true" style="width:300px" styleClass="ShowOnDesktop"
 			widgetVar="mPanel">
 			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 				type="preRenderView" />

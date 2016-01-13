@@ -16,6 +16,10 @@
 }
 </style>
 	<h:form id="importTaskDialogForm">
+		<p:remoteCommand actionListener="#{jJTaskBean.importTask}"
+			name="importTask" update=":projecttabview :growlForm"
+			onstart="PF('taskBlockUIWidget').block()"
+			oncomplete="PF('taskBlockUIWidget').unblock()" />
 
 		<pe:blockUI widgetVar="taskBlockUIWidget"
 			target="importTaskDialogForm">
@@ -26,13 +30,18 @@
 					style="white-space: nowrap;" />
 			</h:panelGrid>
 		</pe:blockUI>
-		<p:panelGrid style="margin-top:10px">
-			<p:row>
-				<p:column>
-					<h:outputText value="Objet:" />
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll" style="max-width: 800px;">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:outputLabel for="objetSelectOneMenu" value="Objet:" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container70">
 					<p:selectOneMenu id="objetSelectOneMenu"
-						value="#{jJTaskBean.objet}" panelStyle="width:150px" effect="fade"
-						style="width:160px" filter="true" filterMatchMode="startsWith">
+						value="#{jJTaskBean.objet}" effect="fade">
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.importTask_selectObject}" />
 						<f:selectItems value="#{jJTaskBean.objets}" var="p"
@@ -44,14 +53,20 @@
 							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
-				</p:column>
-
-				<p:column>
-					<h:outputText
-						value="#{messages.specification_import_category_label}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:outputLabel for="categorySelectOneMenu"
+							value="#{messages.specification_import_category_label}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container70">
 					<p:selectOneMenu id="categorySelectOneMenu"
-						value="#{jJTaskBean.importCategory}" panelStyle="width:150px"
-						effect="fade" style="width:160px" filter="true"
+						value="#{jJTaskBean.importCategory}" effect="fade" filter="true"
 						filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
 						disabled="#{jJTaskBean.disabledFilter}">
@@ -67,13 +82,20 @@
 							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
-				</p:column>
-
-				<p:column>
-					<h:outputText value="#{messages.specification_import_status_label}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:outputLabel for="statusSelectOneMenu"
+							value="#{messages.specification_import_status_label}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container70">
 					<p:selectOneMenu id="statusSelectOneMenu"
-						value="#{jJTaskBean.importStatus}" panelStyle="width:150px"
-						effect="fade" style="width:160px" filter="true"
+						value="#{jJTaskBean.importStatus}" effect="fade" filter="true"
 						filterMatchMode="startsWith"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 						disabled="#{jJTaskBean.disabledFilter}">
@@ -81,162 +103,179 @@
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.importTask_selectStatus}" />
 						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
-							itemLabel="#{loginBean.checkMessage(p)}"
-							itemValue="#{p}" />
+							itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
 						<p:ajax process="@this" partialSubmit="true"
 							listener="#{jJTaskBean.handleSelectStatus}"
 							onstart="PF('taskBlockUIWidget').block()"
 							oncomplete="PF('taskBlockUIWidget').unblock()"
 							update="importTaskDialogForm" />
 					</p:selectOneMenu>
-				</p:column>
-
-				<p:column>
-					<h:outputText value="#{messages.importTask_viewAll}: " />
-
-					<p:selectBooleanCheckbox value="#{jJTaskBean.checkAll}">
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:outputLabel for="seeAll"
+							value="#{messages.importTask_viewAll}: " />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
+					styleClass="Container70">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:selectBooleanCheckbox id="seeAll" value="#{jJTaskBean.checkAll}">
 						<p:ajax update="importTaskDialogForm"
 							listener="#{jJTaskBean.checkAll}"
 							onstart="PF('taskBlockUIWidget').block()"
 							oncomplete="PF('taskBlockUIWidget').unblock()" />
 					</p:selectBooleanCheckbox>
-				</p:column>
-
-			</p:row>
-		</p:panelGrid>
-
-		<p:dataTable id="importDataTable" var="format" scrollable="true"
-			style="width:750px;table-layout: fixed;" scrollHeight="350"
-			emptyMessage="#{messages.label_notRecordFound}"
-			value="#{jJTaskBean.importFormats}" editable="true" editMode="cell">
-			<f:facet name="header">
-				<p:row>
-					<p:column style="width: 60%"></p:column>
-					<p:column style="width: 40%" rendered="#{jJTaskBean.objet != null}">
-						<h:outputText
-							value="Import #{messages['importTask_selectObject_'.concat(jJTaskBean.objet)]}"
-							style="position: absolute;right: 10px;" />
-					</p:column>
-				</p:row>
-			</f:facet>
-			<p:column style="width:35%" id="checkBox">
-				<f:facet name="header">
-					<p:row>
-						<p:column>
-							<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}"
-								id="checkAll">
-								<p:ajax update="importDataTable" process="@this,checkAll"
-									listener="#{jJTaskBean.copyObjetsListener}"
-									onstart="PF('taskBlockUIWidget').block()"
-									oncomplete="PF('taskBlockUIWidget').unblock()" />
-							</p:selectBooleanCheckbox>
-						</p:column>
-						<p:column>
-							<h:outputText value="#{messages.importTask_headerTable_tasks}" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:selectBooleanCheckbox value="#{format.copyObjet}" id="checkOne">
-					<p:ajax update="importDataTable"
-						listener="#{jJTaskBean.copyObjetListener(format)}"
-						onstart="PF('taskBlockUIWidget').block()"
-						oncomplete="PF('taskBlockUIWidget').unblock()"
-						process="@this,checkAll" />
-				</p:selectBooleanCheckbox>
-				<h:outputText value="#{format.name}" id="reqContent" />
-				<p:tooltip id="toolTipContent" for="reqContent" showEffect="fade"
-					hideEffect="fade" style="width:300px"
-					rendered="#{jJTaskBean.objet == 'requirement'}">
-					<p:panelGrid style="width:300px">
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container100 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:dataTable id="importDataTable" var="format" scrollable="true"
+						style="table-layout: fixed;" scrollHeight="350"
+						emptyMessage="#{messages.label_notRecordFound}"
+						value="#{jJTaskBean.importFormats}" editable="true"
+						editMode="cell">
 						<f:facet name="header">
 							<p:row>
-								<p:column>
-									<h:outputText style="font-weight: bold;"
-										value="Requirement: #{format.object.name}" />
+								<p:column style="width: 60%"></p:column>
+								<p:column style="width: 40%"
+									rendered="#{jJTaskBean.objet != null}">
+									<h:outputText
+										value="Import #{messages['importTask_selectObject_'.concat(jJTaskBean.objet)]}"
+										style="position: absolute;right: 10px;" />
 								</p:column>
 							</p:row>
 						</f:facet>
-						<p:row>
-							<p:column>
-								<p:outputLabel style="font-weight: bold;" for="tolDesc"
-									value="Description :" />
-								<br />
-								<h:outputText id="tolDesc" readonly="true" escape="false"
-									style="width:300px" value="#{format.object.description}" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</p:tooltip>
-			</p:column>
+						<p:column style="width:35%" id="checkBox">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<p:selectBooleanCheckbox value="#{jJTaskBean.copyObjets}"
+											id="checkAll">
+											<p:ajax update="importDataTable" process="@this,checkAll"
+												listener="#{jJTaskBean.copyObjetsListener}"
+												onstart="PF('taskBlockUIWidget').block()"
+												oncomplete="PF('taskBlockUIWidget').unblock()" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+									<p:column>
+										<h:outputText value="#{messages.importTask_headerTable_tasks}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{format.copyObjet}"
+								id="checkOne">
+								<p:ajax update="importDataTable"
+									listener="#{jJTaskBean.copyObjetListener(format)}"
+									onstart="PF('taskBlockUIWidget').block()"
+									oncomplete="PF('taskBlockUIWidget').unblock()"
+									process="@this,checkAll" />
+							</p:selectBooleanCheckbox>
+							<h:outputText value="#{format.name}" id="reqContent" />
+							<p:tooltip id="toolTipContent" for="reqContent" showEffect="fade"
+								hideEffect="fade" style="width:300px"
+								rendered="#{jJTaskBean.objet == 'requirement'}">
+								<p:panelGrid style="width:300px">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText style="font-weight: bold;"
+													value="Requirement: #{format.object.name}" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<p:row>
+										<p:column>
+											<p:outputLabel style="font-weight: bold;" for="tolDesc"
+												value="Description :" />
+											<br />
+											<h:outputText id="tolDesc" readonly="true" escape="false"
+												styleClass="Gray" style="width:300px"
+												value="#{format.object.description}" />
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:tooltip>
+						</p:column>
 
-			<p:column style="width:30%"
-				headerText="#{messages.importTask_headerTable_startDate}">
-				<p:cellEditor>
-					<f:facet name="output">
-						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm" />
-					</f:facet>
-					<f:facet name="input">
-						<p:calendar value="#{format.startDate}" navigator="true"
-							pattern="yyyy/MM/dd HH:mm">
-						</p:calendar>
+						<p:column style="width:30%"
+							headerText="#{messages.importTask_headerTable_startDate}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<p:calendar value="#{format.startDate}" navigator="true"
+										pattern="yyyy/MM/dd HH:mm" />
+								</f:facet>
+								<f:facet name="input">
+									<p:calendar value="#{format.startDate}" navigator="true"
+										pattern="yyyy/MM/dd HH:mm">
+									</p:calendar>
 
-					</f:facet>
-				</p:cellEditor>
-			</p:column>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 
-			<p:column style="width:20%"
-				headerText="#{messages.importTask_headerTable_requirement}">
-				<!-- 				<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
-				<!-- 					<p:commandButton id="specButton" -->
-				<!-- 						value="#{format.specification ? 'X' : ' '}" -->
-				<!-- 						styleClass="checkBoxButton" update="specButton" -->
-				<!-- 						actionListener="#{format.setSpecification(!format.specification)}" /> -->
-				<!-- 				</p:panel> -->
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText
-							value="#{format.taskType.name}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:autoComplete id="taskType" value="#{format.taskType}" size="15"
-							itemValue="#{taskType}" scrollHeight="200"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							dropdown="true" var="taskType"
-							itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
-							completeMethod="#{jJTaskBean.completeTaskType}" />
-					</f:facet>
-				</p:cellEditor>
-			</p:column>
-			<p:column style="width:15%"
-				headerText="#{messages.importTask_headerTable_workload}">
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText value="#{format.workload}" />
+						<p:column style="width:20%;text-align: center;"
+							headerText="#{messages.importTask_headerTable_requirement}">
+							<!-- 				<p:panel style="height: 25px;width: 30px; margin: auto;"> -->
+							<!-- 					<p:commandButton id="specButton" -->
+							<!-- 						value="#{format.specification ? 'X' : ' '}" -->
+							<!-- 						styleClass="checkBoxButton" update="specButton" -->
+							<!-- 						actionListener="#{format.setSpecification(!format.specification)}" /> -->
+							<!-- 				</p:panel> -->
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText styleClass="Fs16" value="#{format.taskType.name}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:autoComplete id="taskType" value="#{format.taskType}"
+										size="20" itemValue="#{taskType}" scrollHeight="200"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+										dropdown="true" var="taskType" inputStyleClass="Fs14" 
+										itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+										completeMethod="#{jJTaskBean.completeTaskType}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column style="width:15%;text-align: center;"
+							headerText="#{messages.importTask_headerTable_workload}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{format.workload}" styleClass="Fs16" />
 
-					</f:facet>
-					<f:facet name="input">
-						<p:spinner value="#{format.workload}" size="4" stepFactor="1"
-							min="0">
-						</p:spinner>
+								</f:facet>
+								<f:facet name="input">
+									<p:spinner value="#{format.workload}" size="4" stepFactor="1"
+										min="0">
+									</p:spinner>
 
-					</f:facet>
-				</p:cellEditor>
-			</p:column>
-
-		</p:dataTable>
-
-		<p:remoteCommand actionListener="#{jJTaskBean.importTask}"
-			name="importTask" update=":projecttabview :growlForm"
-			onstart="PF('taskBlockUIWidget').block()"
-			oncomplete="PF('taskBlockUIWidget').unblock()" />
-
-		<p:commandButton id="importButtonSC" value="Import"
-			onstart="PF('taskBlockUIWidget').block()"
-			oncomplete="PF('taskBlockUIWidget').unblock()" style="float: right;"
-			actionListener="#{jJTaskBean.validateTaskField}" update=":growlForm" />
-		<p:commandButton value="Annuler" style="float: right;"
-			oncomplete="PF('taskImportDialogWidget').hide()" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="EmptyBox5" />
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="importButtonSC" value="Import"
+						onstart="PF('taskBlockUIWidget').block()"
+						oncomplete="PF('taskBlockUIWidget').unblock()"
+						style="float: right;"
+						actionListener="#{jJTaskBean.validateTaskField}"
+						update=":growlForm" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton value="#{messages.label_cancel}" styleClass="GrayBack"
+						oncomplete="PF('taskImportDialogWidget').hide()" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 </ui:composition>
 </html>

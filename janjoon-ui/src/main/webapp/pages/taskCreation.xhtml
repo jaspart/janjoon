@@ -74,7 +74,7 @@
 						<p:commandButton value="#{messages.label_create} JJTask"
 							id="createTaskButton" icon="ui-icon-circle-plus"
 							disabled="#{(jJSprintBean.category==null or jJSprintBean.requirement == null) and jJSprintBean.bug == null}"
-							update=":taskImportDialog :projecttabview:SprintTabView:createForm:createTaskPanelGrid"
+							update=":importTaskDialogPanel :projecttabview:SprintTabView:createForm:createTaskPanelGrid"
 							immediate="true" oncomplete="PF('createTaskDialogWidget').show()"
 							actionListener="#{jJSprintBean.attrListener}"
 							title="#{messages.label_create} JJTask">

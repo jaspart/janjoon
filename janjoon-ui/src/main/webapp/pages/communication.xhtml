@@ -53,7 +53,7 @@
 					<f:param name="contactId" value="#{mes.createdBy.id}" />
 				</p:graphicImage>
 			</p:column>
-			<p:column style="width: 20%;min-width: 200px !important;text-align: center; ">
+			<p:column style="width: 20%;min-width: 200px !important;text-align: center; " rendered="#{!loginBean.mobile}">
 				<h:outputText
 					value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
 					style="font-weight: bold;color: #3b5998;" />

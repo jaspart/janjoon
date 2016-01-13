@@ -21,69 +21,39 @@ $(document).ready(
 						$(".timeline-axis-grid-major").css('transform',
 								'translateY(' + scroll + 'px)');
 
-						// var elementArray =
-						// $(".ui-splitbutton").map(function() {
-						// return this.innerHTML;
-						// }).get();
-						//
-						// for (var i = 0; i <
-						// elementArray.length; ++i) {
-						// $(elementArray[i]).css('display',
-						// 'none');
-						// }
-						// var max = $(".stickyHeader").offset().top + 37;
-						//
-						// $(".ui-splitbutton")
-						// .each(
-						// function(i) {
-						// if ($(this)
-						// .attr('id')
-						// .indexOf(
-						// "viewTaskButton") >= 0) {
-						// var offset = $(
-						// this)
-						// .offset();
-						// if (offset.top == 0) {
-						// if ($(this)
-						// .hasClass(
-						// "splitButtonDisplayNone"))
-						// $(this)
-						// .removeClass(
-						// "splitButtonDisplayNone");
-						// } else if (offset.top < max) {
-						// if (!$(this)
-						// .hasClass(
-						// "splitButtonDisplayNone"))
-						// $(this)
-						// .addClass(
-						// "splitButtonDisplayNone");
-						// } else {
-						// if ($(this)
-						// .hasClass(
-						// "splitButtonDisplayNone"))
-						// $(this)
-						// .removeClass(
-						// "splitButtonDisplayNone");
-						//
-						// }
-						// }
-						// });
-						//
+//						var elementArray = $(".littleButton").map(function() {
+//							return this.innerHTML;
+//						}).get();
+
+						//										for (var i = 0; i < elementArray.length; ++i) {
+						//											$(elementArray[i]).css('display',
+						//													'none');
+						//										}
+						var max = $(".stickyHeader").offset().top + 30;
+
+						$(".littleButton").each(
+								function(i) {
+									if ($(this).attr('id').indexOf(
+											"optionsButton") >= 0) {
+										var offset = $(this).parent().offset();
+										if (offset.top == 0) {
+
+											//$(this).css("display", "inline-block");
+											$(this).show();
+										} else if (offset.top < max) {
+											//$(this).css("display", "none");
+											$(this).hide();
+										} else {
+											//$(this).css("display", "inline-block");
+											$(this).show();
+										}
+									}
+								});
+
 					});
 
 		});
 
-// $(function() {
-// $(".rsh").draggable({
-// axis : "y",
-// containment : "parent",
-// helper : "clone",
-// drag : function(event, ui) {
-// var height = ui.offset.top;
-// $(this).prev().height(height);
-// }
-// });
-// });
 $(function() {
 	$(".wmd-view-topscroll").scroll(function() {
 		$(".ui-tree").scrollLeft($(".wmd-view-topscroll").scrollLeft());

@@ -9,9 +9,7 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition template="../templates/template.xhtml">
-	<ui:define name="content">
-		<f:event listener="#{requirementBean.checkRequirement}"
-			type="preRenderView" />
+	<ui:define name="head">
 		<style type="text/css">
 /* .ui-datalist-data { */
 /* 	-webkit-padding-start: 2px; */
@@ -52,12 +50,11 @@
 }
 
 .reqTree {
-	height: 365px;
-	/* 	width: 95%; */
-	/* 	max-width: 400px; */
+	height: 400px;	
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
+	padding: 2px;
 }
 
 .reqTree .ui-tree-container {
@@ -81,6 +78,10 @@
 /* } */
 </style>
 		<h:outputScript library="js" name="scrollTab.js" />
+	</ui:define>
+	<ui:define name="content">
+		<f:event listener="#{requirementBean.checkRequirement}"
+			type="preRenderView" />
 		<h:panelGroup layout="block" styleClass="Container">
 			<h:form id="treeForm">
 				<p:remoteCommand name="updateTree" update="@form" />
@@ -228,7 +229,7 @@
 							styleClass="Container100 ui-fluid">
 							<f:facet name="header">
 								<h:outputText style="float: left;" styleClass="Fs18"
-									value="ID:#{requirementBean.requirement.category.id}" />
+									value="ID:#{requirementBean.requirement.id}" />
 								<h:outputText id="nombres" styleClass="Fs18"
 									value="#{loginBean.checkMessage(requirementBean.requirement.category)}"
 									style="text-transform: uppercase;float: right;" />

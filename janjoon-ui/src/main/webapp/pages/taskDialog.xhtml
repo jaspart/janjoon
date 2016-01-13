@@ -7,8 +7,20 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <ui:composition>
-	<pe:blockUI widgetVar="viewtaskBlockUIWidget"
-		target="viewTaskPanelGrid">
+	<style type="text/css">
+.reqTree {
+	height: 285px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: rgba(255, 0, 0, 0);
+	padding: 2px;
+}
+
+.reqTree .ui-tree-container {
+	width: 100%;
+}
+</style>
+	<pe:blockUI widgetVar="viewtaskBlockUIWidget" target="viewTaskPanel">
 		<h:panelGrid columns="2" layout="grid">
 			<p:graphicImage name="images/preloader.gif" library="rioLayout"
 				style="vertical-align: middle;" />
@@ -16,192 +28,334 @@
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
-	<p:panelGrid id="viewTaskPanelGrid" columns="1"
-		style="height: #{jJTaskBean.height}px ; width: #{jJTaskBean.width}px;">
-		<h:panelGrid columns="8" style="width: 100%">
-			<p:outputLabel value="Sprint :" for="taskSprint" />
-			<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
-				itemLabel="#{sprint != null ? sprint.name : messages.label_select}"
-				itemValue="#{sprint}" scrollHeight="200"
-				converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
-				dropdown="true" var="sprint" binding="#{sprintComponent}"
-				completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
-				<p:ajax event="itemSelect"
-					update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
-				<f:attribute name="project" value="#{JJTask_.project}" />
-			</p:autoComplete>
+	<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+		style="max-width: 850px;">
+		<h:panelGroup layout="block" styleClass="Container100">
+			<p:messages id="msg" showDetail="false" closable="true" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="Sprint :" for="taskSprint" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
+					itemLabel="#{sprint != null ? sprint.name : messages.label_select}"
+					itemValue="#{sprint}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
+					dropdown="true" var="sprint" binding="#{sprintComponent}"
+					completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
+					<p:ajax event="itemSelect"
+						update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
+					<f:attribute name="project" value="#{JJTask_.project}" />
+				</p:autoComplete>
+			</h:panelGroup>
+		</h:panelGroup>
 
-			<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
-				for="taskAssignedTo" />
-			<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
-				size="15"
-				itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
-				itemValue="#{assignedTo}" scrollHeight="200"
-				converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-				dropdown="true" var="assignedTo"
-				completeMethod="#{jJTaskBean.completeAssignedToTask}">
-			</p:autoComplete>
+		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
+						for="taskAssignedTo" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
+					size="15"
+					itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
+					itemValue="#{assignedTo}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+					dropdown="true" var="assignedTo"
+					completeMethod="#{jJTaskBean.completeAssignedToTask}">
+				</p:autoComplete>
+			</h:panelGroup>
+		</h:panelGroup>
 
-			<p:outputLabel value="Status :" for="taskStatus" />
-			<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
-				itemLabel="#{loginBean.checkMessage(status)}"
-				itemValue="#{status}" scrollHeight="200"
-				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-				dropdown="true" var="status" size="15"
-				completeMethod="#{jJTaskBean.completeStatusTask}" />
-				
-				<p:outputLabel value="#{messages.label_requirement} :" for="taskType" />
-			<!-- 			<p:selectBooleanCheckbox id="taskSpec" -->
-			<!-- 				value="#{JJTask_.specification}" /> -->
-			<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
-				itemValue="#{taskType}" scrollHeight="200"
-				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-				dropdown="true" var="taskType"
-				itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
-				completeMethod="#{jJTaskBean.completeTaskType}" />
+		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="Status :" for="taskStatus" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
+					itemLabel="#{loginBean.checkMessage(status)}" itemValue="#{status}"
+					scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+					dropdown="true" var="status" size="15"
+					completeMethod="#{jJTaskBean.completeStatusTask}" />
+			</h:panelGroup>
+		</h:panelGroup>
 
-		</h:panelGrid>
-		<h:panelGrid columns="6" style="width: 100%">
-			<p:outputLabel value="#{messages.project_scrum_new_start_label}"
-				for="taskStartDatePlanned" />
-			<p:calendar id="taskStartDatePlanned" style="width:90px"
-				value="#{JJTask_.startDatePlanned}" navigator="true"
-				pattern="yyyy/MM/dd HH:mm" required="true"
-				binding="#{taskStartDatePlanned}">
-				<f:validator validatorId="dateRangeValidator" />
-				<f:attribute name="edition" value="startDatePlanned" />
-				<f:attribute name="sprintComponent" value="#{sprintComponent}" />
-				<f:attribute name="taskEndDatePlanned" value="#{taskEndDatePlanned}" />
-				<f:attribute name="task" value="#{JJTask_}" />
-				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
-			</p:calendar>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="#{messages.label_requirement} :"
+						for="taskType" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
+					itemValue="#{taskType}" scrollHeight="200"
+					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+					dropdown="true" var="taskType"
+					itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+					completeMethod="#{jJTaskBean.completeTaskType}" />
+			</h:panelGroup>
+		</h:panelGroup>
 
-			<p:outputLabel value="#{messages.project_scrum_new_end_label}"
-				for="taskEndDatePlanned" />
-			<p:calendar id="taskEndDatePlanned" style="width:90px"
-				value="#{JJTask_.endDatePlanned}" navigator="true"
-				pattern="yyyy/MM/dd HH:mm" required="true"
-				binding="#{taskEndDatePlanned}">
-				<f:validator validatorId="dateRangeValidator" />
-				<f:attribute name="edition" value="endDatePlanned" />
-				<f:attribute name="taskStartDatePlanned"
-					value="#{taskStartDatePlanned}" />
-				<f:attribute name="sprintComponent" value="#{sprintComponent}" />
-				<f:attribute name="task" value="#{JJTask_}" />
-				<f:attribute name="workload" value="#{workload}" />
-				<p:ajax event="dateSelect" update="taskEndDatePlanned" />
-			</p:calendar>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="#{messages.project_scrum_new_start_label}"
+						for="taskStartDatePlanned" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:calendar id="taskStartDatePlanned" style="width:90px"
+					value="#{JJTask_.startDatePlanned}" navigator="true"
+					pattern="yyyy/MM/dd HH:mm" required="true"
+					binding="#{taskStartDatePlanned}">
+					<f:validator validatorId="dateRangeValidator" />
+					<f:attribute name="edition" value="startDatePlanned" />
+					<f:attribute name="sprintComponent" value="#{sprintComponent}" />
+					<f:attribute name="taskEndDatePlanned"
+						value="#{taskEndDatePlanned}" />
+					<f:attribute name="task" value="#{JJTask_}" />
+					<p:ajax event="dateSelect" update="taskEndDatePlanned" />
+				</p:calendar>
+			</h:panelGroup>
+		</h:panelGroup>
 
-			<p:outputLabel
-				value="#{messages.specification_create_workload_label}:"
-				for="taskWorkload" />
-			<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
-				stepFactor="1" min="1" required="true" size="3"
-				binding="#{workload}">
-				<p:ajax update="taskEndDatePlanned" />
-			</p:spinner>			
-		</h:panelGrid>
-		<p:panelGrid>
-			<p:row rowspan="5" rendered="#{JJTask_.bug != null}">
-				<p:column colspan="2">
-					<p:outputLabel value="Bug :" for="taskBug" />
-					<p:inputTextarea id="taskBug" readonly="true"
-						converter="JJBugConverter" cols="30" value="#{JJTask_.bug}" />
-				</p:column>
-				<p:column colspan="4" rendered="#{jJTaskBean.taskTreeNode == null}">
-					<p:outputLabel value="Description :" />
-					<br />
-					<pe:ckEditor id="Bugdescription"
-						toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
-						value="#{JJTask_.bug.description}" readOnly="true"
-						rendered="#{!loginBean.mobile}" />
-					<h:outputText escape="false" id="BugMobiledescription" style="width:680px"
-						value="#{JJTask_.bug.description}" rendered="#{loginBean.mobile}" />
-				</p:column>
-			</p:row>
-			<p:row rowspan="5"
-				rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
-				<p:column colspan="2">
-					<p:outputLabel value="TestCase :" for="taskTestCase" />
-					<p:inputTextarea id="taskTestCase" readonly="true" cols="30"
-						converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
-				</p:column>
-				<p:column colspan="4">
-					<p:outputLabel value="Description :" />
-					<br />
-					<pe:ckEditor id="testCasedescription"
-						toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
-						value="#{JJTask_.testcase.description}" readOnly="true"
-						rendered="#{!loginBean.mobile}" />
-					<h:outputText escape="false" id="testcaseMobiledescription" style="width:680px"
-						value="#{JJTask_.testcase.description}" rendered="#{loginBean.mobile}" />
-				</p:column>
-			</p:row>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="#{messages.project_scrum_new_end_label}"
+						for="taskEndDatePlanned" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<p:calendar id="taskEndDatePlanned" style="width:90px"
+					value="#{JJTask_.endDatePlanned}" navigator="true"
+					pattern="yyyy/MM/dd HH:mm" required="true"
+					binding="#{taskEndDatePlanned}">
+					<f:validator validatorId="dateRangeValidator" />
+					<f:attribute name="edition" value="endDatePlanned" />
+					<f:attribute name="taskStartDatePlanned"
+						value="#{taskStartDatePlanned}" />
+					<f:attribute name="sprintComponent" value="#{sprintComponent}" />
+					<f:attribute name="task" value="#{JJTask_}" />
+					<f:attribute name="workload" value="#{workload}" />
+					<p:ajax event="dateSelect" update="taskEndDatePlanned" />
+				</p:calendar>
+			</h:panelGroup>
+		</h:panelGroup>
 
-			<p:row rowspan="5" rendered="#{jJTaskBean.taskTreeNode != null}">
-				<p:column colspan="2">
-					<h:outputLabel id="requirementLabel"
-						value="#{messages.label_requirement}: " for="reqTree" />
-					<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}" var="node"
-						selection="#{jJTaskBean.selectedTree}" animate="true"
-						selectionMode="single">
-						<p:ajax event="select" update=":viewTaskForm:taskTreePanelGrid"
-							listener="#{jJTaskBean.onSelectTreeNode}"
-							onstart="PF('viewtaskBlockUIWidget').block()"
-							oncomplete="PF('viewtaskBlockUIWidget').unblock()" />
-						<p:treeNode icon="ui-icon-arrowthick-1-e">
-							<h:outputText value="#{node.name}" />
-						</p:treeNode>
-					</p:tree>
-				</p:column>
-				<p:column colspan="4">
-					<p:panelGrid id="taskTreePanelGrid" style="margin-top:10px">
-						<f:facet name="header">
-							<p:row>
-								<p:column colspan="3">#{messages.label_requirement}: <p:outputLabel
-										value="#{jJTaskBean.selectedReq.name}" />
-								</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<p:column colspan="1" style="border-style: none;">
-								<p:outputLabel value="#{messages.label_category}:"
-									for="category" />
-								<p:inputText id="category" size="15"
-									value="#{jJTaskBean.selectedReq.category}" readonly="true"
-									converter="JJCategoryConverter" />
-							</p:column>
-							<p:column colspan="1" style="border-style: none;">
-								<h:outputText for="status" value="Status :" />
-								<p:inputText id="status" size="15"
-									value="#{jJTaskBean.selectedReq.status}" readonly="true"
-									converter="JJStatusConverter" />
-							</p:column>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel
+						value="#{messages.specification_create_workload_label}:"
+						for="taskWorkload" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50">
+				<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
+					stepFactor="1" min="1" required="true" size="3"
+					binding="#{workload}">
+					<p:ajax update="taskEndDatePlanned" />
+				</p:spinner>
+			</h:panelGroup>
+		</h:panelGroup>
 
-							<p:column style="border-style: none;">
-								<h:outputText for="chapter" value="#{messages.label_chapter}:" />
-								<p:inputText id="chapter" readonly="true"
-									converter="JJChapterConverter" size="15"
-									value="#{jJTaskBean.selectedReq.chapter}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:outputLabel value="Description :" />
-								<br />
+		<h:panelGroup layout="block" styleClass="Container100"
+			rendered="#{JJTask_.bug != null}">
+			<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<p:panel styleClass="Container100" header="BUG ID:#{JJTask_.bug.id}"
+					rendered="#{JJTask_.bug != null}">
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="Bug :" for="taskBug" />
+							<p:inputTextarea id="taskBug" readonly="true"
+								converter="JJBugConverter" value="#{JJTask_.bug}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel for="jJbugStatus" value="Status : " />
+							<p:inputTextarea id="jJbugStatus"
+								readonly="true" value="#{loginBean.checkMessage(JJTask_.bug.status)}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100"
+						style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="Description :" for="Bugdescription" />
+
+							<pe:ckEditor id="Bugdescription" width="100%"
+								toolbar="#{imageStreamer.ckEditorToolBar}"
+								value="#{JJTask_.bug.description}" readOnly="true"
+								rendered="#{!loginBean.mobile}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100"
+						rendered="#{loginBean.mobile}">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="Description :" for="BugMobiledescription"
+								rendered="#{loginBean.mobile}" />
+							<h:outputText escape="false" id="BugMobiledescription"
+								style="font-size: 16px;font-family: cursive;"
+								value="#{JJTask_.bug.description}"
+								rendered="#{loginBean.mobile}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="Container100"
+			rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
+			<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<p:panel styleClass="Container100"
+					header="#{messages.label_testcase} ID:#{JJTask_.testcase.id}"
+					rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
+					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="#{messages.label_name} :"
+								for="taskTestCase" />
+							<p:inputTextarea id="taskTestCase" readonly="true"
+								converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="#{messages.label_requirement}:"
+								for="taskTestCaseReq" />
+							<p:inputTextarea id="taskTestCaseReq" readonly="true"
+								converter="JJRequirementConverter"
+								value="#{JJTask_.testcase.requirement}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block"
+						styleClass="Container100 Responsive100" style="min-height: 220px;"
+						rendered="#{!loginBean.mobile}">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="Description :" for="testCasedescription" />
+							<pe:ckEditor id="testCasedescription" width="100%"
+								toolbar="#{imageStreamer.ckEditorToolBar}"
+								value="#{JJTask_.testcase.description}" readOnly="true"
+								rendered="#{!loginBean.mobile}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block"
+						styleClass="Container100 Responsive100"
+						rendered="#{loginBean.mobile}">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:outputLabel value="Description :"
+								for="testcaseMobiledescription" />
+							<h:outputText escape="false" id="testcaseMobiledescription"
+								value="#{JJTask_.testcase.description}"
+								style="font-size: 16px;font-family: cursive;"
+								rendered="#{loginBean.mobile}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" styleClass="Container100"
+			rendered="#{jJTaskBean.taskTreeNode != null}">
+
+			<h:panelGroup layout="block" styleClass="Container30 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:accordionPanel id="accordionTreePanel"
+						activeIndex="#{jJTaskBean.activeIndex}"
+						styleClass="accordionTreePanel">
+						<p:tab title="#{messages.label_requirement}">
+							<p:tree id="reqTree" value="#{jJTaskBean.taskTreeNode}"
+								var="node" selection="#{jJTaskBean.selectedTree}" animate="true"
+								styleClass="reqTree Container95" selectionMode="single">
+								<p:ajax event="select" update=":viewTaskForm:taskTreePanelGrid"
+									listener="#{jJTaskBean.onSelectTreeNode}"
+									onstart="PF('viewtaskBlockUIWidget').block()"
+									oncomplete="PF('viewtaskBlockUIWidget').unblock()" />
+								<p:treeNode>
+									<h:outputText styleClass="Fs14"
+										value="R-#{node.id}-#{fn:substring(node.name,0,20)}" />
+								</p:treeNode>
+							</p:tree>
+						</p:tab>
+					</p:accordionPanel>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:panel id="taskTreePanelGrid"
+						header="#{messages.label_requirement}:#{jJTaskBean.selectedReq.name}"
+						styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel
+									value="#{messages.label_category}: #{loginBean.checkMessage(jJTaskBean.selectedReq.category)}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel
+									value="Status : #{loginBean.checkMessage(jJTaskBean.selectedReq.status)}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel
+									value="#{messages.label_chapter} : #{jJTaskBean.selectedReq.chapter.name}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container100"
+							style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel value="Description :" for="description" />
 								<pe:ckEditor id="description"
-									toolbar="#{imageStreamer.ckEditorToolBar}" style="width:680px"
+									toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
 									rendered="#{!loginBean.mobile}"
 									value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container100"
+							rendered="#{loginBean.mobile}">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:outputLabel value="Description :" for="descriptionMobile" />
+								<h:outputText escape="false" id="descriptionMobile"
+									rendered="#{loginBean.mobile}"
+									style="font-size: 16px;font-family: cursive;"
+									value="#{jJTaskBean.selectedReq.description}" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:panel>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+			<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<p:commandButton id="updateTaskButton"
+					update=":viewTaskForm :growlForm"
+					actionListener="#{jJTaskBean.updateTask(View)}"
+					value="#{messages.label_save}"
+					process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType"
+					onstart="PF('viewtaskBlockUIWidget').block()"
+					oncomplete="PF('viewtaskBlockUIWidget').unblock();" />
+			</h:panelGroup>
+		</h:panelGroup>
 
-								<h:outputText escape="false" id="descriptionMobile" style="width:680px"
-									rendered="#{loginBean.mobile}" value="#{jJTaskBean.selectedReq.description}"  />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</p:column>
-			</p:row>
-		</p:panelGrid>
-	</p:panelGrid>
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+			<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<p:commandButton id="viewCloseButton"
+					value="#{messages.label_cancel}" styleClass="GrayBack"
+					oncomplete="PF('blockUIWidget').unblock()"
+					onstart="PF('blockUIWidget').block()"
+					onclick="PF('viewTaskDialogWidget').hide()" type="button" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:panelGroup>
 </ui:composition>
 </html>

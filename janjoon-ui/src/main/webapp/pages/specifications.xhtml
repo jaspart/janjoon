@@ -9,9 +9,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/template.xhtml">
-
-	<ui:define name="content">
-		<!-- 		<h:outputScript library="js" name="ckEditor.js" /> -->
+	<ui:define name="content">		
 		<f:event type="preRenderComponent"
 			oncomplete="PF('blockUIWidget').unblock()"
 			listener="#{jJRequirementBean.initDataTabels}" />
@@ -21,7 +19,7 @@
 				styleClass="ShowOnMobile">
 				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
 					<p:selectBooleanButton value="#{category.checked}"
-						title="#{loginBean.checkMessage(category)}" style="width: 100%;"
+						title="#{loginBean.checkMessage(category)}" styleClass="Container100"
 						onLabel="#{loginBean.checkMessage(category)}"
 						offLabel="#{loginBean.checkMessage(category)}"
 						onIcon="fa fa-check Fs16 Yellow" offIcon="fa fa-close Fs16 White"

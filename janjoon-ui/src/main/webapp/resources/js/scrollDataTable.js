@@ -33,10 +33,10 @@ function autoScroll() {
 				.children().eq(row).children().eq(column);
 		if (highLitedRow != null) {
 
-			highLitedRow.addClass("ui-state-highlight");
+			highLitedRow.addClass("highLightRow");
 
 			setTimeout(function() {
-				highLitedRow.removeClass("ui-state-highlight");
+				highLitedRow.removeClass("highLightRow");
 			}, 2000);
 		}
 	}

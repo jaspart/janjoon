@@ -25,11 +25,15 @@
 		</h:panelGrid>
 	</pe:blockUI>
 	<h:form id="chapterDialogForm">
-		<p:panel styleClass="panelDialog">
-			<f:facet name="header">
+<!-- 		<p:panel styleClass="panelDialog"> -->
+<!-- 			<f:facet name="header"> -->
+<!-- 				<p:messages id="msg" showDetail="false" closable="true" /> -->
+<!-- 			</f:facet> -->
+<!-- 		</p:panel> -->
+		<h:panelGroup layout="block" styleClass="Container100">
 				<p:messages id="msg" showDetail="false" closable="true" />
-			</f:facet>
-		</p:panel>
+		</h:panelGroup>		
+		<h:panelGroup layout="block" styleClass="EmptyBox5"/>
 		<p:tabView widgetVar="chapterTabView">
 			<p:tab title="Chapitre">
 				<h:panelGroup layout="block" styleClass="Container ui-fluid">
@@ -65,6 +69,7 @@
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:inputTextarea id="descriptionMobile"
 									rendered="#{loginBean.mobile}"
+									placeholder="#{messages.specification_chapter_description_label}"
 									value="#{jJChapterBean.chapter.description}" required="true"
 									requiredMessage="#{messages.specification_chapter_description_alert}" />
 							</h:panelGroup>

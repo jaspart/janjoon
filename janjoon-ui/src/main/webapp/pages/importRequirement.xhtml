@@ -18,158 +18,151 @@
 	</pe:blockUI>
 
 	<h:form id="importForm">
-		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width: 700px;">
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container20">
+					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="projectSelectOneMenu"
 							value="#{messages.specification_import_project_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container80">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="projectSelectOneMenu"
-							value="#{jJRequirementBean.importProject}"
-							effect="fade" 
-							filter="true" filterMatchMode="startsWith"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+					styleClass="Container70">
 
-							<f:selectItem itemValue="#{null}"
-								itemLabel="#{messages.specification_import_select_label}" />
-							<f:selectItems value="#{jJRequirementBean.importProjectList}"
-								var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-							<p:ajax partialSubmit="true"
-								onstart="PF('importBlockUIWidget').block()"
-								oncomplete="PF('importBlockUIWidget').unblock()"
-								listener="#{jJRequirementBean.handelSelectImportProject}"
-								update="importDataTable :importForm:importButton" />
-						</p:selectOneMenu>
-					</h:panelGroup>
+					<p:selectOneMenu id="projectSelectOneMenu"
+						value="#{jJRequirementBean.importProject}" effect="fade"
+						filter="true" filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.specification_import_select_label}" />
+						<f:selectItems value="#{jJRequirementBean.importProjectList}"
+							var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+						<p:ajax partialSubmit="true"
+							onstart="PF('importBlockUIWidget').block()"
+							oncomplete="PF('importBlockUIWidget').unblock()"
+							listener="#{jJRequirementBean.handelSelectImportProject}"
+							update="importDataTable :importForm:importButton" />
+					</p:selectOneMenu>
+
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container20">
+					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="categorySelectOneMenu"
 							value="#{messages.specification_import_category_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container80">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="categorySelectOneMenu"
-							value="#{jJRequirementBean.importCategory}"
-							effect="fade" 
-							filter="true" filterMatchMode="startsWith"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
+					styleClass="Container70">
+					<p:selectOneMenu id="categorySelectOneMenu"
+						value="#{jJRequirementBean.importCategory}" effect="fade"
+						filter="true" filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
 
-							<f:selectItem itemValue="#{null}"
-								itemLabel="#{messages.specification_import_select_label}" />
-							<f:selectItems value="#{jJRequirementBean.importCategoryList}"
-								var="p" itemLabel="#{loginBean.checkMessage(p)}"
-								itemValue="#{p}" />
-							<p:ajax partialSubmit="true"
-								onstart="PF('importBlockUIWidget').block()"
-								oncomplete="PF('importBlockUIWidget').unblock()"
-								listener="#{jJRequirementBean.handelSelectImportCategory}"
-								update="importDataTable :importForm:importButton" />
-						</p:selectOneMenu>
-					</h:panelGroup>
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.specification_import_select_label}" />
+						<f:selectItems value="#{jJRequirementBean.importCategoryList}"
+							var="p" itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
+						<p:ajax partialSubmit="true"
+							onstart="PF('importBlockUIWidget').block()"
+							oncomplete="PF('importBlockUIWidget').unblock()"
+							listener="#{jJRequirementBean.handelSelectImportCategory}"
+							update="importDataTable :importForm:importButton" />
+					</p:selectOneMenu>
+
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container20">
+					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="productSelectOneMenu"
 							value="#{messages.specification_import_product_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container80">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="productSelectOneMenu"
-							value="#{jJRequirementBean.importProduct}"
-							effect="fade" 
-							filter="true" filterMatchMode="startsWith"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+					styleClass="Container70">
 
-							<f:selectItem itemValue="#{null}"
-								itemLabel="#{messages.specification_import_select_label}" />
-							<f:selectItems value="#{jJRequirementBean.importProductList}"
-								var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-							<p:ajax partialSubmit="true"
-								onstart="PF('importBlockUIWidget').block()"
-								oncomplete="PF('importBlockUIWidget').unblock()"
-								listener="#{jJRequirementBean.handelSelectImportProduct}"
-								update="importDataTable versionSelectOneMenu :importForm:importButton" />
-						</p:selectOneMenu>
-					</h:panelGroup>
+					<p:selectOneMenu id="productSelectOneMenu"
+						value="#{jJRequirementBean.importProduct}" effect="fade"
+						filter="true" filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.specification_import_select_label}" />
+						<f:selectItems value="#{jJRequirementBean.importProductList}"
+							var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+						<p:ajax partialSubmit="true"
+							onstart="PF('importBlockUIWidget').block()"
+							oncomplete="PF('importBlockUIWidget').unblock()"
+							listener="#{jJRequirementBean.handelSelectImportProduct}"
+							update="importDataTable versionSelectOneMenu :importForm:importButton" />
+					</p:selectOneMenu>
+
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container20">
+					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="versionSelectOneMenu"
 							value="#{messages.specification_import_version_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container80">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="versionSelectOneMenu"
-							value="#{jJRequirementBean.importVersion}"
-							effect="fade" 
-							filter="true" filterMatchMode="startsWith"
-							disabled="#{jJRequirementBean.disableImportVersion}"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+					styleClass="Container70">
 
-							<f:selectItem itemValue="#{null}"
-								itemLabel="#{messages.specification_import_select_label}" />
-							<f:selectItems value="#{jJRequirementBean.importVersionList}"
-								var="v" itemLabel="#{v.name}" itemValue="#{v}" />
-							<p:ajax partialSubmit="true"
-								onstart="PF('importBlockUIWidget').block()"
-								oncomplete="PF('importBlockUIWidget').unblock()"
-								listener="#{jJRequirementBean.handelSelectImportVersion}"
-								update="importDataTable :importForm:importButton" />
-						</p:selectOneMenu>
-					</h:panelGroup>
+					<p:selectOneMenu id="versionSelectOneMenu"
+						value="#{jJRequirementBean.importVersion}" effect="fade"
+						filter="true" filterMatchMode="startsWith"
+						disabled="#{jJRequirementBean.disableImportVersion}"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.specification_import_select_label}" />
+						<f:selectItems value="#{jJRequirementBean.importVersionList}"
+							var="v" itemLabel="#{v.name}" itemValue="#{v}" />
+						<p:ajax partialSubmit="true"
+							onstart="PF('importBlockUIWidget').block()"
+							oncomplete="PF('importBlockUIWidget').unblock()"
+							listener="#{jJRequirementBean.handelSelectImportVersion}"
+							update="importDataTable :importForm:importButton" />
+					</p:selectOneMenu>
 				</h:panelGroup>
+
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container20">
+					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="statusSelectOneMenu"
 							value="#{messages.specification_import_status_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
-					styleClass="Container80">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="statusSelectOneMenu"
-							value="#{jJRequirementBean.importStatus}"
-							effect="fade" 
-							filter="true" filterMatchMode="startsWith"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter">
+					styleClass="Container70">
 
-							<f:selectItem itemValue="#{null}"
-								itemLabel="#{messages.specification_import_select_label}" />
-							<f:selectItems value="#{jJRequirementBean.importStatusList}"
-								var="p" itemLabel="#{loginBean.checkMessage(p)}"
-								itemValue="#{p}" />
-							<p:ajax partialSubmit="true"
-								onstart="PF('importBlockUIWidget').block()"
-								oncomplete="PF('importBlockUIWidget').unblock()"
-								listener="#{jJRequirementBean.handelSelectImportStatus}"
-								update="importDataTable :importForm:importButton" />
-						</p:selectOneMenu>
-					</h:panelGroup>
+					<p:selectOneMenu id="statusSelectOneMenu"
+						value="#{jJRequirementBean.importStatus}" effect="fade"
+						filter="true" filterMatchMode="startsWith"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter">
+
+						<f:selectItem itemValue="#{null}"
+							itemLabel="#{messages.specification_import_select_label}" />
+						<f:selectItems value="#{jJRequirementBean.importStatusList}"
+							var="p" itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
+						<p:ajax partialSubmit="true"
+							onstart="PF('importBlockUIWidget').block()"
+							oncomplete="PF('importBlockUIWidget').unblock()"
+							listener="#{jJRequirementBean.handelSelectImportStatus}"
+							update="importDataTable :importForm:importButton" />
+					</p:selectOneMenu>
+
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container100 Responsive100">
@@ -238,8 +231,7 @@
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="EmptyBox5" />
-			<h:panelGroup layout="block"
-				styleClass="Container50 Responsive50 ">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:commandButton id="importButton" value="Import"
 						update=":growlForm" onstart="PF('importBlockUIWidget').block()"
@@ -248,8 +240,7 @@
 						action="#{jJRequirementBean.importRequirement()}" />
 				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block"
-				styleClass="Container50 Responsive50 ">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:commandButton id="viewCloseButton" styleClass="GrayBack"
 						value="#{messages.label_cancel}"
