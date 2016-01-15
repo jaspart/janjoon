@@ -9,7 +9,7 @@
 <ui:composition>
 	<style type="text/css">
 .reqTree {
-	height: 285px;
+	height: 310px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -29,143 +29,157 @@
 		</h:panelGrid>
 	</pe:blockUI>
 	<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
-		style="max-width: 850px;">
+		style="max-width: 900px;">
 		<h:panelGroup layout="block" styleClass="Container100">
 			<p:messages id="msg" showDetail="false" closable="true" />
 		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="Sprint :" for="taskSprint" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
-					itemLabel="#{sprint != null ? sprint.name : messages.label_select}"
-					itemValue="#{sprint}" scrollHeight="200"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
-					dropdown="true" var="sprint" binding="#{sprintComponent}"
-					completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
-					<p:ajax event="itemSelect"
-						update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
-					<f:attribute name="project" value="#{JJTask_.project}" />
-				</p:autoComplete>
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:autoComplete id="taskSprint" value="#{JJTask_.sprint}"
+						itemLabel="#{sprint != null ? sprint.name : messages.label_select}"
+						itemValue="#{sprint}" scrollHeight="200"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter"
+						dropdown="true" var="sprint" binding="#{sprintComponent}"
+						completeMethod="#{jJTaskBean.completeSprintTask}" size="15">
+						<p:ajax event="itemSelect"
+							update="taskStartDatePlanned taskEndDatePlanned taskAssignedTo" />
+						<f:attribute name="project" value="#{JJTask_.project}" />
+					</p:autoComplete>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
 						for="taskAssignedTo" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
-					size="15"
-					itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
-					itemValue="#{assignedTo}" scrollHeight="200"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-					dropdown="true" var="assignedTo"
-					completeMethod="#{jJTaskBean.completeAssignedToTask}">
-				</p:autoComplete>
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:autoComplete id="taskAssignedTo" value="#{JJTask_.assignedTo}"
+						size="15"
+						itemLabel="#{assignedTo != null ? assignedTo.name : messages.label_select}"
+						itemValue="#{assignedTo}" scrollHeight="200"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+						dropdown="true" var="assignedTo"
+						completeMethod="#{jJTaskBean.completeAssignedToTask}">
+					</p:autoComplete>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="Status :" for="taskStatus" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
-					itemLabel="#{loginBean.checkMessage(status)}" itemValue="#{status}"
-					scrollHeight="200"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-					dropdown="true" var="status" size="15"
-					completeMethod="#{jJTaskBean.completeStatusTask}" />
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:autoComplete id="taskStatus" value="#{JJTask_.status}"
+						itemLabel="#{loginBean.checkMessage(status)}"
+						itemValue="#{status}" scrollHeight="200"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+						dropdown="true" var="status" size="15"
+						completeMethod="#{jJTaskBean.completeStatusTask}" />
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="#{messages.label_requirement} :"
 						for="taskType" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
-					itemValue="#{taskType}" scrollHeight="200"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-					dropdown="true" var="taskType"
-					itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
-					completeMethod="#{jJTaskBean.completeTaskType}" />
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
+						itemValue="#{taskType}" scrollHeight="200"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+						dropdown="true" var="taskType"
+						itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+						completeMethod="#{jJTaskBean.completeTaskType}" />
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="#{messages.project_scrum_new_start_label}"
 						for="taskStartDatePlanned" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:calendar id="taskStartDatePlanned" style="width:90px"
-					value="#{JJTask_.startDatePlanned}" navigator="true"
-					pattern="yyyy/MM/dd HH:mm" required="true"
-					binding="#{taskStartDatePlanned}">
-					<f:validator validatorId="dateRangeValidator" />
-					<f:attribute name="edition" value="startDatePlanned" />
-					<f:attribute name="sprintComponent" value="#{sprintComponent}" />
-					<f:attribute name="taskEndDatePlanned"
-						value="#{taskEndDatePlanned}" />
-					<f:attribute name="task" value="#{JJTask_}" />
-					<p:ajax event="dateSelect" update="taskEndDatePlanned" />
-				</p:calendar>
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="taskStartDatePlanned" style="width:90px"
+						value="#{JJTask_.startDatePlanned}" navigator="true"
+						pattern="yyyy/MM/dd HH:mm" required="true"
+						binding="#{taskStartDatePlanned}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="edition" value="startDatePlanned" />
+						<f:attribute name="sprintComponent" value="#{sprintComponent}" />
+						<f:attribute name="taskEndDatePlanned"
+							value="#{taskEndDatePlanned}" />
+						<f:attribute name="task" value="#{JJTask_}" />
+						<p:ajax event="dateSelect" update="taskEndDatePlanned" />
+					</p:calendar>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="#{messages.project_scrum_new_end_label}"
 						for="taskEndDatePlanned" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
-				<p:calendar id="taskEndDatePlanned" style="width:90px"
-					value="#{JJTask_.endDatePlanned}" navigator="true"
-					pattern="yyyy/MM/dd HH:mm" required="true"
-					binding="#{taskEndDatePlanned}">
-					<f:validator validatorId="dateRangeValidator" />
-					<f:attribute name="edition" value="endDatePlanned" />
-					<f:attribute name="taskStartDatePlanned"
-						value="#{taskStartDatePlanned}" />
-					<f:attribute name="sprintComponent" value="#{sprintComponent}" />
-					<f:attribute name="task" value="#{JJTask_}" />
-					<f:attribute name="workload" value="#{workload}" />
-					<p:ajax event="dateSelect" update="taskEndDatePlanned" />
-				</p:calendar>
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="taskEndDatePlanned" style="width:90px"
+						value="#{JJTask_.endDatePlanned}" navigator="true"
+						pattern="yyyy/MM/dd HH:mm" required="true"
+						binding="#{taskEndDatePlanned}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="edition" value="endDatePlanned" />
+						<f:attribute name="taskStartDatePlanned"
+							value="#{taskStartDatePlanned}" />
+						<f:attribute name="sprintComponent" value="#{sprintComponent}" />
+						<f:attribute name="task" value="#{JJTask_}" />
+						<f:attribute name="workload" value="#{workload}" />
+						<p:ajax event="dateSelect" update="taskEndDatePlanned" />
+					</p:calendar>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-			<h:panelGroup layout="block" styleClass="Container50">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel
 						value="#{messages.specification_create_workload_label}:"
 						for="taskWorkload" />
 				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container50">
-				<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
-					stepFactor="1" min="1" required="true" size="3"
-					binding="#{workload}">
-					<p:ajax update="taskEndDatePlanned" />
-				</p:spinner>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:spinner id="taskWorkload" value="#{JJTask_.workloadPlanned}"
+						stepFactor="1" min="1" required="true" size="3"
+						binding="#{workload}">
+						<p:ajax update="taskEndDatePlanned" />
+					</p:spinner>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 
@@ -184,8 +198,8 @@
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel for="jJbugStatus" value="Status : " />
-							<p:inputTextarea id="jJbugStatus"
-								readonly="true" value="#{loginBean.checkMessage(JJTask_.bug.status)}" />
+							<p:inputTextarea id="jJbugStatus" readonly="true"
+								value="#{loginBean.checkMessage(JJTask_.bug.status)}" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container100"

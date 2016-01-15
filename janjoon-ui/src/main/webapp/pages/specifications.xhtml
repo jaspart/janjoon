@@ -379,16 +379,16 @@
 											target="#{jJRequirementBean.viewLinkRequirement}" />
 									</p:menuitem>
 
-									<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
-										action="#{jJRequirementBean.editRequirement()}"
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()"
-										update=":requirementDialogPanel :requirementDialogHeader"
-										value="#{messages.specification_table_actions_editButton}"
-										disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !loginBean.authorisationService.wRequiement}">
-										<f:setPropertyActionListener value="#{reqUtil.requirement}"
-											target="#{jJRequirementBean.requirement}" />
-									</p:menuitem>
+<!-- 									<p:menuitem id="editButton" icon="fa fa-pencil Fs16" -->
+<!-- 										action="#{jJRequirementBean.editRequirement()}" -->
+<!-- 										onstart="PF('blockUIWidget').block()" -->
+<!-- 										oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" -->
+<!-- 										update=":requirementDialogPanel :requirementDialogHeader" -->
+<!-- 										value="#{messages.specification_table_actions_editButton}" -->
+<!-- 										disabled="#{jJRequirementBean.getDisabledEdit(reqUtil.requirement) or !loginBean.authorisationService.wRequiement}"> -->
+<!-- 										<f:setPropertyActionListener value="#{reqUtil.requirement}" -->
+<!-- 											target="#{jJRequirementBean.requirement}" /> -->
+<!-- 									</p:menuitem> -->
 
 									<p:menuitem id="mindMapButton"
 										value="#{messages.specification_table_actions_mapButton}"

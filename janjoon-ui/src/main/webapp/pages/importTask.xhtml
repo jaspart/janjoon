@@ -30,112 +30,120 @@
 					style="white-space: nowrap;" />
 			</h:panelGrid>
 		</pe:blockUI>
-		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll" style="max-width: 800px;">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width: 800px;">
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="objetSelectOneMenu" value="Objet:" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container70">
-					<p:selectOneMenu id="objetSelectOneMenu"
-						value="#{jJTaskBean.objet}" effect="fade">
-						<f:selectItem itemValue="#{null}"
-							itemLabel="#{messages.importTask_selectObject}" />
-						<f:selectItems value="#{jJTaskBean.objets}" var="p"
-							itemLabel="#{messages['importTask_selectObject_'.concat(p)]}"
-							itemValue="#{p}" />
-						<p:ajax process="@this" partialSubmit="true"
-							listener="#{jJTaskBean.handleSelectObjet}"
-							onstart="PF('taskBlockUIWidget').block()"
-							oncomplete="PF('taskBlockUIWidget').unblock()"
-							update="importTaskDialogForm" />
-					</p:selectOneMenu>
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="objetSelectOneMenu"
+							value="#{jJTaskBean.objet}" effect="fade">
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.importTask_selectObject}" />
+							<f:selectItems value="#{jJTaskBean.objets}" var="p"
+								itemLabel="#{messages['importTask_selectObject_'.concat(p)]}"
+								itemValue="#{p}" />
+							<p:ajax process="@this" partialSubmit="true"
+								listener="#{jJTaskBean.handleSelectObjet}"
+								onstart="PF('taskBlockUIWidget').block()"
+								oncomplete="PF('taskBlockUIWidget').unblock()"
+								update="importTaskDialogForm" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="categorySelectOneMenu"
 							value="#{messages.specification_import_category_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container70">
-					<p:selectOneMenu id="categorySelectOneMenu"
-						value="#{jJTaskBean.importCategory}" effect="fade" filter="true"
-						filterMatchMode="startsWith"
-						converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
-						disabled="#{jJTaskBean.disabledFilter}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="categorySelectOneMenu"
+							value="#{jJTaskBean.importCategory}" effect="fade" filter="true"
+							filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
+							disabled="#{jJTaskBean.disabledFilter}">
 
-						<f:selectItem itemValue="#{null}"
-							itemLabel="#{messages.importTask_selectCategory}" />
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.importTask_selectCategory}" />
 
-						<f:selectItems value="#{jJTaskBean.importCategoryList}" var="p"
-							itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
-						<p:ajax process="@this" partialSubmit="true"
-							listener="#{jJTaskBean.handleSelectCategory}"
-							onstart="PF('taskBlockUIWidget').block()"
-							oncomplete="PF('taskBlockUIWidget').unblock()"
-							update="importTaskDialogForm" />
-					</p:selectOneMenu>
+							<f:selectItems value="#{jJTaskBean.importCategoryList}" var="p"
+								itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
+							<p:ajax process="@this" partialSubmit="true"
+								listener="#{jJTaskBean.handleSelectCategory}"
+								onstart="PF('taskBlockUIWidget').block()"
+								oncomplete="PF('taskBlockUIWidget').unblock()"
+								update="importTaskDialogForm" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="statusSelectOneMenu"
 							value="#{messages.specification_import_status_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container70">
-					<p:selectOneMenu id="statusSelectOneMenu"
-						value="#{jJTaskBean.importStatus}" effect="fade" filter="true"
-						filterMatchMode="startsWith"
-						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-						disabled="#{jJTaskBean.disabledFilter}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="statusSelectOneMenu"
+							value="#{jJTaskBean.importStatus}" effect="fade" filter="true"
+							filterMatchMode="startsWith"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+							disabled="#{jJTaskBean.disabledFilter}">
 
-						<f:selectItem itemValue="#{null}"
-							itemLabel="#{messages.importTask_selectStatus}" />
-						<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
-							itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
-						<p:ajax process="@this" partialSubmit="true"
-							listener="#{jJTaskBean.handleSelectStatus}"
-							onstart="PF('taskBlockUIWidget').block()"
-							oncomplete="PF('taskBlockUIWidget').unblock()"
-							update="importTaskDialogForm" />
-					</p:selectOneMenu>
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.importTask_selectStatus}" />
+							<f:selectItems value="#{jJTaskBean.importStatusList}" var="p"
+								itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
+							<p:ajax process="@this" partialSubmit="true"
+								listener="#{jJTaskBean.handleSelectStatus}"
+								onstart="PF('taskBlockUIWidget').block()"
+								oncomplete="PF('taskBlockUIWidget').unblock()"
+								update="importTaskDialogForm" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="seeAll"
 							value="#{messages.importTask_viewAll}: " />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container70">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:selectBooleanCheckbox id="seeAll" value="#{jJTaskBean.checkAll}">
-						<p:ajax update="importTaskDialogForm"
-							listener="#{jJTaskBean.checkAll}"
-							onstart="PF('taskBlockUIWidget').block()"
-							oncomplete="PF('taskBlockUIWidget').unblock()" />
-					</p:selectBooleanCheckbox>
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:selectBooleanCheckbox id="seeAll"
+							value="#{jJTaskBean.checkAll}">
+							<p:ajax update="importTaskDialogForm"
+								listener="#{jJTaskBean.checkAll}"
+								onstart="PF('taskBlockUIWidget').block()"
+								oncomplete="PF('taskBlockUIWidget').unblock()" />
+						</p:selectBooleanCheckbox>
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container100 Responsive100">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:dataTable id="importDataTable" var="format" scrollable="true"
-						style="table-layout: fixed;" scrollHeight="350"
+						style="table-layout: fixed;" scrollHeight="300"
 						emptyMessage="#{messages.label_notRecordFound}"
 						value="#{jJTaskBean.importFormats}" editable="true"
 						editMode="cell">
@@ -234,7 +242,7 @@
 									<p:autoComplete id="taskType" value="#{format.taskType}"
 										size="20" itemValue="#{taskType}" scrollHeight="200"
 										converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-										dropdown="true" var="taskType" inputStyleClass="Fs14" 
+										dropdown="true" var="taskType" inputStyleClass="Fs14"
 										itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
 										completeMethod="#{jJTaskBean.completeTaskType}" />
 								</f:facet>
@@ -271,7 +279,8 @@
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:commandButton value="#{messages.label_cancel}" styleClass="GrayBack"
+					<p:commandButton value="#{messages.label_cancel}"
+						styleClass="GrayBack"
 						oncomplete="PF('taskImportDialogWidget').hide()" />
 				</h:panelGroup>
 			</h:panelGroup>

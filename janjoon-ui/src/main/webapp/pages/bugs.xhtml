@@ -9,380 +9,416 @@
 
 <ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
-		<style type="text/css">
-/* .mineSelect .ui-selectonemenu-trigger { */
-/* 	display: none; */
-/* } */
-</style>
-		<p:panel id="bugPanel" header="BUG" style="width: 99.5%;valign: top;">
-			<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />			
-			<br />
-			<p:commandButton id="colorBtn" icon="fa fa-info-circle  Gray Fs20"
-				styleClass="Fright GrayButton" type="button" style="float: right;"
-				title="#{messages.specification_video_help_title}" />
-			<!-- 			<p:commandButton value="#{messages.specification_video_help_title}" -->
-			<!-- 				id="videoHelpBtn" icon="ui-icon-video" -->
-			<!-- 				onclick="PF('videoHelpWidget').show()" -->
-			<!-- 				style="float: right;position: relative;" type="button" /> -->
-			<p:overlayPanel id="colorPanel" for="colorBtn" hideEffect="fade"
-				dynamic="true" style="width:600px">
-				<p:panelGrid style="width: 100%;">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="12">Code des Couleurs</p:column>
-						</p:row>
-					</f:facet>
-					<p:row>
-						<p:column colspan="2" styleClass="NEW">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_NEW}" />
-						</p:column>
+		<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
+		<h:form id="bugForm">
+			<f:event type="preRenderComponent"
+				listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs)}" />
+			<pe:blockUI target="bugTable2" content="blockUIContent"
+				widgetVar="blockUIWidget2" />
+			<h:panelGrid id="blockUIContent" columns="2"
+				style="display:none;table-layout:auto;">
+				<p:graphicImage name="images/preloader.gif" library="rioLayout"
+					style="vertical-align: middle;" />
+				<h:outputText value="#{messages.label_refresh}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+			<h:panelGroup layout="block" styleClass="Container">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:dataTable id="bugTable2" sortMode="multiple"
+						styleClass="bugDataTable" style="table-layout: fixed;"
+						value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
+						widgetVar="bugTable" lazy="true" binding="#{dataTable}"
+						emptyMessage="#{messages.label_notRecordFound}"
+						selection="#{jJBugBean.selectedBugList}" paginator="true"
+						rows="50" paginatorPosition="bottom"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="50,100,200">
 
-						<p:column colspan="2" styleClass="CLOSED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_CLOSED}" />
-						</p:column>
+						<p:ajax event="rowSelectCheckbox"
+							update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
+						<p:ajax event="rowUnselectCheckbox"
+							update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
+						<p:ajax event="rowSelect"
+							update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
+						<p:ajax event="toggleSelect"
+							update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
+						<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
+							oncomplete="PF('blockUIWidget2').unblock()" />
+						<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
+							oncomplete="PF('blockUIWidget2').unblock()" />
+						<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
+							oncomplete="PF('blockUIWidget2').unblock()" />
 
-						<p:column colspan="2" styleClass="VERIFIED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_VERIFIED}" />
-						</p:column>
+						<p:ajax event="rowDblselect"
+							onstart="PF('blockUIWidget2').block()" update=":editForm"
+							resetValues="true" listener="#{jJBugBean.onRowDblClckSelect}"
+							oncomplete="PF('blockUIWidget2').unblock();PF('editDialogWidget').show()"
+							title="#{messages.label_edit}" />
 
-						<p:column colspan="2" styleClass="RESOLVED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_RESOLVED}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="DUPLICATE">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_DUPLICATE}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="WONTFIX">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_WONTFIX}" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column colspan="2" styleClass="INVALID">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_INVALID}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="FIXED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_FIXED}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="READY">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_READY}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="REOPENED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_REOPENED}" />
-						</p:column>
-
-						<p:column colspan="2" styleClass="ASSIGNED">
-							<p:outputLabel style="color: #fff;"
-								value="#{messages.status_ASSIGNED}" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
-			</p:overlayPanel>
-			<br />
-			<br />
-			<br />
-			<h:form id="bugForm">
-				<f:event type="preRenderComponent"
-					listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs)}" />
-				<pe:blockUI target="bugTable2" content="blockUIContent"
-					widgetVar="blockUIWidget2" />
-				<h:panelGrid id="blockUIContent" columns="2"
-					style="display:none;table-layout:auto;">
-					<p:graphicImage name="images/preloader.gif" library="rioLayout"
-						style="vertical-align: middle;" />
-					<h:outputText value="#{messages.label_refresh}"
-						style="white-space: nowrap;" />
-				</h:panelGrid>
-				<p:dataTable id="bugTable2" sortMode="multiple"
-					styleClass="bugDataTable" style="table-layout: fixed;"
-					value="#{jJBugBean.bugList}" rowKey="#{bug.id}" var="bug"
-					widgetVar="bugTable" lazy="true" binding="#{dataTable}"
-					emptyMessage="#{messages.label_notRecordFound}"
-					selection="#{jJBugBean.selectedBugList}" paginator="true" rows="50"
-					paginatorPosition="bottom"
-					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-					rowsPerPageTemplate="50,100,200">
-
-					<p:ajax event="rowSelectCheckbox"
-						update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
-					<p:ajax event="rowUnselectCheckbox"
-						update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
-					<p:ajax event="rowSelect"
-						update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
-					<p:ajax event="toggleSelect"
-						update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
-					<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
-						oncomplete="PF('blockUIWidget2').unblock()" />
-					<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
-						oncomplete="PF('blockUIWidget2').unblock()" />
-					<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
-						oncomplete="PF('blockUIWidget2').unblock()" />
-
-					<p:ajax event="rowDblselect" onstart="PF('blockUIWidget2').block()"
-						update=":editForm" resetValues="true"
-						listener="#{jJBugBean.onRowDblClckSelect}"
-						oncomplete="PF('blockUIWidget2').unblock();PF('editDialogWidget').show()"
-						title="#{messages.label_edit}" />
-
-					<f:facet name="header">
-						<p:outputPanel>
-							<p:row>
-								<p:column>
-									<p:selectOneMenu id="mineBugs" styleClass="mineSelect"
-										onchange="PF('bugTable').filter();" effect="fade"
-										binding="#{mineBugs}"
-										title="#{messages.specification_table_requirement_filter}">
-										<f:selectItem itemValue="false"
-											itemLabel="#{messages.specification_table_requirement_all}" />
-										<f:selectItem itemValue="true"
-											itemLabel="#{messages.specification_table_requirement_mine}" />
-									</p:selectOneMenu>
-								</p:column>
-								<p:column colspan="1">
-									<h:outputText value="#{messages.bug_table_search_label}"
-										style="vertical-align: middle !important;margin-left: 20px;" />
-									<p:inputText id="globalFilter"
-										onkeyup="PF('bugTable').filter()" style="width:200px;"
-										placeholder="#{messages.bug_table_search_watermark}" />
-								</p:column>
-								<p:column colspan="1">
-									<p:commandButton id="createButton"
-										icon="fa fa-plus-square  Gray Fs20"
-										styleClass="Fright GrayButton"
-										value="#{messages.bug_table_add_label}" update=":createForm "
-										style="margin-left: 20px;" resetValues="true"
-										oncomplete="PF('createDialogWidget').show()"
-										title="#{messages.label_create}" />
-								</p:column>
-							</p:row>
-						</p:outputPanel>
-					</f:facet>
-
-					<p:column selectionMode="multiple" style="width:8%">
-						<p:commandLink actionListener="#{jJBugBean.onrate(bug)}"
-							onstart="PF('blockUIWidget').block()" style="margin-left:25%;"
-							oncomplete="PF('blockUIWidget').unblock()"
-							update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm">
-
-							<p:graphicImage
-								name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}"
-								width="16" height="16" cache="false" library="images"
-								title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
-
-						</p:commandLink>
-					</p:column>
-
-					<p:column headerText="#{messages.bug_table_title_title}"
-						filterMatchMode="contains" sortBy="#{bug.name}"
-						filterStyle="width: 90%;"
-						style="width: 22% !important;height: 5px !important;">
-						<h:outputText
-							value="#{loginBean.checkMessage(bug.status)}"
-							styleClass="#{bug.status.name}" />
-						<h:outputText value=" ID:#{bug.id} #{bug.name}" />
-					</p:column>
-					<p:column headerText="#{messages.bug_table_creation_title}"
-						sortBy="#{bug.creationDate}"
-						style="width: 15% !important;height: 5px !important;">
-						<h:outputText value="#{bug.creationDate}">
-							<f:convertDateTime type="date" locale="#{localeBean.locale}"
-								pattern="dd/MM/yyyy HH:mm" />
-						</h:outputText>
-					</p:column>
-					<p:column headerText="#{messages.bug_table_criticity_title}"
-						sortBy="#{bug.criticity.name}" id="criticity"
-						filterStyleClass="criticity"
-						style="width: 10% !important;height: 5px !important;"
-						filterOptions="#{jJBugBean.criticityOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						filterBy="#{bug.criticity.name}">
-						<h:outputText value="#{bug.criticity.name}" />
-					</p:column>
-					<p:column headerText="#{messages.bug_table_importance_title}"
-						sortBy="#{bug.importance.name}" id="importance"
-						filterStyleClass="importance"
-						style="width: 10% !important;height: 5px !important;"
-						filterOptions="#{jJBugBean.importanceOptions}"
-						filterMatchMode="exact" filterStyle="width: 90%;"
-						filterBy="#{bug.importance.name}">
-						<h:outputText value="#{bug.importance.name}" />
-					</p:column>
-					<p:column headerText="#{messages.bug_table_status_title}"
-						sortBy="#{bug.status.name}" filterBy="#{bug.status.name}"
-						id="status" style="width: 10% !important;height: 5px !important;"
-						filterStyleClass="status"
-						filterOptions="#{jJBugBean.statusOptions}" filterMatchMode="exact"
-						filterStyle="width: 90%;">
-						<h:outputText
-							value="#{loginBean.checkMessage(bug.status)}"
-							styleClass="#{bug.status.name}" />
-					</p:column>
-					<p:column styleClass="action-column" style="width: 100px;">
 						<f:facet name="header">
-							<h:outputText value="#{messages.bug_table_action_title}" />
-						</f:facet>
-						<p:splitButton id="viewButton" action="#{jJBugBean.bugInfo}"
-							title="#{messages.specification_table_actions_viewButton}"
-							value="#{messages.label_view}" ajax="false"
-							icon="ui-icon-disk fa fa-eye" onclick="target='_blank'">
-							<p:menuitem id="editButton" icon="ui-icon-disk fa fa-pencil"
-								value="#{messages.label_edit}" update=":editForm"
-								oncomplete="PF('editDialogWidget').show()"
-								title="#{messages.label_edit}" resetValues="true">
-								<f:setPropertyActionListener value="#{bug}"
-									target="#{jJBugBean.JJBug_}" />
-								<f:setPropertyActionListener value="#{bug.project}"
-									target="#{jJBugBean.bugProjectSelected}" />
-							</p:menuitem>
-							<p:menuitem id="deleteButton" icon="ui-icon-disk fa fa-trash"
-								oncomplete="PF('deleteDialogWidget').show()"
-								value="#{messages.label_delete}"
-								title="#{messages.label_delete}">
-								<f:setPropertyActionListener value="#{bug}"
-									target="#{jJBugBean.JJBug_}" />
-							</p:menuitem>
-							<f:setPropertyActionListener value="#{bug}"
-								target="#{jJBugBean.viewBug}" />
-						</p:splitButton>
-					</p:column>
-					<f:facet name="footer">
-						<p:commandButton value="#{messages.bug_delete_button}"
-							id="deleteMButton" icon="ui-icon-disk fa fa-trash"
-							update=":createForm"
-							oncomplete="PF('deleteMDialogWidget').show()"
-							disabled="#{empty jJBugBean.selectedBugList}"
-							title="#{messages.label_delete}" />
+							<h:panelGroup layout="block" styleClass="Container ui-fluid">
+								<h:panelGroup layout="block" style="float: right !important;"
+									styleClass="Container20 Responsive Fs20">
+									<h:outputText style="font-family: 'roboto_condensedlight';"
+										value="Bug" />
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Container40 Responsive50 Fleft">
+									<!-- 									<h:panelGroup layout="block" styleClass="Container15" -->
+									<!-- 										style="height: 1px;"> -->
+									<!-- 										<p:commandButton id="colorBtn" -->
+									<!-- 											icon="fa fa-info-circle  Gray Fs20" -->
+									<!-- 											styleClass="GrayButton ShowOnDesktop" type="button" -->
+									<!-- 											title="#{messages.specification_video_help_title}" /> -->
+									<!-- 													<p:overlayPanel id="colorPanel" for="colorPanel" -->
+									<!-- 				hideEffect="fade" dynamic="true" style="width:600px" -->
+									<!-- 				styleClass="ShowOnDesktop"> -->
+									<!-- 				<p:panelGrid style="width: 100%;"> -->
+									<!-- 					<f:facet name="header"> -->
+									<!-- 						<p:row> -->
+									<!-- 							<p:column colspan="12">Code des Couleurs</p:column> -->
+									<!-- 						</p:row> -->
+									<!-- 					</f:facet> -->
+									<!-- 					<p:row> -->
+									<!-- 						<p:column colspan="2" styleClass="NEW"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_NEW}" /> -->
+									<!-- 						</p:column> -->
 
-						<p:commandButton value="#{messages.bug_favoris_button}"
-							id="subscribeMButton" icon="ui-icon-disk fa fa-star"
-							update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
-							actionListener="#{jJBugBean.onRateMultiple}"
-							disabled="#{empty jJBugBean.selectedBugList}"
-							title="#{messages.requirement_subscription_rate_title}" />
-					</f:facet>
-				</p:dataTable>
-			</h:form>
-			<p:dialog id="createDialog" header="#{messages.bug_create_title}"
-				draggable="false" modal="true" widgetVar="createDialogWidget"
-				dynamic="true" visible="#{jJBugBean.createDialogVisible}"
-				resizable="true" maximizable="true" showEffect="fade"
-				hideEffect="explode">
-				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
-				<p:outputPanel id="createPanel">
-					<h:form id="createForm" enctype="multipart/form-data">
-						<p:panel styleClass="panelDialog">
+									<!-- 						<p:column colspan="2" styleClass="CLOSED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_CLOSED}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="VERIFIED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_VERIFIED}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="RESOLVED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_RESOLVED}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="DUPLICATE"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_DUPLICATE}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="WONTFIX"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_WONTFIX}" /> -->
+									<!-- 						</p:column> -->
+									<!-- 					</p:row> -->
+									<!-- 					<p:row> -->
+									<!-- 						<p:column colspan="2" styleClass="INVALID"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_INVALID}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="FIXED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_FIXED}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="READY"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_READY}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="REOPENED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_REOPENED}" /> -->
+									<!-- 						</p:column> -->
+
+									<!-- 						<p:column colspan="2" styleClass="ASSIGNED"> -->
+									<!-- 							<p:outputLabel style="color: #fff;" -->
+									<!-- 								value="#{messages.status_ASSIGNED}" /> -->
+									<!-- 						</p:column> -->
+									<!-- 					</p:row> -->
+									<!-- 				</p:panelGrid> -->
+									<!-- 			</p:overlayPanel> -->
+									<!-- 									</h:panelGroup> -->
+									<h:panelGroup layout="block" styleClass="Container30">
+										<p:commandButton id="createButton"
+											icon="fa fa-plus-square  Gray Fs20" styleClass="GrayButton"
+											title="#{messages.bug_table_add_label}" update=":createForm "
+											resetValues="true"
+											oncomplete="PF('createDialogWidget').show()" />
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container70">
+										<p:selectOneMenu id="mineBugs" styleClass="mineSelect"
+											onchange="PF('bugTable').filter();" effect="fade"
+											binding="#{mineBugs}"
+											title="#{messages.specification_table_requirement_filter}">
+											<f:selectItem itemValue="false"
+												itemLabel="#{messages.specification_table_requirement_all}" />
+											<f:selectItem itemValue="true"
+												itemLabel="#{messages.specification_table_requirement_mine}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGroup>
+
+								<h:panelGroup layout="block"
+									styleClass="Container40 Responsive100 Fleft">
+									<h:panelGroup layout="block" styleClass="Container50">
+										<p:outputLabel for="globalFilter" styleClass="White"
+											value="#{messages.bug_table_search_label}"
+											style="vertical-align: middle !important;" />
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container50">
+										<p:inputText id="globalFilter"
+											onkeyup="PF('bugTable').filter()"
+											placeholder="#{messages.bug_table_search_watermark}" />
+									</h:panelGroup>
+								</h:panelGroup>
+
+							</h:panelGroup>
+						</f:facet>
+
+						<p:column selectionMode="multiple"
+							style="width:8%;text-align: center;" priority="1">
+							<p:commandLink actionListener="#{jJBugBean.onrate(bug)}"
+								onstart="PF('blockUIWidget').block()"
+								styleClass="MarLeftQuarter"
+								oncomplete="PF('blockUIWidget').unblock()"
+								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm">
+
+								<p:graphicImage
+									name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}"
+									width="16" height="16" cache="false" library="images"
+									title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
+
+							</p:commandLink>
+						</p:column>
+
+						<p:column headerText="#{messages.bug_table_title_title}"
+							priority="1" filterMatchMode="contains" sortBy="#{bug.name}"
+							filterStyle="width: 90%;" style="width: 25% !important;">
+							<h:outputText value="#{loginBean.checkMessage(bug.status)}"
+								styleClass="#{bug.status.name}" />
+							<h:outputText value=" ID:#{bug.id} #{bug.name}" />
+						</p:column>
+						<p:column headerText="#{messages.bug_table_creation_title}"
+							sortBy="#{bug.creationDate}" priority="6"
+							style="width: 10% !important;height: 5px !important;">
+							<h:outputText value="#{bug.creationDate}">
+								<f:convertDateTime type="date" locale="#{localeBean.locale}"
+									pattern="dd/MM/yyyy HH:mm" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{messages.bug_table_criticity_title}"
+							sortBy="#{bug.criticity.name}" id="criticity"
+							filterStyleClass="criticity" priority="6"
+							style="width: 10% !important;height: 5px !important;"
+							filterOptions="#{jJBugBean.criticityOptions}"
+							filterMatchMode="exact" filterStyle="width: 90%;"
+							filterBy="#{bug.criticity.name}">
+							<h:outputText value="#{bug.criticity.name}" />
+						</p:column>
+						<p:column headerText="#{messages.bug_table_importance_title}"
+							sortBy="#{bug.importance.name}" id="importance"
+							filterStyleClass="importance" priority="6"
+							style="width: 10% !important;height: 5px !important;"
+							filterOptions="#{jJBugBean.importanceOptions}"
+							filterMatchMode="exact" filterStyle="width: 90%;"
+							filterBy="#{bug.importance.name}">
+							<h:outputText value="#{bug.importance.name}" />
+						</p:column>
+						<p:column headerText="#{messages.bug_table_status_title}"
+							sortBy="#{bug.status.name}" filterBy="#{bug.status.name}"
+							id="status" style="width: 15% !important;height: 5px !important;"
+							filterStyleClass="status" priority="2"
+							filterOptions="#{jJBugBean.statusOptions}"
+							filterMatchMode="exact" filterStyle="width: 90%;">
+							<h:outputText value="#{loginBean.checkMessage(bug.status)}"
+								styleClass="#{bug.status.name}" />
+						</p:column>
+						<p:column style="text-align: center;width:8%;">
 							<f:facet name="header">
-								<p:messages id="msg" showDetail="false" closable="true" />
+								<h:outputText value="#{messages.bug_table_action_title}" />
 							</f:facet>
-							<ui:include src="bugDialog.xhtml">
-								<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
-							</ui:include>
-							<f:facet name="footer">
+							<p:commandButton id="optionButton" type="button"
+								icon="fa fa-list Fs20" styleClass="BlueButton" />
+							<p:menu overlay="true" trigger="optionButton" my="right top"
+								at="right bottom">
+								<p:menuitem id="viewButton" action="#{jJBugBean.bugInfo}"
+									title="#{messages.specification_table_actions_viewButton}"
+									value="#{messages.label_view}" ajax="false"
+									icon="ui-icon-disk fa fa-eye" onclick="target='_blank'">
+									<f:setPropertyActionListener value="#{bug}"
+										target="#{jJBugBean.viewBug}" />
+								</p:menuitem>
+								<p:menuitem id="editButton" icon="ui-icon-disk fa fa-pencil"
+									value="#{messages.label_edit}" update=":editForm"
+									oncomplete="PF('editDialogWidget').show()"
+									title="#{messages.label_edit}" resetValues="true">
+									<f:setPropertyActionListener value="#{bug}"
+										target="#{jJBugBean.JJBug_}" />
+									<f:setPropertyActionListener value="#{bug.project}"
+										target="#{jJBugBean.bugProjectSelected}" />
+								</p:menuitem>
+								<p:menuitem id="deleteButton" icon="ui-icon-disk fa fa-trash"
+									oncomplete="PF('deleteDialogWidget').show()"
+									value="#{messages.label_delete}"
+									title="#{messages.label_delete}">
+									<f:setPropertyActionListener value="#{bug}"
+										target="#{jJBugBean.JJBug_}" />
+								</p:menuitem>
+							</p:menu>
+						</p:column>
+						<f:facet name="footer">
+							<h:panelGroup layout="block" styleClass="Container ui-fluid">
+								<h:panelGroup layout="block"
+									styleClass="Container50 Responsive50">
+									<h:panelGroup layout="block" styleClass="Container50">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton value="#{messages.bug_delete_button}"
+												id="deleteMButton" icon="ui-icon-disk fa fa-trash"
+												update=":createForm"
+												oncomplete="PF('deleteMDialogWidget').show()"
+												disabled="#{empty jJBugBean.selectedBugList}"
+												title="#{messages.label_delete}" />
+										</h:panelGroup>
+									</h:panelGroup>
+
+									<h:panelGroup layout="block" styleClass="Container50">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton value="#{messages.bug_favoris_button}"
+												id="subscribeMButton" icon="ui-icon-disk fa fa-star"
+												update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												actionListener="#{jJBugBean.onRateMultiple}"
+												disabled="#{empty jJBugBean.selectedBugList}"
+												title="#{messages.requirement_subscription_rate_title}" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</f:facet>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+		<p:dialog id="createDialog" header="#{messages.bug_create_title}"
+			draggable="false" modal="true" widgetVar="createDialogWidget"
+			dynamic="true" visible="#{jJBugBean.createDialogVisible}"
+			resizable="true" maximizable="true" showEffect="fade"
+			hideEffect="explode">
+			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
+			<p:outputPanel id="createPanel">
+				<h:form id="createForm" enctype="multipart/form-data">
+					<h:panelGroup id="createPanelGrid" layout="block"
+						styleClass="Container ui-fluid BorderAll"
+						style="max-width: 750px;">
+						<ui:include src="bugDialog.xhtml">
+							<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
+						</ui:include>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createSaveButton"
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
 									update="createPanelGrid,:bugForm :growlForm" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createCloseButton"
-									value="#{messages.label_cancel}"
+									value="#{messages.label_cancel}" styleClass="GrayBack"
 									onclick="PF('createDialogWidget').hide()" type="button" />
-							</f:facet>
-						</p:panel>
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
-			<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-			<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
-				position="center"
-				header="#{messages.specification_video_help_title}"
-				style="padding:0px;" resizable="false" draggable="false"
-				minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
-				<video width="100%" height="100%" controls="true">
-					<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
-				</video>
-			</p:dialog>
+		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			position="center" header="#{messages.specification_video_help_title}"
+			style="padding:0px;" resizable="false" draggable="false"
+			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			<video width="100%" height="100%" controls="true">
+				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
+			</video>
+		</p:dialog>
 
-			<p:dialog id="editDialog" header="#{messages.bug_edit_title}"
-				modal="true" widgetVar="editDialogWidget" dynamic="true"
-				resizable="true" maximizable="true" showEffect="fade"
-				hideEffect="explode" draggable="false">
-				<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}"
-					immediate="true" />
-				<p:outputPanel id="editPanel">
-					<h:form id="editForm" enctype="multipart/form-data">
-						<p:panel styleClass="panelDialog">
-							<f:facet name="header">
-								<p:messages id="msg" showDetail="false" closable="true" />
-							</f:facet>
-							<ui:include src="bugDialog.xhtml">
-								<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
-							</ui:include>
-							<f:facet name="footer">
+		<p:dialog id="editDialog" header="#{messages.bug_edit_title}"
+			modal="true" widgetVar="editDialogWidget" dynamic="true"
+			resizable="false" maximizable="false" showEffect="fade"
+			hideEffect="explode" draggable="false">
+			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}"
+				immediate="true" />
+			<p:outputPanel id="editPanel">
+				<h:form id="editForm" enctype="multipart/form-data">
+					<h:panelGroup id="createPanelGrid" layout="block"
+						styleClass="Container ui-fluid BorderAll"
+						style="max-width: 750px;">
+						<ui:include src="bugDialog.xhtml">
+							<ui:param name="JJBug_" value="#{jJBugBean.JJBug_}" />
+						</ui:include>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="editSaveButton"
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.bug_edit_save_button}"
 									action="#{jJBugBean.persistBug}"
 									update="createPanelGrid :bugForm :growlForm" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="editCloseButton" immediate="true"
-									value="#{messages.label_cancel}"
+									value="#{messages.label_cancel}" styleClass="GrayBack"
 									onclick="PF('editDialogWidget').hide()" type="button" />
-							</f:facet>
-						</p:panel>
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
-			<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
-				message="#{messages.bug_delete_title}" showEffect="fade"
-				hideEffect="explode" header="#{messages.bug_delete_confirm_label}"
-				severity="alarm">
-				<p:outputPanel id="deletePanel">
-					<h:form id="deleteForm">
-						<p:commandButton id="deleteYesButton"
-							value="#{messages.bug_delete_yes_button}"
-							action="#{jJBugBean.deleteSingle}" update=":bugForm :growlForm"
-							onsuccess="PF('deleteDialogWidget').hide()" />
-						<p:commandButton id="deleteNoButton"
-							value="#{messages.bug_delete_no_button}"
-							onclick="PF('deleteDialogWidget').hide()" type="button" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.bug_delete_title}" showEffect="fade"
+			hideEffect="explode" header="#{messages.bug_delete_confirm_label}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJBugBean.deleteSingle}" update=":bugForm :growlForm"
+						onsuccess="PF('deleteDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						onclick="PF('deleteDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
 
-			<p:confirmDialog id="deleteMDialog" widgetVar="deleteMDialogWidget"
-				message="#{messages.bug_mdelete_title}" showEffect="fade"
-				hideEffect="explode" header="#{messages.bug_mdelete_confirm_label}"
-				severity="alarm">
-				<p:outputPanel id="deleteMPanel">
-					<h:form id="deleteMForm">
-						<p:commandButton id="deleteYesButton"
-							value="#{messages.bug_delete_yes_button}"
-							action="#{jJBugBean.deleteMultiple}" update=":bugForm :growlForm"
-							onsuccess="PF('deleteMDialogWidget').hide()" />
-						<p:commandButton id="deleteNoButton"
-							value="#{messages.bug_delete_no_button}"
-							onclick="PF('deleteMDialogWidget').hide()" type="button" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
-		</p:panel>
+		<p:confirmDialog id="deleteMDialog" widgetVar="deleteMDialogWidget"
+			message="#{messages.bug_mdelete_title}" showEffect="fade"
+			hideEffect="explode" header="#{messages.bug_mdelete_confirm_label}"
+			severity="alarm">
+			<p:outputPanel id="deleteMPanel">
+				<h:form id="deleteMForm">
+					<p:commandButton id="deleteYesButton"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJBugBean.deleteMultiple}" update=":bugForm :growlForm"
+						onsuccess="PF('deleteMDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						onclick="PF('deleteMDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
 	</ui:define>
 </ui:composition>
 </html>

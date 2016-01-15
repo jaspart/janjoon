@@ -893,7 +893,7 @@ div.planned1 {
 	border-color: white; /* white */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	height: 35px !important;
+	height: 40px !important;
 	border-radius: 0px !important;
 }
 
@@ -902,7 +902,7 @@ div.planned2 {
 	border-color: white; /* white */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	height: 17px !important;
+	height: 20px !important;
 	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }
@@ -932,8 +932,8 @@ div.real {
 	border-color: black; /* black */
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	height: 17px !important;
-	transform: translate(0px, 18px);
+	height: 20px !important;
+	transform: translate(0px, 21px);
 	border-radius: 0px !important;
 }
 
@@ -942,7 +942,7 @@ div.chapter {
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 35px !important;
+	height: 40px !important;
 	border-radius: 0px !important;
 	cursor: auto !important;
 }
@@ -952,7 +952,7 @@ div.invisible {
 	border-color: white; /* white */
 	opacity: 0;
 	cursor: auto !important;
-	height: 35px !important;
+	height: 40px !important;
 	border-radius: 0px !important;
 }
 
@@ -966,7 +966,7 @@ div.revised1 {
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 35px !important;
+	height: 40px !important;
 	border-radius: 0px !important;
 }
 
@@ -975,7 +975,7 @@ div.revised2 {
 	border-color: white; /* white */
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 17px !important;
+	height: 20px !important;
 	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }
@@ -998,8 +998,8 @@ div.highLightReal {
 		repeat-x !important;
 	opacity: 0.6;
 	filter: alpha(opacity = 60);
-	height: 17px !important;
-	transform: translate(0px, 18px);
+	height: 20px !important;
+	transform: translate(0px, 21px);
 	border-radius: 0px !important;
 }
 
@@ -1010,7 +1010,7 @@ div.highLightRevised1 {
 		repeat-x !important;
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 35px !important;
+	height: 40px !important;
 	border-radius: 0px !important;
 }
 
@@ -1021,7 +1021,7 @@ div.highLightRevised2 {
 		repeat-x !important;
 	opacity: 0.5;
 	filter: alpha(opacity = 50);
-	height: 17px !important;
+	height: 20px !important;
 	transform: translate(0px, -3px);
 	border-radius: 0px !important;
 }

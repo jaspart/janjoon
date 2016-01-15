@@ -263,7 +263,7 @@
 								styleClass="Container100 Responsive100">
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
 									<pe:ckEditor id="description"
-										toolbar="#{imageStreamer.ckEditorToolBar}" width="95%;"
+										toolbar="#{imageStreamer.ckEditorToolBar}" width="100%;"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{requirementBean.requirement.description}"
 										required="true" rendered="#{!loginBean.mobile}"
@@ -434,8 +434,7 @@
 				<ui:include src="communication.xhtml">
 					<ui:param name="communicationList"
 						value="#{requirementBean.communicationMessages}" />
-					<ui:param name="field" value="#{requirementBean.requirement}" />
-					<!-- 					<ui:param name="cols" value="150" /> -->
+					<ui:param name="field" value="#{requirementBean.requirement}" />					
 				</ui:include>
 			</h:panelGroup>
 		</h:panelGroup>

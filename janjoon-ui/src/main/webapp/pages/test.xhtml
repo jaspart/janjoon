@@ -147,13 +147,16 @@
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()" />
 								<p:treeNode type="project">
-									<h:outputText value="P-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
+									<h:outputText value="P-#{node.id}-#{node.name}"
+										styleClass="TestcaseChapter" />
 								</p:treeNode>
 								<p:treeNode type="category">
-									<h:outputText value="C-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
+									<h:outputText value="C-#{node.id}-#{node.name}"
+										styleClass="TestcaseChapter" />
 								</p:treeNode>
 								<p:treeNode>
-									<h:outputText value="CH-#{node.id}-#{node.name}" styleClass="TestcaseChapter" />
+									<h:outputText value="CH-#{node.id}-#{node.name}"
+										styleClass="TestcaseChapter" />
 								</p:treeNode>
 								<p:treeNode type="withOutChapter">
 									<h:outputText value="#{messages.test_tree_withOutChapter}"
@@ -162,7 +165,8 @@
 								<p:treeNode type="TestcaseRequirement">
 									<p:graphicImage library="images" name="add.ico" width="14"
 										height="14" />
-									<h:outputText value="REQ-#{node.id}-#{node.name}" styleClass="TestcaseRequirement" />
+									<h:outputText value="REQ-#{node.id}-#{node.name}"
+										styleClass="TestcaseRequirement" />
 								</p:treeNode>
 
 								<p:treeNode type="TWT">
@@ -171,11 +175,13 @@
 								</p:treeNode>
 
 								<p:treeNode type="TNE">
-									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseNotExecuted" />
+									<h:outputText value="TC-#{node.id}-#{node.name}"
+										styleClass="TestcaseNotExecuted" />
 								</p:treeNode>
 
 								<p:treeNode type="TF">
-									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseFailed" />
+									<h:outputText value="TC-#{node.id}-#{node.name}"
+										styleClass="TestcaseFailed" />
 								</p:treeNode>
 
 								<p:treeNode type="TFWB">
@@ -184,7 +190,8 @@
 								</p:treeNode>
 
 								<p:treeNode type="TS">
-									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseSuccess" />
+									<h:outputText value="TC-#{node.id}-#{node.name}"
+										styleClass="TestcaseSuccess" />
 								</p:treeNode>
 
 								<p:treeNode type="TSWB">
@@ -193,7 +200,8 @@
 								</p:treeNode>
 
 								<p:treeNode type="TNF">
-									<h:outputText value="TC-#{node.id}-#{node.name}" styleClass="TestcaseNonFini" />
+									<h:outputText value="TC-#{node.id}-#{node.name}"
+										styleClass="TestcaseNonFini" />
 								</p:treeNode>
 
 								<p:treeNode type="TNFWB">
@@ -460,7 +468,8 @@
 								<f:facet name="header">
 								#{messages.test_requirement_pieChart}
 								</f:facet>
-								<p:chart type="pie" id="custom" model="#{jJTestcaseBean.pieChart}"
+								<p:chart type="pie" id="custom"
+									model="#{jJTestcaseBean.pieChart}"
 									style="height:200px;margin: auto;width:300px;"
 									responsive="true"
 									rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and jJTestcaseBean.pieChart != null}" />
@@ -763,8 +772,8 @@
 											customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 											toolbar="[['Source','Image','Table']]" readOnly="true"
 											rendered="#{!loginBean.mobile}" />
-										<h:outputText escape="false" id="descriptionMobile" style="width:300px;"
-											rendered="#{loginBean.mobile}" 
+										<h:outputText escape="false" id="descriptionMobile"
+											style="width:300px;" rendered="#{loginBean.mobile}"
 											value="#{jJTestcaseBean.testcase.description}" />
 									</p:column>
 								</p:row>
@@ -807,12 +816,30 @@
 			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="bugForm" enctype="multipart/form-data">
-					<ui:include src="bugDialog.xhtml">
-						<ui:param name="JJBug_" value="#{jJTeststepexecutionBean.bug}" />
-					</ui:include>
-					<p:commandButton id="saveBug" value="#{messages.label_save}"
-						action="#{jJBugBean.saveBug}" update=":runForm :growlForm"
-						oncomplete="PF('bugTestDialogWidget').hide()" />
+					<h:panelGroup id="createPanelGrid" layout="block"
+						styleClass="Container ui-fluid BorderAll"
+						style="max-width: 750px;">
+						<ui:include src="bugDialog.xhtml">
+							<ui:param name="JJBug_" value="#{jJTeststepexecutionBean.bug}" />
+						</ui:include>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="saveBug" value="#{messages.label_save}"
+									action="#{jJBugBean.saveBug}" update=":runForm :growlForm"
+									oncomplete="PF('bugTestDialogWidget').hide()" />
+							</h:panelGroup>
+						</h:panelGroup>
+
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="bugCloseButton" immediate="true"
+									value="#{messages.label_cancel}" styleClass="GrayBack"
+									onclick="PF('bugTestDialogWidget').hide()" type="button" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

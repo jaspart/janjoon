@@ -9,84 +9,83 @@
 <ui:composition>
 	<h:form id="sprintForm">
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
-			<h:panelGroup layout="block" styleClass="Container25 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container30 Responsive50">
 				<h:panelGroup layout="block" styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="sprint" value="Sprint:" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container70">
-					<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
-						effect="fade"
-						converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
-						<f:selectItem itemValue="#{null}"
-							itemLabel="#{messages.project_gantt_select_label}" />
-						<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
-							itemLabel="#{spr.name}" itemValue="#{spr}" />
-						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-							listener="#{jJTaskBean.sprintSelectionChanged}"
-							update=":projecttabview:planningForm "
-							oncomplete="PF('blockUIWidget').unblock()" />
-					</p:selectOneMenu>
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="sprint" value="#{jJTaskBean.sprint}"
+							effect="fade"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJSprintConverter">
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{messages.project_gantt_select_label}" />
+							<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
+								itemLabel="#{spr.name}" itemValue="#{spr}" />
+							<p:ajax onstart="PF('blockUIWidget').block()" event="change"
+								listener="#{jJTaskBean.sprintSelectionChanged}"
+								update=":projecttabview:planningForm "
+								oncomplete="PF('blockUIWidget').unblock()" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container25 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container30 Responsive50">
 				<h:panelGroup layout="block" styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel for="sortMode"
 							value="#{messages.project_gantt_select_sortBy} :" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container70">
-					<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
-						effect="fade">
-						<f:selectItem itemValue="chapter"
-							itemLabel="#{messages.label_chapter}" />
-						<f:selectItem itemValue="StartDateReal"
-							itemLabel="#{messages.project_gantt_table_startreal_title}" />
-						<f:selectItem itemValue="StartDatePlanned"
-							itemLabel="#{messages.project_gantt_table_startplanned_title}" />
-						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-							listener="#{jJTaskBean.SortBySelectionChanged}"
-							update=":projecttabview:planningForm :projecttabview:sprintForm"
-							oncomplete="PF('blockUIWidget').unblock()" />
-					</p:selectOneMenu>
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="sortMode" value="#{jJTaskBean.sortMode}"
+							effect="fade">
+							<f:selectItem itemValue="chapter"
+								itemLabel="#{messages.label_chapter}" />
+							<f:selectItem itemValue="StartDateReal"
+								itemLabel="#{messages.project_gantt_table_startreal_title}" />
+							<f:selectItem itemValue="StartDatePlanned"
+								itemLabel="#{messages.project_gantt_table_startplanned_title}" />
+							<p:ajax onstart="PF('blockUIWidget').block()" event="change"
+								listener="#{jJTaskBean.SortBySelectionChanged}"
+								update=":projecttabview:planningForm :projecttabview:sprintForm"
+								oncomplete="PF('blockUIWidget').unblock()" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container20 Responsive">
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
-				<h:panelGroup layout="block" styleClass="Container80">
-					<p:commandButton id="commandButton" icon="fa fa-plus-square Fs16"
-						value="#{messages.project_gantt_import_button}"
-						style="float: right;" resetValues="true"
-						actionListener="#{jJTaskBean.loadImportFormat}"
-						update=":importTaskDialogPanel"
-						oncomplete="PF('taskImportDialogWidget').show()">
-						<f:attribute name="mode" value="planning" />
-					</p:commandButton>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
+			<h:panelGroup layout="block" styleClass="Container15 Responsive">				
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="commandButton" icon="fa fa-plus-square Fs16"
+							value="#{messages.project_gantt_import_button}"
+							style="float: right;" resetValues="true"
+							actionListener="#{jJTaskBean.loadImportFormat}"
+							update=":importTaskDialogPanel"
+							oncomplete="PF('taskImportDialogWidget').show()">
+							<f:attribute name="mode" value="planning" />
+						</p:commandButton>
+					</h:panelGroup>		
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container15 Responsive">
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
-				<h:panelGroup layout="block" styleClass="Container80">
-					<p:commandButton ajax="false" id="xml"
-						onclick="PrimeFaces.monitorDownload(start, stop);"
-						icon="fa fa-arrow-down Fs16" value="Export XML">
-						<p:fileDownload value="#{jJTaskBean.file}" />
-					</p:commandButton>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
+			<h:panelGroup layout="block" styleClass="Container15 Responsive">				
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton ajax="false" id="xml"
+							onclick="PrimeFaces.monitorDownload(start, stop);"
+							icon="fa fa-arrow-down Fs16" value="Export XML">
+							<p:fileDownload value="#{jJTaskBean.file}" />
+						</p:commandButton>
+					</h:panelGroup>				
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container15 Responsive">
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
-				<h:panelGroup layout="block" styleClass="Container80">
-					<p:commandButton value="#{messages.specification_video_help_title}"
-						id="videoHelpBtn" icon="fa fa-video-camera Fs16"
-						onclick="PF('videoHelpWidget').show()"
-						style="float:none;position:relative;" type="button" />
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="EmptyBox5 Container10" />
+			<h:panelGroup layout="block" styleClass="Container10 Responsive">				
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton
+							value="#{messages.specification_video_help_title}"
+							id="videoHelpBtn" icon="fa fa-video-camera Fs16"
+							onclick="PF('videoHelpWidget').show()"
+							style="float:none;position:relative;" type="button" />
+					</h:panelGroup>				
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
@@ -124,10 +123,11 @@
 						</f:facet>
 					</p:panelGrid>
 					<p:dataTable id="taskDataTable" var="taskData" widgetVar="tdtWV"
-						emptyMessage="#{messages.label_notRecordFound}" style="width: 1700px;"
-						sortFunction="#{jJTaskBean.sortFunction}" rowIndexVar="rowIndex"
-						styleClass="planning-dataTable" sortBy="#{taskData.chapter}"
-						value="#{jJTaskBean.tasksData}" editable="true" editMode="cell">
+						emptyMessage="#{messages.label_notRecordFound}"
+						style="width: 1700px;" sortFunction="#{jJTaskBean.sortFunction}"
+						rowIndexVar="rowIndex" styleClass="planning-dataTable"
+						sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
+						editable="true" editMode="cell">
 
 						<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
 							process="@widgetVar(nameWidget)"
@@ -247,7 +247,7 @@
 								<f:facet name="input">
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
 										filter="true" filterMatchMode="startsWith"
-										rendered="#{taskData.task.sprint == null}" style="width:100%;"
+										rendered="#{taskData.task.sprint == null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 
 										<f:selectItem itemValue="#{null}"
@@ -258,7 +258,7 @@
 									</h:selectOneMenu>
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
 										filter="true" filterMatchMode="startsWith"
-										rendered="#{taskData.task.sprint != null}" style="width:100%;"
+										rendered="#{taskData.task.sprint != null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 
 										<f:selectItem itemValue="#{null}"

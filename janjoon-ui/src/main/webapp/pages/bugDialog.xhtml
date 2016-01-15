@@ -10,162 +10,200 @@
 
 	<pe:blockUI widgetVar="bugBlockUIWidget" target="createPanelGrid">
 		<h:panelGrid columns="2" layout="grid">
-		<p:graphicImage name="images/preloader.gif" library="rioLayout"
-						style="vertical-align: middle;" />
+			<p:graphicImage name="images/preloader.gif" library="rioLayout"
+				style="vertical-align: middle;" />
 			<h:outputText value="#{messages.label_refresh}"
 				style="white-space: nowrap;" />
 		</h:panelGrid>
 	</pe:blockUI>
+	<h:panelGroup layout="block" styleClass="Container100">
+		<p:messages id="msg" showDetail="false" closable="true" />
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:inputTextarea id="jJbugName" value="#{JJBug_.name}" rows="2"
+				requiredMessage="#{messages.label_name_required_alert}"
+				required="true" placeholder="#{messages.label_name} :">
+				<f:validateLength maximum="100" />
+			</p:inputTextarea>
+		</h:panelGroup>
+	</h:panelGroup>
 
-	<p:panelGrid id="createPanelGrid">
-		<p:row>
-			<p:column colspan="1">
-				<p:inputTextarea id="jJbugName" value="#{JJBug_.name}"
-					required="true" placeholder="#{messages.label_name} :">
-					<f:validateLength maximum="100" />
-				</p:inputTextarea>
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugCriticity" scrollHeight="200"
-					value="#{JJBug_.criticity}" itemLabel="#{criticity.name}"
-					itemValue="#{criticity}" placeholder="#{messages.label_criticity}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
-					dropdown="true" var="criticity" 
-					completeMethod="#{jJBugBean.completeCriticityBug}" />
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugImportance" scrollHeight="200"
-					value="#{JJBug_.importance}" itemLabel="#{importance.name}"
-					itemValue="#{importance}" placeholder="Importance"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
-					dropdown="true" var="importance"
-					completeMethod="#{jJBugBean.completeImportance}" />
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
-					placeholder="Status" itemLabel="#{loginBean.checkMessage(status)}"
-					itemValue="#{status}" scrollHeight="200"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-					dropdown="true" var="status" readonly="#{JJBug_.id == null}"
-					completeMethod="#{jJBugBean.completeStatusBug}" />
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugRequirement" scrollHeight="200"
-					value="#{JJBug_.requirement}" widgetVar="jJbugRequirementWV"
-					disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
-					itemLabel="#{requirement.name}" itemValue="#{requirement}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
-					dropdown="true" var="requirement"
-					placeholder="#{messages.label_requirement}"
-					onchange="jJbugTeststepWV.val('');"
-					completeMethod="#{jJBugBean.completeReqBug}">
-					<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
-					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
-				</p:autoComplete>
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugTeststep" scrollHeight="200"
-					widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
-					itemValue="#{teststep}" placeholder="TestStep"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
-					disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
-					dropdown="true" var="teststep" itemLabel="#{teststep.name}"
-					completeMethod="#{jJBugBean.completeTestStepsBug}">
-					<p:column>
-						<h:outputText rendered="#{teststep != null}"
-							value="#{teststep.name}" escape="false" />
-					</p:column>
-					<f:attribute name="requirement" value="#{JJBug_.requirement}" />
-					<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
-				</p:autoComplete>
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugProject"
-					placeholder="#{messages.lable_project}"
-					onchange="jJbugRequirementWV.val('');"
-					value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
-					itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
-					dropdown="true" var="project" scrollHeight="200"
-					completeMethod="#{jJBugBean.completeProject}">
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugCriticity" scrollHeight="200"
+				value="#{JJBug_.criticity}" itemLabel="#{criticity.name}"
+				itemValue="#{criticity}" placeholder="#{messages.label_criticity}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter"
+				dropdown="true" var="criticity"
+				completeMethod="#{jJBugBean.completeCriticityBug}" />
+		</h:panelGroup>
+	</h:panelGroup>
 
-					<p:ajax event="itemSelect"
-						listener="#{jJBugBean.changeEvent('project',JJBug_)}"
-						update="jJbugRequirement jJbugTeststep jJbugProject">
-						<f:setPropertyActionListener target="#{JJBug_.requirement}"
-							value="#{null}" />
-					</p:ajax>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugImportance" scrollHeight="200"
+				value="#{JJBug_.importance}" itemLabel="#{importance.name}"
+				itemValue="#{importance}" placeholder="Importance"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter"
+				dropdown="true" var="importance"
+				completeMethod="#{jJBugBean.completeImportance}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	
+	<h:panelGroup layout="block" styleClass="EmptyBox5 ShowOnDesktop" />
 
-				</p:autoComplete>
-				<p:selectOneMenu id="jJbugProject2" value="#{JJBug_.project}"
-					rendered="#{jJProjectBean.project != null}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
-					<f:selectItem itemValue="#{jJProjectBean.project}"
-						itemLabel="#{jJProjectBean.project.name}" itemDisabled="true" />
-				</p:selectOneMenu>
-				<p:watermark for="jJbugProject2" value="Project : "
-					rendered="#{jJProjectBean.project != null}" />
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugStatus" value="#{JJBug_.status}"
+				placeholder="Status" itemLabel="#{loginBean.checkMessage(status)}"
+				itemValue="#{status}" scrollHeight="200"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+				dropdown="true" var="status" readonly="#{JJBug_.id == null}"
+				completeMethod="#{jJBugBean.completeStatusBug}" />
+		</h:panelGroup>
+	</h:panelGroup>
 
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugVersion" scrollHeight="200"
-					onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
-					value="#{JJBug_.versioning}" placeholder="Version"
-					itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
-					dropdown="true" var="version"
-					itemLabel="#{version.name.concat(' : ').concat(version.product.name)}"										
-					completeMethod="#{jJBugBean.completeVersioningBug}">
-					<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
-						listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
-				</p:autoComplete>
-				<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
-					rendered="#{jJVersionBean.version != null}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
-					<f:selectItem itemValue="#{jJVersionBean.version}"
-						itemDisabled="true"
-						itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
-				</p:selectOneMenu>
-				<p:watermark for="jJbugVersion2" value="Version : "
-					rendered="#{jJVersionBean.version != null}" />
-			</p:column>
-			<p:column colspan="1">
-				<p:autoComplete id="jJbugBuild" scrollHeight="200" 
-					widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
-					itemLabel="#{build.name}" itemValue="#{build}"
-					converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
-					dropdown="true" var="build" placeholder="#{messages.label_build}"
-					completeMethod="#{jJBugBean.completeBuildBug}">
-					<f:attribute name="version" value="#{JJBug_.versioning}" />
-					<f:validator validatorId="bugValidator" />
-					<f:attribute name="jJbugVersion" value="#{JJBug_.versioning}" />
-				</p:autoComplete>
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column colspan="3" style="height:300px;width:600px;">
-				<p:outputLabel value="Description" for="jJBugDescription"
-					rendered="#{!loginBean.mobile}" />
-				<p:outputLabel value="Description" for="jJBugMobileDescription"
-					rendered="#{loginBean.mobile}" />
-				<br />
-				<pe:ckEditor id="jJBugDescription"
-					toolbar="#{imageStreamer.ckEditorToolBar}" style="width:600px"
-					rendered="#{!loginBean.mobile}"
-					customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-					value="#{JJBug_.description}" required="true"
-					requiredMessage="Description is a required value" />
-				<p:inputTextarea id="jJBugMobileDescription" style="width:680px"
-					rendered="#{loginBean.mobile}" value="#{JJBug_.description}"
-					required="true" requiredMessage="Description is a required value" />
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugRequirement" scrollHeight="200"
+				value="#{JJBug_.requirement}" widgetVar="jJbugRequirementWV"
+				disabled="#{jJBugBean.bugProjectSelected==null and jJProjectBean.project == null}"
+				itemLabel="#{requirement.name}" itemValue="#{requirement}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+				dropdown="true" var="requirement"
+				placeholder="#{messages.label_requirement}"
+				onchange="jJbugTeststepWV.val('');"
+				completeMethod="#{jJBugBean.completeReqBug}">
+				<p:ajax event="itemSelect" update="jJbugRequirement jJbugTeststep" />
+				<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
 
-			</p:column>
-		</p:row>
-	</p:panelGrid>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugTeststep" scrollHeight="200"
+				widgetVar="jJbugTeststepWV" value="#{JJBug_.teststep}"
+				itemValue="#{teststep}" placeholder="TestStep"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJTeststepConverter"
+				disabled="#{jJBugBean.bugProjectSelected == null and jJProjectBean.project == null and JJBug_.requirement==null}"
+				dropdown="true" var="teststep" itemLabel="#{teststep.name}"
+				completeMethod="#{jJBugBean.completeTestStepsBug}">
+				<p:column>
+					<h:outputText rendered="#{teststep != null}"
+						value="#{teststep.name}" escape="false" />
+				</p:column>
+				<f:attribute name="requirement" value="#{JJBug_.requirement}" />
+				<f:attribute name="project" value="#{jJBugBean.bugProjectSelected}" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
 
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProjectBean.project == null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugProject"
+				placeholder="#{messages.lable_project}"
+				onchange="jJbugRequirementWV.val('');"
+				value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
+				itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
+				dropdown="true" var="project" scrollHeight="200"
+				completeMethod="#{jJBugBean.completeProject}">
+
+				<p:ajax event="itemSelect"
+					listener="#{jJBugBean.changeEvent('project',JJBug_)}"
+					update="jJbugRequirement jJbugTeststep jJbugProject">
+					<f:setPropertyActionListener target="#{JJBug_.requirement}"
+						value="#{null}" />
+				</p:ajax>
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProjectBean.project != null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectOneMenu id="jJbugProject2" value="#{JJBug_.project}"
+				rendered="#{jJProjectBean.project != null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+				<f:selectItem itemValue="#{jJProjectBean.project}"
+					itemLabel="#{jJProjectBean.project.name}" itemDisabled="true" />
+			</p:selectOneMenu>
+			<p:watermark for="jJbugProject2" value="Project : "
+				rendered="#{jJProjectBean.project != null}" />
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJVersionBean.version == null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugVersion" scrollHeight="200"
+				onchange="jJbugBuild.val('');jJbugRequirementWV.val('');"
+				value="#{JJBug_.versioning}" placeholder="Version"
+				itemValue="#{version}" rendered="#{jJVersionBean.version == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
+				dropdown="true" var="version"
+				itemLabel="#{version.name.concat(' : ').concat(version.product.name)}"
+				completeMethod="#{jJBugBean.completeVersioningBug}">
+				<p:ajax event="itemSelect" update="jJbugVersion jJbugBuild"
+					listener="#{jJBugBean.changeEvent('version',JJBug_)}" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJVersionBean.version != null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectOneMenu id="jJbugVersion2" value="#{JJBug_.versioning}"
+				rendered="#{jJVersionBean.version != null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+				<f:selectItem itemValue="#{jJVersionBean.version}"
+					itemDisabled="true"
+					itemLabel="#{jJVersionBean.version.name} : #{jJVersionBean.version.product.name}" />
+			</p:selectOneMenu>
+			<p:watermark for="jJbugVersion2" value="Version : "
+				rendered="#{jJVersionBean.version != null}" />
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJbugBuild" scrollHeight="200"
+				widgetVar="jJbugBuildWV" value="#{JJBug_.build}"
+				itemLabel="#{build.name}" itemValue="#{build}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter"
+				dropdown="true" var="build" placeholder="#{messages.label_build}"
+				completeMethod="#{jJBugBean.completeBuildBug}">
+				<f:attribute name="version" value="#{JJBug_.versioning}" />
+				<f:validator validatorId="bugValidator" />
+				<f:attribute name="jJbugVersion" value="#{JJBug_.versioning}" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container100"
+		style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:outputLabel value="Description" for="jJBugDescription"
+				rendered="#{!loginBean.mobile}" />
+			<pe:ckEditor id="jJBugDescription"
+				toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
+				rendered="#{!loginBean.mobile}"
+				customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+				value="#{JJBug_.description}" required="true"
+				requiredMessage="#{messages.label_desc_required_alert}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container100"
+		rendered="#{loginBean.mobile}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:inputTextarea id="jJBugMobileDescription"
+				rendered="#{loginBean.mobile}" value="#{JJBug_.description}"
+				placeholder="Description" rows="4" required="true"
+				requiredMessage="#{messages.label_desc_required_alert}" />
+		</h:panelGroup>
+	</h:panelGroup>
 </ui:composition>
 </html>

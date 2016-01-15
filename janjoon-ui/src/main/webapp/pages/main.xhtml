@@ -43,7 +43,7 @@
 
 							</p:column>
 							<p:column style="width: 10%;min-width: 200px !important;"
-								rendered="#{!loginBean.mobile}">
+								priority="6">
 								<h:outputText
 									value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
 									style="font-weight: bold;color: #3b5998;" />
@@ -116,23 +116,23 @@
 							</p:column>
 
 							<p:column headerText="#{messages.label_requirement}"
-								rendered="#{!loginBean.mobile}">
+								priority="6" >
 								<h:outputText value="#{task.requirement}"
 									converter="JJRequirementConverter" />
 							</p:column>
 
-							<p:column headerText="Bug" rendered="#{!loginBean.mobile}">
+							<p:column headerText="Bug" priority="6" >
 								<h:outputText value="#{task.bug}" converter="JJBugConverter" />
 							</p:column>
 
 							<p:column headerText="#{messages.label_project}"
-								style="width:100px;" rendered="#{!loginBean.mobile}">
+								style="width:100px;" priority="6" >
 								<h:outputText value="#{task.project}"
 									converter="JJProjectConverter" />
 							</p:column>
 
 							<p:column headerText="#{messages.project_scrum_new_start_label}"
-								style="width:100px;" rendered="#{!loginBean.mobile}">
+								style="width:100px;" priority="6" >
 								<h:outputText value="#{task.startDateReal}">
 									<f:convertDateTime type="date" locale="#{localeBean.locale}"
 										pattern="dd/MM/yyyy" />
@@ -142,7 +142,7 @@
 
 							<p:column
 								headerText="#{messages.specification_create_workload_label}"
-								style="width:100px;" rendered="#{!loginBean.mobile}">
+								style="width:100px;" priority="6" >
 								<h:outputText value="#{task.workloadPlanned}" />
 							</p:column>
 
@@ -180,7 +180,7 @@
 							</p:column>
 
 							<p:column headerText="#{messages.label_chapter}"
-								rendered="#{!loginBean.mobile}">
+								priority="6" >
 								<h:outputText value="#{req.chapter}"
 									converter="JJChapterConverter" />
 							</p:column>
@@ -191,12 +191,12 @@
 							</p:column>
 
 							<p:column headerText="#{messages.label_category}"
-								rendered="#{!loginBean.mobile}">
+								priority="6" >
 								<h:outputText value="#{req.category}"
 									converter="JJCategoryConverter" />
 							</p:column>
 
-							<p:column headerText="Version" rendered="#{!loginBean.mobile}">
+							<p:column headerText="Version" priority="6" >
 								<h:outputText value="#{req.versioning}"
 									converter="JJVersionConverter" />
 							</p:column>
