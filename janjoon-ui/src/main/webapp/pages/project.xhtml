@@ -102,8 +102,8 @@ td.ui-fileupload-preview {
 		</p:panel>
 	</h:form>
 
-	<p:dialog id="restoreProjectDialog"
-		header="#{messages.admin_project_restore_dialog}" hideEffect="explode"
+	<p:dialog id="restoreProjectDialog" responsive="true"
+		header="#{messages.admin_project_restore_dialog}" 
 		resizable="false" modal="true" widgetVar="restoreProjectDialogWidget"
 		dynamic="true" showEffect="fade" draggable="true">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"
@@ -163,10 +163,10 @@ td.ui-fileupload-preview {
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="projectDialog"
+	<p:dialog id="projectDialog" responsive="true"
 		header="#{messages[jJProjectBean.message]}" modal="true"
 		widgetVar="projectDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false">
+		 resizable="false">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"
 			listener="#{jJProjectBean.closeDialog}" />
 		<p:outputPanel id="projectDialogPanel">
@@ -271,7 +271,7 @@ td.ui-fileupload-preview {
 	<p:confirmDialog id="projectDeleteDialog"
 		widgetVar="projectDeleteDialogWidget"
 		message="#{messages.admin_project_delete_label}" showEffect="fade"
-		hideEffect="explode" header="#{messages.admin_project_delete_title}"
+		 header="#{messages.admin_project_delete_title}"
 		severity="alarm">
 		<p:outputPanel id="projectDeletePanel">
 			<h:form id="projectDeleteForm">

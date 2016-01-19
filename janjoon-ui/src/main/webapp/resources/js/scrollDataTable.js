@@ -6,6 +6,32 @@ var isReal = false;
 var isRevised1 = false;
 var timelineContentIndex = null;
 
+//$(function() {
+//	updateTabViewWidth();
+//});
+
+function updateTabViewWidth() {
+
+	var width = 0;
+	if ($(window).width() > 960)
+		width = $("#layout-topbar").width()
+				- (0.1 / 100 * $("#layout-topbar").width()) - 288;
+	else
+		width = $("#layout-topbar").width()
+				- (2 / 100 * $("#layout-topbar").width()) - 38;
+
+	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
+
+}
+
+$(window).resize(function() {
+	updateTabViewWidth();
+});
+
+$( document ).ready(function() {
+    updateTabViewWidth();
+  });
+
 function saveScrollPos() {
 	var area = $("#projecttabview\\:planningForm\\:westLayout").children()
 			.eq(1);

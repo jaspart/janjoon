@@ -47,10 +47,15 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 			writer.startElement("label", null);
 			writer.writeAttribute("id", menu.getClientId(context) + "_label",
 					null);
+
 			if (valueToRender != null
 					&& menu.getAttributes().get("optionClasses") != null)
-				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS + " "
-						+ valueToRender.toString()+"_select", null);
+				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS
+						+ " Fs14 " + valueToRender.toString() + "_select", null);
+			else if (menu.getAttributes().get("optionClasses") != null
+					|| menu.getAttributes().get("fontSize") != null)
+				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS
+						+ " Fs14", null);
 			else
 				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS, null);
 			writer.write("&nbsp;");
@@ -73,7 +78,7 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 
 			String itemStyleClass = SelectOneMenu.ROW_CLASS;
 
-			if (itemValue != null
+			if (itemValue != null && !itemValue.toString().isEmpty()
 					&& menu.getAttributes().get("optionClasses") != null)
 				itemStyleClass = itemStyleClass
 						.replace("ui-widget-content", "")
@@ -89,7 +94,7 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 
 			writer.startElement("tr", null);
 			writer.writeAttribute("class", itemStyleClass, null);
-			if (itemValue == null
+			if ((itemValue == null || itemValue.toString().isEmpty())
 					&& menu.getAttributes().get("optionClasses") != null)
 				writer.writeAttribute("style", "text-align: center;", null);
 
@@ -103,9 +108,12 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 			if (itemValue instanceof String) {
 				writer.startElement("td", null);
 				writer.writeAttribute("colspan", columns.size(), null);
-				if (itemValue != null
+				if (itemValue != null && !itemValue.toString().isEmpty()
 						&& menu.getAttributes().get("optionClasses") != null)
 					writer.writeAttribute("style", "color: white;", null);
+				if (menu.getAttributes().get("optionClasses") != null
+						|| menu.getAttributes().get("fontSize") != null)
+					writer.writeAttribute("class", "Fs14", null);
 				writer.writeText(selectItem.getLabel(), null);
 				writer.endElement("td");
 			} else {

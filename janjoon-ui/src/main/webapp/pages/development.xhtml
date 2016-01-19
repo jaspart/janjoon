@@ -258,7 +258,6 @@
 			<p:confirmDialog id="deletFileDialog"
 				widgetVar="deleteFileDialogWidget"
 				message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
-				hideEffect="explode"
 				header="#{messages['dev.deletFileDialog.header']}" severity="alarm">
 
 				<p:outputPanel id="deletePanel">
@@ -276,8 +275,7 @@
 			<p:confirmDialog id="commitFileDialog"
 				widgetVar="commitFileDialogWidget"
 				message="#{messages['dev.commitFileDialog.title']}"
-				showEffect="fade" hideEffect="explode"
-				header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
+				showEffect="fade" header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
 				<p:outputPanel id="commitPanel">
 					<h:form id="commitForm">
 						<p:commandButton id="commitYesButton"
@@ -293,7 +291,6 @@
 
 			<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
 				message="#{messages['dev.saveFileDialog.title']}" showEffect="fade"
-				hideEffect="explode"
 				header="#{messages['dev.saveFileDialog.header']}" severity="alarm">
 				<p:outputPanel id="savePanel">
 					<h:form id="saveForm">
@@ -307,8 +304,8 @@
 			</p:confirmDialog>
 
 			<p:dialog id="createFileDialog" header="#{messages.label_create}"
-				widgetVar="createFileDialogWidget" resizable="true"
-				showEffect="fade" hideEffect="explode">
+				widgetVar="createFileDialogWidget" responsive="true" resizable="true"
+				showEffect="fade" >
 				<p:outputPanel id="createFilePanel">
 					<h:form id="createFileForm">
 						<h:panelGrid columns="2" styleClass="dialog">
@@ -334,10 +331,10 @@
 				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog id="viewTaskDialog"
+			<p:dialog id="viewTaskDialog" responsive="true"
 				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
 				resizable="false" maximizable="false" showEffect="fade"
-				hideEffect="explode" draggable="false">
+				 draggable="false">
 				<p:ajax event="close"
 					update=":form:taskSelectOneMenu :form:startTaskPanel"
 					listener="#{jJTaskBean.closeEvent('dev')}" />
@@ -355,10 +352,10 @@
 				</p:outputPanel>
 			</p:dialog>
 
-			<p:dialog id="uploadFileDialog"
+			<p:dialog id="uploadFileDialog" responsive="true"
 				header="#{messages['dev.uploadFileDialog.title']}"
 				widgetVar="uploadFileDialogWidget" resizable="true"
-				showEffect="fade" hideEffect="explode">
+				showEffect="fade" >
 				<p:outputPanel id="uploadFilePanel">
 					<h:form id="uploadFileForm">
 						<p:fileUpload id="uploadFileButton" 
@@ -373,7 +370,7 @@
 
 		</p:panel>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
 			position="center" header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">

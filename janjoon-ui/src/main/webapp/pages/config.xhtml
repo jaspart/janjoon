@@ -6,7 +6,6 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-
 	<h:form id="configForm">
 		<p:panel id="configPanel" style="width:800px" columns="1"
 			cellpadding="6">
@@ -91,7 +90,7 @@
 	<p:dialog id="createDialog" modal="true" widgetVar="createDialogWidget"
 		dynamic="true" visible="#{jJConfigurationBean.createDialogVisible}"
 		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode">
+		hideEffect="explode" responsive="true" >
 		<p:ajax event="close" update=":tabview:configForm"
 			listener="#{jJConfigurationBean.handleDialogClose}" />
 		<f:facet name="header">

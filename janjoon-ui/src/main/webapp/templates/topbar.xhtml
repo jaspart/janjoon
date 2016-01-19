@@ -39,28 +39,29 @@
 					class="Txt">#{loginBean.contact.firstname}
 						#{loginBean.contact.name}</span></a>
 				<ul>
-					<li><a 
+					<li><a
 						href="#{request.contextPath}/pages/contactConfig.jsf?faces-redirect=true">#{loginBean.contact.firstname}
 							#{loginBean.contact.name}</a></li>
 				</ul></li>
-			<li class="ShowOnDesktop"><a class="ShowOnDesktop ripplelink"><i class="ShowOnDesktop icon-bubble8"></i>
-					<span class="ShowOnDesktop Txt">Messages</span></a>
+			<li class="ShowOnDesktop"><a class="ShowOnDesktop ripplelink"><i
+					class="ShowOnDesktop icon-bubble8"></i> <span
+					class="ShowOnDesktop Txt">Messages</span></a>
 				<ul>
-					<li><p:commandLink id="communicationButton" 
+					<li><p:commandLink id="communicationButton"
 							styleClass="ShowOnDesktop" type="button"
 							title="#{message.header_communication_label}"
 							onclick="PF('mPanel').loadContents()" immediate="true">
 							#{loginBean.messageCount} Message</p:commandLink></li>
 				</ul></li>
-				<li><a class="ripplelink"><i class="icon-in-alt"></i> <span
+			<li><a class="ripplelink"><i class="icon-in-alt"></i> <span
 					class="Txt">#{messages.header_logout_link}</span></a>
 				<ul>
 					<li><a href="logout.jsf">#{messages.header_logout_link}</a></li>
-				</ul></li>		
+				</ul></li>
 		</ul>
 		<p:overlayPanel id="mPanel" for="communicationButton"
-			hideEffect="clip" dynamic="true" style="width:300px" styleClass="ShowOnDesktop"
-			widgetVar="mPanel">
+			hideEffect="clip" dynamic="true" style="width:300px"
+			styleClass="ShowOnDesktop" widgetVar="mPanel">
 			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 				type="preRenderView" />
 			<h:form id="messageCreationForm">
@@ -71,32 +72,45 @@
 					paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+					<p:ajax event="rowSelect" update=":viewMessagePanel"
 						listener="#{jJMessageBean.onRowSelect}" immediate="true"
-						oncomplete="PF('viewDialogWidget1').show()" />
+						oncomplete="PF('viewMessageDialogWidget').show()" />
 					<p:column headerText="Messages" sortBy="#{mes.creationDate}"
 						style="text-align: center;">
 						<h:outputText value="#{mes.criticity.name}" style="color: #fff;"
 							styleClass="#{mes.criticity.name}" />
-						<h:outputText id="viewButton" value=" #{fn:substring(mes.message,0, 10)}"
+						<h:outputText id="viewButton"
+							value=" #{fn:substring(mes.message,0, 10)}"
 							title="#{messages.label_view} #{mes.name}" />
 					</p:column>
 					<f:facet name="footer">
-						<h:panelGrid columns="1" border="0" style="text-align: center;">							
-							<p:inputTextarea id="messagedsc" cols="20" rows="6" placeholder="Message"
-								value="#{jJMessageBean.message.message}" 
-								requiredMessage="#{messages.label_alert_message_null}" required="true" />								
-							<h:panelGrid columns="2" border="0" style="border:hidden;">
-								<p:inputSwitch id="alert" style="float: left;"
-									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
-									offLabel="Info" />
-								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
-									process="@this,alert,messagedsc"
-									actionListener="#{jJMessageBean.createMessage(false,null)}"
-									update=":messageCreationForm :headerForm:communicationButton :communicationButton :growlForm" />
-							</h:panelGrid>
-						</h:panelGrid>
-
+						<h:panelGroup layout="block" styleClass="Container ui-fluid" >
+							<h:panelGroup layout="block" styleClass="Container100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:inputTextarea id="messagedsc" rows="6" placeholder="Message"
+										value="#{jJMessageBean.message.message}"
+										requiredMessage="#{messages.label_alert_message_null}"
+										required="true" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100">
+								<h:panelGroup layout="block" styleClass="Container50">
+									<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
+										<p:inputSwitch id="alert" style="float: left;"
+											value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
+											offLabel="Info" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="Container50">
+									<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
+										<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
+											process="@this,alert,messagedsc"
+											actionListener="#{jJMessageBean.createMessage(false,null)}"
+											update=":messageCreationForm :headerForm:communicationButton :communicationButton :growlForm" />
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
 				</p:dataTable>
 			</h:form>

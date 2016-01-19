@@ -333,7 +333,8 @@ public class RequirementBean {
 		testCaseName = null;
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -482,7 +483,7 @@ public class RequirementBean {
 				categorieRequirements = CategorieRequirement
 						.initCategorieRequirement(requirement,
 								jJCategoryService.getCategories(null, false,
-										true, true, LoginBean.getCompany()));			
+										true, true, LoginBean.getCompany()));
 
 			} else {
 				requirement = null;
@@ -638,7 +639,8 @@ public class RequirementBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))
@@ -838,7 +840,8 @@ public class RequirementBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
-				MessageFactory.getMessage("label_requirement", "").getDetail(),"e");
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		((LoginBean) LoginBean.findBean("loginBean"))

@@ -102,7 +102,7 @@ public class JJCategoryBean {
 			FacesMessage facesMessage = MessageFactory
 					.getMessage(message,
 							MessageFactory.getMessage("label_category", "")
-									.getDetail(),"e");
+									.getDetail(), "e");
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -141,8 +141,8 @@ public class JJCategoryBean {
 			categoryListTable = null;
 			allCompany = false;
 
-			facesMessage = MessageFactory.getMessage(message, MessageFactory.getMessage("label_category", "")
-					.getDetail(),"e");
+			facesMessage = MessageFactory.getMessage(message, MessageFactory
+					.getMessage("label_category", "").getDetail(), "e");
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			if (categoryState) {

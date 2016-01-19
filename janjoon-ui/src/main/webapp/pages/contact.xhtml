@@ -98,8 +98,8 @@
 		</p:panel>
 	</h:form>
 
-	<p:dialog id="restoreContactDialog"
-		header="#{messages.admin_contact_restore_dialog}" hideEffect="explode"
+	<p:dialog id="restoreContactDialog" responsive="true"
+		header="#{messages.admin_contact_restore_dialog}" 
 		resizable="false" modal="true" widgetVar="restoreContactDialogWidget"
 		dynamic="true" showEffect="fade" draggable="true">
 		<p:ajax event="close" update=":tabview:contactForm"
@@ -166,10 +166,10 @@
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="contactDialog" draggable="false"
+	<p:dialog id="contactDialog" draggable="false" responsive="true"
 		header="#{messages[jJContactBean.message]}" modal="true"
 		widgetVar="contactDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false">
+		resizable="false">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
 		<p:outputPanel id="contactDialogPanel">
@@ -452,7 +452,7 @@
 	<p:confirmDialog id="contactDeleteDialog"
 		widgetVar="contactDeleteDialogWidget"
 		message="#{messages.admin_contact_delete_alert}" showEffect="fade"
-		hideEffect="explode" header="#{messages.admin_contact_delete_header}"
+		 header="#{messages.admin_contact_delete_header}"
 		severity="alarm">
 		<p:outputPanel id="contactDeletePanel">
 			<h:form id="contactDeleteForm">

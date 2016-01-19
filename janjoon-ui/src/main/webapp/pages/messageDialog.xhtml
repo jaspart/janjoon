@@ -7,84 +7,144 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<p:panelGrid id="viewPanelGrid1">
-		<p:row>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.messageDialog_name}:"
-					for="messageName" />
-			</p:column>
-			<p:column style="border-style: none;" colspan="5">
-				<p:inputText id="messageName" value="#{JJMessage.name}"
-					readonly="true" size="80" />
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.messageDialog_createdBy}:"
-					for="messageCreatedBy" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageCreatedBy" readonly="true"
-					converter="JJContactConverter" value="#{JJMessage.createdBy}" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.messageDialog_to}:" for="messageTo" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageTo" readonly="true"
-					converter="JJContactConverter" value="#{JJMessage.contact}" />
-			</p:column>
+	<h:form id="viewMessageForm">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width: 700px;">
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="messageName" value="#{JJMessage.name}"
+						placeholder="#{messages.messageDialog_name}" readonly="true"
+						size="80" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel value="#{messages.messageDialog_createdBy}:"
+							for="messageCreatedBy" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageCreatedBy" readonly="true"
+							converter="JJContactConverter" value="#{JJMessage.createdBy}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel value="#{messages.messageDialog_to}:"
+							for="messageTo" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageTo" readonly="true"
+							converter="JJContactConverter" value="#{JJMessage.contact}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel value="#{messages.label_project}:"
+							for="messageProject" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageProject" readonly="true"
+							converter="JJProjectConverter" value="#{JJMessage.project}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
 
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.label_project}:"
-					for="messageProject" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageProject" readonly="true"
-					converter="JJProjectConverter" value="#{JJMessage.project}" />
-			</p:column>
-		</p:row>
-		<p:row>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.label_product}:"
-					for="messageProduct" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageProduct" readonly="true"
-					converter="JJProductConverter" value="#{JJMessage.product}" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="#{messages.label_criticity}:"
-					for="messageCriticity" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageCriticity" readonly="true"
-					converter="JJCriticityConverter" value="#{JJMessage.criticity}" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:outputLabel value="Status:" for="messageStatus" />
-			</p:column>
-			<p:column style="border-style: none;">
-				<p:inputText id="messageStatus" readonly="true"
-					value="#{messages['status_'.concat(fn:replace(JJMessage.status.name, ' ', '_'))]}" />
-			</p:column>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 
-		</p:row>
-		<p:row>
-			<p:column style="border-style: none;width: 600px;height: 250px;"
-				colspan="6">
-				<p:outputLabel value="Message:" for="messageMess"
-					rendered="#{!loginBean.mobile}" />
-				<p:outputLabel value="Message:" for="messageMessMobile"
-					rendered="#{loginBean.mobile}" />
+						<p:outputLabel value="#{messages.label_product}:"
+							for="messageProduct" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageProduct" readonly="true"
+							converter="JJProductConverter" value="#{JJMessage.product}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel value="#{messages.label_criticity}:"
+							for="messageCriticity" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageCriticity" readonly="true"
+							converter="JJCriticityConverter" value="#{JJMessage.criticity}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel value="Status:" for="messageStatus" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="messageStatus" readonly="true"
+							value="#{messages['status_'.concat(fn:replace(JJMessage.status.name, ' ', '_'))]}" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
 
-				<pe:ckEditor id="messageMess" toolbar="[['Copy']]"
-					rendered="#{!loginBean.mobile}" width="650"
-					value="#{JJMessage.message}" readOnly="true" />
+			<h:panelGroup layout="block" styleClass="Container100"
+				style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="Message:" for="messageMess"
+						rendered="#{!loginBean.mobile}" />
 
-				<h:outputText id="messageMessMobile" escape="true" rendered="#{loginBean.mobile}" value="#{JJMessage.message}"  />
-			</p:column>
-		</p:row>
-	</p:panelGrid>
+
+					<pe:ckEditor id="messageMess" toolbar="[['Copy']]"
+						rendered="#{!loginBean.mobile}" width="100%" readonly="true"
+						value="#{JJMessage.message}"  />
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100"
+				rendered="#{loginBean.mobile}">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:outputLabel value="Message:" for="messageMessMobile"
+						rendered="#{loginBean.mobile}" />
+						<br/>
+					<h:outputText id="messageMessMobile" escape="true"
+						styleClass="Fs16" style="font-family: cursive;"
+						rendered="#{loginBean.mobile}" value="#{JJMessage.message}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="deleteMessageButton" immediate="true"
+						actionListener="#{jJMessageBean.deleteMessage}"
+						update=":growlForm :headerForm:communicationButton"
+						value="#{messages.label_disable}" icon="fa fa-minus Fs20"
+						oncomplete="PF('viewMessageDialogWidget').hide()" />
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:button id="viewCloseButton" value="#{messages.label_close}"						
+						onclick="PF('viewMessageDialogWidget').hide()" styleClass="GrayBack"/>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
 </ui:composition>
 </html>

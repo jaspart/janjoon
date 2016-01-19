@@ -87,13 +87,13 @@
 		</pe:blockUI>
 
 		<p:dialog modal="true" widgetVar="statusDialog" header="Status"
-			draggable="false" closable="false" resizable="false">
+			draggable="false" closable="false" responsive="true" resizable="false">
 			<p:graphicImage library="images" name="ajaxloadingbar.gif"
 				style="vertical-align: middle;" />
 		</p:dialog>
 
 		<p:overlayPanel id="mPanel" for=":headerForm:communicationButton"
-			hideEffect="clip"  dynamic="true" style="width:300px"
+			hideEffect="clip" dynamic="true" style="width:300px"
 			widgetVar="mPanel">
 			<f:event listener="#{jJMessageBean.initJJMessageLayout}"
 				type="preRenderView" />
@@ -105,9 +105,9 @@
 					paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
 					lazy="true" emptyMessage="#{messages.label_notRecordFound}"
 					sortBy="#{mes.creationDate}" sortOrder="DESCENDING">
-					<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+					<p:ajax event="rowSelect" update=":viewMessagePanel"
 						listener="#{jJMessageBean.onRowSelect}" immediate="true"
-						oncomplete="PF('viewDialogWidget1').show()" />
+						oncomplete="PF('viewMessageDialogWidget').show()" />
 					<p:column headerText="Messages" sortBy="#{mes.creationDate}"
 						style="text-align: center;">
 
@@ -141,7 +141,7 @@
 		</p:overlayPanel>
 
 		<p:dialog widgetVar="headerPanel" id="headerPanel"
-			styleClass="overlayPanelDialog" rendered="#{loginBean.mobile}"
+			styleClass="overlayPanelDialog" responsive="true" rendered="#{loginBean.mobile}"
 			closable="true">
 			<h:form>
 				<p:menu>
@@ -243,23 +243,13 @@
 			</h:form>
 		</p:dialog>
 		<p:dialog id="viewDialog1" header="#{messages.label_view} Message"
-			modal="true" widgetVar="viewDialogWidget1" dynamic="true"
-			resizable="true" maximizable="true" showEffect="fade"
-			hideEffect="fade">
-			<p:outputPanel id="viewPanel1">
-				<h:form id="viewForm1">
-					<ui:include src="/pages/messageDialog.xhtml">
-						<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
-					</ui:include>
-					<p:commandButton id="deleteButton1" value="#{messages.label_close}"
-						style="float: right;margin-top: 10px;"
-						onclick="PF('viewDialogWidget1').hide()" type="button" />
-					<p:commandButton id="viewCloseButton1" immediate="true"
-						actionListener="#{jJMessageBean.deleteMessage}"
-						update=":growlForm :headerForm:communicationButton"
-						value="#{messages.label_delete}" style="margin-top: 10px;"
-						oncomplete="PF('viewDialogWidget1').hide()" />
-				</h:form>
+			modal="true" widgetVar="viewMessageDialogWidget" dynamic="true"
+			resizable="false" maximizable="false" draggable="false" responsive="true"
+			showEffect="fade" hideEffect="fade">
+			<p:outputPanel id="viewMessagePanel">
+				<ui:include src="/pages/messageDialog.xhtml">
+					<ui:param name="JJMessage" value="#{jJMessageBean.viewedMessage}" />
+				</ui:include>
 			</p:outputPanel>
 		</p:dialog>
 		<script type="text/javascript">

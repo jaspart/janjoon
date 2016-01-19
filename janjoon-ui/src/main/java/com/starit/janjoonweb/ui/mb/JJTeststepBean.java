@@ -98,7 +98,7 @@ public class JJTeststepBean {
 		jJBugBean.updateJJBug(bug);
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug","");
+				"message_successfully_updated", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -140,7 +140,7 @@ public class JJTeststepBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "Teststep","");
+				"message_successfully_created", "Teststep", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -269,7 +269,7 @@ public class JJTeststepBean {
 		actionTeststep = true;
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Teststep","");
+				"message_successfully_updated", "Teststep", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 

@@ -380,7 +380,7 @@ public class JJChapterBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", FacesMessage.SEVERITY_ERROR,
-				selectedChapterNode.getData(),"");
+				selectedChapterNode.getData(), "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		selectedChapterNode = null;
@@ -402,7 +402,7 @@ public class JJChapterBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_chapter", "").getDetail(),"");
+				MessageFactory.getMessage("label_chapter", "").getDetail(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -606,9 +606,11 @@ public class JJChapterBean {
 							.getDetail() + "\n", fontChapter));
 
 			for (JJRequirement requirement : withOutChapter) {
-				paragraph.add(new Chunk(MessageFactory.getMessage("label_requirement", "")
-						.getDetail()+": "
-						+ requirement.getName() + "\n", fontRequirement));
+				paragraph
+						.add(new Chunk(MessageFactory.getMessage(
+								"label_requirement", "").getDetail()
+								+ ": " + requirement.getName() + "\n",
+								fontRequirement));
 				StringReader strReader = new StringReader(
 						requirement.getDescription());
 
@@ -717,9 +719,11 @@ public class JJChapterBean {
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 				JJRequirement requirement = (JJRequirement) entry.getValue();
-				paragraph.add(new Chunk(MessageFactory.getMessage("label_requirement", "")
-						.getDetail()+": " + requirement.getName()
-						+ "\n", fontRequirement));
+				paragraph
+						.add(new Chunk(MessageFactory.getMessage(
+								"label_requirement", "").getDetail()
+								+ ": " + requirement.getName() + "\n",
+								fontRequirement));
 				StringReader strReader = new StringReader(
 						requirement.getDescription());
 
@@ -1077,7 +1081,7 @@ public class JJChapterBean {
 						"chapter_successfully_droped",
 						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
 						MessageFactory.getMessage("label_requirement", "")
-						.getDetail());
+								.getDetail());
 
 			} else if (dropNodeData.startsWith("leftRoot")) {
 
@@ -1085,8 +1089,9 @@ public class JJChapterBean {
 					message = MessageFactory.getMessage(
 							"chapter_unsuccessfully_dropedNoChanges",
 							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData, MessageFactory.getMessage("label_requirement", "")
-							.getDetail());
+							dropNodeData,
+							MessageFactory.getMessage("label_requirement", "")
+									.getDetail());
 
 				} else {
 
@@ -1175,8 +1180,9 @@ public class JJChapterBean {
 					message = MessageFactory.getMessage(
 							"chapter_successfully_detached",
 							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData, MessageFactory.getMessage("label_requirement", "")
-							.getDetail());
+							dropNodeData,
+							MessageFactory.getMessage("label_requirement", "")
+									.getDetail());
 
 				}
 
@@ -1185,8 +1191,9 @@ public class JJChapterBean {
 				message = MessageFactory.getMessage(
 						"chapter_unsuccessfully_droped_notAllowed",
 						FacesMessage.SEVERITY_ERROR, dragNodeData,
-						dropNodeData, MessageFactory.getMessage("label_requirement", "")
-						.getDetail());
+						dropNodeData,
+						MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
 
 			}
 

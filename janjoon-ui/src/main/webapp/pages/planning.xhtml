@@ -14,7 +14,8 @@
 	</ui:define>
 	<ui:define name="content">
 		<h:form id="formId" style="width:100%;display:none;">
-			<p:remoteCommand update=":projecttabview:SprintTabView :growlForm"
+			<p:remoteCommand update=":projecttabview:SprintTabView :growlForm" 
+				oncomplete="updateTabViewWidth();"
 				name="updateTabSprint" />
 			<p:remoteCommand onstart="PF('blockUIWidget').block()"
 				name="tabChangeHelper"
@@ -23,21 +24,21 @@
 		</h:form>
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
-
-				<h:panelGroup layout="block" styleClass="Container20 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<h:panelGroup layout="block" styleClass="Container15 Responsive50">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 						<p:outputLabel
 							value="#{messages.label_project}: #{jJProjectBean.project.name}" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container30 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
+					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 							<p:outputLabel for="projectSD"
 								value="#{messages.admin_project_new_startDate_label}:" />
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
+					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:calendar id="projectSD" navigator="true" effect="slideDown"
 								pattern="dd/MM/yyyy" required="true"
@@ -49,13 +50,13 @@
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container30 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
+					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 							<p:outputLabel for="projectED"
 								value="#{messages.admin_project_new_endDate_label}:" />
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
+					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:calendar id="projectED" navigator="true" effect="slideDown"
 								pattern="dd/MM/yyyy" required="true"
@@ -69,7 +70,7 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="Container20 Responsive50">					
+				<h:panelGroup layout="block" styleClass="Container25 Responsive50">					
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:commandButton id="submitButton"
 								onstart="PF('blockUIWidget').block()"
@@ -80,12 +81,13 @@
 								action="#{jJProjectBean.savePlanning}" />
 						</h:panelGroup>					
 				</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
 			<h:panelGroup layout="block" styleClass="EmptyBox10" />
 			<h:panelGroup layout="block" styleClass="Container100">
 				<p:tabView id="projecttabview" widgetVar="projectTabView"
 					activeIndex="#{jJSprintBean.activeTabGantIndex}"
-					onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}])"
+					onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}]);"
 					dynamic="false" cache="true">
 					<p:tab title="#{loginBean.planningConfiguration.firstPageHeader}">
 						<ui:insert>
@@ -104,7 +106,7 @@
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
 			position="center" header="#{messages.specification_video_help_title}"
-			style="padding:0px;" resizable="false" draggable="false"
+			style="padding:0px;" resizable="false" draggable="false" responsive="true"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
@@ -112,7 +114,7 @@
 		</p:dialog>
 		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 			message="#{messages.task_delete_title}" showEffect="fade"
-			hideEffect="explode" header="#{messages.task_delete_confirm_label}"
+			header="#{messages.task_delete_confirm_label}"
 			severity="alarm">
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
@@ -121,20 +123,20 @@
 						action="#{jJTaskBean.deleteTaskData}"
 						update=":projecttabview :growlForm"
 						onstart="saveScrollPos();PF('blockUIWidget').block()"
-						oncomplete="autoScroll();PF('blockUIWidget').unblock()" />
+						oncomplete="autoScroll();PF('blockUIWidget').unblock();updateTabViewWidth();" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						onclick="PF('deleteDialogWidget').hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>
-		<p:dialog id="taskImportDialog"
+		<p:dialog id="taskImportDialog" responsive="true"
 			header="#{messages.project_gantt_import_button}" modal="true"
-			draggable="false" styleClass="disable-scroll"
+			draggable="false" styleClass="disable-scroll" 
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":projecttabview"
 				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock()"
+				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
 				listener="#{jJTaskBean.closeDialogImport}" />
 			<p:outputPanel id="importTaskDialogPanel">
 				<ui:insert name="importTask">
@@ -145,10 +147,10 @@
 
 		<p:dialog id="viewTaskDialog" modal="true" draggable="false"
 			resizable="false" widgetVar="viewTaskDialogWidget" dynamic="true"
-			showEffect="fade" hideEffect="explode">
+			showEffect="fade" responsive="true" >
 			<p:ajax event="close" update=":projecttabview"
 				onstart="#{jJTaskBean.mode eq 'planning' ? 'saveScrollPos()' : ''};PF('blockUIWidget').block()"
-				oncomplete="#{jJTaskBean.mode eq 'planning' ? 'autoScroll()' : ''};PF('blockUIWidget').unblock()"
+				oncomplete="#{jJTaskBean.mode eq 'planning' ? 'autoScroll()' : ''};PF('blockUIWidget').unblock();updateTabViewWidth();"
 				listener="#{jJTaskBean.closeEvent('planning')}" />
 			<f:facet name="header">
 				<p:outputLabel id="viewTaskDialogHeader"
@@ -167,12 +169,12 @@
 		<p:dialog id="editBugDialog" header="#{messages.label_edit} Bug"
 			modal="true" widgetVar="editBugDialogWidget" dynamic="true"
 			resizable="false" maximizable="false" showEffect="fade"
-			draggable="false" hideEffect="explode">
+			draggable="false" responsive="true" >
 			<p:outputPanel id="editBugPanel">
 				<h:form id="editBugForm" enctype="multipart/form-data">
 					<h:panelGroup layout="block" styleClass="Container ui-fluid"
 						style="max-width: 300px;">
-						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container100 Responsive50">
 							<h:panelGroup layout="block" styleClass="Container30">
 								<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 									<p:outputLabel value="BUG :" for="taskBugName" />
@@ -180,12 +182,12 @@
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="Container70">
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:inputTextarea id="taskBugName" readonly="true"
+									<p:inputTextarea id="taskBugName" readonly="true" rows="2"
 										converter="JJBugConverter" value="#{jJSprintBean.bug}" />
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container100 Responsive50">
 							<h:panelGroup layout="block" styleClass="Container30">
 								<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 									<p:outputLabel for="taskBugStatus" value="Status : " />
@@ -211,7 +213,7 @@
 									action="#{jJSprintBean.persistBugTask}"
 									update=":projecttabview :growlForm"
 									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
+									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
 									onsuccess="PF('editBugDialogWidget').hide()" />
 							</h:panelGroup>
 						</h:panelGroup>

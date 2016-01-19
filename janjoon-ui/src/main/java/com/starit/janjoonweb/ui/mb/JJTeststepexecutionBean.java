@@ -423,7 +423,7 @@ public class JJTeststepexecutionBean {
 		jJTestcaseexecutionBean.save();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_executed", "Test","");
+				"message_successfully_executed", "Test", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();

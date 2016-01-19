@@ -23,7 +23,8 @@ public class MessageFactory {
 		return facesMessage;
 	}
 
-	public static String checkMessage(final String messageId, final Object... params) {
+	public static String checkMessage(final String messageId,
+			final Object... params) {
 
 		String summary = null;
 		final FacesContext context = FacesContext.getCurrentInstance();
@@ -31,8 +32,8 @@ public class MessageFactory {
 				.getResourceBundle(context, "messages");
 
 		try {
-			summary = getFormattedText(getLocale(), bundle.getString(messageId),
-					params);
+			summary = getFormattedText(getLocale(),
+					bundle.getString(messageId), params);
 		} catch (final MissingResourceException e) {
 			summary = null;
 		}

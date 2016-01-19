@@ -438,7 +438,7 @@
 				</ui:include>
 			</h:panelGroup>
 		</h:panelGroup>
-		<p:dialog id="requirementDialog" draggable="false"
+		<p:dialog id="requirementDialog" draggable="false" responsive="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close"
 				listener="#{jJRequirementBean.closeDialog(false,false)}"
@@ -454,7 +454,7 @@
 
 		</p:dialog>
 
-		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
+		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)" responsive="true"
 			header="#{messages.requirement_dialog_linkHeader}" modal="true"
 			widgetVar="linkDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":linkForm"
@@ -497,7 +497,7 @@
 		</p:dialog>
 
 
-		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
+		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)" responsive="true"
 			header="#{messages.specification_chapter_header}" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" update=":treeForm"

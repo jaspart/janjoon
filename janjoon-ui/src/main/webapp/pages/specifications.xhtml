@@ -62,9 +62,8 @@
 					<p:inputText id="globalFilter" style="width: 100px;"
 						placeholder="#{messages.specification_table_requirement_filter}"
 						value="#{jJRequirementBean.filterValue}">
-						<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
+						<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"							
+							oncomplete="updateDataTable();" />
 					</p:inputText>
 
 					<p:selectOneMenu id="mineSpec" value="#{jJRequirementBean.mine}"
@@ -184,12 +183,12 @@
 							rowKey="#{reqUtil.requirement.id}" editable="true"
 							editMode="cell" rendered="#{tableDataModel.rendered}"
 							selectionMode="single" widgetVar="dataTable_#{loop.index}_Widget">
-							<p:ajax event="rowDblselect"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()"
-								update=":requirementDialogPanel :requirementDialogHeader"
-								disabled="#{!loginBean.authorisationService.wRequiement}"
-								listener="#{jJRequirementBean.onRowDblClckSelect}" />
+<!-- 							<p:ajax event="rowDblselect" -->
+<!-- 								onstart="PF('blockUIWidget').block()" -->
+<!-- 								oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" -->
+<!-- 								update=":requirementDialogPanel :requirementDialogHeader" -->
+<!-- 								disabled="#{!loginBean.authorisationService.wRequiement}" -->
+<!-- 								listener="#{jJRequirementBean.onRowDblClckSelect}" /> -->
 							<f:facet name="header">
 								<h:panelGroup layout="block" styleClass="Container">
 									<h:panelGroup layout="block" style="float: right !important;"
@@ -446,7 +445,7 @@
 		<p:hotkey bind="esc" handler="PF('requirementDialogWidget').hide()" />
 		<p:hotkey bind="alt+enter"
 			handler="PF('requirementSaveWidget').jq.click()" />
-		<p:dialog id="requirementDialog" draggable="false"
+		<p:dialog id="requirementDialog" draggable="false" responsive="true"
 			header="#{messages[jJRequirementBean.message]}" modal="true"
 			widgetVar="requirementDialogWidget" dynamic="true" resizable="false"
 			appendTo="@(body)"
@@ -466,7 +465,7 @@
 
 		<p:hotkey bind="esc" handler="PF('chapterDialogWidget').hide()" />
 		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
-			header="#{messages.specification_chapter_header}" modal="true"
+			header="#{messages.specification_chapter_header}" responsive="true" modal="true"
 			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
 			<p:ajax event="close" onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();updateDataTable();"
@@ -480,7 +479,7 @@
 			header="#{messages.specification_delete_title}"
 			message="#{messages.specification_delete_label}"
 			widgetVar="requirementDeleteDialogWidget" showEffect="fade"
-			hideEffect="fade" severity="alarm">
+			severity="alarm">
 			<p:outputPanel id="requirementDeletePanel">
 				<h:form id="requirementDeleteForm">
 					<p:commandButton id="deleteYesButton"
@@ -500,7 +499,7 @@
 			header="#{messages.specification_release_title}"
 			message="#{messages.specification_release_label}"
 			widgetVar="requirementReleaseDialogWidget" showEffect="fade"
-			hideEffect="fade" severity="alarm">
+			severity="alarm">
 			<p:outputPanel id="requirementReleasePanel">
 				<h:form id="requirementReleaseForm">
 					<p:commandButton id="releaseYesButton"
@@ -518,7 +517,7 @@
 		</p:confirmDialog>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
 			position="center" header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
@@ -529,7 +528,7 @@
 
 		<p:hotkey bind="esc"
 			handler="PF('requirementImportDialogWidget').hide()" />
-		<p:dialog id="requirementImportXMLDialog" draggable="false"
+		<p:dialog id="requirementImportXMLDialog" draggable="false" responsive="true"
 			modal="true" header="#{messages.specification_import_title} XML"
 			widgetVar="requirementImportXMLDialogWidget" dynamic="true"
 			resizable="false">
@@ -543,7 +542,7 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-		<p:dialog id="exportMenu" draggable="false" modal="true"
+		<p:dialog id="exportMenu" draggable="false" modal="true" responsive="true"
 			widgetVar="exportMenuWidget" dynamic="true" resizable="false"
 			header="#{messages.specification_export_title}">
 			<p:outputPanel id="exportMenuPanel">
@@ -590,7 +589,7 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-		<p:dialog id="requirementImportDialog" draggable="false"
+		<p:dialog id="requirementImportDialog" draggable="false" responsive="true"
 			header="#{messages.specification_import_title}" modal="true"
 			widgetVar="requirementImportDialogWidget" dynamic="true"
 			resizable="false">
@@ -603,7 +602,7 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog id="requirementMindMap"
+		<p:dialog id="requirementMindMap" responsive="true"
 			header="#{messages.specification_MindMap_title}" modal="true"
 			draggable="false" widgetVar="requirementMindMap" dynamic="true"
 			resizable="true">

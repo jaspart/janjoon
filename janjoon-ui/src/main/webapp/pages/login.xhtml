@@ -23,19 +23,19 @@
 <h:body styleClass="loginbodyjanjoon">
 	<h:form id="login" method="post">
 		<p:growl showDetail="true" id="auth" />
-		<div class="Wid90 DispBlock MarAuto TexAlCenter">
-			<div class="Wid33 MarAuto WidAutoOnMobile">
+		<h:panelGroup layout="block" styleClass="Wid90 DispBlock MarAuto TexAlCenter">
+			<h:panelGroup layout="block" styleClass="Wid33 MarAuto WidAutoOnMobile">
 				<h:graphicImage name="janjoon_logo.ico" library="images"
 					style="width:40%; max-width:200px;" />
-				<div class="EmptyBox10"></div>
-				<div class="Card ShadowEffect">
-					<div class="EmptyBox20"></div>
-					<div class="Wid100 OvHidden BigTopic Fs30">
+				<h:panelGroup layout="block" styleClass="EmptyBox10"/>
+				<h:panelGroup layout="block" styleClass="Card ShadowEffect">
+					<h:panelGroup layout="block" styleClass="EmptyBox20"/>
+					<h:panelGroup layout="block" styleClass="Wid100 OvHidden BigTopic Fs30">
 						<i class="icon-users Fs40"></i>
 						#{messages.login_pleaseLogin_header}
-					</div>
-					<div class="EmptyBox20"></div>
-					<div class="Wid100">
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox20"/>
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:inputText id="username"
 							placeholder="#{messages.login_username_label}"
 							styleClass="Wid80 TexAlCenter Fs18" value="#{loginBean.username}"
@@ -43,15 +43,15 @@
 							requiredMessage="#{messages.login_necessaryUsername_label}">
 							<f:validator validatorId="emailValidator" />
 						</p:inputText>
-					</div>
-					<div class="EmptyBox10"></div>
-					<div class="Wid100">
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10"/>
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:password id="password" value="#{loginBean.password}"
 							required="true" styleClass="Wid80 TexAlCenter Fs18"
 							placeholder="#{messages.login_password_label}"
 							requiredMessage="#{messages.login_necessaryPassword_label}" />
-					</div>
-					<div class="EmptyBox30"></div>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox30"/>
 					<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
 						<p:ajax event="change" update="submit" />
 					</p:selectBooleanCheckbox>
@@ -61,8 +61,8 @@
 						<h:outputLabel styleClass="Fs14"
 							value="#{messages.login_terms_label}" />
 					</h:outputLink>
-					<div class="EmptyBox30"></div>
-					<div class="Wid100">
+					<h:panelGroup layout="block" styleClass="EmptyBox30"/>
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:commandButton id="submit"
 							value="#{messages.login_login_button}"
 							onstart="PF('blockUIWidget').block()"
@@ -71,21 +71,21 @@
 							action="#{loginBean.login}" icon="fa fa-key"
 							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
 							disabled="#{!loginBean.agreeTerms}" update=":login:auth" />
-					</div>
-					<div class="EmptyBox5"></div>
-					<div class="Wid100">
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox5"/>
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:button value="#{messages.signup_message}" icon="fa fa-sign-in"
 							styleClass="Wid60 Fs18 White RaisedButton"
 							href="/pages/signup.jsf?faces-redirect=true" />
-					</div>
-					<!-- 					<div class="EmptyBox20"></div> -->
-					<div class="Separator"></div>
-					<!-- 					<div class="EmptyBox10"></div> -->
-					<div class="Wid100">
+					</h:panelGroup>
+					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox20"></h:panelGroup> -->
+					<h:panelGroup layout="block" styleClass="Separator"></h:panelGroup>
+					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox10"></h:panelGroup> -->
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<ui:insert name="footer">
 							<ui:include src="../templates/footer.xhtml" />
 						</ui:insert>
-					</div>
+					</h:panelGroup>
 					<pe:blockUI widgetVar="blockUIWidget">
 						<h:panelGrid columns="2">
 							<p:graphicImage name="images/preloader.gif" library="rioLayout"
@@ -94,9 +94,9 @@
 								style="white-space: nowrap;" />
 						</h:panelGrid>
 					</pe:blockUI>
-				</div>
-			</div>
-		</div>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
 		<h:outputStylesheet name="css/core-layout.css" library="rioLayout" />
 		<h:outputStylesheet name="standard.css" library="css" />
 		<h:outputStylesheet name="css/animate.css" library="rioLayout" />

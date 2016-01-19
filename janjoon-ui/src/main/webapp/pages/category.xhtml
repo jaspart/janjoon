@@ -74,10 +74,10 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="categoryDialog"
+	<p:dialog id="categoryDialog" responsive="true"
 		header="#{messages[jJCategoryBean.message]}" modal="true"
 		widgetVar="categoryDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false">
+		 resizable="false">
 		<p:ajax event="close" update=":tabview:categoryForm"
 			listener="#{jJCategoryBean.closeDialog}" />
 		<p:outputPanel id="categoryDialogPanel">
@@ -133,7 +133,7 @@
 	<p:confirmDialog id="categoryDeleteDialog"
 		widgetVar="categoryDeleteDialogWidget"
 		message="#{messages.admin_category_delete_label}" showEffect="fade"
-		hideEffect="explode" header="#{messages.admin_category_delete_title}"
+		 header="#{messages.admin_category_delete_title}"
 		severity="alarm">
 		<p:outputPanel id="categoryDeletePanel">
 			<h:form id="categoryDeleteForm">

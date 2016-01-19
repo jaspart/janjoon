@@ -364,10 +364,9 @@
 			</h:panelGroup>
 		</h:panelGroup>
 
-		<p:dialog id="createDialog" header="#{messages.bug_create_title}"
+		<p:dialog id="createDialog" header="#{messages.bug_create_title}" responsive="true"
 			draggable="false" modal="true" widgetVar="createDialogWidget"
-			dynamic="true" resizable="false" maximizable="false" showEffect="fade"
-			hideEffect="explode">
+			dynamic="true" resizable="false" maximizable="false" showEffect="fade">
 			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">

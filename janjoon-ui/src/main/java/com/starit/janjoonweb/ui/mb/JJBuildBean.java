@@ -173,7 +173,7 @@ public class JJBuildBean {
 		buildDataModel.getBuilds().set(buildDataModel.getBuilds().indexOf(b),
 				jJBuildService.findJJBuild(b.getId()));
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Build","");
+				"message_successfully_updated", "Build", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -226,7 +226,7 @@ public class JJBuildBean {
 				new BuildUtil(buildutil.getVersion(), jJBuildService.getBuilds(
 						buildutil.getVersion(), true, true)));
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Version","e");
+				"message_successfully_updated", "Version", "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -252,7 +252,7 @@ public class JJBuildBean {
 
 			index = i;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_created", "Bug","");
+					"message_successfully_created", "Bug", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(

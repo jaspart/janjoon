@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -6,154 +6,136 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<ui:composition template="../templates/layout-login.xhtml">
-	<ui:define name="title">#{messages.login_title}</ui:define>
-	<ui:define name="content">
+<h:head>
+	<link rel="shortcut icon" type="image/png"
+		href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<title>#{messages.signup_title}</title>
+</h:head>
+
+<h:body styleClass="loginbodyjanjoon">
+	<h:form id="signup" method="post">
+		<input style="display: none"> </input>
+		<input type="password" style="display: none"></input>
 		<p:growl showDetail="true" id="auth" />
-		<h:form id="signup">
-			<input style="display: none"> </input>
-			<input type="password" style="display: none"></input>
-			<p:panelGrid style="background-color:transparent;margin: 0 auto;">
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="2">
-							<p:outputLabel value="  #{messages.signup_header}" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<h:outputLabel for="firstName"
-							value="#{messages.signup_firstName_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+		<h:panelGroup layout="block"
+			styleClass="Wid90 DispBlock MarAuto TexAlCenter">
+			<h:panelGroup layout="block"
+				styleClass="Wid33 MarAuto WidAutoOnMobile">
+				<h:graphicImage name="janjoon_logo.ico" library="images"
+					style="width:35%; max-width:200px;" />				
+				<h:panelGroup layout="block" styleClass="Card ShadowEffect">
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block"
+						styleClass="Wid100 OvHidden BigTopic Fs30">
+						<i class="icon-users Fs40"></i>
+						#{messages.signup_header}
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:inputText id="firstName"
+							placeholder="#{messages.signup_firstName_label}"
+							styleClass="Wid80 TexAlCenter Fs18"
 							value="#{jJContactBean.contactAdmin.firstname}" required="true"
 							requiredMessage="#{messages.signup_necessaryFirstName_label}">
 							<f:validateLength maximum="100" />
 						</p:inputText>
-
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="firstName" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
-
-				<p:row>
-					<p:column>
-						<h:outputLabel for="lastName"
-							value="#{messages.signup_username_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:inputText id="lastName"
+							placeholder="#{messages.signup_username_label}"
+							styleClass="Wid80 TexAlCenter Fs18"
 							value="#{jJContactBean.contactAdmin.name}" required="true"
 							requiredMessage="#{messages.signup_necessaryLastName_label}">
 							<f:validateLength maximum="100" />
 						</p:inputText>
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="lastName" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
-				<p:row>
-					<p:column>
-						<h:outputLabel for="email" value="#{messages.signup_mail_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:inputText id="email"
+							placeholder="#{messages.signup_mail_label}"
 							value="#{jJContactBean.contactAdmin.email}" required="true"
+							styleClass="Wid80 TexAlCenter Fs18"
 							requiredMessage="#{messages.signup_necessaryEmail_label}">
 							<f:validator validatorId="emailValidator" />
 							<f:attribute name="contact" value="#{jJContactBean.contactAdmin}" />
 						</p:inputText>
-
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="email" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
-				<p:row>
-					<p:column>
-						<h:outputLabel for="mdp"
-							value="#{messages.signup_password_label}:"
-							style="margin-top:20px;" />
-					</p:column>
-					<p:column>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:password id="mdp"
+							placeholder="#{messages.signup_password_label}"
 							value="#{jJContactBean.contactAdmin.password}" required="true"
+							styleClass="Wid80 TexAlCenter Fs18"
 							requiredMessage="#{messages.signup_necessaryPassword_label}" />
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="mdp" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
-				<p:row>
-					<p:column>
-						<p:outputLabel for="company" value="Company" />
-					</p:column>
-					<p:column>
-						<p:selectOneMenu id="company"
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block" styleClass="Wid100 TexAlCenter">
+					<h:panelGroup layout="block" styleClass="Wid90 TexAlCenter" style="margin: 0 auto;">
+						<p:selectOneMenu id="company" title="#{messages.label_company}"
 							value="#{jJContactBean.contactAdmin.company}" effect="fade"
-							required="true"
+							required="true" styleClass="Wid80"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter">
-
 							<f:selectItem itemValue="#{null}"
 								itemLabel="#{messages.signup_select_company}" />
 							<f:selectItems value="#{jJCompanyBean.companies}" var="p"
 								itemLabel="#{p.name}" itemValue="#{p}" />
 						</p:selectOneMenu>
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="company" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
-				<p:row>
-					<p:column colspan="2">
-						<p:captcha id="captcha" label="Captcha" secure="true" />
-					</p:column>
-				</p:row>
-				<!-- 				<p:row> -->
-				<!-- 					<p:column colspan="2"> -->
-				<!-- 						<p:message for="captcha" closable="true" /> -->
-				<!-- 					</p:column> -->
-				<!-- 				</p:row> -->
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
+					<h:panelGroup layout="block" styleClass="Wid70 TexAlCenter" style="margin: 0 auto;">
+						<p:captcha id="captcha" label="Captcha" secure="true"  />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox20" />
+					<h:panelGroup layout="block" styleClass="Wid100">
+						<p:commandButton id="submit" value="#{messages.signup_message}"
+							onstart="PF('blockUIWidget').block()"
+							onerror="PF('blockUIWidget').unblock()"
+							oncomplete="PF('blockUIWidget').unblock()" ajax="false"
+							action="#{jJContactBean.signUp}" update=":signup"
+							icon="fa fa-sign-in" styleClass="Wid60 Fs18 White RaisedButton"
+							disabled="#{!loginBean.agreeTerms}" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="EmptyBox5" />
+					<h:panelGroup layout="block" styleClass="Wid100">
+						<p:button value="#{messages.login_login_button}" icon="fa fa-key"
+							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
+							href="/pages/login.jsf?faces-redirect=true" />
+					</h:panelGroup>
+					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox20"></h:panelGroup> -->
+					<h:panelGroup layout="block" styleClass="Separator"></h:panelGroup>
+					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox10"></h:panelGroup> -->
+					<h:panelGroup layout="block" styleClass="Wid100">
+						<ui:insert name="footer">
+							<ui:include src="../templates/footer.xhtml" />
+						</ui:insert>
+					</h:panelGroup>
+					<pe:blockUI widgetVar="blockUIWidget">
+						<h:panelGrid columns="2">
+							<p:graphicImage name="images/preloader.gif" library="rioLayout"
+								style="vertical-align: middle;" />
+							<h:outputText value="#{messages.label_refresh}"
+								style="white-space: nowrap;" />
+						</h:panelGrid>
+					</pe:blockUI>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:outputStylesheet name="css/core-layout.css" library="rioLayout" />
+		<h:outputStylesheet name="standard.css" library="css" />
+		<h:outputStylesheet name="css/animate.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-font.css" library="rioLayout" />
+		<h:outputStylesheet name="css/ripple-effect.css" library="rioLayout" />
+		<h:outputStylesheet name="css/font-awesome.css" library="rioLayout" />
+		<h:outputStylesheet name="css/rio-layout.css" library="rioLayout" />
+	</h:form>
+</h:body>
 
-				<f:facet name="footer">
-					<p:row style="padding: 4px 1px;">
-						<p:column colspan="2">
-							<p:commandButton id="submit"
-								value="#{messages.signup_signup_button}"
-								onstart="PF('blockUIWidget').block()"
-								onerror="PF('blockUIWidget').unblock()"
-								oncomplete="PF('blockUIWidget').unblock()" ajax="false"
-								action="#{jJContactBean.signUp}" style="margin-top:20px;"
-								update=":signup" />
-						</p:column>
-					</p:row>
-				</f:facet>
-			</p:panelGrid>
-		</h:form>
-		<pe:blockUI widgetVar="blockUIWidget">
-			<h:panelGrid columns="2">
-				<p:graphicImage library="images" name="ajax-loader.gif"
-					style="vertical-align: middle;" />
-				<h:outputText value="#{messages.label_refresh}"
-					style="white-space: nowrap;" />
-			</h:panelGrid>
-		</pe:blockUI>
-	</ui:define>
-</ui:composition>
 </html>

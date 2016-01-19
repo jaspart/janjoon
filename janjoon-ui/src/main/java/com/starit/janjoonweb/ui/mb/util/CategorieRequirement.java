@@ -63,10 +63,10 @@ public class CategorieRequirement {
 
 			}
 		}
-//		for (CategorieRequirement cc : categorieRequirements) {
-//			if (requirement.getCategory().equals(cc.getCategory()))
-//				cc.setRequirements(null);
-//		}
+		// for (CategorieRequirement cc : categorieRequirements) {
+		// if (requirement.getCategory().equals(cc.getCategory()))
+		// cc.setRequirements(null);
+		// }
 
 		return categorieRequirements;
 

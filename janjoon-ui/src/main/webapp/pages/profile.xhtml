@@ -115,10 +115,10 @@
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="profileDialog"
+	<p:dialog id="profileDialog" responsive="true"
 		header="#{messages[jJProfileBean.message]}" modal="true"
 		widgetVar="profileDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false">
+		resizable="false">
 		<p:ajax event="close" update=":tabview:profileForm"
 			listener="#{jJProfileBean.closeDialog(jJRightBean)}" />
 		<p:outputPanel id="profileDialogPanel">
@@ -313,7 +313,7 @@
 	<p:confirmDialog id="profileDeleteDialog"
 		widgetVar="profileDeleteDialogWidget"
 		message="#{messages.admin_profile_delete_title}" showEffect="fade"
-		hideEffect="explode" header="#{messages.admin_profile_delete_label}"
+		 header="#{messages.admin_profile_delete_label}"
 		severity="alarm">
 		<p:outputPanel id="profileDeletePanel">
 			<h:form id="profileDeleteForm">

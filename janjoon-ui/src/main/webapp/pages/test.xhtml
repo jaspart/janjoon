@@ -28,10 +28,10 @@
 		<!-- 			style="min-height:500px;overflow:hidden !important;height:700px !important;" -->
 		<!-- 			stateful="true"> -->
 		<h:form id="testFormNorth">
-			<p:dialog widgetVar="categoryPanel" id="categoryPanel"
+			<p:dialog widgetVar="categoryPanel" id="categoryPanel" responsive="true"
 				onHide="hideEvent()" styleClass="overlayPanelDialog"
 				rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
-				closable="false">
+				closable="false" responsive="true" >
 				<c:forEach items="#{jJTestcaseBean.categoryList}" var="category">
 					<p:selectBooleanButton value="#{category.checked}"
 						onLabel="#{category.category.name}"
@@ -579,13 +579,13 @@
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
 			position="center" header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
-			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
+			minHeight="500" responsive="true" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>
 
-		<p:dialog id="testImportXMLDialog" draggable="false"
+		<p:dialog id="testImportXMLDialog" draggable="false" responsive="true"
 			header="#{messages.specification_import_title} XML" modal="true"
 			widgetVar="testImportXMLDialogWidget" dynamic="true"
 			resizable="false">
@@ -606,7 +606,7 @@
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
-		<p:dialog id="exportMenu" draggable="false" modal="true"
+		<p:dialog id="exportMenu" draggable="false" modal="true" responsive="true"
 			widgetVar="exportMenuWidget" dynamic="true" resizable="false"
 			header="#{messages.specification_export_title}">
 			<p:outputPanel id="exportMenuPanel">
@@ -648,7 +648,7 @@
 		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('testcaseDialogWidget').hide()" />
-		<p:dialog id="testcaseDialog"
+		<p:dialog id="testcaseDialog" responsive="true"
 			header="#{messages[jJTestcaseBean.message]}" modal="true"
 			widgetVar="testcaseDialogWidget" dynamic="true" resizable="false"
 			style="top: 30px;">
@@ -659,9 +659,9 @@
 			</p:outputPanel>
 		</p:dialog>
 		<p:dialog id="runTestcaseDialog" header="#{messages.test_exec_title}"
-			hideEffect="explode" modal="true" widgetVar="runTestcaseDialogWidget"
+			modal="true" widgetVar="runTestcaseDialogWidget"
 			draggable="false" height="400px" dynamic="true" resizable="false"
-			width="400px">
+			width="400px" responsive="true" >
 			<p:hotkey bind="esc" handler="PF('runTestcaseDialogWidget').hide()" />
 			<p:hotkey bind="space" handler="TestcaseExecSuccessButton.jq.click()" />
 			<p:hotkey bind="S" handler="TestcaseExecSuccessButton.jq.click()" />
@@ -809,10 +809,9 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog header="#{messages.bug_create_title}" modal="true"
+		<p:dialog header="#{messages.bug_create_title}" modal="true" responsive="true"
 			widgetVar="bugTestDialogWidget" dynamic="true" resizable="true"
-			maximizable="true" showEffect="fade" hideEffect="explode"
-			style="top: 30px;">
+			maximizable="true" showEffect="fade" style="top: 30px;">
 			<p:ajax event="close" listener="#{jJBugBean.handleDialogClose}" />
 			<p:outputPanel id="createPanel">
 				<h:form id="bugForm" enctype="multipart/form-data">

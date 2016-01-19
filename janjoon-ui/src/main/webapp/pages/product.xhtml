@@ -103,10 +103,10 @@ td.ui-fileupload-preview {
 			</p:dataTable>
 		</p:panel>
 	</h:form>
-	<p:dialog id="productDialog" draggable="false"
+	<p:dialog id="productDialog" draggable="false" responsive="true"
 		header="#{messages[jJProductBean.message]}" modal="true"
 		widgetVar="productDialogWidget" dynamic="true" showEffect="fade"
-		hideEffect="explode" resizable="false">
+		resizable="false">
 		<p:ajax event="close" update=":tabview:productForm :headerForm"
 			listener="#{jJProductBean.closeDialog(jJVersionBean,jJBuildBean)}" />
 		<pe:blockUI widgetVar="versionBlockUIWidget"

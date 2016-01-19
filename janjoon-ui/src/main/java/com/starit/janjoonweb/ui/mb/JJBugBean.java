@@ -157,9 +157,11 @@ public class JJBugBean {
 				.getBugs().contains(b));
 	}
 
-	// public void setRated(boolean rated) {
-	// this.rated = rated;
-	// }
+	public String getMessage() {
+
+		return (JJBug_ == null || JJBug_.getId() == null) ? "bug_create_title"
+				: "bug_edit_title";
+	}
 
 	public JJProject getProject() {
 
@@ -331,7 +333,7 @@ public class JJBugBean {
 			updateJJBug(b);
 		}
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Bug","");
+				"message_successfully_deleted", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -341,7 +343,7 @@ public class JJBugBean {
 		getJJBug_().setEnabled(false);
 		updateJJBug(getJJBug_());
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Bug","");
+				"message_successfully_deleted", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -382,7 +384,8 @@ public class JJBugBean {
 
 		SelectItem[] options = new SelectItem[data.size() + 1];
 
-		options[0] = new SelectItem("", "Select");
+		options[0] = new SelectItem("", MessageFactory.getMessage(
+				"label_select").getDetail());
 		for (int i = 0; i < data.size(); i++) {
 
 			if (data.get(i) instanceof JJCriticity) {
@@ -523,7 +526,7 @@ public class JJBugBean {
 	public void persistBugTask() {
 		updateJJBug(JJBug_);
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug","");
+				"message_successfully_updated", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -541,7 +544,7 @@ public class JJBugBean {
 		viewBug = jJBugService.findJJBug(viewBug.getId());
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug","");
+				"message_successfully_updated", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -575,7 +578,8 @@ public class JJBugBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug","");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug",
+				"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		System.err.println(facesMessage.getDetail());
@@ -586,7 +590,7 @@ public class JJBugBean {
 						"PF('createDialogWidget').hide()");
 			else
 				RequestContext.getCurrentInstance().execute(
-						"PF('editDialogWidget').hide()");
+						"PF('createDialogWidget').hide()");
 		}
 
 	}
@@ -616,7 +620,8 @@ public class JJBugBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug","");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug",
+				"");
 		((LoginBean) LoginBean.findBean("loginBean"))
 				.setFacesMessage(facesMessage);
 

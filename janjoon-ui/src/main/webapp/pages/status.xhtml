@@ -96,11 +96,11 @@
 		</p:panel>
 
 	</h:form>
-	<p:dialog id="ScreateDialog"
+	<p:dialog id="ScreateDialog" responsive="true"
 		header="#{messages.admin_status_new_title}" modal="true"
 		widgetVar="createSatDialogWidget" dynamic="true"
 		visible="#{jJStatusBean.createDialogVisible}" resizable="true"
-		maximizable="true" showEffect="fade" hideEffect="explode">
+		maximizable="true" showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="ScreatePanel">
@@ -121,8 +121,7 @@
 
 	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}"
 		modal="true" widgetVar="editSatDialogWidget" dynamic="true"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode">
+		resizable="true" responsive="true" maximizable="true" showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SeditPanel">
@@ -141,10 +140,10 @@
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="SviewDialog"
+	<p:dialog id="SviewDialog" responsive="true"
 		header="#{messages.admin_status_view_title} Status" modal="true"
 		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true"
-		maximizable="true" showEffect="fade" hideEffect="explode">
+		maximizable="true" showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SviewPanel">
@@ -160,7 +159,7 @@
 	</p:dialog>
 	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
 		message="#{messages.admin_status_delete_label}" showEffect="fade"
-		hideEffect="explode" header="#{messages.admin_status_delete_title}"
+		header="#{messages.admin_status_delete_title}"
 		severity="alarm">
 		<p:outputPanel id="SdeletePanel">
 			<h:form id="sdeleteForm">

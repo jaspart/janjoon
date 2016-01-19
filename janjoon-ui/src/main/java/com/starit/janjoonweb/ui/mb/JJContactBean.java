@@ -282,7 +282,7 @@ public class JJContactBean {
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
-				"Contact","");
+				"Contact", "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedContact = null;
@@ -379,7 +379,7 @@ public class JJContactBean {
 
 				facesMessage = MessageFactory.getMessage(
 						"message_successfully_created",
-						FacesMessage.SEVERITY_INFO, "Contact","");
+						FacesMessage.SEVERITY_INFO, "Contact", "");
 				// contacts.add(contactAdmin);
 
 			} else {
@@ -542,7 +542,7 @@ public class JJContactBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					MessageFactory.getMessage("message_successfully_updated",
-							"Contact",""));
+							"Contact", ""));
 
 			RequestContext context = RequestContext.getCurrentInstance();
 
@@ -653,7 +653,7 @@ public class JJContactBean {
 			loginBean.getAuthorisationService().setSession(session);
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-					"Contact " + loginBean.getContact().getName(),"");
+					"Contact " + loginBean.getContact().getName(), "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			session.setAttribute("jJContactBean", new JJContactBean());
 		} catch (Exception e) {
@@ -676,7 +676,7 @@ public class JJContactBean {
 		loginBean.getAuthorisationService().setSession(session);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-				"Contact " + loginBean.getContact().getName(),"");
+				"Contact " + loginBean.getContact().getName(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		session.setAttribute("jJContactBean", new JJContactBean());
 	}
@@ -713,7 +713,7 @@ public class JJContactBean {
 		loginBean.getAuthorisationService().setSession(session);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-				"Contact " + loginBean.getContact().getName(),"");
+				"Contact " + loginBean.getContact().getName(), "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
@@ -743,7 +743,9 @@ public class JJContactBean {
 	public String signUp() {
 
 		contactAdmin.setDescription("This contact is "
-				+ contactAdmin.getFirstname() + " " + contactAdmin.getName());
+				+ contactAdmin.getFirstname() + " " + contactAdmin.getName()
+				+ " registred By signUp page");
+		String password = contactAdmin.getPassword();
 		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
 				.trim()));
 		contactAdmin.setCreationDate(new Date());
@@ -765,6 +767,10 @@ public class JJContactBean {
 			permission.setProfile(customProfile);
 			permission.setEnabled(true);
 			jJPermissionService.saveJJPermission(permission);
+
+			((LoginBean) LoginBean.findBean("loginBean")).signUpLogin(
+					contactAdmin.getEmail(), password);
+			contactAdmin = null;
 			return "success";
 
 		} else {
@@ -933,7 +939,7 @@ public class JJContactBean {
 				FacesMessage facesMessage = MessageFactory.getMessage(
 						"message_successfully_updated",
 						FacesMessage.SEVERITY_INFO, "Contact "
-								+ loginBean.getContact().getName(),"");
+								+ loginBean.getContact().getName(), "");
 				FacesContext.getCurrentInstance()
 						.addMessage(null, facesMessage);
 				session.setAttribute("jJContactBean", new JJContactBean());

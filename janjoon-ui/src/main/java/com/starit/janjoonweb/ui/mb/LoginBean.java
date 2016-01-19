@@ -40,7 +40,6 @@ import org.primefaces.component.tabmenu.TabMenu;
 import org.primefaces.component.tabview.TabView;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.menu.MenuModel;
 import org.primefaces.rio.component.menu.RioMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -387,7 +386,7 @@ public class LoginBean implements Serializable {
 				config.setVal("true");
 				config.setParam("header.showMarquee");
 				jJConfigurationService.saveJJConfiguration(config);
-				showMarquee =true;
+				showMarquee = true;
 			} else {
 				if (jJConfigurationService
 						.getConfigurations("MarqueeAlertMessage", null, true)
@@ -398,7 +397,6 @@ public class LoginBean implements Serializable {
 			}
 		return showMarquee;
 	}
-	
 
 	public void setShowMarquee(Boolean showMarquee) {
 		this.showMarquee = showMarquee;
@@ -469,6 +467,130 @@ public class LoginBean implements Serializable {
 						FacesContext.getCurrentInstance().getExternalContext()
 								.getRequestContextPath()
 								+ "/pages/contactConfig.jsf?faces-redirect=true");
+	}
+
+	public String signUpLogin(String mail, String pass) {
+
+		this.username = mail.trim();
+		this.password = pass.trim();
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+				username, password);
+
+		try {
+			Authentication authentication = authenticationManager
+					.authenticate(token);
+			SecurityContext sContext = SecurityContextHolder.getContext();
+			sContext.setAuthentication(authentication);
+			enable = true;
+
+		} catch (AuthenticationException loginError) {
+
+			FacesMessage message = MessageFactory.getMessage(
+					"login_invalid_credentials", FacesMessage.SEVERITY_ERROR,
+					loginError.getMessage());
+			FacesContext.getCurrentInstance().addMessage("login", message);
+
+			enable = false;
+		}
+		if (enable) {
+			contact = jJContactService.getContactByEmail(username, true);
+			contact = jJContactService.findJJContact(contact.getId());
+
+			FacesContext fContext = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) fContext.getExternalContext()
+					.getSession(false);
+
+			session.putValue("password", password);
+
+			logger.info("login operation success " + contact.getName()
+					+ " logged in");
+			if (session.getAttribute("jJProjectBean") == null)
+				session.setAttribute("jJProjectBean", new JJProjectBean());
+
+			if (session.getAttribute("jJProductBean") == null)
+				session.setAttribute("jJProductBean", new JJProductBean());
+
+			if (session.getAttribute("jJVersionBean") == null)
+				session.setAttribute("jJVersionBean", new JJVersionBean());
+
+			JJProjectBean jjProjectBean = (JJProjectBean) session
+					.getAttribute("jJProjectBean");
+			JJProductBean jjProductBean = (JJProductBean) session
+					.getAttribute("jJProductBean");
+			JJVersionBean jjVersionBean = (JJVersionBean) session
+					.getAttribute("jJVersionBean");
+
+			boolean save = false;
+
+			if (contact.getCategories() == null
+					|| contact.getCategories().isEmpty()) {
+				save = true;
+				contact.setCategories(new HashSet<JJCategory>(
+						jJPermissionService.getDefaultCategories(contact)));
+
+			}
+
+			if (contact.getLastProject() == null
+					|| !contact.getCompany().equals(
+							contact.getLastProject().getCompany())) {
+				save = true;
+				contact.setLastProject(jJPermissionService
+						.getDefaultProject(contact));
+			}
+
+			if (contact.getLastProduct() == null
+					|| !contact.getCompany().equals(
+							contact.getLastProduct().getCompany())) {
+				save = true;
+				contact.setLastProduct(jJPermissionService
+						.getDefaultProduct(contact));
+			}
+			if (save) {
+				jJContactService.updateJJContact(contact);
+				contact = jJContactService.getContactByEmail(username, true);
+			}
+
+			jjProjectBean.getProjectList();
+			if (jjProjectBean.getProjectList().contains(
+					contact.getLastProject()))
+				jjProjectBean.setProject(contact.getLastProject());
+
+			jjProductBean.getProductList();
+			if (jjProductBean.getProductList().contains(
+					contact.getLastProduct())) {
+				jjProductBean.setProduct(contact.getLastProduct());
+			}
+
+			jjVersionBean.getVersionList();
+			if (jjVersionBean.getVersionList().contains(
+					contact.getLastVersion())) {
+				jjVersionBean.setVersion(contact.getLastVersion());
+			}
+
+			authorisationService = new AuthorisationService(session, contact);
+
+			facesMessage = MessageFactory.getMessage("signup_welcome_message",
+					FacesMessage.SEVERITY_INFO, getContact().getName());
+
+			auditLogLogin = new JJAuditLog();
+			auditLogLogin.setContact(contact);
+			auditLogLogin.setAuditLogDate(new Date());
+			auditLogLogin.setKeyName(ConnectionStatistics.LOGIN_OBJECT);
+			auditLogLogin.setKeyValue(ConnectionStatistics.getFormatter()
+					.format(auditLogLogin.getAuditLogDate()));
+			auditLogLogin.setObjet("JJContact");
+
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			Cookie cookie = new Cookie("agreeTerms", "true");
+			cookie.setMaxAge(365 * 24 * 60 * 60 * 1000);
+			response.addCookie(cookie);
+
+		}
+
+		return "success";
+
 	}
 
 	public String login() {
@@ -1618,7 +1740,7 @@ public class LoginBean implements Serializable {
 
 		if (obj instanceof CategoryUtil) {
 
-			JJCategory cat = ((CategoryUtil) obj).getCategory();			
+			JJCategory cat = ((CategoryUtil) obj).getCategory();
 			return MessageFactory.checkMessage("category_"
 					+ cat.getName().replace(" ", "_"), "") != null ? MessageFactory
 					.checkMessage(

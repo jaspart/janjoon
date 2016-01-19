@@ -148,37 +148,35 @@ function removeMenuActiveIndex() {
 
 }
 
-$(window)
-		.resize(
-				function() {
-					
-					$(".ui-dialog-content").css("maxWidth",($(window).width() * 90 / 100) + "px");
-					$(".ui-dialog-content").css("maxHeight",($(window).height() * 80 / 100) + "px");
+$(window).resize(
+		function() {
 
-					var $dlg = $(".ui-dialog:visible");
-					// $dlg.dialog("option", "position", {my: "center", at:
-					// "center", of: window});
+			$(".ui-dialog-content").css("maxWidth",
+					($(window).width() * 90 / 100) + "px");
+			$(".ui-dialog-content").css("maxHeight",
+					($(window).height() * 80 / 100) + "px");
 
-					$dlg.position({my : "center center",at : "center center",of : window});
+			// Begin-Responsive
+			var $dlg = $(".ui-confirm-dialog:visible");
 
-//					var width = $(window).width() * 82 / 100;
-//
-//					if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-//							.test(navigator.userAgent)) {
-//						width = $(window).width() * 95 / 100;
-//					} else if ($(window).width() < 960)
-//						width = $(window).width() * 95 / 100;
-//					$("#layoutsGrid").width(width);
-				});
-$(function() {
-	// var height = $("#requirementForm\\:requirementFormPanelGrid").height() *
-	// 81.1 / 100;
-	// var width = $("#treeForm\\:treePanelGrid").width() * 96 / 100;
-	// $(".reqTree").css( "maxWidth", ( $("#treeForm\\:treePanelGrid").width() *
-	// 95/100) + "px" );
-	// $(".reqTree").height(height);
+			$dlg.position({
+				my : "center center",
+				at : "center center",
+				of : window
+			});
+			// End-Responsive
+			// var width = $(window).width() * 82 / 100;
+			//
+			// if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera
+			// Mini/i
+			// .test(navigator.userAgent)) {
+			// width = $(window).width() * 95 / 100;
+			// } else if ($(window).width() < 960)
+			// width = $(window).width() * 95 / 100;
+			// $("#layoutsGrid").width(width);
+		});
 
-	// ui-dialog-content
+$(function() {	
 
 	$(".ui-dialog-content").css("maxWidth",
 			($(window).width() * 90 / 100) + "px");
@@ -186,16 +184,6 @@ $(function() {
 			($(window).height() * 80 / 100) + "px");
 });
 
-//$(function() {
-//	var width = $(window).width() * 82 / 100;
-//
-//	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-//			.test(navigator.userAgent)) {
-//		width = $(window).width() * 95 / 100;
-//	} else if ($(window).width() < 960)
-//		width = $(window).width() * 95 / 100;
-//	$("#layoutsGrid").width(width);
-//});
 
 $(document).ready(function() {
 	$("#rowToggler").click(function() {

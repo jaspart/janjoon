@@ -4,7 +4,9 @@ $(document).ready(
 					function() {
 						$(".ui-layout-content").scrollTop($(this).scrollTop());
 						var scroll = $(this).scrollTop();
-						$(".stickyHeader").css('transform',
+//						$(".stickyHeader").css('transform',
+//								'translateY(' + scroll + 'px)');
+						$("#projecttabview\\:planningForm\\:taskDataTable_head").css('transform',
 								'translateY(' + scroll + 'px)');
 						// $(".stickyHeader").css('z-index',
 						// '50');
@@ -29,7 +31,7 @@ $(document).ready(
 						//											$(elementArray[i]).css('display',
 						//													'none');
 						//										}
-						var max = $(".stickyHeader").offset().top + 30;
+						var max = $("#projecttabview\\:planningForm\\:taskDataTable_head").offset().top + 30;
 
 						$(".littleButton").each(
 								function(i) {

@@ -24,10 +24,15 @@
 							value="#{jJMessageBean.mainMessages}" rowKey="#{mes.id}"
 							var="mes" widgetVar="messageTable" paginator="true" rows="4"
 							paginatorPosition="bottom" sortBy="#{mes.creationDate}"
-							sortOrder="DESCENDING"
+							sortOrder="DESCENDING" selectionMode="single" 
 							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 							lazy="true" emptyMessage="#{messages.label_notFound}"
 							rowClasses="order-table-odd-row,order-table-even-row">
+
+							<p:ajax event="rowSelect" update=":viewMessagePanel"
+								listener="#{jJMessageBean.onRowSelect}" immediate="true"
+								oncomplete="PF('viewMessageDialogWidget').show()" />
+
 							<p:column style="width: 70px !important;text-align: center;">
 								<f:facet name="header">
 									<p:commandButton id="createButton"
@@ -74,7 +79,7 @@
 									rendered="#{jJMessageBean.haveObject(mes)}"
 									action="#{jJMessageBean.objectInfo(mes)}" ajax="false" />
 							</p:column>
-							<p:column style="width:10% !important;text-align: center;">
+							<p:column style="width:15% !important;text-align: center;">
 								<p:commandButton id="resolveButton" icon="fa fa-minus Fs20"
 									oncomplete="PF('resolveDialogWidget').show()"
 									resetValues="true" title="#{messages.label_disable}">
@@ -214,7 +219,7 @@
 
 		<p:confirmDialog id="resolveDialog" widgetVar="resolveDialogWidget"
 			message="#{messages.label_disable_record}" showEffect="fade"
-			hideEffect="explode" header="#{messages.label_confirm_disabling}"
+			 header="#{messages.label_confirm_disabling}"
 			severity="alarm">
 			<p:outputPanel id="deletePanel">
 				<h:form id="deleteForm">
@@ -228,9 +233,9 @@
 			</p:outputPanel>
 		</p:confirmDialog>
 
-		<p:dialog id="viewTaskDialog" modal="true"
+		<p:dialog id="viewTaskDialog" modal="true" responsive="true"
 			widgetVar="viewTaskDialogWidget" dynamic="true" resizable="false" 
-			maximizable="false" showEffect="fade" hideEffect="explode" draggable="false">
+			maximizable="false" showEffect="fade"  draggable="false">
 			<p:ajax event="close" update=":taskForm"
 				listener="#{jJTaskBean.closeEvent('main')}" />
 			<f:facet name="header">
@@ -249,24 +254,35 @@
 		</p:dialog>
 
 		<p:dialog widgetVar="messageDialog" id="messageDialog"
-			header="#{messages.main_message_header}" showEffect="fade"
-			dynamic="true" closable="true" resizable="false">
+			responsive="true" header="#{messages.main_message_header}"
+			showEffect="fade" dynamic="true" closable="true" resizable="false">
 			<h:form id="messageDialogForm">
-				<p:panelGrid columns="1">
-					<p:inputTextarea id="messagedsc" cols="40" rows="6"
-						placeholder="Message"
-						requiredMessage="#{messages.label_alert_message_null}"
-						value="#{jJMessageBean.message.message}" required="true" />
-					<p:panelGrid columns="2" styleClass="Container100"
-						style="text-align: center;">
-						<p:inputSwitch id="alert" value="#{jJMessageBean.alertOrInfo}"
-							onLabel="Alert" offLabel="Info" />
-						<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
-							process="@this,alert,messagedsc"
-							actionListener="#{jJMessageBean.createMessage(false,null)}"
-							update="messageDialogForm :headerForm:communicationButton :growlForm :communicationButton" />
-					</p:panelGrid>
-				</p:panelGrid>
+				<h:panelGroup layout="block" styleClass="Container ui-fluid BordAll" style="max-width: 300px;">
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:inputTextarea id="messagedsc" cols="40" rows="6"
+								placeholder="Message"
+								requiredMessage="#{messages.label_alert_message_null}"
+								value="#{jJMessageBean.message.message}" required="true" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="Container50">
+							<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
+								<p:inputSwitch id="alert" value="#{jJMessageBean.alertOrInfo}"
+									onLabel="Alert" offLabel="Info" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container50">
+							<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
+								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
+									process="@this,alert,messagedsc"
+									actionListener="#{jJMessageBean.createMessage(false,null)}"
+									update="messageDialogForm :headerForm:communicationButton :growlForm :communicationButton" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
 		</p:dialog>
 

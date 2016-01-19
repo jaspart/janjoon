@@ -233,7 +233,7 @@ public class JJMessageBean {
 		updateJJMessage(resolvedJJMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message","");
+				"Message", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -248,7 +248,7 @@ public class JJMessageBean {
 		updateJJMessage(viewedMessage);
 		String message = "message_successfully_disabled";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message","");
+				"Message", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 
@@ -391,7 +391,7 @@ public class JJMessageBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				"Message","");
+				"Message", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -534,11 +534,15 @@ public class JJMessageBean {
 	public void reset() {
 		setAllJJMessages(null);
 		RequestContext context = RequestContext.getCurrentInstance();
+
 		context.update(":headerForm:dataTable1");
-		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
-				.contains("main")) {
-			context.update("contentPanel");
-		}
+		context.update("comForm");
+		context.update("messageForm");
+
+		// if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+		// .contains("main")) {
+		// context.update("contentPanel");
+		// }
 		setJJMessage_(null);
 		setCreateDialogVisible(false);
 		loadFiltredJJmessage = false;

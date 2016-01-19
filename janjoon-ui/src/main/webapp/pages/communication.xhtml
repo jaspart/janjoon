@@ -12,9 +12,9 @@
 			emptyMessage="#{messages.label_notRecordFound}"
 			rendered="#{loginBean.enable}" scrollHeight="300" 
 			tableStyleClass="ui-table-columntoggle"	selectionMode="single">
-			<p:ajax event="rowSelect" update=":viewForm1:viewPanelGrid1"
+			<p:ajax event="rowSelect" update=":viewMessagePanel"
 				listener="#{jJMessageBean.onRowSelect}" immediate="true"
-				oncomplete="PF('viewDialogWidget1').show()" />
+				oncomplete="PF('viewMessageDialogWidget').show()" />
 			<f:facet name="header">
 				<p:panelGrid>
 					<p:row>

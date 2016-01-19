@@ -191,14 +191,14 @@
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Bug :" for="taskBug" />
-							<p:inputTextarea id="taskBug" readonly="true"
+							<p:inputText id="taskBug" readonly="true"
 								converter="JJBugConverter" value="#{JJTask_.bug}" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel for="jJbugStatus" value="Status : " />
-							<p:inputTextarea id="jJbugStatus" readonly="true"
+							<p:inputText id="jJbugStatus" readonly="true"
 								value="#{loginBean.checkMessage(JJTask_.bug.status)}" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -218,8 +218,9 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Description :" for="BugMobiledescription"
 								rendered="#{loginBean.mobile}" />
+								<br/>
 							<h:outputText escape="false" id="BugMobiledescription"
-								style="font-size: 16px;font-family: cursive;"
+								styleClass="Fs16" style="font-family: cursive;"
 								value="#{JJTask_.bug.description}"
 								rendered="#{loginBean.mobile}" />
 						</h:panelGroup>
@@ -237,7 +238,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="#{messages.label_name} :"
 								for="taskTestCase" />
-							<p:inputTextarea id="taskTestCase" readonly="true"
+							<p:inputText id="taskTestCase" readonly="true"
 								converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -245,7 +246,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="#{messages.label_requirement}:"
 								for="taskTestCaseReq" />
-							<p:inputTextarea id="taskTestCaseReq" readonly="true"
+							<p:inputText id="taskTestCaseReq" readonly="true"
 								converter="JJRequirementConverter"
 								value="#{JJTask_.testcase.requirement}" />
 						</h:panelGroup>
@@ -267,10 +268,10 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Description :"
 								for="testcaseMobiledescription" />
+								<br/>
 							<h:outputText escape="false" id="testcaseMobiledescription"
-								value="#{JJTask_.testcase.description}"
-								style="font-size: 16px;font-family: cursive;"
-								rendered="#{loginBean.mobile}" />
+								value="#{JJTask_.testcase.description}" styleClass="Fs16"
+								style="font-family: cursive;" rendered="#{loginBean.mobile}" />
 						</h:panelGroup>
 					</h:panelGroup>
 				</p:panel>
@@ -339,9 +340,10 @@
 							rendered="#{loginBean.mobile}">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:outputLabel value="Description :" for="descriptionMobile" />
+								<br/>
 								<h:outputText escape="false" id="descriptionMobile"
-									rendered="#{loginBean.mobile}"
-									style="font-size: 16px;font-family: cursive;"
+									rendered="#{loginBean.mobile}" styleClass="Fs16"
+									style="font-family: cursive;"
 									value="#{jJTaskBean.selectedReq.description}" />
 							</h:panelGroup>
 						</h:panelGroup>

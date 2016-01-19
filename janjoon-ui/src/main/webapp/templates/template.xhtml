@@ -60,24 +60,20 @@
 					<h:panelGrid id="applicatinPanelGrid" columns="1"
 						styleClass="wrapper">
 						<p:panel styleClass="content">
-							<p:dialog id="viewDialog1"
+							<p:dialog id="viewDialog1" responsive="true"
 								header="#{messages.label_view} Message" modal="true"
-								widgetVar="viewDialogWidget1" dynamic="true" resizable="true"
-								maximizable="true" showEffect="fade" hideEffect="fade">
-								<p:outputPanel id="viewPanel1">
-									<h:form id="viewForm1">
-										<ui:include src="/pages/messageDialog.xhtml">
-											<ui:param name="JJMessage"
-												value="#{jJMessageBean.viewedMessage}" />
-										</ui:include>
-										<p:commandButton id="viewCloseButton1"
-											value="#{messages.label_close}" style="margin-top: 10px;"
-											onclick="PF('viewDialogWidget1').hide()" type="button" />
-									</h:form>
+								widgetVar="viewMessageDialogWidget" dynamic="true" resizable="false"
+								maximizable="false" draggable="false" showEffect="fade"
+								hideEffect="fade">
+								<p:outputPanel id="viewMessagePanel">
+									<ui:include src="/pages/messageDialog.xhtml">
+										<ui:param name="JJMessage"
+											value="#{jJMessageBean.viewedMessage}" />
+									</ui:include>
 								</p:outputPanel>
 							</p:dialog>
 							<p:imageSwitch id="scrollRight" effect="scrollRight"
-								style="width:100%;height:25px;" speed="10000" 
+								style="width:100%;height:25px;" speed="10000"
 								slideshowSpeed="250" rendered="#{loginBean.showMarquee }">
 								<ui:repeat var="data" value="#{jJMessageBean.alertMessages}">
 									<p:outputPanel style="width:100px;">
@@ -105,9 +101,9 @@
 								<ui:insert name="content" />
 							</p:panel>
 						</p:panel>
-<!-- 						<ui:insert name="footer"> -->
-<!-- 							<ui:include src="footer.xhtml" /> -->
-<!-- 						</ui:insert> -->
+						<!-- 						<ui:insert name="footer"> -->
+						<!-- 							<ui:include src="footer.xhtml" /> -->
+						<!-- 						</ui:insert> -->
 
 					</h:panelGrid>
 
