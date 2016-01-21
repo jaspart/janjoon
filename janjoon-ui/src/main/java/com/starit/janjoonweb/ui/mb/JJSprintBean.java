@@ -964,16 +964,18 @@ public class JJSprintBean {
 		int i = 0;
 		int j = -1;
 
-		if (sprintList != null && id != null) {
+		if (sprintList != null && id != null && id != 0) {
 			while (i < sprintList.size()) {
-				if (sprintList.get(i).getSprint().getId().equals(id)) {
+				if (sprintList.get(i).getSprint() != null
+						&& sprintList.get(i).getSprint().getId() != null
+						&& sprintList.get(i).getSprint().getId().equals(id)) {
 					j = i;
 					i = sprintList.size();
 				} else
 					i++;
 			}
 		}
-		if (id == null)
+		if (id == null || id == 0)
 			j = sprintList.size() - 1;
 
 		return j;

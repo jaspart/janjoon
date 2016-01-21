@@ -1597,14 +1597,17 @@ div.highLightRevised2 {
 	height: 30px;
 	width: 30px !important;
 }
-/* .ALERT { */
-/* 	background-color: #F2DEDE !important; */
-/* 	background-image: none !important; */
-/* 	color: black !important; */
-/* } */
 
-/* .INFO { */
-/* 	background-color: #D9EDF7 !important; */
-/* 	background-image: none !important; */
-/* 	color: black !important; */
-/* } */
+.responsiveTabView {
+	
+}
+
+@media ( min-width : 100px) and (max-width: 960px) {
+	.responsiveTabView {
+		border-top-width: 2px;
+	}
+	.responsiveTabView .ui-tabs-navscroller {
+		display: none;
+		opacity: 0;
+	}
+}

@@ -7,6 +7,9 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/template.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="admin.js" />
+	</ui:define>
 	<ui:define name="content">
 		<h:form>
 			<p:remoteCommand name="updateAdmin"
@@ -18,9 +21,11 @@
 			title="#{messages.specification_video_help_title}"
 			onclick="PF('videoHelpWidget').show()" type="button"
 			style="float: right;" />
-		<p:tabView id="tabview" widgetVar="AdmintabView"
+		<h:panelGroup layout="block" styleClass="EmptyBox5" />	
+		<p:tabView id="tabview" widgetVar="AdmintabView" scrollable="true"
+			style="max-width: 200px;"
 			activeIndex="#{loginBean.activeTabAdminIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}"/>
+			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}" />
 
 			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
 				titletip="#{loginBean.authorisationService.adminContactMSG}"
@@ -133,8 +138,9 @@
 		</p:tabView>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
-			position="center" header="#{messages.specification_video_help_title}"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			responsive="true" position="center"
+			header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">

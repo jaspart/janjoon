@@ -7,159 +7,228 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../templates/template.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="stats.js" />
+	</ui:define>
 	<ui:define name="content">
-
 		<h:form style="width:100%;display:none;">
 			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper"
+				name="tabChangeHelper" update=":statsTabView"
 				actionListener="#{jJStatusBean.onTabStatChange}"
-				oncomplete="PF('blockUIWidget').unblock()" />
+				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+
+			<p:remoteCommand onstart="PF('blockUIWidget').block()"
+				name="sprintTabChangeHelper"
+				update=":statsTabView:activeSprintIndexForm"
+				actionListener="#{jJStatusBean.onTabStatChange}"
+				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
 		</h:form>
 		<!-- 		<p:commandButton value="#{messages.specification_video_help_title}" -->
 		<!-- 			id="videoHelpBtn" icon="ui-icon-video" -->
 		<!-- 			onclick="PF('videoHelpWidget').show()" type="button" -->
 		<!-- 			style="float: right;" /> -->
 		<f:event type="preRenderComponent"
-			oncomplete="PF('blockUIWidget').unblock()"
+			oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
 			listener="#{jJStatusBean.loadData()}" />
-		<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="true"
-			activeIndex="#{jJStatusBean.activeTabIndex}"
-			onTabChange="tabChangeHelper([{name: 'activeIndex', value: index}])"
-			cache="true">
-			<p:tab id="specTab" title="#{messages.label_requirement}">
-
-				<p:commandButton id="infoBtnSpec"
-					icon="fa fa-info-circle  Gray Fs20" styleClass="Fright GrayButton"
-					type="button" style="float: right;"
-					title="#{messages.specification_video_help_title}" />
-				<p:overlayPanel id="infoPanelSpec" for="infoBtnSpec"
-					hideEffect="fade" style="width:30%">
-					<p:panelGrid style="width: 100%;" columns="1">
-						<ul>
-							<li>#{messages.statistique_spec_projectKpi_help}</li>
-							<li>#{messages.statistique_spec_pieChart_help}</li>
-						</ul>
-					</p:panelGrid>
-					<p:panelGrid style="width: 100%;">
-						<f:facet name="header">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="false"
+				activeIndex="#{jJStatusBean.activeTabIndex}"
+				onTabChange="tabChangeHelper([{name: 'activeIndex', value: index}])"
+				cache="true">
+				<p:tab id="specTab" title="#{messages.label_requirement}">
+					<p:overlayPanel id="infoPanelSpec" for="specForm:infoBtnSpec"
+						hideEffect="fade">
+						<p:panelGrid style="width: 100%;" columns="1">
+							<ul>
+								<li>#{messages.statistique_spec_projectKpi_help}</li>
+								<li>#{messages.statistique_spec_pieChart_help}</li>
+							</ul>
+						</p:panelGrid>
+						<p:panelGrid style="width: 100%;">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="6">Code des Couleurs</p:column>
+								</p:row>
+							</f:facet>
 							<p:row>
-								<p:column colspan="6">Code des Couleurs</p:column>
+								<p:column colspan="2" styleClass="DELAY">
+									<p:outputLabel style="color: #fff;"
+										value="#{messages.statistique_help_project_delay}" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="ONTIME">
+									<p:outputLabel style="color: #fff;"
+										value="#{messages.statistique_help_project_time}" />
+								</p:column>
+
+								<p:column colspan="2" styleClass="INADVANCE">
+									<p:outputLabel style="color: #fff;"
+										value="#{messages.statistique_help_project_advance}" />
+								</p:column>
 							</p:row>
-						</f:facet>
-						<p:row>
-							<p:column colspan="2" styleClass="DELAY">
-								<p:outputLabel style="color: #fff;"
-									value="#{messages.statistique_help_project_delay}" />
-							</p:column>
+						</p:panelGrid>
+					</p:overlayPanel>
 
-							<p:column colspan="2" styleClass="ONTIME">
-								<p:outputLabel style="color: #fff;"
-									value="#{messages.statistique_help_project_time}" />
-							</p:column>
+					<h:panelGroup layout="block" styleClass="Container">
+						<h:form id="specForm">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container10 Responsive100 Fright">
+								<p:commandButton id="infoBtnSpec"
+									icon="fa fa-info-circle  Gray Fs20"
+									styleClass="Fright GrayButton" type="button"
+									title="#{messages.specification_video_help_title}" />
+							</h:panelGroup>
 
-							<p:column colspan="2" styleClass="INADVANCE">
-								<p:outputLabel style="color: #fff;"
-									value="#{messages.statistique_help_project_advance}" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</p:overlayPanel>
-				<h:form id="specForm">
-					<h:panelGrid id="statPanel" columns="2">
-						<p:chart id="custom" responsive="true"
-							rendered="#{jJStatusBean.pieChart != null}"
-							model="#{jJStatusBean.pieChart}" style="width:400px;height:300px"
-							type="pie" />
-						<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
-							style="width:400px;height:300px" responsive="true"
-							rendered="#{jJStatusBean.prjMetergauge != null}" />
-					</h:panelGrid>
-					<p:dataTable id="categoryTable" var="categoryModel"
-						emptyMessage="#{messages.label_notRecordFound}"
-						value="#{jJStatusBean.categoryDataModel}">
-						<f:facet name="header">
-							<h:outputText value="Categories stats" />
-						</f:facet>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{messages.label_name}" />
-							</f:facet>
-							<h:outputText value="#{categoryModel.category.name}"
-								style="margin: auto;" />
-						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText
-									value="#{messages.specification_completion_progress}" />
-							</f:facet>
-							<p:chart id="coverage" responsive="true"
-								model="#{categoryModel.categoryPieChart}" type="pie"
-								style="width:200px;height:150px;margin: auto;" />
-						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText
-									value="#{messages.specification_coverage_progress}" />
-							</f:facet>
-							<p:progressBar style="width:385px;margin: auto;"
-								value="#{categoryModel.coverageProgress}"
-								labelTemplate="{value}%" displayOnly="true" />
-						</p:column>
-					</p:dataTable>
-				</h:form>
-			</p:tab>
-			<p:tab id="bugTab" title="Bug">
-				<p:commandButton id="infoBtnBug" icon="fa fa-info-circle  Gray Fs20"
-					styleClass="Fright GrayButton" type="button" style="float: right;"
-					title="#{messages.specification_video_help_title}" />
-				<p:overlayPanel id="infoPanelBug" for="infoBtnBug" hideEffect="fade"
-					style="width:30%">
-					<p:panelGrid style="width: 100%;" columns="1">
-						<ul>
-							<li>#{messages.statistique_bug_bugKpi_help}</li>
-							<li>#{messages.statistique_bug_bugpieChart_help}</li>
-						</ul>
-					</p:panelGrid>
-				</p:overlayPanel>
-				<h:form id="bugForm">
-					<h:panelGrid id="bugPanel" columns="2">
-						<p:chart id="custom" responsive="true"
-							rendered="#{jJStatusBean.bugPieChart != null}"
-							model="#{jJStatusBean.bugPieChart}"
-							style="width:400px;height:300px" type="pie" />
+							<h:panelGroup layout="block"
+								styleClass="Container45 Responsive100">
+								<p:chart id="custom" responsive="true"
+									rendered="#{jJStatusBean.pieChart != null}"
+									model="#{jJStatusBean.pieChart}" style="height:300px"
+									type="pie" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container45 Responsive100">
+								<p:chart type="metergauge" model="#{jJStatusBean.prjMetergauge}"
+									style="height:300px" responsive="true"
+									rendered="#{jJStatusBean.prjMetergauge != null}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100">
+								<p:dataTable id="categoryTable" var="categoryModel"
+									emptyMessage="#{messages.label_notRecordFound}"
+									value="#{jJStatusBean.categoryDataModel}">
+									<f:facet name="header">
+										<h:outputText value="Categories stats" />
+									</f:facet>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{messages.label_name}" />
+										</f:facet>
+										<h:outputText value="#{categoryModel.category.name}"
+											style="margin: auto;" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText
+												value="#{messages.specification_completion_progress}" />
+										</f:facet>
+										<p:chart id="coverage" responsive="true"
+											model="#{categoryModel.categoryPieChart}" type="pie"
+											style="height:150px;margin: auto;" />
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText
+												value="#{messages.specification_coverage_progress}" />
+										</f:facet>
+										<p:progressBar style="margin: auto;"
+											value="#{categoryModel.coverageProgress}"
+											labelTemplate="{value}%" displayOnly="true" />
+									</p:column>
+								</p:dataTable>
+							</h:panelGroup>
+						</h:form>
+					</h:panelGroup>
+				</p:tab>
+				<p:tab id="bugTab" title="Bug">
+					<p:overlayPanel id="infoPanelBug" for="bugForm:infoBtnBug">
+						<p:panelGrid style="width: 100%;" columns="1">
+							<ul>
+								<li>#{messages.statistique_bug_bugKpi_help}</li>
+								<li>#{messages.statistique_bug_bugpieChart_help}</li>
+							</ul>
+						</p:panelGrid>
+					</p:overlayPanel>
+					<h:form id="bugForm">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container10 Responsive100 Fright">
+								<p:commandButton id="infoBtnBug"
+									icon="fa fa-info-circle  Gray Fs20" styleClass="Fright GrayButton"
+									type="button"
+									title="#{messages.specification_video_help_title}" />
+							</h:panelGroup>
 
-						<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
-							style="width:400px;height:300px"
-							rendered="#{jJStatusBean.bugMetergauge != null}"
-							responsive="true" />
-					</h:panelGrid>
-				</h:form>
-			</p:tab>
-			<p:tab id="sprintTab" title="Sprint"
-				rendered="#{!jJStatusBean.emptysprintList}">
-				<p:tabView id="SprintTabView" dynamic="true" widgetVar="SprintTab"
-					value="#{jJStatusBean.sprintList}" var="jjsprint"
-					onTabChange="tabChangeHelper([{name: 'activeSprintIndex', value: index}])"
-					activeIndex="#{jJStatusBean.activeTabSprintIndex}">
-					<p:tab title="#{jjsprint.sprint.name}"
-						titletip="#{!jjsprint.render and jjsprint.chartModel == null ? messages.statistique_disabled_sprint_titletip :''}"
-						disabled="#{jjsprint.render}">
-						<h3>#{messages.statistique_completion_progress_title}</h3>
-						<p:progressBar value="#{jjsprint.progressBarValue}"
-							labelTemplate="{value}%" displayOnly="true" />
-						<br />
-						<br />
-						<p:chart model="#{jjsprint.chartModel}" type="bar"
-							style="height:400px;" responsive="true"
-							widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
-							rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
-					</p:tab>
-				</p:tabView>
-			</p:tab>
-		</p:tabView>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<p:chart id="custom" responsive="true"
+									rendered="#{jJStatusBean.bugPieChart != null}"
+									model="#{jJStatusBean.bugPieChart}" style="height:300px"
+									type="pie" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+
+								<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
+									style="height:300px"
+									rendered="#{jJStatusBean.bugMetergauge != null}"
+									responsive="true" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:form>
+				</p:tab>
+				<p:tab id="sprintTab" title="Sprint"
+					rendered="#{!jJStatusBean.emptysprintList}">
+					<h:panelGroup layout="block" styleClass="Container">
+						<h:panelGroup layout="block"
+							styleClass="Container100 ShowOnMobile">
+							<h:form id="activeSprintIndexForm">
+								<h:panelGroup layout="block" styleClass="Container30">
+									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+										<p:outputLabel for="activeSprintIndex" value="Sprint:" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="Container70">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:selectOneMenu id="activeSprintIndex"
+											value="#{jJStatusBean.activeTabSprintIndex}" effect="fade"
+											onchange="PF('SprintTab').select(value);">
+											<f:selectItems value="#{jJStatusBean.sprintList}"
+												var="jjsprint"
+												itemDisabled="#{jjsprint.sprint.name == null}"
+												itemLabel="#{jjsprint.sprint.name != null ? jjsprint.sprint.name : messages.project_scrum_new_title}"
+												itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:form>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container100">
+							<p:tabView id="SprintTabView" dynamic="true"
+								widgetVar="SprintTab" style="max-width: 200px;"
+								value="#{jJStatusBean.sprintList}" var="jjsprint"
+								scrollable="true" styleClass="responsiveTabView"
+								onTabChange="sprintTabChangeHelper([{name: 'activeSprintIndex', value: index}])"
+								activeIndex="#{jJStatusBean.activeTabSprintIndex}">
+								<p:tab title="#{jjsprint.sprint.name}"
+									titletip="#{!jjsprint.render and jjsprint.chartModel == null ? messages.statistique_disabled_sprint_titletip :''}"
+									disabled="#{jjsprint.render}">
+									<h:panelGroup layout="block" styleClass="Container">
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h3 style="text-align: center;">#{messages.statistique_completion_progress_title}</h3>
+											<h:panelGroup layout="block" styleClass="EmptyBox5" />
+											<p:progressBar value="#{jjsprint.progressBarValue}"
+												labelTemplate="{value}%" displayOnly="true" />
+										</h:panelGroup>
+										<div class="EmptyBox30 barChart"
+											id="barChart_#{jjsprint.sprint.id}" />
+										<h:panelGroup layout="block" styleClass="Container100">
+											<p:chart model="#{jjsprint.chartModel}" type="bar"
+												style="height:400px;" responsive="true"
+												widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+												rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</p:tab>
+							</p:tabView>
+						</h:panelGroup>
+					</h:panelGroup>
+				</p:tab>
+			</p:tabView>
+		</h:panelGroup>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
-			position="center" header="#{messages.specification_video_help_title}"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			responsive="true" position="center"
+			header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">

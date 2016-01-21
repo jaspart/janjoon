@@ -28,7 +28,7 @@
 		<!-- 			style="min-height:500px;overflow:hidden !important;height:700px !important;" -->
 		<!-- 			stateful="true"> -->
 		<h:form id="testFormNorth">
-			<p:dialog widgetVar="categoryPanel" id="categoryPanel" responsive="true"
+			<p:dialog widgetVar="categoryPanel" id="categoryPanel" 
 				onHide="hideEvent()" styleClass="overlayPanelDialog"
 				rendered="#{loginBean.mobile}" binding="#{categoryPanel}"
 				closable="false" responsive="true" >
@@ -825,6 +825,7 @@
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="saveBug" value="#{messages.label_save}"
+									icon="fa fa-save Fs16"
 									action="#{jJBugBean.saveBug}" update=":runForm :growlForm"
 									oncomplete="PF('bugTestDialogWidget').hide()" />
 							</h:panelGroup>

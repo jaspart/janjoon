@@ -219,6 +219,7 @@
 								styleClass="Container50 Responsive50">
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
 									<p:commandButton id="editSaveButton"
+										icon="fa fa-save Fs16"
 										onstart="PF('bugBlockUIWidget').block()"
 										oncomplete="PF('bugBlockUIWidget').unblock()"
 										value="#{messages.bug_edit_save_button}"
@@ -379,6 +380,7 @@
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createSaveButton"
+									icon="fa fa-save Fs16"
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.label_save}" action="#{jJBugBean.persistBug}"

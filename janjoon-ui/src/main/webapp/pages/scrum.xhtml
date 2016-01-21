@@ -8,10 +8,30 @@
 
 <ui:composition>
 	<h:panelGroup layout="block" styleClass="Container">
+		<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
+		<h:form id="activeSprintIndexForm">
+			<h:panelGroup layout="block" styleClass="Container30">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+					<p:outputLabel for="activeSprintIndex" value="Sprint:" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container70">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:selectOneMenu id="activeSprintIndex" value="#{jJSprintBean.activeTabSprintIndex}" 
+						effect="fade" onchange="PF('SprintTab').select(value);">						
+						<f:selectItems value="#{jJSprintBean.sprintList}" var="jjsprint"
+							itemLabel="#{jjsprint.sprint.name != null ? jjsprint.sprint.name : messages.project_scrum_new_title}"
+							itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />						
+					</p:selectOneMenu>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="Container100">
-			<p:tabView id="SprintTabView" dynamic="true" cache="true" scrollable="true" 
-				widgetVar="SprintTab" value="#{jJSprintBean.sprintList}" style="max-width: 1000px;"
-				onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
+			<p:tabView id="SprintTabView" dynamic="true" cache="true"
+				scrollable="true" widgetVar="SprintTab" styleClass="responsiveTabView"
+				value="#{jJSprintBean.sprintList}" style="max-width: 200px;"
+				onTabChange="sprintTabChangeHelper([{name: 'activeScrumIndex', value: index}]);"
 				var="jjsprint" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
 				<p:tab
 					disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
@@ -71,6 +91,8 @@
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
+									<div class="EmptyBox1 barChart"
+										id="barChart_#{jjsprint.sprint.id}" />
 									<h:panelGroup layout="block"
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="Container40">
@@ -114,6 +136,7 @@
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="EmptyBox1" />
 									<h:panelGroup layout="block"
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="Container40">
@@ -146,6 +169,7 @@
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="EmptyBox1" />
 									<h:panelGroup layout="block"
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="Container40">
@@ -178,10 +202,9 @@
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
-
-
+									<h:panelGroup layout="block" styleClass="EmptyBox1" />
 									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive">
+										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="editSprintButton"
 												disabled="{!loginBean.authorisationService.wProject}"
@@ -202,14 +225,14 @@
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive">
+										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton
 												value="#{messages.project_gantt_import_button}"
 												id="createTaskttButton" icon="fa fa-plus-square Fs16"
 												update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :importTaskDialogPanel :growlForm"
 												immediate="true" onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+												oncomplete="PF('blockUIWidget').unblock();"
 												resetValues="true"
 												actionListener="#{jJTaskBean.loadImportFormat}"
 												title="#{messages.project_gantt_import_button}">
@@ -227,6 +250,7 @@
 									styleClass="Container99">
 									<h:panelGroup layout="block" styleClass="Container100">
 										<p:chart type="bar" responsive="true"
+											id="barChart_#{jjsprint.sprint.id}"
 											model="#{jjsprint.chartModel}"
 											widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
 											style="height:300px;" />
@@ -246,8 +270,8 @@
 								<h:panelGroup layout="block"
 									styleClass="Container33 Responsive100">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
-									<p:fieldset legend="#{messages.project_scrum_todo}" style="padding: 4px;padding-bottom: 0px;"
-										id="todoFieldset">
+									<p:fieldset legend="#{messages.project_scrum_todo}"
+										style="padding: 4px;padding-bottom: 0px;" id="todoFieldset">
 										<p:outputPanel id="tododropArea"
 											style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
 											<h:outputText
@@ -257,8 +281,9 @@
 											<p:dataTable scrollable="true" scrollHeight="250" id="todo"
 												var="todo" value="#{jjsprint.todoTask}"
 												emptyMessage="#{messages.label_notRecordFound}"
-												styleClass="planning-dataTable task-dataTable" rowKey="#{todo.id}"
-												sortOrder="DESCENDING" style="table-layout: fixed"
+												styleClass="planning-dataTable task-dataTable"
+												rowKey="#{todo.id}" sortOrder="DESCENDING"
+												style="table-layout: fixed"
 												rendered="#{not empty jjsprint.todoTask}"
 												sortBy="#{todo.creationDate}">
 
@@ -325,8 +350,8 @@
 								<h:panelGroup layout="block"
 									styleClass="Container33 Responsive100">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
-									<p:fieldset legend="#{messages.project_scrum_inProgress}" style="padding: 4px;padding-bottom: 0px;"
-										id="progFieldset">
+									<p:fieldset legend="#{messages.project_scrum_inProgress}"
+										style="padding: 4px;padding-bottom: 0px;" id="progFieldset">
 										<p:outputPanel id="progdropArea"
 											style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
 											<h:outputText
@@ -341,8 +366,7 @@
 												value="#{jjsprint.progressTask}" rowKey="#{prog.id}"
 												rendered="#{not empty jjsprint.progressTask}"
 												sortBy="#{prog.startDateReal}">
-												<p:ajax event="cellEdit"
-													oncomplete="updateTabViewWidth();"
+												<p:ajax event="cellEdit" oncomplete="updateTabViewWidth();"
 													listener="#{jJSprintBean.onCellEditTask}"
 													update=":growlForm :projecttabview:SprintTabView:taskListForm :projecttabview:SprintTabView:sprintForm" />
 												<p:column rendered="#{!jjsprint.disableDragDrop}"
@@ -408,15 +432,16 @@
 								<h:panelGroup layout="block"
 									styleClass="Responsive100 Container33">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
-									<p:fieldset legend="#{messages.project_scrum_done}" style="padding: 4px;padding-bottom: 0px;"
-										id="doneFieldset">
+									<p:fieldset legend="#{messages.project_scrum_done}"
+										style="padding: 4px;padding-bottom: 0px;" id="doneFieldset">
 										<p:outputPanel id="donedropArea"
 											style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
 											<h:outputText
 												value="!!!  #{messages.project_scrum_drop_panel}  !!!"
 												rendered="#{empty jjsprint.doneTask and !jjsprint.disableDragDrop}"
 												styleClass="Fs24" />
-											<p:dataTable id="done" styleClass="planning-dataTable task-dataTable"
+											<p:dataTable id="done"
+												styleClass="planning-dataTable task-dataTable"
 												emptyMessage="#{messages.label_notRecordFound}" var="done"
 												value="#{jjsprint.doneTask}" rowKey="#{done.id}"
 												style="table-layout: fixed"

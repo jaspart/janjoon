@@ -5,6 +5,7 @@
 
 .planning-dataTable thead {
 	/*display: none;*/
+	
 }
 
 .task-dataTable thead {
@@ -24,7 +25,7 @@
 }
 
 .pe-layout-pane-content {
-	padding: 0px !important;	
+	padding: 0px !important;
 }
 
 .ui-layout-resizer {
@@ -53,7 +54,7 @@
 .planning-dataTable .ui-datatable-data tr {
 	height: 50px;
 	overflow: hidden;
-/* 	width: 1700px; */
+	/* 	width: 1700px; */
 }
 
 .planning-action-column {
