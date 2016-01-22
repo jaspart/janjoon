@@ -7,383 +7,472 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/template.xhtml">
-	<ui:define name="content">
+	<ui:define name="head">
 		<style type="text/css">
 .ui-datalist-data {
-	-webkit-padding-start: 15px;
-} 
+	-webkit-padding-start: 0px;
+}
 
-/* .ui-fileupload-progress { */
-/* 	display: none; */
-/* } */
-/* .ui-fileupload-cancel { */
-/* 	display: none; */
-/* } */
-/* .ui-fileupload-files { */
-/* 	margin: 1px 0; */
-/* 	width: 150px !important; */
-/* 	display: inline-block; */
-/* 	height: 50px; */
-/* } */
 .ui-datatable table {
 	border-collapse: collapse;
 	table-layout: fixed;
 }
+
+.ui-datatable-tablewrapper {
+	margin: 0px;
+}
+
+.ui-datalist-item {
+	padding: 3px;
+}
+
+.paginated .ui-datalist-data {
+	padding-left: 10px;
+}
 </style>
-		<p:panel style="height:650px;"
-			header="#{messages.contact_panel_header}">
-			<h:panelGrid style="float: left;" columns="3" cellspacing="0">
-				<h:form id="configForm" style="float:left;">
-					<p:remoteCommand name="updateAdmin" />
-					<p:panelGrid>
-						<f:facet name="header">
-							<p:row>
-								<p:column colspan="4">Configuration</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="4">
-									<p:graphicImage style="width:100px; height:100px"
-										value="#{imageStreamer.image}" cache="false">
-										<f:param name="contactId" value="#{loginBean.contact.id}" />
-									</p:graphicImage>
+	</ui:define>
+	<ui:define name="content">
+		<h:form>
+			<p:remoteCommand name="updateAdmin" />
+		</h:form>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:form id="configForm">
+
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container60 Responsive100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:panel header="#{messages.contact_panel_header}"
+								styleClass="Container100">
+								<h:panelGroup layout="block" styleClass="EmptyBox5" />
+								<h:panelGroup layout="block" styleClass="Container100">
+									<h:panelGroup layout="block"
+										styleClass="Container25 Responsive SoftGrayBack">
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:graphicImage value="#{imageStreamer.image}" cache="false"
+													height="100%" width="100%">
+													<f:param name="contactId" value="#{loginBean.contact.id}" />
+												</p:graphicImage>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:commandButton
+													onclick="PF('changePhotoDialogWidget').show()"
+													value="Change" icon="fa fa-plus-square Fs20" />
+
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block"
+										styleClass="Container75 Responsive100">
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="firstname"
+														value="#{messages.contact_firstname}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+
+													<p:inputText id="firstname"
+														value="#{jJContactBean.contactUtil.firstname}"
+														required="true">
+														<f:validateLength maximum="100" />
+													</p:inputText>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="name" value="#{messages.contact_name}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="name"
+														value="#{jJContactBean.contactUtil.name}" required="true">
+														<f:validateLength maximum="100" />
+													</p:inputText>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="email"
+														value="#{messages.contact_email}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="email"
+														value="#{jJContactBean.contactUtil.email}" readonly="true" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="lastproject"
+														value="#{messages.contact_lastproject}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:selectOneMenu id="lastproject"
+														value="#{jJContactBean.contactUtil.lastProject}"
+														effect="fade" filter="true" filterMatchMode="startsWith"
+														converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+
+														<f:selectItem itemValue="#{null}"
+															itemLabel="#{messages.contact_anyProject}" />
+														<f:selectItems value="#{jJProjectBean.projectList}"
+															var="p" itemLabel="#{p.name}" itemValue="#{p}" />
+														<p:ajax onstart="PF('blockUIWidget').block()"
+															oncomplete="PF('blockUIWidget').unblock()"
+															update="configForm" />
+													</p:selectOneMenu>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="EmptyBox1" />
+									<h:panelGroup layout="block"
+										styleClass="Container50 Responsive100">
+										<h:panelGroup layout="block" styleClass="Container40">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndentLabel">
+												<p:outputLabel for="lastproduct"
+													value="#{messages.contact_lastproduct}:" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container60">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:selectOneMenu id="lastproduct"
+													value="#{jJContactBean.contactUtil.lastProduct}"
+													effect="fade" filter="true" filterMatchMode="startsWith"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+
+													<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.contact_anyProduct}" />
+													<f:selectItems value="#{jJProductBean.productList}" var="p"
+														itemLabel="#{p.name}" itemValue="#{p}" />
+													<p:ajax onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock()"
+														update="configForm" />
+												</p:selectOneMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+
+									<h:panelGroup layout="block"
+										styleClass="Container50 Responsive100">
+										<h:panelGroup layout="block" styleClass="Container40">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndentLabel">
+												<p:outputLabel for="lastversion"
+													value="#{messages.contact_lastversion}:" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container60">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:selectOneMenu id="lastversion"
+													value="#{jJContactBean.contactUtil.lastVersion}"
+													effect="fade" filter="true" filterMatchMode="startsWith"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
+
+													<f:selectItem itemValue="#{null}"
+														itemLabel="#{messages.contact_anyVersion}" />
+													<f:selectItems value="#{jJContactBean.versionList}" var="p"
+														itemLabel="#{p.name}" itemValue="#{p}" />
+												</p:selectOneMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block"
+										rendered="#{loginBean.authorisationService.renderCategoryConfig}"
+										styleClass="Container100">
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:outputLabel for="categories"
+													value="#{messages.contact_categories}:" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:selectManyMenu id="categories" scrollHeight="110"
+													value="#{jJContactBean.loggedContactCategories}"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
+													showCheckbox="true">
+													<f:selectItems value="#{jJContactBean.categories}"
+														var="cat" itemLabel="#{cat.name}" itemValue="#{cat}" />
+													<f:validator validatorId="listCategoriesValidator" />
+												</p:selectManyMenu>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container100">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton id="submit" icon="fa fa-save Fs16"
+												update=":vacationForm configForm :workdaysCalendar :growlForm "
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												value="#{messages.contact_submit}"
+												action="#{jJContactBean.updateUserConfiguration(loginBean,jJRequirementBean)}" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+
+							</p:panel>
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" styleClass="Container40 Responsive100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:dataTable id="permissionDataTable" var="permission"
+								scrollable="true" scrollHeight="200" styleClass="Container99"
+								value="#{jJContactBean.contactUtil.permissions}"
+								emptyMessage="#{messages.label_notRecordFound}">
+								<f:facet name="header">
+									<h:outputText
+										value="#{messages.admin_contact_new_table_title} " />
+								</f:facet>
+								<p:column style="width:40%">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText
+													value="#{messages.admin_contact_new_table_profile_title}" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<h:outputText value="#{permission.profile.name}" />
 								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="4">
-									<p:commandButton onclick="PF('changePhotoDialogWidget').show()"
-										value="Change" icon="ui-icon-plusthick" style="float:right;" />
+
+								<p:column style="width:30%">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText
+													value="#{messages.admin_contact_new_table_project_title}" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<h:outputText value="#{permission.project.name}" />
 								</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="firstname"
-									value="#{messages.contact_firstname}" />
 
-							</p:column>
-							<p:column colspan="2">
-								<p:inputText id="firstname"
-									value="#{jJContactBean.contactUtil.firstname}" required="true">
-									<f:validateLength maximum="100" />
-								</p:inputText>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="name" value="#{messages.contact_name}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:inputText id="name" value="#{jJContactBean.contactUtil.name}"
-									required="true">
-									<f:validateLength maximum="100" />
-								</p:inputText>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="email" value="#{messages.contact_email}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:inputText id="email"
-									value="#{jJContactBean.contactUtil.email}" readonly="true" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="lastproject"
-									value="#{messages.contact_lastproject}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:selectOneMenu id="lastproject"
-									value="#{jJContactBean.contactUtil.lastProject}"
-									panelStyle="width:120px" effect="fade" style="width:160px"
-									filter="true" filterMatchMode="startsWith"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
-
-									<f:selectItem itemValue="#{null}"
-										itemLabel="#{messages.contact_anyProject}" />
-									<f:selectItems value="#{jJProjectBean.projectList}" var="p"
-										itemLabel="#{p.name}" itemValue="#{p}" />
-									<p:ajax onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="lastproduct"
-									value="#{messages.contact_lastproduct}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:selectOneMenu id="lastproduct"
-									value="#{jJContactBean.contactUtil.lastProduct}"
-									panelStyle="width:120px" effect="fade" style="width:160px"
-									filter="true" filterMatchMode="startsWith"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
-
-									<f:selectItem itemValue="#{null}"
-										itemLabel="#{messages.contact_anyProduct}" />
-									<f:selectItems value="#{jJProductBean.productList}" var="p"
-										itemLabel="#{p.name}" itemValue="#{p}" />
-									<p:ajax onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()" update="configForm" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:outputLabel for="lastversion"
-									value="#{messages.contact_lastversion}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:selectOneMenu id="lastversion"
-									value="#{jJContactBean.contactUtil.lastVersion}"
-									panelStyle="width:120px" effect="fade" style="width:160px"
-									filter="true" filterMatchMode="startsWith"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
-
-									<f:selectItem itemValue="#{null}"
-										itemLabel="#{messages.contact_anyVersion}" />
-									<f:selectItems value="#{jJContactBean.versionList}" var="p"
-										itemLabel="#{p.name}" itemValue="#{p}" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row
-							rendered="#{loginBean.authorisationService.renderCategoryConfig}">
-							<p:column colspan="2">
-								<p:outputLabel for="categories"
-									value="#{messages.contact_categories}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:selectManyMenu id="categories" scrollHeight="110"
-									value="#{jJContactBean.loggedContactCategories}"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
-									style="height: 110px !important;" showCheckbox="true">
-									<f:selectItems value="#{jJContactBean.categories}" var="cat"
-										itemLabel="#{cat.name}" itemValue="#{cat}" />
-									<f:validator validatorId="listCategoriesValidator" />
-								</p:selectManyMenu>
-							</p:column>
-						</p:row>
-						<f:facet name="footer">
-							<p:row>
-								<p:column colspan="4" style="text-align: right">
-									<p:commandButton id="submit"
-										update=":vacationForm configForm :workdaysCalendar :growlForm "
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()"
-										value="#{messages.contact_submit}"
-										action="#{jJContactBean.updateUserConfiguration(loginBean,jJRequirementBean)}" />
-
+								<p:column style="width:30%">
+									<f:facet name="header">
+										<p:row>
+											<p:column>
+												<h:outputText
+													value="#{messages.admin_contact_new_table_product_title}" />
+											</p:column>
+										</p:row>
+									</f:facet>
+									<h:outputText value="#{permission.product.name}" />
 								</p:column>
-							</p:row>
-						</f:facet>
-					</p:panelGrid>
-				</h:form>
-				<h:panelGrid columns="1" style="margin-top: -4px;">
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+			<h:panelGroup layout="block" styleClass="EmptyBox20" />
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="Container60 Responsive100">
 					<h:form id="workdaysCalendar">
-						<p:dataTable value="#{jJContactBean.workDays}" var="day"
-							style="width: 550px;"
-							emptyMessage="#{messages.label_notRecordFound}"
-							rendered="#{jJContactBean.workDays != null}">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:dataTable value="#{jJContactBean.workDays}" var="day"
+								emptyMessage="#{messages.label_notRecordFound}"
+								rendered="#{jJContactBean.workDays != null}">
 
-							<p:columnGroup type="header">
-								<p:row>
-									<p:column colspan="5" style="text-align: left;"
-										headerText="#{messages.contact_datatableHeader}" />
-								</p:row>
-								<p:row>
-									<p:column rowspan="2" width="40%"
-										headerText="#{messages.contact_dataTable_day}" />
-									<p:column colspan="2" rowspan="1" width="30%"
-										headerText="#{messages.contact_datatable_morning}" />
-									<p:column colspan="2" rowspan="1" width="30%"
-										headerText="#{messages.contact_datatable_afternoon}" />
-								</p:row>
-								<p:row>
-									<p:column width="15%"
-										headerText="#{messages.contact_dataTable_from}" />
-									<p:column width="15%"
-										headerText="#{messages.contact_dataTable_to}" />
-									<p:column width="15%"
-										headerText="#{messages.contact_dataTable_from}" />
-									<p:column width="15%"
-										headerText="#{messages.contact_dataTable_to}" />
-								</p:row>
-							</p:columnGroup>
-							<p:column width="40%">
-								<h:outputText value="#{day.day}" />
-							</p:column>
-							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate1}"
-									locale="#{localeBean.locale}" showDeselectButton="true"
-									mode="popup">
-									<p:ajax event="timeSelect"
-										update=":workdaysCalendar :vacationForm :configForm :growlForm"
-										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
-										onstart="PF('blockUIWidget').block();"
-										oncomplete="PF('blockUIWidget').unblock();" />
-								</pe:timePicker>
-							</p:column>
-							<p:column width="15%">
-								<pe:timePicker value="#{day.endDate1}" showDeselectButton="true"
-									mode="popup" locale="#{localeBean.locale}">
-									<p:ajax event="timeSelect"
-										update=":workdaysCalendar :vacationForm :configForm :growlForm"
-										listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
-										onstart="PF('blockUIWidget').block();"
-										oncomplete="PF('blockUIWidget').unblock();" />
-								</pe:timePicker>
-							</p:column>
-							<p:column width="15%">
-								<pe:timePicker value="#{day.startDate2}"
-									locale="#{localeBean.locale}" showDeselectButton="true"
-									mode="popup">
-									<p:ajax event="timeSelect"
-										update=":workdaysCalendar :vacationForm :configForm :growlForm"
-										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
-										onstart="PF('blockUIWidget').block();"
-										oncomplete="PF('blockUIWidget').unblock();" />
-								</pe:timePicker>
-							</p:column>
-							<p:column width="15%">
-								<pe:timePicker value="#{day.endDate2}" showDeselectButton="true"
-									mode="popup" locale="#{localeBean.locale}">
-									<p:ajax event="timeSelect"
-										update=":workdaysCalendar :vacationForm :configForm :growlForm"
-										listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
-										onstart="PF('blockUIWidget').block();"
-										oncomplete="PF('blockUIWidget').unblock();" />
-								</pe:timePicker>
-							</p:column>
-						</p:dataTable>
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="5" style="text-align: left;"
+											headerText="#{messages.contact_datatableHeader}" />
+									</p:row>
+									<p:row>
+										<p:column rowspan="2" width="40%"
+											headerText="#{messages.contact_dataTable_day}" />
+										<p:column colspan="2" rowspan="1" width="30%"
+											headerText="#{messages.contact_datatable_morning}" />
+										<p:column colspan="2" rowspan="1" width="30%"
+											headerText="#{messages.contact_datatable_afternoon}" />
+									</p:row>
+									<p:row>
+										<p:column width="15%"
+											headerText="#{messages.contact_dataTable_from}" />
+										<p:column width="15%"
+											headerText="#{messages.contact_dataTable_to}" />
+										<p:column width="15%"
+											headerText="#{messages.contact_dataTable_from}" />
+										<p:column width="15%"
+											headerText="#{messages.contact_dataTable_to}" />
+									</p:row>
+								</p:columnGroup>
+								<p:column width="40%">
+									<h:outputText value="#{day.day}" />
+								</p:column>
+								<p:column width="15%">
+									<pe:timePicker value="#{day.startDate1}"
+										locale="#{localeBean.locale}" showDeselectButton="true"
+										mode="popup">
+										<p:ajax event="timeSelect"
+											update=":workdaysCalendar :vacationForm :configForm :growlForm"
+											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
+											onstart="PF('blockUIWidget').block();"
+											oncomplete="PF('blockUIWidget').unblock();" />
+									</pe:timePicker>
+								</p:column>
+								<p:column width="15%">
+									<pe:timePicker value="#{day.endDate1}"
+										showDeselectButton="true" mode="popup"
+										locale="#{localeBean.locale}">
+										<p:ajax event="timeSelect"
+											update=":workdaysCalendar :vacationForm :configForm :growlForm"
+											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
+											onstart="PF('blockUIWidget').block();"
+											oncomplete="PF('blockUIWidget').unblock();" />
+									</pe:timePicker>
+								</p:column>
+								<p:column width="15%">
+									<pe:timePicker value="#{day.startDate2}"
+										locale="#{localeBean.locale}" showDeselectButton="true"
+										mode="popup">
+										<p:ajax event="timeSelect"
+											update=":workdaysCalendar :vacationForm :configForm :growlForm"
+											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
+											onstart="PF('blockUIWidget').block();"
+											oncomplete="PF('blockUIWidget').unblock();" />
+									</pe:timePicker>
+								</p:column>
+								<p:column width="15%">
+									<pe:timePicker value="#{day.endDate2}"
+										showDeselectButton="true" mode="popup"
+										locale="#{localeBean.locale}">
+										<p:ajax event="timeSelect"
+											update=":workdaysCalendar :vacationForm :configForm :growlForm"
+											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
+											onstart="PF('blockUIWidget').block();"
+											oncomplete="PF('blockUIWidget').unblock();" />
+									</pe:timePicker>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
 					</h:form>
-					<h:form id="permissionForm"
-						style="#{jJContactBean.calendarUtil.workDays != null ? 'margin-top :20px;' : ''}">
-						<p:dataTable id="permissionDataTable" var="permission"
-							scrollable="true" style="width:550px;" scrollHeight="200"
-							value="#{jJContactBean.contactUtil.permissions}"
-							emptyMessage="#{messages.label_notRecordFound}">
-							<f:facet name="header">
-								<h:outputText value="#{messages.admin_contact_new_table_title} " />
-							</f:facet>
-							<p:column style="width:40%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_contact_new_table_profile_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
-								<h:outputText value="#{permission.profile.name}" />
-							</p:column>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container40 Responsive100">
+					<h:form id="vacationForm">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:dataList var="vacation" paginator="true" rows="9"
+								paginatorPosition="bottom" itemType="none"
+								emptyMessage="#{messages.contact_empty_vacation}"
+								value="#{jJContactBean.calendarUtil.vacation}" type="unordered">
+								<f:facet name="header">#{messages.contact_vacances}</f:facet>
+								<h:panelGroup layout="block" styleClass="Container">
+									<h:panelGroup layout="block" styleClass="Container10">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton icon="fa fa-trash Fs16"
+												update="vacationForm :configForm :workdaysCalendar :growlForm"
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												title="#{messages.label_delete}" immediate="true"
+												actionListener="#{jJContactBean.removeVacation(loginBean,loginBean.contact,vacation.startVacation,vacation.endVacation)}"
+												styleClass="littleButton" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container45">
+										<h:panelGroup layout="block" styleClass="Container20">
+											<h:panelGroup layout="block"
+												style="padding-left: 0px;padding-right: 0px;text-align: center;"
+												styleClass="ContainerIndentLabel">
+												<p:outputLabel value="#{messages.contact_from} :" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container80">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:inputText readonly="true"
+													value="#{vacation.startVacation}">
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
+												</p:inputText>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container45">
+										<h:panelGroup layout="block" styleClass="Container20">
+											<h:panelGroup layout="block"
+												style="padding-left: 0px;padding-right: 0px;text-align: center;"
+												styleClass="ContainerIndentLabel">
+												<p:outputLabel value=" #{messages.contact_to} :" />
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container80">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:inputText readonly="true" value="#{vacation.endVacation}">
+													<f:convertDateTime type="date"
+														locale="#{localeBean.locale}" pattern="dd/MM/yyyy HH:mm" />
+												</p:inputText>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</p:dataList>
 
-							<p:column style="width:30%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_contact_new_table_project_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
-								<h:outputText value="#{permission.project.name}" />
-							</p:column>
-
-							<p:column style="width:30%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_contact_new_table_product_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
-								<h:outputText value="#{permission.product.name}" />
-							</p:column>
-						</p:dataTable>
+							<h:panelGroup layout="block" styleClass="Container100 BorderAll">
+								<h:panelGroup layout="block" styleClass="Container50">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:calendar id="start" navigator="true" effect="slideDown"
+											required="true" pattern="dd/MM/yyyy HH:mm"
+											binding="#{startDateCreation}"
+											placeholder="#{messages.contact_from}"
+											value="#{jJContactBean.startDate}">
+											<p:ajax event="dateSelect" update="addVacation :growlForm" />
+										</p:calendar>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="Container50">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:calendar id="end" navigator="true" effect="slideDown"
+											required="true" pattern="dd/MM/yyyy HH:mm"
+											value="#{jJContactBean.endDate}"
+											placeholder="#{messages.contact_to}">
+											<f:validator validatorId="dateRangeValidator" />
+											<f:attribute name="startDateComponent"
+												value="#{startDateCreation}" />
+											<p:ajax event="dateSelect" update="addVacation :growlForm" />
+										</p:calendar>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="Container100">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:commandButton id="addVacation"
+											icon="fa fa-plus-square Fs20"
+											onstart="PF('blockUIWidget').block()"
+											oncomplete="PF('blockUIWidget').unblock()"
+											disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
+											update="vacationForm :configForm :workdaysCalendar :growlForm"
+											action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
+											value="#{messages.contact_new_vacation}" />
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 					</h:form>
-				</h:panelGrid>
-				<h:form id="vacationForm">
-					<p:panelGrid>
-						<f:facet name="header">
-							<p:row>
-								<p:column colspan="2">#{messages.contact_vacances}</p:column>
-							</p:row>
-						</f:facet>
-						<p:row>
-							<p:column colspan="2">
-								<p:dataList var="vacation" paginator="true" rows="9"
-									paginatorPosition="bottom"
-									emptyMessage="#{messages.contact_empty_vacation}"
-									value="#{jJContactBean.calendarUtil.vacation}" type="unordered">
-
-									<p:commandButton icon="ui-icon-trash"
-										update="vacationForm :configForm :workdaysCalendar :growlForm"
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()"
-										title="#{messages.label_delete}" immediate="true"
-										actionListener="#{jJContactBean.removeVacation(loginBean,loginBean.contact,vacation.startVacation,vacation.endVacation)}"
-										style="width: 20px;height: 20px;" />
-
-
-									<p:outputLabel value="#{messages.contact_from} :" />
-									<p:inputText readonly="true" value="#{vacation.startVacation}"
-										style="width: 137px;">
-										<f:convertDateTime type="date" locale="#{localeBean.locale}"
-											pattern="dd/MM/yyyy HH:mm" />
-									</p:inputText>
-									<p:outputLabel value=" #{messages.contact_to} :"
-										style="-webkit-padding-start: 30px;" />
-									<p:inputText readonly="true" value="#{vacation.endVacation}">
-										<f:convertDateTime type="date" locale="#{localeBean.locale}"
-											pattern="dd/MM/yyyy HH:mm" />
-									</p:inputText>
-								</p:dataList>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel for="start" value="#{messages.contact_from}:" />
-								<p:calendar id="start" navigator="true" effect="slideDown"
-									required="true" pattern="dd/MM/yyyy HH:mm"
-									binding="#{startDateCreation}"
-									value="#{jJContactBean.startDate}">
-									<p:ajax event="dateSelect" update="addVacation :growlForm" />
-								</p:calendar>
-							</p:column>
-							<p:column>
-								<p:outputLabel for="end" value="#{messages.contact_to}:" />
-								<p:calendar id="end" navigator="true" effect="slideDown"
-									required="true" pattern="dd/MM/yyyy HH:mm"
-									value="#{jJContactBean.endDate}">
-									<f:validator validatorId="dateRangeValidator" />
-									<f:attribute name="startDateComponent"
-										value="#{startDateCreation}" />
-									<p:ajax event="dateSelect" update="addVacation :growlForm" />
-								</p:calendar>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:commandButton id="addVacation"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
-									disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
-									update="vacationForm :configForm :workdaysCalendar :growlForm"
-									action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
-									value="#{messages.contact_new_vacation}" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</h:form>
-			</h:panelGrid>
-		</p:panel>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
 		<p:dialog id="changePhotoDialog" draggable="false" modal="true"
 			header="Change Photo" widgetVar="changePhotoDialogWidget"
-			dynamic="true" resizable="false" responsive="true" >
+			dynamic="true" resizable="false" responsive="true">
 			<p:outputPanel id="changePhotoPanel">
 				<h:form id="changePhotoForm">
 					<p:fileUpload

@@ -296,7 +296,7 @@
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
 									<p:commandButton onstart="PF('blockUIWidget').block()"
 										action="#{requirementBean.save(jJRequirementBean)}"
-										oncomplete="PF('blockUIWidget').unblock()"
+										oncomplete="PF('blockUIWidget').unblock()" update=":growlForm"
 										value="#{messages.specification_create_save_button}" />
 								</h:panelGroup>
 							</h:panelGroup>

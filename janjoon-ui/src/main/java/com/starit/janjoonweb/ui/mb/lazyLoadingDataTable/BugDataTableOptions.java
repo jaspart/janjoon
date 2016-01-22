@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import javax.faces.event.ComponentSystemEvent;
 
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.inputswitch.InputSwitch;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.SortMeta;
 import org.springframework.context.annotation.Scope;
@@ -82,12 +84,21 @@ public class BugDataTableOptions {
 		}
 	}
 
-	public void dataTableInit(DataTable dataTable, SelectOneMenu mineBugs) {
+	public void dataTableInit(DataTable dataTable, InputSwitch mineBugs,
+			InputText glbFilter, SelectOneMenu criticitySelect,
+			SelectOneMenu importanceSelect, SelectOneMenu statusSelect) {
 
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);
 		dataTable.setMultiSortMeta(multiSortMeta);
 		mineBugs.setValue(mine);
+		if (filters != null) {
+			glbFilter.setValue(filters.get("globalFilter"));
+			criticitySelect.setValue(filters.get("criticity.name"));
+			importanceSelect.setValue(filters.get("importance.name"));
+			statusSelect.setValue(filters.get("status.name"));
+		}
+
 	}
 
 	public int getFirst() {

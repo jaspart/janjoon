@@ -492,7 +492,8 @@ public class JJTaskServiceImpl implements JJTaskService {
 	public boolean haveTask(Object object, boolean onlyActif, boolean finished,
 			boolean checkLinkUp) {
 		if (object != null
-				&& (object instanceof JJBug || object instanceof JJRequirement || object instanceof JJTestcase)) {
+				&& (object instanceof JJSprint || object instanceof JJBug
+						|| object instanceof JJRequirement || object instanceof JJTestcase)) {
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
 			CriteriaQuery<Long> select = criteriaBuilder
@@ -511,6 +512,9 @@ public class JJTaskServiceImpl implements JJTaskService {
 			} else if (object instanceof JJTestcase) {
 				predicates.add(criteriaBuilder.equal(from.get("testcase"),
 						object));
+			} else if (object instanceof JJSprint) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("sprint"), object));
 			}
 
 			if (onlyActif) {

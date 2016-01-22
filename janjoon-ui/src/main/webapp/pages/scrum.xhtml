@@ -28,6 +28,7 @@
 		</h:form>
 		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="Container100">
+		<f:event type="preRenderComponent"	listener="#{jJSprintBean.updateTabViewWidth()}" />
 			<p:tabView id="SprintTabView" dynamic="true" cache="true"
 				scrollable="true" widgetVar="SprintTab" styleClass="responsiveTabView"
 				value="#{jJSprintBean.sprintList}" style="max-width: 200px;"
@@ -43,7 +44,7 @@
 							styleClass="fa fa-plus-square Fs16" />
 					</f:facet>
 					<ui:include src="sprint.xhtml" />
-					<h:form id="sprintForm" rendered="#{!jjsprint.render}">
+					<h:form id="sprintForm" rendered="#{!jjsprint.render}">					
 						<h:panelGroup layout="block" styleClass="Container ui-fluid">
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -204,7 +205,7 @@
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="EmptyBox1" />
 									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
+										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="editSprintButton"
 												disabled="{!loginBean.authorisationService.wProject}"
@@ -224,8 +225,22 @@
 												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
 										</h:panelGroup>
 									</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{jjsprint.enableDelete}"
+										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton id="deleteSprintButton" rendered="#{jjsprint.enableDelete}"
+												disabled="{!loginBean.authorisationService.wProject}"
+												value="#{messages.label_delete}" icon="fa fa-trash Fs16"												
+												action="#{jJSprintBean.deleteSprint(jjsprint)}"
+												onstart="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+												update=":projecttabview :growlForm">
+												<f:attribute name="sprintUtilValue" value="#{jjsprint}" />												
+											</p:commandButton>
+										</h:panelGroup>
+									</h:panelGroup>
 									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
+										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton
 												value="#{messages.project_gantt_import_button}"

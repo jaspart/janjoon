@@ -19,6 +19,7 @@ public class SprintUtil {
 	private List<JJTask> progressTask;
 	private List<JJContact> contacts;
 	private boolean disableDragDrop;
+	private boolean enableDelete;
 
 	private Integer consumed;
 	private Integer workload;
@@ -28,12 +29,13 @@ public class SprintUtil {
 	private Integer priseSold;
 
 	public SprintUtil(JJSprint sprint, List<JJTask> tasks,
-			JJContactService jJContactService) {
+			JJContactService jJContactService, JJTaskService jjTaskService) {
 		this.sprint = sprint;
 		this.jJContactService = jJContactService;
 		this.neditabale = false;
 		this.chartModel = new BarChartModel();
 		this.disableDragDrop = true;
+		this.enableDelete = sprint.getId() != null	&& !jjTaskService.haveTask(sprint, true, false, false);
 		calculateField(tasks);
 		if (tasks != null && !tasks.isEmpty())
 			initChartModel(tasks);
@@ -182,6 +184,14 @@ public class SprintUtil {
 
 	public void setRender(boolean render) {
 		this.render = render;
+	}
+
+	public boolean isEnableDelete() {
+		return enableDelete;
+	}
+
+	public void setEnableDelete(boolean enableDelete) {
+		this.enableDelete = enableDelete;
 	}
 
 	public CartesianChartModel getChartModel() {
@@ -370,7 +380,8 @@ public class SprintUtil {
 			sprintUtils = new ArrayList<SprintUtil>();
 			for (JJSprint s : sprints) {
 				SprintUtil ss = new SprintUtil(s, jJTaskService.getSprintTasks(
-						s, LoginBean.getProduct()), jjContactService);
+						s, LoginBean.getProduct()), jjContactService,
+						jJTaskService);
 				sprintUtils.add(ss);
 			}
 		}

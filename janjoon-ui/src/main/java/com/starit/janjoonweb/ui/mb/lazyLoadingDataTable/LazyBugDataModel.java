@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.primefaces.component.inputswitch.InputSwitch;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
@@ -81,7 +82,7 @@ public class LazyBugDataModel extends LazyDataModel<JJBug> {
 		System.err.println("FIRST " + first);
 		List<JJBug> data = new ArrayList<JJBug>();
 		MutableInt size = new MutableInt(0);
-		SelectOneMenu mineComponent = (SelectOneMenu) LoginBean
+		InputSwitch mineComponent = (InputSwitch) LoginBean
 				.findComponent("mineBugs");
 		JJContact contact = null;
 		System.out.println("VALUE: " + mineComponent.getValue());

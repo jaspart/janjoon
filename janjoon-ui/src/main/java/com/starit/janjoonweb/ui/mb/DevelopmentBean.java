@@ -620,7 +620,7 @@ public class DevelopmentBean implements Serializable {
 											.findJJSprint(
 													task.getSprint().getId()),
 									LoginBean.getProduct()),
-							jJSprintBean.getJJContactService());
+							jJSprintBean.getJJContactService(), jJTaskService);
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
 							jJSprintBean.contains(s.getSprint().getId()), s);

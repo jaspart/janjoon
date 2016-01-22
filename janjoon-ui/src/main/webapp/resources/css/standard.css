@@ -500,6 +500,11 @@ div#contentPanel_content {
 	font-size: 16px !important;
 }
 
+.requirement-table .ui-datatable-data tr {
+    height: 70px;
+    overflow: hidden;   
+}
+
 .link-datatable .ui-datatable-header {
 	background-color: #d1d3d4;
 	color: #0288d1;

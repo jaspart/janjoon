@@ -69,7 +69,7 @@ import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJVersion;
-import com.starit.janjoonweb.ui.mb.JJRequirementBean.CategoryDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.CategoryDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 

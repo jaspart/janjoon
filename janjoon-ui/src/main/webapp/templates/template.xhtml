@@ -124,7 +124,12 @@
 					<!--                         </div> -->
 					<!--                     </div> -->
 				</h:panelGroup>
-
+				<p:dialog modal="true" widgetVar="progressDialog" header="Status"
+					draggable="false" closable="false" responsive="true"
+					resizable="false">
+					<p:graphicImage library="images" name="ajaxloadingbar.gif"
+						style="vertical-align: middle;" />
+				</p:dialog>
 				<p:ajaxStatus
 					style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
 					<f:facet name="start">
@@ -141,11 +146,11 @@
 
 		<script type="text/javascript">
 			function start() {
-				PF('statusDialog').show();
+				PF('progressDialog').show();
 			}
 
 			function stop() {
-				PF('statusDialog').hide();
+				PF('progressDialog').hide();
 			}
 
 			jQuery("div.ui-growl").remove();

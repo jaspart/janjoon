@@ -596,7 +596,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(task.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -610,7 +611,8 @@ public class JJTaskBean {
 						s = new SprintUtil(jJSprintService.findJJSprint(ss
 								.getId()), jJTaskService.getSprintTasks(
 								jJSprintService.findJJSprint(ss.getId()),
-								LoginBean.getProduct()), jJContactService);
+								LoginBean.getProduct()), jJContactService,
+								jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList()
@@ -631,7 +633,7 @@ public class JJTaskBean {
 										jJSprintService.findJJSprint(task
 												.getSprint().getId()),
 										LoginBean.getProduct()),
-								jJContactService);
+								jJContactService, jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList()
@@ -647,7 +649,8 @@ public class JJTaskBean {
 						s = new SprintUtil(jJSprintService.findJJSprint(ss
 								.getId()), jJTaskService.getSprintTasks(
 								jJSprintService.findJJSprint(ss.getId()),
-								LoginBean.getProduct()), jJContactService);
+								LoginBean.getProduct()), jJContactService,
+								jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
 						jJSprintBean.getSprintList()
@@ -1521,7 +1524,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(task.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -1647,7 +1651,7 @@ public class JJTaskBean {
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(duplicatedTask.getSprint()
 											.getId()), LoginBean.getProduct()),
-							jJContactService);
+							jJContactService, jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -2073,7 +2077,7 @@ public class JJTaskBean {
 						jJSprintBean.contains(sprint.getId()),
 						new SprintUtil(sprint, jJTaskService.getSprintTasks(
 								sprint, LoginBean.getProduct()),
-								jJContactService));
+								jJContactService, jJTaskService));
 
 			}
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -2095,7 +2099,8 @@ public class JJTaskBean {
 						.getSprintUtil().getSprint().getId());
 				SprintUtil sprintUtil = new SprintUtil(sprint,
 						jJTaskService.getSprintTasks(sprint,
-								LoginBean.getProduct()), jJContactService);
+								LoginBean.getProduct()), jJContactService,
+						jJTaskService);
 				jJSprintBean.setSprintUtil(sprintUtil);
 				jJSprintBean.getSprintList().set(
 						jJSprintBean.contains(sprint.getId()), sprintUtil);
@@ -2592,7 +2597,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(tJjTask.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
 					jJSprintBean.getSprintList().set(
@@ -3136,7 +3142,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 					jJSprintBean.getSprintList().set(
 							jJSprintBean.contains(s.getSprint().getId()), s);
 				}
@@ -3805,7 +3812,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 					jJSprintBean.getSprintList().set(
 							jJSprintBean.contains(s.getSprint().getId()), s);
 				}
@@ -3847,7 +3855,8 @@ public class JJTaskBean {
 							.getSprint().getId()),
 							jJTaskService.getSprintTasks(jJSprintService
 									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService);
+									LoginBean.getProduct()), jJContactService,
+							jJTaskService);
 					jJSprintBean.getSprintList().set(
 							jJSprintBean.contains(s.getSprint().getId()), s);
 				}

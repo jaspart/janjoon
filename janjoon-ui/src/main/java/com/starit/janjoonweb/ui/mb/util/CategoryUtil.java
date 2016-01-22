@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.starit.janjoonweb.domain.JJCategory;
-import com.starit.janjoonweb.ui.mb.JJRequirementBean.CategoryDataModel;
+import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.CategoryDataModel;
 
 public class CategoryUtil implements Serializable {
 

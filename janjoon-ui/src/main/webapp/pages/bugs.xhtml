@@ -9,17 +9,17 @@
 
 <ui:composition template="../templates/template.xhtml">
 	<ui:define name="head">
-	<style type="text/css">
-	.ui-datatable-tablewrapper {
-		margin: auto;
-	}
-	</style>
+		<style type="text/css">
+.ui-datatable-tablewrapper {
+	margin: auto;
+}
+</style>
 	</ui:define>
 	<ui:define name="content">
 		<f:event listener="#{jJBugBean.initJJBug}" type="preRenderView" />
 		<h:form id="bugForm">
 			<f:event type="preRenderComponent"
-				listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs)}" />
+				listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs,glbFilter,criticitySelect,importanceSelect,statusSelect)}" />
 			<pe:blockUI target="bugTable2" content="blockUIContent"
 				widgetVar="blockUIWidget2" />
 			<h:panelGrid id="blockUIContent" columns="2"
@@ -37,9 +37,9 @@
 						widgetVar="bugTable" lazy="true" binding="#{dataTable}"
 						emptyMessage="#{messages.label_notRecordFound}"
 						selection="#{jJBugBean.selectedBugList}" paginator="true"
-						rows="50" paginatorPosition="bottom" 
+						rows="25" paginatorPosition="bottom"
 						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="50,100,200">
+						rowsPerPageTemplate="25,50,100">
 
 						<p:ajax event="rowSelectCheckbox"
 							update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
@@ -53,8 +53,8 @@
 							oncomplete="PF('blockUIWidget2').unblock()" />
 						<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
 							oncomplete="PF('blockUIWidget2').unblock()" />
-						<p:ajax event="filter" onstart="PF('blockUIWidget2').block()"
-							oncomplete="PF('blockUIWidget2').unblock()" />
+						<!-- 						<p:ajax event="filter" onstart="PF('blockUIWidget2').block()" -->
+						<!-- 							oncomplete="PF('blockUIWidget2').unblock()" /> -->
 
 						<p:ajax event="rowDblselect"
 							onstart="PF('blockUIWidget2').block()"
@@ -66,14 +66,24 @@
 						<f:facet name="header">
 							<h:panelGroup layout="block" styleClass="Container ui-fluid">
 								<h:panelGroup layout="block" style="float: right !important;"
-									styleClass="Container10 Responsive100">
-									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<h:outputText style="font-family: 'roboto_condensedlight';"
-											styleClass="Fs20" value="Bug" />
+									styleClass="Container20 Responsive">
+									<h:panelGroup layout="block" styleClass="Container50">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:inputSwitch id="mineBugs"
+												onchange="PF('bugTable').filter();" binding="#{mineBugs}"
+												offLabel="#{messages.specification_table_requirement_all}"
+												onLabel="#{messages.specification_table_requirement_mine}" />
+										</h:panelGroup>
 									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container50">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<h:outputText style="font-family: 'roboto_condensedlight';"
+												styleClass="Fs20" value="Bug" />
+										</h:panelGroup>
+									</h:panelGroup>
+
 								</h:panelGroup>
-								<h:panelGroup layout="block"
-									styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="Container20 Responsive">
 									<!-- 									<h:panelGroup layout="block" styleClass="Container15" -->
 									<!-- 										style="height: 1px;"> -->
 									<!-- 										<p:commandButton id="colorBtn" -->
@@ -150,7 +160,7 @@
 									<!-- 			</p:overlayPanel> -->
 									<!-- 									</h:panelGroup> -->
 
-									<h:panelGroup layout="block" styleClass="Container10">
+									<h:panelGroup layout="block" styleClass="Container33">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_delete_button}"
 												id="deleteMButton" icon="fa fa-trash Gray Fs20"
@@ -160,7 +170,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block" styleClass="Container10">
+									<h:panelGroup layout="block" styleClass="Container33">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_favoris_button}"
 												id="subscribeMButton" icon="fa fa-star Gray Fs20"
@@ -173,7 +183,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block" styleClass="Container10">
+									<h:panelGroup layout="block" styleClass="Container33">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="createButton"
 												icon="fa fa-plus-square  Gray Fs20" styleClass="GrayButton"
@@ -182,24 +192,12 @@
 												oncomplete="PF('createDialogWidget').show()" />
 										</h:panelGroup>
 									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="Container70">
-										<h:panelGroup layout="block" styleClass="ContainerIndent">
-											<p:selectOneMenu id="mineBugs" styleClass="mineSelect"
-												onchange="PF('bugTable').filter();" effect="fade"
-												binding="#{mineBugs}"
-												title="#{messages.specification_table_requirement_filter}">
-												<f:selectItem itemValue="false"
-													itemLabel="#{messages.specification_table_requirement_all}" />
-												<f:selectItem itemValue="true"
-													itemLabel="#{messages.specification_table_requirement_mine}" />
-											</p:selectOneMenu>
-										</h:panelGroup>
-									</h:panelGroup>
 								</h:panelGroup>
 
-								<h:panelGroup layout="block" styleClass="Container40 Responsive100">
+								<h:panelGroup layout="block"
+									styleClass="Container60 Responsive100">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:inputText id="globalFilter"
+										<p:inputText id="globalFilter" binding="#{glbFilter}"
 											onkeyup="PF('bugTable').filter()"
 											placeholder="#{messages.bug_table_search_watermark}" />
 									</h:panelGroup>
@@ -244,7 +242,8 @@
 							style="width: 10% !important;height: 5px !important;text-align:center;"
 							filterMatchMode="exact" filterBy="#{bug.criticity.name}">
 							<f:facet name="filter">
-								<p:selectOneMenu var="type" style="padding-right: 35px !important;"
+								<p:selectOneMenu id="criticitySelect" binding="#{criticitySelect}" var="type"
+									style="padding-right: 35px !important;" 
 									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu Fs14"
 									onchange="PF('bugTable').filter()">
@@ -262,7 +261,8 @@
 							style="width: 10% !important;height: 5px !important;text-align:center;"
 							filterMatchMode="exact" filterBy="#{bug.importance.name}">
 							<f:facet name="filter">
-								<p:selectOneMenu var="type" style="padding-right: 35px !important;"
+								<p:selectOneMenu id="importanceSelect" binding="#{importanceSelect}" var="type"
+									style="padding-right: 35px !important;"
 									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu"
 									onchange="PF('bugTable').filter()">
@@ -277,12 +277,14 @@
 						</p:column>
 						<p:column headerText="#{messages.bug_table_status_title}"
 							sortBy="#{bug.status.name}" filterBy="#{bug.status.name}"
-							id="status" style="width: 15% !important;height: 5px !important;text-align:center;"
+							id="status"
+							style="width: 15% !important;height: 5px !important;text-align:center;"
 							priority="2" filterMatchMode="exact">
 
 							<f:facet name="filter">
-								<p:selectOneMenu var="type" style="padding-right: 35px !important;"
-									panelStyleClass="specSelectOneMenuPanel"									
+								<p:selectOneMenu id="statusSelect" binding="#{statusSelect}" var="type"
+									style="padding-right: 35px !important;"
+									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu Fs14"
 									onchange="PF('bugTable').filter()">
 									<f:attribute name="optionClasses" value="true" />
@@ -355,8 +357,7 @@
 						<h:panelGroup layout="block"
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:commandButton id="createSaveButton"
-									icon="fa fa-save Fs16"
+								<p:commandButton id="createSaveButton" icon="fa fa-save Fs16"
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
@@ -377,8 +378,9 @@
 		</p:dialog>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
-			position="center" header="#{messages.specification_video_help_title}"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			responsive="true" position="center"
+			header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">

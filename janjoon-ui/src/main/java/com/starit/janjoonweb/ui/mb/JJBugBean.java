@@ -385,7 +385,7 @@ public class JJBugBean {
 		SelectItem[] options = new SelectItem[data.size() + 1];
 
 		options[0] = new SelectItem("", MessageFactory.getMessage(
-				"label_select").getDetail());
+				"label_all").getDetail());
 		for (int i = 0; i < data.size(); i++) {
 
 			if (data.get(i) instanceof JJCriticity) {
