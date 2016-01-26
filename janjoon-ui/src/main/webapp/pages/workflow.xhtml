@@ -7,225 +7,298 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-
 	<h:form id="workflowForm">
-		<p:panel id="workflowPanel" style="width:1000px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="workflowDataTable" var="workflow" lazy="true"
-				sortMode="multiple" paginatorPosition="bottom"
-				value="#{jJWorkflowBean.workflowList}" paginator="true" rows="10"
-				emptyMessage="#{messages.label_notRecordFound}"
-				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15" widgetVar="workflowDataTableWV">
-				<f:facet name="header">  
-           #{messages.admin_workflow_table_header}  <p:inputText
-						id="globalFilter" onkeyup="PF('workflowDataTableWV').filter()"
-						style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-
-				<p:column sortBy="#{workflow.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<p:dataTable id="workflowDataTable" var="workflow" lazy="true"
+					sortMode="multiple" paginatorPosition="bottom"
+					value="#{jJWorkflowBean.workflowList}" paginator="true" rows="10"
+					emptyMessage="#{messages.label_notRecordFound}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" widgetVar="workflowDataTableWV">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_workflow_table_name_title}" />
-					</f:facet>
-					<h:outputText value="#{workflow.name}" />
-				</p:column>
-
-				<p:column sortBy="#{workflow.objet}" id="objet"
-					filterOptions="#{jJWorkflowBean.objectOptions}"
-					filterMatchMode="exact" filterStyle="width: 90%;"
-					filterBy="#{workflow.objet}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_workflow_table_object_title}" />
-					</f:facet>
-					<h:outputText value="#{workflow.objet}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_workflow_table_action_title}" />
-					</f:facet>
-					<h:outputText value="#{workflow.actionWorkflow}" />
-				</p:column>
-
-				<p:column sortBy="#{workflow.source.name}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_workflow_table_source_title}" />
-					</f:facet>
-					<h:outputText
-							value="#{loginBean.checkMessage(workflow.source)}" />
-				</p:column>
-
-				<p:column sortBy="#{workflow.target.name}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_workflow_table_target_title}" />
-					</f:facet>
-					<h:outputText
-							value="#{loginBean.checkMessage(workflow.target)}" />
-
-				</p:column>
-
-
-				<p:column styleClass="action-column" style="width:250px;">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_workflow_table_action_title}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_workflow_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('workflowDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
 
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						update=":tabview:createWorkFlowForm:createWorkFlowPanelGrid :tabview:createWorkFlowDialog"
-						action="#{jJWorkflowBean.onEdit}" resetValues="true"
-						oncomplete="PF('createWorkFlowDialogWidget').show()"
-						value="#{messages.admin_workflow_edit_title}">
-						<f:setPropertyActionListener value="#{workflow}"
-							target="#{jJWorkflowBean.JJWorkflow_}" />
-						<f:setPropertyActionListener
-							target="#{jJWorkflowBean.renderCreate}" value="false" />
+					<p:column sortBy="#{workflow.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_workflow_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{workflow.name}" />
+					</p:column>
+
+					<p:column sortBy="#{workflow.objet}" id="objet"
+						filterMatchMode="exact" filterBy="#{workflow.objet}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_workflow_table_object_title}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('workflowDataTableWV').filter()">
+								<f:selectItems value="#{jJWorkflowBean.objectOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{workflow.objet}" />
+					</p:column>
+
+					<!-- 					<p:column> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<h:outputText -->
+					<!-- 								value="#{messages.admin_workflow_table_action_title}" /> -->
+					<!-- 						</f:facet> -->
+					<!-- 						<h:outputText value="#{workflow.actionWorkflow}" /> -->
+					<!-- 					</p:column> -->
+
+					<p:column sortBy="#{workflow.source.name}" priority="6">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_workflow_table_source_title}" />
+						</f:facet>
+						<h:outputText value="#{loginBean.checkMessage(workflow.source)}" />
+					</p:column>
+
+					<p:column sortBy="#{workflow.target.name}" priority="6">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_workflow_table_target_title}" />
+						</f:facet>
+						<h:outputText value="#{loginBean.checkMessage(workflow.target)}" />
+
+					</p:column>
 
 
-						<p:menuitem id="deleteWorkFlowButton" icon="ui-icon-trash"
-							resetValues="true"
-							oncomplete="PF('deleteWorkFlowDialogWidget').show()"
-							value="#{messages.admin_workflow_delete_title}">
-							<f:setPropertyActionListener value="#{workflow}"
-								target="#{jJWorkflowBean.selectedWorkFlow}" />
-						</p:menuitem>
+					<p:column styleClass="action-column" style="width: 10%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_workflow_table_action_title}" />
+						</f:facet>
 
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_workflow_new_button}"
-						id="createWorkFlowButton" icon="ui-icon-circle-plus"
-						update=":tabview:createWorkFlowForm:createWorkFlowPanelGrid :tabview:createWorkFlowDialog"
-						actionListener="#{jJWorkflowBean.beforeDialogShow}"
-						title="#{messages.admin_workflow_new_title}" resetValues="true">
-						<f:setPropertyActionListener
-							target="#{jJWorkflowBean.renderCreate}" value="true" />
-					</p:commandButton>
-					<p:tooltip for="createWorkFlowButton"
-						value="#{messages.admin_workflow_table_create_title}"
-						showEffect="fade" hideEffect="fade" />
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								update=":tabview:workFlowDialogForm :tabview:workFlowDialogHeader"
+								action="#{jJWorkflowBean.onEdit}" resetValues="true"
+								oncomplete="PF('workFlowDialogWidget').show()"
+								title="#{messages.label_edit}" value="#{messages.label_edit}">
+								<f:setPropertyActionListener value="#{workflow}"
+									target="#{jJWorkflowBean.JJWorkflow_}" />
+								<f:setPropertyActionListener
+									target="#{jJWorkflowBean.renderCreate}" value="false" />
+							</p:menuitem>
 
+							<p:menuitem id="deleteWorkFlowButton" icon="fa fa-trash Fs16"
+								resetValues="true" title="#{messages.label_delete}"
+								oncomplete="PF('deleteWorkFlowDialogWidget').show()"
+								value="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{workflow}"
+									target="#{jJWorkflowBean.selectedWorkFlow}" />
+							</p:menuitem>
+
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_workflow_new_button}"
+										id="createWorkFlowButton" icon="fa fa-plus Fs20"
+										update=":tabview:workFlowDialogForm :tabview:workFlowDialogHeader"
+										actionListener="#{jJWorkflowBean.beforeDialogShow}"
+										title="#{messages.admin_workflow_new_title}"
+										resetValues="true">
+										<f:setPropertyActionListener
+											target="#{jJWorkflowBean.renderCreate}" value="true" />
+									</p:commandButton>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</f:facet>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
-	<p:dialog id="createWorkFlowDialog" modal="true"
+	<p:dialog id="workFlowDialog" modal="true"
 		visible="#{jJWorkflowBean.createDialogVisible}" responsive="true"
-		widgetVar="createWorkFlowDialogWidget" dynamic="true" resizable="true"
-		maximizable="true" showEffect="fade" >
+		widgetVar="workFlowDialogWidget" dynamic="true" resizable="false"
+		maximizable="false" showEffect="fade">
 		<p:ajax event="close" update=":tabview:workflowForm"
 			listener="#{jJWorkflowBean.handleDialogClose}" />
 		<f:facet name="header">
-			<p:outputLabel rendered="#{jJWorkflowBean.renderCreate}"
-				value="#{messages.admin_workflow_new_title}" />
-
-			<p:outputLabel rendered="#{!jJWorkflowBean.renderCreate}"
-				value="#{messages.admin_workflow_edit_title}" />
+			<p:outputLabel id="workFlowDialogHeader"
+				value="#{jJWorkflowBean.renderCreate ? messages.admin_workflow_new_title : messages.admin_workflow_edit_title}" />
 		</f:facet>
-		<p:outputPanel id="createWorkFlowPanel">
-			<h:form id="createWorkFlowForm" enctype="multipart/form-data"
-				style="height: 470px;width: 710px;">
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
-						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<h:panelGrid id="createWorkFlowPanelGrid" columns="2"
-						styleClass="dialog" columnClasses="col1,col2,col3">
-						<p:outputLabel for="workflowName"
-							value="#{messages.admin_workflow_table_name_title}:" />
-						<p:inputTextarea value="#{jJWorkflowBean.JJWorkflow_.name}"
-							id="workflowName" required="true"
-							requiredMessage="Name field is requiered">
-							<f:validateLength maximum="100" />
-						</p:inputTextarea>
-
-						<p:outputLabel for="workflowDesc" value="Description :"
+		<h:form id="workFlowDialogForm" enctype="multipart/form-data">
+			<h:panelGroup layout="block"
+				styleClass="Container ui-fluid BorderAll" style="max-width: 550px;">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="workflowName"
+								value="#{messages.admin_workflow_table_name_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:inputTextarea value="#{jJWorkflowBean.JJWorkflow_.name}"
+								id="workflowName" required="true" rows="2"
+								requiredMessage="#{messages.label_name_required_alert}">
+								<f:validateLength maximum="100" />
+							</p:inputTextarea>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100"
+					style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:outputLabel for="workflowDesc" value="Description:"
 							rendered="#{!loginBean.mobile}" />
-						<pe:ckEditor id="workflowDesc"
+						<pe:ckEditor id="workflowDesc" width="100%"
 							toolbar="#{imageStreamer.ckEditorToolBar}"
-							rendered="#{!loginBean.mobile}" height="150px"
+							rendered="#{!loginBean.mobile}"
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJWorkflowBean.JJWorkflow_.description}" required="true"
-							requiredMessage="WorkFlow Description is a required value" />
-
-						<p:outputLabel for="workflowMobileDesc" value="Description :"
-							rendered="#{loginBean.mobile}" />
+							requiredMessage="#{messages.label_desc_required_alert}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100"
+					rendered="#{loginBean.mobile}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:inputTextarea id="workflowMobileDesc"
 							rendered="#{loginBean.mobile}"
 							value="#{jJWorkflowBean.JJWorkflow_.description}" required="true"
-							requiredMessage="WorkFlow Description is a required value" />
-
-						<p:outputLabel for="workFlowAction"
-							value="#{messages.admin_workflow_table_action_title} : " />
-						<p:autoComplete id="workFlowAction" scrollHeight="200"
-							widgetVar="workFlowAction"
-							value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
-							itemValue="#{action}" required="true" dropdown="true"
-							var="action" itemLabel="#{action}"
-							completeMethod="#{jJWorkflowBean.completeAction}" />
-
-						<p:outputLabel for="workFlowObjet"
-							value="#{messages.admin_workflow_table_object_title} : " />
-						<p:autoComplete id="workFlowObjet" scrollHeight="200"
-							widgetVar="workFlowObjet"
-							value="#{jJWorkflowBean.JJWorkflow_.objet}" itemValue="#{objet}"
-							required="true" dropdown="true" var="objet" itemLabel="#{objet}"
-							completeMethod="#{jJWorkflowBean.completeObject}">
-							<p:ajax event="itemSelect"
-								update="workFlowObjet workFlowTarget workFlowSource" />
-						</p:autoComplete>
-
-						<p:outputLabel for="workFlowSource"
-							value="#{messages.admin_workflow_table_source_title} : " />
-						<p:autoComplete id="workFlowSource" scrollHeight="200"
-							widgetVar="workFlowSource"
-							value="#{jJWorkflowBean.JJWorkflow_.source}"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							itemValue="#{source}" required="true" dropdown="true"
-							var="source" itemLabel="#{loginBean.checkMessage(source)}"
-							completeMethod="#{jJWorkflowBean.completeSource}">
-							<f:attribute name="objet"
-								value="#{jJWorkflowBean.JJWorkflow_.objet}" />
-						</p:autoComplete>
-
-						<p:outputLabel for="workFlowTarget"
-							value="#{messages.admin_workflow_table_target_title} : " />
-						<p:autoComplete id="workFlowTarget" scrollHeight="200"
-							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-							widgetVar="workFlowTarget"
-							value="#{jJWorkflowBean.JJWorkflow_.target}"
-							itemValue="#{target}" required="true" dropdown="true"
-							var="target" itemLabel="#{loginBean.checkMessage(target)}"
-							completeMethod="#{jJWorkflowBean.completeTarget}">
-							<f:attribute name="objet"
-								value="#{jJWorkflowBean.JJWorkflow_.objet}" />
-						</p:autoComplete>
-
-					</h:panelGrid>
-					<f:facet name="footer">
-						<p:commandButton id="createWorkFlowSaveButton"
+							requiredMessage="#{messages.label_desc_required_alert}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="workFlowAction"
+								value="#{messages.admin_workflow_table_action_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="workFlowAction" scrollHeight="200"
+								widgetVar="workFlowAction"
+								value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
+								itemValue="#{action}" required="true" dropdown="true"
+								var="action" itemLabel="#{action}"
+								completeMethod="#{jJWorkflowBean.completeAction}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="workFlowObjet"
+								value="#{messages.admin_workflow_table_object_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="workFlowObjet" scrollHeight="200"
+								widgetVar="workFlowObjet"
+								value="#{jJWorkflowBean.JJWorkflow_.objet}" itemValue="#{objet}"
+								required="true" dropdown="true" var="objet" itemLabel="#{objet}"
+								completeMethod="#{jJWorkflowBean.completeObject}">
+								<p:ajax event="itemSelect"
+									update="workFlowObjet workFlowTarget workFlowSource" />
+							</p:autoComplete>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="workFlowSource"
+								value="#{messages.admin_workflow_table_source_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="workFlowSource" scrollHeight="200"
+								widgetVar="workFlowSource"
+								value="#{jJWorkflowBean.JJWorkflow_.source}"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+								itemValue="#{source}" required="true" dropdown="true"
+								var="source" itemLabel="#{loginBean.checkMessage(source)}"
+								completeMethod="#{jJWorkflowBean.completeSource}">
+								<f:attribute name="objet"
+									value="#{jJWorkflowBean.JJWorkflow_.objet}" />
+							</p:autoComplete>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="workFlowTarget"
+								value="#{messages.admin_workflow_table_target_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="workFlowTarget" scrollHeight="200"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+								widgetVar="workFlowTarget"
+								value="#{jJWorkflowBean.JJWorkflow_.target}"
+								itemValue="#{target}" required="true" dropdown="true"
+								var="target" itemLabel="#{loginBean.checkMessage(target)}"
+								completeMethod="#{jJWorkflowBean.completeTarget}">
+								<f:attribute name="objet"
+									value="#{jJWorkflowBean.JJWorkflow_.objet}" />
+							</p:autoComplete>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="workFlowDialogSaveButton"
 							value="#{messages.admin_workflow_new_save_button}"
 							action="#{jJWorkflowBean.persistConf}"
-							update="createWorkFlowPanelGrid,:growlForm " />
-						<!-- 					 :messagePanel -->
-						<p:commandButton idid="createWorkFlowCloseButton"
-							value="#{messages.label_cancel}"
-							onclick="PF('createWorkFlowDialogWidget').hide()" type="button" />
-					</f:facet>
-				</p:panel>
-			</h:form>
-		</p:outputPanel>
+							update=":tabview:workFlowDialogForm :growlForm " />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="workFlowDialogCloseButton"
+							styleClass="GrayBack" value="#{messages.label_cancel}"
+							onclick="PF('workFlowDialogWidget').hide()" type="button" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
 	</p:dialog>
+	
 	<p:confirmDialog id="deleteWorkFlowDialog"
 		widgetVar="deleteWorkFlowDialogWidget"
 		message="#{messages.admin_workflow_delete_label}" showEffect="fade"
-		header="#{messages.admin_workflow_delete_title}"
-		severity="alarm">
+		header="#{messages.admin_workflow_delete_title}" severity="alarm">
 		<p:outputPanel id="deleteWorkFlowPanel">
 			<h:form id="deleteWorkFlowForm">
 				<p:commandButton id="deleteWorkFlowYesButton"

@@ -6,67 +6,88 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="statistiqueForm">
-		<p:panel id="statistiquePanel" style="width:700px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="statistiqueDataTable" var="statistique" lazy="true"
-				paginatorPosition="bottom"
-				value="#{jJAuditLogBean.connectionStatistiquesListTable}"
-				paginator="true" rows="10"
-				emptyMessage="#{messages.label_notRecordFound}"
-				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15" sortMode="multiple"
-				widgetVar="statistiqueDataTableWV">
-				<f:facet name="header">#{messages.admin_statistique_table_header}
-				<p:inputText id="globalFilter"
-						onkeyup="PF('statistiqueDataTableWV').filter()"
-						style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-				<p:column sortBy="#{statistique.contact.company.name}" id="company"
-					filterOptions="#{jJCompanyBean.companyOptions}"
-					filterMatchMode="exact" filterStyle="width: 80%;"
-					filterBy="#{statistique.contact.company.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<p:dataTable id="statistiqueDataTable" var="statistique" lazy="true"
+					paginatorPosition="bottom"
+					value="#{jJAuditLogBean.connectionStatistiquesListTable}"
+					paginator="true" rows="10"
+					emptyMessage="#{messages.label_notRecordFound}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" sortMode="multiple"
+					widgetVar="statistiqueDataTableWV">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_menuitem}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_statistique_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('statistiqueDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{statistique.contact.company.name}" />
-				</p:column>
-				<p:column sortBy="#{statistique.contact.name}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_statistique_table_name_title}" />
-					</f:facet>
-					<h:outputText value="#{statistique.contact.name}" />
-				</p:column>
-				<p:column sortBy="#{statistique.loginDate}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_statistique_table_logindate_title}" />
-					</f:facet>
-					<h:outputText value="#{statistique.loginDate}">
-						<f:convertDateTime type="date" locale="#{localeBean.locale}"
-							pattern="dd/MM/yyyy HH:mm" />
-					</h:outputText>
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_statistique_table_logoutdate_title}" />
-					</f:facet>
-					<h:outputText value="#{statistique.logoutDate}">
-						<f:convertDateTime type="date" locale="#{localeBean.locale}"
-							pattern="dd/MM/yyyy HH:mm" />
-					</h:outputText>
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_statistique_table_duration_title}" />
-					</f:facet>
-					<h:outputText value="#{statistique.duration}" />
-				</p:column>
-			</p:dataTable>
-		</p:panel>
+					<p:column sortBy="#{statistique.contact.company.name}" id="company"
+						priority="6" filterMatchMode="exact"
+						filterBy="#{statistique.contact.company.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_company_menuitem}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('statistiqueDataTableWV').filter()">
+								<f:selectItems value="#{jJCompanyBean.companyOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{statistique.contact.company.name}" />
+					</p:column>
+					<p:column sortBy="#{statistique.contact.name}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_statistique_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{statistique.contact.name}" />
+					</p:column>
+					<p:column sortBy="#{statistique.loginDate}">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_statistique_table_logindate_title}" />
+						</f:facet>
+						<h:outputText value="#{statistique.loginDate}">
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_statistique_table_logoutdate_title}" />
+						</f:facet>
+						<h:outputText value="#{statistique.logoutDate}">
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_statistique_table_duration_title}" />
+						</f:facet>
+						<h:outputText value="#{statistique.duration} min" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 </ui:composition>
 </html>

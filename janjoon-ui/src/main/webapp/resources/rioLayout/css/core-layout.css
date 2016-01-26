@@ -207,6 +207,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container75{ width:75%; float:left;}
 .Container70{ width:70%; float:left;}
 .Container66{ width:66.6%; float:left;}
+.Container65{ width:65%; float:left;}
 .Container60{ width:60%; float:left;}
 .Container50{ width:50%; float:left;}
 .Container45{ width:45%; float:left;}
@@ -221,7 +222,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container5{ width:5%; float:left;}
 
 .ContainerIndent{display:block; margin:0px auto; padding:10px;}
-.ContainerIndentLabel{display:block; margin:0px auto; padding:20px;}
+.ContainerIndentLabel{display:block; margin:0px auto;padding: 20px 10px;}
 
 /* Text Aligns */
 .TexAlCenter{ text-align:center;}
@@ -314,7 +315,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
-	.ContainerIndentLabel{padding:15px;}
+	.ContainerIndentLabel{padding: 15px 5px;}
 	.MarLeftQuarter{ margin-left:15%;}
     
     /* make auto of element width attribute on mobile devices with media queries */
@@ -360,7 +361,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
-	.ContainerIndentLabel{padding:15px;}
+	.ContainerIndentLabel{padding: 10px 5px;}
 	.MarLeftQuarter{ margin-left:10%;}
 
     /* make auto of element width attribute on mobile devices with media queries */
@@ -408,7 +409,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
-	.ContainerIndentLabel{padding:15px;}
+	.ContainerIndentLabel{padding: 10px 5px;}
 	.MarLeftQuarter{ margin-left:5%;}
 
     /* make auto of element width attribute on mobile devices with media queries */

@@ -167,7 +167,7 @@ public class JJConfigurationBean {
 			message = "message_successfully_created";
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createDialogWidget').hide()");
+		context.execute("PF('configDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"Configuration", "e");
@@ -196,7 +196,7 @@ public class JJConfigurationBean {
 		setJJConfiguration_(new JJConfiguration());
 		renderCreate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createDialogWidget').show()");
+		context.execute("PF('configDialogWidget').show()");
 
 	}
 

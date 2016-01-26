@@ -1,0 +1,40 @@
+.customFileUpload .ui-fileupload-progress {
+	display: none;
+}
+
+.customFileUpload .ui-fileupload-cancel {
+/* 	display: none; */
+}
+
+.customFileUpload .ui-fileupload-files {
+	margin: 1px 0;
+/* 	width: 150px !important; */
+	display: inline-block;
+	height: 30px;
+}
+
+.customFileUpload td.ui-fileupload-preview {
+	display: none;
+}
+
+.customCompanyFileUpload .ui-fileupload-progress {
+	display: none;
+}
+
+.customCompanyFileUpload .ui-fileupload-cancel {
+/* 	display: none; */
+}
+
+.customCompanyFileUpload .ui-fileupload-files {
+	margin: 1px 0;
+/* 	width: 150px !important; */
+	display: inline-block;
+	height: 30px;
+}
+
+.ui-datalist-data {
+	padding: 10px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+

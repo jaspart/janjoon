@@ -6,135 +6,182 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="categoryForm">
-		<p:panel id="categoryPanel" style="width:650px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="categoryDataTable" var="category" lazy="true"
-				sortMode="multiple" paginatorPosition="bottom"
-				emptyMessage="#{messages.label_notRecordFound}"
-				value="#{jJCategoryBean.categoryListTable}" paginator="true"
-				widgetVar="categoryDataTableWV" rows="15" rowKey="#{category.id}">
-				<f:facet name="header">#{messages.admin_category_table_header}<p:inputText
-						id="globalFilter" onkeyup="PF('categoryDataTableWV').filter()"
-						style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-				<p:column>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<p:dataTable id="categoryDataTable" var="category" lazy="true"
+					sortMode="multiple" paginatorPosition="bottom"
+					emptyMessage="#{messages.label_notRecordFound}"
+					value="#{jJCategoryBean.categoryListTable}" paginator="true"
+					widgetVar="categoryDataTableWV" rows="15" rowKey="#{category.id}">
 					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_category_table_company_title}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_category_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('categoryDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{category.company.name}"
-						rendered="#{category.company != null}" />
-					<h:outputText value="#{messages.admin_profile_table_filter_all}"
-						rendered="#{category.company == null}" />
-				</p:column>
-				<p:column sortBy="#{category.name}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_category_table_name_title}" />
-					</f:facet>
-					<h:outputText value="#{category.name}" />
-				</p:column>
-				<p:column sortBy="#{category.stage}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_category_table_stage_title}" />
-					</f:facet>
-					<h:outputText value="#{category.stage}" />
-				</p:column>
-				<p:column styleClass="action-column">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_category_table_action_title}" />
-					</f:facet>
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('categoryDialogWidget').show()"
-						disabled="#{category.company == null and !loginBean.authorisationService.superAdmin}"
-						value="#{messages.admin_category_table_edit_tooltip}"
-						action="#{jJCategoryBean.editCategory}" resetValues="true"
-						update=":tabview:categoryDialog">
-						<f:setPropertyActionListener value="#{category}"
-							target="#{jJCategoryBean.categoryAdmin}" />
+					<p:column priority="6">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_category_table_company_title}" />
+						</f:facet>
+						<h:outputText value="#{category.company.name}"
+							rendered="#{category.company != null}" />
+						<h:outputText value="#{messages.admin_profile_table_filter_all}"
+							rendered="#{category.company == null}" />
+					</p:column>
+					<p:column sortBy="#{category.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_category_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{category.name}" />
+					</p:column>
+					<p:column sortBy="#{category.stage}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_category_table_stage_title}" />
+						</f:facet>
+						<h:outputText value="#{category.stage}" />
+					</p:column>
+					<p:column styleClass="action-column" style="text-align: center;width: 15%;" >
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_category_table_action_title}" />
+						</f:facet>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								oncomplete="PF('categoryDialogWidget').show()"
+								disabled="#{category.company == null and !loginBean.authorisationService.superAdmin}"
+								value="#{messages.label_edit}"
+								title="#{messages.label_edit}"
+								action="#{jJCategoryBean.editCategory}" resetValues="true"
+								update=":tabview:categoryDialogForm :tabview:categoryDialogHeader">
+								<f:setPropertyActionListener value="#{category}"
+									target="#{jJCategoryBean.categoryAdmin}" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								title="#{messages.label_delete}"
+								oncomplete="PF('categoryDeleteDialogWidget').show()"
+								value="#{messages.label_delete}" resetValues="true">
+								<f:setPropertyActionListener value="#{category}"
+									target="#{jJCategoryBean.categoryAdmin}" />
+							</p:menuitem>
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							value="#{messages.admin_category_table_delete_tooltip}"
-							oncomplete="PF('categoryDeleteDialogWidget').show()"
-							title="#{messages.label_delete}" resetValues="true">
-							<f:setPropertyActionListener value="#{category}"
-								target="#{jJCategoryBean.categoryAdmin}" />
-						</p:menuitem>
-
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_category_new_button}"
-						id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
-						update=":tabview:categoryDialog" resetValues="true"
-						oncomplete="PF('categoryDialogWidget').show()"
-						icon="ui-icon-circle-plus" />
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton value="#{messages.admin_category_new_button}"
+									id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
+									update=":tabview:categoryDialogForm :tabview:categoryDialogHeader"
+									resetValues="true"
+									oncomplete="PF('categoryDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
+									</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</f:facet>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 	<p:dialog id="categoryDialog" responsive="true"
 		header="#{messages[jJCategoryBean.message]}" modal="true"
 		widgetVar="categoryDialogWidget" dynamic="true" showEffect="fade"
-		 resizable="false">
+		resizable="false">
 		<p:ajax event="close" update=":tabview:categoryForm"
 			listener="#{jJCategoryBean.closeDialog}" />
-		<p:outputPanel id="categoryDialogPanel">
+		<f:facet name="header">
+			<p:outputLabel id="categoryDialogHeader"
+				value="#{messages[jJCategoryBean.message]}" />
+		</f:facet>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width:400px;">
 			<h:form id="categoryDialogForm">
-				<!-- 				<p:growl id="msg" /> -->
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
-						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<p:panelGrid>
-						<p:row>
-							<p:column colspan="2">
-								<h:outputLabel for="name"
-									value="#{messages.admin_category_new_name_label}" />
-								<p:inputText id="name"
-									placeholder="#{messages.admin_category_new_name_watermark}"
-									value="#{jJCategoryBean.categoryAdmin.name}"
-									label="#{messages.admin_category_new_name_label}"
-									required="true" widgetVar="nameWidget">
-									<f:validateLength maximum="100" />
-								</p:inputText>
-								<p:message for="name" id="msgName" />
-							</p:column>
-							<p:column colspan="2">
-								<h:outputLabel for="stage"
-									value="#{messages.admin_category_new_stage_label}" />
-								<p:spinner id="stage"
-									value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100" />
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="name"
+							placeholder="#{messages.admin_category_new_name_watermark}"
+							value="#{jJCategoryBean.categoryAdmin.name}"
+							label="#{messages.admin_category_new_name_label}" required="true"
+							widgetVar="nameWidget">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container40">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="stage" 
+								value="#{messages.admin_category_new_stage_label}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container60">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:spinner id="stage"
+								value="#{jJCategoryBean.categoryAdmin.stage}" min="0" max="100" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
-							</p:column>
-						</p:row>
-						<p:row
-							rendered="#{loginBean.authorisationService.superAdmin and jJCategoryBean.categoryAdmin.id == null}">
-							<p:column colspan="4">
-								<p:selectBooleanButton value="#{jJCategoryBean.allCompany}"
-									onLabel="#{messages.admin_category_new_all_button}"
-									offLabel="#{messages.admin_category_new_notall_button}"
-									onIcon="ui-icon-check" offIcon="ui-icon-close" />
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-					<f:facet name="footer">
-						<p:commandButton id="submitButton"
-							value="#{messages.admin_category_new_save_button}"
-							update="categoryDialogForm :growlForm"
-							action="#{jJCategoryBean.save}" />
+				<h:panelGroup layout="block" styleClass="Container100"
+					rendered="#{loginBean.authorisationService.superAdmin and jJCategoryBean.categoryAdmin.id == null}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectBooleanButton value="#{jJCategoryBean.allCompany}"
+							onLabel="#{messages.admin_category_new_all_button}"
+							offLabel="#{messages.admin_category_new_notall_button}"
+							onIcon="fa fa-check Fs16 Green" offIcon="fa fa-close Fs16 Red" />
 
-					</f:facet>
-				</p:panel>
+						<!-- 					<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+						<!-- 						<p:inputSwitch value="#{jJCategoryBean.allCompany}" -->
+						<!-- 							offLabel="#{messages.admin_category_new_notall_button}" -->
+						<!-- 							onLabel="#{messages.admin_category_new_all_button}" /> -->
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="submitButton"
+								value="#{messages.admin_category_new_save_button}"
+								update="categoryDialogForm :growlForm"
+								action="#{jJCategoryBean.save}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+								value="#{messages.label_cancel}"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('categoryDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
-		</p:outputPanel>
+		</h:panelGroup>
 	</p:dialog>
 	<p:confirmDialog id="categoryDeleteDialog"
 		widgetVar="categoryDeleteDialogWidget"
 		message="#{messages.admin_category_delete_label}" showEffect="fade"
-		 header="#{messages.admin_category_delete_title}"
-		severity="alarm">
+		header="#{messages.admin_category_delete_title}" severity="alarm">
 		<p:outputPanel id="categoryDeletePanel">
 			<h:form id="categoryDeleteForm">
 				<p:commandButton id="deleteYesButton"

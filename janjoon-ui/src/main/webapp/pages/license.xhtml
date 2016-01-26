@@ -5,41 +5,26 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
-	<style type="text/css">
-.ui-fileupload-progress {
-	display: block;
-}
-
-.ui-fileupload-cancel {
-	display: block;
-}
-
-.ui-fileupload-files {
-	margin: 10px 0;
-	border-collapse: collapse;
-	width: auto !important;
-	display: inline-block;
-	height: auto !important;
-}
-</style>
 	<h:form id="licenseForm">
-		<p:panel id="licenseForm" style="width:600px" columns="1"
-			cellpadding="6">
-			<h:panelGrid columns="1" cellpadding="5">
-				<h:outputLabel for="licenseForm"
-					value="#{messages.admin_license_files_text}"
-					style="font-weight:bold" />
-
-				<h:outputLabel for="licenseForm"
-					value="#{messages.admin_license_db_text}" />
-
-				<p:fileUpload fileUploadListener="#{licenseBean.handleFileUpload}"
-					mode="advanced" fileLimit="1"
-					dragDropSupport="true" update=":growlForm"
-					sizeLimit="100000" allowTypes="/(\.|\/)(lic|license)$/" />
-
-			</h:panelGrid>
-		</p:panel>
+		<h:panelGroup layout="block" styleClass="Container">
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:outputLabel for="licenseForm"
+						value="#{messages.admin_license_files_text}"
+						style="font-weight:bold" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:outputLabel for="licenseForm"
+						value="#{messages.admin_license_db_text}" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:fileUpload fileUploadListener="#{licenseBean.handleFileUpload}"
+						mode="advanced" fileLimit="1" dragDropSupport="false"
+						update=":growlForm" sizeLimit="100000"
+						allowTypes="/(\.|\/)(lic|license)$/" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 
 </ui:composition>

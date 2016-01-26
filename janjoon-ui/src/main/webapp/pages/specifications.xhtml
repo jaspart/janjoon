@@ -24,22 +24,27 @@
 			<p:overlayPanel id="category-menu" for="show-category-menu"
 				hideEffect="clip" widgetVar="category-menu"
 				styleClass="ShowOnMobile">
-				<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectBooleanButton value="#{category.checked}"
-							title="#{loginBean.checkMessage(category)}"
-							styleClass="Container100"
-							onLabel="#{loginBean.checkMessage(category)}"
-							offLabel="#{loginBean.checkMessage(category)}"
-							onIcon="fa fa-check Fs16 Yellow" offIcon="fa fa-close Fs16 White"
-							id="Mcategory_#{category.category.id}">
-							<p:ajax
-								listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
-								update="@form" onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
-						</p:selectBooleanButton>
-					</h:panelGroup>
-				</c:forEach>
+				<h:panelGroup layout="block" styleClass="Container">
+					<c:forEach items="#{jJRequirementBean.categoryList}" var="category">
+						<h:panelGroup layout="block" styleClass="Container100">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:selectBooleanButton value="#{category.checked}"
+									title="#{loginBean.checkMessage(category)}"
+									styleClass="Container100"
+									onLabel="#{loginBean.checkMessage(category)}"
+									offLabel="#{loginBean.checkMessage(category)}"
+									onIcon="fa fa-check Fs16 Yellow"
+									offIcon="fa fa-close Fs16 White"
+									id="Mcategory_#{category.category.id}">
+									<p:ajax
+										listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
+										update="@form" onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
+								</p:selectBooleanButton>
+							</h:panelGroup>
+						</h:panelGroup>
+					</c:forEach>
+				</h:panelGroup>
 			</p:overlayPanel>
 			<h:panelGroup layout="block" styleClass="Container">
 				<h:panelGroup layout="block"
@@ -375,7 +380,7 @@
 									at="right bottom">
 									<p:menuitem action="#{jJRequirementBean.requirementInfo}"
 										title="#{messages.specification_table_actions_viewButton}"
-										value="#{messages.label_view}" ajax="false"
+										value="#{messages.label_view}" ajax="false" 
 										icon="fa fa-eye Fs16" onclick="target='_blank'">
 										<f:setPropertyActionListener value="#{reqUtil.requirement}"
 											target="#{jJRequirementBean.requirement}" />

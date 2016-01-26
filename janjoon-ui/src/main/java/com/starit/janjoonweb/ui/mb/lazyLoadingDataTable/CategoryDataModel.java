@@ -227,8 +227,11 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 			JJRequirementService requirementService,
 			JJCategoryService categoryService, JJChapterService chapterService,
 			JJTaskService taskService) {
-		this.allRequirements = new ArrayList<RequirementUtil>(
-				new HashSet<RequirementUtil>(data));
+		if (data != null)
+			this.allRequirements = new ArrayList<RequirementUtil>(
+					new HashSet<RequirementUtil>(data));
+		else
+			this.allRequirements = new ArrayList<RequirementUtil>();
 		this.categoryId = categoryId;
 		this.nameDataModel = nameDataModel;
 		this.rendered = rendered;

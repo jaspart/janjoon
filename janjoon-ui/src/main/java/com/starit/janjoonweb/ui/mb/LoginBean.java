@@ -1736,6 +1736,10 @@ public class LoginBean implements Serializable {
 
 	}
 
+	public void updateTabViewWidth() {
+		RequestContext.getCurrentInstance().execute("updateTabViewWidth();");
+	}
+
 	public String checkMessage(Object obj) {
 
 		if (obj instanceof CategoryUtil) {

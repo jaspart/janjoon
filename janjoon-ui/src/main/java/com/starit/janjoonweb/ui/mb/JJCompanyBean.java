@@ -159,7 +159,8 @@ public class JJCompanyBean {
 			getCompanies();
 			companyOptions = new SelectItem[companies.size() + 1];
 
-			companyOptions[0] = new SelectItem("", "Select");
+			companyOptions[0] = new SelectItem("", MessageFactory.getMessage(
+					"label_all").getDetail());
 			int i = 0;
 			for (JJCompany comp : companies) {
 				companyOptions[i + 1] = new SelectItem(comp.getName(),

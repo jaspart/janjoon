@@ -421,10 +421,6 @@ public class JJSprintBean {
 
 	}
 
-	public void updateTabViewWidth() {
-		RequestContext.getCurrentInstance().execute("updateTabViewWidth();");
-	}
-
 	public void onTabSprintChange() {
 
 		FacesContext context = FacesContext.getCurrentInstance();

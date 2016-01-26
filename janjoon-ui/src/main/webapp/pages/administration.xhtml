@@ -9,6 +9,7 @@
 <ui:composition template="../templates/template.xhtml">
 	<ui:define name="head">
 		<h:outputScript library="js" name="admin.js" />
+		<h:outputStylesheet library="css" name="adminStyle.css" />
 	</ui:define>
 	<ui:define name="content">
 		<h:form>
@@ -16,127 +17,185 @@
 				update=":contentPanel :headerForm" />
 		</h:form>
 
-		<p:commandButton value="#{messages.specification_video_help_title}"
-			id="videoHelpBtn" icon="ui-icon-video"
-			title="#{messages.specification_video_help_title}"
-			onclick="PF('videoHelpWidget').show()" type="button"
-			style="float: right;" />
-		<h:panelGroup layout="block" styleClass="EmptyBox5" />	
-		<p:tabView id="tabview" widgetVar="AdmintabView" scrollable="true"
-			style="max-width: 200px;"
-			activeIndex="#{loginBean.activeTabAdminIndex}">
-			<p:ajax event="tabChange" listener="#{loginBean.onTabAdminChange}" />
+		<h:panelGroup layout="block" styleClass="Container">
+		<h:panelGroup layout="block" styleClass="Container20 Responsive ui-fluid" style="float: right;">
+			<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:commandButton value="#{messages.specification_video_help_title}"
+				id="videoHelpBtn" icon="fa fa-video-camera Fs20"
+				title="#{messages.specification_video_help_title}"
+				onclick="PF('videoHelpWidget').show()" type="button"/>
+				</h:panelGroup></h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100 ShowOnMobile ui-fluid">
+				<h:form id="activeIndexForm">
+					<h:panelGroup layout="block" styleClass="Container30" >
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="activeIndex" value="#{messages.label_tab}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container70">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="activeIndex" var="tab" panelStyleClass="hideDisabled"
+								value="#{loginBean.activeTabAdminIndex}" effect="fade"
+								onchange="PF('AdmintabView').select(value);">
+								<f:selectItem itemLabel="#{messages.admin_user_menuitem}"
+									itemValue="0"
+									itemDisabled="#{!loginBean.authorisationService.adminContact}" />
+								<f:selectItem itemLabel="#{messages.admin_profile_menuitem}"
+									itemValue="1"
+									itemDisabled="#{!loginBean.authorisationService.adminProfil}" />
+								<f:selectItem itemLabel="#{messages.admin_company_menuitem}"
+									itemValue="2"
+									itemDisabled="#{!loginBean.authorisationService.adminCompany and !loginBean.authorisationService.adminContact}" />
+								<f:selectItem itemLabel="#{messages.admin_product_menuitem}"
+									itemValue="3"
+									itemDisabled="#{!loginBean.authorisationService.adminProduct}" />
+								<f:selectItem itemLabel="#{messages.admin_project_menuitem}"
+									itemValue="4"
+									itemDisabled="#{!loginBean.authorisationService.adminProject}" />
+								<f:selectItem itemLabel="#{messages.admin_category_menuitem}"
+									itemValue="5"
+									itemDisabled="#{!loginBean.authorisationService.adminCategory}" />
+								<f:selectItem
+									itemLabel="#{messages.admin_configuration_menuitem}"
+									itemValue="6"
+									itemDisabled="#{!loginBean.authorisationService.adminConfiguration}" />
+								<f:selectItem itemLabel="#{messages.admin_status_menuitem}"
+									itemValue="7"
+									itemDisabled="#{!loginBean.authorisationService.adminStatus}" />
+								<f:selectItem itemLabel="#{messages.admin_workflow_menuitem}"
+									itemValue="8"
+									itemDisabled="#{!loginBean.authorisationService.adminWorkflow}" />
+								<f:selectItem itemLabel="#{messages.admin_license_menuitem}"
+									itemValue="9" />
+								<f:selectItem itemLabel="Statistiques"
+									itemValue="10"
+									itemDisabled="#{!loginBean.authorisationService.adminContact}" />								
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</h:panelGroup>						
+			<h:panelGroup layout="block" styleClass="EmptyBox5" />
+			<h:panelGroup layout="block" styleClass="Container100">
+				<f:event type="preRenderComponent"
+					listener="#{loginBean.updateTabViewWidth()}" />
+				<p:tabView id="tabview" widgetVar="AdmintabView" scrollable="true"
+					style="max-width: 300px;" styleClass="responsiveTabView"
+					activeIndex="#{loginBean.activeTabAdminIndex}">
+					<p:ajax event="tabChange" update=":activeIndexForm"
+						listener="#{loginBean.onTabAdminChange}" />
 
-			<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
-				titletip="#{loginBean.authorisationService.adminContactMSG}"
-				rendered="#{loginBean.authorisationService.adminContact}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="contact">
-						<ui:include src="contact.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabUser" title="#{messages.admin_user_menuitem}"
+						titletip="#{loginBean.authorisationService.adminContactMSG}"
+						rendered="#{loginBean.authorisationService.adminContact}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="contact">
+								<ui:include src="contact.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}"
-				titletip="#{loginBean.authorisationService.adminProfilMSG}"
-				rendered="#{loginBean.authorisationService.adminProfil}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="profile">
-						<ui:include src="profile.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabProfile" title="#{messages.admin_profile_menuitem}"
+						titletip="#{loginBean.authorisationService.adminProfilMSG}"
+						rendered="#{loginBean.authorisationService.adminProfil}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="profile">
+								<ui:include src="profile.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabCompagnies" title="#{messages.admin_company_menuitem}"
-				titletip="#{loginBean.authorisationService.adminCompanyMSG}"
-				rendered="#{loginBean.authorisationService.adminCompany or loginBean.authorisationService.adminContact}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="Compagnies">
-						<ui:include src="compagnies.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabCompagnies"
+						title="#{messages.admin_company_menuitem}"
+						titletip="#{loginBean.authorisationService.adminCompanyMSG}"
+						rendered="#{loginBean.authorisationService.adminCompany or loginBean.authorisationService.adminContact}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="Compagnies">
+								<ui:include src="compagnies.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}"
-				titletip="#{loginBean.authorisationService.adminProductMSG}"
-				rendered="#{loginBean.authorisationService.adminProduct}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="product">
-						<ui:include src="product.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabProduct" title="#{messages.admin_product_menuitem}"
+						titletip="#{loginBean.authorisationService.adminProductMSG}"
+						rendered="#{loginBean.authorisationService.adminProduct}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="product">
+								<ui:include src="product.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabProject" title="#{messages.admin_project_menuitem}"
-				titletip="#{loginBean.authorisationService.adminProjectMSG}"
-				rendered="#{loginBean.authorisationService.adminProject}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="project">
-						<ui:include src="project.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabProject" title="#{messages.admin_project_menuitem}"
+						titletip="#{loginBean.authorisationService.adminProjectMSG}"
+						rendered="#{loginBean.authorisationService.adminProject}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="project">
+								<ui:include src="project.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabCategory" title="#{messages.admin_category_menuitem}"
-				titletip="#{loginBean.authorisationService.adminCategoryMSG}"
-				rendered="#{loginBean.authorisationService.adminCategory}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="category">
-						<ui:include src="category.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
-			<p:tab id="tabConfig"
-				titletip="#{loginBean.authorisationService.adminConfigurationMSG}"
-				rendered="#{loginBean.authorisationService.adminConfiguration}"
-				title="#{messages.admin_configuration_menuitem}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="configuration">
-						<ui:include src="config.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabCategory" title="#{messages.admin_category_menuitem}"
+						titletip="#{loginBean.authorisationService.adminCategoryMSG}"
+						rendered="#{loginBean.authorisationService.adminCategory}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="category">
+								<ui:include src="category.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
+					<p:tab id="tabConfig"
+						titletip="#{loginBean.authorisationService.adminConfigurationMSG}"
+						rendered="#{loginBean.authorisationService.adminConfiguration}"
+						title="#{messages.admin_configuration_menuitem}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="configuration">
+								<ui:include src="config.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabStatus" title="#{messages.admin_status_menuitem}"
-				titletip="#{loginBean.authorisationService.adminStatusMSG}"
-				rendered="#{loginBean.authorisationService.adminStatus}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="status">
-						<ui:include src="status.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabStatus" title="#{messages.admin_status_menuitem}"
+						titletip="#{loginBean.authorisationService.adminStatusMSG}"
+						rendered="#{loginBean.authorisationService.adminStatus}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="status">
+								<ui:include src="status.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabWorkflow" title="#{messages.admin_workflow_menuitem}"
-				titletip="#{loginBean.authorisationService.adminWorkflowMSG}"
-				rendered="#{loginBean.authorisationService.adminWorkflow}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="workflow">
-						<ui:include src="workflow.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabWorkflow" title="#{messages.admin_workflow_menuitem}"
+						titletip="#{loginBean.authorisationService.adminWorkflowMSG}"
+						rendered="#{loginBean.authorisationService.adminWorkflow}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="workflow">
+								<ui:include src="workflow.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabLicense" title="#{messages.admin_license_menuitem}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="license">
-						<ui:include src="license.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
+					<p:tab id="tabLicense" title="#{messages.admin_license_menuitem}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="license">
+								<ui:include src="license.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
 
-			<p:tab id="tabStatistique" title="Statistiques"
-				titletip="#{loginBean.authorisationService.adminContactMSG}"
-				rendered="#{loginBean.authorisationService.adminContact}">
-				<h:panelGrid columns="1" cellpadding="3">
-					<ui:insert name="statistique">
-						<ui:include src="statistique.xhtml" />
-					</ui:insert>
-				</h:panelGrid>
-			</p:tab>
-
-		</p:tabView>
-
+					<p:tab id="tabStatistique" title="Statistiques"
+						titletip="#{loginBean.authorisationService.adminContactMSG}"
+						rendered="#{loginBean.authorisationService.adminContact}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="statistique">
+								<ui:include src="statistique.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</h:panelGroup>
+		</h:panelGroup>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
 			responsive="true" position="center"

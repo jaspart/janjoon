@@ -252,7 +252,7 @@ public class JJBuildBean {
 
 			index = i;
 			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_created", "Bug", "");
+					"message_successfully_created", "Build", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(

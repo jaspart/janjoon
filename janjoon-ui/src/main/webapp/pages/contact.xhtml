@@ -6,454 +6,558 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<h:form id="contactForm">
-		<p:panel id="contactPanel" style="width:850px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="contactDataTable" var="contact" lazy="true"
-				paginatorPosition="bottom" widgetVar="contactDataTableWV"
-				emptyMessage="#{messages.label_notRecordFound}" sortMode="multiple"
-				value="#{jJContactBean.contactsLazyModel}" paginator="true"
-				rows="15" rowKey="#{contact.id}">
-				<f:facet name="header">#{messages.admin_contact_table_title}				
-					
-					<p:inputText id="globalFilter"
-						onkeyup="PF('contactDataTableWV').filter()" style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar" cache="false"
-						value="#{imageStreamer.image}"
-						rendered="#{contact.picture != null}">
-						<f:param name="contactId" value="#{contact.id}" />
-					</p:graphicImage>
-					<p:graphicImage styleClass="avatar" library="images"
-						name="default-user-2.jpg" rendered="#{contact.picture == null}" />
-				</p:column>
-				<p:column sortBy="#{contact.company.name}" id="company"
-					filterOptions="#{jJCompanyBean.companyOptions}"
-					filterMatchMode="exact" filterStyle="width: 80%;"
-					filterBy="#{contact.company.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<p:dataTable id="contactDataTable" var="contact" lazy="true"
+					paginatorPosition="bottom" widgetVar="contactDataTableWV"
+					emptyMessage="#{messages.label_notRecordFound}" sortMode="multiple"
+					value="#{jJContactBean.contactsLazyModel}" paginator="true"
+					rows="15" rowKey="#{contact.id}">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_menuitem}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_contact_table_title}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('contactDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{contact.company.name}" />
-				</p:column>
-				<p:column sortBy="#{contact.firstname}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_contact_table_firstname_label}" />
-					</f:facet>
-					<h:outputText value="#{contact.firstname}" />
-				</p:column>
-				<p:column sortBy="#{contact.name}">
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_contact_table_lastname_label}" />
-					</f:facet>
-					<h:outputText value="#{contact.name}" />
-				</p:column>
-				<p:column sortBy="#{contact.email}" width="180">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_contact_table_email_label}" />
-					</f:facet>
-					<h:outputText value="#{contact.email}" />
-				</p:column>
-				<p:column styleClass="action-column" width="170">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_contact_table_action_label}" />
-					</f:facet>
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('contactDialogWidget').show()"
-						action="#{jJContactBean.editContact(jJPermissionBean)}"
-						update=":tabview:contactDialog" resetValues="true"
-						title="#{messages.admin_contact_edit_label}"
-						value="#{messages.admin_contact_edit_label}">
-						<f:setPropertyActionListener value="#{contact}"
-							target="#{jJContactBean.contactAdmin}" />
+					<p:column style="text-align: center;">
+						<p:graphicImage styleClass="avatar" cache="false"
+							value="#{imageStreamer.image}" 
+							rendered="#{contact.picture != null}">
+							<f:param name="contactId" value="#{contact.id}" />
+						</p:graphicImage>
+						<p:graphicImage styleClass="avatar" library="images"
+							name="default-user-2.jpg" rendered="#{contact.picture == null}" />
+					</p:column>
+					<p:column sortBy="#{contact.company.name}" id="company"
+						priority="6" filterMatchMode="exact" style="width: 20%;"
+						filterBy="#{contact.company.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_company_menuitem}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('contactDataTableWV').filter()">								
+								<f:selectItems value="#{jJCompanyBean.companyOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{contact.company.name}" />
+					</p:column>
+					<p:column sortBy="#{contact.firstname}" priority="6">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_contact_table_firstname_label}" />
+						</f:facet>
+						<h:outputText value="#{contact.firstname}" />
+					</p:column>
+					<p:column sortBy="#{contact.name}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_contact_table_lastname_label}" />
+						</f:facet>
+						<h:outputText value="#{contact.name}" />
+					</p:column>
+					<p:column sortBy="#{contact.email}" style="width: 30%;">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_contact_table_email_label}" />
+						</f:facet>
+						<h:outputText value="#{contact.email}" />
+					</p:column>
+					<p:column styleClass="action-column" style="width: 10%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_contact_table_action_label}" />
+						</f:facet>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil fs16"
+								oncomplete="PF('contactDialogWidget').show()"
+								action="#{jJContactBean.editContact(jJPermissionBean)}"
+								update=":tabview:contactDialogHeader :tabview:contactDialogForm"
+								resetValues="true" title="#{messages.label_edit}"
+								value="#{messages.label_edit}">
+								<f:setPropertyActionListener value="#{contact}"
+									target="#{jJContactBean.contactAdmin}" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								resetValues="true"
+								oncomplete="PF('contactDeleteDialogWidget').show()"
+								value="#{messages.label_delete}"
+								title="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{contact}"
+									target="#{jJContactBean.contactAdmin}" />
+							</p:menuitem>
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							resetValues="true"
-							oncomplete="PF('contactDeleteDialogWidget').show()"
-							value="#{messages.admin_contact_delete_button}"
-							title="#{messages.admin_contact_delete_label}">
-							<f:setPropertyActionListener value="#{contact}"
-								target="#{jJContactBean.contactAdmin}" />
-						</p:menuitem>
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_contact_new_button}"
+										id="newContact" title="#{messages.admin_contact_new_button}"
+										actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
+										update=":tabview:contactDialogHeader :tabview:contactDialogForm"
+										resetValues="true"
+										oncomplete="PF('contactDialogWidget').show()"
+										icon="fa fa-plus Fs20" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton id="restoreContact"
+										icon="fa fa-rotate-right Fs20"
+										value="#{messages.admin_contact_restore_dialog}"
+										oncomplete="PF('restoreContactDialogWidget').show()"
+										resetValues="true" update=":tabview:restoreContactForm" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_contact_new_button}"
-						id="newContact" title="#{messages.admin_contact_new_button}"
-						actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
-						update=":tabview:contactDialog" resetValues="true"
-						oncomplete="PF('contactDialogWidget').show()"
-						icon="ui-icon-circle-plus" />
-					<p:commandButton id="restoreContact" icon="ui-icon-restore"
-						value="#{messages.admin_contact_restore_dialog}"
-						oncomplete="PF('restoreContactDialogWidget').show()"
-						resetValues="true" update=":tabview:restoreContactForm" />
-
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+					</f:facet>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 
 	<p:dialog id="restoreContactDialog" responsive="true"
-		header="#{messages.admin_contact_restore_dialog}" 
-		resizable="false" modal="true" widgetVar="restoreContactDialogWidget"
-		dynamic="true" showEffect="fade" draggable="true">
+		header="#{messages.admin_contact_restore_dialog}" resizable="false"
+		modal="true" widgetVar="restoreContactDialogWidget" dynamic="true"
+		showEffect="fade" draggable="true">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
-
 		<p:outputPanel id="restoreContactPanel">
-			<h:form id="restoreContactForm" enctype="multipart/form-data"
-				style="width: 600px;">
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
+			<h:form id="restoreContactForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block"
+					styleClass="Container ui-fluid BorderAll" style="max-width:600px;">
+
+					<h:panelGroup layout="block" styleClass="Container100">
 						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<p:dataTable id="restoreContactTable" var="contact"
-						scrollable="true" value="#{jJContactBean.deletedContact}"
-						rowKey="#{contact.id}"
-						selection="#{jJContactBean.restoredContact}" scrollHeight="400"
-						emptyMessage="#{messages.label_notRecordFound}">
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:dataTable id="restoreContactTable" var="contact"
+								scrollable="true" value="#{jJContactBean.deletedContact}"
+								rowKey="#{contact.id}"
+								selection="#{jJContactBean.restoredContact}" scrollHeight="400"
+								emptyMessage="#{messages.label_notRecordFound}">
 
-						<p:ajax event="rowSelectCheckbox"
-							update="tabview:restoreContactForm:restoreButton" />
-						<p:ajax event="rowUnselectCheckbox"
-							update="tabview:restoreContactForm:restoreButton" />
-						<p:ajax event="toggleSelect"
-							update="tabview:restoreContactForm:restoreButton" />
+								<p:ajax event="rowSelectCheckbox"
+									update="tabview:restoreContactForm:restoreButton" />
+								<p:ajax event="rowUnselectCheckbox"
+									update="tabview:restoreContactForm:restoreButton" />
+								<p:ajax event="toggleSelect"
+									update="tabview:restoreContactForm:restoreButton" />
 
-						<f:facet name="header">#{messages.admin_contact_restore_table_title}</f:facet>
-						<p:column selectionMode="multiple"
-							style="width: 20px;text-align:center" />
-						<p:column>
-							<f:facet name="header">
-								<h:outputText
-									value="#{messages.admin_contact_table_firstname_label}" />
-							</f:facet>
-							<h:outputText value="#{contact.firstname}" />
-						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText
-									value="#{messages.admin_contact_table_lastname_label}" />
-							</f:facet>
-							<h:outputText value="#{contact.name}" />
-						</p:column>
-						<p:column>
-							<f:facet name="header">
-								<h:outputText
-									value="#{messages.admin_contact_table_email_label}" />
-							</f:facet>
-							<h:outputText value="#{contact.email}" />
-						</p:column>
-					</p:dataTable>
-					<f:facet name="footer">
-						<p:commandButton id="restoreButton"
-							value="#{messages.admin_contact_resore_button}"
-							update="restoreContactForm"
-							disabled="#{empty jJContactBean.restoredContact}"
-							title="#{messages.admin_contact_resore_button}"
-							action="#{jJContactBean.restoreContacts}" />
-						<p:commandButton id="cancelButton" value="Annuler"
-							onclick="PF('restoreContactDialogWidget').hide()" type="button" />
-					</f:facet>
-				</p:panel>
-
+								<f:facet name="header">#{messages.admin_contact_restore_table_title}</f:facet>
+								<p:column selectionMode="multiple"
+									style="width: 20px;text-align:center" />
+								<p:column priority="6">
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_contact_table_firstname_label}" />
+									</f:facet>
+									<h:outputText value="#{contact.firstname}" />
+								</p:column>
+								<p:column priority="6">
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_contact_table_lastname_label}" />
+									</f:facet>
+									<h:outputText value="#{contact.name}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_contact_table_email_label}" />
+									</f:facet>
+									<h:outputText value="#{contact.email}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Separator" />
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="restoreButton"
+								value="#{messages.admin_contact_resore_button}"
+								update="restoreContactForm" icon="fa fa-rotate-right Fs20"
+								disabled="#{empty jJContactBean.restoredContact}"
+								title="#{messages.admin_contact_resore_button}"
+								action="#{jJContactBean.restoreContacts}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+								value="#{messages.label_cancel}"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('restoreContactDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
 	<p:dialog id="contactDialog" draggable="false" responsive="true"
-		header="#{messages[jJContactBean.message]}" modal="true"
-		widgetVar="contactDialogWidget" dynamic="true" showEffect="fade"
-		resizable="false">
+		modal="true" widgetVar="contactDialogWidget" dynamic="true"
+		showEffect="fade" resizable="false">
 		<p:ajax event="close" update=":tabview:contactForm"
 			listener="#{jJContactBean.closeDialog(jJPermissionBean)}" />
-		<p:outputPanel id="contactDialogPanel">
+		<f:facet name="header">
+			<p:outputLabel id="contactDialogHeader"
+				value="#{messages[jJContactBean.message]}" />
+		</f:facet>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width:1000px;">
 			<h:form id="contactDialogForm">
 				<input style="display: none"> </input>
 				<input type="password" style="display: none"></input>
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
-						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<p:row>
-						<p:column>
-							<p:panelGrid>
-								<p:row>
-									<p:column>
-										<p:inputText id="firstname"
-											value="#{jJContactBean.contactAdmin.firstname}"
-											label="#{messages.admin_contact_new_firstname_label}"
-											required="true"
-											placeholder="#{messages.admin_contact_new_firstname_watermark}"
-											disabled="#{jJContactBean.disabledContactMode}">
-											<f:validateLength maximum="100" />
-										</p:inputText>
-									</p:column>
-									<p:column>
-										<p:inputText id="lastname"
-											value="#{jJContactBean.contactAdmin.name}" label="Lastname"
-											required="true"
-											placeholder="#{messages.admin_contact_new_lastname_watermark}"
-											disabled="#{jJContactBean.disabledContactMode}">
-											<f:validateLength maximum="100" />
-										</p:inputText>
-									</p:column>
 
-									<p:column>
-										<p:inputText id="email"
-											value="#{jJContactBean.contactAdmin.email}"
-											label="#{messages.admin_contact_new_email_label}"
-											required="true" autocomplete="off"
-											placeholder="#{messages.admin_contact_new_email_watermark}"
-											readonly="#{jJContactBean.contactAdmin.id != null}"
-											disabled="#{jJContactBean.disabledContactMode}">
-											<f:validator validatorId="emailValidator" />
-											<f:attribute name="contact"
-												value="#{jJContactBean.contactAdmin}" />
-										</p:inputText>
-									</p:column>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="firstname"
+							value="#{jJContactBean.contactAdmin.firstname}"
+							label="#{messages.admin_contact_new_firstname_label}"
+							required="true"
+							placeholder="#{messages.admin_contact_new_firstname_watermark}"
+							disabled="#{jJContactBean.disabledContactMode}">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="lastname"
+							value="#{jJContactBean.contactAdmin.name}" label="Lastname"
+							required="true"
+							placeholder="#{messages.admin_contact_new_lastname_watermark}"
+							disabled="#{jJContactBean.disabledContactMode}">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
 
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_password_label}" />
-										<p:password id="password"
-											value="#{jJContactBean.contactAdmin.password}"
-											feedback="true"
-											placeholder="#{messages.admin_contact_new_password_label}"
-											label="#{messages.admin_contact_new_password_label}"
-											redisplay="true" required="true"
-											disabled="#{jJContactBean.disabledContactMode}" />
-									</p:column>
+						<p:inputText id="email"
+							value="#{jJContactBean.contactAdmin.email}"
+							label="#{messages.admin_contact_new_email_label}" required="true"
+							autocomplete="off"
+							placeholder="#{messages.admin_contact_new_email_watermark}"
+							readonly="#{jJContactBean.contactAdmin.id != null}"
+							disabled="#{jJContactBean.disabledContactMode}">
+							<f:validator validatorId="emailValidator" />
+							<f:attribute name="contact" value="#{jJContactBean.contactAdmin}" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container40">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="password"
+								value="#{messages.admin_contact_new_password_label}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container60">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:password id="password"
+								onblur="if(value=='') value = '#{jJContactBean.contactAdmin.password}'"
+								onfocus="value = ''"
+								value="#{jJContactBean.contactAdmin.password}" feedback="true"
+								placeholder="#{messages.admin_contact_new_password_label}"
+								label="#{messages.admin_contact_new_password_label}"
+								redisplay="true" required="true"
+								disabled="#{jJContactBean.disabledContactMode}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container40">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="company" value="#{messages.label_company}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container60">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="company"
+								value="#{jJContactBean.contactAdmin.company}" effect="fade"
+								filter="true" required="true" filterMatchMode="startsWith"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
+								label="#{messages.label_company}">
+								<f:selectItems value="#{jJCompanyBean.companies}" var="comp"
+									itemLabel="#{comp.name}" itemValue="#{comp}" />
+								<p:ajax update="product project addPermission" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container40">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="priceReal"
+								value="#{messages.project_scrum_price_real}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container60">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:spinner id="priceReal"
+								value="#{jJContactBean.contactAdmin.priceReal}" prefix="$"
+								min="0" disabled="#{jJContactBean.disabledContactMode}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container40">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="priceSold"
+								value="#{messages.project_scrum_price_sold}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container60">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:spinner id="priceSold"
+								value="#{jJContactBean.contactAdmin.priceSold}" prefix="$"
+								min="0" disabled="#{jJContactBean.disabledContactMode}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
-								</p:row>
+				<h:panelGroup layout="block" styleClass="Container25 Responsive50"
+					style="float: right;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="addContact"
+							value="#{messages.admin_contact_add_button}"
+							update="contactDialogForm" icon="fa fa-plus Fs16"
+							title="#{messages.admin_contact_add_button}"
+							process="@this,firstname,lastname,email,password,company,priceSold,priceReal"
+							action="#{jJContactBean.addContact(jJPermissionBean)}"
+							disabled="#{not jJContactBean.disabledPermissionMode}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
 
-								<p:row>
-									<p:column>
-										<p:outputLabel for="company"
-											value="#{messages.label_company}: " />
-										<p:selectOneMenu id="company"
-											value="#{jJContactBean.contactAdmin.company}"
-											panelStyle="width:150px" effect="fade" style="width:160px"
-											filter="true" required="true" filterMatchMode="startsWith"
-											converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
-											label="#{messages.label_company}">
+				<h:panelGroup layout="block" styleClass="Container30 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container35">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="profile"
+								value="#{messages.admin_contact_new_profile_label}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container65">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="profile" value="#{jJPermissionBean.profile}"
+								effect="fade" filter="true" filterMatchMode="startsWith"
+								required="true" widgetVar="profileWidget" label="Profile"
+								disabled="#{jJContactBean.disabledPermissionMode}">
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />
+								<f:selectItems value="#{jJPermissionBean.profiles}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
-											<f:selectItems value="#{jJCompanyBean.companies}" var="comp"
-												itemLabel="#{comp.name}" itemValue="#{comp}" />
-											<p:ajax update="product project addPermission" />
-										</p:selectOneMenu>
-									</p:column>
-									<p:column>
-										<p:selectBooleanButton
-											value="#{jJContactBean.contactAdmin.enabled}"
-											onLabel="#{messages.admin_contact_new_active_button}"
-											offLabel="#{messages.admin_contact_new_inactive_button}"
-											onIcon="ui-icon-check" offIcon="ui-icon-close"
-											disabled="#{jJContactBean.disabledContactMode}">
-											<p:ajax update="msg" listener="#{jJContactBean.addMessage}" />
-										</p:selectBooleanButton>
-									</p:column>
-									<p:column>
-										<h:outputLabel for="priceReal"
-											value="#{messages.project_scrum_price_real}: " />
-										<p:spinner id="priceReal"
-											value="#{jJContactBean.contactAdmin.priceReal}" prefix="$"
-											min="0" disabled="#{jJContactBean.disabledContactMode}" />
-									</p:column>
-									<p:column>
-										<h:outputLabel for="priceSold"
-											value="#{messages.project_scrum_price_sold}: " />
-										<p:spinner id="priceSold"
-											value="#{jJContactBean.contactAdmin.priceSold}" prefix="$"
-											min="0" disabled="#{jJContactBean.disabledContactMode}" />
-									</p:column>
-								</p:row>
-
-								<p:row>
-									<p:column colspan="4">
-										<p:commandButton id="addContact"
-											value="#{messages.admin_contact_add_button}"
-											style="float: right;" update="contactDialogForm"
-											title="#{messages.admin_contact_add_button}"
-											process="@this,firstname,lastname,email,password,company,priceSold,priceReal"
-											action="#{jJContactBean.addContact(jJPermissionBean)}"
-											disabled="#{not jJContactBean.disabledPermissionMode}" />
-									</p:column>
-								</p:row>
-
-
-								<p:row>
-
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_profile_label}" />
-										<p:selectOneMenu id="profile"
-											value="#{jJPermissionBean.profile}" panelStyle="width:150px"
-											effect="fade" style="width:160px" filter="true"
-											filterMatchMode="startsWith" required="true"
-											widgetVar="profileWidget" label="Profile"
-											disabled="#{jJContactBean.disabledPermissionMode}">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />
-											<f:selectItems value="#{jJPermissionBean.profiles}" var="p"
-												itemLabel="#{p.name}" itemValue="#{p}" />
-										</p:selectOneMenu>
-									</p:column>
-
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_project_label}" />
-										<p:selectOneMenu id="project"
-											value="#{jJPermissionBean.project}" panelStyle="width:150px"
-											effect="fade" style="width:160px" filter="true"
-											filterMatchMode="startsWith" widgetVar="projectWidget"
-											disabled="#{jJContactBean.disabledPermissionMode}">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
-											<f:selectItem itemValue="#{null}"
-												itemLabel="#{messages.contact_anyProject}" />
-											<f:selectItems value="#{jJPermissionBean.projects}" var="p"
-												itemLabel="#{p.name}" itemValue="#{p}" />
-										</p:selectOneMenu>
-									</p:column>
-
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_product_label}" />
-										<p:selectOneMenu id="product"
-											value="#{jJPermissionBean.product}" panelStyle="width:150px"
-											effect="fade" style="width:160px" filter="true"
-											filterMatchMode="startsWith" widgetVar="productWidget"
-											disabled="#{jJContactBean.disabledPermissionMode}">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
-											<f:selectItem itemValue="#{null}"
-												itemLabel="#{messages.contact_anyProduct}" />
-											<f:selectItems value="#{jJPermissionBean.products}" var="p"
-												itemLabel="#{p.name}" itemValue="#{p}" />
-										</p:selectOneMenu>
-									</p:column>
-
-									<p:column>
-										<p:commandButton id="addPermission"
-											update="profile project product permissionDataTable msg"
-											actionListener="#{jJPermissionBean.addPermission}"
-											icon="ui-icon-circle-plus"
-											title="#{messages.admin_contact_addPermission_button}"
-											process="@this,profile,project,product"
-											disabled="#{jJContactBean.disabledPermissionMode}" />
-										<p:commandButton id="infoBtn" icon="ui-icon-info"
-											title="#{messages.specification_video_help_title}"
-											type="button" style="float: right;" />
-										<p:overlayPanel id="infoPanel" for="infoBtn" hideEffect="fade"
-											style="width:30%">
-											<p:panelGrid style="width: 100%;" columns="1">
-												<ul>
-													<li>#{messages.admin_contact_addPermission_help1}</li>
-													<li>#{messages.admin_contact_addPermission_help2}</li>
-													<li>#{messages.admin_contact_addPermission_help3}</li>
-												</ul>
-											</p:panelGrid>
-										</p:overlayPanel>
-									</p:column>
-
-								</p:row>
-							</p:panelGrid>
-						</p:column>
-					</p:row>
-					<p:dataTable id="permissionDataTable" var="permissionModel"
-						scrollable="true" style="width:500px;" scrollHeight="200"
-						value="#{jJPermissionBean.permissionDataModel}"
-						rowStyleClass="#{permissionModel.old ? 'old' : null}"
-						emptyMessage="#{messages.label_notRecordFound}">
-						<f:facet name="header">
-							<h:outputText value="#{messages.admin_contact_new_table_title} " />
-						</f:facet>
-
-						<p:column style="width:10%">
+				<h:panelGroup layout="block" styleClass="Container30 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container35">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="project"
+								value="#{messages.admin_contact_new_project_label}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container65">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="project" value="#{jJPermissionBean.project}"
+								effect="fade" filter="true" filterMatchMode="startsWith"
+								widgetVar="projectWidget"
+								disabled="#{jJContactBean.disabledPermissionMode}">
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.contact_anyProject}" />
+								<f:selectItems value="#{jJPermissionBean.projects}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container30 Responsive50">
+					<h:panelGroup layout="block" styleClass="Container35">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="product"
+								value="#{messages.admin_contact_new_product_label}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container65">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="product" value="#{jJPermissionBean.product}"
+								effect="fade" filter="true" filterMatchMode="startsWith"
+								widgetVar="productWidget"
+								disabled="#{jJContactBean.disabledPermissionMode}">
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
+								<f:selectItem itemValue="#{null}"
+									itemLabel="#{messages.contact_anyProduct}" />
+								<f:selectItems value="#{jJPermissionBean.products}" var="p"
+									itemLabel="#{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block"
+					styleClass="Container10 Responsive50 TexAlCenter"
+					style="float: right;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="addPermission"
+							update="profile project product permissionDataTable msg"
+							actionListener="#{jJPermissionBean.addPermission}"
+							icon="fa fa-plus Fs16"
+							title="#{messages.admin_contact_addPermission_button}"
+							process="@this,profile,project,product"
+							disabled="#{jJContactBean.disabledPermissionMode}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container15 Responsive"
+					style="float: right;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="infoBtn" icon="fa fa-info Fs16"
+							styleClass="ShowOnDesktop"
+							title="#{messages.specification_video_help_title}" type="button"
+							style="float: right;" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<p:overlayPanel id="infoPanel" for="infoBtn" hideEffect="fade"
+					style="max-width: 450px;" styleClass="ShowOnDesktop">
+					<p:panelGrid style="width: 100%;" columns="1">
+						<ul>
+							<li>#{messages.admin_contact_addPermission_help1}</li>
+							<li>#{messages.admin_contact_addPermission_help2}</li>
+							<li>#{messages.admin_contact_addPermission_help3}</li>
+						</ul>
+					</p:panelGrid>
+				</p:overlayPanel>
+				<h:panelGroup layout="block" styleClass="Container60 Responsive100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:dataTable id="permissionDataTable" var="permissionModel"
+							scrollable="true" scrollHeight="140"
+							value="#{jJPermissionBean.permissionDataModel}"
+							rowStyleClass="#{permissionModel.old ? 'old' : null}"
+							emptyMessage="#{messages.label_notRecordFound}">
 							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<p:selectBooleanCheckbox
-											disabled="#{jJPermissionBean.disabledCheckPermission}"
-											value="#{jJPermissionBean.checkPermissions}">
-											<p:ajax update="permissionDataTable"
-												listener="#{jJPermissionBean.checkPermissions}" />
-										</p:selectBooleanCheckbox>
-									</p:column>
-								</p:row>
+								<h:outputText value="#{messages.admin_contact_new_table_title} " />
 							</f:facet>
+							<p:column style="width:10%">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<p:selectBooleanCheckbox
+												disabled="#{jJPermissionBean.disabledCheckPermission}"
+												value="#{jJPermissionBean.checkPermissions}">
+												<p:ajax update="permissionDataTable"
+													listener="#{jJPermissionBean.checkPermissions}" />
+											</p:selectBooleanCheckbox>
+										</p:column>
+									</p:row>
+								</f:facet>
+								<p:selectBooleanCheckbox
+									value="#{permissionModel.checkPermission}"
+									disabled="#{jJPermissionBean.disabledCheckPermission}">
+									<p:ajax update="permissionDataTable"
+										listener="#{jJPermissionBean.checkPermission}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{messages.admin_contact_new_table_profile_title}" />
+										</p:column>
+									</p:row>
+								</f:facet>
+								<h:outputText value="#{permissionModel.permission.profile.name}" />
+							</p:column>
 
-							<p:selectBooleanCheckbox
-								value="#{permissionModel.checkPermission}"
-								disabled="#{jJPermissionBean.disabledCheckPermission}">
-								<p:ajax update="permissionDataTable"
-									listener="#{jJPermissionBean.checkPermission}" />
-							</p:selectBooleanCheckbox>
-						</p:column>
+							<p:column priority="6">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{messages.admin_contact_new_table_project_title}" />
+										</p:column>
+									</p:row>
+								</f:facet>
+								<h:outputText value="#{permissionModel.permission.project.name}" />
+							</p:column>
 
-
-
-						<p:column style="width:30%">
-							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_table_profile_title}" />
-									</p:column>
-								</p:row>
-							</f:facet>
-							<h:outputText value="#{permissionModel.permission.profile.name}" />
-						</p:column>
-
-						<p:column style="width:30%">
-							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_table_project_title}" />
-									</p:column>
-								</p:row>
-							</f:facet>
-							<h:outputText value="#{permissionModel.permission.project.name}" />
-						</p:column>
-
-						<p:column style="width:30%">
-							<f:facet name="header">
-								<p:row>
-									<p:column>
-										<h:outputText
-											value="#{messages.admin_contact_new_table_product_title}" />
-									</p:column>
-								</p:row>
-							</f:facet>
-							<h:outputText value="#{permissionModel.permission.product.name}" />
-						</p:column>
-					</p:dataTable>
-					<f:facet name="footer">
+							<p:column priority="6">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{messages.admin_contact_new_table_product_title}" />
+										</p:column>
+									</p:row>
+								</f:facet>
+								<h:outputText value="#{permissionModel.permission.product.name}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
+				<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:commandButton id="saveButton"
 							value="#{messages.admin_contact_new_save_button}"
+							icon="fa fa-save Fs16"
 							title="#{messages.admin_contact_new_save_button}"
 							update="contactDialogForm :headerForm :growlForm"
-							style="float: right;"
 							process="@this,firstname,lastname,email,password,company,priceReal,priceSold"
 							disabled="#{jJContactBean.disabledPermissionMode}"
 							action="#{jJContactBean.save(jJPermissionBean)}" />
-					</f:facet>
-				</p:panel>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+					style="float: right;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+							value="#{messages.label_cancel}"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							onclick="PF('contactDialogWidget').hide()" type="button" />
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
-		</p:outputPanel>
+		</h:panelGroup>
 	</p:dialog>
 	<p:confirmDialog id="contactDeleteDialog"
 		widgetVar="contactDeleteDialogWidget"
 		message="#{messages.admin_contact_delete_alert}" showEffect="fade"
-		 header="#{messages.admin_contact_delete_header}"
-		severity="alarm">
+		header="#{messages.admin_contact_delete_header}" severity="alarm">
 		<p:outputPanel id="contactDeletePanel">
 			<h:form id="contactDeleteForm">
 				<p:commandButton id="deleteYesButton"

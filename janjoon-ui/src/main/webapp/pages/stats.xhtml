@@ -179,7 +179,7 @@
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="Container70">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:selectOneMenu id="activeSprintIndex"
+										<p:selectOneMenu id="activeSprintIndex" panelStyleClass="hideDisabled"
 											value="#{jJStatusBean.activeTabSprintIndex}" effect="fade"
 											onchange="PF('SprintTab').select(value);">
 											<f:selectItems value="#{jJStatusBean.sprintList}"

@@ -6,110 +6,97 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<style type="text/css">
-.ui-fileupload-progress {
-	display: none;
-}
-
-.ui-fileupload-cancel {
-	display: none;
-}
-
-.ui-fileupload-files {
-	margin: 1px 0;
-	width: 150px !important;
-	display: inline-block;
-	height: 30px;
-}
-
-.ui-datalist-data {
-	padding: 10px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-</style>
-
 	<h:form id="companyForm">
-		<p:panel id="companyPanel" style="width:500px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="categoryDataTable" var="company" lazy="true"
-				sortMode="multiple" paginatorPosition="bottom"
-				emptyMessage="#{messages.label_notRecordFound}"
-				value="#{jJCompanyBean.lazyCompanyList}" paginator="true"
-				widgetVar="companyDataTableWV" rows="15" rowKey="#{company.id}">
-				<f:facet name="header">#{messages.admin_company_table_header}
-				<p:inputText id="globalFilter"
-						onkeyup="PF('companyDataTableWV').filter()" style="width:200px"
-						rendered="#{loginBean.authorisationService.adminCompany}"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar" cache="false"
-						value="#{imageStreamer.imageComp}" rendered="#{company.logo != null}">
-						<f:param name="CompId" value="#{company.id}" />
-					</p:graphicImage>
-					<p:graphicImage styleClass="avatar" library="images" name="empty_company.png" 
-					rendered="#{company.logo == null}"/>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<p:dataTable id="categoryDataTable" var="company" lazy="true"
+					sortMode="multiple" paginatorPosition="bottom"
+					emptyMessage="#{messages.label_notRecordFound}"
+					value="#{jJCompanyBean.lazyCompanyList}" paginator="true"
+					widgetVar="companyDataTableWV" rows="15" rowKey="#{company.id}">
+					<f:facet name="header">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_company_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									rendered="#{loginBean.authorisationService.adminCompany}"
+									onkeyup="PF('companyDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</f:facet>
+					<p:column style="width: 70px !important;text-align: center;">
+						<p:graphicImage styleClass="avatar" cache="false"
+							value="#{imageStreamer.imageComp}"
+							rendered="#{company.logo != null}">
+							<f:param name="CompId" value="#{company.id}" />
+						</p:graphicImage>
+						<p:graphicImage styleClass="avatar" library="images"
+							name="empty_company.png" rendered="#{company.logo == null}" />
 					</p:column>
-				<p:column sortBy="#{company.name}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_table_name_title}" />
+					<p:column sortBy="#{company.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_company_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{company.name}" />
+					</p:column>
+					<p:column styleClass="action-column" style="width: 15%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_company_table_action_title}" />
+						</f:facet>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								oncomplete="PF('companyDialogWidget').show();"
+								value="#{messages.label_edit}" title="#{messages.label_edit}"
+								update=":tabview:companyDialog" resetValues="true">
+								<f:setPropertyActionListener value="#{company}"
+									target="#{jJCompanyBean.companie}" />
+								<f:setPropertyActionListener
+									target="#{jJCompanyBean.headerMessage}"
+									value="admin_company_edit_title" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								value="#{messages.label_delete}"
+								oncomplete="PF('companyDeleteDialogWidget').show()"
+								title="#{messages.label_delete}" resetValues="true">
+								<f:setPropertyActionListener value="#{company}"
+									target="#{jJCompanyBean.companie}" />
+							</p:menuitem>
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_company_new_button}"
+										title="#{messages.admin_company_new_button}" id="newCompany"
+										update=":tabview:companyDialog"
+										rendered="#{loginBean.authorisationService.adminCompany}"
+										oncomplete="PF('companyDialogWidget').show();"
+										icon="fa fa-plus Fs20" resetValues="true">
+										<f:setPropertyActionListener
+											target="#{jJCompanyBean.headerMessage}"
+											value="admin_company_new_title" />
+										<f:setPropertyActionListener value="#{null}"
+											target="#{jJCompanyBean.companie}" />
+									</p:commandButton>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{company.name}" />
-				</p:column>
-				<p:column styleClass="action-column" style="width: 150px;">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_table_action_title}" />
-					</f:facet>
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('companyDialogWidget').show();"
-						value="#{messages.admin_company_table_edit_tooltip}"
-						title="#{messages.admin_company_table_edit_tooltip}"
-						update=":tabview:companyDialog" resetValues="true">
-						<f:setPropertyActionListener value="#{company}"
-							target="#{jJCompanyBean.companie}" />
-						<f:setPropertyActionListener
-							target="#{jJCompanyBean.headerMessage}"
-							value="admin_company_edit_title" />
-
-						<!-- 						<p:menuitem id="editCalendar" icon="ui-icon-calendar" -->
-						<!-- 							value="#{messages.admin_company_table_editcalendar_tooltip}" -->
-						<!-- 							oncomplete="PF('companyEditCalendarDialogWidget').show()" -->
-						<!-- 							resetValues="true" update=":tabview:EditCalendarForm"> -->
-						<!-- 							<f:setPropertyActionListener value="#{company}" -->
-						<!-- 								target="#{jJCompanyBean.companie}" /> -->
-						<!-- 						</p:menuitem> -->
-
-
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							value="#{messages.admin_company_table_delete_tooltip}"
-							oncomplete="PF('companyDeleteDialogWidget').show()"
-							title="#{messages.label_delete}" resetValues="true">
-							<f:setPropertyActionListener value="#{company}"
-								target="#{jJCompanyBean.companie}" />
-
-						</p:menuitem>
-
-
-
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_company_new_button}"
-						title="#{messages.admin_company_new_button}" id="newCompany"
-						update=":tabview:companyDialog"
-						rendered="#{loginBean.authorisationService.adminCompany}"
-						oncomplete="PF('companyDialogWidget').show();"
-						icon="ui-icon-circle-plus" resetValues="true">
-						<f:setPropertyActionListener
-							target="#{jJCompanyBean.headerMessage}"
-							value="admin_company_new_title" />
-						<f:setPropertyActionListener value="#{null}"
-							target="#{jJCompanyBean.companie}" />
-					</p:commandButton>
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 
 	<!-- 	<p:dialog id="companyEditCalendarDialog" header="Edit Calendar" -->
@@ -286,7 +273,7 @@
 			target="companyDialogPanel">
 			<h:panelGrid columns="2" layout="grid">
 				<p:graphicImage name="images/preloader.gif" library="rioLayout"
-						style="vertical-align: middle;" />
+					style="vertical-align: middle;" />
 				<h:outputText value="#{messages.label_refresh}"
 					style="white-space: nowrap;" />
 			</h:panelGrid>
@@ -324,10 +311,11 @@
 									</p:column>
 									<p:column colspan="1">
 										<h:outputLabel for="compLogo" value="Logo:" />
-										<p:fileUpload id="compLogo" fileLimit="1"	
+										<p:fileUpload id="compLogo" fileLimit="1"
+											styleClass="customCompanyFileUpload"
 											disabled="#{empty jJCompanyBean.companie.name}"
 											fileUploadListener="#{licenseBean.handleCompLogoUpload}"
-											mode="advanced" dragDropSupport="true" update="msg"
+											mode="advanced" dragDropSupport="false" update="msg"
 											sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
 									</p:column>
 								</p:row>
@@ -345,8 +333,8 @@
 											customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 											value="#{jJCompanyBean.companie.description}" required="true"
 											requiredMessage="Description is a required value" />
-										<p:inputTextarea id="jJCompanyMobileDescription" style="width:680px"
-											rendered="#{loginBean.mobile}"
+										<p:inputTextarea id="jJCompanyMobileDescription"
+											style="width:680px" rendered="#{loginBean.mobile}"
 											value="#{jJCompanyBean.companie.description}" required="true"
 											requiredMessage="Description is a required value" />
 
@@ -509,8 +497,7 @@
 	<p:confirmDialog id="companyDeleteDialog"
 		widgetVar="companyDeleteDialogWidget"
 		message="#{messages.admin_company_delete_label}" showEffect="fade"
-		header="#{messages.admin_company_delete_title}"
-		severity="alarm">
+		header="#{messages.admin_company_delete_title}" severity="alarm">
 		<p:outputPanel id="companyDeletePanel">
 			<h:form id="companyDeleteForm">
 				<p:commandButton id="deleteYesButton"

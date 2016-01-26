@@ -7,162 +7,221 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<h:form id="configForm">
-		<p:panel id="configPanel" style="width:800px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="configDataTable" var="conf" lazy="true"
-				sortMode="multiple" paginatorPosition="bottom"
-				value="#{jJConfigurationBean.configList}" paginator="true" rows="10"
-				emptyMessage="#{messages.label_notRecordFound}"
-				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15" widgetVar="configDataTableWV">
-				<f:facet name="header">  
-           #{messages.admin_config_table_header}  
-           <p:inputText
-						id="globalFilter" onkeyup="PF('configDataTableWV').filter()"
-						style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-
-				<p:column sortBy="#{conf.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container60 Responsive100">
+				<p:dataTable id="configDataTable" var="conf" lazy="true"
+					sortMode="multiple" paginatorPosition="bottom"
+					value="#{jJConfigurationBean.configList}" paginator="true"
+					rows="10" emptyMessage="#{messages.label_notRecordFound}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" widgetVar="configDataTableWV">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_config_table_name_title}" />
-					</f:facet>
-					<h:outputText value="#{conf.name}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText
-							value="#{messages.admin_config_table_parameter_title}" />
-					</f:facet>
-					<h:outputText value="#{conf.param}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_config_table_value_title}" />
-					</f:facet>
-					<h:outputText value="#{conf.val}"
-						style="white-space: pre-wrap;max-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
-				</p:column>
-				<p:column styleClass="action-column" style="width:250px;">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_config_table_action_title}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_config_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('configDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
 
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
-						action="#{jJConfigurationBean.onEdit}" resetValues="true"
-						oncomplete="PF('createDialogWidget').show()"
-						value="#{messages.admin_config_edit_title}">
-						<f:setPropertyActionListener value="#{conf}"
-							target="#{jJConfigurationBean.JJConfiguration_}" />
-						<f:setPropertyActionListener
-							target="#{jJConfigurationBean.renderCreate}" value="false" />
+					<p:column sortBy="#{conf.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_config_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{conf.name}" />
+					</p:column>
 
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_config_table_parameter_title}" />
+						</f:facet>
+						<h:outputText value="#{conf.param}" />
+					</p:column>
 
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							resetValues="true" oncomplete="PF('deleteDialogWidget').show()"
-							value="#{messages.admin_config_delete_title}">
-							<f:setPropertyActionListener value="#{conf}"
-								target="#{jJConfigurationBean.selectedConf}" />
-						</p:menuitem>
+					<!-- 					<p:column> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<h:outputText value="#{messages.admin_config_table_value_title}" /> -->
+					<!-- 						</f:facet> -->
+					<!-- 						<h:outputText value="#{conf.val}" -->
+					<!-- 							style="white-space: pre-wrap;max-height: 40px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" /> -->
+					<!-- 					</p:column> -->
+					<p:column styleClass="action-column" style="width: 10%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_config_table_action_title}" />
+						</f:facet>
 
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_config_new_button}"
-						id="createButton" icon="ui-icon-circle-plus"
-						update=":tabview:createForm:createPanelGrid :tabview:createDialog"
-						actionListener="#{jJConfigurationBean.beforeDialogShow}"
-						title="#{messages.admin_config_new_title}" resetValues="true">
-						<f:setPropertyActionListener
-							target="#{jJConfigurationBean.renderCreate}" value="true" />
-					</p:commandButton>
-					<p:tooltip for="createButton"
-						value="#{messages.admin_config_table_create_title}"
-						showEffect="fade" hideEffect="fade" />
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								update=":tabview:configDialogForm :tabview:configDialogHeader"
+								resetValues="true" oncomplete="PF('configDialogWidget').show()"
+								title="#{messages.label_edit}" value="#{messages.label_edit}">
+								<f:setPropertyActionListener value="#{conf}"
+									target="#{jJConfigurationBean.JJConfiguration_}" />
+								<f:setPropertyActionListener
+									target="#{jJConfigurationBean.renderCreate}" value="false" />
+							</p:menuitem>
 
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								resetValues="true" oncomplete="PF('deleteDialogWidget').show()"
+								title="#{messages.label_delete}"
+								value="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{conf}"
+									target="#{jJConfigurationBean.selectedConf}" />
+							</p:menuitem>
+
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_config_new_button}"
+										id="configDialogButton" icon="fa fa-plus Fs20"
+										update=":tabview:configDialogForm :tabview:configDialogHeader"
+										actionListener="#{jJConfigurationBean.beforeDialogShow}"
+										title="#{messages.admin_config_new_title}" resetValues="true">
+										<f:setPropertyActionListener
+											target="#{jJConfigurationBean.renderCreate}" value="true" />
+									</p:commandButton>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</f:facet>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
-	<p:dialog id="createDialog" modal="true" widgetVar="createDialogWidget"
-		dynamic="true" visible="#{jJConfigurationBean.createDialogVisible}"
-		resizable="true" maximizable="true" showEffect="fade"
-		hideEffect="explode" responsive="true" >
+	<p:dialog id="configDialog" modal="true" widgetVar="configDialogWidget"
+		dynamic="true" resizable="false" maximizable="false" showEffect="fade"
+		responsive="true">
 		<p:ajax event="close" update=":tabview:configForm"
 			listener="#{jJConfigurationBean.handleDialogClose}" />
 		<f:facet name="header">
-			<p:outputLabel rendered="#{jJConfigurationBean.renderCreate}"
-				value="#{messages.admin_config_new_title}" />
-
-			<p:outputLabel rendered="#{!jJConfigurationBean.renderCreate}"
-				value="#{messages.admin_config_edit_title}" />
+			<p:outputLabel id="configDialogHeader"
+				value="#{jJConfigurationBean.renderCreate ? messages.admin_config_new_title:messages.admin_config_edit_title}" />
 		</f:facet>
-		<p:outputPanel id="createPanel">
-			<h:form id="createForm" enctype="multipart/form-data"
-				style="/*height: 470px;width: 710px;*/">
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
-						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog">
-						<p:outputLabel for="confName"
-							value="#{messages.admin_config_table_name_title}:" />
-						<p:inputTextarea
-							value="#{jJConfigurationBean.JJConfiguration_.name}"
-							id="confName" required="true" rows="2"
-							requiredMessage="#{messages.admin_config_new_name_required}">
-							<f:validateLength maximum="100" />
-						</p:inputTextarea>
+		<h:form id="configDialogForm" enctype="multipart/form-data">
+			<h:panelGroup layout="block"
+				styleClass="Container ui-fluid BorderAll" style="max-width: 700px;">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="confName"
+								value="#{messages.admin_config_table_name_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:inputTextarea
+								value="#{jJConfigurationBean.JJConfiguration_.name}"
+								id="confName" required="true" rows="2"
+								requiredMessage="#{messages.admin_config_new_name_required}">
+								<f:validateLength maximum="100" />
+							</p:inputTextarea>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
+				<h:panelGroup layout="block" styleClass="Container100"
+					style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:outputLabel for="confDesc" value="Description :"
 							rendered="#{!loginBean.mobile}" />
 						<pe:ckEditor id="confDesc"
 							toolbar="#{imageStreamer.ckEditorToolBar}"
-							rendered="#{!loginBean.mobile}" height="150px"
+							rendered="#{!loginBean.mobile}"
 							customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
-							required="true" width="580px"
+							required="true" width="100%"
 							requiredMessage="#{messages.admin_config_new_desc_required}" />
+					</h:panelGroup>
+				</h:panelGroup>
 
-						<p:outputLabel for="confMobileDesc" value="Description :"
-							rendered="#{loginBean.mobile}" />
-						<p:inputTextarea id="confMobileDesc" style="width:680px"
-							rendered="#{loginBean.mobile}"
+				<h:panelGroup layout="block" styleClass="Container100"
+					rendered="#{loginBean.mobile}">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputTextarea id="confMobileDesc"
+							rendered="#{loginBean.mobile}" placeholder="Description"
 							value="#{jJConfigurationBean.JJConfiguration_.description}"
-							required="true"
+							required="true" style="resize: none;"
 							requiredMessage="#{messages.admin_config_new_desc_required}" />
 
+					</h:panelGroup>
+				</h:panelGroup>
 
-						<p:outputLabel for="confParam"
-							value="#{messages.admin_config_table_parameter_title}:" />
-						<p:inputText value="#{jJConfigurationBean.JJConfiguration_.param}"
-							id="confParam">
-							<f:validateLength maximum="100" />
-						</p:inputText>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="confParam"
+								value="#{messages.admin_config_table_parameter_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:inputText
+								value="#{jJConfigurationBean.JJConfiguration_.param}"
+								id="confParam">
+								<f:validateLength maximum="100" />
+							</p:inputText>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
-						<p:outputLabel for="confVal"
-							value="#{messages.admin_config_table_value_title}:" />
-						<p:inputTextarea scrollHeight="6" cols="82" rows="6"
-							autoResize="false"
-							value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
-						</p:inputTextarea>
-					</h:panelGrid>
-					<f:facet name="footer">
-						<p:commandButton id="createSaveButton"
+
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="confVal"
+								value="#{messages.admin_config_table_value_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:inputTextarea scrollHeight="3" rows="3" autoResize="false"
+								style="resize: none;"
+								value="#{jJConfigurationBean.JJConfiguration_.val}" id="confVal">
+							</p:inputTextarea>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+
+
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="configDialogSaveButton"
 							value="#{messages.admin_config_new_save_button}"
 							action="#{jJConfigurationBean.persistConf}"
-							update="createPanelGrid,:growlForm :scrollRight" />
-						<!-- 					 :messagePanel -->
-						<p:commandButton idid="createCloseButton"
-							value="#{messages.label_cancel}"
-							onclick="PF('createDialogWidget').hide()" type="button" />
-					</f:facet>
-				</p:panel>
-			</h:form>
-		</p:outputPanel>
+							icon="fa fa-save Fs16"
+							update=":tabview:configDialogForm :growlForm :scrollRight" />
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="configDialogCloseButton"
+							styleClass="GrayBack" value="#{messages.label_cancel}"
+							onclick="PF('configDialogWidget').hide()" type="button" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+
 	</p:dialog>
 	<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 		message="#{messages.admin_config_delete_label}" showEffect="fade"

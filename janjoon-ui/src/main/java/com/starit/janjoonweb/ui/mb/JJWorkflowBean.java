@@ -128,7 +128,7 @@ public class JJWorkflowBean {
 			message = "message_successfully_created";
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createWorkFlowDialogWidget').hide()");
+		context.execute("PF('workFlowDialogWidget').hide()");
 
 		FacesMessage facesMessage = MessageFactory
 				.getMessage(message,
@@ -152,7 +152,7 @@ public class JJWorkflowBean {
 		setJJWorkflow_(new JJWorkflow());
 		renderCreate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createWorkFlowDialogWidget').show()");
+		context.execute("PF('workFlowDialogWidget').show()");
 
 	}
 

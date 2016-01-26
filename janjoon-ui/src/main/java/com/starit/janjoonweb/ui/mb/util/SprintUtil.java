@@ -35,7 +35,8 @@ public class SprintUtil {
 		this.neditabale = false;
 		this.chartModel = new BarChartModel();
 		this.disableDragDrop = true;
-		this.enableDelete = sprint.getId() != null	&& !jjTaskService.haveTask(sprint, true, false, false);
+		this.enableDelete = sprint.getId() != null
+				&& !jjTaskService.haveTask(sprint, true, false, false);
 		calculateField(tasks);
 		if (tasks != null && !tasks.isEmpty())
 			initChartModel(tasks);

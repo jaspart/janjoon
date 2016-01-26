@@ -9,92 +9,119 @@
 <ui:composition>
 
 	<h:form id="statusForm">
-
-		<p:panel id="statusPanel" style="width:750px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="statusTable" var="status" lazy="true"
-				paginatorPosition="bottom" value="#{jJStatusBean.lazyStatusList}"
-				paginator="true" rows="10"
-				emptyMessage="#{messages.label_notRecordFound}"
-				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15" sortMode="multiple"
-				widgetVar="statusTableWV">
-				<f:facet name="header">#{messages.admin_status_table_header}
-				<p:inputText id="globalFilter"
-						onkeyup="PF('statusTableWV').filter()" style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-
-				<p:column sortBy="#{status.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container60 Responsive100">
+				<p:dataTable id="statusTable" var="status" lazy="true"
+					paginatorPosition="bottom" value="#{jJStatusBean.lazyStatusList}"
+					paginator="true" rows="10"
+					emptyMessage="#{messages.label_notRecordFound}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" sortMode="multiple"
+					widgetVar="statusTableWV">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_status_table_name_title}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_status_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('statusTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{loginBean.checkMessage(status)}" />
-				</p:column>
+					<p:column sortBy="#{status.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_status_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{loginBean.checkMessage(status)}" />
+					</p:column>
 
-				<p:column sortBy="#{status.objet}" id="objet"
-					filterOptions="#{jJStatusBean.objectOptions}"
-					filterMatchMode="exact" filterStyle="width: 90%;"
-					filterBy="#{status.objet}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_status_table_objet_title}" />
+					<p:column sortBy="#{status.objet}" id="objet"
+						filterMatchMode="exact" filterBy="#{status.objet}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_status_table_objet_title}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('statusTableWV').filter()">
+								<f:selectItems value="#{jJStatusBean.objectOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{status.objet}" />
+					</p:column>
+
+					<p:column sortBy="#{status.creationDate}" priority="6">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_status_table_date_title}" />
+						</f:facet>
+						<h:outputText value="#{status.creationDate}">
+							<f:convertDateTime type="date" locale="#{localeBean.locale}"
+								pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<!-- 				<p:column> -->
+					<!-- 					<f:facet name="header"> -->
+					<!-- 						<h:outputText value="#{messages.admin_status_table_creator_title}" /> -->
+					<!-- 					</f:facet> -->
+					<!-- 					<h:outputText value="#{status.createdBy.name}" /> -->
+					<!-- 				</p:column> -->
+					<p:column styleClass="action-column" style="width:10%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_status_table_action_title}" />
+						</f:facet>
+
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								update=":tabview:seditForm:editPanelGrid"
+								action="#{jJStatusBean.onEdit}" resetValues="true"
+								oncomplete="PF('editSatDialogWidget').show()"
+								title="#{messages.label_edit}" value="#{messages.label_edit}">
+								<f:setPropertyActionListener value="#{status}"
+									target="#{jJStatusBean.JJStatus_}" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								resetValues="true"
+								oncomplete="PF('deleteSatDialogWidget').show()"
+								value="#{messages.label_delete}"
+								title="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{status}"
+									target="#{jJStatusBean.selectedStatus}" />
+							</p:menuitem>
+
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_status_new_button}"
+										id="createButton" icon="fa fa-plus Fs20" resetValues="true"
+										update=":tabview:ScreateForm:createPanelGrid"
+										oncomplete="PF('createSatDialogWidget').show()"
+										title="#{messages.admin_status_new_button}" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{status.objet}" />
-				</p:column>
-
-				<p:column sortBy="#{status.creationDate}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_status_table_date_title}" />
-					</f:facet>
-					<h:outputText value="#{status.creationDate}">
-						<f:convertDateTime type="date" locale="#{localeBean.locale}"
-							pattern="dd/MM/yyyy HH:mm" />
-					</h:outputText>
-				</p:column>
-
-				<!-- 				<p:column> -->
-				<!-- 					<f:facet name="header"> -->
-				<!-- 						<h:outputText value="#{messages.admin_status_table_creator_title}" /> -->
-				<!-- 					</f:facet> -->
-				<!-- 					<h:outputText value="#{status.createdBy.name}" /> -->
-				<!-- 				</p:column> -->
-				<p:column styleClass="action-column" style="width:200px;">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_status_table_action_title}" />
-					</f:facet>
-
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						update=":tabview:seditForm:editPanelGrid"
-						action="#{jJStatusBean.onEdit}" resetValues="true"
-						oncomplete="PF('editSatDialogWidget').show()"
-						value="#{messages.admin_status_table_edit_tooltip}">
-						<f:setPropertyActionListener value="#{status}"
-							target="#{jJStatusBean.JJStatus_}" />
-
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							resetValues="true"
-							oncomplete="PF('deleteSatDialogWidget').show()"
-							value="#{messages.admin_status_table_delete_tooltip}"
-							title="#{messages.admin_status_table_delete_title}">
-							<f:setPropertyActionListener value="#{status}"
-								target="#{jJStatusBean.selectedStatus}" />
-						</p:menuitem>
-
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_status_new_button}"
-						id="createButton" icon="ui-icon-circle-plus" resetValues="true"
-						update=":tabview:ScreateForm:createPanelGrid"
-						oncomplete="PF('createSatDialogWidget').show()"
-						title="#{messages.admin_status_new_button}" />
-					<p:tooltip for="createButton"
-						value="#{messages.admin_status_new_tooltip}" showEffect="fade"
-						hideEffect="fade" />
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
-
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 	<p:dialog id="ScreateDialog" responsive="true"
 		header="#{messages.admin_status_new_title}" modal="true"
@@ -121,7 +148,8 @@
 
 	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}"
 		modal="true" widgetVar="editSatDialogWidget" dynamic="true"
-		resizable="true" responsive="true" maximizable="true" showEffect="fade">
+		resizable="true" responsive="true" maximizable="true"
+		showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
 		<p:outputPanel id="SeditPanel">
@@ -159,8 +187,7 @@
 	</p:dialog>
 	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
 		message="#{messages.admin_status_delete_label}" showEffect="fade"
-		header="#{messages.admin_status_delete_title}"
-		severity="alarm">
+		header="#{messages.admin_status_delete_title}" severity="alarm">
 		<p:outputPanel id="SdeletePanel">
 			<h:form id="sdeleteForm">
 				<p:commandButton id="deleteYesButton"

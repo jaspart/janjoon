@@ -6,273 +6,331 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition>
 	<style type="text/css">
-.ui-fileupload-progress {
-	display: none;
-}
-
-.ui-fileupload-cancel {
-	display: none;
-}
-
-.ui-fileupload-files {
-	margin: 1px 0;
-	width: 150px !important;
-	display: inline-block;
-	height: 30px;
-}
-
-td.ui-fileupload-preview {
-	display: none;
-}
 </style>
 	<h:form id="projectForm">
-		<p:panel id="projectForm" style="width:600px" columns="1"
-			cellpadding="6">
-			<p:dataTable id="projectDataTable" var="project" lazy="true"
-				emptyMessage="#{messages.label_notRecordFound}"
-				paginatorPosition="bottom" value="#{jJProjectBean.projectListTable}"
-				sortMode="multiple" paginator="true" rows="15"
-				rowKey="#{project.id}" widgetVar="projectDataTableWV">
-				<f:facet name="header">#{messages.admin_project_table_header}
-				<p:inputText id="globalFilter"
-						onkeyup="PF('projectDataTableWV').filter()" style="width:200px"
-						placeholder="#{messages.bug_table_search_watermark}" />
-				</f:facet>
-				<p:column style="width: 70px !important;text-align: center;">
-					<p:graphicImage styleClass="avatar" cache="false"
-						rendered="#{project.logo != null}"
-						value="#{imageStreamer.imageProj}">
-						<f:param name="ProjId" value="#{project.id}" />
-					</p:graphicImage>
-					<p:graphicImage styleClass="avatar" library="images"
-						name="empty_company.png" rendered="#{project.logo == null}" />
-				</p:column>
-				<p:column sortBy="#{project.name}">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+				<p:dataTable id="projectDataTable" var="project" lazy="true"
+					emptyMessage="#{messages.label_notRecordFound}"
+					paginatorPosition="bottom"
+					value="#{jJProjectBean.projectListTable}" sortMode="multiple"
+					paginator="true" rows="15" rowKey="#{project.id}"
+					widgetVar="projectDataTableWV">
 					<f:facet name="header">
-						<h:outputText value="#{messages.admin_project_table_name_title}" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container40 Responsive100 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_project_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('projectDataTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{project.name}" />
-				</p:column>
-				<p:column sortBy="#{project.manager.company.name}" id="company"
-					filterOptions="#{jJCompanyBean.companyOptions}"
-					filterMatchMode="exact" filterStyle="width: 90%;"
-					filterBy="#{project.manager.company.name}">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_company_menuitem}" />
+					<p:column style="width: 70px !important;text-align: center;">
+						<p:graphicImage styleClass="avatar" cache="false"
+							rendered="#{project.logo != null}"
+							value="#{imageStreamer.imageProj}">
+							<f:param name="ProjId" value="#{project.id}" />
+						</p:graphicImage>
+						<p:graphicImage styleClass="avatar" library="images"
+							name="empty_company.png" rendered="#{project.logo == null}" />
+					</p:column>
+					<p:column sortBy="#{project.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_project_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{project.name}" />
+					</p:column>
+					<p:column sortBy="#{project.manager.company.name}" id="company"
+						filterMatchMode="exact" priority="6"
+						filterBy="#{project.manager.company.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_company_menuitem}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('projectDataTableWV').filter()">
+								<f:selectItems value="#{jJCompanyBean.companyOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{project.manager.company.name}" />
+					</p:column>
+					<p:column styleClass="action-column" style="width: 15%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_project_table_action_title}" />
+						</f:facet>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								oncomplete="PF('projectDialogWidget').show()" resetValues="true"
+								value="#{messages.label_edit}"
+								action="#{jJProjectBean.editProject}"
+								title="#{messages.label_edit}"
+								update=":tabview:projectDialogHeader :tabview:projectDialogForm">
+								<f:setPropertyActionListener value="#{project}"
+									target="#{jJProjectBean.projectAdmin}" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								resetValues="true"
+								oncomplete="PF('projectDeleteDialogWidget').show()"
+								title="#{messages.label_delete}"
+								value="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{project}"
+									target="#{jJProjectBean.projectAdmin}" />
+							</p:menuitem>
+
+						</p:menu>
+					</p:column>
+					<f:facet name="footer">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton value="#{messages.admin_project_new_button}"
+										actionListener="#{jJProjectBean.newProject}" id="newProject"
+										update=":tabview:projectDialogHeader :tabview:projectDialogForm"
+										resetValues="true"
+										oncomplete="PF('projectDialogWidget').show()"
+										icon="fa fa-plus Fs20" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive50">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton id="restoreProject"
+										icon="fa fa-rotate-right Fs20"
+										value="#{messages.admin_project_restore_dialog}"
+										oncomplete="PF('restoreProjectDialogWidget').show()"
+										resetValues="true" update=":tabview:restoreProjectForm" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
 					</f:facet>
-					<h:outputText value="#{project.manager.company.name}" />
-				</p:column>
-				<p:column styleClass="action-column" style="width: 150px">
-					<f:facet name="header">
-						<h:outputText value="#{messages.admin_project_table_action_title}" />
-					</f:facet>
-					<p:splitButton id="editButton" icon="ui-icon-pencil"
-						oncomplete="PF('projectDialogWidget').show()" resetValues="true"
-						value="#{messages.admin_project_table_edit_tooltip}"
-						action="#{jJProjectBean.editProject}"
-						update=":tabview:projectDialog">
-						<f:setPropertyActionListener value="#{project}"
-							target="#{jJProjectBean.projectAdmin}" />
-
-						<p:menuitem id="deleteButton" icon="ui-icon-trash"
-							resetValues="true"
-							oncomplete="PF('projectDeleteDialogWidget').show()"
-							value="#{messages.admin_project_table_delete_title}"
-							title="#{messages.label_delete}">
-							<f:setPropertyActionListener value="#{project}"
-								target="#{jJProjectBean.projectAdmin}" />
-						</p:menuitem>
-
-					</p:splitButton>
-				</p:column>
-				<f:facet name="footer">
-					<p:commandButton value="#{messages.admin_project_new_button}"
-						actionListener="#{jJProjectBean.newProject}" id="newProject"
-						update=":tabview:projectDialog" resetValues="true"
-						oncomplete="PF('projectDialogWidget').show()"
-						icon="ui-icon-circle-plus" />
-
-					<p:commandButton id="restoreProject" icon="ui-icon-restore"
-						value="#{messages.admin_project_restore_dialog}"
-						oncomplete="PF('restoreProjectDialogWidget').show()"
-						resetValues="true" update=":tabview:restoreProjectForm" />
-
-				</f:facet>
-			</p:dataTable>
-		</p:panel>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
 	</h:form>
 
 	<p:dialog id="restoreProjectDialog" responsive="true"
-		header="#{messages.admin_project_restore_dialog}" 
-		resizable="false" modal="true" widgetVar="restoreProjectDialogWidget"
-		dynamic="true" showEffect="fade" draggable="true">
+		header="#{messages.admin_project_restore_dialog}" resizable="false"
+		modal="true" widgetVar="restoreProjectDialogWidget" dynamic="true"
+		showEffect="fade" draggable="true">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"
 			listener="#{jJProjectBean.closeDialog}" />
 
 		<p:outputPanel id="restoreProjectPanel">
-			<h:form id="restoreProjectForm" enctype="multipart/form-data"
-				style="width: 600px;">
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
+			<h:form id="restoreProjectForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block"
+					styleClass="Container ui-fluid BorderAll" style="max-width:600px;">
+					<h:panelGroup layout="block" styleClass="Container100">
 						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<p:dataTable id="restoreProjectTable" var="project"
-						scrollable="true" value="#{jJProjectBean.deletedProject}"
-						rowKey="#{project.id}"
-						emptyMessage="#{messages.label_notRecordFound}"
-						selection="#{jJProjectBean.restoredProject}" scrollHeight="400">
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
 
-						<p:ajax event="rowSelectCheckbox"
-							update="tabview:restoreProjectForm:restoreButton" />
-						<p:ajax event="rowUnselectCheckbox"
-							update="tabview:restoreProjectForm:restoreButton" />
-						<p:ajax event="toggleSelect"
-							update="tabview:restoreProjectForm:restoreButton" />
+							<p:dataTable id="restoreProjectTable" var="project"
+								scrollable="true" value="#{jJProjectBean.deletedProject}"
+								rowKey="#{project.id}"
+								emptyMessage="#{messages.label_notRecordFound}"
+								selection="#{jJProjectBean.restoredProject}" scrollHeight="400">
 
-						<f:facet name="header">#{messages.admin_project_restore_table_title}</f:facet>
-						<p:column selectionMode="multiple"
-							style="width: 20px;text-align:center" />
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{messages.admin_project_table_name_title}" />
-							</f:facet>
-							<h:outputText value="#{project.name}" />
-						</p:column>
-						<p:column headerText="Manager">
-							<h:outputText value="#{project.manager}"
-								converter="JJContactConverter" />
-						</p:column>
-						<p:column headerText="#{messages.label_company}">
-							<h:outputText value="#{project.manager.company}"
-								converter="JJCompanyConverter" />
-						</p:column>
-					</p:dataTable>
-					<f:facet name="footer">
-						<p:commandButton id="restoreButton"
-							value="#{messages.admin_project_resore_button}"
-							update="restoreProjectForm"
-							disabled="#{empty jJProjectBean.restoredProject}"
-							title="#{messages.admin_project_resore_button}"
-							action="#{jJProjectBean.restoreProjects}" />
-						<p:commandButton id="cancelButton" value="Annuler"
-							onclick="PF('restoreProjectDialogWidget').hide()" type="button" />
-					</f:facet>
-				</p:panel>
+								<p:ajax event="rowSelectCheckbox"
+									update="tabview:restoreProjectForm:restoreButton" />
+								<p:ajax event="rowUnselectCheckbox"
+									update="tabview:restoreProjectForm:restoreButton" />
+								<p:ajax event="toggleSelect"
+									update="tabview:restoreProjectForm:restoreButton" />
+
+								<f:facet name="header">#{messages.admin_project_restore_table_title}</f:facet>
+								<p:column selectionMode="multiple"
+									style="width: 20px;text-align:center" />
+								<p:column>
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_project_table_name_title}" />
+									</f:facet>
+									<h:outputText value="#{project.name}" />
+								</p:column>
+								<p:column headerText="Manager" priority="6">
+									<h:outputText value="#{project.manager}"
+										converter="JJContactConverter" />
+								</p:column>
+								<p:column headerText="#{messages.label_company}">
+									<h:outputText value="#{project.manager.company}"
+										converter="JJCompanyConverter" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Separator" />
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="restoreButton"
+								value="#{messages.admin_project_resore_button}"
+								update="restoreProjectForm" icon="fa fa-rotate-right Fs20"
+								disabled="#{empty jJProjectBean.restoredProject}"
+								title="#{messages.admin_project_resore_button}"
+								action="#{jJProjectBean.restoreProjects}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+								value="#{messages.label_cancel}"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('restoreProjectDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
 
-	<p:dialog id="projectDialog" responsive="true"
-		header="#{messages[jJProjectBean.message]}" modal="true"
+	<p:dialog id="projectDialog" responsive="true" modal="true"
 		widgetVar="projectDialogWidget" dynamic="true" showEffect="fade"
-		 resizable="false">
+		resizable="false">
 		<p:ajax event="close" update=":tabview:projectForm :headerForm"
 			listener="#{jJProjectBean.closeDialog}" />
-		<p:outputPanel id="projectDialogPanel">
-			<h:form id="projectDialogForm">
-				<p:panel styleClass="panelDialog">
-					<f:facet name="header">
-						<p:messages id="msg" showDetail="false" closable="true" />
-					</f:facet>
-					<p:panelGrid>
-						<p:row>
-							<p:column colspan="2">
-								<p:inputText id="name"
-									value="#{jJProjectBean.projectAdmin.name}" label="Name"
-									required="true" widgetVar="nameWidget">
-									<f:validateLength maximum="100" />
-									<p:ajax event="blur" update="projLogo" />
-								</p:inputText>
-								<p:message for="name" id="msgName" />
-								<p:watermark for="name"
-									value="#{messages.admin_project_new_name_watermark}" />
-							</p:column>
-							<p:column colspan="2">
-								<h:outputText
-									value="#{messages.admin_project_new_manager_label}" />
-								<p:selectOneMenu id="projectManagerSelect"
-									value="#{jJProjectBean.projectManager}"
-									panelStyle="width:150px" effect="fade" style="width:160px"
-									filter="true" filterMatchMode="startsWith" required="true"
-									label="Project Manager"
-									requiredMessage="#{messages.admin_project_new_manager_alert}"
-									widgetVar="projectManagerWidget">
-									<f:converter
-										converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
-									<f:selectItems value="#{jJProjectBean.projectManagerList}"
-										var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+		<f:facet name="header">
+			<p:outputLabel id="projectDialogHeader"
+				value="#{messages[jJProjectBean.message]}" />
+		</f:facet>
+		<h:panelGroup layout="block" styleClass="Container BorderAll"
+			style="max-width:500px;">
+			<h:form id="projectDialogForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
+							label="Name" required="true"
+							placeholder="#{messages.admin_project_new_name_watermark}"
+							widgetVar="nameWidget">
+							<f:validateLength maximum="100" />
+							<p:ajax event="blur" update="projLogo" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
 
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:watermark for="projectSD"
-									value="#{messages.admin_project_new_startDate_label}" />
-								<p:calendar id="projectSD" navigator="true" effect="slideDown"
-									pattern="dd/MM/yyyy" required="true"
-									binding="#{startDateEdition}"
-									requiredMessage="#{messages.admin_project_new_startDate_alert}"
-									value="#{jJProjectBean.projectAdmin.startDate}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:watermark for="projectED"
-									value="#{messages.admin_project_new_endDate_label}" />
-								<p:calendar id="projectED" navigator="true" effect="slideDown"
-									pattern="dd/MM/yyyy" required="true"
-									requiredMessage="#{messages.admin_project_new_endDate_alert}"
-									value="#{jJProjectBean.projectAdmin.endDate}">
-									<f:validator validatorId="dateRangeValidator" />
-									<f:attribute name="startDateComponent"
-										value="#{startDateEdition}" />
-								</p:calendar>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column style="text-align: center;">
-								<p:graphicImage styleClass="avatar" cache="false"
-									value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
-									<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
-								</p:graphicImage>
-							</p:column>
-							<p:column colspan="2">
-								<h:outputLabel for="projLogo" value="Logo:" />
-								<p:fileUpload id="projLogo" fileLimit="1"	
-									disabled="#{empty jJProjectBean.projectAdmin.name}"
-									fileUploadListener="#{licenseBean.handleProjLogoUpload}"
-									mode="advanced" dragDropSupport="true" update="msg"
-									sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:selectBooleanButton
-									value="#{jJProjectBean.projectAdmin.enabled}"
-									onLabel="#{messages.admin_project_new_active_button}"
-									offLabel="#{messages.admin_project_new_inactive_button}"
-									onIcon="ui-icon-check" offIcon="ui-icon-close">
-									<p:ajax update="msg" listener="#{jJProjectBean.addMessage}" />
-								</p:selectBooleanButton>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-					<f:facet name="footer">
-						<p:commandButton id="submitButton"
+				<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+					<h:panelGroup layout="block" styleClass="Container35">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="projectManagerSelect"
+								value="#{messages.admin_project_new_manager_label}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container65">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="projectManagerSelect"
+								value="#{jJProjectBean.projectManager}" effect="fade"
+								filter="true" filterMatchMode="startsWith" required="true"
+								label="Project Manager"
+								requiredMessage="#{messages.admin_project_new_manager_alert}"
+								widgetVar="projectManagerWidget">
+								<f:converter
+									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+								<f:selectItem itemLabel="#{messages.label_select}" itemValue="#{null}" />
+								<f:selectItems value="#{jJProjectBean.projectManagerList}"
+									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="ui-fluid Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:calendar id="projectSD" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true"
+							binding="#{startDateEdition}" title="#{messages.admin_project_new_startDate_label}"
+							requiredMessage="#{messages.admin_project_new_startDate_alert}"
+							placeholder="#{messages.admin_project_new_startDate_label}"
+							value="#{jJProjectBean.projectAdmin.startDate}" />
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="ui-fluid Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:calendar id="projectED" navigator="true" effect="slideDown"
+							pattern="dd/MM/yyyy" required="true" title="#{messages.admin_project_new_endDate_label}"
+							placeholder="#{messages.admin_project_new_endDate_label}"
+							requiredMessage="#{messages.admin_project_new_endDate_alert}"
+							value="#{jJProjectBean.projectAdmin.endDate}">
+							<f:validator validatorId="dateRangeValidator" />
+							<f:attribute name="startDateComponent"
+								value="#{startDateEdition}" />
+						</p:calendar>
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" style="height:100px;"
+						styleClass="Container20 TexAlCenter BorderAll">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:graphicImage styleClass="avatar" cache="false"
+								value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
+								<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
+							</p:graphicImage>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75 TexAlCenter"
+						style="height:100px;">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:fileUpload id="projLogo" fileLimit="1"
+								styleClass="customFileUpload"
+								disabled="#{empty jJProjectBean.projectAdmin.name}"
+								fileUploadListener="#{licenseBean.handleProjLogoUpload}"
+								mode="advanced" dragDropSupport="false" update="msg"
+								sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
+				<h:panelGroup layout="block"
+					styleClass="ui-fluid Container50 Responsive50">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="submitButton" icon="fa fa-save Fs16"
 							value="#{messages.admin_project_new_save_button}"
 							update="projectDialogForm :headerForm :growlForm"
 							process="@this,name,projectManagerSelect,projectSD,projectED"
 							action="#{jJProjectBean.save}" />
-					</f:facet>
-				</p:panel>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block"
+					styleClass="ui-fluid Container50 Responsive50"
+					style="float: right;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:commandButton id="viewCloseButton" styleClass="GrayBack"
+							value="#{messages.label_cancel}"
+							oncomplete="PF('blockUIWidget').unblock()"
+							onstart="PF('blockUIWidget').block()"
+							onclick="PF('projectDialogWidget').hide()" type="button" />
+					</h:panelGroup>
+				</h:panelGroup>
+
 			</h:form>
-		</p:outputPanel>
+		</h:panelGroup>
 	</p:dialog>
 	<p:confirmDialog id="projectDeleteDialog"
 		widgetVar="projectDeleteDialogWidget"
 		message="#{messages.admin_project_delete_label}" showEffect="fade"
-		 header="#{messages.admin_project_delete_title}"
-		severity="alarm">
+		header="#{messages.admin_project_delete_title}" severity="alarm">
 		<p:outputPanel id="projectDeletePanel">
 			<h:form id="projectDeleteForm">
 				<p:commandButton id="deleteYesButton"

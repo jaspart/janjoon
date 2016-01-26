@@ -1607,6 +1607,10 @@ div.highLightRevised2 {
 	
 }
 
+.ui-selectonemenu-panel.hideDisabled .ui-selectonemenu-item.ui-state-disabled {
+    display: none;
+}
+
 @media ( min-width : 100px) and (max-width: 960px) {
 	.responsiveTabView {
 		border-top-width: 2px;
