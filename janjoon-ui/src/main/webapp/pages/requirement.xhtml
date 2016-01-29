@@ -11,22 +11,6 @@
 <ui:composition template="../templates/template.xhtml">
 	<ui:define name="head">
 		<style type="text/css">
-/* .ui-datalist-data { */
-/* 	-webkit-padding-start: 2px; */
-/* } */
-
-/* .ui-datalist .ui-datalist-header { */
-/* 	background-color: #d1d3d4; */
-/* 	color: #0288d1; */
-/* } */
-/* .ui-editor { */
-/* 	height: 150px !important; */
-/* } */
-
-/* .cke_chrome { */
-/* 	visibility: inherit; */
-/* 	width: 730px !important; */
-/* } */
 .testCaseDataTable {
 	
 }
@@ -50,7 +34,7 @@
 }
 
 .reqTree {
-	height: 400px;	
+	height: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -186,7 +170,7 @@
 										<p:tab title="#{messages.specification_tree_panel_header}">
 											<p:tree id="reqTree" value="#{requirementBean.rootNode}"
 												var="node" selectionMode="single"
-												styleClass="reqTree Container95"
+												styleClass="reqTree Container99"
 												selection="#{requirementBean.selectedNode}" dynamic="true">
 												<p:ajax event="select"
 													listener="#{requirementBean.onNodeSelect}"
@@ -228,11 +212,13 @@
 							rendered="#{requirementBean.requirement != null}"
 							styleClass="Container100 ui-fluid">
 							<f:facet name="header">
-								<h:outputText style="float: left;" styleClass="Fs18"
-									value="ID:#{requirementBean.requirement.id}" />
-								<h:outputText id="nombres" styleClass="Fs18"
+								<h:outputText id="nombres" styleClass="Fleft Fs18"
 									value="#{loginBean.checkMessage(requirementBean.requirement.category)}"
-									style="text-transform: uppercase;float: right;" />
+									style="text-transform: uppercase;" />
+								
+								<h:outputText
+									value="REQ ID=#{requirementBean.requirement.id} #{messages.label_createdBy} #{requirementBean.requirement.createdBy.firstname} #{requirementBean.requirement.createdBy.name}"
+									styleClass="Fright Fs18" />
 							</f:facet>
 							<h:panelGroup layout="block"
 								styleClass="Container50 Responsive100">
@@ -262,7 +248,7 @@
 								rendered="#{!loginBean.mobile}"
 								styleClass="Container100 Responsive100">
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<pe:ckEditor id="description"
+									<pe:ckEditor id="description" height="150px"
 										toolbar="#{imageStreamer.ckEditorToolBar}" width="100%;"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
 										value="#{requirementBean.requirement.description}"
@@ -434,7 +420,7 @@
 				<ui:include src="communication.xhtml">
 					<ui:param name="communicationList"
 						value="#{requirementBean.communicationMessages}" />
-					<ui:param name="field" value="#{requirementBean.requirement}" />					
+					<ui:param name="field" value="#{requirementBean.requirement}" />
 				</ui:include>
 			</h:panelGroup>
 		</h:panelGroup>
@@ -454,9 +440,10 @@
 
 		</p:dialog>
 
-		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)" responsive="true"
-			header="#{messages.requirement_dialog_linkHeader}" modal="true"
-			widgetVar="linkDialogWidget" dynamic="true" resizable="false">
+		<p:dialog id="linkDialog" draggable="false" appendTo="@(body)"
+			responsive="true" header="#{messages.requirement_dialog_linkHeader}"
+			modal="true" widgetVar="linkDialogWidget" dynamic="true"
+			resizable="false">
 			<p:ajax event="close" update=":linkForm"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock()"
@@ -497,9 +484,10 @@
 		</p:dialog>
 
 
-		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)" responsive="true"
-			header="#{messages.specification_chapter_header}" modal="true"
-			widgetVar="chapterDialogWidget" dynamic="true" resizable="false">
+		<p:dialog id="chapterDialog" draggable="false" appendTo="@(body)"
+			responsive="true" header="#{messages.specification_chapter_header}"
+			modal="true" widgetVar="chapterDialogWidget" dynamic="true"
+			resizable="false">
 			<p:ajax event="close" update=":treeForm"
 				onstart="PF('blockUIWidget').block()"
 				oncomplete="PF('blockUIWidget').unblock();"

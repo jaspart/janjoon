@@ -334,36 +334,7 @@ public class LoginBean implements Serializable {
 
 		this.menuIndex = menuIndex;
 	}
-
-	// public JJConfiguration getPlaningTabsConf() {
-	// if (planingTabsConf == null) {
-	// List<JJConfiguration> conf = jJConfigurationService
-	// .getConfigurations("planning", "project.type", true);
-	// if (conf != null && !conf.isEmpty())
-	// planingTabsConf = conf.get(0);
-	// else {
-	// JJConfiguration configuration = new JJConfiguration();
-	// configuration.setName("planning");
-	// configuration
-	// .setDescription("specify available tab in planing vue");
-	// configuration.setCreatedBy(getContact());
-	// configuration.setCreationDate(new Date());
-	// configuration.setEnabled(true);
-	// configuration.setParam("project.type");
-	// configuration.setVal("gantt,scrum");
-	// jJConfigurationService.saveJJConfiguration(configuration);
-	// planingTabsConf = jJConfigurationService.getConfigurations(
-	// "planning", "project.type", true).get(0);
-	// }
-	//
-	// }
-	// return planingTabsConf;
-	// }
-	//
-	// public void setPlaningTabsConf(JJConfiguration planingTabsConf) {
-	// this.planingTabsConf = planingTabsConf;
-	// }
-
+	
 	public boolean isMobile() {
 		return mobile;
 	}
@@ -993,6 +964,7 @@ public class LoginBean implements Serializable {
 					JJProductBean productBean = (JJProductBean) findBean("jJProductBean");
 					productBean.setProduct((JJProduct) event.getNewValue());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
+					session.setAttribute("jJBuildBean", new JJBuildBean());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					if (session.getAttribute("jJStatusBean") != null)
 						((JJStatusBean) session.getAttribute("jJStatusBean"))
@@ -1000,6 +972,7 @@ public class LoginBean implements Serializable {
 
 				} else if (event.getComponent().getClientId()
 						.contains("versionSelectOneMenu")) {
+					session.setAttribute("jJBuildBean", new JJBuildBean());
 					jJVersionBean.getVersionList();
 					jJVersionBean.setVersion((JJVersion) event.getNewValue());
 					if (session.getAttribute("jJStatusBean") != null)
@@ -1739,6 +1712,18 @@ public class LoginBean implements Serializable {
 	public void updateTabViewWidth() {
 		RequestContext.getCurrentInstance().execute("updateTabViewWidth();");
 	}
+	
+	public void updateDataTableContainerWidth(){
+		RequestContext.getCurrentInstance().execute("updateDataTableContainerWidth();");
+	}
+	
+	public String parseHtml(String value){
+		
+		if(value != null)
+		return value.replaceAll("\\<[^>]*>", "");
+		else
+			return value;
+	}
 
 	public String checkMessage(Object obj) {
 
@@ -1817,62 +1802,8 @@ public class LoginBean implements Serializable {
 			return null;
 	}
 
-	// public boolean isRenderScrum() {
-	// boolean bbbb = getPlaningTabsConf().getVal().toLowerCase()
-	// .contains("scrum".toLowerCase());
-	//
-	// if (!bbbb && findBean("jJSprintBean") != null)
-	// ((JJSprintBean) findBean("jJSprintBean")).setActiveTabGantIndex(0);
-	//
-	// return bbbb;
-	//
-	// }
-	//
-	// public boolean isRenderGantt() {
-	//
-	// boolean bbbb = getPlaningTabsConf().getVal().toLowerCase()
-	// .contains("gantt".toLowerCase());
-	//
-	// if (!bbbb && findBean("jJSprintBean") != null)
-	// ((JJSprintBean) findBean("jJSprintBean")).setActiveTabGantIndex(0);
-	//
-	// return bbbb;
-	//
-	// }
-
-	// InitLayout
 	private String state;
 
-	// private LayoutOptions layoutOptions;
-
-	// protected void initialize() {
-	//
-	// // options for all panes (center and west)
-	// LayoutOptions panes = new LayoutOptions();
-	//
-	// layoutOptions = new LayoutOptions();
-	//
-	// // options for all panes
-	// panes = new LayoutOptions();
-	// panes.addOption("slidable", false);
-	// panes.addOption("resizeWhileDragging", true);
-	// panes.addOption("resizable", true);
-	// panes.addOption("closable", true);
-	// layoutOptions.setPanesOptions(panes);
-	//
-	// // options for east pane
-	// LayoutOptions pane = new LayoutOptions();
-	// pane.addOption("resizable", true);
-	// pane.addOption("closable", true);
-	// pane.addOption("size", "45%");
-	// layoutOptions.setNorthOptions(pane);
-	// pane = new LayoutOptions();
-	// pane.addOption("resizable", true);
-	// pane.addOption("closable", true);
-	// pane.addOption("size", "10%");
-	// layoutOptions.setSouthOptions(pane);
-	//
-	// }
 
 	public String getState() {
 		return state;
@@ -1881,14 +1812,6 @@ public class LoginBean implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
-
-	// public LayoutOptions getLayoutOptions() {
-	// return layoutOptions;
-	// }
-	//
-	// public void setLayoutOptions(LayoutOptions layoutOptions) {
-	// this.layoutOptions = layoutOptions;
-	// }
 
 	public String getStyleClass() {
 		FacesContext ctx = FacesContext.getCurrentInstance();
@@ -1900,7 +1823,7 @@ public class LoginBean implements Serializable {
 		else
 			return null;
 	}
-
+	
 	public void loadStyleSheet(StyleSheet style, String param) {
 		List<JJConfiguration> configs = jJConfigurationService
 				.getConfigurations(null, param, true);

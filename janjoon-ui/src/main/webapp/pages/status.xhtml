@@ -87,12 +87,14 @@
 						<p:menu overlay="true" trigger="viewButton" my="right top"
 							at="right bottom">
 							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
-								update=":tabview:seditForm:editPanelGrid"
+								update=":tabview:statusDialogForm :tabview:statusDialogHeader"
 								action="#{jJStatusBean.onEdit}" resetValues="true"
-								oncomplete="PF('editSatDialogWidget').show()"
+								oncomplete="PF('statusDialogWidget').show()"
 								title="#{messages.label_edit}" value="#{messages.label_edit}">
 								<f:setPropertyActionListener value="#{status}"
 									target="#{jJStatusBean.JJStatus_}" />
+									<f:setPropertyActionListener
+									target="#{jJStatusBean.renderCreate}" value="false" />
 							</p:menuitem>
 							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
 								resetValues="true"
@@ -112,9 +114,12 @@
 								<h:panelGroup layout="block" styleClass="ContainerIndent">
 									<p:commandButton value="#{messages.admin_status_new_button}"
 										id="createButton" icon="fa fa-plus Fs20" resetValues="true"
-										update=":tabview:ScreateForm:createPanelGrid"
-										oncomplete="PF('createSatDialogWidget').show()"
-										title="#{messages.admin_status_new_button}" />
+										update=":tabview:statusDialogForm :tabview:statusDialogHeader"
+										oncomplete="PF('statusDialogWidget').show()"
+										title="#{messages.admin_status_new_button}" >
+										<f:setPropertyActionListener
+									target="#{jJStatusBean.renderCreate}" value="true" />
+									</p:commandButton>
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
@@ -123,68 +128,127 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
-	<p:dialog id="ScreateDialog" responsive="true"
-		header="#{messages.admin_status_new_title}" modal="true"
-		widgetVar="createSatDialogWidget" dynamic="true"
-		visible="#{jJStatusBean.createDialogVisible}" resizable="true"
-		maximizable="true" showEffect="fade">
+	<p:dialog id="statusDialog" modal="true" responsive="true"
+		widgetVar="statusDialogWidget" dynamic="true" resizable="false" 
+		maximizable="false" showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
-		<p:outputPanel id="ScreatePanel">
-			<h:form id="ScreateForm" enctype="multipart/form-data">
-				<h:panelGrid id="createPanelGrid" columns="3"
-					binding="#{jJStatusBean.createPanelGrid}" styleClass="dialog"
-					columnClasses="col1,col2,col3" />
-				<p:commandButton id="createSaveButton"
-					value="#{messages.admin_status_new_save_button}"
-					action="#{jJStatusBean.persistStatus}"
-					update="createPanelGrid,:growlForm" />
-				<p:commandButton id="createCloseButton"
-					value="#{messages.label_cancel}"
-					onclick="PF('createSatDialogWidget').hide()" type="button" />
+			<f:facet name="header">
+			<p:outputLabel id="statusDialogHeader"
+				value="#{jJStatusBean.renderCreate ? messages.admin_status_new_title:messages.admin_status_edit_title}" />
+		</f:facet>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width:400px;">
+			<h:form id="statusDialogForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="name"
+							placeholder="#{messages.admin_status_table_name_title}"
+							value="#{jJStatusBean.JJStatus_.name}"
+							label="#{messages.admin_status_table_name_title}" required="true"
+							widgetVar="nameWidget">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="statusObject"
+								value="#{messages.admin_status_table_objet_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="statusObject" scrollHeight="200"
+								widgetVar="statusObjectWv"
+								value="#{jJStatusBean.JJStatus_.objet}" itemValue="#{obj}"
+								required="true" dropdown="true" var="obj" itemLabel="#{obj}"
+								completeMethod="#{jJStatusBean.completeObject}" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="level"
+								value="#{messages.admin_status_table_level_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:spinner id="level"
+								value="#{jJStatusBean.JJStatus_.levelStatus}" min="0" max="100" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="createSaveButton"
+								value="#{messages.admin_status_new_save_button}"
+								action="#{jJStatusBean.persistStatus}"
+								update=":tabview:statusDialogForm :growlForm" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="createCloseButton" styleClass="GrayBack"
+								value="#{messages.label_cancel}"
+								oncomplete="PF('blockUIWidget').unblock()"
+								onstart="PF('blockUIWidget').block()"
+								onclick="PF('statusDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
-		</p:outputPanel>
+		</h:panelGroup>
 	</p:dialog>
 
-	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}"
-		modal="true" widgetVar="editSatDialogWidget" dynamic="true"
-		resizable="true" responsive="true" maximizable="true"
-		showEffect="fade">
-		<p:ajax event="close" update=":tabview:statusForm"
-			listener="#{jJStatusBean.handleDialogClose}" />
-		<p:outputPanel id="SeditPanel">
-			<h:form id="seditForm" enctype="multipart/form-data">
-				<h:panelGrid id="editPanelGrid" columns="3"
-					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog"
-					columnClasses="col1,col2,col3" />
-				<p:commandButton id="editSaveButton"
-					value="#{messages.admin_status_edit_save_button}"
-					action="#{jJStatusBean.persistStatus}"
-					update="editPanelGrid,:growlForm" />
-				<p:commandButton id="editCloseButton"
-					value="#{messages.label_cancel}"
-					onclick="PF('editSatDialogWidget').hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
+<!-- 	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}" -->
+<!-- 		modal="true" widgetVar="editSatDialogWidget" dynamic="true" -->
+<!-- 		resizable="true" responsive="true" maximizable="true" -->
+<!-- 		showEffect="fade"> -->
+<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
+<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
+<!-- 		<p:outputPanel id="SeditPanel"> -->
+<!-- 			<h:form id="seditForm" enctype="multipart/form-data"> -->
+<!-- 				<h:panelGrid id="editPanelGrid" columns="3" -->
+<!-- 					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog" -->
+<!-- 					columnClasses="col1,col2,col3" /> -->
+<!-- 				<p:commandButton id="editSaveButton" -->
+<!-- 					value="#{messages.admin_status_edit_save_button}" -->
+<!-- 					action="#{jJStatusBean.persistStatus}" -->
+<!-- 					update="editPanelGrid,:growlForm" /> -->
+<!-- 				<p:commandButton id="editCloseButton" -->
+<!-- 					value="#{messages.label_cancel}" -->
+<!-- 					onclick="PF('editSatDialogWidget').hide()" type="button" /> -->
+<!-- 			</h:form> -->
+<!-- 		</p:outputPanel> -->
+<!-- 	</p:dialog> -->
 
-	<p:dialog id="SviewDialog" responsive="true"
-		header="#{messages.admin_status_view_title} Status" modal="true"
-		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true"
-		maximizable="true" showEffect="fade">
-		<p:ajax event="close" update=":tabview:statusForm"
-			listener="#{jJStatusBean.handleDialogClose}" />
-		<p:outputPanel id="SviewPanel">
-			<h:form id="sviewForm" enctype="multipart/form-data">
-				<h:panelGrid id="viewPanelGrid" columns="2"
-					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog"
-					columnClasses="col1,col2" />
-				<p:commandButton id="viewCloseButton"
-					value="#{messages.admin_status_view_close_button}"
-					onclick="PF('viewSatDialogWidget').hide()" type="button" />
-			</h:form>
-		</p:outputPanel>
-	</p:dialog>
+<!-- 	<p:dialog id="SviewDialog" responsive="true" -->
+<!-- 		header="#{messages.admin_status_view_title} Status" modal="true" -->
+<!-- 		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true" -->
+<!-- 		maximizable="true" showEffect="fade"> -->
+<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
+<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
+<!-- 		<p:outputPanel id="SviewPanel"> -->
+<!-- 			<h:form id="sviewForm" enctype="multipart/form-data"> -->
+<!-- 				<h:panelGrid id="viewPanelGrid" columns="2" -->
+<!-- 					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog" -->
+<!-- 					columnClasses="col1,col2" /> -->
+<!-- 				<p:commandButton id="viewCloseButton" -->
+<!-- 					value="#{messages.admin_status_view_close_button}" -->
+<!-- 					onclick="PF('viewSatDialogWidget').hide()" type="button" /> -->
+<!-- 			</h:form> -->
+<!-- 		</p:outputPanel> -->
+<!-- 	</p:dialog> -->
+
 	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
 		message="#{messages.admin_status_delete_label}" showEffect="fade"
 		header="#{messages.admin_status_delete_title}" severity="alarm">

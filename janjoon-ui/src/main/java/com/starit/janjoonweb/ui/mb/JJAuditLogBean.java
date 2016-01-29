@@ -21,14 +21,15 @@ public class JJAuditLogBean {
 
 	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {
 
-		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		JJCompany company = null;
-		if (!loginBean.getAuthorisationService().isAdminCompany())
-			company = LoginBean.getCompany();
-		connectionStatistiquesListTable = null;
-		if (connectionStatistiquesListTable == null)
+		// connectionStatistiquesListTable = null;
+		if (connectionStatistiquesListTable == null) {
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+			JJCompany company = null;
+			if (!loginBean.getAuthorisationService().isAdminCompany())
+				company = LoginBean.getCompany();
 			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
 					jJAuditLogService, company);
+		}
 		return connectionStatistiquesListTable;
 	}
 

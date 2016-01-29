@@ -195,7 +195,7 @@ public class JJTestcaseBean {
 	private boolean disabledTask;
 	private boolean disabledExport;
 	private boolean testcaseState;
-	private List<CategoryUtil> categoryList;
+	private List<JJCategory> categoryList;
 	private List<JJMessage> communicationMessages;
 
 	private JJChapter chapter;
@@ -298,12 +298,12 @@ public class JJTestcaseBean {
 
 				}
 				if (rowNames != null) {
-					width = 180 + (rowNames.size() * 70) + "px";
+					width = "width: "+180 + (rowNames.size() * 70) + "px";
 
-					if (180 + (rowNames.size() * 70) > 1000)
-						width = "100%";
+					if (180 + (rowNames.size() * 70) > 910)
+						width = "";
 				} else
-					width = 170 + "px";
+					width = "width: "+170 + "px";
 
 			}
 		}
@@ -339,8 +339,8 @@ public class JJTestcaseBean {
 	}
 
 	public Integer getScrollWidth() {
-		if (180 + (rowNames.size() * 70) > 1000)
-			return 1000;
+		if (180 + (rowNames.size() * 70) > 910)
+			return 910;
 		else
 			return null;
 	}
@@ -470,7 +470,7 @@ public class JJTestcaseBean {
 
 	public void setRendredEmptySelection(boolean rendredEmptySelection) {
 		this.rendredEmptySelection = rendredEmptySelection;
-	}
+	}	 
 
 	public boolean getRenderCommentsPanel() {
 		boolean returnValue = ((LoginBean) LoginBean.findBean("loginBean"))
@@ -582,16 +582,16 @@ public class JJTestcaseBean {
 		this.builds = builds;
 	}
 
-	public List<CategoryUtil> getCategoryList() {
+	public List<JJCategory> getCategoryList() {
 
 		if (categoryList == null)
-			categoryList = CategoryUtil.getCategoryList(jJCategoryService
+			categoryList = jJCategoryService
 					.getCategories(null, false, true, true,
-							LoginBean.getCompany()), category);
+							LoginBean.getCompany());
 		return categoryList;
 	}
 
-	public void setCategoryList(List<CategoryUtil> categoryList) {
+	public void setCategoryList(List<JJCategory> categoryList) {
 		this.categoryList = categoryList;
 	}
 
@@ -2158,13 +2158,13 @@ public class JJTestcaseBean {
 
 	}
 
-	public String getMarginLeft(CategoryUtil cc) {
+	public String getMarginLeft(JJCategory cc) {
 		int jj = categoryList.indexOf(cc);
 		if (jj == -1 || jj == 0)
 			return "";
 		else {
-			if (categoryList.get(jj - 1).getCategory().getStage()
-					.equals(cc.getCategory().getStage()))
+			if (categoryList.get(jj - 1).getStage()
+					.equals(cc.getStage()))
 				return "";
 			else
 				return "margin-left: 20px;";
@@ -2739,6 +2739,17 @@ public class JJTestcaseBean {
 
 	public String getPieChartSerieColor() {
 		return pieChartSerieColor;
+	}
+	
+	public String getActiveIndex() {
+
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
+				: "0";
+
+	}
+
+	public void setActiveIndex(String index) {
+
 	}
 
 }

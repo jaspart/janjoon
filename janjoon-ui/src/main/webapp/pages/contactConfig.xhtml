@@ -371,8 +371,8 @@
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container40 Responsive100">
 					<h:form id="vacationForm">
-						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:dataList var="vacation" paginator="true" rows="9"
+						<h:panelGroup layout="block" styleClass="Container100">
+							<p:dataList var="vacation" paginator="true" rows="5"
 								paginatorPosition="bottom" itemType="none"
 								emptyMessage="#{messages.contact_empty_vacation}"
 								value="#{jJContactBean.calendarUtil.vacation}" type="unordered">
@@ -425,46 +425,47 @@
 										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
+								<f:facet name="footer">
+									<h:panelGroup layout="block" styleClass="Container">
+										<h:panelGroup layout="block" styleClass="Container50">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:calendar id="start" navigator="true" effect="slideDown"
+													required="true" pattern="dd/MM/yyyy HH:mm"
+													binding="#{startDateCreation}"
+													placeholder="#{messages.contact_from}"
+													value="#{jJContactBean.startDate}">
+													<p:ajax event="dateSelect" update="addVacation :growlForm" />
+												</p:calendar>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container50">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:calendar id="end" navigator="true" effect="slideDown"
+													required="true" pattern="dd/MM/yyyy HH:mm"
+													value="#{jJContactBean.endDate}"
+													placeholder="#{messages.contact_to}">
+													<f:validator validatorId="dateRangeValidator" />
+													<f:attribute name="startDateComponent"
+														value="#{startDateCreation}" />
+													<p:ajax event="dateSelect" update="addVacation :growlForm" />
+												</p:calendar>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="Container100">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:commandButton id="addVacation"
+													icon="fa fa-plus-square Fs20"
+													onstart="PF('blockUIWidget').block()"
+													oncomplete="PF('blockUIWidget').unblock()"
+													disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
+													update="vacationForm :configForm :workdaysCalendar :growlForm"
+													action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
+													value="#{messages.contact_new_vacation}" />
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+								</f:facet>
 							</p:dataList>
-
-							<h:panelGroup layout="block" styleClass="Container100 BorderAll">
-								<h:panelGroup layout="block" styleClass="Container50">
-									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:calendar id="start" navigator="true" effect="slideDown"
-											required="true" pattern="dd/MM/yyyy HH:mm"
-											binding="#{startDateCreation}"
-											placeholder="#{messages.contact_from}"
-											value="#{jJContactBean.startDate}">
-											<p:ajax event="dateSelect" update="addVacation :growlForm" />
-										</p:calendar>
-									</h:panelGroup>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="Container50">
-									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:calendar id="end" navigator="true" effect="slideDown"
-											required="true" pattern="dd/MM/yyyy HH:mm"
-											value="#{jJContactBean.endDate}"
-											placeholder="#{messages.contact_to}">
-											<f:validator validatorId="dateRangeValidator" />
-											<f:attribute name="startDateComponent"
-												value="#{startDateCreation}" />
-											<p:ajax event="dateSelect" update="addVacation :growlForm" />
-										</p:calendar>
-									</h:panelGroup>
-								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="Container100">
-									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:commandButton id="addVacation"
-											icon="fa fa-plus-square Fs20"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()"
-											disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
-											update="vacationForm :configForm :workdaysCalendar :growlForm"
-											action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
-											value="#{messages.contact_new_vacation}" />
-									</h:panelGroup>
-								</h:panelGroup>
-							</h:panelGroup>
 						</h:panelGroup>
 					</h:form>
 				</h:panelGroup>

@@ -78,7 +78,8 @@ public class JJWorkflowBean {
 			Set<String> objects = jJWorkflowService.getAllObject();
 			objectOptions = new SelectItem[objects.size() + 1];
 
-			objectOptions[0] = new SelectItem("", "Select");
+			objectOptions[0] = new SelectItem("", MessageFactory.getMessage(
+					"label_all").getDetail());
 			int i = 0;
 			for (String comp : objects) {
 				objectOptions[i + 1] = new SelectItem(comp, comp);

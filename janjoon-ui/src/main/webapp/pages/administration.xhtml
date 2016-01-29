@@ -18,23 +18,27 @@
 		</h:form>
 
 		<h:panelGroup layout="block" styleClass="Container">
-		<h:panelGroup layout="block" styleClass="Container20 Responsive ui-fluid" style="float: right;">
-			<h:panelGroup layout="block" styleClass="ContainerIndent">
-			<p:commandButton value="#{messages.specification_video_help_title}"
-				id="videoHelpBtn" icon="fa fa-video-camera Fs20"
-				title="#{messages.specification_video_help_title}"
-				onclick="PF('videoHelpWidget').show()" type="button"/>
-				</h:panelGroup></h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container70 Responsive100 ShowOnMobile ui-fluid">
+			<h:panelGroup layout="block"
+				styleClass="Container20 Responsive ui-fluid" style="float: right;">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton value="#{messages.specification_video_help_title}"
+						id="videoHelpBtn" icon="fa fa-video-camera Fs20"
+						title="#{messages.specification_video_help_title}"
+						onclick="PF('videoHelpWidget').show()" type="button" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="Container70 Responsive100 ShowOnMobile ui-fluid">
 				<h:form id="activeIndexForm">
-					<h:panelGroup layout="block" styleClass="Container30" >
+					<h:panelGroup layout="block" styleClass="Container30">
 						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 							<p:outputLabel for="activeIndex" value="#{messages.label_tab}:" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container70">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:selectOneMenu id="activeIndex" var="tab" panelStyleClass="hideDisabled"
+							<p:selectOneMenu id="activeIndex" var="tab"
+								panelStyleClass="hideDisabled"
 								value="#{loginBean.activeTabAdminIndex}" effect="fade"
 								onchange="PF('AdmintabView').select(value);">
 								<f:selectItem itemLabel="#{messages.admin_user_menuitem}"
@@ -67,14 +71,13 @@
 									itemDisabled="#{!loginBean.authorisationService.adminWorkflow}" />
 								<f:selectItem itemLabel="#{messages.admin_license_menuitem}"
 									itemValue="9" />
-								<f:selectItem itemLabel="Statistiques"
-									itemValue="10"
-									itemDisabled="#{!loginBean.authorisationService.adminContact}" />								
+								<f:selectItem itemLabel="Statistiques" itemValue="10"
+									itemDisabled="#{!loginBean.authorisationService.adminContact}" />
 							</p:selectOneMenu>
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:form>
-			</h:panelGroup>						
+			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="EmptyBox5" />
 			<h:panelGroup layout="block" styleClass="Container100">
 				<f:event type="preRenderComponent"
@@ -196,6 +199,21 @@
 				</p:tabView>
 			</h:panelGroup>
 		</h:panelGroup>
+
+		<p:dialog id="companyDialog" responsive="true" modal="true"
+			rendered="#{loginBean.authorisationService.adminCompany or loginBean.authorisationService.adminContact}"
+			widgetVar="companyDialogWidget" dynamic="true" showEffect="fade"
+			resizable="false" onHide="PF('companyTabView').select(0);"
+			onShow="PF('companyTabView').select(0);">
+			<p:ajax event="close" update=":tabview:companyForm"
+				listener="#{jJCompanyBean.closeDialog}" />
+			<f:facet name="header">
+				<p:outputLabel id="companyDialogHeader"
+					value="#{messages[jJCompanyBean.headerMessage]}" />
+			</f:facet>
+			<ui:include src="companyDialog.xhtml" />
+		</p:dialog>
+
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
 		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
 			responsive="true" position="center"

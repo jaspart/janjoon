@@ -33,8 +33,22 @@
 }
 
 .ui-datalist-data {
-	padding: 10px;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	-webkit-padding-start: 0px;
+	padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-right: 5px !important;
+}
+
+.ui-datalist .ui-datalist-header{
+	padding: 5px !important;
+}
+
+.ui-datalist-footer{
+	padding: 0px !important;
+}
+
+.customTimePicker{
+	padding-top: 1px !important;
+    padding-bottom: 1px !important;
 }
 

@@ -63,7 +63,7 @@
 										value="#{messages.specification_chapter_description_label}" />
 									<pe:ckEditor id="description" rendered="#{!loginBean.mobile}"
 										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
-										toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
+										toolbar="#{imageStreamer.ckEditorToolBar}" width="100%" height="150px"
 										value="#{jJChapterBean.chapter.description}" required="true"
 										requiredMessage="#{messages.specification_chapter_description_alert}" />
 								</h:panelGroup>

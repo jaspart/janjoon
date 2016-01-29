@@ -97,25 +97,6 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="#{messages.label_requirement} :"
-						for="taskType" />
-				</h:panelGroup>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container60">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
-						itemValue="#{taskType}" scrollHeight="200"
-						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-						dropdown="true" var="taskType"
-						itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
-						completeMethod="#{jJTaskBean.completeTaskType}" />
-				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
-
-		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-			<h:panelGroup layout="block" styleClass="Container40">
-				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 					<p:outputLabel value="#{messages.project_scrum_new_start_label}"
 						for="taskStartDatePlanned" />
 				</h:panelGroup>
@@ -183,11 +164,34 @@
 			</h:panelGroup>
 		</h:panelGroup>
 
+		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+			<h:panelGroup layout="block" styleClass="Container40">
+				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+					<p:outputLabel value="#{messages.label_requirement} :"
+						for="taskType" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container60">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:autoComplete id="taskType" value="#{JJTask_.taskType}" size="15"
+						itemValue="#{taskType}" scrollHeight="200"
+						converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+						dropdown="true" var="taskType"
+						itemLabel="#{taskType != null ? taskType.name : messages.label_select}"
+						completeMethod="#{jJTaskBean.completeTaskType}" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+
 		<h:panelGroup layout="block" styleClass="Container100"
 			rendered="#{JJTask_.bug != null}">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
-				<p:panel styleClass="Container100" header="BUG ID:#{JJTask_.bug.id}"
-					rendered="#{JJTask_.bug != null}">
+				<p:panel styleClass="Container100" rendered="#{JJTask_.bug != null}">
+					<f:facet name="header">
+						<h:outputText
+							value="BUG ID=#{JJTask_.bug.id} #{messages.label_createdBy} #{JJTask_.bug.createdBy.firstname} #{JJTask_.bug.createdBy.name}"
+							styleClass="Fright" />
+					</f:facet>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Bug :" for="taskBug" />
@@ -210,7 +214,7 @@
 							<pe:ckEditor id="Bugdescription" width="100%"
 								toolbar="#{imageStreamer.ckEditorToolBar}"
 								value="#{JJTask_.bug.description}" readOnly="true"
-								rendered="#{!loginBean.mobile}" />
+								rendered="#{!loginBean.mobile}" height="150px" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container100"
@@ -218,7 +222,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Description :" for="BugMobiledescription"
 								rendered="#{loginBean.mobile}" />
-								<br/>
+							<br />
 							<h:outputText escape="false" id="BugMobiledescription"
 								styleClass="Fs16" style="font-family: cursive;"
 								value="#{JJTask_.bug.description}"
@@ -257,7 +261,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Description :" for="testCasedescription" />
 							<pe:ckEditor id="testCasedescription" width="100%"
-								toolbar="#{imageStreamer.ckEditorToolBar}"
+								toolbar="#{imageStreamer.ckEditorToolBar}" height="150px"
 								value="#{JJTask_.testcase.description}" readOnly="true"
 								rendered="#{!loginBean.mobile}" />
 						</h:panelGroup>
@@ -268,7 +272,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="Description :"
 								for="testcaseMobiledescription" />
-								<br/>
+							<br />
 							<h:outputText escape="false" id="testcaseMobiledescription"
 								value="#{JJTask_.testcase.description}" styleClass="Fs16"
 								style="font-family: cursive;" rendered="#{loginBean.mobile}" />
@@ -305,9 +309,12 @@
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container70 Responsive100">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:panel id="taskTreePanelGrid"
-						header="#{messages.label_requirement}:#{jJTaskBean.selectedReq.name}"
-						styleClass="Container100">
+					<p:panel id="taskTreePanelGrid" styleClass="Container100">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.label_requirement}:#{jJTaskBean.selectedReq.name} #{messages.label_createdBy} #{jJTaskBean.selectedReq.createdBy.firstname} #{jJTaskBean.selectedReq.createdBy.name}"
+								styleClass="Fs18" />
+						</f:facet>
 						<h:panelGroup layout="block" styleClass="Container33 Responsive">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:outputLabel
@@ -332,7 +339,7 @@
 								<p:outputLabel value="Description :" for="description" />
 								<pe:ckEditor id="description"
 									toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
-									rendered="#{!loginBean.mobile}"
+									rendered="#{!loginBean.mobile}" height="150px"
 									value="#{jJTaskBean.selectedReq.description}" readOnly="true" />
 							</h:panelGroup>
 						</h:panelGroup>
@@ -340,7 +347,7 @@
 							rendered="#{loginBean.mobile}">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:outputLabel value="Description :" for="descriptionMobile" />
-								<br/>
+								<br />
 								<h:outputText escape="false" id="descriptionMobile"
 									rendered="#{loginBean.mobile}" styleClass="Fs16"
 									style="font-family: cursive;"
@@ -354,8 +361,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
 				<p:commandButton id="updateTaskButton"
-					update=":viewTaskForm :growlForm"
-					icon="fa fa-save Fs16"
+					update=":viewTaskForm :growlForm" icon="fa fa-save Fs16"
 					actionListener="#{jJTaskBean.updateTask(View)}"
 					value="#{messages.label_save}"
 					process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType"

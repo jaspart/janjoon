@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:panelGroup id="runTestcaseDialogPanel" layout="block"
+		styleClass="Container ui-fluid" style="max-width: 500px;">
+		<h:form id="runTestcaseDialogForm">
+			<h:panelGroup layout="block" styleClass="Container100">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container100">
+				<p:tabView id="teststepTabView" widgetVar="teststepTabViewWidget"
+					activeIndex="#{jJTeststepexecutionBean.activeIndex}"
+					scrollable="true" dynamic="true"
+					value="#{jJTeststepexecutionBean.teststepexecutions}" var="tse">
+					<p:ajax event="tabChange"
+						listener="#{jJTeststepexecutionBean.onTabChange}"
+						update="teststepTabView" />
+					<p:tab
+						title="#{tse.teststep != null ? tse.teststep.ordering : 'Teststep'}">
+						<h:panelGroup layout="block" styleClass="Container"
+							rendered="#{tse.teststep != null}">
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel value="#{messages.test_exec_action_label}" />
+									<p:inputTextarea readonly="true" rendered="#{loginBean.mobile}"
+										value="#{tse.teststep.actionstep}" />
+									<pe:ckEditor height="75px" width="100%"
+										value="#{tse.teststep.actionstep}"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+										toolbar="[['Source','Image','Table']]" readonly="true"
+										rendered="#{!loginBean.mobile}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel value="#{messages.test_exec_result_label}" />
+									<p:inputTextarea readonly="true" rendered="#{loginBean.mobile}"
+										value="#{tse.teststep.resultstep}" />
+									<pe:ckEditor height="75px" width="100%"
+										value="#{tse.teststep.resultstep}"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+										toolbar="[['Source','Image','Table']]" readonly="true"
+										rendered="#{!loginBean.mobile}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100"
+								rendered="#{not empty tse.teststep.bugs}">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:dataTable emptyMessage="#{messages.label_notRecordFound}"
+										value="#{tse.teststep.bugs}" scrollable="true"
+										scrollHeight="120" var="bug">
+										<p:column headerText="Bug">
+											<h:outputText value="#{bug.name}" />
+										</p:column>
+										<p:column headerText="Fixed" style="text-align:center;">											
+												<p:commandButton styleClass="littleButton SoftGrayBack"
+													icon="fa #{jJTeststepBean.isBugFixed(bug) ? 'fa-check Green' : 'fa-close Red'} Fs16 "
+													disabled="#{jJTeststepBean.isBugFixed(bug)}"
+													update=":runTestcaseDialogForm:teststepTabView :runTestcaseDialogForm:msg"
+													actionListener="#{jJTeststepBean.onbugCheckStatus(bug,jJBugBean)}" />											
+										</p:column>
+									</p:dataTable>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton id="testExecSuccessButton"
+										disabled="#{tse.passed != null}"
+										value="#{messages.test_graph_success_label}"
+										icon="fa fa-check Green Fs16"
+										actionListener="#{jJTeststepexecutionBean.setStatus('true')}"
+										action="#{jJTeststepexecutionBean.handleStatus(tse)}"
+										widgetVar="TestcaseExecSuccessButton"
+										update="teststepTabView :runTestcaseDialogForm:msg :bugForm:createPanelGrid"
+										async="true" ajax="true" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton id="testExecFailedButton"
+										disabled="#{tse.passed != null}"
+										value="#{messages.test_graph_failed_label}"
+										icon="fa fa-close Red Fs16"
+										actionListener="#{jJTeststepexecutionBean.setStatus('false')}"
+										action="#{jJTeststepexecutionBean.handleStatus(tse)}"
+										widgetVar="TestcaseExecFailedButton"
+										update="teststepTabView :runTestcaseDialogForm:msg :bugForm:createPanelGrid"
+										async="true" ajax="true" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<p:remoteCommand name="remoteButton"
+								update=":runTestcaseDialogForm" />
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="Container"
+							rendered="#{tse.teststep == null}">
+							<h:panelGroup layout="block" styleClass="Container100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel
+										value="#{messages.test_exec_finalResult}:#{jJTestcaseBean.testcase.name}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100"
+								style="min-height:150px;">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel value="Description:" />
+									<pe:ckEditor height="100px" width="100%"
+										value="#{jJTestcaseBean.testcase.description}"
+										customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+										toolbar="[['Source','Image','Table']]" readonly="true"
+										rendered="#{!loginBean.mobile}" />
+									<p:inputTextarea id="descriptionMobile"
+										rendered="#{loginBean.mobile}" readonly="true"
+										value="#{jJTestcaseBean.testcase.description}" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:selectOneButton id="testcaseexecutionStatus"
+										value="#{jJTestcaseexecutionBean.status}"
+										disabled="#{jJTeststepexecutionBean.disabledTestcase}">
+										<p:ajax listener="#{jJTestcaseexecutionBean.handleStatus()}" />
+										<f:selectItem itemValue="true"
+											itemLabel="#{messages.test_exec_status_passed_label}" />
+										<f:selectItem itemValue="false"
+											itemLabel="#{messages.test_exec_status_failed_label}" />
+									</p:selectOneButton>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:commandButton id="validateButton"
+										value="#{messages.test_exec_valid_label}"
+										icon="fa fa-check-circle Fs16"
+										update=":testFormCenter :testFormWest :growlForm "
+										actionListener="#{jJTeststepexecutionBean.validateTab}"
+										style="float: right;" onstart="PF('blockUIWidget').block()"
+										oncomplete="PF('blockUIWidget').unblock()"
+										disabled="#{jJTeststepexecutionBean.disabledTestcase}" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:tab>
+				</p:tabView>
+			</h:panelGroup>
+		</h:form>
+	</h:panelGroup>
+</ui:composition>
+</html>

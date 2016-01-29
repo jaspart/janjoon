@@ -235,21 +235,25 @@ public class JJTeststepBean {
 
 	public void initCkeditor(RowEditEvent event) {
 
-		DataTable table = (DataTable) event.getSource();
-		int activeRow = table.getRowIndex();
-		int lenth = table.getRowCount();
+		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
+			DataTable table = (DataTable) event.getSource();
+			int activeRow = table.getRowIndex();
+			int lenth = table.getRowCount();
 
-		for (int i = 0; i < lenth; i++)
-			if (i != activeRow)
-				RequestContext.getCurrentInstance().execute(
-						"jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq("
-								+ i
-								+ ").each(function(){jQuery(this).click()});");
+			for (int i = 0; i < lenth; i++)
+				if (i != activeRow)
+					RequestContext
+							.getCurrentInstance()
+							.execute(
+									"jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq("
+											+ i
+											+ ").each(function(){jQuery(this).click()});");
 
-		RequestContext.getCurrentInstance().execute(
-				"PF('testTabView').select(0)");
-		RequestContext.getCurrentInstance().execute(
-				"PF('testTabView').select(1)");
+			RequestContext.getCurrentInstance().execute(
+					"PF('testTabView').select(0)");
+			RequestContext.getCurrentInstance().execute(
+					"PF('testTabView').select(1)");
+		}
 	}
 
 	public void editTestStep(RowEditEvent event) {

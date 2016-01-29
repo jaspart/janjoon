@@ -13,6 +13,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 
@@ -32,6 +33,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -77,6 +79,7 @@ public class JJStatusBean {
 	private List<CategoryDataModel> categoryDataModel;
 	private int activeTabIndex;
 	private int activeTabSprintIndex = -1;
+	private boolean renderCreate;
 
 	// private Boolean first;
 
@@ -171,7 +174,8 @@ public class JJStatusBean {
 			Set<String> objects = jJStatusService.getAllObject();
 			objectOptions = new SelectItem[objects.size() + 1];
 
-			objectOptions[0] = new SelectItem("", "Select");
+			objectOptions[0] = new SelectItem("", MessageFactory.getMessage(
+					"label_all").getDetail());
 			int i = 0;
 			for (String comp : objects) {
 				objectOptions[i + 1] = new SelectItem(comp, comp);
@@ -430,6 +434,23 @@ public class JJStatusBean {
 			System.out.println("###### ACtive tab: " + activeTabSprintIndex);
 		}
 	}
+	
+	public boolean isRenderCreate() {
+		return renderCreate;
+	}
+
+	public void setRenderCreate(boolean renderCreate) {
+		this.renderCreate = renderCreate;
+	}
+	
+//	public void beforeDialogShow(ActionEvent event) {
+//
+//		setJJStatus__(new JJStatus());
+//		renderCreate = true;
+//		RequestContext context = RequestContext.getCurrentInstance();
+//		context.execute("PF('statusDialogWidget').show()");
+//
+//	}
 
 	@SuppressWarnings("serial")
 	public void loadData() {

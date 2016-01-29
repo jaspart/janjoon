@@ -154,7 +154,7 @@ $(window).resize(
 			$(".ui-dialog-content").css("maxWidth",
 					($(window).width() * 90 / 100) + "px");
 			$(".ui-dialog-content").css("maxHeight",
-					($(window).height() * 80 / 100) + "px");
+					($(window).height() * 85 / 100) + "px");
 
 			// Begin-Responsive
 			var $dlg = $(".ui-confirm-dialog:visible");
@@ -181,7 +181,7 @@ $(function() {
 	$(".ui-dialog-content").css("maxWidth",
 			($(window).width() * 90 / 100) + "px");
 	$(".ui-dialog-content").css("maxHeight",
-			($(window).height() * 80 / 100) + "px");
+			($(window).height() * 85 / 100) + "px");
 });
 
 

@@ -1583,9 +1583,9 @@ div.highLightRevised2 {
 }
 
 /* ckEditor */
-.cke_contents {
-	height: 150px !important;
-}
+/* .cke_contents { */
+/* 	height: 150px !important; */
+/* } */
 
 .cke_bottom {
 	display: none !important;
@@ -1605,6 +1605,11 @@ div.highLightRevised2 {
 
 .responsiveTabView {
 	
+}
+
+.ui-datatable-scrollable-theadclone th span.ui-column-title {
+	display: none !important;
+	height: 0px;
 }
 
 .ui-selectonemenu-panel.hideDisabled .ui-selectonemenu-item.ui-state-disabled {
