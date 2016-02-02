@@ -677,7 +677,7 @@ public class JJBugBean {
 			if (show) {
 				if (viewBug.getVersioning() != null)
 					prod = viewBug.getVersioning().getProduct();
-				else if (viewBug.getBuild() != null)
+				else if (viewBug.getBuild() != null && viewBug.getBuild().getVersion() != null)
 					prod = viewBug.getBuild().getVersion().getProduct();
 			}
 

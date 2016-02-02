@@ -7,73 +7,84 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
 	<h:form id="comForm">
-		<p:dataTable id="comDataTable" value="#{communicationList}"
-			rowKey="#{mes.id}" var="mes" scrollable="true"
-			emptyMessage="#{messages.label_notRecordFound}"
-			rendered="#{loginBean.enable}" scrollHeight="300" 
-			tableStyleClass="ui-table-columntoggle"	selectionMode="single">
-			<p:ajax event="rowSelect" update=":viewMessagePanel"
-				listener="#{jJMessageBean.onRowSelect}" immediate="true"
-				oncomplete="PF('viewMessageDialogWidget').show()" />
-			<f:facet name="header">
-				<p:panelGrid>
-					<p:row>
-						<p:column style="width: 70px !important;text-align: center;">
-							<p:graphicImage styleClass="avatar"
-								value="#{imageStreamer.image}">
-								<f:param name="contactId" value="#{loginBean.contact.id}" />
-							</p:graphicImage>
-						</p:column>
-						<p:column colspan="5">							
-							<p:inputTextarea id="messagedsc" rows="3"
-								style="float:left;width: 98%;" value="#{jJMessageBean.message.message}"
-								required="true" requiredMessage="#{messages.label_alert_message_null}"
-								placeholder="Message" />							
-						</p:column>
-					</p:row>
-					<f:facet name="footer">
-						<p:row>
-							<p:column colspan="6">
-								<p:inputSwitch id="alert" style="float: left;"
+		<p:remoteCommand name="updateDataTable" update="@form"
+			immediate="true" />
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:dataTable id="comDataTable" value="#{communicationList}"
+				rowKey="#{mes.id}" var="mes" scrollable="true"
+				emptyMessage="#{messages.label_notRecordFound}"
+				rendered="#{loginBean.enable}" scrollHeight="300"
+				selectionMode="single">
+				<p:ajax event="rowSelect" update=":viewMessagePanel"
+					listener="#{jJMessageBean.onRowSelect}" immediate="true"
+					oncomplete="PF('viewMessageDialogWidget').show()" />
+				<f:facet name="header">
+					<h:panelGroup layout="block" styleClass="Container ui-fluid WhiteBlueBack">
+						<h:panelGroup layout="block" styleClass="Container100">
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter" style="min-width:80px;">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">									
+										<p:graphicImage styleClass="avatar"
+											value="#{imageStreamer.image}">
+											<f:param name="contactId" value="#{loginBean.contact.id}" />
+										</p:graphicImage>									
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container90">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:inputTextarea id="messagedsc" rows="3"
+										value="#{jJMessageBean.message.message}" required="true"
+										requiredMessage="#{messages.label_alert_message_null}"
+										placeholder="Message" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container15 Responsive TexAlCenter">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:inputSwitch id="alert" 
 									value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
 									offLabel="Info">
 								</p:inputSwitch>
-								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
-									process="@this,alert,messagedsc" style="float: left;left: 1%;"
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container20 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="submitMes" icon="fa fa-send Fs20"
+									value="#{messages.label_send}" process="@this,alert,messagedsc"
 									actionListener="#{jJMessageBean.createMessage(true,field)}"
 									update=":comForm :headerForm:communicationButton :growlForm" />
-							</p:column>
-						</p:row>
-					</f:facet>
-				</p:panelGrid>
-			</f:facet>
-			<p:column style="width: 75px;text-align: center;min-width: 75px;">
-				<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
-					rendered="#{mes.createdBy.picture != null}">
-					<f:param name="contactId" value="#{mes.createdBy.id}" />
-				</p:graphicImage>
-			</p:column>
-			<p:column style="width: 20%;min-width: 200px !important;text-align: center; " priority="6">
-				<h:outputText
-					value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
-					style="font-weight: bold;color: #3b5998;" />
-				<br />
-				<h:outputText value="#{mes.creationDate}"
-					style="color: #9197a3;font-size: 10px;">
-					<f:convertDateTime type="date" locale="#{localeBean.locale}"
-						pattern="dd/MM/yyyy HH:mm" />
-				</h:outputText>
-				<br />
-				<h:outputText value="#{mes.criticity.name}"
-							styleClass="#{mes.criticity.name}" />
-			</p:column>
-			<p:column style="width: 65%;min-width: 200px">
-			<h:outputText id="viewButton"
-					style=";white-space: pre-wrap;" styleClass="Fs14"
-					value="#{mes.message}" title="#{messages.label_view} #{mes.name}" />			
-			</p:column>
-
-		</p:dataTable>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</f:facet>
+				<p:column style="width: 75px;text-align: center;min-width: 75px;">
+					<p:graphicImage styleClass="avatar" value="#{imageStreamer.image}"
+						rendered="#{mes.createdBy.picture != null}">
+						<f:param name="contactId" value="#{mes.createdBy.id}" />
+					</p:graphicImage>
+				</p:column>
+				<p:column
+					style="width: 20%;min-width: 200px !important;text-align: center; "
+					priority="6">
+					<h:outputText
+						value="#{mes.createdBy.firstname} #{mes.createdBy.name}"
+						style="font-weight: bold;color: #3b5998;" />
+					<br />
+					<h:outputText value="#{mes.creationDate}"
+						style="color: #9197a3;font-size: 10px;">
+						<f:convertDateTime type="date" locale="#{localeBean.locale}"
+							pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+					<br />
+					<h:outputText value="#{mes.criticity.name}"
+						styleClass="#{mes.criticity.name}" />
+				</p:column>
+				<p:column style="width: 65%;min-width: 200px">
+					<h:outputText id="viewButton" style=";white-space: pre-wrap;"
+						styleClass="Fs14" value="#{mes.message}"
+						title="#{messages.label_view} #{mes.name}" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
 	</h:form>
 </ui:composition>
 </html>

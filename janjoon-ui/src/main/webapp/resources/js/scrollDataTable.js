@@ -6,7 +6,6 @@ var isReal = false;
 var isRevised1 = false;
 var timelineContentIndex = null;
 
-
 function updateTabViewWidth() {
 
 	var width = 0;
@@ -21,17 +20,19 @@ function updateTabViewWidth() {
 
 	var $chart = $(".barChart:visible").last();
 
-	if ($chart != null) {
+	if ($chart.length != 0) {
 		var value = $chart.attr("id");
+		
+		if (PrimeFaces.widgets['' + value + '_Widget']) {
 
-		if (PF('' + value + '_Widget') != null)
 			PF('' + value + '_Widget').plot.replot();
+		}
 	}
-	
 
 }
 
-$(window).resize(function() {
+$(window).resize(
+		function() {
 			var width = 0;
 			if ($(window).width() > 960)
 				width = $("#layout-topbar").width()
@@ -43,7 +44,8 @@ $(window).resize(function() {
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
 		});
 
-$(document).ready(function() {
+$(document).ready(
+		function() {
 			var width = 0;
 			if ($(window).width() > 960)
 				width = $("#layout-topbar").width()

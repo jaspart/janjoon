@@ -3,6 +3,7 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -57,7 +58,7 @@ public class JJVersionBean {
 	private JJVersion version;
 	private List<JJVersion> versionList;
 	private boolean disabled = true;
-
+	private int activeDeliveryIndex;
 	private JJVersion versionAdmin;
 	private List<VersionDataModel> versionDataModel;
 
@@ -101,6 +102,14 @@ public class JJVersionBean {
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public int getActiveDeliveryIndex() {
+		return activeDeliveryIndex;
+	}
+
+	public void setActiveDeliveryIndex(int activeDeliveryIndex) {
+		this.activeDeliveryIndex = activeDeliveryIndex;
 	}
 
 	public JJVersion getVersionAdmin() {
@@ -245,6 +254,40 @@ public class JJVersionBean {
 		}
 		checkVersions = checkAll;
 		oldCheckVersions = checkAll;
+	}
+
+	public int contains(Long id) {
+		int i = 0;
+		int j = -1;
+
+		if (versionDataModelList != null && id != null && id != 0) {
+			while (i < versionDataModelList.size()) {
+				if (versionDataModelList.get(i).getVersion() != null
+						&& versionDataModelList.get(i).getVersion() != null
+						&& versionDataModelList.get(i).getVersion().getId()
+								.equals(id)) {
+					j = i;
+					i = versionDataModelList.size();
+				} else
+					i++;
+			}
+		}
+		if (id == null || id == 0)
+			j = versionDataModelList.size() - 1;
+
+		return j;
+
+	}
+
+	public void onTabDeliveryChange() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map<String, String> paramMap = context.getExternalContext()
+				.getRequestParameterMap();
+		if (paramMap.get("activeIndex") != null) {
+			String paramIndex = paramMap.get("activeIndex");
+			setActiveDeliveryIndex(Integer.valueOf(paramIndex));
+		}
 	}
 
 	public class VersionDataModel {

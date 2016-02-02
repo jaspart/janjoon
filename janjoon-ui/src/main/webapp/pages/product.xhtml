@@ -181,7 +181,7 @@
 							<p:selectOneMenu id="productManagerSelect"
 								disabled="#{jJProductBean.disabledProductMode}"
 								value="#{jJProductBean.productManager}" effect="fade"
-								filter="true" filterMatchMode="startsWith" required="true"
+								filter="#{!loginBean.mobile}" filterMatchMode="startsWith" required="true"
 								requiredMessage="#{messages.admin_product_new_manager_alert}"
 								widgetVar="productManagerWidget"
 								label="#{messages.admin_product_new_manager_label}">
@@ -212,6 +212,7 @@
 							<p:graphicImage styleClass="avatar" cache="false"
 								style="margin-top: 7%;" value="#{imageStreamer.imageProd}">
 								<f:param name="ProdId" value="#{jJProductBean.productAdmin.id}" />
+								<f:param name="Edit" value="true" />
 							</p:graphicImage>
 						</h:panelGroup>
 					</h:panelGroup>

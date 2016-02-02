@@ -166,7 +166,7 @@
 												<h:panelGroup layout="block" styleClass="Container70">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-															effect="fade" filter="true" filterMatchMode="startsWith"
+															effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 															converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter">
 															<f:selectItem itemValue="#{null}"
 																itemLabel="#{messages.label_select}" />
@@ -224,33 +224,26 @@
 										<p:commandButton id="colorBtn" icon="fa fa-info-circle Fs20"
 											type="button" styleClass="ShowOnDesktop"
 											title="#{messages.specification_video_help_title}" />
+											
 										<p:commandButton
 											title="#{messages.specification_req_exportTo}"
 											resetValues="true" onclick="PF('exportMenuWidget').show();"
 											update=":exportMenuPanel" icon="fa fa-arrow-down Fs20" />
+											
 										<p:commandButton
 											title="#{messages.specification_import_button} XML"
 											icon="fa fa-arrow-up Fs20"
 											disabled="#{jJProjectBean.project == null}"
 											update=":importXMLForm" onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
-										<!-- 										<p:commandLink actionListener="#{jJTestcaseBean.onrate}" -->
-										<!-- 											update=":growlForm :messageCreationForm :headerForm:communicationButton @this" -->
-										<!-- 											rendered="#{jJTestcaseBean.rendredTestCaseHistorical}" -->
-										<!-- 											onstart="PF('blockUIWidget').block()" -->
-										<!-- 											oncomplete="PF('blockUIWidget').unblock()"> -->
-										<!-- 											<p:graphicImage -->
-										<!-- 												name="#{!jJTestcaseBean.rated ? 'blackstar.ico' : 'yelstar.ico'}" -->
-										<!-- 												width="32" height="32" cache="false" library="images" -->
-										<!-- 												title="#{!jJTestcaseBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" /> -->
-
-										<!-- 										</p:commandLink> -->
+										
 										<p:commandButton actionListener="#{jJTestcaseBean.onrate}"
 											rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
+											title="#{!jJTestcaseBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}"
 											styleClass="SoftGrayBack"
-											icon="fa fa-star Fs20 #{!jJTestcaseBean.rated ? 'Yellow' : 'BoldGray'}"
+											icon="fa fa-star Fs20 #{jJTestcaseBean.rated ? 'Yellow' : 'BoldGray'}"
 											update=":growlForm :messageCreationForm :headerForm:communicationButton @this" />
 
 									</p:column>

@@ -52,6 +52,7 @@
 										<p:graphicImage styleClass="avatar" cache="false"
 											value="#{imageStreamer.imageComp}" style="margin-top: 7%;">
 											<f:param name="CompId" value="#{jJCompanyBean.companie.id}" />
+											<f:param name="Edit" value="true" />
 										</p:graphicImage>
 									</h:panelGroup>
 								</h:panelGroup>
@@ -222,7 +223,7 @@
 												<h:panelGroup layout="block" styleClass="Container60">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:calendar id="start" navigator="true" effect="slideDown"
-															pattern="dd/MM/yyyy" value="#{jJCompanyBean.day}">
+															pattern="dd/MM/yyyy" readonlyInput="true" value="#{jJCompanyBean.day}">
 															<p:ajax event="dateSelect" update="addHoliday" />
 														</p:calendar>
 													</h:panelGroup>

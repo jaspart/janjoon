@@ -9,29 +9,32 @@
 <ui:composition>
 	<h:panelGroup layout="block" styleClass="Container">
 		<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
-		<h:form id="activeSprintIndexForm">
-			<h:panelGroup layout="block" styleClass="Container30">
-				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel for="activeSprintIndex" value="Sprint:" />
+			<h:form id="activeSprintIndexForm">
+				<h:panelGroup layout="block" styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel for="activeSprintIndex" value="Sprint:" />
+					</h:panelGroup>
 				</h:panelGroup>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container70">
-				<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:selectOneMenu id="activeSprintIndex" value="#{jJSprintBean.activeTabSprintIndex}" 
-						effect="fade" onchange="PF('SprintTab').select(value);">						
-						<f:selectItems value="#{jJSprintBean.sprintList}" var="jjsprint"
-							itemLabel="#{jjsprint.sprint.name != null ? jjsprint.sprint.name : messages.project_scrum_new_title}"
-							itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />						
-					</p:selectOneMenu>
+				<h:panelGroup layout="block" styleClass="Container70">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="activeSprintIndex"
+							value="#{jJSprintBean.activeTabSprintIndex}" effect="fade"
+							onchange="PF('SprintTab').select(value);">
+							<f:selectItems value="#{jJSprintBean.sprintList}" var="jjsprint"
+								itemLabel="#{jjsprint.sprint.name != null ? jjsprint.sprint.name : messages.project_scrum_new_title}"
+								itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
 				</h:panelGroup>
-			</h:panelGroup>
-		</h:form>
+			</h:form>
 		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="Container100">
-		<f:event type="preRenderComponent"	listener="#{loginBean.updateTabViewWidth()}" />
+			<f:event type="preRenderComponent"
+				listener="#{loginBean.updateTabViewWidth()}" />
 			<p:tabView id="SprintTabView" dynamic="true" cache="true"
-				scrollable="true" widgetVar="SprintTab" styleClass="responsiveTabView"
-				value="#{jJSprintBean.sprintList}" style="max-width: 200px;"
+				scrollable="true" widgetVar="SprintTab"
+				styleClass="responsiveTabView" value="#{jJSprintBean.sprintList}"
+				style="max-width: 200px;"
 				onTabChange="sprintTabChangeHelper([{name: 'activeScrumIndex', value: index}]);"
 				var="jjsprint" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
 				<p:tab
@@ -44,218 +47,226 @@
 							styleClass="fa fa-plus-square Fs16" />
 					</f:facet>
 					<ui:include src="sprint.xhtml" />
-					<h:form id="sprintForm" rendered="#{!jjsprint.render}">					
+					<h:form id="sprintForm" rendered="#{!jjsprint.render}">
 						<h:panelGroup layout="block" styleClass="Container ui-fluid">
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
 								<p:panel header="#{messages.project_scrum_sprint_info}"
 									styleClass="Container99">
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
+									<h:panelGroup layout="block" styleClass="Container">
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintName"
+														value="#{messages.project_scrum_sprint_name}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintName"
+														value="#{jjsprint.sprint.name}" required="true"
+														requiredMessage="#{messages.project_scrum_sprint_name_required}">
+														<f:validateLength maximum="100" />
+													</p:inputText>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintcts"
+														value="#{messages.project_scrum_sprint_contacts}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:selectManyMenu id="sprintcts"
+														value="#{jjsprint.contacts}" scrollHeight="150"
+														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+														showCheckbox="true">
+														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+															itemLabel="#{ctc.firstname} #{ctc.name}"
+															itemValue="#{ctc}" />
+														<f:validator validatorId="listCategoriesValidator" />
+													</p:selectManyMenu>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<div class="EmptyBox1 barChart"
+											id="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintSD"
+														value="#{messages.project_scrum_new_start_label}" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:calendar id="sprintSD" navigator="true"
+														effect="slideDown" pattern="dd/MM/yyyy" required="true"
+														binding="#{startDateEdition}" readonlyInput="true"
+														value="#{jjsprint.sprint.startDate}">
+														<f:validator validatorId="dateRangeValidator" />
+														<f:attribute name="sprintMode" value="sprintSD" />
+													</p:calendar>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintED"
+														value="#{messages.project_scrum_new_end_label}" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:calendar id="sprintED" navigator="true" readonlyInput="true"
+														effect="slideDown" pattern="dd/MM/yyyy" required="true"
+														value="#{jjsprint.sprint.endDate}">
+														<f:validator validatorId="dateRangeValidator" />
+														<f:attribute name="startDateComponent"
+															value="#{startDateEdition}" />
+														<f:attribute name="sprintMode" value="sprintED" />
+													</p:calendar>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintPS"
+														value="#{messages.project_scrum_price_sold}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:spinner id="sprintPS" value="#{jjsprint.priseSold}"
+														prefix="$" min="0" readonly="true" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintPR"
+														value="#{messages.project_scrum_price_real}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:spinner id="sprintPR" value="#{jjsprint.priseReal}"
+														prefix="$" min="0" readonly="true" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintW"
+														value="#{messages.project_scrum_total}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintW" readonly="true"
+														value="#{jjsprint.workload}" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintC"
+														value="#{messages.project_scrum_consumed}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintC" readonly="true"
+														value="#{jjsprint.consumed}" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+									</h:panelGroup>
+									<f:facet name="footer">
+										<h:panelGroup layout="block" styleClass="Container">
 											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintName"
-													value="#{messages.project_scrum_sprint_name}:" />
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton id="editSprintButton"
+														disabled="{!loginBean.authorisationService.wProject}"
+														value="#{messages.label_save}" icon="fa fa-check Fs16"
+														process="@this,sprintName,sprintED,sprintSD,sprintcts"
+														actionListener="#{jJSprintBean.attrListener}"
+														onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+														update=":projecttabview:SprintTabView:sprintForm :growlForm">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+														<f:attribute name="create" value="edit" />
+													</p:commandButton>
+													<p:remoteCommand name="editSprint"
+														update=":projecttabview :growlForm"
+														action="#{jJSprintBean.editSprint}"
+														onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+												</h:panelGroup>
 											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:inputText id="sprintName" value="#{jjsprint.sprint.name}"
-													required="true"
-													requiredMessage="#{messages.project_scrum_sprint_name_required}">
-													<f:validateLength maximum="100" />
-												</p:inputText>
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
 											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintcts"
-													value="#{messages.project_scrum_sprint_contacts}:" />
+												rendered="#{jjsprint.enableDelete}"
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton id="deleteSprintButton"
+														rendered="#{jjsprint.enableDelete}"
+														disabled="{!loginBean.authorisationService.wProject}"
+														value="#{messages.label_delete}" icon="fa fa-trash Fs16"
+														action="#{jJSprintBean.deleteSprint(jjsprint)}"
+														onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+														update=":projecttabview :growlForm">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+													</p:commandButton>
+												</h:panelGroup>
 											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:selectManyMenu id="sprintcts"
-													value="#{jjsprint.contacts}" scrollHeight="150"
-													converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-													showCheckbox="true">
-													<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
-														itemLabel="#{ctc.firstname} #{ctc.name}"
-														itemValue="#{ctc}" />
-													<f:validator validatorId="listCategoriesValidator" />
-												</p:selectManyMenu>
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<div class="EmptyBox1 barChart"
-										id="barChart_#{jjsprint.sprint.id}" />
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
 											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintSD"
-													value="#{messages.project_scrum_new_start_label}" />
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton
+														value="#{messages.project_gantt_import_button}"
+														id="createTaskttButton" icon="fa fa-plus-square Fs16"
+														update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :importTaskDialogPanel :growlForm"
+														immediate="true" onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock();"
+														resetValues="true"
+														actionListener="#{jJTaskBean.loadImportFormat}"
+														title="#{messages.project_gantt_import_button}">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+														<f:attribute name="mode" value="scrum" />
+													</p:commandButton>
+												</h:panelGroup>
 											</h:panelGroup>
 										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:calendar id="sprintSD" navigator="true"
-													effect="slideDown" pattern="dd/MM/yyyy" required="true"
-													binding="#{startDateEdition}"
-													value="#{jjsprint.sprint.startDate}">
-													<f:validator validatorId="dateRangeValidator" />
-													<f:attribute name="sprintMode" value="sprintSD" />
-												</p:calendar>
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintED"
-													value="#{messages.project_scrum_new_end_label}" />
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:calendar id="sprintED" navigator="true"
-													effect="slideDown" pattern="dd/MM/yyyy" required="true"
-													value="#{jjsprint.sprint.endDate}">
-													<f:validator validatorId="dateRangeValidator" />
-													<f:attribute name="startDateComponent"
-														value="#{startDateEdition}" />
-													<f:attribute name="sprintMode" value="sprintED" />
-												</p:calendar>
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="EmptyBox1" />
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintPS"
-													value="#{messages.project_scrum_price_sold}:" />
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:spinner id="sprintPS" value="#{jjsprint.priseSold}"
-													prefix="$" min="0" readonly="true" />
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintPR"
-													value="#{messages.project_scrum_price_real}:" />
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:spinner id="sprintPR" value="#{jjsprint.priseReal}"
-													prefix="$" min="0" readonly="true" />
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="EmptyBox1" />
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintW"
-													value="#{messages.project_scrum_total}:" />
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:inputText id="sprintW" readonly="true"
-													value="#{jjsprint.workload}" />
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block"
-										styleClass="Container50 Responsive50">
-										<h:panelGroup layout="block" styleClass="Container40">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndentLabel">
-												<p:outputLabel for="sprintC"
-													value="#{messages.project_scrum_consumed}:" />
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="Container60">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
-												<p:inputText id="sprintC" readonly="true"
-													value="#{jjsprint.consumed}" />
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="EmptyBox1" />
-									<h:panelGroup layout="block"
-										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
-										<h:panelGroup layout="block" styleClass="ContainerIndent">
-											<p:commandButton id="editSprintButton"
-												disabled="{!loginBean.authorisationService.wProject}"
-												value="#{messages.label_save}" icon="fa fa-check Fs16"
-												process="@this,sprintName,sprintED,sprintSD,sprintcts"
-												actionListener="#{jJSprintBean.attrListener}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
-												update=":projecttabview:SprintTabView:sprintForm :growlForm">
-												<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-												<f:attribute name="create" value="edit" />
-											</p:commandButton>
-											<p:remoteCommand name="editSprint"
-												update=":projecttabview :growlForm"
-												action="#{jJSprintBean.editSprint}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
-										</h:panelGroup>
-									</h:panelGroup>
-										<h:panelGroup layout="block" rendered="#{jjsprint.enableDelete}"
-										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
-										<h:panelGroup layout="block" styleClass="ContainerIndent">
-											<p:commandButton id="deleteSprintButton" rendered="#{jjsprint.enableDelete}"
-												disabled="{!loginBean.authorisationService.wProject}"
-												value="#{messages.label_delete}" icon="fa fa-trash Fs16"												
-												action="#{jJSprintBean.deleteSprint(jjsprint)}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
-												update=":projecttabview :growlForm">
-												<f:attribute name="sprintUtilValue" value="#{jjsprint}" />												
-											</p:commandButton>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block"
-										styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}" >
-										<h:panelGroup layout="block" styleClass="ContainerIndent">
-											<p:commandButton
-												value="#{messages.project_gantt_import_button}"
-												id="createTaskttButton" icon="fa fa-plus-square Fs16"
-												update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :importTaskDialogPanel :growlForm"
-												immediate="true" onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock();"
-												resetValues="true"
-												actionListener="#{jJTaskBean.loadImportFormat}"
-												title="#{messages.project_gantt_import_button}">
-												<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-												<f:attribute name="mode" value="scrum" />
-											</p:commandButton>
-										</h:panelGroup>
-									</h:panelGroup>
+									</f:facet>
 								</p:panel>
 							</h:panelGroup>
 							<h:panelGroup id="sprintChartPanelGrid"
@@ -264,10 +275,9 @@
 								<p:panel header="#{messages.project_scrum_sprint_chart}"
 									styleClass="Container99">
 									<h:panelGroup layout="block" styleClass="Container100">
-										<p:chart type="bar" responsive="true"
-											id="barChart_#{jjsprint.sprint.id}"
+										<p:chart type="bar" responsive="true"											
 											model="#{jjsprint.chartModel}"
-											widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
+											widgetVar="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}_Widget"
 											style="height:300px;" />
 									</h:panelGroup>
 								</p:panel>
@@ -307,7 +317,7 @@
 
 													<p:panel id="todoIcon"
 														style="background: initial;border: none;text-align: center;min-height: 40px;">
-														<h:outputText 	styleClass="fa fa-arrows Fs20" />
+														<h:outputText styleClass="fa fa-arrows Fs20" />
 													</p:panel>
 													<p:draggable for="todoIcon" revert="true" scope="TodoTask"
 														disabled="#{jjsprint.disableDragDrop}" />
@@ -466,7 +476,7 @@
 													style="text-align: center;width: 15%;padding-right: 0px;padding-left: 0px;padding-top: 0px;padding-bottom: 0px;">
 													<p:panel id="doneIcon"
 														style="background: initial;border: none;text-align: center;min-height: 40px;">
-														<h:outputText 	styleClass="fa fa-arrows Fs20" />
+														<h:outputText styleClass="fa fa-arrows Fs20" />
 													</p:panel>
 													<p:draggable for="doneIcon" revert="true" scope="DoneTask"
 														disabled="#{jjsprint.disableDragDrop}" />

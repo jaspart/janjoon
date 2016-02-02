@@ -70,7 +70,7 @@
 					styleClass="Container70">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="categorySelectOneMenu"
-							value="#{jJTaskBean.importCategory}" effect="fade" filter="true"
+							value="#{jJTaskBean.importCategory}" effect="fade" filter="#{!loginBean.mobile}"
 							filterMatchMode="startsWith"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
 							disabled="#{jJTaskBean.disabledFilter}">
@@ -101,7 +101,7 @@
 					styleClass="Container70">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="statusSelectOneMenu"
-							value="#{jJTaskBean.importStatus}" effect="fade" filter="true"
+							value="#{jJTaskBean.importStatus}" effect="fade" filter="#{!loginBean.mobile}"
 							filterMatchMode="startsWith"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 							disabled="#{jJTaskBean.disabledFilter}">
@@ -214,11 +214,11 @@
 							headerText="#{messages.importTask_headerTable_startDate}">
 							<p:cellEditor>
 								<f:facet name="output">
-									<p:calendar value="#{format.startDate}" navigator="true"
+									<p:calendar value="#{format.startDate}" readonlyInput="true" navigator="true"
 										pattern="yyyy/MM/dd HH:mm" />
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar value="#{format.startDate}" navigator="true"
+									<p:calendar value="#{format.startDate}" readonlyInput="true" navigator="true"
 										pattern="yyyy/MM/dd HH:mm">
 									</p:calendar>
 

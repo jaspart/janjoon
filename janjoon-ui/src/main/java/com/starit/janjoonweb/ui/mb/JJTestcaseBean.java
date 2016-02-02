@@ -298,7 +298,8 @@ public class JJTestcaseBean {
 
 				}
 				if (rowNames != null) {
-					width = "width: "+180 + (rowNames.size() * 70) + "px";
+					width = 180 + (rowNames.size() * 70)+"";
+					width = "width: "+width+ "px";
 
 					if (180 + (rowNames.size() * 70) > 910)
 						width = "";
@@ -306,6 +307,8 @@ public class JJTestcaseBean {
 					width = "width: "+170 + "px";
 
 			}
+//			utiliser l'objet admin dans image streamer
+//			changer les bouton rating dans bug et requirelent
 		}
 		return rowNames;
 	}

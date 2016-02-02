@@ -46,7 +46,7 @@
 						<h:panelGroup layout="block" styleClass="Container50">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:calendar id="projectSD" navigator="true" effect="slideDown"
-									pattern="dd/MM/yyyy" required="true"
+									pattern="dd/MM/yyyy" required="true" readonlyInput="true"
 									readonly="#{!loginBean.authorisationService.adminProject}"
 									binding="#{startDateProjectEdition}"
 									requiredMessage="#{messages.admin_project_new_startDate_alert}"
@@ -64,7 +64,7 @@
 						<h:panelGroup layout="block" styleClass="Container50">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:calendar id="projectED" navigator="true" effect="slideDown"
-									pattern="dd/MM/yyyy" required="true"
+									pattern="dd/MM/yyyy" required="true" readonlyInput="true"
 									readonly="#{!loginBean.authorisationService.adminProject}"
 									requiredMessage="#{messages.admin_project_new_endDate_alert}"
 									value="#{jJProjectBean.project.endDate}">

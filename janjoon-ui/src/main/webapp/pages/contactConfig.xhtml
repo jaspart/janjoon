@@ -29,6 +29,10 @@
 .paginated .ui-datalist-data {
 	padding-left: 10px;
 }
+
+.pe-timepicker-input {
+	width: 100%;
+}
 </style>
 	</ui:define>
 	<ui:define name="content">
@@ -129,7 +133,8 @@
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
 													<p:selectOneMenu id="lastproject"
 														value="#{jJContactBean.contactUtil.lastProject}"
-														effect="fade" filter="true" filterMatchMode="startsWith"
+														effect="fade" filter="#{!loginBean.mobile}"
+														filterMatchMode="startsWith"
 														converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
 														<f:selectItem itemValue="#{null}"
@@ -158,7 +163,8 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:selectOneMenu id="lastproduct"
 													value="#{jJContactBean.contactUtil.lastProduct}"
-													effect="fade" filter="true" filterMatchMode="startsWith"
+													effect="fade" filter="#{!loginBean.mobile}"
+													filterMatchMode="startsWith"
 													converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 													<f:selectItem itemValue="#{null}"
@@ -186,7 +192,8 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:selectOneMenu id="lastversion"
 													value="#{jJContactBean.contactUtil.lastVersion}"
-													effect="fade" filter="true" filterMatchMode="startsWith"
+													effect="fade" filter="#{!loginBean.mobile}"
+													filterMatchMode="startsWith"
 													converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
 													<f:selectItem itemValue="#{null}"
@@ -331,6 +338,14 @@
 											onstart="PF('blockUIWidget').block();"
 											oncomplete="PF('blockUIWidget').unblock();" />
 									</pe:timePicker>
+									<!-- 									<p:calendar value="#{day.startDate1}" pattern="HH:mm"  -->
+									<!-- 										timeOnly="true" readonlyInput="true" showButtonPanel="true"> -->
+									<!-- 										<p:ajax event="dateSelect" -->
+									<!-- 											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}" -->
+									<!-- 											update=":workdaysCalendar :vacationForm :configForm :growlForm" -->
+									<!-- 											onstart="PF('blockUIWidget').block();" -->
+									<!-- 											oncomplete="PF('blockUIWidget').unblock();" /> -->
+									<!-- 									</p:calendar> -->
 								</p:column>
 								<p:column width="15%">
 									<pe:timePicker value="#{day.endDate1}"
@@ -431,7 +446,7 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:calendar id="start" navigator="true" effect="slideDown"
 													required="true" pattern="dd/MM/yyyy HH:mm"
-													binding="#{startDateCreation}"
+													binding="#{startDateCreation}" readonlyInput="true"
 													placeholder="#{messages.contact_from}"
 													value="#{jJContactBean.startDate}">
 													<p:ajax event="dateSelect" update="addVacation :growlForm" />
@@ -442,7 +457,7 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:calendar id="end" navigator="true" effect="slideDown"
 													required="true" pattern="dd/MM/yyyy HH:mm"
-													value="#{jJContactBean.endDate}"
+													value="#{jJContactBean.endDate}" readonlyInput="true"
 													placeholder="#{messages.contact_to}">
 													<f:validator validatorId="dateRangeValidator" />
 													<f:attribute name="startDateComponent"
@@ -472,8 +487,8 @@
 			</h:panelGroup>
 		</h:panelGroup>
 		<p:dialog id="changePhotoDialog" draggable="false" modal="true"
-			header="Change Photo" widgetVar="changePhotoDialogWidget"
-			dynamic="true" resizable="false" responsive="true">
+			header="Photo" widgetVar="changePhotoDialogWidget" dynamic="true"
+			resizable="false" responsive="true">
 			<p:outputPanel id="changePhotoPanel">
 				<h:form id="changePhotoForm">
 					<p:fileUpload

@@ -45,7 +45,7 @@
 						<p:selectOneMenu id="status"
 							value="#{jJRequirementBean.requirementStatus}" required="true"
 							requiredMessage="#{messages.specification_create_status_alert}"
-							effect="fade" filter="true" filterMatchMode="startsWith"
+							effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 							disabled="#{jJRequirementBean.disabledStatus}">
 							<f:converter
 								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
@@ -72,7 +72,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="project"
 							value="#{jJRequirementBean.requirementProject}" effect="fade"
-							filter="true" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 							disabled="#{jJRequirementBean.disabledProject}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
@@ -101,7 +101,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="chapter"
 							value="#{jJRequirementBean.requirementChapter}" effect="fade"
-							filter="true" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
 
 							<f:selectItem itemValue="#{null}"
@@ -128,7 +128,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="product"
 							value="#{jJRequirementBean.requirementProduct}" effect="fade"
-							filter="true" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 							<f:selectItem itemValue="#{null}"
@@ -157,7 +157,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="version"
 							value="#{jJRequirementBean.requirementVersion}" effect="fade"
-							filter="true" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 							disabled="#{jJRequirementBean.disabledVersion}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
@@ -178,7 +178,7 @@
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:selectCheckboxMenu id="lowRequirement"
 						value="#{jJRequirementBean.selectedLowRequirementsList}"
-						label="#{jJRequirementBean.lowCategoryName}" filter="true"
+						label="#{jJRequirementBean.lowCategoryName}" filter="#{!loginBean.mobile}"
 						filterText="Filter" filterMatchMode="contains"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 						disabled="#{jJRequirementBean.disabledLowRequirements}">
@@ -194,7 +194,7 @@
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:selectCheckboxMenu id="mediumRequirement"
 						value="#{jJRequirementBean.selectedMediumRequirementsList}"
-						label="#{jJRequirementBean.mediumCategoryName}" filter="true"
+						label="#{jJRequirementBean.mediumCategoryName}" filter="#{!loginBean.mobile}"
 						filterText="Filter" filterMatchMode="contains"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 						disabled="#{jJRequirementBean.disabledMediumRequirements}">
@@ -211,7 +211,7 @@
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:selectCheckboxMenu id="highRequirement"
 						value="#{jJRequirementBean.selectedHighRequirementsList}"
-						label="#{jJRequirementBean.highCategoryName}" filter="true"
+						label="#{jJRequirementBean.highCategoryName}" filter="#{!loginBean.mobile}"
 						filterText="Filter" filterMatchMode="contains"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
 						disabled="#{jJRequirementBean.disabledHighRequirements}">

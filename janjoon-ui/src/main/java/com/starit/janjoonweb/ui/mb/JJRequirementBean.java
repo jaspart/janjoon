@@ -2297,7 +2297,7 @@ public class JJRequirementBean {
 				if (cat.getEnabled())
 					updateTemplate(cat.getId(), null, true, true);
 			}
-			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+			logger.info("REQ-Tracker=" + (System.currentTimeMillis() - t));
 		} else {
 
 			for (int i = 0; i < 3; i++) {
@@ -3662,9 +3662,7 @@ public class JJRequirementBean {
 			JJCategoryService jJCategoryService,
 			JJRequirementService jJRequirementService,
 			JJTaskService jJTaskService, JJTestcaseService jJTestcaseService,
-			JJTestcaseexecutionService jJTestcaseexecutionService) {
-
-		long t = System.currentTimeMillis();
+			JJTestcaseexecutionService jJTestcaseexecutionService) {		
 
 		boolean UP = jJRequirementService.haveLinkUp(requirement)
 				|| jJCategoryService.isHighLevel(requirement.getCategory(),
@@ -3677,35 +3675,26 @@ public class JJRequirementBean {
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
 
-		boolean TASK = true;
-		boolean ENCOURS = false;
+		boolean TASK = true;		
 		boolean FINIS = true;
 
-		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, false, requirement, null, null, true, false, false, null);
-		if (tasks.isEmpty()) {
-			TASK = false;
-		}
-		if (UP && DOWN && TASK)
-			for (JJTask task : tasks) {
-				if (!(task.getEndDateReal() != null || (task.getStatus() != null && task
-						.getStatus().getName().equalsIgnoreCase("DONE")))) {
-					ENCOURS = true;
-					FINIS = false;
-					break;
-				}
-			}
 
+		TASK = jJTaskService.haveTask(requirement, true, false, false);
+		if(UP && DOWN && TASK){			
+			FINIS = jJTaskService.haveTask(requirement, true, true, false);			
+		}
+		
 		String rowStyleClass = "";
 
 		if (UP && DOWN && TASK) {
 
-			if (ENCOURS && !FINIS) {
+			if (!FINIS) {
 				rowStyleClass = "Progress";
-			} else if (!ENCOURS && FINIS) {
-
+			} else if (FINIS) {
+				long t = System.currentTimeMillis();
 				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
 						requirement, null, null, null, true, false, false);
+				
 				boolean SUCCESS = true;
 
 				for (JJTestcase testcase : testcases) {
@@ -3734,6 +3723,7 @@ public class JJRequirementBean {
 				} else {
 					rowStyleClass = "InTesting";
 				}
+				logger.info("TestCaseCalcul = "+ (System.currentTimeMillis() - t));
 
 			}
 
@@ -3743,7 +3733,7 @@ public class JJRequirementBean {
 			if (!(UP && DOWN && TASK))
 				rowStyleClass = "UnLinked";
 		}
-		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
+		
 		return rowStyleClass;
 	}
 
@@ -3768,6 +3758,7 @@ public class JJRequirementBean {
 	public List<RequirementUtil> getListOfRequiremntUtils(
 			List<JJRequirement> requirments) {
 
+		long t = System.currentTimeMillis();
 		if (requirments != null) {
 			List<RequirementUtil> requirementUtils = new ArrayList<RequirementUtil>();
 			for (JJRequirement req : requirments) {
@@ -3775,7 +3766,10 @@ public class JJRequirementBean {
 						req, jJCategoryService, jJRequirementService,
 						jJTaskService, jJTestcaseService,
 						jJTestcaseexecutionService)));
+				//requirementUtils.add(new RequirementUtil(req, ""));
+				
 			}
+			logger.error("getListOfRequiremntUtils ="+ (System.currentTimeMillis() - t));
 			return requirementUtils;
 		} else
 			return null;

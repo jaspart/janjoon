@@ -6,140 +6,146 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition>
-	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">		
+	<h:form id="sprintCreationForm" rendered="#{jjsprint.render}">
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<p:panel header="#{messages.project_scrum_new_title}"
 				styleClass="Container70 Responsive100">
-				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
-						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-							<p:outputLabel for="sprintCName"
-								value="#{messages.project_scrum_sprint_name}:" />
+				<h:panelGroup layout="block" styleClass="Container">
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="sprintCName"
+									value="#{messages.project_scrum_sprint_name}:" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:inputTextarea id="sprintCName"
+									value="#{jjsprint.sprint.name}" required="true"
+									requiredMessage="#{messages.project_scrum_sprint_name_required}"
+									readonly="#{jjsprint.neditabale}">
+									<f:validateLength maximum="100" />
+								</p:inputTextarea>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
-						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:inputTextarea id="sprintCName" value="#{jjsprint.sprint.name}"
-								required="true"
-								requiredMessage="#{messages.project_scrum_sprint_name_required}"
-								readonly="#{jjsprint.neditabale}">
-								<f:validateLength maximum="100" />
-							</p:inputTextarea>
-						</h:panelGroup>
-					</h:panelGroup>
-				</h:panelGroup>
 
-				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
-						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-							<p:outputLabel for="sprintcts"
-								value="#{messages.project_scrum_sprint_contacts}:" />
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="sprintcts"
+									value="#{messages.project_scrum_sprint_contacts}:" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:selectManyMenu id="sprintcts" scrollHeight="150"
+									value="#{jjsprint.sprint.contacts}"
+									disabled="#{jjsprint.neditabale}"
+									converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+									showCheckbox="true">
+									<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+										itemLabel="#{ctc.firstname} #{ctc.name}" itemValue="#{ctc}" />
+									<f:validator validatorId="listCategoriesValidator" />
+								</p:selectManyMenu>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
-						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:selectManyMenu id="sprintcts" scrollHeight="150"
-								value="#{jjsprint.sprint.contacts}"
-								disabled="#{jjsprint.neditabale}"
-								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-								showCheckbox="true">
-								<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
-									itemLabel="#{ctc.firstname} #{ctc.name}" itemValue="#{ctc}" />
-								<f:validator validatorId="listCategoriesValidator" />
-							</p:selectManyMenu>
-						</h:panelGroup>
-					</h:panelGroup>
-				</h:panelGroup>
 
-				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
-						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-							<p:outputLabel for="sprintCSD"
-								value="#{messages.project_scrum_new_start_label}" />
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="sprintCSD"
+									value="#{messages.project_scrum_new_start_label}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
+									pattern="dd/MM/yyyy" required="true"
+									binding="#{startDateCreation}" readonlyInput="true"
+									disabled="#{jjsprint.neditabale}"
+									value="#{jjsprint.sprint.startDate}">
+									<f:validator validatorId="dateRangeValidator" />
+									<f:attribute name="sprintMode" value="sprintSD" />
+								</p:calendar>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
-						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:calendar id="sprintCSD" navigator="true" effect="slideDown"
-								pattern="dd/MM/yyyy" required="true"
-								binding="#{startDateCreation}" disabled="#{jjsprint.neditabale}"
-								value="#{jjsprint.sprint.startDate}">
-								<f:validator validatorId="dateRangeValidator" />
-								<f:attribute name="sprintMode" value="sprintSD" />
-							</p:calendar>
-						</h:panelGroup>
-					</h:panelGroup>
-				</h:panelGroup>
 
-				<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-					<h:panelGroup layout="block" styleClass="Container40">
-						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-							<p:outputLabel for="sprintCED"
-								value="#{messages.project_scrum_new_end_label}" />
+					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="sprintCED"
+									value="#{messages.project_scrum_new_end_label}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:calendar id="sprintCED" navigator="true" effect="slideDown"
+									pattern="dd/MM/yyyy" required="true"
+									disabled="#{jjsprint.neditabale}" readonlyInput="true"
+									value="#{jjsprint.sprint.endDate}">
+									<f:validator validatorId="dateRangeValidator" />
+									<f:attribute name="startDateComponent"
+										value="#{startDateCreation}" />
+									<f:attribute name="sprintMode" value="sprintED" />
+								</p:calendar>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="Container60">
-						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:calendar id="sprintCED" navigator="true" effect="slideDown"
-								pattern="dd/MM/yyyy" required="true"
-								disabled="#{jjsprint.neditabale}"
-								value="#{jjsprint.sprint.endDate}">
-								<f:validator validatorId="dateRangeValidator" />
-								<f:attribute name="startDateComponent"
-									value="#{startDateCreation}" />
-								<f:attribute name="sprintMode" value="sprintED" />
-							</p:calendar>
+				</h:panelGroup>
+				<f:facet name="footer">
+					<h:panelGroup layout="block" styleClass="Container">
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="createSprintButton"
+									value="#{messages.label_create}" icon="fa fa-save Fs16"
+									disabled="#{jjsprint.neditabale or !loginBean.authorisationService.wProject}"
+									actionListener="#{jJSprintBean.attrListener}"
+									oncomplete="updateTabViewWidth();"
+									update=":projecttabview:SprintTabView:sprintCreationForm :growlForm">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									<f:attribute name="create" value="create" />
+								</p:commandButton>
+								<p:remoteCommand name="createSprint"
+									update=":projecttabview :growlForm"
+									action="#{jJSprintBean.createSprint}"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+							</h:panelGroup>
+						</h:panelGroup>
+
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton value="#{messages.project_scrum_done_button}"
+									id="doneButtonr" update=":projecttabview :growlForm"
+									immediate="true" icon="fa fa-check Fs16"
+									disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
+									actionListener="#{jJSprintBean.doneEvent}"
+									onstart="PF('blockUIWidget').block()"
+									title="#{messages.project_scrum_done_button}"
+									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+								</p:commandButton>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container33 Responsive">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton value="#{messages.project_gantt_import_button}"
+									disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
+									icon="fa fa-plus-square Fs16" immediate="true"
+									onstart="PF('blockUIWidget').block()" resetValues="true"
+									oncomplete="PF('blockUIWidget').unblock()"
+									actionListener="#{jJTaskBean.loadImportFormat}"
+									title="#{messages.project_gantt_import_button}">
+									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+									<f:attribute name="mode" value="scrum" />
+								</p:commandButton>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup>
-
-				<h:panelGroup layout="block" styleClass="Container33 Responsive">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton id="createSprintButton"
-							value="#{messages.label_create}" icon="fa fa-save Fs16"
-							disabled="#{jjsprint.neditabale or !loginBean.authorisationService.wProject}"
-							actionListener="#{jJSprintBean.attrListener}"
-							oncomplete="updateTabViewWidth();"
-							update=":projecttabview:SprintTabView:sprintCreationForm :growlForm">
-							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-							<f:attribute name="create" value="create" />
-						</p:commandButton>
-						<p:remoteCommand name="createSprint"
-							update=":projecttabview :growlForm"
-							action="#{jJSprintBean.createSprint}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
-					</h:panelGroup>
-				</h:panelGroup>
-
-				<h:panelGroup layout="block" styleClass="Container33 Responsive">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton value="#{messages.project_scrum_done_button}"
-							id="doneButtonr" update=":projecttabview :growlForm"
-							immediate="true" icon="fa fa-check Fs16"
-							disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
-							actionListener="#{jJSprintBean.doneEvent}"
-							onstart="PF('blockUIWidget').block()"
-							title="#{messages.project_scrum_done_button}"
-							oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();">
-							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-						</p:commandButton>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="Container33 Responsive">
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton value="#{messages.project_gantt_import_button}"
-							disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
-							icon="fa fa-plus-square Fs16" immediate="true"
-							onstart="PF('blockUIWidget').block()" resetValues="true"
-							oncomplete="PF('blockUIWidget').unblock()"
-							actionListener="#{jJTaskBean.loadImportFormat}"
-							title="#{messages.project_gantt_import_button}">
-							<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-							<f:attribute name="mode" value="scrum" />
-						</p:commandButton>
-					</h:panelGroup>
-				</h:panelGroup>
+				</f:facet>
 			</p:panel>
 		</h:panelGroup>
 	</h:form>

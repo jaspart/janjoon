@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -189,7 +191,7 @@ public class DevelopmentBean implements Serializable {
 
 		if (configuration != null && getConfigManager() != null
 				&& version != null && product != null) {
-
+			long t = System.currentTimeMillis();
 			render = true;
 			treeOperation = new TreeOperation(configManager);
 			tree = configManager.listRepositoryContent(version.getName());
@@ -212,6 +214,8 @@ public class DevelopmentBean implements Serializable {
 				}
 				selectedTree = null;
 			}
+			
+			logger.error("jDev ="+ (System.currentTimeMillis() - t));
 
 		} else {
 			render = false;
@@ -287,6 +291,7 @@ public class DevelopmentBean implements Serializable {
 
 	public AbstractConfigManager getConfigManager() {
 
+		long t = System.currentTimeMillis();
 		if (configuration.getParam().equalsIgnoreCase("git") && product != null
 				&& version != null) {
 
@@ -359,7 +364,7 @@ public class DevelopmentBean implements Serializable {
 
 		} else
 			configManager = null;
-
+		logger.error("jDevConfigManager ="+ (System.currentTimeMillis() - t));
 		return configManager;
 
 	}
@@ -665,10 +670,22 @@ public class DevelopmentBean implements Serializable {
 	public void startTask() {
 		task.setStartDateReal(new Date());
 		jJTaskBean.setTask(task);
-		jJTaskBean.updateTask("dev");
-		// task=jJTaskService.findJJTask(task.getId());
-		// tasks = jJTaskService.getTasksByProduct(product, project);
+		jJTaskBean.updateTask("dev");		
 
+	}
+	
+	public List<JJTask> completeTask(String query) {		
+
+		List<JJTask> suggestions = new ArrayList<JJTask>();
+
+		suggestions.add(null);
+		for (JJTask tt : getTasks()) {
+			String sug = String.valueOf(tt.getName());
+			if (sug.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(tt);
+			}
+		}
+		return suggestions;
 	}
 
 	public void onSelectTree(NodeSelectEvent event) {
@@ -953,6 +970,17 @@ public class DevelopmentBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR, event.getFile().getFileName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+
+	}
+	
+	public String getActiveIndex() {
+
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
+				: "0";
+
+	}
+
+	public void setActiveIndex(String index) {
 
 	}
 

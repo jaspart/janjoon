@@ -240,8 +240,8 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="projectManagerSelect"
 								value="#{jJProjectBean.projectManager}" effect="fade"
-								filter="true" filterMatchMode="startsWith" required="true"
-								label="Project Manager"
+								filter="#{!loginBean.mobile}" filterMatchMode="startsWith" required="true"
+								label="#{messages.admin_project_new_manager_label}"
 								requiredMessage="#{messages.admin_project_new_manager_alert}"
 								widgetVar="projectManagerWidget">
 								<f:converter
@@ -257,7 +257,7 @@
 				<h:panelGroup layout="block" styleClass="ui-fluid Container50 Responsive50">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:calendar id="projectSD" navigator="true" effect="slideDown"
-							pattern="dd/MM/yyyy" required="true"
+							pattern="dd/MM/yyyy" required="true" readonlyInput="true"
 							binding="#{startDateEdition}" title="#{messages.admin_project_new_startDate_label}"
 							requiredMessage="#{messages.admin_project_new_startDate_alert}"
 							placeholder="#{messages.admin_project_new_startDate_label}"
@@ -269,7 +269,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:calendar id="projectED" navigator="true" effect="slideDown"
 							pattern="dd/MM/yyyy" required="true" title="#{messages.admin_project_new_endDate_label}"
-							placeholder="#{messages.admin_project_new_endDate_label}"
+							placeholder="#{messages.admin_project_new_endDate_label}" readonlyInput="true"
 							requiredMessage="#{messages.admin_project_new_endDate_alert}"
 							value="#{jJProjectBean.projectAdmin.endDate}">
 							<f:validator validatorId="dateRangeValidator" />
@@ -286,6 +286,7 @@
 							<p:graphicImage styleClass="avatar" cache="false"
 								value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
 								<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
+								<f:param name="Edit" value="true" />
 							</p:graphicImage>
 						</h:panelGroup>
 					</h:panelGroup>

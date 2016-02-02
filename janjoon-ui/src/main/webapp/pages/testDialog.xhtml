@@ -50,7 +50,7 @@
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:selectOneMenu id="requirement"
 											value="#{jJTestcaseBean.requirement}" effect="fade"
-											filter="true" required="true" filterMatchMode="startsWith"
+											filter="#{!loginBean.mobile}" required="true" filterMatchMode="startsWith"
 											widgetVar="requirementWidget"
 											disabled="#{jJTestcaseBean.disabledTestcaseMode}"
 											requiredMessage="#{messages.test_new_name_alert}">

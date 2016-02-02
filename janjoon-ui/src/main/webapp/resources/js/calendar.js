@@ -115,6 +115,15 @@ PrimeFaces.locales['fr'] = {
 	allDayText : 'Toute la journée'
 };
 
+//$(".hasDatepicker").datepicker({
+//	showButtonPanel : true,
+//	closeText : 'Clear',
+//	onClose : function(dateText, inst) {
+//		if ($(window.event.srcElement).hasClass('ui-datepicker-close'))
+//			$(".hasDatepicker").val('');
+//	}
+//});
+
 function setMenuActiveIndex(activeIndex) {
 
 	var tabMenuPanel = $("#headerForm\\:tabMenu");
@@ -150,7 +159,9 @@ function removeMenuActiveIndex() {
 
 $(window).resize(
 		function() {
-
+			
+			updateComDataTable();
+			
 			$(".ui-dialog-content").css("maxWidth",
 					($(window).width() * 90 / 100) + "px");
 			$(".ui-dialog-content").css("maxHeight",
@@ -163,27 +174,24 @@ $(window).resize(
 				my : "center center",
 				at : "center center",
 				of : window
-			});
+			});				
 			// End-Responsive
-			// var width = $(window).width() * 82 / 100;
-			//
-			// if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera
-			// Mini/i
-			// .test(navigator.userAgent)) {
-			// width = $(window).width() * 95 / 100;
-			// } else if ($(window).width() < 960)
-			// width = $(window).width() * 95 / 100;
-			// $("#layoutsGrid").width(width);
+			
 		});
 
 $(function() {	
-
 	$(".ui-dialog-content").css("maxWidth",
 			($(window).width() * 90 / 100) + "px");
 	$(".ui-dialog-content").css("maxHeight",
 			($(window).height() * 85 / 100) + "px");
 });
 
+function updateComDataTable() {
+
+	if ($("#comForm\\:comDataTable").length != 0) {
+		updateDataTable();
+	}
+}
 
 $(document).ready(function() {
 	$("#rowToggler").click(function() {

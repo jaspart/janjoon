@@ -8,397 +8,464 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../templates/template.xhtml">
-	<link type="text/css" rel="stylesheet"
-		href="#{facesContext.externalContext.requestContextPath}/syntaxhighlighter/syntaxhighlighter.css" />
-	<link type="text/css" rel="stylesheet"
-		href="/syntaxhighlighter/standard.css" />
-	<ui:define name="content">
+	<ui:define name="head">
 		<style type="text/css">
 .CodeMirror-scroll {
 	height: 450px;
 }
+
+.reqTree {
+	height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: rgba(255, 0, 0, 0);
+	padding: 2px;
+}
 </style>
-		<!-- 		<h:outputScript library="js" name="codeMirror.js" /> -->
+		<h:outputScript library="js" name="dev.js" />
+	</ui:define>
+	<ui:define name="content">
 		<h:form>
 			<p:remoteCommand name="updateHeader"
 				oncomplete="PF('blockUIWidget').unblock()"
 				update=":contentPanel :growlForm" />
 		</h:form>
-		<br />
-		<p:panel id="errorPanel"
-			header="#{messages['dev.panel.error.header']}"
-			style="width: 100%;valign: top;" rendered="#{!jJDevelopment.render}">
-			<!-- 			<p:growl id="error" showDetail="false" life="2000" /> -->
-			<H1>#{messages['dev.panel.error.title']}</H1>
-		</p:panel>
+		<h:panelGroup layout="block" styleClass="Container">
+			<h:panelGroup layout="block" styleClass="Container100">
+				<p:panel id="errorPanel"
+					header="#{messages['dev.panel.error.header']}"
+					rendered="#{!jJDevelopment.render}">
+					<h:panelGroup layout="block" styleClass="Container">
+						<h:panelGroup layout="block" styleClass="Container100">
+							<h:outputText value="#{messages['dev.panel.error.title']}"
+								styleClass="Fs50" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</p:panel>
+				<p:panel header="#{jJDevelopment.product.name}" id="devPanel"
+					rendered="#{jJDevelopment.render}">
+					<h:panelGroup layout="block" styleClass="Container ui-fluid">
+
+						<h:form id="form">
+							<h:panelGroup layout="block"
+								styleClass="Container40 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:panelGrid style="width: 100%;">
+										<f:facet name="header">
+											<p:row>
+												<p:column colspan="2" styleClass="TexAlLeft">
+													<h:panelGroup layout="block"
+														styleClass="Container ui-fluid">
+														<h:panelGroup layout="block"
+															styleClass="Container70 Responsive100 TexAlLeft">
+															<h:panelGroup layout="block" styleClass="Container25">
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndentLabel">
+																	<p:outputLabel for="taskSelectOneMenu"
+																		value="#{messages['dev.taskSelectOneMenu.label']}:" />
+																</h:panelGroup>
+															</h:panelGroup>
+															<h:panelGroup layout="block" styleClass="Container75">
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndent">
+																	<p:autoComplete id="taskSelectOneMenu"
+																		scrollHeight="200" value="#{jJDevelopment.task}"
+																		itemLabel="#{t.name}" itemValue="#{t}"
+																		panelStyle="max-width:250px;" required="true"
+																		converter="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter"
+																		dropdown="true" var="t"
+																		placeholder="-- #{messages['dev.taskSelectOneMenu.labelitem']} --"
+																		completeMethod="#{jJDevelopment.completeTask}">
+																		<p:ajax event="itemSelect" update="startTaskPanel"
+																			immediate="true" />
+																	</p:autoComplete>
+																</h:panelGroup>
+															</h:panelGroup>
+														</h:panelGroup>
+														<h:panelGroup layout="block"
+															styleClass="Container30 Responsive100 TexAlLeft">
+															<h:panelGroup layout="block" styleClass="Container33">
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndent">
+																	<p:commandButton id="fetchFromRepo" immediate="true"
+																		process="@this" icon="fa Fs20 fa-refresh"
+																		onstart="PF('blockUIWidget').block()"
+																		oncomplete="PF('blockUIWidget').unblock()"
+																		actionListener="#{jJDevelopment.pull}"
+																		update=":form :growlForm" />
+																</h:panelGroup>
+															</h:panelGroup>
+
+															<h:panelGroup styleClass="Container66"
+																id="startTaskPanel" layout="block">
+																<h:panelGroup layout="block" styleClass="Container50">
+																	<h:panelGroup layout="block"
+																		styleClass="ContainerIndent">
+																		<p:commandButton immediate="true"
+																			icon="fa Fs20 fa-play"
+																			disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
+																			actionListener="#{jJDevelopment.startTask}"
+																			update=":form:taskSelectOneMenu startTaskPanel :growlForm" />
+																	</h:panelGroup>
+																</h:panelGroup>
+																<h:panelGroup layout="block" styleClass="Container50">
+																	<h:panelGroup layout="block"
+																		styleClass="ContainerIndent">
+																		<p:commandButton id="viewTaskButton"
+																			icon="fa fa-eye Fs20"
+																			update=":viewTaskForm :viewTaskDialogHeader"
+																			resetValues="true"
+																			disabled="#{jJDevelopment.task == null}"
+																			immediate="true"
+																			oncomplete="PF('viewTaskDialogWidget').show()"
+																			actionListener="#{jJTaskBean.gettingTaskValue}"
+																			title="#{messages.project_gantt_table_actions_viewMenuItem}">
+																			<f:attribute name="taskValue"
+																				value="#{jJDevelopment.task}" />
+																		</p:commandButton>
+																	</h:panelGroup>
+																</h:panelGroup>
+																<h:panelGroup layout="block" styleClass="Container100">
+																	<h:panelGroup layout="block"
+																		styleClass="ContainerIndent">
+																		<h:outputText
+																			value="#{jJDevelopment.task.startDateReal}"
+																			rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
+																			style="color:red;">
+																			<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+																		</h:outputText>
+																	</h:panelGroup>
+																</h:panelGroup>
+															</h:panelGroup>
+														</h:panelGroup>
+													</h:panelGroup>
+												</p:column>
+											</p:row>
+										</f:facet>
+										<p:row>
+											<p:column colspan="2"
+												style="padding-left: 0px !important;padding-right: 0px !important;padding-top: 0px !important;padding-bottom: 0px !important;">
 
 
-		<p:panel header="#{jJDevelopment.product.name}" id="devPanel"
-			style="width: 100%;valign: top;" rendered="#{jJDevelopment.render}">
-			<p:commandButton value="#{messages.specification_video_help_title}"
-				id="videoHelpBtn" icon="ui-icon-video"
-				onclick="PF('videoHelpWidget').show()" type="button" />
-			<h:form id="form">
-				<table>
-					<tr>
-						<td><p:panelGrid style="margin-top:10px;height: 550px;">
-								<p:row>
-									<p:column>
-										<h:outputText for="taskSelectOneMenu"
-											value="#{messages['dev.taskSelectOneMenu.label']}" />
+												<p:accordionPanel activeIndex="#{jJDevelopment.activeIndex}"
+													styleClass="accordionTreePanel">
+													<p:tab title="#{messages['devs.projectexplorer.label']}">
 
-										<p:selectOneMenu id="taskSelectOneMenu" immediate="true"
-											value="#{jJDevelopment.task}" panelStyle="width:150px"
-											effect="fold" editable="false" style="width:160px"
-											required="true" requiredMessage="Select task to commit">
-											<f:selectItem itemValue="#{null}"
-												itemLabel="-- #{messages['dev.taskSelectOneMenu.labelitem']} --" />
-											<f:selectItems value="#{jJDevelopment.tasks}" var="t"
-												itemLabel="#{t.name}" itemValue="#{t}" />
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
+														<p:contextMenu for="fileTree" nodeType="folder">
+															<p:menuitem
+																value="#{messages['dev.menuitem.deleteFolder.label']}"
+																icon="fa Fs20 fa-trash" immediate="true"
+																update=":deletePanel" resetValues="true"
+																oncomplete="PF('deleteFileDialogWidget').show()" />
+															<p:menuitem
+																value="#{messages['dev.menuitem.addFile.label']}"
+																icon="fa Fs20 fa-file-o" immediate="true"
+																resetValues="true" update=":createFilePanel"
+																oncomplete="PF('createFileDialogWidget').show()" />
+															<p:menuitem
+																value="#{messages['dev.menuitem.uploadFile.label']}"
+																icon="fa Fs20 fa-arrow-circle-o-up" immediate="true"
+																resetValues="true"
+																oncomplete="PF('uploadFileDialogWidget').show()" />
+															<p:menuitem
+																value="#{messages['dev.menuitem.commit.label']}"
+																icon="fa Fs20 fa-arrow-circle-o-right" immediate="true"
+																resetValues="true"
+																oncomplete="PF('commitFileDialogWidget').show()" />
+														</p:contextMenu>
 
-											<p:ajax update="startTaskPanel" />
-										</p:selectOneMenu>
-									</p:column>
+														<p:contextMenu for="fileTree" nodeType="file">
+															<p:menuitem
+																value="#{messages['dev.menuitem.deleteFile.label']}"
+																icon="Fs20 fa fa-trash" immediate="true"
+																update=":deletePanel" resetValues="true"
+																oncomplete="PF('deleteFileDialogWidget').show()" />
+															<p:menuitem
+																value="#{messages['dev.menuitem.commit.label']}"
+																icon="fa Fs20 fa-arrow-circle-o-right" immediate="true"
+																resetValues="true"
+																oncomplete="PF('commitFileDialogWidget').show()" />
+														</p:contextMenu>
 
-									<p:column>
-										<p:commandButton id="fetchFromRepo" immediate="true"
-											process="@this" icon="ui-icon-refresh"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()"
-											actionListener="#{jJDevelopment.pull}"
-											update=":form :growlForm" />
+														<p:tree id="fileTree" value="#{jJDevelopment.tree}"
+															var="file" animate="true" dynamic="true"
+															styleClass="reqTree Container99"
+															selection="#{jJDevelopment.selectedTree}"
+															selectionMode="single">
+															<p:ajax event="select" update=":form:tabViewPanel"
+																listener="#{jJDevelopment.onSelectTree}" />
+															<p:treeNode type="folder"
+																expandedIcon="ui-icon-folder-open"
+																collapsedIcon="ui-icon-folder-collapsed">
+																<h:outputText value="#{file.name}" />
+															</p:treeNode>
 
-										<h:panelGroup id="startTaskPanel">
+															<p:treeNode type="file" icon="ui-icon-document">
+																<h:outputText value="#{file.name}" />
+															</p:treeNode>
+														</p:tree>
+													</p:tab>
+												</p:accordionPanel>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<p:commandButton
+													value="#{messages['dev.menuitem.uploadFile.label']}"
+													icon="fa Fs20 fa-arrow-circle-o-up" immediate="true"
+													resetValues="true"
+													actionListener="#{jJDevelopment.addToRoot}"
+													oncomplete="PF('uploadFileDialogWidget').show()" />
+											</p:column>
+											<p:column>
+												<p:commandButton
+													value="#{messages['dev.menuitem.addFile.label']}"
+													icon="fa Fs20 fa-file-o" immediate="true"
+													resetValues="true" update=":createFilePanel"
+													actionListener="#{jJDevelopment.addToRoot}"
+													oncomplete="PF('createFileDialogWidget').show()" />
 
-											<p:commandButton immediate="true" icon="ui-icon-play"
-												disabled="#{jJDevelopment.task == null or jJDevelopment.task.startDateReal != null}"
-												actionListener="#{jJDevelopment.startTask}"
-												update=":form:taskSelectOneMenu startTaskPanel :growlForm" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="2">
+												<p:inputTextarea id="textMess"
+													value="#{jJDevelopment.comment}" required="true"
+													placeholder="#{messages['dev.comment.label']}"
+													requiredMessage="#{messages['dev.comment.requiredMessage']}"
+													rows="4" autoResize="false"
+													style="resize: none;margin-left:auto; margin-right:auto;" />
+											</p:column>
+										</p:row>
+										<f:facet name="footer">
+											<p:row>
+												<p:column>
+													<p:selectBooleanCheckbox value="#{jJDevelopment.check}"
+														id="Marcasdone" />
+													<h:outputLabel value="#{messages['dev.Marcasdone.label']}"
+														for="Marcasdone" />
+												</p:column>
+												<p:column>
+													<p:commandButton value="#{messages['dev.submit.button']}"
+														id="submit" icon="Fs20 fa fa-save"
+														onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock()"
+														actionListener="#{jJDevelopment.commit}"
+														update=":growlForm,:form" />
+												</p:column>
+											</p:row>
+										</f:facet>
+									</p:panelGrid>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:panel id="tabViewPanel"
+										header="#{messages['dev.fileContent.panel']}">
+										<f:event type="preRenderComponent"
+											listener="#{loginBean.updateTabViewWidth()}" />
+										<h:panelGroup layout="block" styleClass="Container">
+											<!-- 											<h:panelGroup layout="block" -->
+											<!-- 												styleClass="Container100 Responsive100 ShowOnMobile ui-fluid"> -->
 
-											<p:commandButton id="viewTaskButton" icon="ui-icon-zoomin"
-												update=":viewTaskForm :viewTaskDialogHeader" resetValues="true"
-												disabled="#{jJDevelopment.task == null}" immediate="true"
-												oncomplete="PF('viewTaskDialogWidget').show()"
-												actionListener="#{jJTaskBean.gettingTaskValue}"
-												title="#{messages.project_gantt_table_actions_viewMenuItem}">
-												<f:attribute name="taskValue" value="#{jJDevelopment.task}" />
+											<!-- 												<h:panelGroup layout="block" styleClass="Container30"> -->
+											<!-- 													<h:panelGroup layout="block" -->
+											<!-- 														styleClass="ContainerIndentLabel"> -->
+											<!-- 														<p:outputLabel for="activeIndex" -->
+											<!-- 															value="#{messages.label_tab}:" /> -->
+											<!-- 													</h:panelGroup> -->
+											<!-- 												</h:panelGroup> -->
+											<!-- 												<h:panelGroup layout="block" styleClass="Container70"> -->
+											<!-- 													<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+											<!-- 														<p:selectOneMenu id="activeIndex"  -->
+											<!-- 															value="#{jJDevelopment.activeTabIndex}"  -->
+											<!-- 															effect="fade" onchange="PF('fileTabview').select(value);"> -->
+											<!-- 															<f:selectItems value="#{jJDevelopment.files}" var="tab" -->
+											<!-- 																itemLabel="#{tab.title}" -->
+											<!-- 																itemValue="#{jJDevelopment.contains(tab)}" /> -->
 
-												<!-- 												<f:setPropertyActionListener value="#{jJDevelopment.task}" -->
-												<!-- 													target="#{jJTaskBean.JJTask_}" /> -->
-											</p:commandButton>
-											<br />
-											<h:outputText
-												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
-												style="color:red;" />
+											<!-- 														</p:selectOneMenu>														 -->
+											<!-- 													</h:panelGroup> -->
+											<!-- 												</h:panelGroup> -->
 
-											<h:outputText value="#{jJDevelopment.task.startDateReal}"
-												rendered="#{jJDevelopment.task != null and jJDevelopment.task.startDateReal != null}"
-												style="color:red;">
-												<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-											</h:outputText>
+											<!-- 											</h:panelGroup> -->
+											<h:panelGroup layout="block" styleClass="Container100">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:tabView id="tabView" effectDuration="fast" styleClass=""
+														widgetVar="fileTabview" style="max-width: 300px;"
+														rendered="#{not empty jJDevelopment.files}"
+														activeIndex="#{jJDevelopment.activeTabIndex}"
+														effect="fade" scrollable="true"
+														value="#{jJDevelopment.files}" var="tab">
 
+														<p:ajax event="tabClose"
+															listener="#{jJDevelopment.onCloseTab}"
+															update=":form:tabViewPanel" />
 
+														<p:ajax event="tabChange" update=":form:tabViewPanel" />
+
+														<p:tab title="#{tab.title}" closable="true">
+
+															<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
+																binding="#{codeMirror}" autoformat="true"
+																theme="eclipse" value="#{tab.texte}" lineNumbers="true"
+																tabSize="150" widgetVar="myCodeMirror_#{tab.index}"
+																extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
+																<p:ajax event="blur" update=":form:tabView:codeMirror"
+																	listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
+
+																<f:attribute name="cm" value="#{codeMirror}" />
+															</pe:codeMirror>
+														</p:tab>
+													</p:tabView>
+												</h:panelGroup>
+											</h:panelGroup>
 										</h:panelGroup>
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column colspan="2">
-										<p:message for="taskSelectOneMenu" id="taskmessage"
-											closable="true" />
-										<!-- 										<p:growl id="messages" showDetail="false" life="2000" /> -->
-										<p:panel header="#{messages['devs.projectexplorer.label']}">
+									</p:panel>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:form>
+					</h:panelGroup>
+				</p:panel>
+			</h:panelGroup>
+		</h:panelGroup>
+		<p:confirmDialog id="deletFileDialog"
+			widgetVar="deleteFileDialogWidget"
+			message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
+			header="#{messages['dev.deletFileDialog.header']}" severity="alarm">
 
-											<p:scrollPanel id="fileTreeScrollPanel" style="height:300px;"
-												mode="native">
-												<p:contextMenu for="fileTree" nodeType="folder">
-													<p:menuitem
-														value="#{messages['dev.menuitem.deleteFolder.label']}"
-														icon="ui-icon-trash" immediate="true"
-														update=":deletePanel" resetValues="true"
-														oncomplete="PF('deleteFileDialogWidget').show()" />
-													<p:menuitem
-														value="#{messages['dev.menuitem.addFile.label']}"
-														icon="ui-icon-document" immediate="true"
-														resetValues="true" update=":createFilePanel"
-														oncomplete="PF('createFileDialogWidget').show()" />
-													<p:menuitem
-														value="#{messages['dev.menuitem.uploadFile.label']}"
-														icon="ui-icon-arrowthickstop-1-n" immediate="true"
-														resetValues="true"
-														oncomplete="PF('uploadFileDialogWidget').show()" />
-													<p:menuitem
-														value="#{messages['dev.menuitem.commit.label']}"
-														icon="ui-icon-arrowthickstop-1-e" immediate="true"
-														resetValues="true"
-														oncomplete="PF('commitFileDialogWidget').show()" />
-												</p:contextMenu>
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{jJDevelopment.deleteFile}"
+						update=":form :growlForm :deletePanel"
+						oncomplete="PF('deleteFileDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="PF('deleteFileDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+		<p:confirmDialog id="commitFileDialog"
+			widgetVar="commitFileDialogWidget"
+			message="#{messages['dev.commitFileDialog.title']}" showEffect="fade"
+			header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
+			<p:outputPanel id="commitPanel">
+				<h:form id="commitForm">
+					<p:commandButton id="commitYesButton" value="#{messages.label_yes}"
+						onstart="PF('blockUIWidget').block()"
+						action="#{jJDevelopment.commitFile}" update=":form :growlForm"
+						oncomplete="PF('commitFileDialogWidget').hide(),PF('blockUIWidget').unblock()" />
+					<p:commandButton id="commitNoButton" value="#{messages.label_no}"
+						onclick="PF('commitFileDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
 
-												<p:contextMenu for="fileTree" nodeType="file">
-													<p:menuitem
-														value="#{messages['dev.menuitem.deleteFile.label']}"
-														icon="ui-icon-trash" immediate="true"
-														update=":deletePanel" resetValues="true"
-														oncomplete="PF('deleteFileDialogWidget').show()" />
-													<p:menuitem
-														value="#{messages['dev.menuitem.commit.label']}"
-														icon="ui-icon-arrowthickstop-1-e" immediate="true"
-														resetValues="true"
-														oncomplete="PF('commitFileDialogWidget').show()" />
-												</p:contextMenu>
+		<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
+			message="#{messages['dev.saveFileDialog.title']}" showEffect="fade"
+			header="#{messages['dev.saveFileDialog.header']}" severity="alarm">
+			<p:outputPanel id="savePanel">
+				<h:form id="saveForm">
+					<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
+						action="#{jJDevelopment.saveFile}"
+						update=":form:tabViewPanel :growlForm" />
+					<p:commandButton id="saveNoButton" value="#{messages.label_no}"
+						action="#{jJDevelopment.notSaveFile}" update=":form:tabViewPanel" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
 
-												<p:tree id="fileTree" value="#{jJDevelopment.tree}"
-													var="file" animate="true" dynamic="true"
-													selection="#{jJDevelopment.selectedTree}"
-													selectionMode="single">
-													<p:ajax event="select" update=":form:tabViewPanel"
-														listener="#{jJDevelopment.onSelectTree}" />
-													<p:treeNode type="folder"
-														expandedIcon="ui-icon-folder-open"
-														collapsedIcon="ui-icon-folder-collapsed">
+		<p:dialog id="createFileDialog" header="#{messages.label_create}"
+			maximizable="false" widgetVar="createFileDialogWidget"
+			responsive="true" resizable="false" showEffect="fade">
+			<p:outputPanel id="createFilePanel">
+				<h:form id="createFileForm">
+					<h:panelGroup layout="block"
+						styleClass="Container ui-fluid BorderAll"
+						style="max-width: 300px;">
+						<h:panelGroup layout="block" styleClass="Container100">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:inputText id="fileName" placeholder="#{messages.label_name}"
+									value="#{jJDevelopment.createdFileName}" required="true" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container100">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:selectBooleanButton id="fileType"
+									value="#{jJDevelopment.fileOrFolder}" onLabel="File"
+									offLabel="Folder" onIcon="fa Fs20 fa-file-o"
+									offIcon="fa Fs20 fa-folder">
+								</p:selectBooleanButton>
+							</h:panelGroup>
+						</h:panelGroup>
 
-														<h:outputText value="#{file.name}" />
+						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="createSaveButton"
+									value="#{messages.label_save}" update=":form,:growlForm"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									action="#{jJDevelopment.CreateFile}" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="createCloseButton"
+									value="#{messages.label_close}"
+									onclick="PF('createFileDialogWidget').hide()" type="button" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
-													</p:treeNode>
+		<p:dialog id="viewTaskDialog" responsive="true" modal="true"
+			widgetVar="viewTaskDialogWidget" dynamic="true" resizable="false"
+			maximizable="false" showEffect="fade" draggable="false">
+			<p:ajax event="close"
+				update=":form:taskSelectOneMenu :form:startTaskPanel"
+				listener="#{jJTaskBean.closeEvent('dev')}" />
+			<f:facet name="header">
+				<p:outputLabel id="viewTaskDialogHeader"
+					value="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}" />
+			</f:facet>
+			<p:outputPanel id="viewTaskPanel">
+				<h:form id="viewTaskForm" enctype="multipart/form-data">
+					<ui:include src="taskDialog.xhtml">
+						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						<ui:param name="View" value="dev" />
+					</ui:include>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="uploadFileDialog" responsive="true"
+			header="#{messages['dev.uploadFileDialog.title']}"
+			widgetVar="uploadFileDialogWidget" resizable="false"
+			showEffect="fade">
+			<p:outputPanel id="uploadFilePanel">
+				<h:form id="uploadFileForm">
+					<p:fileUpload id="uploadFileButton"
+						fileUploadListener="#{jJDevelopment.handleFileUpload}"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()" mode="advanced"
+						dragDropSupport="false" update=":form :growlForm"
+						sizeLimit="1000000" fileLimit="4" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
 
-													<p:treeNode type="file" icon="ui-icon-document">
-														<h:outputText value="#{file.name}" />
-													</p:treeNode>
-												</p:tree>
-											</p:scrollPanel>
-											<p:commandButton
-												value="#{messages['dev.menuitem.uploadFile.label']}"
-												icon="ui-icon-arrowthickstop-1-n" immediate="true"
-												resetValues="true"
-												actionListener="#{jJDevelopment.addToRoot}"
-												oncomplete="PF('uploadFileDialogWidget').show()" />
-											<p:commandButton
-												value="#{messages['dev.menuitem.addFile.label']}"
-												icon="ui-icon-document" immediate="true" resetValues="true"
-												update=":createFilePanel"
-												actionListener="#{jJDevelopment.addToRoot}"
-												oncomplete="PF('createFileDialogWidget').show()" />
-										</p:panel>
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column colspan="2">
-										<p:outputLabel for="textMess"
-											value="#{messages['dev.comment.label']}" />
-										<br />
-										<p:inputTextarea id="textMess"
-											value="#{jJDevelopment.comment}" required="true"
-											requiredMessage="#{messages['dev.comment.requiredMessage']}"
-											rows="5" cols="40" autoResize="false" />
-										<p:message for="textMess" id="commentmessage" closable="true" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column>
-										<p:selectBooleanCheckbox value="#{jJDevelopment.check}"
-											id="Marcasdone" />
-										<h:outputLabel value="#{messages['dev.Marcasdone.label']}"
-											for="Marcasdone" />
-									</p:column>
-									<p:column>
-										<p:commandButton value="#{messages['dev.submit.button']}"
-											id="submit" icon="ui-icon-disk"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock()"
-											actionListener="#{jJDevelopment.commit}"
-											update=":growlForm,:form" />
-									</p:column>
-								</p:row>
-							</p:panelGrid></td>
-						<td><p:panel id="tabViewPanel"
-								header="#{messages['dev.fileContent.panel']}"
-								style="height:570px;width:700px;margin-top: 11px;margin-left: 20px;">
-								<p:tabView id="tabView" effectDuration="fast"
-									rendered="#{not empty jJDevelopment.files}"
-									activeIndex="#{jJDevelopment.activeTabIndex}" effect="fade"
-									scrollable="true" value="#{jJDevelopment.files}" var="tab">
-
-									<p:ajax event="tabClose" listener="#{jJDevelopment.onCloseTab}"
-										update=":form:tabViewPanel" />
-
-									<p:ajax event="tabChange" update=":form:tabViewPanel" />
-
-									<p:tab title="#{tab.title}" closable="true">
-
-										<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
-											binding="#{codeMirror}" autoformat="true" theme="eclipse"
-											value="#{tab.texte}" lineNumbers="true" tabSize="150"
-											widgetVar="myCodeMirror_#{tab.index}"
-											extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
-											<p:ajax event="blur" update=":form:tabView:codeMirror"
-												listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
-
-											<f:attribute name="cm" value="#{codeMirror}" />
-										</pe:codeMirror>
-										<!-- 										<h:panelGrid columns="3"> -->
-										<!-- 											<a -->
-										<!-- 												href="javascript:autoFormatSelection(PF('myCodeMirror_#{tab.index}').instance)"> -->
-										<!-- 												Autoformat Selected </a> -->
-										<!-- 											<a -->
-										<!-- 												href="javascript:commentSelection(true,PF('myCodeMirror_#{tab.index}').instance)"> -->
-										<!-- 												Comment Selected </a> -->
-										<!-- 											<a -->
-										<!-- 												href="javascript:commentSelection(false,PF('myCodeMirror_#{tab.index}').instance)"> -->
-										<!-- 												Uncomment Selected </a> -->
-										<!-- 										</h:panelGrid> -->
-									</p:tab>
-								</p:tabView>
-							</p:panel></td>
-					</tr>
-				</table>
-
-
-			</h:form>
-			<p:confirmDialog id="deletFileDialog"
-				widgetVar="deleteFileDialogWidget"
-				message="#{messages['dev.deletFileDialog.title']}" showEffect="fade"
-				header="#{messages['dev.deletFileDialog.header']}" severity="alarm">
-
-				<p:outputPanel id="deletePanel">
-					<h:form id="deleteForm">
-						<p:commandButton id="deleteYesButton"
-							value="#{messages.label_yes}"
-							action="#{jJDevelopment.deleteFile}"
-							update=":form :growlForm :deletePanel"
-							oncomplete="PF('deleteFileDialogWidget').hide()" />
-						<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
-							onclick="PF('deleteFileDialogWidget').hide()" type="button" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
-			<p:confirmDialog id="commitFileDialog"
-				widgetVar="commitFileDialogWidget"
-				message="#{messages['dev.commitFileDialog.title']}"
-				showEffect="fade" header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
-				<p:outputPanel id="commitPanel">
-					<h:form id="commitForm">
-						<p:commandButton id="commitYesButton"
-							value="#{messages.label_yes}"
-							onstart="PF('blockUIWidget').block()"
-							action="#{jJDevelopment.commitFile}" update=":form :growlForm"
-							oncomplete="PF('commitFileDialogWidget').hide(),PF('blockUIWidget').unblock()" />
-						<p:commandButton id="commitNoButton" value="#{messages.label_no}"
-							onclick="PF('commitFileDialogWidget').hide()" type="button" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
-
-			<p:confirmDialog id="saveFileDialog" widgetVar="saveFileDialogWidget"
-				message="#{messages['dev.saveFileDialog.title']}" showEffect="fade"
-				header="#{messages['dev.saveFileDialog.header']}" severity="alarm">
-				<p:outputPanel id="savePanel">
-					<h:form id="saveForm">
-						<p:commandButton id="saveYesButton" value="#{messages.label_yes}"
-							action="#{jJDevelopment.saveFile}"
-							update=":form:tabViewPanel :growlForm" />
-						<p:commandButton id="saveNoButton" value="#{messages.label_no}"
-							action="#{jJDevelopment.notSaveFile}" update=":form:tabViewPanel" />
-					</h:form>
-				</p:outputPanel>
-			</p:confirmDialog>
-
-			<p:dialog id="createFileDialog" header="#{messages.label_create}"
-				widgetVar="createFileDialogWidget" responsive="true" resizable="true"
-				showEffect="fade" >
-				<p:outputPanel id="createFilePanel">
-					<h:form id="createFileForm">
-						<h:panelGrid columns="2" styleClass="dialog">
-							<p:outputLabel for="fileName" value="Nom :" />
-							<p:inputText id="fileName"
-								value="#{jJDevelopment.createdFileName}" required="true" />
-							<p:outputLabel for="fileType" value="Type :" />
-							<p:selectBooleanButton id="fileType"
-								value="#{jJDevelopment.fileOrFolder}" onLabel="File"
-								offLabel="Folder" onIcon="ui-icon-document"
-								offIcon="ui-icon-folder-collapsed">
-							</p:selectBooleanButton>
-							<p:commandButton id="createSaveButton"
-								value="#{messages.label_save}" update=":form,:growlForm"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()"
-								action="#{jJDevelopment.CreateFile}" />
-							<p:commandButton id="createCloseButton"
-								value="#{messages.label_close}"
-								onclick="PF('createFileDialogWidget').hide()" type="button" />
-						</h:panelGrid>
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
-
-			<p:dialog id="viewTaskDialog" responsive="true"
-				modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-				resizable="false" maximizable="false" showEffect="fade"
-				 draggable="false">
-				<p:ajax event="close"
-					update=":form:taskSelectOneMenu :form:startTaskPanel"
-					listener="#{jJTaskBean.closeEvent('dev')}" />
-				<f:facet name="header">
-					<p:outputLabel id="viewTaskDialogHeader"
-						value="#{messages.label_view} #{jJTaskBean.getDialogHeader(jJTaskBean.task,null)}" />
-				</f:facet>
-				<p:outputPanel id="viewTaskPanel">
-					<h:form id="viewTaskForm" enctype="multipart/form-data">					
-							<ui:include src="taskDialog.xhtml">
-								<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-								<ui:param name="View" value="dev" />
-							</ui:include>
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
-
-			<p:dialog id="uploadFileDialog" responsive="true"
-				header="#{messages['dev.uploadFileDialog.title']}"
-				widgetVar="uploadFileDialogWidget" resizable="true"
-				showEffect="fade" >
-				<p:outputPanel id="uploadFilePanel">
-					<h:form id="uploadFileForm">
-						<p:fileUpload id="uploadFileButton" 
-							fileUploadListener="#{jJDevelopment.handleFileUpload}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" mode="advanced"
-							dragDropSupport="false" update=":form :growlForm"
-							sizeLimit="1000000" fileLimit="4" />
-					</h:form>
-				</p:outputPanel>
-			</p:dialog>
-
-		</p:panel>
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
-			position="center" header="#{messages.specification_video_help_title}"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			responsive="true" position="center"
+			header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>
-	</ui:define>
-	<ui:define name="outer">
-		<center>
-			<ui:insert name="highlight">
-				<script type="text/javascript"
-					src="#{request.contextPath}/syntaxhighlighter/shCore.js"></script>
-
-				<script type="text/javascript"
-					src="#{request.contextPath}/syntaxhighlighter/shBrushXml.js"></script>
-				<script type="text/javascript"
-					src="#{request.contextPath}/syntaxhighlighter/shBrushJava.js"></script>
-				<script type="text/javascript"
-					src="#{request.contextPath}/syntaxhighlighter/shBrushCss.js"></script>
-				<script type="text/javascript"
-					src="#{request.contextPath}/syntaxhighlighter/shBrushJScript.js"></script>
-				<script type="text/javascript">
-					dp.SyntaxHighlighter.ClipboardSwf = '\#{request.contextPath}/syntaxhighlighter/clipboard.swf';
-					dp.SyntaxHighlighter.HighlightAll('code');
-				</script>
-			</ui:insert>
-		</center>
 	</ui:define>
 </ui:composition>
 </html>

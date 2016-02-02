@@ -9,201 +9,221 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="../templates/template.xhtml">
-	<ui:define name="content">
+	<ui:define name="head">
 		<style type="text/css">
 .ui-datatable .ui-row-toggler {
 	float: left;
 }
 </style>
-		<h:form style="width:100%;display:none;">
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper" update=":versionTabView:deliveryForm"
-				oncomplete="PF('blockUIWidget').unblock()" />
-		</h:form>
-		<p:tabView id="versionTabView" widgetVar="versionTab"
-			style="width: 1400px;" dynamic="true" cache="false"
-			onTabChange="tabChangeHelper([{name: 'activeScrumIndex', value: index}])"
-			scrollable="#{jJVersionBean.scrollable}"
-			value="#{jJVersionBean.versionDataModelList}" var="versionDataModel">
-			<p:tab>
+		<h:outputScript library="js" name="delivery.js" />
+	</ui:define>
+	<ui:define name="content">
+		<h:panelGroup layout="block" styleClass="Container">
+			<h:form style="width:100%;display:none;">
+				<p:remoteCommand onstart="PF('blockUIWidget').block()"
+					name="tabChangeHelper"
+					actionListener="#{jJVersionBean.onTabDeliveryChange}"
+					update=":versionTabView:deliveryForm :activeDeliveryIndexForm"
+					oncomplete="PF('blockUIWidget').unblock()" />
+			</h:form>
 
-				<f:facet name="title">
-					<h:outputText rendered="#{versionDataModel.version != null}"
-						value="#{versionDataModel.version.product.name}/#{versionDataModel.version.name}" />
-					<h:outputText rendered="#{versionDataModel.version == null}"
-						value="No Version" />
-				</f:facet>
-
-				<h:form id="deliveryForm">
-					<h:panelGrid columns="3" style="margin-top: 10px;"
-						columnClasses="twentyFivePercent,thirtyPercent" border="0">
-						<!-- 						<c:forEach items="#{jJBuildBean.buildDataModelList}" -->
-						<!-- 							var="buildDataModel" varStatus="loop"> -->
-
-						<!-- 							<p:fieldset -->
-						<!-- 								legend="#{buildDataModel.version.product.name}/#{buildDataModel.version.name}" -->
-						<!-- 								id="buildFieldSet"> -->
-						<p:dataTable id="buildDataTable" scrollable="true"
-							scrollHeight="250" var="build" value="#{versionDataModel.builds}"
-							rowKey="#{build.id}"
-							rendered="#{versionDataModel.version != null}"
-							emptyMessage="#{messages.label_notRecordFound}">
-							<!-- 							<p:column headerText="Project"> -->
-							<!-- 								<h:outputText value="#{build.name}" /> -->
-							<!-- 							</p:column> -->
-							<f:facet name="header">
+			<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
+				<h:form id="activeDeliveryIndexForm">
+					<h:panelGroup layout="block" styleClass="Container30">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="activeIndex" value="Version:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container70">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:selectOneMenu id="activeIndex" effect="fade"
+								value="#{jJVersionBean.activeDeliveryIndex}"
+								onchange="PF('versionTab').select(value);">
+								<f:selectItems value="#{jJVersionBean.versionDataModelList}"
+									var="verDM" itemLabel="#{verDM.name}"
+									itemValue="#{jJVersionBean.contains(verDM.version.id)}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container100">
+				<f:event type="preRenderComponent"
+					listener="#{loginBean.updateTabViewWidth()}" />
+				<p:tabView id="versionTabView" widgetVar="versionTab"
+					style="max-width: 300px;" styleClass="responsiveTabView"
+					dynamic="true" cache="false"
+					activeIndex="#{jJVersionBean.activeDeliveryIndex}"
+					onTabChange="tabChangeHelper([{name: 'activeIndex', value: index}])"
+					scrollable="true" value="#{jJVersionBean.versionDataModelList}"
+					var="versionDataModel">
+					<p:tab title="#{versionDataModel.name}">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:form id="deliveryForm">
+								<h:panelGroup layout="block"
+									styleClass="Container30 Responsive50"
+									rendered="#{versionDataModel.version != null}">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:dataTable id="buildDataTable" scrollable="true"
+											scrollHeight="250" var="build"
+											value="#{versionDataModel.builds}" rowKey="#{build.id}"
+											rendered="#{versionDataModel.version != null}"
+											emptyMessage="#{messages.label_notRecordFound}">
+											<f:facet name="header">
 										ChangeLog
 									</f:facet>
-							<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
-								update="buildDataTable"
-								onstart="updateRowExapansion();PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()" />
-							<p:column style="width:20%;">
-								<p:rowToggler />
-								<p:commandLink target="_blank" style="float: right;"
-									action="#{jJBuildBean.getZipFile(build)}" ajax="false"
-									disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
-									<p:graphicImage name="download.ico" library="images" width="14"
-										height="14" />
-								</p:commandLink>
-							</p:column>
-							<p:column headerText="Build">
-								<h:outputText value="#{build.name}" />
-							</p:column>
-							<p:column headerText="Status">
-								<p:autoComplete id="status" dropdown="true"
-									value="#{build.status}"
-									itemLabel="#{loginBean.checkMessage(status)}"
-									itemValue="#{status}" var="status" size="10"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
-									completeMethod="#{jJBuildBean.completeStatus}">
-									<p:ajax event="itemSelect"
-										onstart="PF('blockUIWidget').block()"
-										oncomplete="PF('blockUIWidget').unblock()"
-										listener="#{jJBuildBean.changeEvent(build,versionDataModel)}"
-										update="buildDataTable :growlForm" />
-								</p:autoComplete>
-							</p:column>
-							<p:rowExpansion styleClass="rowExpansion">
-								<!-- 									<f:event type="preRenderComponent" update="versionDataTable" -->
-								<!-- 										onstart="PF('versionBlockUIWidget').block()" -->
-								<!-- 										oncomplete="PF('versionBlockUIWidget').unblock()" -->
-								<!-- 										listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" /> -->
+											<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+												update="buildDataTable"
+												onstart="updateRowExapansion();PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()" />
+											<p:column style="width:15%;">
+												<p:rowToggler />
+												<p:commandLink target="_blank" style="float: right;"
+													action="#{jJBuildBean.getZipFile(build)}" ajax="false"
+													disabled="#{jJBuildBean.haveUrl(build)}" title="Download">
+													<p:graphicImage name="download.ico" library="images"
+														width="14" height="14" />
+												</p:commandLink>
+											</p:column>
+											<p:column headerText="Build" style="width:35%;">
+												<h:outputText value="#{build.name}" />
+											</p:column>
+											<p:column headerText="Status" style="width:50%;">
+												<p:autoComplete id="status" dropdown="true"
+													value="#{build.status}"
+													itemLabel="#{loginBean.checkMessage(status)}"
+													itemValue="#{status}" var="status" size="10"
+													converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+													completeMethod="#{jJBuildBean.completeStatus}">
+													<p:ajax event="itemSelect"
+														onstart="PF('blockUIWidget').block()"
+														oncomplete="PF('blockUIWidget').unblock()"
+														listener="#{jJBuildBean.changeEvent(build,versionDataModel)}"
+														update="buildDataTable :growlForm" />
+												</p:autoComplete>
+											</p:column>
+											<p:rowExpansion styleClass="rowExpansion">
+												<p:dataTable id="taskDataTable" var="task"
+													style="width:90%;" rowKey="#{task.id}"
+													emptyMessage="#{messages.label_notRecordFound}"
+													value="#{build.tasks}">
 
-								<p:dataTable id="taskDataTable" var="task" style="width:90%;"
-									rowKey="#{task.id}"
-									emptyMessage="#{messages.label_notRecordFound}"
-									value="#{build.tasks}">
+													<p:column style="width:25%">
+														<f:facet name="header">
+															<p:row>
+																<p:column>
+																	<h:outputText value="Id" />
+																</p:column>
+															</p:row>
+														</f:facet>
+														<h:outputText value="#{task.id}" />
+													</p:column>
 
-									<p:column style="width:25%">
-										<f:facet name="header">
-											<p:row>
-												<p:column>
-													<h:outputText value="#{messages.label_task} Id" />
-												</p:column>
-											</p:row>
-										</f:facet>
-										<h:outputText value="#{task.id}" />
-									</p:column>
+													<p:column style="width:75%">
+														<f:facet name="header">
+															<p:row>
+																<p:column>
+																	<h:outputText value="#{messages.label_task}:" />
+																</p:column>
+															</p:row>
+														</f:facet>
+														<p:graphicImage
+															rendered="#{task.taskType.name == 'specifier'}"
+															library="images" name="doc.ico" width="16" height="16" />
+														<p:graphicImage rendered="#{task.bug != null}"
+															library="images" name="bug.ico" width="16" height="16" />
+														<p:graphicImage
+															rendered="#{task.bug == null and task.requirement != null}"
+															library="images" name="function.ico" width="16"
+															height="16" />
+														<p:graphicImage title="TestCase"
+															rendered="#{task.bug == null and task.requirement == null and task.testcase != null}"
+															library="images" name="test.ico" width="16" height="16" />
+														<h:outputText value="#{task.name}" />
+													</p:column>
+												</p:dataTable>
+											</p:rowExpansion>
+										</p:dataTable>
+									</h:panelGroup>
+								</h:panelGroup>
 
-									<p:column style="width:75%">
-										<f:facet name="header">
-											<p:row>
-												<p:column>
-													<h:outputText value="#{messages.label_task}:" />
-												</p:column>
-											</p:row>
-										</f:facet>
-										<!-- 										<p:graphicImage -->
-										<!-- 											rendered="#{task.specification != null and task.specification}" -->
-										<!-- 											library="images" name="doc.ico" width="16" height="16" /> -->
-										<p:graphicImage
-											rendered="#{task.taskType.name == 'specifier'}"
-											library="images" name="doc.ico" width="16" height="16" />
-										<p:graphicImage rendered="#{task.bug != null}"
-											library="images" name="bug.ico" width="16" height="16" />
-										<p:graphicImage
-											rendered="#{task.bug == null and task.requirement != null}"
-											library="images" name="function.ico" width="16" height="16" />
-										<p:graphicImage title="TestCase"
-											rendered="#{task.bug == null and task.requirement == null and task.testcase != null}"
-											library="images" name="test.ico" width="16" height="16" />
-										<h:outputText value="#{task.name}" />
-									</p:column>
-								</p:dataTable>
-							</p:rowExpansion>
-						</p:dataTable>
-						<!-- 							</p:fieldset> -->
-						<!-- 						</c:forEach> -->
-
-						<p:dataTable id="specTable"
-							value="#{versionDataModel.requirementRoadMap}" rowKey="#{req.id}"
-							var="req" widgetVar="specTable" scrollable="true"
-							scrollHeight="250"
-							emptyMessage="#{messages.label_notRecordFound}">
-							<f:facet name="header">
+								<h:panelGroup layout="block"
+									styleClass="#{versionDataModel.version != null ? 'Container30':'Container50'}  Responsive50">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:dataTable id="specTable"
+											value="#{versionDataModel.requirementRoadMap}"
+											rowKey="#{req.id}" var="req" widgetVar="specTable"
+											scrollable="true" scrollHeight="250"
+											emptyMessage="#{messages.label_notRecordFound}">
+											<f:facet name="header">
 										#{messages.label_requirement} RoadMap
 									</f:facet>
-							<p:column id="reqName" headerText="#{messages.label_requirement}">
-								<p:commandLink target="_blank" value="#{req.name}"
-									action="#{jJRequirementBean.requirementInfo}" ajax="false">
-									<f:setPropertyActionListener value="#{req}"
-										target="#{jJRequirementBean.requirement}" />
-								</p:commandLink>
-							</p:column>
-
-							<p:column id="reqCategory"
-								headerText="#{messages.label_category}">
-								<h:outputText value="#{req.category}"
-									converter="JJCategoryConverter" />
-							</p:column>
-
-							<p:column id="reqStatus" headerText="Status">
-								<h:outputText
-									value="#{loginBean.checkMessage(req.status)}" />
-							</p:column>
-						</p:dataTable>
-						<p:dataTable id="bugTable" value="#{versionDataModel.bugRoadMap}"
-							rowKey="#{bug.id}" var="bug" widgetVar="bugTable"
-							scrollable="true" scrollHeight="250"
-							emptyMessage="#{messages.label_notRecordFound}">
-							<f:facet name="header">
+											<p:column id="reqName" style="width:60%;"
+												headerText="#{messages.label_requirement}">
+												<p:commandLink target="_blank" value="#{req.name}"
+													action="#{jJRequirementBean.requirementInfo}" ajax="false">
+													<f:setPropertyActionListener value="#{req}"
+														target="#{jJRequirementBean.requirement}" />
+												</p:commandLink>
+											</p:column>
+											<p:column id="reqCategory" style="width:40%;"
+												headerText="#{messages.label_category}">
+												<h:outputText value="#{req.category}"
+													converter="JJCategoryConverter" />
+											</p:column>
+										</p:dataTable>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="#{versionDataModel.version != null ? 'Container40':'Container50'}  Responsive100">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:dataTable id="bugTable"
+											value="#{versionDataModel.bugRoadMap}" rowKey="#{bug.id}"
+											var="bug" widgetVar="bugTable" scrollable="true"
+											scrollHeight="250"
+											emptyMessage="#{messages.label_notRecordFound}">
+											<f:facet name="header">
 										Bug RoadMap
 									</f:facet>
-							<p:column id="bugName"
-								headerText="#{messages.bug_table_title_title}" width="35%">
-								<p:commandLink target="_blank" value="#{bug.name}"
-									action="#{jJBugBean.bugInfo}" ajax="false">
-									<f:setPropertyActionListener value="#{bug}"
-										target="#{jJBugBean.viewBug}" />
-								</p:commandLink>
-							</p:column>
-							<p:column id="bugDate"
-								headerText="#{messages.bug_table_creation_title}" width="35%">
-								<h:outputText value="#{bug.creationDate}">
-									<f:convertDateTime type="date" locale="#{localeBean.locale}"
-										pattern="dd/MM/yyyy HH:mm" />
-								</h:outputText>
-							</p:column>
-							<p:column id="bugImportance"
-								headerText="#{messages.bug_table_importance_title}" width="15%">
-								<h:outputText value="#{bug.importance.name}" />
-							</p:column>
-							<p:column id="bugStatus"
-								headerText="#{messages.bug_table_status_title}" width="15%">
-								<h:outputText
-									value="#{loginBean.checkMessage(bug.status)}"
-									styleClass="#{bug.status.name}" />
-							</p:column>
-						</p:dataTable>
-					</h:panelGrid>
-				</h:form>
-			</p:tab>
-		</p:tabView>
+											<p:column id="bugName"
+												headerText="#{messages.bug_table_title_title}" width="60%">
+												<p:commandLink target="_blank" value="#{bug.name}"
+													action="#{jJBugBean.bugInfo}" ajax="false">
+													<f:setPropertyActionListener value="#{bug}"
+														target="#{jJBugBean.viewBug}" />
+												</p:commandLink>
+											</p:column>
+											<!-- 									<p:column id="bugDate" -->
+											<!-- 										headerText="#{messages.bug_table_creation_title}" width="35%"> -->
+											<!-- 										<h:outputText value="#{bug.creationDate}"> -->
+											<!-- 											<f:convertDateTime type="date" locale="#{localeBean.locale}" -->
+											<!-- 												pattern="dd/MM/yyyy HH:mm" /> -->
+											<!-- 										</h:outputText> -->
+											<!-- 									</p:column> -->
+											<p:column id="bugImportance"
+												headerText="#{messages.bug_table_importance_title}"
+												width="20%">
+												<h:outputText value="#{bug.importance.name}" />
+											</p:column>
+											<p:column id="bugStatus"
+												headerText="#{messages.bug_table_status_title}" width="20%">
+												<h:outputText value="#{loginBean.checkMessage(bug.status)}"
+													styleClass="#{bug.status.name}" />
+											</p:column>
+										</p:dataTable>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:form>
+						</h:panelGroup>
+					</p:tab>
+				</p:tabView>
+			</h:panelGroup>
+		</h:panelGroup>
 
 		<p:hotkey bind="esc" handler="PF('videoHelpWidget').hide()" />
-		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget" responsive="true"
-			position="center" header="#{messages.specification_video_help_title}"
+		<p:dialog id="videoHelpDialog" widgetVar="videoHelpWidget"
+			responsive="true" position="center"
+			header="#{messages.specification_video_help_title}"
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" minWidth="500" showEffect="fade" hideEffect="fade">
 			<video width="100%" height="100%" controls="true">

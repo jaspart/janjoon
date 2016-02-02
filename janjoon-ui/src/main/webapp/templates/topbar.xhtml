@@ -94,17 +94,17 @@
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="Container100">
-								<h:panelGroup layout="block" styleClass="Container50">
-									<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
-										<p:inputSwitch id="alert" style="float: left;"
+								<h:panelGroup layout="block" styleClass="Container40">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:inputSwitch id="alert" 
 											value="#{jJMessageBean.alertOrInfo}" onLabel="Alert"
 											offLabel="Info" />
 									</h:panelGroup>
 								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="Container50">
-									<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
-										<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
-											process="@this,alert,messagedsc"
+								<h:panelGroup layout="block" styleClass="Container60">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:commandButton id="submitMes" icon="fa fa-send Fs20"
+											process="@this,alert,messagedsc" value="#{messages.label_send}"
 											actionListener="#{jJMessageBean.createMessage(false,null)}"
 											update=":messageCreationForm :headerForm:communicationButton :communicationButton :growlForm" />
 									</h:panelGroup>

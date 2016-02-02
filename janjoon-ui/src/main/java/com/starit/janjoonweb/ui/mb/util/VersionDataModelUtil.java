@@ -15,6 +15,7 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class VersionDataModelUtil {
 
+	private String name;
 	private JJVersion version;
 	private List<JJBuild> builds;
 	private List<JJRequirement> requirementRoadMap;
@@ -38,6 +39,18 @@ public class VersionDataModelUtil {
 		this.requirementRoadMap = requirementBean
 				.getInfinshedRequirement(version);
 		this.bugRoadMap = bugBean.getInfinshedBugs(version);
+
+		this.name = (version != null) ? version.getProduct().getName() + "/"
+				+ version.getName() : MessageFactory.getMessage(
+				"label_noVersion").getDetail();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public JJVersion getVersion() {
@@ -70,6 +83,14 @@ public class VersionDataModelUtil {
 
 	public void setBugRoadMap(List<JJBug> bugRoadMap) {
 		this.bugRoadMap = bugRoadMap;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		return (object instanceof VersionDataModelUtil)
+				&& (getVersion() != null) ? getVersion().equals(
+				((VersionDataModelUtil) object).getVersion())
+				: (object == this);
 	}
 
 }

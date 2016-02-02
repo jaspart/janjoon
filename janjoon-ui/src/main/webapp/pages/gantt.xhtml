@@ -246,7 +246,7 @@
 								</f:facet>
 								<f:facet name="input">
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
-										filter="true" filterMatchMode="startsWith"
+										filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 										rendered="#{taskData.task.sprint == null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 
@@ -257,7 +257,7 @@
 											itemValue="#{contact}" />
 									</h:selectOneMenu>
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
-										filter="true" filterMatchMode="startsWith"
+										filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 										rendered="#{taskData.task.sprint != null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 
@@ -285,7 +285,7 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" value="#{taskData.startDate}"
+									<p:calendar style="width:90px" value="#{taskData.startDate}" readonlyInput="true"
 										navigator="true" pattern="yyyy/MM/dd HH:mm" styleClass="Fs14">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="taskData" value="#{taskData}" />
@@ -305,7 +305,7 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14"
+									<p:calendar style="width:90px" styleClass="Fs14" readonlyInput="true"
 										value="#{taskData.endDate}" navigator="true"
 										pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />
@@ -340,8 +340,8 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14"
-										value="#{taskData.task.startDateReal}" navigator="true"
+									<p:calendar style="width:90px" styleClass="Fs14" 
+										value="#{taskData.task.startDateReal}" readonlyInput="true" navigator="true"
 										pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="taskData" value="#{taskData}" />
@@ -362,7 +362,7 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14"
+									<p:calendar style="width:90px" styleClass="Fs14" readonlyInput="true"
 										value="#{taskData.task.endDateReal}" navigator="true"
 										pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />

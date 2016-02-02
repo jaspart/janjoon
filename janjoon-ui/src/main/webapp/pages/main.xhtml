@@ -275,8 +275,8 @@
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container50">
 							<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
-								<p:commandButton id="submitMes" icon="fa fa-plus-square Fs20"
-									process="@this,alert,messagedsc"
+								<p:commandButton id="submitMes" icon="fa fa-send Fs20"
+									process="@this,alert,messagedsc" value="#{messages.label_send}"
 									actionListener="#{jJMessageBean.createMessage(false,null)}"
 									update="messageDialogForm :headerForm:communicationButton :growlForm :communicationButton" />
 							</h:panelGroup>

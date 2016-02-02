@@ -39,7 +39,7 @@
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:selectOneMenu id="objectComponent"
 											onchange="PF('profileDataTableWV').filter();" effect="fade"
-											filter="true" filterMatchMode="startsWith">
+											filter="#{!loginBean.mobile}" filterMatchMode="startsWith">
 											<f:selectItem itemValue="all"
 												itemLabel="#{messages.admin_profile_table_filter_all}" />
 											<f:selectItems value="#{jJRightBean.objects}" var="p"
@@ -220,7 +220,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="object" value="#{jJRightBean.object}"
-								effect="fade" filter="true" filterMatchMode="startsWith"
+								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 								disabled="#{jJProfileBean.disabledRightMode}"
 								widgetVar="objectWidget" label="Right Object" required="true">
 								<p:ajax process="@this" partialSubmit="true"
@@ -243,7 +243,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="category" value="#{jJRightBean.category}"
-								effect="fade" filter="true" filterMatchMode="startsWith"
+								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
 								disabled="#{jJProfileBean.disabledRightMode}">
 								<p:ajax process="@this" partialSubmit="true"
 									listener="#{jJRightBean.handleSelectCategory()}" />
