@@ -143,8 +143,8 @@
 							<h:panelGroup layout="block" style="float: right !important;"
 								styleClass="Container10 Responsive100 Fright">
 								<p:commandButton id="infoBtnBug"
-									icon="fa fa-info-circle  Gray Fs20" styleClass="Fright GrayButton"
-									type="button"
+									icon="fa fa-info-circle  Gray Fs20"
+									styleClass="Fright GrayButton" type="button"
 									title="#{messages.specification_video_help_title}" />
 							</h:panelGroup>
 
@@ -179,7 +179,8 @@
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="Container70">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:selectOneMenu id="activeSprintIndex" panelStyleClass="hideDisabled"
+										<p:selectOneMenu id="activeSprintIndex"
+											panelStyleClass="hideDisabled"
 											value="#{jJStatusBean.activeTabSprintIndex}" effect="fade"
 											onchange="PF('SprintTab').select(value);">
 											<f:selectItems value="#{jJStatusBean.sprintList}"
@@ -194,7 +195,7 @@
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container100">
 							<p:tabView id="SprintTabView" dynamic="true"
-								widgetVar="SprintTab" style="max-width: 200px;"
+								widgetVar="SprintTab" style="max-width: 300px;display: none;"
 								value="#{jJStatusBean.sprintList}" var="jjsprint"
 								scrollable="true" styleClass="responsiveTabView"
 								onTabChange="sprintTabChangeHelper([{name: 'activeSprintIndex', value: index}])"
@@ -203,20 +204,24 @@
 									titletip="#{!jjsprint.render and jjsprint.chartModel == null ? messages.statistique_disabled_sprint_titletip :''}"
 									disabled="#{jjsprint.render}">
 									<h:panelGroup layout="block" styleClass="Container">
-										<h:panelGroup layout="block" styleClass="Container100">
-											<h3 style="text-align: center;">#{messages.statistique_completion_progress_title}</h3>
-											<h:panelGroup layout="block" styleClass="EmptyBox5" />
-											<p:progressBar value="#{jjsprint.progressBarValue}"
-												labelTemplate="{value}%" displayOnly="true" />
-										</h:panelGroup>
-										<div class="EmptyBox30 barChart"
-											id="barChart_#{jjsprint.sprint.id}" />
-										<h:panelGroup layout="block" styleClass="Container100">
-											<p:chart model="#{jjsprint.chartModel}" type="bar"
-												style="height:400px;" responsive="true"
-												widgetVar="barChart_#{jjsprint.sprint.id}_Widget"
-												rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
-										</h:panelGroup>
+										<h:form id="sprintForm">
+											<p:remoteCommand name="updateBarChart"
+												update="#{jjsprint.chartModel != null ? ':statsTabView:SprintTabView:sprintForm:barChart':''}" />
+											<h:panelGroup layout="block" styleClass="Container100">
+												<h3 style="text-align: center;">#{messages.statistique_completion_progress_title}</h3>
+												<h:panelGroup layout="block" styleClass="EmptyBox5" />
+												<p:progressBar value="#{jjsprint.progressBarValue}"
+													labelTemplate="{value}%" displayOnly="true" />
+											</h:panelGroup>
+											<div class="EmptyBox30 barChart"
+												id="barChart_#{jjsprint.sprint.id}" />
+											<h:panelGroup layout="block" styleClass="Container100">
+												<p:chart id="barChart" model="#{jjsprint.chartModel}"
+													type="bar" style="height:400px;" responsive="true"
+													widgetVar="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}_Widget"
+													rendered="#{!jjsprint.render and jjsprint.chartModel != null}" />
+											</h:panelGroup>
+										</h:form>
 									</h:panelGroup>
 								</p:tab>
 							</p:tabView>

@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -21,6 +20,7 @@ import javax.net.ssl.SSLHandshakeException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.primefaces.context.RequestContext;
@@ -33,14 +33,10 @@ import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
 
-import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
@@ -214,8 +210,8 @@ public class DevelopmentBean implements Serializable {
 				}
 				selectedTree = null;
 			}
-			
-			logger.error("jDev ="+ (System.currentTimeMillis() - t));
+
+			logger.error("jDev =" + (System.currentTimeMillis() - t));
 
 		} else {
 			render = false;
@@ -356,6 +352,8 @@ public class DevelopmentBean implements Serializable {
 			configManager = new SvnConfigManager("",
 					"https://svn.riouxsvn.com/testchemakh", path, "chemakh",
 					"taraji0000", product.getName(), version.getName());
+			logger.error("SvnConfigManager ="
+					+ (System.currentTimeMillis() - t));
 			configManager
 					.cloneRemoteRepository(
 							"https://svn.riouxsvn.com/testchemakh/"
@@ -364,7 +362,7 @@ public class DevelopmentBean implements Serializable {
 
 		} else
 			configManager = null;
-		logger.error("jDevConfigManager ="+ (System.currentTimeMillis() - t));
+		logger.error("jDevConfigManager =" + (System.currentTimeMillis() - t));
 		return configManager;
 
 	}
@@ -609,7 +607,7 @@ public class DevelopmentBean implements Serializable {
 			task.setStatus(status);
 		}
 
-		jJTaskBean.saveJJTask(task, false);
+		jJTaskBean.saveJJTask(task, false, new MutableInt(0));
 		if (task.getSprint() != null
 				&& LoginBean.findBean("jJSprintBean") != null) {
 			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
@@ -670,11 +668,11 @@ public class DevelopmentBean implements Serializable {
 	public void startTask() {
 		task.setStartDateReal(new Date());
 		jJTaskBean.setTask(task);
-		jJTaskBean.updateTask("dev");		
+		jJTaskBean.updateTask("dev");
 
 	}
-	
-	public List<JJTask> completeTask(String query) {		
+
+	public List<JJTask> completeTask(String query) {
 
 		List<JJTask> suggestions = new ArrayList<JJTask>();
 
@@ -714,6 +712,8 @@ public class DevelopmentBean implements Serializable {
 				}
 			}
 			activeTabIndex = i;
+			RequestContext.getCurrentInstance().execute(
+					"PF('fileTabview').select(" + activeTabIndex + ");");
 
 		}
 
@@ -972,7 +972,7 @@ public class DevelopmentBean implements Serializable {
 		}
 
 	}
-	
+
 	public String getActiveIndex() {
 
 		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"

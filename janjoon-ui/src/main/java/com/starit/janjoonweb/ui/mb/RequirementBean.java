@@ -13,22 +13,18 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.RateEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
 import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -42,9 +38,9 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJVersion;
+import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.util.CategorieRequirement;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @Scope("session")
@@ -56,6 +52,9 @@ public class RequirementBean {
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
+
+	@Autowired
+	private JJVersionService jJVersionService;
 
 	@Autowired
 	private JJChapterService jJChapterService;
@@ -102,6 +101,10 @@ public class RequirementBean {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	public void setjJVersionService(JJVersionService jJVersionService) {
+		this.jJVersionService = jJVersionService;
 	}
 
 	public void setjJChapterService(JJChapterService jJChapterService) {
@@ -449,6 +452,15 @@ public class RequirementBean {
 									new JJStatusBean());
 						}
 					}
+				} else if (jJProductBean.getProduct() != null
+						&& requirement.getProduct() == null) {
+					change = true;
+					jJProductBean.setProduct(null);
+					jJVersionBean.getVersionList();
+					jJVersionBean.setVersion(null);
+					session.setAttribute("jJTaskBean", new JJTaskBean());
+					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJSprintBean", new JJSprintBean());
 				}
 
 				if (change) {
@@ -536,10 +548,8 @@ public class RequirementBean {
 								project, product), version, null, true, true);
 
 		for (JJRequirement requirement : requirements) {
-			new DefaultTreeNode("Requirement", new RequirementUtil(requirement,
-					jJCategoryService, jJRequirementService, jJTaskService,
-					jJTestcaseService, jJTestcaseexecutionService),
-					categoryNode);
+			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(
+					requirement, jJRequirementService), categoryNode);
 		}
 
 	}
@@ -556,9 +566,8 @@ public class RequirementBean {
 						version, null, chapter, true, true, true, false, null);
 
 		for (JJRequirement requirement : requirements) {
-			new DefaultTreeNode("Requirement", new RequirementUtil(requirement,
-					jJCategoryService, jJRequirementService, jJTaskService,
-					jJTestcaseService, jJTestcaseexecutionService), newNode);
+			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(
+					requirement, jJRequirementService), newNode);
 		}
 		if (requirement != null && requirement.getChapter() != null
 				&& requirement.getChapter().equals(chapter))
@@ -568,10 +577,9 @@ public class RequirementBean {
 
 	public void onNodeSelect(NodeSelectEvent event) throws IOException {
 
-		if (event.getTreeNode().getData() instanceof RequirementUtil) {
+		if (event.getTreeNode().getData() instanceof JJRequirement) {
 
-			long id = ((RequirementUtil) event.getTreeNode().getData())
-					.getRequirement().getId();
+			long id = ((JJRequirement) event.getTreeNode().getData()).getId();
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
@@ -593,12 +601,16 @@ public class RequirementBean {
 		requirement = jJRequirementService.findJJRequirement(requirement
 				.getId());
 
+		List<JJRequirement> linkUpToUpdate = new ArrayList<JJRequirement>();
+
 		if (requirement.getCategory().getStage() < linkCategory.getStage()) {
 			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
 					requirement.getRequirementLinkUp());
 			for (JJRequirement req : listReq) {
 				if (req.getCategory().equals(linkCategory)) {
 					requirement.getRequirementLinkUp().remove(req);
+					if (!linkReq.contains(req))
+						linkUpToUpdate.add(req);
 				}
 			}
 			requirement.getRequirementLinkUp().addAll(
@@ -609,32 +621,46 @@ public class RequirementBean {
 			for (JJRequirement req : listReq) {
 				if (req.getCategory().equals(linkCategory)) {
 
-					req = jJRequirementService.findJJRequirement(req.getId());
-					req.getRequirementLinkUp().remove(requirement);
-					JJContact contact = ((LoginBean) LoginBean
-							.findBean("loginBean")).getContact();
-					req.setUpdatedBy(contact);
-					req.setUpdatedDate(new Date());
-					jJRequirementService.updateJJRequirement(req);
+					if (!linkReq.contains(req)) {
+						req = jJRequirementService.findJJRequirement(req
+								.getId());
+						req.getRequirementLinkUp().remove(requirement);
+						// jJRequirementBean.updateJJRequirement(req);
+						JJRequirementBean.updateRowState(req,
+								jJRequirementService, requirement);
+						jJRequirementBean.updateDataTable(req,
+								JJRequirementBean.UPDATE_OPERATION);
+					}
 
 				}
 			}
 			for (JJRequirement req : linkReq) {
-				req = jJRequirementService.findJJRequirement(req.getId());
-				req.getRequirementLinkUp().add(requirement);
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
-				req.setUpdatedBy(contact);
-				req.setUpdatedDate(new Date());
-				jJRequirementService.updateJJRequirement(req);
+				if (!listReq.contains(req)) {
+					req = jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().add(requirement);
+					// jJRequirementBean.updateJJRequirement(req);
+					JJRequirementBean.updateRowState(req, jJRequirementService,
+							requirement);
+					jJRequirementBean.updateDataTable(req,
+							JJRequirementBean.UPDATE_OPERATION);
+				}
 			}
 		}
 
 		rootNode = null;
 		selectedNode = null;
-		jJRequirementService.saveJJRequirement(requirement);
+		JJRequirementBean.updateRowState(requirement, jJRequirementService,
+				requirement);
 		jJRequirementBean.updateDataTable(requirement,
-				JJRequirementBean.UPDATE_OPERATION, false);
+				JJRequirementBean.UPDATE_OPERATION);
+
+		for (JJRequirement req : linkUpToUpdate) {
+			JJRequirementBean.updateRowState(req, jJRequirementService,
+					requirement);
+			jJRequirementBean.updateDataTable(req,
+					JJRequirementBean.UPDATE_OPERATION);
+		}
+
 		long id = requirement.getId();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
@@ -713,10 +739,9 @@ public class RequirementBean {
 
 	public String underligne(Object node) {
 
-		if (node instanceof RequirementUtil) {
+		if (node instanceof JJRequirement) {
 			if (requirement != null
-					&& ((RequirementUtil) node).getRequirement().equals(
-							requirement))
+					&& ((JJRequirement) node).equals(requirement))
 				return "opacity: 0.7;filter: alpha(opacity=70);";
 			else
 				return "";
@@ -735,6 +760,28 @@ public class RequirementBean {
 			}
 		}
 		return suggestions;
+	}
+
+	public List<JJProduct> completeProductRequirement(String query) {
+
+		List<JJProduct> productList = new ArrayList<JJProduct>();
+		productList.add(null);
+		productList
+				.addAll(((JJProductBean) LoginBean.findBean("jJProductBean"))
+						.getProductList());
+		return productList;
+	}
+
+	public List<JJVersion> completeVersionRequirement(String query) {
+
+		List<JJVersion> versionList = new ArrayList<JJVersion>();
+		versionList.add(null);
+
+		requirement.setVersioning(null);
+		if (requirement.getProduct() != null)
+			versionList.addAll(jJVersionService.getVersions(true, true,
+					requirement.getProduct(), LoginBean.getCompany(), true));
+		return versionList;
 	}
 
 	public void onrate() {
@@ -834,8 +881,8 @@ public class RequirementBean {
 		jJRequirementBean.getRequirementOrder(requirement);
 		// jJRequirementBean.updateJJRequirement(requirement);
 		jJRequirementBean.updateDataTable(requirement,
-				JJRequirementBean.UPDATE_OPERATION, false);
-		;
+				JJRequirementBean.UPDATE_OPERATION);
+
 		long id = requirement.getId();
 
 		FacesMessage facesMessage = MessageFactory.getMessage(

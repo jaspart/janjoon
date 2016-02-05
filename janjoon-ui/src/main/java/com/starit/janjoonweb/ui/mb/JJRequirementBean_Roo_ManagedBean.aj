@@ -627,6 +627,30 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
+        OutputLabel stateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        stateCreateOutput.setFor("stateCreateInput");
+        stateCreateOutput.setId("stateCreateOutput");
+        stateCreateOutput.setValue("State:");
+        htmlPanelGrid.getChildren().add(stateCreateOutput);
+        
+        AutoComplete stateCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        stateCreateInput.setId("stateCreateInput");
+        stateCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.state}", JJStatus.class));
+        stateCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeState}", List.class, new Class[] { String.class }));
+        stateCreateInput.setDropdown(true);
+        stateCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "state", String.class));
+        stateCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{state.name} #{state.description} #{state.creationDate} #{state.updatedDate}", String.class));
+        stateCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{state}", JJStatus.class));
+        stateCreateInput.setConverter(new JJStatusConverter());
+        stateCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(stateCreateInput);
+        
+        Message stateCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        stateCreateInputMessage.setId("stateCreateInputMessage");
+        stateCreateInputMessage.setFor("stateCreateInput");
+        stateCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(stateCreateInputMessage);
+        
         OutputLabel sprintCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintCreateOutput.setFor("sprintCreateInput");
         sprintCreateOutput.setId("sprintCreateOutput");
@@ -1341,6 +1365,30 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
+        OutputLabel stateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        stateEditOutput.setFor("stateEditInput");
+        stateEditOutput.setId("stateEditOutput");
+        stateEditOutput.setValue("State:");
+        htmlPanelGrid.getChildren().add(stateEditOutput);
+        
+        AutoComplete stateEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        stateEditInput.setId("stateEditInput");
+        stateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.state}", JJStatus.class));
+        stateEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeState}", List.class, new Class[] { String.class }));
+        stateEditInput.setDropdown(true);
+        stateEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "state", String.class));
+        stateEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{state.name} #{state.description} #{state.creationDate} #{state.updatedDate}", String.class));
+        stateEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{state}", JJStatus.class));
+        stateEditInput.setConverter(new JJStatusConverter());
+        stateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(stateEditInput);
+        
+        Message stateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        stateEditInputMessage.setId("stateEditInputMessage");
+        stateEditInputMessage.setFor("stateEditInput");
+        stateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(stateEditInputMessage);
+        
         OutputLabel sprintEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         sprintEditOutput.setFor("sprintEditInput");
         sprintEditOutput.setId("sprintEditOutput");
@@ -1835,6 +1883,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(statusValue);
         
+        HtmlOutputText stateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        stateLabel.setId("stateLabel");
+        stateLabel.setValue("State:");
+        htmlPanelGrid.getChildren().add(stateLabel);
+        
+        HtmlOutputText stateValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        stateValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.state}", JJStatus.class));
+        stateValue.setConverter(new JJStatusConverter());
+        htmlPanelGrid.getChildren().add(stateValue);
+        
         HtmlOutputText sprintLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         sprintLabel.setId("sprintLabel");
         sprintLabel.setValue("Sprint:");
@@ -2107,6 +2165,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     }
     
     public List<JJStatus> JJRequirementBean.completeStatus(String query) {
+        List<JJStatus> suggestions = new ArrayList<JJStatus>();
+        for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
+            String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
+            if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJStatus);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJStatus> JJRequirementBean.completeState(String query) {
         List<JJStatus> suggestions = new ArrayList<JJStatus>();
         for (JJStatus jJStatus : jJStatusService.findAllJJStatuses()) {
             String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());

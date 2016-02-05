@@ -22,7 +22,7 @@
 									rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
-									styleClass="SoftGrayBack"
+									styleClass="GrayButton"
 									icon="fa fa-star Fs20 #{jJBugBean.isRated(jJBugBean.viewBug) ? 'Yellow' : 'BoldGray'}"
 									update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
 									title="#{!jJBugBean.isRated(jJBugBean.viewBug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
@@ -221,7 +221,7 @@
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.label_cancel}"
-												value="#{messages.label_cancel}" styleClass="GrayBack"
+												value="#{messages.label_cancel}" styleClass="GrayButton"
 												action="/pages/bugs.jsf?faces-redirect=true" />
 										</h:panelGroup>
 									</h:panelGroup>
@@ -385,7 +385,7 @@
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createCloseButton"
-									value="#{messages.label_cancel}" styleClass="GrayBack"
+									value="#{messages.label_cancel}" styleClass="GrayButton"
 									onclick="PF('createDialogWidget').hide()" type="button" />
 							</h:panelGroup>
 						</h:panelGroup>

@@ -17,6 +17,8 @@ public interface JJTestcaseexecutionService {
 			JJChapter chapter, JJBuild build, boolean onlyActif,
 			boolean sortedByUpdatedDate, boolean withOutChapter);
 
+	public boolean checkIfSuccess(JJRequirement requirement);
+
 	public boolean haveTestcaseExec(JJTestcase testcase, JJBuild build,
 			JJVersion version);
 

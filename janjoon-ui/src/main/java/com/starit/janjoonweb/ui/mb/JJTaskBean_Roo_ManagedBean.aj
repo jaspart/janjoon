@@ -2266,8 +2266,7 @@ privileged aspect JJTaskBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    } 
-   
+    }
     
     public List<JJTask> JJTaskBean.completeParent(String query) {
         List<JJTask> suggestions = new ArrayList<JJTask>();

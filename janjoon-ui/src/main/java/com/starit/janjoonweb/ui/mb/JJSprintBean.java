@@ -15,6 +15,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.message.Message;
@@ -57,8 +58,6 @@ public class JJSprintBean {
 
 	@Autowired
 	private JJPermissionService jJPermissionService;
-
-	private JJTaskBean jJTaskBean;
 
 	@Autowired
 	private JJCategoryService jJCategoryService;
@@ -105,8 +104,11 @@ public class JJSprintBean {
 		this.activeTabGantIndex = activeTabGantIndex;
 	}
 
-	public void setjJTaskBean(JJTaskBean jJTaskBean) {
-		this.jJTaskBean = jJTaskBean;
+	public JJTaskBean getJJTaskBean() {
+		JJTaskBean jJTaskBean = ((JJTaskBean) LoginBean.findBean("jJTaskBean"));
+		if (jJTaskBean == null)
+			jJTaskBean = new JJTaskBean();
+		return jJTaskBean;
 	}
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
@@ -210,14 +212,6 @@ public class JJSprintBean {
 	}
 
 	public List<SprintUtil> getSprintList() {
-
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-
-		if (jJTaskBean == null)
-			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if (jJTaskBean == null)
-			jJTaskBean = new JJTaskBean();
 
 		if (LoginBean.getProject() == null) {
 
@@ -328,7 +322,7 @@ public class JJSprintBean {
 		DataTable dataTable = (DataTable) event.getSource();
 		JJTask t = (JJTask) dataTable.getRowData();
 		t.setAssignedTo((JJContact) event.getNewValue());
-		jJTaskBean.saveJJTask(t, true);
+		getJJTaskBean().saveJJTask(t, true, new MutableInt(0));
 		sprintUtil = SprintUtil
 				.getSprintUtil(t.getSprint().getId(), sprintList);
 		sprintUtil.setSprint(jJSprintService.findJJSprint(sprintUtil
@@ -407,16 +401,13 @@ public class JJSprintBean {
 						LoginBean.getProduct()), jJContactService,
 				jJTaskService);
 		sprintList.set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-		JJTaskBean jjTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if (jJTaskBean == null)
-			jJTaskBean = new JJTaskBean();
-		jjTaskBean.onSprintUpdate(sprintUtil.getSprint());
+		getJJTaskBean().onSprintUpdate(sprintUtil.getSprint());
 
 		String message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"Sprint", "");
-		jJTaskBean.setSprints(null);
-		jJTaskBean.setSprint(null);
+		getJJTaskBean().setSprints(null);
+		getJJTaskBean().setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -448,11 +439,9 @@ public class JJSprintBean {
 							+ activeTabSprintIndex);
 				}
 
-				((JJTaskBean) LoginBean.findBean("jJTaskBean"))
-						.setMode("scrum");
+				getJJTaskBean().setMode("scrum");
 			} else
-				((JJTaskBean) LoginBean.findBean("jJTaskBean"))
-						.setMode("planning");
+				getJJTaskBean().setMode("planning");
 
 			System.err.println("###### ACtive activeTabGantIndex: "
 					+ activeTabGantIndex);
@@ -471,8 +460,8 @@ public class JJSprintBean {
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "Sprint", "");
 
-		jJTaskBean.setSprints(null);
-		jJTaskBean.setSprint(null);
+		getJJTaskBean().setSprints(null);
+		getJJTaskBean().setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -497,8 +486,8 @@ public class JJSprintBean {
 
 		sprintUtil.setSprint(getJJSprint_());
 		sprintUtil.setNeditabale(true);
-		jJTaskBean.setSprints(null);
-		jJTaskBean.setSprint(null);
+		getJJTaskBean().setSprints(null);
+		getJJTaskBean().setSprint(null);
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -541,18 +530,9 @@ public class JJSprintBean {
 			dropedTask.setWorkloadReal(null);
 			dropedTask.setAssignedTo(null);
 			dropedTask.setCompleted(false);
-			jJTaskBean.saveJJTask(dropedTask, true);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
 			// resetJJTaskBean();
-
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJTaskBean jJTaskBean = (JJTaskBean) session
-					.getAttribute("jJTaskBean");
-			if (jJTaskBean == null)
-				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					JJTaskBean.UPDATE_OPERATION);
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -591,18 +571,9 @@ public class JJSprintBean {
 			dropedTask.setStartDateReal(new Date());
 			dropedTask.setAssignedTo(assignedTo);
 			dropedTask.setCompleted(false);
-			jJTaskBean.saveJJTask(dropedTask, true);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
 			// resetJJTaskBean();
-
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJTaskBean jJTaskBean = (JJTaskBean) session
-					.getAttribute("jJTaskBean");
-			if (jJTaskBean == null)
-				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					JJTaskBean.UPDATE_OPERATION);
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -624,18 +595,10 @@ public class JJSprintBean {
 			dropedTask.setStatus(status);
 			dropedTask.setEndDateReal(null);
 			dropedTask.setCompleted(false);
-			jJTaskBean.saveJJTask(dropedTask, true);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
 			// resetJJTaskBean();
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJTaskBean jJTaskBean = (JJTaskBean) session
-					.getAttribute("jJTaskBean");
-			if (jJTaskBean == null)
-				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					JJTaskBean.UPDATE_OPERATION);
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -673,18 +636,9 @@ public class JJSprintBean {
 			dropedTask.setEndDateReal(new Date());
 			dropedTask.setCompleted(true);
 			dropedTask.setStatus(status);
-			jJTaskBean.saveJJTask(dropedTask, true);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
 			// resetJJTaskBean();
-
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJTaskBean jJTaskBean = (JJTaskBean) session
-					.getAttribute("jJTaskBean");
-			if (jJTaskBean == null)
-				jJTaskBean = new JJTaskBean();
-			jJTaskBean.updateView(jJTaskService.findJJTask(dropedTask.getId()),
-					JJTaskBean.UPDATE_OPERATION);
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
 
 			JJSprint s = jJSprintService.findJJSprint(sprintId);
 			sprintUtil = new SprintUtil(s, jJTaskService.getSprintTasks(s,
@@ -867,7 +821,7 @@ public class JJSprintBean {
 		System.out.println("deleteTask");
 		task = jJTaskService.findJJTask(task.getId());
 		task.setEnabled(false);
-		jJTaskBean.saveJJTask(task, false);
+		getJJTaskBean().saveJJTask(task, false, new MutableInt(0));
 		sprintUtil = new SprintUtil(jJSprintService.findJJSprint(task
 				.getSprint().getId()), jJTaskService.getSprintTasks(
 				jJSprintService.findJJSprint(task.getSprint().getId()),
@@ -878,14 +832,7 @@ public class JJSprintBean {
 		// requirement = null;
 		category = null;
 		categoryList = null;
-
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if (jJTaskBean == null)
-			jJTaskBean = new JJTaskBean();
-		jJTaskBean.updateView(jJTaskService.findJJTask(task.getId()),
-				JJTaskBean.DELETE_OPERATION);
+		getJJTaskBean().updateView(task, JJTaskBean.DELETE_OPERATION);
 		// reqList = null;
 		task = null;
 		// resetJJTaskBean();
@@ -911,14 +858,9 @@ public class JJSprintBean {
 	}
 
 	public void resetJJTaskBean() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if (jJTaskBean == null)
-			jJTaskBean = new JJTaskBean();
-		jJTaskBean.setProject(null);
-		jJTaskBean.setTasksData(null);
-		jJTaskBean.setModel(null);
+		getJJTaskBean().setProject(null);
+		getJJTaskBean().setTasksData(null);
+		getJJTaskBean().setModel(null);
 	}
 
 	public int contains(Long id) {

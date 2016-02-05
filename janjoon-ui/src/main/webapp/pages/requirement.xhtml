@@ -87,10 +87,10 @@
 								<p:outputLabel style="color: #fff;"
 									value="#{messages.specification_color_RequirementNoTask_label}" />
 							</p:column>
-							<p:column styleClass="Progress Wid20">
+							<p:column styleClass="InProgress Wid20">
 								<p:outputLabel style="color: #fff;"
-									value="#{messages.specification_color_RequirementInProcess_label}" />
-							</p:column>
+									value="#{messages.specification_color_RequirementInProgress_label}" />
+							</p:column>						
 							<p:column styleClass="InTesting Wid20">
 								<p:outputLabel style="color: #fff;"
 									value="#{messages.specification_color_RequirementFinishedTestProcess_label}" />
@@ -122,7 +122,7 @@
 															onstart="PF('blockUIWidget').block()"
 															oncomplete="PF('blockUIWidget').unblock()"
 															title="#{!requirementBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}"
-															styleClass="SoftGrayBack"
+															styleClass="GrayButton"
 															icon="fa fa-star Fs20 #{requirementBean.rated ? 'Yellow' : 'BoldGray'}"
 															update=":growlForm :messageCreationForm :headerForm:communicationButton :treeForm:rate" />
 													</h:panelGroup>
@@ -216,8 +216,8 @@
 												</p:treeNode>
 												<p:treeNode type="Requirement">
 													<h:outputText style="#{requirementBean.underligne(node)}"
-														value="R-#{node.requirement.id}-#{fn:substring(node.requirement.name,0,25)}"
-														styleClass="#{node.style}" />
+														value="R-#{node.id}-#{fn:substring(node.name,0,25)}"
+														styleClass="#{node.state.name}" />
 												</p:treeNode>
 											</p:tree>
 										</p:tab>
@@ -261,7 +261,7 @@
 									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup layout="block"
-									styleClass="Container50 Responsive100">
+									styleClass="Container50 Responsive">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:autoComplete id="chapter" scrollHeight="200"
 											value="#{requirementBean.requirement.chapter}"
@@ -270,9 +270,37 @@
 											title="#{messages.specification_create_chapter_label}"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter"
 											dropdown="true" var="chapter"
-											completeMethod="#{requirementBean.completeChapterRequirement}" />
+											completeMethod="#{requirementBean.completeChapterRequirement}" />											
 									</h:panelGroup>
 								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Container50 Responsive">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:autoComplete id="product" scrollHeight="200"
+											value="#{requirementBean.requirement.product}"
+											itemLabel="#{product != null ? product.name : messages.label_selectProduct}"
+											itemValue="#{product}"
+											title="#{messages.label_product}"
+											converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter"
+											dropdown="true" var="product"
+											completeMethod="#{requirementBean.completeProductRequirement}" >
+											<p:ajax event="itemSelect" update="version" />											
+											</p:autoComplete>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Container50 Responsive">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:autoComplete id="version" scrollHeight="200"
+											value="#{requirementBean.requirement.versioning}"
+											itemLabel="#{version != null ? version.name : messages.label_selectVersion}"
+											itemValue="#{version}"
+											title="Version"
+											converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
+											dropdown="true" var="version"
+											completeMethod="#{requirementBean.completeVersionRequirement}" />
+									</h:panelGroup>
+								</h:panelGroup>								
 								<h:panelGroup layout="block" style="height: 220px;"
 									rendered="#{!loginBean.mobile}"
 									styleClass="Container100 Responsive100">
@@ -324,7 +352,7 @@
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.label_cancel}"
-												value="#{messages.label_cancel}" styleClass="BoldGrayBack"
+												value="#{messages.label_cancel}" styleClass="GrayButton"
 												action="/pages/specifications.jsf?faces-redirect=true" />
 										</h:panelGroup>
 									</h:panelGroup>
@@ -395,12 +423,17 @@
 							#{messages.label_task}
 						</f:facet>
 						<p:column headerText="#{messages.project_gantt_table_name_title}"
-							width="70%">
+							width="60%">
 							<h:outputText value="#{task.id}-#{fn:substring(task.name,0,30)}" />
 						</p:column>
 						<p:column
+							headerText="Status"
+							width="20%">
+							<h:outputText value="#{loginBean.checkMessage(task.status)}" />
+						</p:column>
+						<p:column
 							headerText="#{messages.project_gantt_table_assigned_title}"
-							width="30%">
+							width="20%">
 							<h:outputText value="#{task.assignedTo}"
 								converter="JJContactConverter" />
 						</p:column>

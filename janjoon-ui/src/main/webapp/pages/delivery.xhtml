@@ -18,7 +18,7 @@
 		<h:outputScript library="js" name="delivery.js" />
 	</ui:define>
 	<ui:define name="content">
-		<h:panelGroup layout="block" styleClass="Container">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form style="width:100%;display:none;">
 				<p:remoteCommand onstart="PF('blockUIWidget').block()"
 					name="tabChangeHelper"
@@ -51,7 +51,7 @@
 				<f:event type="preRenderComponent"
 					listener="#{loginBean.updateTabViewWidth()}" />
 				<p:tabView id="versionTabView" widgetVar="versionTab"
-					style="max-width: 300px;" styleClass="responsiveTabView"
+					style="max-width: 300px;display: none;"  styleClass="responsiveTabView"
 					dynamic="true" cache="false"
 					activeIndex="#{jJVersionBean.activeDeliveryIndex}"
 					onTabChange="tabChangeHelper([{name: 'activeIndex', value: index}])"

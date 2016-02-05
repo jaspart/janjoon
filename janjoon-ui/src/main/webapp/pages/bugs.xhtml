@@ -30,6 +30,73 @@
 					style="white-space: nowrap;" />
 			</h:panelGrid>
 			<h:panelGroup layout="block" styleClass="Container">
+				<p:overlayPanel id="colorPanel" for="bugTable2:colorBtn" hideEffect="fade"
+					dynamic="true"  styleClass="ShowOnDesktop">
+					<p:panelGrid style="width: 100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="12">Code des Couleurs</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column colspan="2" styleClass="NEW">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_NEW}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="CLOSED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_CLOSED}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="VERIFIED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_VERIFIED}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="RESOLVED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_RESOLVED}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="DUPLICATE">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_DUPLICATE}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="WONTFIX">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_WONTFIX}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" styleClass="INVALID">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_INVALID}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="FIXED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_FIXED}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="READY">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_READY}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="REOPENED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_REOPENED}" />
+							</p:column>
+
+							<p:column colspan="2" styleClass="ASSIGNED">
+								<p:outputLabel style="color: #fff;"
+									value="#{messages.status_ASSIGNED}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:overlayPanel>
 				<h:panelGroup layout="block" styleClass="Container100">
 					<p:dataTable id="bugTable2" sortMode="multiple"
 						styleClass="bugDataTable" style="table-layout: fixed;"
@@ -84,83 +151,18 @@
 
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="Container20 Responsive">
-									<!-- 									<h:panelGroup layout="block" styleClass="Container15" -->
-									<!-- 										style="height: 1px;"> -->
-									<!-- 										<p:commandButton id="colorBtn" -->
-									<!-- 											icon="fa fa-info-circle  Gray Fs20" -->
-									<!-- 											styleClass="GrayButton ShowOnDesktop" type="button" -->
-									<!-- 											title="#{messages.specification_video_help_title}" /> -->
-									<!-- 													<p:overlayPanel id="colorPanel" for="colorPanel" -->
-									<!-- 				hideEffect="fade" dynamic="true" style="width:600px" -->
-									<!-- 				styleClass="ShowOnDesktop"> -->
-									<!-- 				<p:panelGrid style="width: 100%;"> -->
-									<!-- 					<f:facet name="header"> -->
-									<!-- 						<p:row> -->
-									<!-- 							<p:column colspan="12">Code des Couleurs</p:column> -->
-									<!-- 						</p:row> -->
-									<!-- 					</f:facet> -->
-									<!-- 					<p:row> -->
-									<!-- 						<p:column colspan="2" styleClass="NEW"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_NEW}" /> -->
-									<!-- 						</p:column> -->
+									<h:panelGroup layout="block"
+										styleClass="Container25 ShowOnDesktop">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:commandButton id="colorBtn"
+											icon="fa fa-info-circle  Gray Fs20"
+											styleClass="GrayButton ShowOnDesktop" type="button"
+											title="#{messages.specification_video_help_title}" />
+</h:panelGroup>
+									</h:panelGroup>
 
-									<!-- 						<p:column colspan="2" styleClass="CLOSED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_CLOSED}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="VERIFIED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_VERIFIED}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="RESOLVED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_RESOLVED}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="DUPLICATE"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_DUPLICATE}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="WONTFIX"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_WONTFIX}" /> -->
-									<!-- 						</p:column> -->
-									<!-- 					</p:row> -->
-									<!-- 					<p:row> -->
-									<!-- 						<p:column colspan="2" styleClass="INVALID"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_INVALID}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="FIXED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_FIXED}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="READY"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_READY}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="REOPENED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_REOPENED}" /> -->
-									<!-- 						</p:column> -->
-
-									<!-- 						<p:column colspan="2" styleClass="ASSIGNED"> -->
-									<!-- 							<p:outputLabel style="color: #fff;" -->
-									<!-- 								value="#{messages.status_ASSIGNED}" /> -->
-									<!-- 						</p:column> -->
-									<!-- 					</p:row> -->
-									<!-- 				</p:panelGrid> -->
-									<!-- 			</p:overlayPanel> -->
-									<!-- 									</h:panelGroup> -->
-
-									<h:panelGroup layout="block" styleClass="Container33">
+									<h:panelGroup layout="block"
+										styleClass="Container25">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_delete_button}"
 												id="deleteMButton" icon="fa fa-trash Gray Fs20"
@@ -170,7 +172,8 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block" styleClass="Container33">
+									<h:panelGroup layout="block"
+										styleClass="Container25">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_favoris_button}"
 												id="subscribeMButton" icon="fa fa-star Gray Fs20"
@@ -183,7 +186,8 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block" styleClass="Container33">
+									<h:panelGroup layout="block"
+										styleClass="Container25">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="createButton"
 												icon="fa fa-plus-square  Gray Fs20" styleClass="GrayButton"
@@ -208,18 +212,27 @@
 
 						<p:column selectionMode="multiple"
 							style="width:8%;text-align: center;" priority="1">
-							<p:commandLink actionListener="#{jJBugBean.onrate(bug)}"
-								onstart="PF('blockUIWidget').block()"
-								styleClass="MarLeftQuarter"
+<!-- 							<p:commandLink actionListener="#{jJBugBean.onrate(bug)}" -->
+<!-- 								onstart="PF('blockUIWidget').block()" -->
+<!-- 								styleClass="MarLeftQuarter" -->
+<!-- 								oncomplete="PF('blockUIWidget').unblock()" -->
+<!-- 								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"> -->
+
+<!-- 								<p:graphicImage -->
+<!-- 									name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}" -->
+<!-- 									width="16" height="16" cache="false" library="images" -->
+<!-- 									title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" /> -->
+
+<!-- 							</p:commandLink> -->
+							
+							<p:commandButton
+								actionListener="#{jJBugBean.onrate(bug)}"
+								onstart="PF('blockUIWidget').block()"								
 								oncomplete="PF('blockUIWidget').unblock()"
-								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm">
-
-								<p:graphicImage
-									name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}"
-									width="16" height="16" cache="false" library="images"
-									title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
-
-							</p:commandLink>
+								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"									
+								styleClass="MarLeftQuarter GrayButton littleButton"
+								icon="fa fa-star Fs20 #{jJBugBean.isRated(bug) ? 'Yellow' : 'BoldGray'}"									
+								title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
 						</p:column>
 
 						<p:column headerText="#{messages.bug_table_title_title}"
@@ -242,8 +255,9 @@
 							style="width: 10% !important;height: 5px !important;text-align:center;"
 							filterMatchMode="exact" filterBy="#{bug.criticity.name}">
 							<f:facet name="filter">
-								<p:selectOneMenu id="criticitySelect" binding="#{criticitySelect}" var="type"
-									style="padding-right: 35px !important;" 
+								<p:selectOneMenu id="criticitySelect"
+									binding="#{criticitySelect}" var="type"
+									style="padding-right: 35px !important;"
 									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu Fs14"
 									onchange="PF('bugTable').filter()">
@@ -261,7 +275,8 @@
 							style="width: 10% !important;height: 5px !important;text-align:center;"
 							filterMatchMode="exact" filterBy="#{bug.importance.name}">
 							<f:facet name="filter">
-								<p:selectOneMenu id="importanceSelect" binding="#{importanceSelect}" var="type"
+								<p:selectOneMenu id="importanceSelect"
+									binding="#{importanceSelect}" var="type"
 									style="padding-right: 35px !important;"
 									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu"
@@ -282,8 +297,8 @@
 							priority="2" filterMatchMode="exact">
 
 							<f:facet name="filter">
-								<p:selectOneMenu id="statusSelect" binding="#{statusSelect}" var="type"
-									style="padding-right: 35px !important;"
+								<p:selectOneMenu id="statusSelect" binding="#{statusSelect}"
+									var="type" style="padding-right: 35px !important;"
 									panelStyleClass="specSelectOneMenuPanel"
 									styleClass="specSelectOneMenu Fs14"
 									onchange="PF('bugTable').filter()">
@@ -368,7 +383,7 @@
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createCloseButton"
-									value="#{messages.label_cancel}" styleClass="GrayBack"
+									value="#{messages.label_cancel}" styleClass="GrayButton"
 									onclick="PF('createDialogWidget').hide()" type="button" />
 							</h:panelGroup>
 						</h:panelGroup>

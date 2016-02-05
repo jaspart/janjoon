@@ -43,7 +43,6 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
-import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @RooSerializable
@@ -677,7 +676,8 @@ public class JJBugBean {
 			if (show) {
 				if (viewBug.getVersioning() != null)
 					prod = viewBug.getVersioning().getProduct();
-				else if (viewBug.getBuild() != null && viewBug.getBuild().getVersion() != null)
+				else if (viewBug.getBuild() != null
+						&& viewBug.getBuild().getVersion() != null)
 					prod = viewBug.getBuild().getVersion().getProduct();
 			}
 

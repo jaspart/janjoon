@@ -5,6 +5,7 @@ import java.util.*;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -13,9 +14,11 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -27,10 +30,18 @@ import com.starit.janjoonweb.domain.JJVersion;
 public class JJTestcaseexecutionBean {
 
 	@Autowired
-	JJTaskService jJTaskService;
+	private JJTaskService jJTaskService;
+
+	@Autowired
+	private JJRequirementService jJRequirementService;
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
+		this.jJRequirementService = jJRequirementService;
 	}
 
 	private JJTestcaseexecution testcaseexecution;
@@ -139,7 +150,7 @@ public class JJTestcaseexecutionBean {
 				.findJJTestcaseexecution(testcaseexecution.getId());
 
 		tce.setPassed(status);
-		updateJJTestcaseexecution(tce);
+		updateJJTestcaseexecution(tce, new MutableInt(0));
 
 		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
 				null, false, null, tce.getTestcase(), tce.getBuild(), true,
@@ -156,7 +167,7 @@ public class JJTestcaseexecutionBean {
 					.getSession(false);
 			JJTaskBean jJTaskBean = (JJTaskBean) session
 					.getAttribute("jJTaskBean");
-			jJTaskBean.saveJJTask(task, true);
+			jJTaskBean.saveJJTask(task, true, new MutableInt(0));
 
 		}
 
@@ -200,12 +211,17 @@ public class JJTestcaseexecutionBean {
 		jJTestcaseexecutionService.saveJJTestcaseexecution(b);
 	}
 
-	public void updateJJTestcaseexecution(JJTestcaseexecution b) {
+	public void updateJJTestcaseexecution(JJTestcaseexecution b,
+			MutableInt updateReq) {
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
-		jJTestcaseexecutionService.updateJJTestcaseexecution(b);
+		b = jJTestcaseexecutionService.updateJJTestcaseexecution(b);
+
+		if (updateReq.intValue() == 1)
+			JJRequirementBean.updateRowState(b.getTestcase().getRequirement(),
+					jJRequirementService, b);
 	}
 
 	public class TestCaseexecutionRecap {

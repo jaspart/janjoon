@@ -501,8 +501,8 @@ div#contentPanel_content {
 }
 
 .requirement-table .ui-datatable-data tr {
-    height: 70px;
-    overflow: hidden;   
+	height: 70px;
+	overflow: hidden;
 }
 
 .link-datatable .ui-datatable-header {
@@ -1090,7 +1090,7 @@ div.highLightRevised2 {
 	background-color: #FF3333 !important;
 }
 
-.Progress {
+.InProgress {
 	padding: .2em .6em .3em;
 	font-size: 80%;
 	/* 	font-weight: 700; */
@@ -1141,7 +1141,7 @@ div.highLightRevised2 {
 	background-color: #FF3333 !important;
 }
 
-.Progress_select {
+.InProgress_select {
 	color: #fff !important;
 	text-align: center;
 	background-color: #9E33FF !important;
@@ -1170,7 +1170,6 @@ div.highLightRevised2 {
 }
 
 /* BugStyle */
-
 .NEW {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
@@ -1315,61 +1314,61 @@ div.highLightRevised2 {
 }
 
 .NEW_select {
-	background-color: #FF0000 !important;	
+	background-color: #FF0000 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .ASSIGNED_select {
-	background-color: #00A5F7 !important;	
+	background-color: #00A5F7 !important;
 	color: #fff !important;
-	text-align: center;	
+	text-align: center;
 }
 
 .REOPENED_select {
-	background-color: #FF0000 !important;	
+	background-color: #FF0000 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .READY_select {
-	background-color: #00A5F7 !important;	
+	background-color: #00A5F7 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .FIXED_select {
-	background-color: #008800 !important;	
+	background-color: #008800 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .INVALID_select {
-	background-color: #8600FF !important;	
+	background-color: #8600FF !important;
 	color: #fff !important;
 	text-align: center;
 }
 
-.WONTFIX_select{
-	background-color: #666666 !important;	
+.WONTFIX_select {
+	background-color: #666666 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .DUPLICATE_select {
-	background-color: #8600FF !important;	
+	background-color: #8600FF !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .RESOLVED_select {
-	background-color: #008800 !important;	
+	background-color: #008800 !important;
 	color: #fff !important;
 	text-align: center;
 }
 
 .VERIFIED_select {
-	background-color: #8600FF !important;	
+	background-color: #8600FF !important;
 	color: #fff !important;
 	text-align: center;
 }
@@ -1586,7 +1585,6 @@ div.highLightRevised2 {
 /* .cke_contents { */
 /* 	height: 150px !important; */
 /* } */
-
 .cke_bottom {
 	display: none !important;
 }
@@ -1603,17 +1601,26 @@ div.highLightRevised2 {
 	width: 30px !important;
 }
 
-.responsiveTabView {
-	
-}
-
 .ui-datatable-scrollable-theadclone th span.ui-column-title {
 	display: none !important;
 	height: 0px;
 }
 
-.ui-selectonemenu-panel.hideDisabled .ui-selectonemenu-item.ui-state-disabled {
-    display: none;
+.ui-selectonemenu-panel.hideDisabled .ui-selectonemenu-item.ui-state-disabled
+	{
+	display: none;
+}
+
+.responsiveTabView {
+	
+}
+
+.responsiveTabView .ui-tabs-navscroller {
+	padding-left: 18px;
+}
+
+.responsiveTabView .ui-tabs-navscroller .ui-tabs-navscroller-btn{
+	display: inline;
 }
 
 @media ( min-width : 100px) and (max-width: 960px) {

@@ -242,7 +242,7 @@
 											onstart="PF('blockUIWidget').block()"
 											oncomplete="PF('blockUIWidget').unblock()"
 											title="#{!jJTestcaseBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}"
-											styleClass="SoftGrayBack"
+											styleClass="GrayButton"
 											icon="fa fa-star Fs20 #{jJTestcaseBean.rated ? 'Yellow' : 'BoldGray'}"
 											update=":growlForm :messageCreationForm :headerForm:communicationButton @this" />
 
@@ -349,7 +349,7 @@
 								style="color: red;" />
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup id="dataTableContainer" layout="block" style="max-width: 500px;"
+					<h:panelGroup id="dataTableContainer" layout="block" style="/*max-width: 300px;*/display: none;" 
 						rendered="#{jJTestcaseBean.rowNames != null and !jJTestcaseBean.rendredTestCaseRecaps and !jJTestcaseBean.rendredTestCaseHistorical}"
 						styleClass="Container100">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
@@ -377,7 +377,7 @@
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton
 												icon="fa Fs18 #{columnName.allBuilds ? 'fa-check Green' : 'fa-close Red'}"
-												styleClass="littleButton SoftGrayBack"
+												styleClass="littleButton GrayButton"
 												update=":growlForm :testFormCenter :testFormWest :container"
 												actionListener="#{jJTestcaseBean.onCellEdit(columnName,jJBuildBean,true)}"
 												onstart="PF('blockUIWidget').block()"
@@ -402,7 +402,7 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:commandButton
 													icon="fa Fs18 #{rowName.allTestcases ? 'fa-check Green' : 'fa-close Red'}"
-													styleClass="littleButton SoftGrayBack"
+													styleClass="littleButton GrayButton"
 													update=":growlForm :testFormCenter :testFormWest :container"
 													actionListener="#{jJTestcaseBean.onCellEdit(rowName,jJBuildBean,true)}"
 													onstart="PF('blockUIWidget').block()"
@@ -821,7 +821,7 @@
 							styleClass="Container50 Responsive50 ">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="bugCloseButton" immediate="true"
-									value="#{messages.label_cancel}" styleClass="GrayBack"
+									value="#{messages.label_cancel}" styleClass="GrayButton RaisedButton"
 									onclick="PF('bugTestDialogWidget').hide()" type="button" />
 							</h:panelGroup>
 						</h:panelGroup>

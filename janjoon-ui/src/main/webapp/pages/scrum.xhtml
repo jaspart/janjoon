@@ -34,7 +34,7 @@
 			<p:tabView id="SprintTabView" dynamic="true" cache="true"
 				scrollable="true" widgetVar="SprintTab"
 				styleClass="responsiveTabView" value="#{jJSprintBean.sprintList}"
-				style="max-width: 200px;"
+				style="max-width: 300px;display: none;"
 				onTabChange="sprintTabChangeHelper([{name: 'activeScrumIndex', value: index}]);"
 				var="jjsprint" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
 				<p:tab
@@ -48,6 +48,8 @@
 					</f:facet>
 					<ui:include src="sprint.xhtml" />
 					<h:form id="sprintForm" rendered="#{!jjsprint.render}">
+						<p:remoteCommand name="updateBarChart"
+							update="#{jjsprint.chartModel != null ? ':projecttabview:SprintTabView:sprintForm:barChart':''}" />
 						<h:panelGroup layout="block" styleClass="Container ui-fluid">
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -130,8 +132,9 @@
 											</h:panelGroup>
 											<h:panelGroup layout="block" styleClass="Container60">
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:calendar id="sprintED" navigator="true" readonlyInput="true"
-														effect="slideDown" pattern="dd/MM/yyyy" required="true"
+													<p:calendar id="sprintED" navigator="true"
+														readonlyInput="true" effect="slideDown"
+														pattern="dd/MM/yyyy" required="true"
 														value="#{jjsprint.sprint.endDate}">
 														<f:validator validatorId="dateRangeValidator" />
 														<f:attribute name="startDateComponent"
@@ -275,7 +278,7 @@
 								<p:panel header="#{messages.project_scrum_sprint_chart}"
 									styleClass="Container99">
 									<h:panelGroup layout="block" styleClass="Container100">
-										<p:chart type="bar" responsive="true"											
+										<p:chart id="barChart" type="bar" responsive="true"
 											model="#{jjsprint.chartModel}"
 											widgetVar="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}_Widget"
 											style="height:300px;" />
@@ -296,7 +299,8 @@
 									styleClass="Container33 Responsive100">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
 									<p:fieldset legend="#{messages.project_scrum_todo}"
-										style="padding: 4px;padding-bottom: 0px;" id="todoFieldset">
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.todoTask ? 'border: 0px;':''}"
+										id="todoFieldset">
 										<p:outputPanel id="tododropArea"
 											style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
 											<h:outputText
@@ -337,7 +341,7 @@
 												<p:column style="width:10%" priority="6">
 													<h:outputText value="#{todo.workloadPlanned}" />
 												</p:column>
-												<p:column style="width:15%">
+												<p:column style="width:15%;text-align: center;">
 													<p:commandButton styleClass="littleButton" id="todoButton"
 														type="button"
 														icon="ui-icon-#{jJTaskBean.getTaskIcone(todo)}" />
@@ -375,7 +379,8 @@
 									styleClass="Container33 Responsive100">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
 									<p:fieldset legend="#{messages.project_scrum_inProgress}"
-										style="padding: 4px;padding-bottom: 0px;" id="progFieldset">
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.progressTask ? 'border: 0px;':''}"
+										id="progFieldset">
 										<p:outputPanel id="progdropArea"
 											style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
 											<h:outputText
@@ -418,7 +423,7 @@
 												<p:column style="width:20%" priority="6">
 													<h:outputText value="#{prog.assignedTo.name}" />
 												</p:column>
-												<p:column style="width:15%">
+												<p:column style="width:15%;text-align: center;">
 													<p:commandButton styleClass="littleButton" id="progButton"
 														type="button"
 														icon="ui-icon-#{jJTaskBean.getTaskIcone(prog)}" />
@@ -456,7 +461,8 @@
 									styleClass="Responsive100 Container33">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />
 									<p:fieldset legend="#{messages.project_scrum_done}"
-										style="padding: 4px;padding-bottom: 0px;" id="doneFieldset">
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.doneTask ? 'border: 0px;':''}"
+										id="doneFieldset">
 										<p:outputPanel id="donedropArea"
 											style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
 											<h:outputText
@@ -498,7 +504,7 @@
 													<h:outputText
 														value="#{done.workloadPlanned-done.workloadReal}" />
 												</p:column>
-												<p:column style="width:15%">
+												<p:column style="width:15%;text-align: center;">
 													<p:commandButton styleClass="littleButton" id="doneButton"
 														type="button"
 														icon="ui-icon-#{jJTaskBean.getTaskIcone(done)}" />

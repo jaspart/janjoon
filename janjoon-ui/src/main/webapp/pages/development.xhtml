@@ -265,35 +265,36 @@
 										header="#{messages['dev.fileContent.panel']}">
 										<f:event type="preRenderComponent"
 											listener="#{loginBean.updateTabViewWidth()}" />
+
 										<h:panelGroup layout="block" styleClass="Container">
-											<!-- 											<h:panelGroup layout="block" -->
-											<!-- 												styleClass="Container100 Responsive100 ShowOnMobile ui-fluid"> -->
+											<h:panelGroup layout="block"
+												styleClass="Container100 Responsive100 ShowOnMobile ui-fluid">
 
-											<!-- 												<h:panelGroup layout="block" styleClass="Container30"> -->
-											<!-- 													<h:panelGroup layout="block" -->
-											<!-- 														styleClass="ContainerIndentLabel"> -->
-											<!-- 														<p:outputLabel for="activeIndex" -->
-											<!-- 															value="#{messages.label_tab}:" /> -->
-											<!-- 													</h:panelGroup> -->
-											<!-- 												</h:panelGroup> -->
-											<!-- 												<h:panelGroup layout="block" styleClass="Container70"> -->
-											<!-- 													<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
-											<!-- 														<p:selectOneMenu id="activeIndex"  -->
-											<!-- 															value="#{jJDevelopment.activeTabIndex}"  -->
-											<!-- 															effect="fade" onchange="PF('fileTabview').select(value);"> -->
-											<!-- 															<f:selectItems value="#{jJDevelopment.files}" var="tab" -->
-											<!-- 																itemLabel="#{tab.title}" -->
-											<!-- 																itemValue="#{jJDevelopment.contains(tab)}" /> -->
+												<h:panelGroup layout="block" styleClass="Container30">
+													<h:panelGroup layout="block"
+														styleClass="ContainerIndentLabel">
+														<p:outputLabel for="activeIndex"
+															value="#{messages.label_tab}:" />
+													</h:panelGroup>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="Container70">
+													<h:panelGroup layout="block" styleClass="ContainerIndent">
+														<p:selectOneMenu id="activeIndex"
+															value="#{jJDevelopment.activeTabIndex}" effect="fade"
+															onchange="PF('fileTabview').select(value);">
+															<f:selectItems value="#{jJDevelopment.files}" var="tab"
+																itemLabel="#{tab.title}"
+																itemValue="#{jJDevelopment.contains(tab.file)}" />
 
-											<!-- 														</p:selectOneMenu>														 -->
-											<!-- 													</h:panelGroup> -->
-											<!-- 												</h:panelGroup> -->
-
-											<!-- 											</h:panelGroup> -->
+														</p:selectOneMenu>
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
 											<h:panelGroup layout="block" styleClass="Container100">
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:tabView id="tabView" effectDuration="fast" styleClass=""
-														widgetVar="fileTabview" style="max-width: 300px;"
+													<p:tabView id="tabView" effectDuration="fast"
+														styleClass="responsiveTabView" widgetVar="fileTabview"
+														style="max-width: 300px;display: none;"
 														rendered="#{not empty jJDevelopment.files}"
 														activeIndex="#{jJDevelopment.activeTabIndex}"
 														effect="fade" scrollable="true"
@@ -303,20 +304,35 @@
 															listener="#{jJDevelopment.onCloseTab}"
 															update=":form:tabViewPanel" />
 
-														<p:ajax event="tabChange" update=":form:tabViewPanel" />
+														<p:ajax event="tabChange"  update=":form:tabViewPanel" />
 
 														<p:tab title="#{tab.title}" closable="true">
+															<h:panelGroup layout="block" styleClass="Container">
+																<h:panelGroup layout="block" styleClass="Container100">
+																	<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
+																		binding="#{codeMirror}" autoformat="true"
+																		theme="eclipse" value="#{tab.texte}"
+																		lineNumbers="true" tabSize="150"																		
+																		widgetVar="myCodeMirror_#{tab.index}"
+																		extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
+																		<p:ajax event="blur" update=":form:tabView:codeMirror"
+																			listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
 
-															<pe:codeMirror id="codeMirror" mode="#{tab.mode}"
-																binding="#{codeMirror}" autoformat="true"
-																theme="eclipse" value="#{tab.texte}" lineNumbers="true"
-																tabSize="150" widgetVar="myCodeMirror_#{tab.index}"
-																extraKeys="{ 'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);}}">
-																<p:ajax event="blur" update=":form:tabView:codeMirror"
-																	listener="#{jJDevelopment.valueChangeHandlerCodeMirror}" />
-
-																<f:attribute name="cm" value="#{codeMirror}" />
-															</pe:codeMirror>
+																		<f:attribute name="cm" value="#{codeMirror}" />
+																	</pe:codeMirror>
+																</h:panelGroup>
+																<div class="EmptyBox5 codeMirrorId"
+																	id="#{jJDevelopment.contains(tab.file)}" />
+																<h:panelGroup layout="block"
+																	styleClass="Container33 ui-fluid Responsive">
+																	<h:panelGroup layout="block"
+																		styleClass="ContainerIndent">
+																		<p:commandButton type="button"
+																			icon="fa fa-file-text-o" value="Format"
+																			onclick="autoFormatSelection()" />
+																	</h:panelGroup>
+																</h:panelGroup>															
+															</h:panelGroup>
 														</p:tab>
 													</p:tabView>
 												</h:panelGroup>

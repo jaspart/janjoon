@@ -15,6 +15,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.reference.StrFunction;
+
 public class JJBugServiceImpl implements JJBugService {
 
 	@PersistenceContext
@@ -233,9 +235,12 @@ public class JJBugServiceImpl implements JJBugService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
+							criteriaBuilder.upper(from.<String> get("name")),
+							"%" + pairs.getValue() + "%"), criteriaBuilder
+							.like(new StrFunction<Long>(criteriaBuilder, from
+									.<Long> get("id")), "%" + pairs.getValue()
+									+ "%")));
 				}
 
 				else if (pairs.getKey().toString().contains("importance")) {

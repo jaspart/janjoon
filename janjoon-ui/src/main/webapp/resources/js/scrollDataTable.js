@@ -17,16 +17,18 @@ function updateTabViewWidth() {
 				- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
+	$("#projecttabview\\:SprintTabView").css("display","block");
 
-	var $chart = $(".barChart:visible").last();
+	var chart = $(".barChart:visible").last();
 
-	if ($chart.length != 0) {
-		var value = $chart.attr("id");
-		
-		if (PrimeFaces.widgets['' + value + '_Widget']) {
-
-			PF('' + value + '_Widget').plot.replot();
-		}
+	if (chart.length != 0) {
+//		var value = chart.attr("id");
+//		
+//		if (PrimeFaces.widgets['' + value + '_Widget']) {
+//
+//			PF('' + value + '_Widget').plot.replot();
+//		}
+		updateBarChart();
 	}
 
 }
@@ -42,6 +44,7 @@ $(window).resize(
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
+			$("#projecttabview\\:SprintTabView").css("display","block");
 		});
 
 $(document).ready(
@@ -55,6 +58,7 @@ $(document).ready(
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
+			$("#projecttabview\\:SprintTabView").css("display","block");
 		});
 
 function saveScrollPos() {

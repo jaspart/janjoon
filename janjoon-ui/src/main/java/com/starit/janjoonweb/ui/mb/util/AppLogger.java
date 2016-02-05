@@ -7,6 +7,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,8 +29,10 @@ import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowService;
+import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.JJVersionBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
@@ -152,8 +155,9 @@ public class AppLogger {
 
 				JJRequirement requirement = (JJRequirement) object;
 				if (requirement.getId() != null && requirement.getEnabled()) {
+					long id = requirement.getId();
 					JJRequirement oldRequirement = jJRequirementService
-							.findJJRequirement(requirement.getId());
+							.findJJRequirement(id);
 					workFlows = jJWorkflowService.getObjectWorkFlows(
 							"requirement", oldRequirement.getStatus(),
 							requirement.getStatus(), null, true);
@@ -287,10 +291,33 @@ public class AppLogger {
 		}
 	}
 
+	@Before("execution(* com.starit.janjoonweb.ui.mb.JJTestcaseexecutionBean.updateJJTestcaseexecution(..))")
+	public void updateJJRequirementState(JoinPoint joinPoint) {
+		Object[] args = joinPoint.getArgs();
+		JJTestcaseexecution testExec = (JJTestcaseexecution) args[0];
+		MutableInt updateReq = (MutableInt) args[1];
+
+		JJRequirement requirement = testExec.getTestcase().getRequirement();
+		boolean update = false;
+		if (requirement.getState() != null)
+			update = requirement.getState().getName()
+					.equalsIgnoreCase(JJRequirementBean.jJRequirement_Finished)
+					|| requirement
+							.getState()
+							.getName()
+							.equalsIgnoreCase(
+									JJRequirementBean.jJRequirement_InTesting);
+		if (update)
+			updateReq.setValue(1);
+
+	}
+
 	@Before("execution(* com.starit.janjoonweb.ui.mb.JJTaskBean.saveJJTask(..))")
 	public void updateJJTaskFields(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		JJTask task = (JJTask) args[0];
+
+		MutableInt updateReq = (MutableInt) args[2];
 
 		if (task.getId() == null)
 			task.setCreationDate(new Date());
@@ -459,14 +486,26 @@ public class AppLogger {
 					task.getStartDateRevised(), task.getEndDateRevised(), null,
 					null)));
 
+		boolean update = task.getRequirement() != null;
+
 		if (task.getStartDateReal() == null
 				&& (task.getStatus() == null || !task.getStatus().getName()
 						.equalsIgnoreCase("todo"))) {
+			if (update) {
+				update = (task.getStatus() == null || task.getStatus()
+						.getName().equalsIgnoreCase("DONE"));
+			}
+
 			task.setStatus(jJStatusService.getOneStatus("TODO", "Task", true));
 		} else if (task.getStartDateReal() != null) {
 			if (task.getEndDateReal() == null
 					&& (task.getStatus() == null || !task.getStatus().getName()
 							.equalsIgnoreCase("IN PROGRESS"))) {
+				if (update) {
+					update = (task.getStatus() == null || task.getStatus()
+							.getName().equalsIgnoreCase("DONE"));
+				}
+
 				task.setStatus(jJStatusService.getOneStatus("IN PROGRESS",
 						"Task", true));
 			} else if (task.getEndDateReal() != null
@@ -476,7 +515,8 @@ public class AppLogger {
 						true));
 			}
 		}
-
+		if (update)
+			updateReq.setValue(1);
 		logger.info("operation : " + joinPoint.getSignature().toShortString()
 				+ " :successful " + task.getName());
 		// callingJJTaskWorkFlows

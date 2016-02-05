@@ -26,6 +26,41 @@ public class JJTestcaseexecutionServiceImpl implements
 		this.entityManager = entityManager;
 	}
 
+	public boolean checkIfSuccess(JJRequirement requirement) {
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Boolean> criteriaQuery = criteriaBuilder
+				.createQuery(Boolean.class);
+
+		Root<JJTestcaseexecution> from = criteriaQuery
+				.from(JJTestcaseexecution.class);
+
+		CriteriaQuery<Boolean> select = criteriaQuery.select(from
+				.<Boolean> get("passed"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (requirement != null) {
+			predicates.add(criteriaBuilder.equal(
+					from.join("testcase").get("requirement"), requirement));
+		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.where(predicates.toArray(new Predicate[] {}));
+
+		select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
+
+		TypedQuery<Boolean> result = entityManager.createQuery(select);
+
+		if (result.getResultList() == null || result.getResultList().isEmpty())
+			return false;
+		else
+			return result.getResultList().get(0) != null ? result
+					.getResultList().get(0) : false;
+
+	}
+
 	public Boolean isPassed(JJTestcase testCase, JJBuild build,
 			JJVersion version) {
 

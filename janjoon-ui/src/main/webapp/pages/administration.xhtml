@@ -83,7 +83,7 @@
 				<f:event type="preRenderComponent"
 					listener="#{loginBean.updateTabViewWidth()}" />
 				<p:tabView id="tabview" widgetVar="AdmintabView" scrollable="true"
-					style="max-width: 300px;" styleClass="responsiveTabView"
+					style="max-width: 200px;display: none;" styleClass="responsiveTabView"
 					activeIndex="#{loginBean.activeTabAdminIndex}">
 					<p:ajax event="tabChange" update=":activeIndexForm"
 						listener="#{loginBean.onTabAdminChange}" />

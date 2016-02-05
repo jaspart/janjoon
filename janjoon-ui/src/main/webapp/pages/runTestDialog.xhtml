@@ -61,7 +61,7 @@
 											<h:outputText value="#{bug.name}" />
 										</p:column>
 										<p:column headerText="Fixed" style="text-align:center;">											
-												<p:commandButton styleClass="littleButton SoftGrayBack"
+												<p:commandButton styleClass="littleButton GrayButton"
 													icon="fa #{jJTeststepBean.isBugFixed(bug) ? 'fa-check Green' : 'fa-close Red'} Fs16 "
 													disabled="#{jJTeststepBean.isBugFixed(bug)}"
 													update=":runTestcaseDialogForm:teststepTabView :runTestcaseDialogForm:msg"

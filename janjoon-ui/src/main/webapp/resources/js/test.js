@@ -14,6 +14,7 @@ function updateDataTableContainerWidth() {
 					- (2 / 100 * $("#layout-topbar").width()) - 14;
 
 		table.css("maxWidth", width + "px");
+		table.css("display","block");
 
 		updateTable();
 	}

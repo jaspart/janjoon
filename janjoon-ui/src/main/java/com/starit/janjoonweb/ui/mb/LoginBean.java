@@ -334,7 +334,7 @@ public class LoginBean implements Serializable {
 
 		this.menuIndex = menuIndex;
 	}
-	
+
 	public boolean isMobile() {
 		return mobile;
 	}
@@ -1712,15 +1712,16 @@ public class LoginBean implements Serializable {
 	public void updateTabViewWidth() {
 		RequestContext.getCurrentInstance().execute("updateTabViewWidth();");
 	}
-	
-	public void updateDataTableContainerWidth(){
-		RequestContext.getCurrentInstance().execute("updateDataTableContainerWidth();");
+
+	public void updateDataTableContainerWidth() {
+		RequestContext.getCurrentInstance().execute(
+				"updateDataTableContainerWidth();");
 	}
-	
-	public String parseHtml(String value){
-		
-		if(value != null)
-		return value.replaceAll("\\<[^>]*>", "");
+
+	public String parseHtml(String value) {
+
+		if (value != null)
+			return value.replaceAll("\\<[^>]*>", "");
 		else
 			return value;
 	}
@@ -1804,7 +1805,6 @@ public class LoginBean implements Serializable {
 
 	private String state;
 
-
 	public String getState() {
 		return state;
 	}
@@ -1823,7 +1823,7 @@ public class LoginBean implements Serializable {
 		else
 			return null;
 	}
-	
+
 	public void loadStyleSheet(StyleSheet style, String param) {
 		List<JJConfiguration> configs = jJConfigurationService
 				.getConfigurations(null, param, true);

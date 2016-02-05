@@ -57,7 +57,7 @@ public class ImageStreamer {
 	public StreamedContent getStar() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {		
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 
 			return new DefaultStreamedContent();
 		} else {
@@ -144,7 +144,7 @@ public class ImageStreamer {
 			JJProject proj = null;
 			if (projId != null && !projId.isEmpty())
 				proj = jJProjectService.findJJProject(Long.valueOf(projId));
-			
+
 			if (context.getExternalContext().getRequestParameterMap()
 					.get("Edit") == null
 					&& proj != null && proj.getLogo() != null) {
@@ -189,11 +189,11 @@ public class ImageStreamer {
 		} else {
 			String CompId = context.getExternalContext()
 					.getRequestParameterMap().get("CompId");
-			
+
 			JJCompany comp = null;
 			if (CompId != null && !CompId.isEmpty())
 				comp = jJCompanyService.findJJCompany(Long.valueOf(CompId));
-			
+
 			if (context.getExternalContext().getRequestParameterMap()
 					.get("Edit") == null
 					&& comp != null && comp.getLogo() != null) {
@@ -240,7 +240,7 @@ public class ImageStreamer {
 		} else {
 			String contactId = context.getExternalContext()
 					.getRequestParameterMap().get("contactId");
-			
+
 			if (contactId == null) {
 
 				JJContact contact = ((LoginBean) LoginBean

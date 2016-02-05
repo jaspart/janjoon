@@ -20,6 +20,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.reference.StrFunction;
+
 public class JJProfileServiceImpl implements JJProfileService {
 
 	@PersistenceContext
@@ -111,8 +113,12 @@ public class JJProfileServiceImpl implements JJProfileService {
 			Boolean wComponent = (Boolean) filters.get("wComponent");
 			Boolean xComponent = (Boolean) filters.get("xComponent");
 
-			predicates.add(criteriaBuilder.like(from.<String> get("name"), "%"
-					+ filters.get("globalFilter") + "%"));
+			predicates.add(criteriaBuilder.or(criteriaBuilder.like(
+					criteriaBuilder.upper(from.<String> get("name")), "%"
+							+ filters.get("globalFilter") + "%"),
+					criteriaBuilder.like(new StrFunction<Long>(criteriaBuilder,
+							from.<Long> get("id")),
+							"%" + filters.get("globalFilter") + "%")));
 
 			List<Predicate> allpredicates = new ArrayList<Predicate>();
 			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);

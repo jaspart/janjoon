@@ -31,10 +31,9 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.JJStatusBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
-import com.starit.janjoonweb.ui.mb.util.RequirementUtil;
 
 @SuppressWarnings("deprecation")
-public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
+public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
 	static Logger logger = Logger.getLogger(CategoryDataModel.class);
 	private static final long serialVersionUID = 1L;
@@ -43,7 +42,7 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 	private int activeIndex = -1;
 	private float coverageProgress = -1;
 	private float completionProgress = -1;
-	private List<RequirementUtil> allRequirements;
+	private List<JJRequirement> allRequirements;
 	private boolean rendered;
 	private TreeNode chapterTree;
 	private boolean expanded;
@@ -61,7 +60,7 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 		if (categoryId != 0)
 			return categoryId + "";
 		else {
-			System.out.println(System.identityHashCode(this));
+			// System.out.println(System.identityHashCode(this));
 			return System.identityHashCode(this) + "";
 		}
 	}
@@ -125,11 +124,11 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 		this.completionProgress = completionProgress;
 	}
 
-	public List<RequirementUtil> getAllRequirements() {
+	public List<JJRequirement> getAllRequirements() {
 		return allRequirements;
 	}
 
-	public void setAllRequirements(List<RequirementUtil> requirements) {
+	public void setAllRequirements(List<JJRequirement> requirements) {
 		this.allRequirements = requirements;
 	}
 
@@ -222,16 +221,16 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 		this.selectedChapter = selectedChapter;
 	}
 
-	public CategoryDataModel(List<RequirementUtil> data, long categoryId,
+	public CategoryDataModel(List<JJRequirement> data, long categoryId,
 			String nameDataModel, boolean rendered,
 			JJRequirementService requirementService,
 			JJCategoryService categoryService, JJChapterService chapterService,
 			JJTaskService taskService) {
 		if (data != null)
-			this.allRequirements = new ArrayList<RequirementUtil>(
-					new HashSet<RequirementUtil>(data));
+			this.allRequirements = new ArrayList<JJRequirement>(
+					new HashSet<JJRequirement>(data));
 		else
-			this.allRequirements = new ArrayList<RequirementUtil>();
+			this.allRequirements = new ArrayList<JJRequirement>();
 		this.categoryId = categoryId;
 		this.nameDataModel = nameDataModel;
 		this.rendered = rendered;
@@ -282,8 +281,8 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 				boolean sizeIsOne = false;
 
 				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
-				for (RequirementUtil r : allRequirements) {
-					requirements.add(r.getRequirement());
+				for (JJRequirement r : allRequirements) {
+					requirements.add(r);
 				}
 
 				if (jJCategoryService.isLowLevel(category,
@@ -307,8 +306,29 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 
 						linkDown = jJRequirementService
 								.haveLinkDown(requirement);
-						linkUp = jJTaskService.haveTask(requirement, true,
-								false, false);
+						// linkUp = jJTaskService.haveTask(requirement, true,
+						// false, false);
+
+						linkUp = JJRequirementBean
+								.getRowState(requirement, jJRequirementService)
+								.getState()
+								.getName()
+								.equalsIgnoreCase(
+										JJRequirementBean.jJRequirement_InProgress)
+								|| JJRequirementBean
+										.getRowState(requirement,
+												jJRequirementService)
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												JJRequirementBean.jJRequirement_InTesting)
+								|| JJRequirementBean
+										.getRowState(requirement,
+												jJRequirementService)
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												JJRequirementBean.jJRequirement_Finished);
 
 						if (linkUp && linkDown) {
 							compteur++;
@@ -380,8 +400,8 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 			}
 			if (!containCategory) {
 				float compteur = 0;
-				for (RequirementUtil r : allRequirements) {
-					compteur = compteur + calculCompletion(r.getRequirement());
+				for (JJRequirement r : allRequirements) {
+					compteur = compteur + calculCompletion(r);
 
 				}
 
@@ -414,7 +434,21 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 		}
 
 		int hasTaskCompleted = 0;
-		if (jJTaskService.haveTask(r, true, true, false)) {
+		if (JJRequirementBean.getRowState(r, jJRequirementService).getState()
+				.getName()
+				.equalsIgnoreCase(JJRequirementBean.jJRequirement_InProgress)
+				|| JJRequirementBean
+						.getRowState(r, jJRequirementService)
+						.getState()
+						.getName()
+						.equalsIgnoreCase(
+								JJRequirementBean.jJRequirement_InTesting)
+				|| JJRequirementBean
+						.getRowState(r, jJRequirementService)
+						.getState()
+						.getName()
+						.equalsIgnoreCase(
+								JJRequirementBean.jJRequirement_Finished)) {
 			compteur++;
 			hasTaskCompleted = 1;
 		}
@@ -426,10 +460,10 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 	}
 
 	@Override
-	public RequirementUtil getRowData(String rowKey) {
+	public JJRequirement getRowData(String rowKey) {
 
-		for (RequirementUtil req : allRequirements) {
-			if (req.getRequirement().getId().toString().equals(rowKey))
+		for (JJRequirement req : allRequirements) {
+			if (req.getId().toString().equals(rowKey))
 				return req;
 		}
 
@@ -437,18 +471,17 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 	}
 
 	@Override
-	public Object getRowKey(RequirementUtil req) {
-		return req.getRequirement().getId();
+	public Object getRowKey(JJRequirement req) {
+		return req.getId();
 	}
 
 	public StreamedContent getFile() {
 
 		String buffer = "<category name=\"" + nameDataModel.toUpperCase()
 				+ "\">";
-		for (RequirementUtil rrr : allRequirements) {
+		for (JJRequirement rrr : allRequirements) {
 			String description = "";
-			StringReader strReader = new StringReader(rrr.getRequirement()
-					.getDescription());
+			StringReader strReader = new StringReader(rrr.getDescription());
 			@SuppressWarnings("rawtypes")
 			List arrList = null;
 			try {
@@ -463,27 +496,27 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 							+ ((Element) arrList.get(i)).toString();
 				}
 			else
-				description = rrr.getRequirement().getDescription();
+				description = rrr.getDescription();
 
 			description = description.replace("[", " ").replace("]", "")
 					.replace("&#39;", "'").replace("\"", "'")
 					.replace("&&", "and").replace("<", "").replace(">", "");
-			String note = rrr.getRequirement().getNote();
+			String note = rrr.getNote();
 			if (note != null)
 				note = note.replace("[", " ").replace("]", "")
 						.replace("&#39;", "'").replace("\"", "'")
 						.replace("&&", "and").replace("<", "").replace(">", "");
 
 			String chapterName = "";
-			if (rrr.getRequirement().getChapter() != null)
-				chapterName = rrr.getRequirement().getChapter().getName();
-			String s = "<requirement name=\"" + rrr.getRequirement().getName()
-					+ "\"" + System.getProperty("line.separator")
-					+ "description=\"" + description + "\""
-					+ System.getProperty("line.separator") + "enabled=\"1\""
-					+ System.getProperty("line.separator") + "note=\"" + note
-					+ "\"" + System.getProperty("line.separator")
-					+ "chapter=\"" + chapterName + "\" />";
+			if (rrr.getChapter() != null)
+				chapterName = rrr.getChapter().getName();
+			String s = "<requirement name=\"" + rrr.getName() + "\""
+					+ System.getProperty("line.separator") + "description=\""
+					+ description + "\"" + System.getProperty("line.separator")
+					+ "enabled=\"1\"" + System.getProperty("line.separator")
+					+ "note=\"" + note + "\""
+					+ System.getProperty("line.separator") + "chapter=\""
+					+ chapterName + "\" />";
 			buffer = buffer + System.getProperty("line.separator") + s;
 		}
 		buffer = buffer + System.getProperty("line.separator") + "</category>";
@@ -494,14 +527,12 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 
 	}
 
-	public boolean checkChapter(RequirementUtil reqUtil) {
+	public boolean checkChapter(JJRequirement req) {
 
 		boolean check = !filterChapter
-				|| (selectedChapter == null && reqUtil.getRequirement()
-						.getChapter() == null)
-				|| (selectedChapter != null
-						&& reqUtil.getRequirement().getChapter() != null && selectedChapter
-							.equals(reqUtil.getRequirement().getChapter()));
+				|| (selectedChapter == null && req.getChapter() == null)
+				|| (selectedChapter != null && req.getChapter() != null && selectedChapter
+						.equals(req.getChapter()));
 
 		if (check)
 			return check;
@@ -512,10 +543,8 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 			int i = 0;
 			while (!check && i < list.size()) {
 				check = !filterChapter
-						|| (list.get(i) != null
-								&& reqUtil.getRequirement().getChapter() != null && list
-								.get(i).equals(
-										reqUtil.getRequirement().getChapter()));
+						|| (list.get(i) != null && req.getChapter() != null && list
+								.get(i).equals(req.getChapter()));
 				i++;
 			}
 
@@ -530,9 +559,9 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 	}
 
 	@Override
-	public List<RequirementUtil> load(int first, int pageSize,
+	public List<JJRequirement> load(int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-		List<RequirementUtil> data = new ArrayList<RequirementUtil>();
+		List<JJRequirement> data = new ArrayList<JJRequirement>();
 		String filterValue = ((JJRequirementBean) LoginBean
 				.findBean("jJRequirementBean")).getFilterValue();
 		boolean mine = ((JJRequirementBean) LoginBean
@@ -546,39 +575,36 @@ public class CategoryDataModel extends LazyDataModel<RequirementUtil> {
 			mineContact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();
 
-		for (RequirementUtil reqUtil : allRequirements) {
+		for (JJRequirement req : allRequirements) {
 			boolean match = true;
 
 			match = (filterValue == null || filterValue.isEmpty())
-					|| (reqUtil.getRequirement().getName().toLowerCase()
-							.contains(filterValue.toLowerCase()));
+					|| (req.getName().toLowerCase().contains(filterValue
+							.toLowerCase()))
+					|| ((req.getId() + "").contains(filterValue.toLowerCase()));
 			match = match
 					&& (mineContact == null
-							|| (reqUtil.getRequirement().getUpdatedBy() != null && reqUtil
-									.getRequirement().getUpdatedBy()
-									.equals(mineContact)) || (reqUtil
-							.getRequirement().getCreatedBy() != null && reqUtil
-							.getRequirement().getCreatedBy()
+							|| (req.getUpdatedBy() != null && req
+									.getUpdatedBy().equals(mineContact)) || (req
+							.getCreatedBy() != null && req.getCreatedBy()
 							.equals(mineContact)));
 
 			match = match
 					&& (viewLinkRequirement == null
-							|| (viewLinkRequirement.equals(reqUtil
-									.getRequirement())) || (viewLinkRequirement
-							.getRequirementLinkDown().contains(
-									reqUtil.getRequirement()) || viewLinkRequirement
-							.getRequirementLinkUp().contains(
-									reqUtil.getRequirement())));
+							|| (viewLinkRequirement.equals(req)) || (viewLinkRequirement
+							.getRequirementLinkDown().contains(req) || viewLinkRequirement
+							.getRequirementLinkUp().contains(req)));
 
 			match = match
 					&& ((rowStyleClassFilter == null
-							|| rowStyleClassFilter.isEmpty() || reqUtil
-							.getStyle().equalsIgnoreCase(rowStyleClassFilter)));
+							|| rowStyleClassFilter.isEmpty() || (req.getState() != null && req
+							.getState().getName()
+							.equalsIgnoreCase(rowStyleClassFilter))));
 
-			match = match && checkChapter(reqUtil);
+			match = match && checkChapter(req);
 
 			if (match) {
-				data.add(reqUtil);
+				data.add(req);
 			}
 		}
 

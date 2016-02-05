@@ -9,15 +9,20 @@ function updateTabViewWidth() {
 				- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 	$("#statsTabView\\:SprintTabView").css("maxWidth", width + "px");
+	$("#statsTabView\\:SprintTabView").css("display","block");
 	
 	var chart = $(".barChart:visible").last();
 
-	if (chart != null) {
-		var value = chart.attr("id");
-
-		if (PF('' + value + '_Widget') != null)
-			PF('' + value + '_Widget').plot.replot();
+	if (chart.length != 0) {
+//		var value = chart.attr("id");
+//		
+//		if (PrimeFaces.widgets['' + value + '_Widget']) {
+//
+//			PF('' + value + '_Widget').plot.replot();
+//		}
+		updateBarChart();
 	}
+	
 
 }
 

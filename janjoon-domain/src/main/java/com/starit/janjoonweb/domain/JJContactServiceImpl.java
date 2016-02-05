@@ -17,6 +17,8 @@ import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.starit.janjoonweb.domain.reference.StrFunction;
+
 public class JJContactServiceImpl implements JJContactService {
 
 	@PersistenceContext
@@ -165,11 +167,16 @@ public class JJContactServiceImpl implements JJContactService {
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
 					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"), criteriaBuilder.like(
-							from.<String> get("firstname"),
+							criteriaBuilder.upper(from.<String> get("name")),
 							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(from.<String> get("email"),
+							.like(criteriaBuilder.upper(from
+									.<String> get("firstname")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(criteriaBuilder.upper(from
+									.<String> get("email")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(new StrFunction<Long>(
+									criteriaBuilder, from.<Long> get("id")),
 									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("company")) {
 

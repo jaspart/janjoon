@@ -47,6 +47,9 @@ public interface JJRequirementService {
 
 	public void refreshRequirement(JJRequirement requirement);
 
+	public JJStatus getRequirementState(JJRequirement requirement,
+			JJCompany company);
+
 	public boolean haveLinkUp(JJRequirement requirement);
 
 	public boolean haveLinkDown(JJRequirement requirement);

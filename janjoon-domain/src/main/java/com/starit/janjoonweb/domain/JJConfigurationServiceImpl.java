@@ -19,6 +19,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import com.starit.janjoonweb.domain.reference.StrFunction;
+
 public class JJConfigurationServiceImpl implements JJConfigurationService {
 
 	@PersistenceContext
@@ -67,10 +69,14 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
 					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"), criteriaBuilder.like(
-							from.<String> get("param"), "%" + pairs.getValue()
-									+ "%")));
+							criteriaBuilder.upper(from.<String> get("param")),
+							"%" + pairs.getValue() + "%"), criteriaBuilder
+							.like(criteriaBuilder.upper(from
+									.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(new StrFunction<Long>(
+									criteriaBuilder, from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				}
 			}
 		}

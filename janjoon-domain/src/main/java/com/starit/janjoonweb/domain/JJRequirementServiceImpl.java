@@ -14,15 +14,58 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class JJRequirementServiceImpl implements JJRequirementService {
+
+	private static final String jJRequirement_Specified = "Specified";
+	private static final String jJRequirement_UnLinked = "UnLinked";
+	private static final String jJRequirement_InProgress = "InProgress";
+	private static final String jJRequirement_Finished = "Finished";
+	private static final String jJRequirement_InTesting = "InTesting";
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	private JJTaskService jJTaskService;
+
+	@Autowired
+	private JJCategoryService jJCategoryService;
+
+	@Autowired
+	private JJTestcaseService jJTestcaseService;
+
+	@Autowired
+	private JJTestcaseexecutionService jJTestcaseexecutionService;
+
+	@Autowired
+	private JJStatusService jJStatusService;
+
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	public void setjJTaskService(JJTaskService jJTaskService) {
+		this.jJTaskService = jJTaskService;
+	}
+
+	public void setjJCategoryService(JJCategoryService jJCategoryService) {
+		this.jJCategoryService = jJCategoryService;
+	}
+
+	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+		this.jJTestcaseService = jJTestcaseService;
+	}
+
+	public void setjJTestcaseexecutionService(
+			JJTestcaseexecutionService jJTestcaseexecutionService) {
+		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
+	}
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
 	}
 
 	public boolean haveLinkDown(JJRequirement requirement) {
@@ -602,6 +645,84 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	@Override
 	public void refreshRequirement(JJRequirement requirement) {
 		entityManager.refresh(requirement);
+	}
+
+	public JJStatus getRequirementState(JJRequirement requirement,
+			JJCompany company) {
+
+		boolean UP = haveLinkUp(requirement)
+				|| jJCategoryService.isHighLevel(requirement.getCategory(),
+						company);
+
+		boolean DOWN = haveLinkDown(requirement)
+				|| jJCategoryService.isLowLevel(requirement.getCategory(),
+						company);
+
+		// requirement = findJJRequirement(requirement.getId());
+
+		boolean TASK = true;
+		boolean FINIS = true;
+
+		TASK = jJTaskService.haveTask(requirement, true, false, true);
+		if (UP && DOWN && TASK) {
+			FINIS = jJTaskService.haveTask(requirement, true, true, true);
+		}
+
+		String rowStyleClass = "";
+
+		if (UP && DOWN && TASK) {
+
+			if (!FINIS) {
+				rowStyleClass = jJRequirement_InProgress;
+			} else if (FINIS) {
+				// List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+				// requirement, null, null, null, true, false, false);
+
+				boolean SUCCESS = jJTestcaseexecutionService
+						.checkIfSuccess(requirement);
+				//
+				// for (JJTestcase testcase : testcases) {
+				//
+				// List<JJTestcaseexecution> testcaseExecutions =
+				// jJTestcaseexecutionService
+				// .getTestcaseexecutions(testcase, null, true, true,false);
+				//
+				// if (testcaseExecutions.isEmpty()) {
+				// SUCCESS = false;
+				// break;
+				// } else {
+				//
+				// if ((testcaseExecutions.get(0).getPassed() == null)
+				// || (testcaseExecutions.get(0).getPassed() != null &&
+				// !testcaseExecutions
+				// .get(0).getPassed())) {
+				// SUCCESS = false;
+				// break;
+				//
+				// }
+				// }
+				//
+				// }
+				if (SUCCESS) {
+					rowStyleClass = jJRequirement_Finished;
+				} else {
+					rowStyleClass = jJRequirement_InTesting;
+				}
+
+			}
+
+		} else if (UP && DOWN && !TASK) {
+			rowStyleClass = jJRequirement_Specified;
+		} else {
+			if (!(UP && DOWN && TASK))
+				rowStyleClass = jJRequirement_UnLinked;
+		}
+
+		if (rowStyleClass.isEmpty())
+			rowStyleClass = jJRequirement_UnLinked;
+
+		return jJStatusService.getOneStatus(rowStyleClass, "RequirementState",
+				true);
 	}
 
 	public void saveJJRequirement(JJRequirement JJRequirement_) {

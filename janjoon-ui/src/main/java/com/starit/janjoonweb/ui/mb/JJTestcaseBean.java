@@ -26,6 +26,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -298,17 +299,17 @@ public class JJTestcaseBean {
 
 				}
 				if (rowNames != null) {
-					width = 180 + (rowNames.size() * 70)+"";
-					width = "width: "+width+ "px";
+					width = 180 + (rowNames.size() * 70) + "";
+					width = "width: " + width + "px";
 
 					if (180 + (rowNames.size() * 70) > 910)
 						width = "";
 				} else
-					width = "width: "+170 + "px";
+					width = "width: " + 170 + "px";
 
 			}
-//			utiliser l'objet admin dans image streamer
-//			changer les bouton rating dans bug et requirelent
+			// utiliser l'objet admin dans image streamer
+			// changer les bouton rating dans bug et requirelent
 		}
 		return rowNames;
 	}
@@ -473,7 +474,7 @@ public class JJTestcaseBean {
 
 	public void setRendredEmptySelection(boolean rendredEmptySelection) {
 		this.rendredEmptySelection = rendredEmptySelection;
-	}	 
+	}
 
 	public boolean getRenderCommentsPanel() {
 		boolean returnValue = ((LoginBean) LoginBean.findBean("loginBean"))
@@ -588,9 +589,8 @@ public class JJTestcaseBean {
 	public List<JJCategory> getCategoryList() {
 
 		if (categoryList == null)
-			categoryList = jJCategoryService
-					.getCategories(null, false, true, true,
-							LoginBean.getCompany());
+			categoryList = jJCategoryService.getCategories(null, false, true,
+					true, LoginBean.getCompany());
 		return categoryList;
 	}
 
@@ -876,6 +876,15 @@ public class JJTestcaseBean {
 									new JJStatusBean());
 						}
 					}
+				} else if (jJProductBean.getProduct() != null
+						&& testcase.getRequirement().getProduct() == null) {
+					change = true;
+					jJProductBean.setProduct(null);
+					jJVersionBean.getVersionList();
+					jJVersionBean.setVersion(null);
+					session.setAttribute("jJTaskBean", new JJTaskBean());
+					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJSprintBean", new JJSprintBean());
 				}
 
 				if (change) {
@@ -1144,7 +1153,7 @@ public class JJTestcaseBean {
 				task.setEndDatePlanned(task1.getEndDatePlanned());
 				task.setWorkloadPlanned(task1.getWorkloadPlanned());
 
-				jJTaskBean.saveJJTask(task, false);
+				jJTaskBean.saveJJTask(task, false, new MutableInt(0));
 				build.getTasks().add(task);
 				jJBuildBean.saveJJBuild(build);
 
@@ -1157,7 +1166,7 @@ public class JJTestcaseBean {
 			task.setStartDateReal(new Date());
 			task.setEndDateReal(null);
 			task.setWorkloadReal(null);
-			jJTaskBean.saveJJTask(task, true);
+			jJTaskBean.saveJJTask(task, true, new MutableInt(0));
 			build.getTasks().add(task);
 			jJBuildBean.saveJJBuild(build);
 		}
@@ -2083,6 +2092,8 @@ public class JJTestcaseBean {
 				.getContact();
 		b.setCreatedBy(contact);
 		jJTestcaseService.saveJJTestcase(b);
+		JJRequirementBean.updateRowState(b.getRequirement(),
+				jJRequirementService, b);
 	}
 
 	public void updateJJTestcase(JJTestcase b) {
@@ -2094,6 +2105,8 @@ public class JJTestcaseBean {
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJTestcaseService.updateJJTestcase(b);
+		JJRequirementBean.updateRowState(b.getRequirement(),
+				jJRequirementService, b);
 	}
 
 	private boolean getTestcaseDialogConfiguration() {
@@ -2166,8 +2179,7 @@ public class JJTestcaseBean {
 		if (jj == -1 || jj == 0)
 			return "";
 		else {
-			if (categoryList.get(jj - 1).getStage()
-					.equals(cc.getStage()))
+			if (categoryList.get(jj - 1).getStage().equals(cc.getStage()))
 				return "";
 			else
 				return "margin-left: 20px;";
@@ -2743,7 +2755,7 @@ public class JJTestcaseBean {
 	public String getPieChartSerieColor() {
 		return pieChartSerieColor;
 	}
-	
+
 	public String getActiveIndex() {
 
 		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"

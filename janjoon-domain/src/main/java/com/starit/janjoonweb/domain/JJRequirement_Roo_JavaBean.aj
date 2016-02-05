@@ -176,6 +176,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.status = status;
     }
     
+    public JJStatus JJRequirement.getState() {
+        return this.state;
+    }
+    
+    public void JJRequirement.setState(JJStatus state) {
+        this.state = state;
+    }
+    
     public JJSprint JJRequirement.getSprint() {
         return this.sprint;
     }

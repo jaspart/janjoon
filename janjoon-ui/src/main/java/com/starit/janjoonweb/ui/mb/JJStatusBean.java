@@ -434,7 +434,7 @@ public class JJStatusBean {
 			System.out.println("###### ACtive tab: " + activeTabSprintIndex);
 		}
 	}
-	
+
 	public boolean isRenderCreate() {
 		return renderCreate;
 	}
@@ -442,15 +442,15 @@ public class JJStatusBean {
 	public void setRenderCreate(boolean renderCreate) {
 		this.renderCreate = renderCreate;
 	}
-	
-//	public void beforeDialogShow(ActionEvent event) {
-//
-//		setJJStatus__(new JJStatus());
-//		renderCreate = true;
-//		RequestContext context = RequestContext.getCurrentInstance();
-//		context.execute("PF('statusDialogWidget').show()");
-//
-//	}
+
+	// public void beforeDialogShow(ActionEvent event) {
+	//
+	// setJJStatus__(new JJStatus());
+	// renderCreate = true;
+	// RequestContext context = RequestContext.getCurrentInstance();
+	// context.execute("PF('statusDialogWidget').show()");
+	//
+	// }
 
 	@SuppressWarnings("serial")
 	public void loadData() {
@@ -1163,8 +1163,31 @@ public class JJStatusBean {
 							boolean linkDown = false;
 							linkDown = jJRequirementService
 									.haveLinkDown(requirement);
-							linkUp = jJTaskService.haveTask(requirement, true,
-									false, false);
+							// linkUp = jJTaskService.haveTask(requirement,
+							// true,
+							// false, false);
+
+							linkUp = JJRequirementBean
+									.getRowState(requirement,
+											jJRequirementService)
+									.getState()
+									.getName()
+									.equalsIgnoreCase(
+											JJRequirementBean.jJRequirement_InProgress)
+									|| JJRequirementBean
+											.getRowState(requirement,
+													jJRequirementService)
+											.getState()
+											.getName()
+											.equalsIgnoreCase(
+													JJRequirementBean.jJRequirement_InTesting)
+									|| JJRequirementBean
+											.getRowState(requirement,
+													jJRequirementService)
+											.getState()
+											.getName()
+											.equalsIgnoreCase(
+													JJRequirementBean.jJRequirement_Finished);
 
 							if (linkUp && linkDown) {
 								compteur++;
@@ -1280,7 +1303,29 @@ public class JJStatusBean {
 
 			int hasTaskCompleted = 0;
 
-			if (jJTaskService.haveTask(requirement, true, true, false)) {
+			// if (jJTaskService.haveTask(requirement, true, true, false)) {
+			// compteur++;
+			// hasTaskCompleted = 1;
+			// }
+
+			if (JJRequirementBean
+					.getRowState(requirement, jJRequirementService)
+					.getState()
+					.getName()
+					.equalsIgnoreCase(
+							JJRequirementBean.jJRequirement_InProgress)
+					|| JJRequirementBean
+							.getRowState(requirement, jJRequirementService)
+							.getState()
+							.getName()
+							.equalsIgnoreCase(
+									JJRequirementBean.jJRequirement_InTesting)
+					|| JJRequirementBean
+							.getRowState(requirement, jJRequirementService)
+							.getState()
+							.getName()
+							.equalsIgnoreCase(
+									JJRequirementBean.jJRequirement_Finished)) {
 				compteur++;
 				hasTaskCompleted = 1;
 			}

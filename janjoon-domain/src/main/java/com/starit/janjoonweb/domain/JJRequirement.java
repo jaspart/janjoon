@@ -94,6 +94,9 @@ public class JJRequirement {
 	private JJStatus status;
 
 	@ManyToOne
+	private JJStatus state;
+
+	@ManyToOne
 	private JJSprint sprint;
 
 	@Size(max = 100)

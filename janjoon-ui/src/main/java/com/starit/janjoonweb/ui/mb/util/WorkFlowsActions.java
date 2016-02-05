@@ -457,7 +457,7 @@ public class WorkFlowsActions {
 					jJRequirementBean = (JJRequirementBean) LoginBean
 							.findBean("jJRequirementBean");
 					jJRequirementBean.updateDataTable(task.getRequirement(),
-							JJRequirementBean.UPDATE_OPERATION, false);
+							JJRequirementBean.UPDATE_OPERATION);
 				}
 
 			}

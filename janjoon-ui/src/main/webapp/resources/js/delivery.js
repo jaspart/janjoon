@@ -9,6 +9,7 @@ function updateTabViewWidth() {
 				- (2 / 100 * $("#layout-topbar").width()) - 14;
 
 	$("#versionTabView").css("maxWidth", width + "px");
+	$("#versionTabView").css("display","block");
 }
 
 $(window).resize(function() {updateTabViewWidth();});
