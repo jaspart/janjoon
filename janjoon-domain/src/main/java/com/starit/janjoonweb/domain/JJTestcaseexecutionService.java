@@ -19,6 +19,8 @@ public interface JJTestcaseexecutionService {
 
 	public boolean checkIfSuccess(JJRequirement requirement);
 
+	public boolean checkIfSuccess(JJTestcase testcase);
+
 	public boolean haveTestcaseExec(JJTestcase testcase, JJBuild build,
 			JJVersion version);
 

@@ -506,6 +506,7 @@ public class JJBugBean {
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('bugTestDialogWidget').hide()");
+		RequestContext.getCurrentInstance().update("growlForm");
 
 		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,
 				jJTeststepexecutionBean);
@@ -584,12 +585,10 @@ public class JJBugBean {
 		System.err.println(facesMessage.getDetail());
 
 		if (hideBugDialog()) {
-			if (message != "message_successfully_updated")
-				RequestContext.getCurrentInstance().execute(
-						"PF('createDialogWidget').hide()");
-			else
-				RequestContext.getCurrentInstance().execute(
-						"PF('createDialogWidget').hide()");
+			RequestContext.getCurrentInstance().execute(
+					"PF('createDialogWidget').hide()");
+
+			RequestContext.getCurrentInstance().update("growlForm");
 		}
 
 	}

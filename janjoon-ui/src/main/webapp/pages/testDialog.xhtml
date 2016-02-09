@@ -50,12 +50,11 @@
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:selectOneMenu id="requirement"
 											value="#{jJTestcaseBean.requirement}" effect="fade"
-											filter="#{!loginBean.mobile}" required="true" filterMatchMode="startsWith"
+											filter="#{!loginBean.mobile}" required="true" filterMatchMode="contains"
 											widgetVar="requirementWidget"
 											disabled="#{jJTestcaseBean.disabledTestcaseMode}"
-											requiredMessage="#{messages.test_new_name_alert}">
-											<f:converter
-												converterId="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter" />
+											converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter"
+											requiredMessage="#{messages.test_new_requirement_alert}">
 											<f:selectItem itemValue="#{null}"
 												itemLabel="#{messages.test_build_select}" />
 											<f:selectItems value="#{jJTestcaseBean.requirements}"
@@ -372,7 +371,7 @@
 						onstart="PF('testBlockUIWidget').block()"
 						oncomplete="PF('testBlockUIWidget').unblock()"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
-						update=":testcaseDialogForm :testFormWest :growlForm"
+						update=":testcaseDialogForm :testFormWest"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -385,7 +384,7 @@
 						oncomplete="PF('testBlockUIWidget').unblock()"
 						disabled="#{jJTestcaseBean.disabledTeststepMode}"
 						rendered="#{loginBean.mobile}" icon="fa fa-save Fs16"
-						update=":testcaseDialogForm :testFormWest :growlForm"
+						update=":testcaseDialogForm :testFormWest"
 						action="#{jJTestcaseBean.saveAndclose(jJTeststepBean)}" />
 				</h:panelGroup>
 			</h:panelGroup>

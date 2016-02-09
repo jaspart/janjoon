@@ -55,7 +55,8 @@ public class ViewExpiredExceptionExceptionHandler extends
 				} finally {
 					i.remove();
 				}
-			} else if (LoginBean.findBean("loginBean") != null) {
+			} else if (FacesContext.getCurrentInstance().getExternalContext() != null
+					&& LoginBean.findBean("loginBean") != null) {
 
 				if (FacesContext.getCurrentInstance().getViewRoot() != null) {
 					String viewId = FacesContext.getCurrentInstance()

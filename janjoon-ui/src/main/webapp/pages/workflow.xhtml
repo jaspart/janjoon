@@ -207,7 +207,7 @@
 								widgetVar="workFlowAction"
 								value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
 								itemValue="#{action}" required="true" dropdown="true"
-								var="action" itemLabel="#{action}"
+								var="action" itemLabel="#{action != null ? messages['workFlow_action_'.concat(action)] : messages.label_select}"
 								completeMethod="#{jJWorkflowBean.completeAction}" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -281,7 +281,7 @@
 						<p:commandButton id="workFlowDialogSaveButton"
 							value="#{messages.admin_workflow_new_save_button}"
 							action="#{jJWorkflowBean.persistConf}"
-							update=":tabview:workFlowDialogForm :growlForm " />
+							update=":tabview:workFlowDialogForm" />
 					</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">

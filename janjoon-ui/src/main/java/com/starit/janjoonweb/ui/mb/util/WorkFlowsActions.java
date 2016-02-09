@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -425,7 +424,7 @@ public class WorkFlowsActions {
 
 	}
 
-	public void setRequirementToREALEASEDWorkFlow(Object objet) {
+	public void setRequirementToRELEASEDWorkFlow(Object objet) {
 
 		System.err
 				.println("setRequirementToREALEASEDWorkFlow Successufuly Executed");
@@ -441,23 +440,26 @@ public class WorkFlowsActions {
 						&& (req.getStatus() == null || !req.getStatus()
 								.getName().equalsIgnoreCase("RELEASED"))) {
 
-					JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
-							.findBean("jJRequirementBean");
+					// JJRequirementBean jJRequirementBean = (JJRequirementBean)
+					// LoginBean
+					// .findBean("jJRequirementBean");
 					JJStatus reqStatus = jJStatusService.getOneStatus(
 							"RELEASED", "Requirement", true);
 					req.setStatus(reqStatus);
-					if (jJRequirementBean == null)
-						jJRequirementBean = new JJRequirementBean();
-					jJRequirementBean.updateJJRequirement(req);
+					// if (jJRequirementBean == null)
+					// jJRequirementBean = new JJRequirementBean();
+					jJRequirementService.updateJJRequirement(req);
 
 					if (((RequirementBean) LoginBean
 							.findBean("requirementBean")) != null)
 						((RequirementBean) LoginBean
 								.findBean("requirementBean")).setRootNode(null);
-					jJRequirementBean = (JJRequirementBean) LoginBean
+					JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
 							.findBean("jJRequirementBean");
-					jJRequirementBean.updateDataTable(task.getRequirement(),
-							JJRequirementBean.UPDATE_OPERATION);
+					if (jJRequirementBean != null)
+						jJRequirementBean.updateDataTable(
+								task.getRequirement(),
+								JJRequirementBean.UPDATE_OPERATION);
 				}
 
 			}
@@ -466,7 +468,7 @@ public class WorkFlowsActions {
 
 	}
 
-	public void sendMailTooBusinessReqCreatorWorkFlow(Object object) {
+	public void sendMailToBusinessReqCreatorWorkFlow(Object object) {
 		// System.err.println("sendMailWorkFlow Successufuly Executed");
 		if (object instanceof JJTask) {
 			JJTask task = (JJTask) object;
@@ -570,8 +572,8 @@ public class WorkFlowsActions {
 
 		for (JJWorkflow workFlow : workflows) {
 			switch (workFlow.getActionWorkflow()) {
-			case "setRequirementToREALEASEDWorkFlow":
-				this.setRequirementToREALEASEDWorkFlow(object);
+			case "setRequirementToRELEASEDWorkFlow":
+				this.setRequirementToRELEASEDWorkFlow(object);
 				break;
 			case "createMessageWorkFlow":
 				this.createMessageWorkFlow(object);
@@ -582,8 +584,8 @@ public class WorkFlowsActions {
 			case "sendMailWorkFlow":
 				this.sendMailWorkFlow(object);
 				break;
-			case "sendMailTooBusinessReqCreatorWorkFlow":
-				this.sendMailTooBusinessReqCreatorWorkFlow(object);
+			case "sendMailToBusinessReqCreatorWorkFlow":
+				this.sendMailToBusinessReqCreatorWorkFlow(object);
 				break;
 			}
 		}

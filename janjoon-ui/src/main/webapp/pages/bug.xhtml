@@ -83,7 +83,7 @@
 												onchange="jJbugBuild.val('');"
 												value="#{jJBugBean.viewBug.versioning}"
 												styleClass="bugAutoComplete"
-												itemLabel="#{version != null ? version.name.concat(' : ').concat(version.product.name) : messages.label_select}"
+												itemLabel="#{version != null ? version.name.concat(':').concat(version.product.name) : messages.label_select}"
 												itemValue="#{version}"
 												converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 												dropdown="true" var="version"
@@ -378,7 +378,7 @@
 									onstart="PF('bugBlockUIWidget').block()"
 									oncomplete="PF('bugBlockUIWidget').unblock()"
 									value="#{messages.label_save}" action="#{jJBugBean.persistBug}"
-									update="createPanelGrid,:growlForm" />
+									update="createPanelGrid" />
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block"

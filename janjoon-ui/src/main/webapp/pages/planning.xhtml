@@ -91,7 +91,7 @@
 			<h:panelGroup layout="block" styleClass="EmptyBox10" />
 			<h:panelGroup layout="block" styleClass="Container100">
 				<p:tabView id="projecttabview" widgetVar="projectTabView"
-					activeIndex="#{jJSprintBean.activeTabGantIndex}"
+					activeIndex="#{jJSprintBean.activeTabGantIndex}" style="border: 0px;"
 					onTabChange="tabChangeHelper([{name: 'activeGantIndex', value: index}]);"
 					dynamic="false" cache="true">
 					<p:tab title="#{loginBean.planningConfiguration.firstPageHeader}">

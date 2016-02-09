@@ -130,6 +130,7 @@ public class JJWorkflowBean {
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('workFlowDialogWidget').hide()");
+		RequestContext.getCurrentInstance().update("growlForm");
 
 		FacesMessage facesMessage = MessageFactory
 				.getMessage(message,

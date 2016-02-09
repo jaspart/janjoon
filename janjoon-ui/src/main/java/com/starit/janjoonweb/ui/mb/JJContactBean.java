@@ -549,11 +549,13 @@ public class JJContactBean {
 			if (contactState) {
 				if (getContactDialogConfiguration()) {
 					context.execute("PF('contactDialogWidget').hide()");
+					RequestContext.getCurrentInstance().update("growlForm");
 				} else {
 					newContact(jJPermissionBean);
 				}
 			} else {
 				context.execute("PF('contactDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			}
 			contactsLazyModel = null;
 		} else

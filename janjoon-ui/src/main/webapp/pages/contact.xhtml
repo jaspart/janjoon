@@ -305,7 +305,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="company"
 								value="#{jJContactBean.contactAdmin.company}" effect="fade"
-								filter="true" required="true" filterMatchMode="startsWith"
+								filter="true" required="true" filterMatchMode="contains"
 								converter="com.starit.janjoonweb.ui.mb.converter.JJCompanyConverter"
 								label="#{messages.label_company}">
 								<f:selectItems value="#{jJCompanyBean.companies}" var="comp"
@@ -370,7 +370,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="profile" value="#{jJPermissionBean.profile}"
-								effect="fade" filter="true" filterMatchMode="startsWith"
+								effect="fade" filter="true" filterMatchMode="contains"
 								required="true" widgetVar="profileWidget" label="Profile"
 								disabled="#{jJContactBean.disabledPermissionMode}">
 								<f:converter
@@ -392,7 +392,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="project" value="#{jJPermissionBean.project}"
-								effect="fade" filter="true" filterMatchMode="startsWith"
+								effect="fade" filter="true" filterMatchMode="contains"
 								widgetVar="projectWidget"
 								disabled="#{jJContactBean.disabledPermissionMode}">
 								<f:converter
@@ -415,7 +415,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="product" value="#{jJPermissionBean.product}"
-								effect="fade" filter="true" filterMatchMode="startsWith"
+								effect="fade" filter="true" filterMatchMode="contains"
 								widgetVar="productWidget"
 								disabled="#{jJContactBean.disabledPermissionMode}">
 								<f:converter
@@ -535,7 +535,7 @@
 							value="#{messages.admin_contact_new_save_button}"
 							icon="fa fa-save Fs16"
 							title="#{messages.admin_contact_new_save_button}"
-							update="contactDialogForm :headerForm :growlForm"
+							update="contactDialogForm :headerForm"
 							process="@this,firstname,lastname,email,password,company,priceReal,priceSold"
 							disabled="#{jJContactBean.disabledPermissionMode}"
 							action="#{jJContactBean.save(jJPermissionBean)}" />

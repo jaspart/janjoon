@@ -46,6 +46,9 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.event.ToggleSelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.extensions.component.timeline.Timeline;
 import org.primefaces.extensions.event.timeline.TimelineAddEvent;
 import org.primefaces.extensions.event.timeline.TimelineModificationEvent;
@@ -164,9 +167,10 @@ public class JJTaskBean {
 	private List<String> objets;
 
 	private List<ImportFormat> importFormats;
+	private List<ImportFormat> selectedImportFormat;
 
-	private boolean copyObjets;
-	private boolean oldCopyObjects;
+	// private boolean copyObjets;
+	// private boolean oldCopyObjects;
 
 	public String getSortMode() {
 		return sortMode;
@@ -458,13 +462,21 @@ public class JJTaskBean {
 		this.importFormats = importFormats;
 	}
 
-	public boolean getCopyObjets() {
-		return copyObjets;
+	public List<ImportFormat> getSelectedImportFormat() {
+		return selectedImportFormat;
 	}
 
-	public void setCopyObjets(boolean copyObjets) {
-		this.copyObjets = copyObjets;
+	public void setSelectedImportFormat(List<ImportFormat> selectedImportFormat) {
+		this.selectedImportFormat = selectedImportFormat;
 	}
+
+	// public boolean getCopyObjets() {
+	// return copyObjets;
+	// }
+	//
+	// public void setCopyObjets(boolean copyObjets) {
+	// this.copyObjets = copyObjets;
+	// }
 
 	public String getDialogHeader(JJTask ttt, String scrum) {
 
@@ -687,8 +699,10 @@ public class JJTaskBean {
 					MessageFactory.getMessage("label_task", "").getDetail(),
 					"e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
 			RequestContext.getCurrentInstance().execute(
 					"PF('viewTaskDialogWidget').hide()");
+			RequestContext.getCurrentInstance().update("growlForm");
 		}
 
 	}
@@ -1675,8 +1689,8 @@ public class JJTaskBean {
 		disabledFilter = true;
 
 		checkAll = false;
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 
 		if (mode.equalsIgnoreCase("planning")) {
 
@@ -1699,6 +1713,7 @@ public class JJTaskBean {
 		getVersion();
 
 		importFormats = new ArrayList<ImportFormat>();
+		selectedImportFormat = new ArrayList<ImportFormat>();
 
 	}
 
@@ -1706,89 +1721,87 @@ public class JJTaskBean {
 		boolean validationFailed = false;
 		int i = 0;
 		FacesMessage message = null;
-		while (i < importFormats.size() && !validationFailed) {
-			ImportFormat format = importFormats.get(i);
-			if (format.getCopyObjet()) {
-				Date startDate = format.getStartDate();
-				if (format.getStartDate() == null) {
-					validationFailed = true;
-					message = MessageFactory.getMessage(
-							"validator_task_startDateRequired",
-							FacesMessage.SEVERITY_ERROR, "ttt");
+		while (i < selectedImportFormat.size() && !validationFailed) {
+			ImportFormat format = selectedImportFormat.get(i);
+			Date startDate = format.getStartDate();
+			if (format.getStartDate() == null) {
+				validationFailed = true;
+				message = MessageFactory.getMessage(
+						"validator_task_startDateRequired",
+						FacesMessage.SEVERITY_ERROR, "ttt");
 
-				} else {
-					if (mode.equalsIgnoreCase("scrum")) {
-						if (startDate.before(((JJSprintBean) LoginBean
+			} else {
+				if (mode.equalsIgnoreCase("scrum")) {
+					if (startDate.before(((JJSprintBean) LoginBean
+							.findBean("jJSprintBean")).getSprintUtil()
+							.getSprint().getStartDate())) {
+
+						format.setStartDate(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
-								.getSprint().getStartDate())) {
-
-							format.setStartDate(((JJSprintBean) LoginBean
-									.findBean("jJSprintBean")).getSprintUtil()
-									.getSprint().getStartDate());
+								.getSprint().getStartDate());
+						// validationFailed = true;
+						// message = MessageFactory.getMessage(
+						// "validator_date_startBeforeStart",
+						// MessageFactory.getMessage("label_task", "")
+						// .getDetail(), "Sprint");
+						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+					} else if (startDate.after(((JJSprintBean) LoginBean
+							.findBean("jJSprintBean")).getSprintUtil()
+							.getSprint().getEndDate())) {
+						// validationFailed = true;
+						// message = MessageFactory.getMessage(
+						// "validator_date_startAfterEnd",
+						// MessageFactory.getMessage("label_task", "")
+						// .getDetail(), "Sprint");
+						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+						format.setStartDate(((JJSprintBean) LoginBean
+								.findBean("jJSprintBean")).getSprintUtil()
+								.getSprint().getStartDate());
+					}
+				} else {
+					if (sprint != null) {
+						if (startDate.before(sprint.getStartDate())) {
 							// validationFailed = true;
+							//
 							// message = MessageFactory.getMessage(
 							// "validator_date_startBeforeStart",
-							// MessageFactory.getMessage("label_task", "")
-							// .getDetail(), "Sprint");
+							// MessageFactory.getMessage("label_task",
+							// "").getDetail(), "Sprint");
 							// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-						} else if (startDate.after(((JJSprintBean) LoginBean
-								.findBean("jJSprintBean")).getSprintUtil()
-								.getSprint().getEndDate())) {
+							format.setStartDate(sprint.getStartDate());
+						} else if (startDate.after(sprint.getEndDate())) {
 							// validationFailed = true;
 							// message = MessageFactory.getMessage(
 							// "validator_date_startAfterEnd",
-							// MessageFactory.getMessage("label_task", "")
-							// .getDetail(), "Sprint");
+							// MessageFactory.getMessage("label_task",
+							// "").getDetail(), "Sprint");
 							// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-							format.setStartDate(((JJSprintBean) LoginBean
-									.findBean("jJSprintBean")).getSprintUtil()
-									.getSprint().getStartDate());
+							format.setStartDate(sprint.getStartDate());
 						}
-					} else {
-						if (sprint != null) {
-							if (startDate.before(sprint.getStartDate())) {
-								// validationFailed = true;
-								//
-								// message = MessageFactory.getMessage(
-								// "validator_date_startBeforeStart",
-								// MessageFactory.getMessage("label_task",
-								// "").getDetail(), "Sprint");
-								// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-								format.setStartDate(sprint.getStartDate());
-							} else if (startDate.after(sprint.getEndDate())) {
-								// validationFailed = true;
-								// message = MessageFactory.getMessage(
-								// "validator_date_startAfterEnd",
-								// MessageFactory.getMessage("label_task",
-								// "").getDetail(), "Sprint");
-								// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-								format.setStartDate(sprint.getStartDate());
-							}
 
-						}
 					}
-
-				}
-				if (!validationFailed) {
-
-					Integer workload = format.getWorkload();
-					if (workload == null) {
-
-						validationFailed = true;
-						message = MessageFactory
-								.getMessage("validator_task_workloadRequired");
-						message.setSeverity(FacesMessage.SEVERITY_ERROR);
-					} else if (workload <= 0) {
-
-						validationFailed = true;
-						message = MessageFactory
-								.getMessage("validator_task_workloadNegatif");
-						message.setSeverity(FacesMessage.SEVERITY_ERROR);
-					}
-
 				}
 
 			}
+			if (!validationFailed) {
+
+				Integer workload = format.getWorkload();
+				if (workload == null) {
+
+					validationFailed = true;
+					message = MessageFactory
+							.getMessage("validator_task_workloadRequired");
+					message.setSeverity(FacesMessage.SEVERITY_ERROR);
+				} else if (workload <= 0) {
+
+					validationFailed = true;
+					message = MessageFactory
+							.getMessage("validator_task_workloadNegatif");
+					message.setSeverity(FacesMessage.SEVERITY_ERROR);
+				}
+
+			}
+
 			i++;
 		}
 		if (!validationFailed)
@@ -1804,8 +1817,8 @@ public class JJTaskBean {
 	}
 
 	public void checkAll() {
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 		disabledImportButton = true;
 
 		fillTableImport();
@@ -1820,8 +1833,9 @@ public class JJTaskBean {
 	public void fillTableImport() {
 
 		importFormats = new ArrayList<ImportFormat>();
-		copyObjets = false;
-		oldCopyObjects = false;
+		selectedImportFormat = new ArrayList<ImportFormat>();
+		// copyObjets = false;
+		// oldCopyObjects = false;
 		disabledImportButton = true;
 
 		if (objet != null) {
@@ -1837,12 +1851,11 @@ public class JJTaskBean {
 
 						if (!jJTaskService.haveTask(bug, true, false, false)) {
 							importFormats.add(new ImportFormat(bug.getName(),
-									bug, copyObjets));
+									bug));
 						}
 
 					} else {
-						importFormats.add(new ImportFormat(bug.getName(), bug,
-								copyObjets));
+						importFormats.add(new ImportFormat(bug.getName(), bug));
 					}
 				}
 
@@ -1861,12 +1874,12 @@ public class JJTaskBean {
 						if (!jJTaskService.haveTask(requirement, true, false,
 								true)) {
 							importFormats.add(new ImportFormat(requirement
-									.getName(), requirement, copyObjets));
+									.getName(), requirement));
 						}
 					} else {
 
 						importFormats.add(new ImportFormat(requirement
-								.getName(), requirement, copyObjets));
+								.getName(), requirement));
 					}
 				}
 
@@ -1882,53 +1895,54 @@ public class JJTaskBean {
 						if (!jJTaskService
 								.haveTask(testcase, true, false, true)) {
 							importFormats.add(new ImportFormat(testcase
-									.getName(), testcase, copyObjets));
+									.getName(), testcase));
 						}
 					} else {
 
 						importFormats.add(new ImportFormat(testcase.getName(),
-								testcase, copyObjets));
+								testcase));
 					}
 				}
 			}
 
 		} else {
 			importFormats = new ArrayList<ImportFormat>();
+			selectedImportFormat = new ArrayList<ImportFormat>();
 		}
 	}
 
-	public void fillInDates() {
-		for (ImportFormat format : importFormats) {
-			if (format.getCopyObjet()) {
-				if (this.sprint != null && mode.equalsIgnoreCase("planning"))
-					format.setStartDate(sprint.getStartDate());
-				else if (mode.equalsIgnoreCase("planning"))
-					format.setStartDate(new Date());
-				else
-					format.setStartDate(((JJSprintBean) LoginBean
-							.findBean("jJSprintBean")).getSprintUtil()
-							.getSprint().getStartDate());
-			}
-		}
-	}
+	// public void fillInDates() {
+	// for (ImportFormat format : selectedImportFormat) {
+	// // if (format.getCopyObjet()) {
+	// if (this.sprint != null && mode.equalsIgnoreCase("planning"))
+	// format.setStartDate(sprint.getStartDate());
+	// else if (mode.equalsIgnoreCase("planning"))
+	// format.setStartDate(new Date());
+	// else
+	// format.setStartDate(((JJSprintBean) LoginBean
+	// .findBean("jJSprintBean")).getSprintUtil().getSprint()
+	// .getStartDate());
+	// // }
+	// }
+	// }
 
-	private boolean fillInDate;
+	// private boolean fillInDate;
 
-	public boolean isFillInDate() {
-
-		fillInDate = true;
-		for (ImportFormat format : importFormats) {
-			if (format.getCopyObjet()) {
-				fillInDate = false;
-				break;
-			}
-		}
-		return fillInDate;
-	}
-
-	public void setFillInDate(boolean fillInDate) {
-		this.fillInDate = fillInDate;
-	}
+	// public boolean isFillInDate() {
+	//
+	// fillInDate = true;
+	// for (ImportFormat format : selectedImportFormat) {
+	// //if (format.getCopyObjet()) {
+	// fillInDate = false;
+	// break;
+	// //}
+	// }
+	// return fillInDate;
+	// }
+	//
+	// public void setFillInDate(boolean fillInDate) {
+	// this.fillInDate = fillInDate;
+	// }
 
 	public void importTask() {
 
@@ -1942,125 +1956,116 @@ public class JJTaskBean {
 				c.getCompany());
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH");
 
-		for (ImportFormat format : importFormats) {
+		for (ImportFormat format : selectedImportFormat) {
 
-			if (format.getCopyObjet()) {
+			String name = null;
+			if (mode == null)
+				mode = "planning";
 
-				String name = null;
-				if (mode == null)
-					mode = "planning";
+			JJTask task = new JJTask();
+			task.setEnabled(true);
+			task.setTaskType(format.getTaskType());
+			if (mode.equalsIgnoreCase("planning"))
+				task.setSprint(this.sprint);
 
-				JJTask task = new JJTask();
+			if (format.getStartDate() == null) {
+				if (this.sprint != null && mode.equalsIgnoreCase("planning"))
+					task.setStartDatePlanned(calendarUtil
+							.nextWorkingDate(sprint.getStartDate()));
+				else
+					task.setStartDatePlanned(calendarUtil
+							.nextWorkingDate(new Date()));
+
+			} else {
+				task.setStartDatePlanned(calendarUtil.nextWorkingDate(format
+						.getStartDate()));
+			}
+
+			if (format.getWorkload() != null) {
+				task.setWorkloadPlanned(format.getWorkload());
+
+				if (task.getStartDatePlanned() != null)
+					calendarUtil.getEndDate(task, Planned, jJTaskService);
+			}
+
+			if (format.getObject() instanceof JJRequirement) {
+
+				JJRequirement requirement = (JJRequirement) format.getObject();
+
+				name = requirement.getName() + " (" + df.format(new Date())
+						+ "h)";
+
+				requirement = jJRequirementService
+						.findJJRequirement(requirement.getId());
+
+				requirement.getTasks().add(task);
+
+				task.setRequirement(requirement);
+
+			} else if (format.getObject() instanceof JJBug) {
+
+				JJBug bug = (JJBug) format.getObject();
+
+				name = bug.getName() + " (" + df.format(new Date()) + "h)";
+
+				bug = jJBugService.findJJBug(bug.getId());
+				bug.getTasks().add(task);
+
+				task.setBug(bug);
+
+			} else if (format.getObject() instanceof JJTestcase) {
+
+				JJTestcase testcase = (JJTestcase) format.getObject();
+
+				name = testcase.getName() + " (" + df.format(new Date()) + "h)";
+
+				testcase = jJTestcaseService.findJJTestcase(testcase.getId());
+
+				testcase.getTasks().add(task);
+
+				task.setTestcase(testcase);
+			}
+
+			if (name.length() > 100) {
+				name = name.substring(0, 99);
+			}
+
+			task.setName(name);
+			task.setDescription("This is task " + task.getName());
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+
+			if (mode.equalsIgnoreCase("scrum")) {
+
+				JJSprintBean jJSprintBean = (JJSprintBean) session
+						.getAttribute("jJSprintBean");
+				task.setCreationDate(new Date());
+				// exception name size
+				task.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact());
+				JJStatus status = jJStatusService.getOneStatus("TODO", "Task",
+						true);
+				if (status != null)
+					task.setStatus(status);
 				task.setEnabled(true);
-				task.setTaskType(format.getTaskType());
-				if (mode.equalsIgnoreCase("planning"))
-					task.setSprint(this.sprint);
+				task.setSprint(jJSprintBean.getSprintUtil().getSprint());
 
 				if (format.getStartDate() == null) {
-					if (this.sprint != null
-							&& mode.equalsIgnoreCase("planning"))
-						task.setStartDatePlanned(calendarUtil
-								.nextWorkingDate(sprint.getStartDate()));
-					else
-						task.setStartDatePlanned(calendarUtil
-								.nextWorkingDate(new Date()));
-
-				} else {
-					task.setStartDatePlanned(calendarUtil
-							.nextWorkingDate(format.getStartDate()));
-				}
-
-				if (format.getWorkload() != null) {
-					task.setWorkloadPlanned(format.getWorkload());
-
-					if (task.getStartDatePlanned() != null)
+					task.setStartDatePlanned(jJSprintBean.getSprintUtil()
+							.getSprint().getStartDate());
+					if (task.getWorkloadPlanned() != null)
 						calendarUtil.getEndDate(task, Planned, jJTaskService);
 				}
 
-				if (format.getObject() instanceof JJRequirement) {
-
-					JJRequirement requirement = (JJRequirement) format
-							.getObject();
-
-					name = requirement.getName() + " (" + df.format(new Date())
-							+ "h)";
-
-					requirement = jJRequirementService
-							.findJJRequirement(requirement.getId());
-
-					requirement.getTasks().add(task);
-
-					task.setRequirement(requirement);
-
-				} else if (format.getObject() instanceof JJBug) {
-
-					JJBug bug = (JJBug) format.getObject();
-
-					name = bug.getName() + " (" + df.format(new Date()) + "h)";
-
-					bug = jJBugService.findJJBug(bug.getId());
-					bug.getTasks().add(task);
-
-					task.setBug(bug);
-
-				} else if (format.getObject() instanceof JJTestcase) {
-
-					JJTestcase testcase = (JJTestcase) format.getObject();
-
-					name = testcase.getName() + " (" + df.format(new Date())
-							+ "h)";
-
-					testcase = jJTestcaseService.findJJTestcase(testcase
-							.getId());
-
-					testcase.getTasks().add(task);
-
-					task.setTestcase(testcase);
-				}
-
-				if (name.length() > 100) {
-					name = name.substring(0, 99);
-				}
-
-				task.setName(name);
-				task.setDescription("This is task " + task.getName());
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-
-				if (mode.equalsIgnoreCase("scrum")) {
-
-					JJSprintBean jJSprintBean = (JJSprintBean) session
-							.getAttribute("jJSprintBean");
-					task.setCreationDate(new Date());
-					// exception name size
-					task.setCreatedBy(((LoginBean) LoginBean
-							.findBean("loginBean")).getContact());
-					JJStatus status = jJStatusService.getOneStatus("TODO",
-							"Task", true);
-					if (status != null)
-						task.setStatus(status);
-					task.setEnabled(true);
-					task.setSprint(jJSprintBean.getSprintUtil().getSprint());
-
-					if (format.getStartDate() == null) {
-						task.setStartDatePlanned(jJSprintBean.getSprintUtil()
-								.getSprint().getStartDate());
-						if (task.getWorkloadPlanned() != null)
-							calendarUtil.getEndDate(task, Planned,
-									jJTaskService);
-					}
-
-				}
-
-				if (task.getWorkloadPlanned() == null) {
-					task.setWorkloadPlanned(3);
-					calendarUtil.getEndDate(task, Planned, jJTaskService);
-				}
-				saveJJTask(task, false, new MutableInt(0));
-				updateView(task, ADD_OPERATION);
-
 			}
+
+			if (task.getWorkloadPlanned() == null) {
+				task.setWorkloadPlanned(3);
+				calendarUtil.getEndDate(task, Planned, jJTaskService);
+			}
+			saveJJTask(task, false, new MutableInt(0));
+			updateView(task, ADD_OPERATION);
 
 		}
 
@@ -2141,6 +2146,7 @@ public class JJTaskBean {
 		objets = null;
 
 		importFormats = null;
+		selectedImportFormat = null;
 		mode = null;
 
 	}
@@ -2154,8 +2160,8 @@ public class JJTaskBean {
 		getImportStatus();
 
 		disabledImportButton = true;
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 
 		if (objet != null) {
 			if (objet.equalsIgnoreCase("testcase")) {
@@ -2167,6 +2173,7 @@ public class JJTaskBean {
 		} else {
 			disabledFilter = true;
 			importFormats = new ArrayList<ImportFormat>();
+			selectedImportFormat = new ArrayList<ImportFormat>();
 
 		}
 
@@ -2175,13 +2182,14 @@ public class JJTaskBean {
 	public void handleSelectStatus() {
 		getImportStatus();
 		disabledImportButton = true;
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 
 		if (objet != null) {
 			fillTableImport();
 		} else {
 			importFormats = new ArrayList<ImportFormat>();
+			selectedImportFormat = new ArrayList<ImportFormat>();
 
 		}
 	}
@@ -2190,13 +2198,14 @@ public class JJTaskBean {
 		getImportCategory();
 
 		disabledImportButton = true;
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 
 		if (objet != null) {
 			fillTableImport();
 		} else {
 			importFormats = new ArrayList<ImportFormat>();
+			selectedImportFormat = new ArrayList<ImportFormat>();
 
 		}
 	}
@@ -2229,13 +2238,12 @@ public class JJTaskBean {
 
 	}
 
-	public void copyObjetsListener() {
+	public void copyObjetsListener(ToggleSelectEvent event) {
 
-		if (copyObjets == oldCopyObjects)
-			copyObjets = !copyObjets;
 		for (ImportFormat importFormat : importFormats) {
-			importFormat.setCopyObjet(copyObjets);
-			if (copyObjets) {
+
+			if (event.isSelected() && importFormat.getStartDate() == null) {
+
 				if (this.sprint != null && mode.equalsIgnoreCase("planning"))
 					importFormat.setStartDate(sprint.getStartDate());
 				else if (mode.equalsIgnoreCase("planning"))
@@ -2245,76 +2253,47 @@ public class JJTaskBean {
 							.findBean("jJSprintBean")).getSprintUtil()
 							.getSprint().getStartDate());
 
-			} else {
+			} else if (!event.isSelected()) {
 				importFormat.setStartDate(null);
 			}
-
 		}
-
-		disabledImportButton = !copyObjets;
-		oldCopyObjects = copyObjets;
-
 	}
 
-	public void copyObjetListener(ImportFormat format) {
+	public void copyObjetListener(SelectEvent event) {
 
-		boolean copyAll = true;
-		for (ImportFormat importFormat : importFormats) {
-			if (!importFormat.getCopyObjet()) {
-				copyAll = false;
-				break;
-			}
+		ImportFormat importFormat = (ImportFormat) event.getObject();
 
-		}
+		if (this.sprint != null && mode.equalsIgnoreCase("planning"))
+			importFormat.setStartDate(sprint.getStartDate());
+		else if (mode.equalsIgnoreCase("planning"))
+			importFormat.setStartDate(new Date());
+		else
+			importFormat.setStartDate(((JJSprintBean) LoginBean
+					.findBean("jJSprintBean")).getSprintUtil().getSprint()
+					.getStartDate());
+	}
 
-		if (format.getCopyObjet()) {
+	public void copyObjetListener(UnselectEvent event) {
+		((ImportFormat) event.getObject()).setStartDate(null);
 
-			if (this.sprint != null && mode.equalsIgnoreCase("planning"))
-				format.setStartDate(sprint.getStartDate());
-			else if (mode.equalsIgnoreCase("planning"))
-				format.setStartDate(new Date());
-			else
-				format.setStartDate(((JJSprintBean) LoginBean
-						.findBean("jJSprintBean")).getSprintUtil().getSprint()
-						.getStartDate());
-
-		} else {
-			format.setStartDate(null);
-		}
-
-		copyObjets = copyAll;
-		oldCopyObjects = copyAll;
-
-		for (ImportFormat importFormat : importFormats) {
-			if (importFormat.getCopyObjet()) {
-				disabledImportButton = false;
-				break;
-			} else {
-				disabledImportButton = true;
-			}
-
-		}
 	}
 
 	public class ImportFormat {
 
 		private String name;
 		private Object object;
-		private boolean copyObjet;
 		private Date startDate;
 		private Integer workload;
-		// private boolean specification;
 		private JJStatus taskType;
 
 		public ImportFormat() {
 			super();
 		}
 
-		public ImportFormat(String name, Object object, boolean copyObjet) {
+		public ImportFormat(String name, Object object) {
 			super();
 			this.name = name;
 			this.object = object;
-			this.copyObjet = copyObjet;
 		}
 
 		public String getName() {
@@ -2331,14 +2310,6 @@ public class JJTaskBean {
 
 		public void setObject(Object object) {
 			this.object = object;
-		}
-
-		public boolean getCopyObjet() {
-			return copyObjet;
-		}
-
-		public void setCopyObjet(boolean copyObjet) {
-			this.copyObjet = copyObjet;
 		}
 
 		public JJStatus getTaskType() {
@@ -2363,6 +2334,13 @@ public class JJTaskBean {
 
 		public void setWorkload(Integer workload) {
 			this.workload = workload;
+		}
+
+		@Override
+		public boolean equals(Object object) {
+			return (object instanceof ImportFormat) && (getObject() != null) ? getObject()
+					.equals(((ImportFormat) object).getObject())
+					: (object == this);
 		}
 
 	}
@@ -3012,14 +2990,15 @@ public class JJTaskBean {
 		disabledImportButton = true;
 		disabledFilter = true;
 		checkAll = false;
-		copyObjets = false;
-		oldCopyObjects = false;
+		// copyObjets = false;
+		// oldCopyObjects = false;
 		importSprint = null;
 		getProject();
 		getProduct();
 		getVersion();
 
 		importFormats = new ArrayList<ImportFormat>();
+		selectedImportFormat = new ArrayList<ImportFormat>();
 	}
 
 	public void onEditTimelineEvent(TimelineModificationEvent ev) {

@@ -39,7 +39,7 @@
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:selectOneMenu id="objectComponent"
 											onchange="PF('profileDataTableWV').filter();" effect="fade"
-											filter="#{!loginBean.mobile}" filterMatchMode="startsWith">
+											filter="#{!loginBean.mobile}" filterMatchMode="contains">
 											<f:selectItem itemValue="all"
 												itemLabel="#{messages.admin_profile_table_filter_all}" />
 											<f:selectItems value="#{jJRightBean.objects}" var="p"
@@ -190,7 +190,8 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:inputText id="name"
 							placeholder="#{messages.admin_profile_new_name_watermark}"
-							disabled="#{jJProfileBean.disabledProfileMode}"
+							disabled="#{jJProfileBean.disabledProfileMode}"		
+							requiredMessage="#{messages.label_name_required_alert}"					
 							value="#{jJProfileBean.profileAdmin.name}" required="true">
 							<f:validateLength maximum="100" />
 						</p:inputText>
@@ -220,7 +221,7 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="object" value="#{jJRightBean.object}"
-								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="contains"
 								disabled="#{jJProfileBean.disabledRightMode}"
 								widgetVar="objectWidget" label="Right Object" required="true">
 								<p:ajax process="@this" partialSubmit="true"
@@ -243,12 +244,12 @@
 					<h:panelGroup layout="block" styleClass="Container65">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="category" value="#{jJRightBean.category}"
-								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
-								disabled="#{jJProfileBean.disabledRightMode}">
+								effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="contains"
+								disabled="#{jJProfileBean.disabledRightMode}"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter">
 								<p:ajax process="@this" partialSubmit="true"
 									listener="#{jJRightBean.handleSelectCategory()}" />
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter" />
+								
 								<f:selectItem itemLabel="*" itemValue="#{null}" />
 								<f:selectItems value="#{jJRightBean.categories}" var="p"
 									itemLabel="#{loginBean.checkMessage(p)}" itemValue="#{p}" />
@@ -304,13 +305,14 @@
 				<h:panelGroup layout="block" styleClass="Container70 Responsive100">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:dataTable id="rightDataTable" var="rightModel"
-							scrollable="true" scrollHeight="300" reflow="true"
-							value="#{jJRightBean.rightDataModel}"
+							scrollable="true" scrollHeight="300"
+							value="#{jJRightBean.rightDataModel}"							
 							emptyMessage="#{messages.label_notRecordFound}"
-							rowStyleClass="#{rightModel.old ? 'old' : null}">
+							rowStyleClass="#{rightModel.old ? 'old' : null}">						
+						
 							<f:facet name="header">
 								<h:outputText
-									value="#{messages.admin_profile_new_table_header} " />
+									value="#{messages.admin_profile_new_table_header}" />
 							</f:facet>
 							<p:column style="width:7%">
 								<f:facet name="header">
@@ -331,59 +333,19 @@
 										listener="#{jJRightBean.checkRightListener}" />
 								</p:selectBooleanCheckbox>
 							</p:column>
-							<p:column style="width:25%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_profile_new_table_object_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
+							<p:column style="width:25%" headerText="#{messages.admin_profile_new_table_object_title}">								
 								<h:outputText value="#{rightModel.right.objet}" />
 							</p:column>
-							<p:column style="width:25%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_profile_new_table_category_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
+							<p:column style="width:25%" headerText="#{messages.admin_profile_new_table_category_title}">								
 								<h:outputText value="#{rightModel.right.category.name}" />
 							</p:column>
-							<p:column style="width:13%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_profile_new_table_read_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
+							<p:column style="width:13%" headerText="#{messages.admin_profile_new_table_read_title}">								
 								<h:outputText value="#{rightModel.right.r}" />
 							</p:column>
-							<p:column style="width:15%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_profile_new_table_write_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
+							<p:column style="width:15%" headerText="#{messages.admin_profile_new_table_write_title}">								
 								<h:outputText value="#{rightModel.right.w}" />
 							</p:column>
-							<p:column style="width:15%">
-								<f:facet name="header">
-									<p:row>
-										<p:column>
-											<h:outputText
-												value="#{messages.admin_profile_new_table_execute_title}" />
-										</p:column>
-									</p:row>
-								</f:facet>
+							<p:column style="width:15%" headerText="#{messages.admin_profile_new_table_execute_title}">								
 								<h:outputText value="#{rightModel.right.x}" />
 							</p:column>
 						</p:dataTable>
@@ -394,7 +356,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:commandButton id="saveButton" 
 							value="#{messages.admin_profil_new_save_button}"
-							update="profileDialogForm :growlForm" icon="fa fa-save Fs16"
+							update="profileDialogForm" icon="fa fa-save Fs16"
 							disabled="#{jJProfileBean.disabledRightMode}"
 							process="@this,name" action="#{jJProfileBean.save(jJRightBean)}" />
 					</h:panelGroup>

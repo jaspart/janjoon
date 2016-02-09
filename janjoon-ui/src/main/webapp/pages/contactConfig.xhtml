@@ -134,7 +134,7 @@
 													<p:selectOneMenu id="lastproject"
 														value="#{jJContactBean.contactUtil.lastProject}"
 														effect="fade" filter="#{!loginBean.mobile}"
-														filterMatchMode="startsWith"
+														filterMatchMode="contains"
 														converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
 														<f:selectItem itemValue="#{null}"
@@ -164,7 +164,7 @@
 												<p:selectOneMenu id="lastproduct"
 													value="#{jJContactBean.contactUtil.lastProduct}"
 													effect="fade" filter="#{!loginBean.mobile}"
-													filterMatchMode="startsWith"
+													filterMatchMode="contains"
 													converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 													<f:selectItem itemValue="#{null}"
@@ -193,7 +193,7 @@
 												<p:selectOneMenu id="lastversion"
 													value="#{jJContactBean.contactUtil.lastVersion}"
 													effect="fade" filter="#{!loginBean.mobile}"
-													filterMatchMode="startsWith"
+													filterMatchMode="contains"
 													converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
 													<f:selectItem itemValue="#{null}"

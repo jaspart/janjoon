@@ -1222,6 +1222,7 @@ public class JJTestcaseBean {
 
 			if (getTestcaseDialogConfiguration()) {
 				context.execute("PF('testcaseDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			} else {
 				newTestcase(jJTeststepBean);
 			}
@@ -1249,6 +1250,7 @@ public class JJTestcaseBean {
 							"Test", ""));
 
 			context.execute("PF('testcaseDialogWidget').hide()");
+			RequestContext.getCurrentInstance().update("growlForm");
 
 		}
 		createTestcaseTree();

@@ -345,12 +345,15 @@ public class JJCompanyBean {
 		companies = null;
 		companyOptions = null;
 		logo = null;
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('companyDialogWidget').hide()");
+
 		FacesMessage facesMessage = MessageFactory
 				.getMessage("message_successfully_updated", MessageFactory
 						.getMessage("label_company", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('companyDialogWidget').hide()");
+		RequestContext.getCurrentInstance().update("growlForm");
 	}
 
 	public void deleteCompany() {
@@ -398,11 +401,14 @@ public class JJCompanyBean {
 		companies = null;
 		companyOptions = null;
 		logo = null;
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('companyDialogWidget').hide()");
+
 		facesMessage = MessageFactory.getMessage(message, MessageFactory
 				.getMessage("label_company", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('companyDialogWidget').hide()");
+		RequestContext.getCurrentInstance().update("growlForm");
 
 	}
 

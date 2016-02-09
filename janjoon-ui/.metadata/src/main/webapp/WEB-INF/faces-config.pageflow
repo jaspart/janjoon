@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13950744793370" configfile="/janjoon-ui/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="pages/login" id="pf14502584454070" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14502584454071 pf14502584454072" inlinks="pf14502584454071 pf14502584454073" path="/pages/login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/signup" id="pf14502584454074" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14502584454075 pf14502584454073" inlinks="pf14502584454075" path="/pages/signup.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/bugs" id="pf14502584454076" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf14502584454072" path="/pages/bugs.xhtml"/>
-  <links id="pf14502584454071" target="pf14502584454070" source="pf14502584454070" outcome="fail" fromaction="#{loginBean.login}"/>
-  <links id="pf14502584454075" target="pf14502584454074" source="pf14502584454074" outcome="fail" fromaction="#{jJContactBean.signUp}"/>
-  <links id="pf14502584454073" target="pf14502584454070" source="pf14502584454074" outcome="success" fromaction="#{jJContactBean.signUp}"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login" x="122" y="178" id="pf14502584454070" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf14502584454071 pf14502584454072" inlinks="pf14502584454071" path="/pages/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/signup" x="122" y="562" id="pf14502584454074" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf14502584454075 pf14549373410250" inlinks="pf14502584454075" path="/pages/signup.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/bugs" x="338" y="178" id="pf14502584454076" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf14502584454072" path="/pages/bugs.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/main" x="338" y="562" id="pf14549373410251" referenceLink="//@navigationRule.1/@navigationCase.1/@toViewId|" inlinks="pf14549373410250" path="/pages/main.xhtml"/>
   <links id="pf14502584454072" target="pf14502584454076" source="pf14502584454070" outcome="bug" fromaction="#{jJBugBean.persistBug}"/>
+  <links id="pf14549373410250" target="pf14549373410251" source="pf14502584454074" outcome="success" fromaction="#{jJContactBean.signUp}"/>
+  <links id="pf14502584454071" target="pf14502584454070" source="pf14502584454070" outcome="fail" fromaction="#{loginBean.login}">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf14502584454075" target="pf14502584454074" source="pf14502584454074" outcome="fail" fromaction="#{jJContactBean.signUp}">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
 </pageflow:Pageflow>

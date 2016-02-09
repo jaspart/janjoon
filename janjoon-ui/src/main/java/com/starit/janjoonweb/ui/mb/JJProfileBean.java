@@ -250,14 +250,14 @@ public class JJProfileBean {
 		if (profileState) {
 			if (getProfileDialogConfiguration()) {
 				context.execute("PF('profileDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			} else {
 				newProfile(jJRightBean);
 			}
 		} else {
 			context.execute("PF('profileDialogWidget').hide()");
+			RequestContext.getCurrentInstance().update("growlForm");
 		}
-
-		System.out.println("dfgdfgf");
 		profileListTable = null;
 	}
 

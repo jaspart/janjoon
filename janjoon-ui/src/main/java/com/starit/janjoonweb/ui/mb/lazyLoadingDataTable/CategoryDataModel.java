@@ -278,96 +278,80 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 				}
 			}
 			if (!containCategory) {
-				boolean sizeIsOne = false;
 
-				List<JJRequirement> requirements = new ArrayList<JJRequirement>();
-				for (JJRequirement r : allRequirements) {
-					requirements.add(r);
-				}
+				boolean isLowCategory = jJCategoryService.isLowLevel(category,
+						LoginBean.getCompany());
+				boolean isHighCategory = jJCategoryService.isHighLevel(
+						category, LoginBean.getCompany());
 
-				if (jJCategoryService.isLowLevel(category,
-						LoginBean.getCompany())) {
-
-					for (JJRequirement requirement : requirements) {
-
-						if (jJRequirementService.haveLinkUp(requirement))
-							compteur++;
-
-					}
-
-					sizeIsOne = true;
-				} else if (jJCategoryService.isHighLevel(category,
-						LoginBean.getCompany())
-						&& !sizeIsOne) {
-
-					for (JJRequirement requirement : requirements) {
-						boolean linkUp = false;
-						boolean linkDown = false;
-
-						linkDown = jJRequirementService
-								.haveLinkDown(requirement);
-						// linkUp = jJTaskService.haveTask(requirement, true,
-						// false, false);
-
-						linkUp = JJRequirementBean
-								.getRowState(requirement, jJRequirementService)
+				for (JJRequirement requirement : allRequirements) {
+					{
+						requirement = JJRequirementBean.getRowState(
+								requirement, jJRequirementService);
+						if (requirement
 								.getState()
 								.getName()
 								.equalsIgnoreCase(
 										JJRequirementBean.jJRequirement_InProgress)
-								|| JJRequirementBean
-										.getRowState(requirement,
-												jJRequirementService)
+								|| requirement
 										.getState()
 										.getName()
 										.equalsIgnoreCase(
 												JJRequirementBean.jJRequirement_InTesting)
-								|| JJRequirementBean
-										.getRowState(requirement,
-												jJRequirementService)
+								|| requirement
 										.getState()
 										.getName()
 										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_Finished);
-
-						if (linkUp && linkDown) {
+												JJRequirementBean.jJRequirement_Finished)) {
 							compteur++;
-						} else if (linkUp || linkDown) {
+						} else if (isLowCategory
+								&& requirement
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												JJRequirementBean.jJRequirement_Specified)) {
+							compteur++;
+
+						} else if (isHighCategory
+								&& (requirement
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												JJRequirementBean.jJRequirement_Specified) || jJTaskService
+										.haveTask(requirement, true, false,
+												false))) {
+
 							compteur += 0.5;
-						}
 
-					}
-				} else {
-
-					for (JJRequirement requirement : requirements) {
-						requirement = jJRequirementService
-								.findJJRequirement(requirement.getId());
-						boolean linkUp = false;
-						boolean linkDown = false;
-
-						linkUp = jJRequirementService.haveLinkUp(requirement);
-						linkDown = jJRequirementService
-								.haveLinkDown(requirement);
-
-						if (linkUp && linkDown) {
+						} else if (!isHighCategory
+								&& !isLowCategory
+								&& requirement
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												JJRequirementBean.jJRequirement_Specified)) {
 							compteur++;
-						} else if (linkUp || linkDown) {
+						} else if (!isHighCategory
+								&& !isLowCategory
+								&& (jJRequirementService
+										.haveLinkUp(requirement) || jJRequirementService
+										.haveLinkDown(requirement))) {
 							compteur += 0.5;
 						}
 					}
 				}
 
-				if (requirements.isEmpty()) {
+				if (allRequirements.isEmpty()) {
 					coverageProgress = 0;
 				} else {
-					coverageProgress = compteur / requirements.size();
+					coverageProgress = compteur / allRequirements.size();
 				}
 
 				coverageProgress = coverageProgress * 100;
 			}
 
 		}
-		logger.error("calculCoverageProgress_TaskTracker="
+		logger.info("calculCoverageProgress_TaskTracker="
 				+ (System.currentTimeMillis() - t));
 	}
 

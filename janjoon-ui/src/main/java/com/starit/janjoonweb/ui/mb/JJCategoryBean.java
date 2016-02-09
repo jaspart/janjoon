@@ -148,6 +148,7 @@ public class JJCategoryBean {
 			if (categoryState) {
 				if (getCategoryDialogConfiguration()) {
 					context.execute("PF('categoryDialogWidget').hide()");
+					RequestContext.getCurrentInstance().update("growlForm");
 				} else {
 
 					newCategory();
@@ -155,6 +156,7 @@ public class JJCategoryBean {
 
 			} else {
 				context.execute("PF('categoryDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			}
 		} else {
 			message = "validator_buildVersion_nameExist";

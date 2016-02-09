@@ -32,7 +32,7 @@
 						</h:panelGroup>
 					</f:facet>
 					<p:column style="width: 70px !important;text-align: center;">
-						<p:graphicImage styleClass="avatar" cache="false"
+						<p:graphicImage  styleClass="avatar" cache="false"
 							rendered="#{project.logo != null}"
 							value="#{imageStreamer.imageProj}">
 							<f:param name="ProjId" value="#{project.id}" />
@@ -240,7 +240,7 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="projectManagerSelect"
 								value="#{jJProjectBean.projectManager}" effect="fade"
-								filter="#{!loginBean.mobile}" filterMatchMode="startsWith" required="true"
+								filter="#{!loginBean.mobile}" filterMatchMode="contains" required="true"
 								label="#{messages.admin_project_new_manager_label}"
 								requiredMessage="#{messages.admin_project_new_manager_alert}"
 								widgetVar="projectManagerWidget">
@@ -283,7 +283,7 @@
 					<h:panelGroup layout="block" style="height:100px;"
 						styleClass="Container20 TexAlCenter BorderAll">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:graphicImage styleClass="avatar" cache="false"
+							<p:graphicImage id="img" styleClass="avatar" cache="false"
 								value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
 								<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
 								<f:param name="Edit" value="true" />
@@ -297,7 +297,7 @@
 								styleClass="customFileUpload"
 								disabled="#{empty jJProjectBean.projectAdmin.name}"
 								fileUploadListener="#{licenseBean.handleProjLogoUpload}"
-								mode="advanced" dragDropSupport="false" update="msg"
+								mode="advanced" dragDropSupport="false" update="msg img"
 								sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -309,7 +309,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:commandButton id="submitButton" icon="fa fa-save Fs16"
 							value="#{messages.admin_project_new_save_button}"
-							update="projectDialogForm :headerForm :growlForm"
+							update="projectDialogForm :headerForm"
 							process="@this,name,projectManagerSelect,projectSD,projectED"
 							action="#{jJProjectBean.save}" />
 					</h:panelGroup>

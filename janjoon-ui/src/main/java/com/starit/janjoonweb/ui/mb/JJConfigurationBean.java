@@ -168,6 +168,7 @@ public class JJConfigurationBean {
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('configDialogWidget').hide()");
+		RequestContext.getCurrentInstance().update("growlForm");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"Configuration", "e");

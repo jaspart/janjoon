@@ -45,10 +45,10 @@
 						<p:selectOneMenu id="status"
 							value="#{jJRequirementBean.requirementStatus}" required="true"
 							requiredMessage="#{messages.specification_create_status_alert}"
-							effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
-							disabled="#{jJRequirementBean.disabledStatus}">
-							<f:converter
-								converterId="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter" />
+							effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="contains"
+							disabled="#{jJRequirementBean.disabledStatus}" 
+							converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter">
+							
 							<f:selectItems value="#{jJRequirementBean.requirementStatusList}"
 								var="req" itemLabel="#{loginBean.checkMessage(req)}"
 								itemValue="#{req}" />
@@ -72,7 +72,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="project"
 							value="#{jJRequirementBean.requirementProject}" effect="fade"
-							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
 							disabled="#{jJRequirementBean.disabledProject}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
@@ -101,7 +101,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="chapter"
 							value="#{jJRequirementBean.requirementChapter}" effect="fade"
-							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJChapterConverter">
 
 							<f:selectItem itemValue="#{null}"
@@ -128,7 +128,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="product"
 							value="#{jJRequirementBean.requirementProduct}" effect="fade"
-							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 							<f:selectItem itemValue="#{null}"
@@ -157,7 +157,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:selectOneMenu id="version"
 							value="#{jJRequirementBean.requirementVersion}" effect="fade"
-							filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
 							disabled="#{jJRequirementBean.disabledVersion}"
 							converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter">
 
@@ -316,7 +316,7 @@
 						oncomplete="PF('requirementBlockUIWidget').unblock()"
 						action="#{jJRequirementBean.save}" rendered="#{loginBean.mobile}"
 						process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note"
-						widgetVar="requirementSaveWidget" update="@form :growlForm" />
+						widgetVar="requirementSaveWidget" update="@form" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">

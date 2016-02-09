@@ -42,7 +42,7 @@
 						value="#{jJProjectBean.project}" panelStyle="width:120px"
 						effect="fade" style="width:160px" filter="#{!loginBean.mobile}"
 						valueChangeListener="#{loginBean.changeEvent}"
-						filterMatchMode="startsWith"
+						filterMatchMode="contains"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 
 						<f:selectItem itemValue="#{null}"
@@ -60,7 +60,7 @@
 						value="#{jJProductBean.product}" panelStyle="width:120px"
 						effect="fade" style="width:160px" filter="#{!loginBean.mobile}"
 						valueChangeListener="#{loginBean.changeEvent}"
-						filterMatchMode="startsWith"
+						filterMatchMode="contains"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 						<f:selectItem itemValue="#{null}"
@@ -79,7 +79,7 @@
 						effect="fade" style="width:160px" filter="#{!loginBean.mobile}"
 						valueChangeListener="#{loginBean.changeEvent}"
 						converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
-						filterMatchMode="startsWith" disabled="#{jJVersionBean.disabled}">
+						filterMatchMode="contains" disabled="#{jJVersionBean.disabled}">
 
 						<f:selectItem itemValue="#{null}"
 							itemLabel="#{messages.header_any_version}" />

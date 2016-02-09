@@ -399,6 +399,11 @@ public class JJChapterBean {
 		} else {
 			updateJJChapter(chapter);
 			message = "message_successfully_updated";
+
+			RequirementBean requirementBean = (RequirementBean) LoginBean
+					.findBean("requirementBean");
+			if (requirementBean != null)
+				requirementBean.setRootNode(null);
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
@@ -416,10 +421,6 @@ public class JJChapterBean {
 
 		} else {
 			context.execute("PF('chapterDialogWidget').hide()");
-			RequirementBean requirementBean = (RequirementBean) LoginBean
-					.findBean("requirementBean");
-			if (requirementBean != null)
-				requirementBean.setRootNode(null);
 		}
 	}
 

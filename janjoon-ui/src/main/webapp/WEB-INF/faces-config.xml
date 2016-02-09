@@ -59,27 +59,32 @@
 		<!-- <renderer> -->
 		<!-- <component-family>org.primefaces.component</component-family> -->
 		<!-- <renderer-type>org.primefaces.component.FileUploadRenderer</renderer-type> -->
-		<!-- <renderer-class>com.starit.janjoonweb.ui.mb.util.FileUploadRenderer</renderer-class> -->
+		<!-- <renderer-class>com.starit.janjoonweb.ui.mb.util.renderer.FileUploadRenderer</renderer-class> -->
 		<!-- </renderer> -->
 		<renderer>
 			<component-family>org.primefaces.component</component-family>
 			<renderer-type>org.primefaces.component.RioMenuRenderer</renderer-type>
 			<renderer-class>org.primefaces.rio.component.menu.RioMenuRenderer</renderer-class>
 		</renderer>
-<!-- 		<renderer> -->
-<!-- 			<component-family>org.primefaces.component</component-family> -->
-<!-- 			<renderer-type>org.primefaces.component.ProgressBarRenderer</renderer-type> -->
-<!-- 			<renderer-class>com.starit.janjoonweb.ui.mb.util.ProgressBarRendererImpl</renderer-class> -->
-<!-- 		</renderer> -->
+		<!-- <renderer> -->
+		<!-- <component-family>org.primefaces.component</component-family> -->
+		<!-- <renderer-type>org.primefaces.component.ProgressBarRenderer</renderer-type> -->
+		<!-- <renderer-class>com.starit.janjoonweb.ui.mb.util.renderer.ProgressBarRendererImpl</renderer-class> -->
+		<!-- </renderer> -->
 		<renderer>
 			<component-family>org.primefaces.component</component-family>
 			<renderer-type>org.primefaces.component.SelectOneMenuRenderer</renderer-type>
-			<renderer-class>com.starit.janjoonweb.ui.mb.util.ExtendedMenuRenderer</renderer-class>
+			<renderer-class>com.starit.janjoonweb.ui.mb.util.renderer.ExtendedMenuRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>org.primefaces.component</component-family>
+			<renderer-type>org.primefaces.component.AutoCompleteRenderer</renderer-type>
+			<renderer-class>com.starit.janjoonweb.ui.mb.util.renderer.AutoCompleteRenderer</renderer-class>
 		</renderer>
 		<!-- <renderer> -->
 		<!-- <component-family>org.primefaces.component</component-family> -->
 		<!-- <renderer-type>org.primefaces.component.DataTableRenderer</renderer-type> -->
-		<!-- <renderer-class>com.starit.janjoonweb.ui.mb.util.DataTableRendererImpl</renderer-class> -->
+		<!-- <renderer-class>com.starit.janjoonweb.ui.mb.util.renderer.DataTableRendererImpl</renderer-class> -->
 		<!-- </renderer> -->
 	</render-kit>
 	<lifecycle>

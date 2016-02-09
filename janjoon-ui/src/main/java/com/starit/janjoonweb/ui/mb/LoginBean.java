@@ -1703,7 +1703,7 @@ public class LoginBean implements Serializable {
 
 		if (facesMessage != null) {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-			RequestContext.getCurrentInstance().execute("updateGrowl()");
+			// RequestContext.getCurrentInstance().execute("updateGrowl()");
 			facesMessage = null;
 		}
 

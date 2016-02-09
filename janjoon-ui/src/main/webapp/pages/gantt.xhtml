@@ -246,7 +246,7 @@
 								</f:facet>
 								<f:facet name="input">
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
-										filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+										filter="#{!loginBean.mobile}" filterMatchMode="contains"
 										rendered="#{taskData.task.sprint == null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 
@@ -257,7 +257,7 @@
 											itemValue="#{contact}" />
 									</h:selectOneMenu>
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
-										filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+										filter="#{!loginBean.mobile}" filterMatchMode="contains"
 										rendered="#{taskData.task.sprint != null}" 
 										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 

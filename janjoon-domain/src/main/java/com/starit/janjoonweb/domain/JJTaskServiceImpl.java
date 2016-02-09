@@ -560,18 +560,23 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 						if (req.getEnabled()) {
 							if (req.getState() == null) {
-								req.setState(jJRequirementService
-										.getRequirementState(req, req
-												.getProject().getCompany()));
-								req = jJRequirementService
-										.updateJJRequirement(req);
+								// req.setState(jJRequirementService
+								// .getRequirementState(req, req
+								// .getProject().getCompany()));
+								// req = jJRequirementService
+								// .updateJJRequirement(req);
+								isFinished = haveTask(req, true, true, true);
+							} else {
+								isFinished = req
+										.getState()
+										.getName()
+										.equalsIgnoreCase(
+												jJRequirement_Finished)
+										|| req.getState()
+												.getName()
+												.equalsIgnoreCase(
+														jJRequirement_InTesting);
 							}
-							isFinished = req.getState().getName()
-									.equalsIgnoreCase(jJRequirement_Finished)
-									|| req.getState()
-											.getName()
-											.equalsIgnoreCase(
-													jJRequirement_InTesting);
 
 						}
 						i++;
@@ -596,21 +601,25 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 					if (req.getEnabled()) {
 						if (req.getState() == null) {
-							req.setState(jJRequirementService
-									.getRequirementState(req, req.getProject()
-											.getCompany()));
-							req = jJRequirementService.updateJJRequirement(req);
+							// req.setState(jJRequirementService
+							// .getRequirementState(req, req.getProject()
+							// .getCompany()));
+							// req =
+							// jJRequirementService.updateJJRequirement(req);
+
+							haveTask = haveTask(req, true, false, true);
+						} else {
+							haveTask = req.getState().getName()
+									.equalsIgnoreCase(jJRequirement_Finished)
+									|| req.getState()
+											.getName()
+											.equalsIgnoreCase(
+													jJRequirement_InProgress)
+									|| req.getState()
+											.getName()
+											.equalsIgnoreCase(
+													jJRequirement_InTesting);
 						}
-						haveTask = req.getState().getName()
-								.equalsIgnoreCase(jJRequirement_Finished)
-								|| req.getState()
-										.getName()
-										.equalsIgnoreCase(
-												jJRequirement_InProgress)
-								|| req.getState()
-										.getName()
-										.equalsIgnoreCase(
-												jJRequirement_InTesting);
 
 					}
 					i++;

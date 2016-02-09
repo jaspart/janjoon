@@ -224,6 +224,15 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
+		// for(JJRequirement req:jJRequirementService.findAllJJRequirements())
+		// {
+		// if(req.getState() != null)
+		// {
+		// req.setState(null);
+		// jJRequirementService.updateJJRequirement(req);
+		// }
+		// }
+
 		// for(JJRight right:jJRightService.findAllJJRights())
 		// {
 		// if(right.getObjet().startsWith("JJ"))

@@ -351,7 +351,7 @@ public class JJSprintBean {
 			activeTabSprintIndex = -1;
 			Date now = new Date();
 			int i = 0;
-			while (i < sprintList.size() - 1) {
+			while (i < sprintList.size()) {
 				if (now.after(sprintList.get(i).getSprint().getStartDate())
 						&& now.before(sprintList.get(i).getSprint()
 								.getEndDate())) {

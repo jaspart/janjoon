@@ -1059,9 +1059,11 @@ div.highLightRevised2 {
 }
 
 .old {
-	background-color: #FCA752 !important;
-	background-image: none !important;
-	color: black !important;
+	background-color: #26a69a !important;
+}
+
+.old td {
+	color: #ffffff !important;
 }
 
 .Specified {
@@ -1611,6 +1613,15 @@ div.highLightRevised2 {
 	display: none;
 }
 
+.ui-selectonemenu.with-placeholder .ui-selectonemenu-label {
+	color: #ccc;
+}
+
+.ui-selectonemenu-panel.hide-disabled .ui-selectonemenu-list-item.ui-state-disabled
+	{
+	display: none;
+}
+
 .responsiveTabView {
 	
 }
@@ -1619,7 +1630,7 @@ div.highLightRevised2 {
 	padding-left: 18px;
 }
 
-.responsiveTabView .ui-tabs-navscroller .ui-tabs-navscroller-btn{
+.responsiveTabView .ui-tabs-navscroller .ui-tabs-navscroller-btn {
 	display: inline;
 }
 

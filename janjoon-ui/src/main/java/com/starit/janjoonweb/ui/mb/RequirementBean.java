@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -752,8 +753,9 @@ public class RequirementBean {
 	public List<JJChapter> completeChapterRequirement(String query) {
 		List<JJChapter> suggestions = new ArrayList<JJChapter>();
 		suggestions.add(null);
-		for (JJChapter chapter : jJChapterService.getChapters(null,
-				LoginBean.getProject(), requirement.getCategory(), true, null)) {
+		for (JJChapter chapter : jJChapterService
+				.getChapters(null, requirement.getProject(),
+						requirement.getCategory(), true, null)) {
 			String jJChapterStr = String.valueOf(chapter.getName());
 			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(chapter);
@@ -762,13 +764,49 @@ public class RequirementBean {
 		return suggestions;
 	}
 
+	public List<JJProject> completeProjectRequirement(String query) {
+
+		List<JJProject> projectList = new ArrayList<JJProject>();
+		projectList.add(null);
+		projectList
+				.addAll(((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+						.getProjectList());
+		for (JJProject proj : ((JJProjectBean) LoginBean
+				.findBean("jJProjectBean")).getProjectList()) {
+			String name = String.valueOf(proj.getName());
+			if (name.toLowerCase().startsWith(query.toLowerCase())) {
+				projectList.add(proj);
+			}
+		}
+
+		return projectList;
+	}
+
+	public List<JJCategory> completeCategoryRequirement(String query) {
+
+		List<JJCategory> categoryList = new ArrayList<JJCategory>();
+		categoryList.add(null);
+		for (JJCategory cate : getCategories()) {
+			String name = String.valueOf(cate.getName());
+			if (name.toLowerCase().startsWith(query.toLowerCase())) {
+				categoryList.add(cate);
+			}
+		}
+		return categoryList;
+	}
+
 	public List<JJProduct> completeProductRequirement(String query) {
 
 		List<JJProduct> productList = new ArrayList<JJProduct>();
 		productList.add(null);
-		productList
-				.addAll(((JJProductBean) LoginBean.findBean("jJProductBean"))
-						.getProductList());
+		for (JJProduct prod : ((JJProductBean) LoginBean
+				.findBean("jJProductBean")).getProductList()) {
+			String name = String.valueOf(prod.getName());
+			if (name.toLowerCase().startsWith(query.toLowerCase())) {
+				productList.add(prod);
+			}
+		}
+
 		return productList;
 	}
 
@@ -777,10 +815,15 @@ public class RequirementBean {
 		List<JJVersion> versionList = new ArrayList<JJVersion>();
 		versionList.add(null);
 
-		requirement.setVersioning(null);
 		if (requirement.getProduct() != null)
-			versionList.addAll(jJVersionService.getVersions(true, true,
-					requirement.getProduct(), LoginBean.getCompany(), true));
+			for (JJVersion ver : jJVersionService.getVersions(true, true,
+					requirement.getProduct(), LoginBean.getCompany(), true)) {
+				String name = String.valueOf(ver.getName());
+				if (name.toLowerCase().startsWith(query.toLowerCase())) {
+					versionList.add(ver);
+				}
+			}
+
 		return versionList;
 	}
 
@@ -877,13 +920,52 @@ public class RequirementBean {
 
 	public void save(JJRequirementBean jJRequirementBean) throws IOException {
 
+		boolean changeCategorie = !requirement
+				.getCategory()
+				.getStage()
+				.equals(jJRequirementService
+						.findJJRequirement(requirement.getId()).getCategory()
+						.getStage());
+
+		List<JJRequirement> reqToUpdate = new ArrayList<JJRequirement>();
+
+		if (changeCategorie) {
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkUp());
+
+			for (JJRequirement req : listReq) {
+				if (requirement.getCategory().getStage() >= req.getCategory()
+						.getStage()) {
+					requirement.getRequirementLinkUp().remove(req);
+					reqToUpdate.add(req);
+				}
+			}
+
+			listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkDown());
+
+			for (JJRequirement req : listReq) {
+				if (requirement.getCategory().getStage() <= req.getCategory()
+						.getStage()) {
+					req = jJRequirementService.findJJRequirement(req.getId());
+					req.getRequirementLinkUp().remove(requirement);
+					req = jJRequirementBean.updateJJRequirement(req);
+
+				}
+			}
+		}
+
 		jJRequirementBean.setRequirementStatus(requirement.getStatus());
 		jJRequirementBean.getRequirementOrder(requirement);
-		// jJRequirementBean.updateJJRequirement(requirement);
+
 		jJRequirementBean.updateDataTable(requirement,
 				JJRequirementBean.UPDATE_OPERATION);
 
 		long id = requirement.getId();
+
+		for (JJRequirement req : reqToUpdate) {
+			jJRequirementBean.updateJJRequirement(req);
+		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_updated",
@@ -893,6 +975,7 @@ public class RequirementBean {
 
 		((LoginBean) LoginBean.findBean("loginBean"))
 				.setFacesMessage(facesMessage);
+
 		FacesContext
 				.getCurrentInstance()
 				.getExternalContext()

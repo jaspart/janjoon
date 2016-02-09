@@ -361,7 +361,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
 				<p:commandButton id="updateTaskButton"
-					update=":viewTaskForm :growlForm" icon="fa fa-save Fs16"
+					update=":viewTaskForm" icon="fa fa-save Fs16"
 					actionListener="#{jJTaskBean.updateTask(View)}"
 					value="#{messages.label_save}"
 					process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType"

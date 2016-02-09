@@ -256,6 +256,7 @@ public class JJProjectBean {
 
 			if (getProjectDialogConfiguration()) {
 				context.execute("PF('projectDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			} else {
 				newProject();
 			}
@@ -263,6 +264,7 @@ public class JJProjectBean {
 		} else {
 
 			context.execute("PF('projectDialogWidget').hide()");
+			RequestContext.getCurrentInstance().update("growlForm");
 		}
 	}
 

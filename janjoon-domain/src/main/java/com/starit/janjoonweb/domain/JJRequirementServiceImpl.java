@@ -675,34 +675,19 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			if (!FINIS) {
 				rowStyleClass = jJRequirement_InProgress;
 			} else if (FINIS) {
-				// List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				// requirement, null, null, null, true, false, false);
 
-				boolean SUCCESS = jJTestcaseexecutionService
-						.checkIfSuccess(requirement);
-				//
-				// for (JJTestcase testcase : testcases) {
-				//
-				// List<JJTestcaseexecution> testcaseExecutions =
-				// jJTestcaseexecutionService
-				// .getTestcaseexecutions(testcase, null, true, true,false);
-				//
-				// if (testcaseExecutions.isEmpty()) {
-				// SUCCESS = false;
-				// break;
-				// } else {
-				//
-				// if ((testcaseExecutions.get(0).getPassed() == null)
-				// || (testcaseExecutions.get(0).getPassed() != null &&
-				// !testcaseExecutions
-				// .get(0).getPassed())) {
-				// SUCCESS = false;
-				// break;
-				//
-				// }
-				// }
-				//
-				// }
+				List<JJTestcase> testcases = jJTestcaseService.getTestcases(
+						requirement, null, null, null, true, false, false);
+
+				boolean SUCCESS = true;
+				int i = 0;
+
+				while (SUCCESS && i < testcases.size()) {
+					SUCCESS = jJTestcaseexecutionService
+							.checkIfSuccess(testcases.get(i));
+					i++;
+				}
+
 				if (SUCCESS) {
 					rowStyleClass = jJRequirement_Finished;
 				} else {

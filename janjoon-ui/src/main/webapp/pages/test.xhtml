@@ -166,7 +166,7 @@
 												<h:panelGroup layout="block" styleClass="Container70">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:selectOneMenu id="build" value="#{jJBuildBean.build}"
-															effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="startsWith"
+															effect="fade" filter="#{!loginBean.mobile}" filterMatchMode="contains"
 															converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter">
 															<f:selectItem itemValue="#{null}"
 																itemLabel="#{messages.label_select}" />
@@ -632,11 +632,11 @@
 
 								<p:column headerText="Action">
 									<h:outputText value="#{ts.actionstep}" escape="false"
-										style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
+										style="white-space: pre-wrap;max-height: 35px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 								</p:column>
 								<p:column headerText="Result">
 									<h:outputText value="#{ts.resultstep}" escape="false"
-										style="white-space: pre-wrap;max-height: 30px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
+										style="white-space: pre-wrap;max-height: 35px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 								</p:column>
 							</p:dataTable>
 						</h:panelGroup>
@@ -812,7 +812,7 @@
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="saveBug" value="#{messages.label_save}"
 									icon="fa fa-save Fs16" action="#{jJBugBean.saveBug}"
-									update=":runTestcaseDialogForm :growlForm"
+									update=":runTestcaseDialogForm"
 									oncomplete="PF('bugTestDialogWidget').hide()" />
 							</h:panelGroup>
 						</h:panelGroup>

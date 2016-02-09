@@ -1,4 +1,4 @@
-package com.starit.janjoonweb.ui.mb.util;
+package com.starit.janjoonweb.ui.mb.util.renderer;
 
 import java.io.IOException;
 import java.util.List;

@@ -298,11 +298,13 @@ public class JJProductBean {
 		if (productState) {
 			if (getProductDialogConfiguration()) {
 				context.execute("PF('productDialogWidget').hide()");
+				RequestContext.getCurrentInstance().update("growlForm");
 			} else {
 				newProduct(jJVersionBean);
 			}
 		} else {
 			context.execute("PF('productDialogWidget').hide()");
+			RequestContext.getCurrentInstance().update("growlForm");
 		}
 	}
 

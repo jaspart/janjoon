@@ -23,7 +23,7 @@
 				<p:messages id="msg" showDetail="false" closable="true" />
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container100">
-				<p:tabView widgetVar="companyTabView" scrollable="false">
+				<p:tabView widgetVar="companyTabView" id="companyTabView" scrollable="false">
 					<p:ajax event="tabChange" update=":companyDialogForm:msg" />
 					<p:tab title="#{messages.admin_company_menuitem}">
 						<h:panelGroup layout="block" styleClass="Container">
@@ -49,7 +49,7 @@
 								<h:panelGroup layout="block" style="height:100px;"
 									styleClass="Responsive Container20 TexAlCenter BorderAll">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:graphicImage styleClass="avatar" cache="false"
+										<p:graphicImage id="img" styleClass="avatar" cache="false"
 											value="#{imageStreamer.imageComp}" style="margin-top: 7%;">
 											<f:param name="CompId" value="#{jJCompanyBean.companie.id}" />
 											<f:param name="Edit" value="true" />
@@ -64,7 +64,7 @@
 											disabled="#{empty jJCompanyBean.companie.name}"
 											fileUploadListener="#{licenseBean.handleCompLogoUpload}"
 											mode="advanced" dragDropSupport="false"
-											update=":companyDialogForm:msg" sizeLimit="1000000"
+											update=":companyDialogForm:msg companyDialogForm:companyTabView:img" sizeLimit="1000000"
 											allowTypes="/(gif|png|ico|jpeg)$/" />
 									</h:panelGroup>
 								</h:panelGroup>
@@ -253,7 +253,7 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:commandButton id="submitButton" icon="fa fa-save Fs16"
 							value="#{messages.admin_company_new_save_button}"
-							update="companyDialogForm :growlForm"
+							update="companyDialogForm"
 							title="#{messages.admin_company_new_save_button}"
 							action="#{jJCompanyBean.saveCompany}" />
 					</h:panelGroup>

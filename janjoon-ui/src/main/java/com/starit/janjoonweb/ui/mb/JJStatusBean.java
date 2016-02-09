@@ -13,7 +13,6 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
-import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.LengthValidator;
 
@@ -30,10 +29,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
-import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
-import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -618,7 +615,7 @@ public class JJStatusBean {
 		selectedStatus.setEnabled(false);
 		updateJJStatus(selectedStatus);
 		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Status");
+				"message_successfully_deleted", "Status", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
 		pieChart = null;
@@ -652,7 +649,7 @@ public class JJStatusBean {
 		return suggestions;
 	}
 
-	public String persistStatus() {
+	public void persistStatus() {
 		String message = "";
 
 		if (getJJStatus_().getId() != null) {
@@ -667,15 +664,17 @@ public class JJStatusBean {
 			saveJJStatus(getJJStatus_());
 			message = "message_successfully_created";
 		}
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('createSatDialogWidget').hide()");
-		context.execute("PF('editSatDialogWidget').hide()");
 
-		FacesMessage facesMessage = MessageFactory
-				.getMessage(message, "Status");
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Status", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('statusDialogWidget').hide()");
+
+		RequestContext.getCurrentInstance().update("growlForm");
+
 		reset();
-		return findAllJJStatuses();
 
 	}
 
@@ -1144,73 +1143,63 @@ public class JJStatusBean {
 									.getVersion(), null, null, false, true,
 									false, false, null);
 
-					boolean sizeIsOne = false;
+					boolean isLowCategory = jJCategoryService.isLowLevel(
+							category, LoginBean.getCompany());
+					boolean isHighCategory = jJCategoryService.isHighLevel(
+							category, LoginBean.getCompany());
 
-					if (jJCategoryService.isLowLevel(category,
-							LoginBean.getCompany())) {
-
-						for (JJRequirement requirement : dataList) {
-							if (jJRequirementService.haveLinkUp(requirement))
-								compteur++;
-						}
-
-						sizeIsOne = true;
-					} else if (jJCategoryService.isHighLevel(category,
-							LoginBean.getCompany()) && !sizeIsOne) {
-
-						for (JJRequirement requirement : dataList) {
-							boolean linkUp = false;
-							boolean linkDown = false;
-							linkDown = jJRequirementService
-									.haveLinkDown(requirement);
-							// linkUp = jJTaskService.haveTask(requirement,
-							// true,
-							// false, false);
-
-							linkUp = JJRequirementBean
-									.getRowState(requirement,
-											jJRequirementService)
+					for (JJRequirement requirement : dataList) {
+						{
+							requirement = JJRequirementBean.getRowState(
+									requirement, jJRequirementService);
+							if (requirement
 									.getState()
 									.getName()
 									.equalsIgnoreCase(
 											JJRequirementBean.jJRequirement_InProgress)
-									|| JJRequirementBean
-											.getRowState(requirement,
-													jJRequirementService)
+									|| requirement
 											.getState()
 											.getName()
 											.equalsIgnoreCase(
 													JJRequirementBean.jJRequirement_InTesting)
-									|| JJRequirementBean
-											.getRowState(requirement,
-													jJRequirementService)
+									|| requirement
 											.getState()
 											.getName()
 											.equalsIgnoreCase(
-													JJRequirementBean.jJRequirement_Finished);
-
-							if (linkUp && linkDown) {
+													JJRequirementBean.jJRequirement_Finished)) {
 								compteur++;
-							} else if (linkUp || linkDown) {
+							} else if (isLowCategory
+									&& requirement
+											.getState()
+											.getName()
+											.equalsIgnoreCase(
+													JJRequirementBean.jJRequirement_Specified)) {
+								compteur++;
+
+							} else if (isHighCategory
+									&& (requirement
+											.getState()
+											.getName()
+											.equalsIgnoreCase(
+													JJRequirementBean.jJRequirement_Specified) || jJTaskService
+											.haveTask(requirement, true, false,
+													false))) {
+
 								compteur += 0.5;
-							}
 
-						}
-					} else {
-
-						for (JJRequirement requirement : dataList) {
-
-							boolean linkUp = false;
-							boolean linkDown = false;
-
-							linkUp = jJRequirementService
-									.haveLinkUp(requirement);
-							linkDown = jJRequirementService
-									.haveLinkDown(requirement);
-
-							if (linkUp && linkDown) {
+							} else if (!isHighCategory
+									&& !isLowCategory
+									&& requirement
+											.getState()
+											.getName()
+											.equalsIgnoreCase(
+													JJRequirementBean.jJRequirement_Specified)) {
 								compteur++;
-							} else if (linkUp || linkDown) {
+							} else if (!isHighCategory
+									&& !isLowCategory
+									&& (jJRequirementService
+											.haveLinkUp(requirement) || jJRequirementService
+											.haveLinkDown(requirement))) {
 								compteur += 0.5;
 							}
 						}
