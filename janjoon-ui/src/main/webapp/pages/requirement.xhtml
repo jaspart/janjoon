@@ -31,7 +31,7 @@
 }
 
 .reqTree {
-	height: 400px;
+	height: 520px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
@@ -40,6 +40,10 @@
 
 .reqTree .ui-tree-container {
 	width: 100%;
+}
+
+.gridTreePanel .ui-panelgrid-header {
+	padding: 4px;
 }
 
 .customPanel {
@@ -93,17 +97,23 @@
 				</p:overlayPanel>
 
 				<h:panelGroup id="treePanelGrid" layout="block"
-					styleClass="Container30 MarAuto Responsive100">
+					styleClass="Container35 MarAuto Responsive100">
 
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:panelGrid styleClass="Container100">
+						<p:panelGrid styleClass="Container100 gridTreePanel">
 							<f:facet name="header">
 								<p:row>
 									<p:column colspan="2" styleClass="TexAlLeft">
 										<h:panelGroup layout="block" styleClass="Container ui-fluid">
 											<h:panelGroup layout="block"
-												styleClass="Container50 Responsive100 TexAlLeft">
-												<h:panelGroup layout="block" styleClass="Container25">
+												styleClass="Container60 Responsive100 TexAlLeft">
+												<h:panelGroup layout="block" styleClass="Container20">
+													<h:panelGroup layout="block" styleClass="ContainerIndent">
+														<p:inputText styleClass="Red CounterStyle" size="4"
+															value="#{requirementBean.rowCount}" />
+													</h:panelGroup>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="Container20">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:commandButton
 															actionListener="#{requirementBean.onrate}" id="rate"
@@ -118,7 +128,7 @@
 												</h:panelGroup>
 
 												<h:panelGroup layout="block"
-													styleClass="Container25 ShowOnDesktop">
+													styleClass="Container20 ShowOnDesktop">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:commandButton id="colorBtn"
 															icon="fa fa-info-circle Fs20" type="button"
@@ -126,7 +136,7 @@
 													</h:panelGroup>
 												</h:panelGroup>
 
-												<h:panelGroup layout="block" styleClass="Container25">
+												<h:panelGroup layout="block" styleClass="Container20">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:commandButton id="manageChapterButton"
 															resetValues="true" icon="fa fa-folder Fs20"
@@ -138,7 +148,7 @@
 															oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
 													</h:panelGroup>
 												</h:panelGroup>
-												<h:panelGroup layout="block" styleClass="Container25">
+												<h:panelGroup layout="block" styleClass="Container20">
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:commandButton id="newRequirementButton"
 															icon="fa fa-plus-square Fs20"
@@ -153,7 +163,7 @@
 
 											</h:panelGroup>
 											<h:panelGroup layout="block"
-												styleClass="Container50 Responsive100 TexAlLeft">
+												styleClass="Container40 Responsive100 TexAlLeft">
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
 
 													<p:selectOneMenu id="category"
@@ -183,7 +193,11 @@
 									<p:accordionPanel id="accordionTreePanel"
 										activeIndex="#{requirementBean.activeIndex}"
 										styleClass="accordionTreePanel">
-										<p:tab title="#{messages.specification_tree_panel_header}">
+										<p:tab>
+											<f:facet name="title">
+												<h:outputText
+													value="#{messages.specification_tree_panel_header}" />
+											</f:facet>
 											<p:tree id="reqTree" value="#{requirementBean.rootNode}"
 												var="node" selectionMode="single"
 												styleClass="reqTree Container99"
@@ -194,6 +208,7 @@
 													oncomplete="PF('blockUIWidget').unblock()" />
 
 												<p:treeNode type="projet">
+
 													<h:outputText value="P-#{node.id}-#{node.name}" />
 												</p:treeNode>
 												<p:treeNode type="chapter">
@@ -205,7 +220,7 @@
 												</p:treeNode>
 												<p:treeNode type="Requirement">
 													<h:outputText style="#{requirementBean.underligne(node)}"
-														value="R-#{node.id}-#{fn:substring(node.name,0,25)}"
+														value="R-#{node.id}-#{fn:substring(node.name,0,35)}"
 														styleClass="#{node.state.name}" />
 												</p:treeNode>
 											</p:tree>
@@ -221,7 +236,7 @@
 			</h:form>
 			<h:form id="requirementForm">
 				<h:panelGroup layout="block"
-					styleClass="Container70 MarAuto Responsive100">
+					styleClass="Container65 MarAuto Responsive100">
 
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 
@@ -257,9 +272,10 @@
 											itemLabel="#{project.name}" itemValue="#{project}"
 											title="#{messages.label_project}"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
-											dropdown="true" var="project" 
+											dropdown="true" var="project"
 											completeMethod="#{requirementBean.completeProjectRequirement}">
-											<p:ajax event="itemSelect" update="chapter" listener="#{requirementBean.requirement.setChapter(null)}" />
+											<p:ajax event="itemSelect" update="chapter"
+												listener="#{requirementBean.requirement.setChapter(null)}" />
 										</p:autoComplete>
 									</h:panelGroup>
 								</h:panelGroup>
@@ -271,9 +287,10 @@
 											itemLabel="#{category != null ? loginBean.checkMessage(category) : ''}"
 											itemValue="#{category}" title="#{messages.label_category}"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
-											dropdown="true" var="category" 
+											dropdown="true" var="category"
 											completeMethod="#{requirementBean.completeCategoryRequirement}">
-											<p:ajax event="itemSelect" update="chapter" listener="#{requirementBean.requirement.setChapter(null)}" />
+											<p:ajax event="itemSelect" update="chapter"
+												listener="#{requirementBean.requirement.setChapter(null)}" />
 										</p:autoComplete>
 									</h:panelGroup>
 								</h:panelGroup>
@@ -297,9 +314,10 @@
 											itemLabel="#{product.name}" itemValue="#{product}"
 											title="#{messages.label_product}"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter"
-											dropdown="true" var="product" 
+											dropdown="true" var="product"
 											completeMethod="#{requirementBean.completeProductRequirement}">
-											<p:ajax event="itemSelect" update="version" listener="#{requirementBean.requirement.setVersioning(null)}" />
+											<p:ajax event="itemSelect" update="version"
+												listener="#{requirementBean.requirement.setVersioning(null)}" />
 										</p:autoComplete>
 									</h:panelGroup>
 								</h:panelGroup>

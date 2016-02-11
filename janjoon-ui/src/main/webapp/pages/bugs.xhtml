@@ -30,8 +30,8 @@
 					style="white-space: nowrap;" />
 			</h:panelGrid>
 			<h:panelGroup layout="block" styleClass="Container">
-				<p:overlayPanel id="colorPanel" for="bugTable2:colorBtn" hideEffect="fade"
-					dynamic="true"  styleClass="ShowOnDesktop">
+				<p:overlayPanel id="colorPanel" for="bugTable2:colorBtn"
+					hideEffect="fade" dynamic="true" styleClass="ShowOnDesktop">
 					<p:panelGrid style="width: 100%;">
 						<f:facet name="header">
 							<p:row>
@@ -133,16 +133,18 @@
 						<f:facet name="header">
 							<h:panelGroup layout="block" styleClass="Container ui-fluid">
 								<h:panelGroup layout="block" style="float: right !important;"
-									styleClass="Container20 Responsive">
-									<h:panelGroup layout="block" styleClass="Container50">
+									styleClass="Container15 Responsive">
+									<h:panelGroup layout="block" styleClass="Container60">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:inputSwitch id="mineBugs"
 												onchange="PF('bugTable').filter();" binding="#{mineBugs}"
 												offLabel="#{messages.specification_table_requirement_all}"
-												onLabel="#{messages.specification_table_requirement_mine}" />
+												onLabel="#{messages.specification_table_requirement_mine}">
+												<p:ajax event="change" update="counter" />
+											</p:inputSwitch>
 										</h:panelGroup>
 									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="Container50">
+									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<h:outputText style="font-family: 'roboto_condensedlight';"
 												styleClass="Fs20" value="Bug" />
@@ -150,19 +152,25 @@
 									</h:panelGroup>
 
 								</h:panelGroup>
-								<h:panelGroup layout="block" styleClass="Container20 Responsive">
-									<h:panelGroup layout="block"
-										styleClass="Container25 ShowOnDesktop">
+								<h:panelGroup layout="block" styleClass="Container35 Responsive">
+									<h:panelGroup layout="block" styleClass="Container20">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:commandButton id="colorBtn"
-											icon="fa fa-info-circle  Gray Fs20"
-											styleClass="GrayButton ShowOnDesktop" type="button"
-											title="#{messages.specification_video_help_title}" />
-</h:panelGroup>
+											<p:inputText id="counter" readonly="true"
+												styleClass="Red CounterStyle" size="4"
+												value="#{jJBugBean.bugList.rowCount}" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block"
+										styleClass="Container20 ShowOnDesktop">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton id="colorBtn"
+												icon="fa fa-info-circle  Gray Fs20"
+												styleClass="GrayButton ShowOnDesktop" type="button"
+												title="#{messages.specification_video_help_title}" />
+										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block"
-										styleClass="Container25">
+									<h:panelGroup layout="block" styleClass="Container20">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_delete_button}"
 												id="deleteMButton" icon="fa fa-trash Gray Fs20"
@@ -172,8 +180,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block"
-										styleClass="Container25">
+									<h:panelGroup layout="block" styleClass="Container20">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton title="#{messages.bug_favoris_button}"
 												id="subscribeMButton" icon="fa fa-star Gray Fs20"
@@ -186,8 +193,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 
-									<h:panelGroup layout="block"
-										styleClass="Container25">
+									<h:panelGroup layout="block" styleClass="Container20">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="createButton"
 												icon="fa fa-plus-square  Gray Fs20" styleClass="GrayButton"
@@ -199,11 +205,13 @@
 								</h:panelGroup>
 
 								<h:panelGroup layout="block"
-									styleClass="Container60 Responsive100">
+									styleClass="Container50 Responsive100">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:inputText id="globalFilter" binding="#{glbFilter}"
 											onkeyup="PF('bugTable').filter()"
-											placeholder="#{messages.bug_table_search_watermark}" />
+											placeholder="#{messages.bug_table_search_watermark}">
+											<p:ajax event="keyup" update="counter" />
+										</p:inputText>
 									</h:panelGroup>
 								</h:panelGroup>
 
@@ -212,26 +220,25 @@
 
 						<p:column selectionMode="multiple"
 							style="width:8%;text-align: center;" priority="1">
-<!-- 							<p:commandLink actionListener="#{jJBugBean.onrate(bug)}" -->
-<!-- 								onstart="PF('blockUIWidget').block()" -->
-<!-- 								styleClass="MarLeftQuarter" -->
-<!-- 								oncomplete="PF('blockUIWidget').unblock()" -->
-<!-- 								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"> -->
+							<!-- 							<p:commandLink actionListener="#{jJBugBean.onrate(bug)}" -->
+							<!-- 								onstart="PF('blockUIWidget').block()" -->
+							<!-- 								styleClass="MarLeftQuarter" -->
+							<!-- 								oncomplete="PF('blockUIWidget').unblock()" -->
+							<!-- 								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"> -->
 
-<!-- 								<p:graphicImage -->
-<!-- 									name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}" -->
-<!-- 									width="16" height="16" cache="false" library="images" -->
-<!-- 									title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" /> -->
+							<!-- 								<p:graphicImage -->
+							<!-- 									name="#{!jJBugBean.isRated(bug) ? 'blackstar.ico' : 'yelstar.ico'}" -->
+							<!-- 									width="16" height="16" cache="false" library="images" -->
+							<!-- 									title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" /> -->
 
-<!-- 							</p:commandLink> -->
-							
-							<p:commandButton
-								actionListener="#{jJBugBean.onrate(bug)}"
-								onstart="PF('blockUIWidget').block()"								
+							<!-- 							</p:commandLink> -->
+
+							<p:commandButton actionListener="#{jJBugBean.onrate(bug)}"
+								onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock()"
-								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"									
+								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
 								styleClass="MarLeftQuarter GrayButton littleButton"
-								icon="fa fa-star Fs20 #{jJBugBean.isRated(bug) ? 'Yellow' : 'BoldGray'}"									
+								icon="fa fa-star Fs20 #{jJBugBean.isRated(bug) ? 'Yellow' : 'BoldGray'}"
 								title="#{!jJBugBean.isRated(bug) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" />
 						</p:column>
 
@@ -266,6 +273,7 @@
 									<p:column>
 										<h:outputText value="#{type}" />
 									</p:column>
+									<p:ajax event="change" update="counter" />
 								</p:selectOneMenu>
 							</f:facet>
 							<h:outputText value="#{bug.criticity.name}" />
@@ -286,6 +294,7 @@
 									<p:column>
 										<h:outputText value="#{type}" />
 									</p:column>
+									<p:ajax event="change" update="counter" />
 								</p:selectOneMenu>
 							</f:facet>
 							<h:outputText value="#{bug.importance.name}" />
@@ -307,7 +316,7 @@
 									<p:column>
 										<h:outputText value="#{type}" />
 									</p:column>
-									<p:ajax event="change" update="@this" />
+									<p:ajax event="change" update="counter" />
 
 								</p:selectOneMenu>
 							</f:facet>

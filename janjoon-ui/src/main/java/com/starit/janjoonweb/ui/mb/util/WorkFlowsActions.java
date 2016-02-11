@@ -458,7 +458,7 @@ public class WorkFlowsActions {
 							.findBean("jJRequirementBean");
 					if (jJRequirementBean != null)
 						jJRequirementBean.updateDataTable(
-								task.getRequirement(),
+								task.getRequirement(),task.getRequirement().getCategory(),
 								JJRequirementBean.UPDATE_OPERATION);
 				}
 

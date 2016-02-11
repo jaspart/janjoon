@@ -85,6 +85,7 @@ public class RequirementBean {
 	// private Integer rated;
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
+	private Integer rowCount;
 	private JJCategory category;
 	private List<JJTask> requirementTasks;
 	private List<JJCategory> categories;
@@ -142,10 +143,6 @@ public class RequirementBean {
 				.getRequirements().contains(requirement));
 	}
 
-	// public void setRated(Integer rated) {
-	// this.rated = rated;
-	// }
-
 	public TreeNode getRootNode() {
 		if (rootNode == null)
 			createTreeNode();
@@ -162,6 +159,16 @@ public class RequirementBean {
 
 	public void setSelectedNode(TreeNode selectedNode) {
 		this.selectedNode = selectedNode;
+	}
+
+	public Integer getRowCount() {
+		if (rootNode == null || rowCount == null)
+			createTreeNode();
+		return rowCount;
+	}
+
+	public void setRowCount(Integer rowCount) {
+		this.rowCount = rowCount;
 	}
 
 	public JJRequirement getRequirement() {
@@ -320,6 +327,7 @@ public class RequirementBean {
 	public void categorySelectionChanged(final AjaxBehaviorEvent event) {
 
 		rootNode = null;
+		rowCount = null;
 		selectedNode = null;
 	}
 
@@ -517,6 +525,7 @@ public class RequirementBean {
 	public void createTreeNode() {
 
 		rootNode = new DefaultTreeNode("Root", null);
+		rowCount = 0;
 
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJProject project = LoginBean.getProject();
@@ -549,6 +558,7 @@ public class RequirementBean {
 								project, product), version, null, true, true);
 
 		for (JJRequirement requirement : requirements) {
+			rowCount ++;
 			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(
 					requirement, jJRequirementService), categoryNode);
 		}
@@ -567,6 +577,7 @@ public class RequirementBean {
 						version, null, chapter, true, true, true, false, null);
 
 		for (JJRequirement requirement : requirements) {
+			rowCount ++;
 			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(
 					requirement, jJRequirementService), newNode);
 		}
@@ -630,6 +641,7 @@ public class RequirementBean {
 						JJRequirementBean.updateRowState(req,
 								jJRequirementService, requirement);
 						jJRequirementBean.updateDataTable(req,
+								req.getCategory(),
 								JJRequirementBean.UPDATE_OPERATION);
 					}
 
@@ -642,7 +654,7 @@ public class RequirementBean {
 					// jJRequirementBean.updateJJRequirement(req);
 					JJRequirementBean.updateRowState(req, jJRequirementService,
 							requirement);
-					jJRequirementBean.updateDataTable(req,
+					jJRequirementBean.updateDataTable(req, req.getCategory(),
 							JJRequirementBean.UPDATE_OPERATION);
 				}
 			}
@@ -653,12 +665,12 @@ public class RequirementBean {
 		JJRequirementBean.updateRowState(requirement, jJRequirementService,
 				requirement);
 		jJRequirementBean.updateDataTable(requirement,
-				JJRequirementBean.UPDATE_OPERATION);
+				requirement.getCategory(), JJRequirementBean.UPDATE_OPERATION);
 
 		for (JJRequirement req : linkUpToUpdate) {
 			JJRequirementBean.updateRowState(req, jJRequirementService,
 					requirement);
-			jJRequirementBean.updateDataTable(req,
+			jJRequirementBean.updateDataTable(req, req.getCategory(),
 					JJRequirementBean.UPDATE_OPERATION);
 		}
 
@@ -920,16 +932,31 @@ public class RequirementBean {
 
 	public void save(JJRequirementBean jJRequirementBean) throws IOException {
 
-		boolean changeCategorie = !requirement
-				.getCategory()
-				.getStage()
-				.equals(jJRequirementService
-						.findJJRequirement(requirement.getId()).getCategory()
-						.getStage());
+		// updateDataTable pour le requirementBean
+		JJCategory oldCategory = jJRequirementService.findJJRequirement(
+				requirement.getId()).getCategory();
+		boolean changeCategorie = !requirement.getCategory().getStage()
+				.equals(oldCategory.getStage());
+		
+		boolean change = !requirement.getProject().equals(LoginBean.getProject());
+		
+		if(!change && LoginBean.getProduct() != null)
+		{
+			change = !LoginBean.getProduct().equals(requirement.getProduct());
+		}
+		
+		if(!change && LoginBean.getVersion() != null)
+		{
+			change = !LoginBean.getVersion().equals(requirement.getVersioning());
+		}
+		
+		if(change)
+			jJRequirementBean.setTableDataModelList(null);
+		
 
 		List<JJRequirement> reqToUpdate = new ArrayList<JJRequirement>();
 
-		if (changeCategorie) {
+		if (changeCategorie ) {
 			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
 					requirement.getRequirementLinkUp());
 
@@ -958,8 +985,12 @@ public class RequirementBean {
 		jJRequirementBean.setRequirementStatus(requirement.getStatus());
 		jJRequirementBean.getRequirementOrder(requirement);
 
-		jJRequirementBean.updateDataTable(requirement,
-				JJRequirementBean.UPDATE_OPERATION);
+		jJRequirementBean.updateDataTable(requirement, oldCategory,
+				JJRequirementBean.DELETE_OPERATION);
+		
+		jJRequirementBean.updateDataTable(requirement, requirement.getCategory(),
+				JJRequirementBean.ADD_OPERATION);
+		
 
 		long id = requirement.getId();
 

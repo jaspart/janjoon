@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.log4j.Logger;
-import org.primefaces.component.dialog.Dialog;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
@@ -1161,18 +1160,19 @@ public class JJRequirementBean {
 			req = jJRequirementService.findJJRequirement(req.getId());
 			req.getRequirementLinkUp().remove(requirement);
 			req = updateJJRequirement(req);
-			updateDataTable(req, UPDATE_OPERATION);
+			updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 		}
 		listReq = new ArrayList<JJRequirement>(
 				requirement.getRequirementLinkUp());
 		requirement.setRequirementLinkUp(new HashSet<JJRequirement>());
 		requirement = updateJJRequirement(requirement);
-		updateDataTable(requirement, DELETE_OPERATION);
+		updateDataTable(requirement, requirement.getCategory(),
+				DELETE_OPERATION);
 
 		for (JJRequirement req : listReq) {
 
 			req = updateJJRequirement(req);
-			updateDataTable(req, UPDATE_OPERATION);
+			updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 		}
 
 		deleteTasksAndTestcase(requirement);
@@ -1183,7 +1183,8 @@ public class JJRequirementBean {
 
 	}
 
-	public void updateDataTable(JJRequirement req, String operation) {
+	public void updateDataTable(JJRequirement req, JJCategory oldCategory,
+			String operation) {
 		int i = 0;
 		RequirementBean requirementBean = (RequirementBean) LoginBean
 				.findBean("requirementBean");
@@ -1193,11 +1194,9 @@ public class JJRequirementBean {
 
 		if (tableDataModelList != null) {
 			while (i < tableDataModelList.size()) {
-				if (req.getCategory() != null
-						&& req.getCategory()
-								.getId()
-								.equals(tableDataModelList.get(i)
-										.getCategoryId())
+				if (oldCategory != null
+						&& oldCategory.getId().equals(
+								tableDataModelList.get(i).getCategoryId())
 						&& tableDataModelList.get(i).getRendered()) {
 					List<JJRequirement> listRes = tableDataModelList.get(i)
 							.getAllRequirements();
@@ -1214,7 +1213,7 @@ public class JJRequirementBean {
 						listRes.add(getRowState(req, jJRequirementService));
 					}
 
-					tableDataModelList.get(i).setWrappedData(listRes);
+					tableDataModelList.get(i).setAllRequirements(listRes);
 					tableDataModelList.get(i).setCompletionProgress(-1);
 					tableDataModelList.get(i).setCoverageProgress(-1);
 					tableDataModelList.get(i).setActiveIndex(-1);
@@ -1358,18 +1357,19 @@ public class JJRequirementBean {
 								selectedHighRequirementsList));
 
 				requirement = updateJJRequirement(requirement);
-				updateDataTable(requirement, u);
+				updateDataTable(requirement, requirement.getCategory(), u);
 
 				for (JJRequirement req : listReq)
 					if (!selectedHighRequirementsList.contains(req)
 							&& !selectedMediumRequirementsList.contains(req))
-						updateDataTable(req, UPDATE_OPERATION);
+						updateDataTable(req, req.getCategory(),
+								UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedHighRequirementsList)
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedMediumRequirementsList)
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 
 			} else if (requirement.getCategory().equals(mediumCategory)) {
 
@@ -1386,10 +1386,11 @@ public class JJRequirementBean {
 
 				for (JJRequirement req : listReq)
 					if (!selectedHighRequirementsList.contains(req))
-						updateDataTable(req, UPDATE_OPERATION);
+						updateDataTable(req, req.getCategory(),
+								UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedHighRequirementsList)
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 
 				listReq = new ArrayList<JJRequirement>(
 						requirement.getRequirementLinkDown());
@@ -1410,15 +1411,16 @@ public class JJRequirementBean {
 				}
 
 				requirement = updateJJRequirement(requirement);
-				updateDataTable(requirement, u);
+				updateDataTable(requirement, requirement.getCategory(), u);
 
 				for (JJRequirement req : listReq)
 					if (!selectedLowRequirementsList.contains(req))
-						updateDataTable(req, UPDATE_OPERATION);
+						updateDataTable(req, req.getCategory(),
+								UPDATE_OPERATION);
 
 				for (JJRequirement req : selectedLowRequirementsList) {
 					req = updateJJRequirement(req);
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 				}
 
 			} else if (requirement.getCategory().equals(highCategory)) {
@@ -1439,23 +1441,24 @@ public class JJRequirementBean {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					req = updateJJRequirement(req);
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 				}
 
 				for (JJRequirement req : selectedMediumRequirementsList) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					req = updateJJRequirement(req);
-					updateDataTable(req, UPDATE_OPERATION);
+					updateDataTable(req, req.getCategory(), UPDATE_OPERATION);
 				}
 
 				for (JJRequirement req : listReq)
 					if (!selectedLowRequirementsList.contains(req)
 							&& !selectedMediumRequirementsList.contains(req))
-						updateDataTable(req, UPDATE_OPERATION);
+						updateDataTable(req, req.getCategory(),
+								UPDATE_OPERATION);
 
 				requirement = updateJJRequirement(requirement);
-				updateDataTable(requirement, u);
+				updateDataTable(requirement, requirement.getCategory(), u);
 			}
 		}
 		// requirement = updateJJRequirement(requirement);
@@ -1528,9 +1531,13 @@ public class JJRequirementBean {
 			importRequirement.setName(requirement.getName() + "(i)");
 			importRequirement.setDescription(requirement.getDescription());
 			importRequirement.setNumero(requirement.getNumero());
-			importRequirement.setProject(project);
-			importRequirement.setProduct(importProduct);
-			importRequirement.setVersioning(importVersion);
+			importRequirement.setProject(project != null ? project
+					: requirement.getProject());
+			importRequirement.setProduct(importProduct != null ? importProduct
+					: requirement.getProduct());
+			importRequirement
+					.setVersioning(importVersion != null ? importVersion
+							: requirement.getVersioning());
 			importRequirement.setEnabled(true);
 			importRequirement.setCategory(requirement.getCategory());
 			importRequirement.setNote(requirement.getNote());
@@ -1610,7 +1617,8 @@ public class JJRequirementBean {
 			}
 
 			saveJJRequirement(importRequirement);
-			updateDataTable(importRequirement, ADD_OPERATION);
+			updateDataTable(importRequirement, importRequirement.getCategory(),
+					ADD_OPERATION);
 			reset();
 
 			if (format.getCopyTestcase()) {
@@ -2061,29 +2069,29 @@ public class JJRequirementBean {
 
 		loadParameter();
 
-		String[] results = templateHeader.split("-");
-
-		for (int i = 0; i < results.length; i++) {
-
-			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
-			long categoryId = categoryDataModel.getCategoryId();
-
-			if (categoryId != 0) {
-				JJCategory category = jJCategoryService
-						.findJJCategory(categoryId);
-
-				List<JJRequirement> requirements = getRequirementsList(
-						category, product, version, project, true);
-
-				categoryDataModel = new CategoryDataModel(
-						getListOfRequiremntUtils(requirements),
-						category.getId(), category.getName(), true,
-						jJRequirementService, jJCategoryService,
-						jJChapterService, jJTaskService);
-
-				tableDataModelList.set(i, categoryDataModel);
-			}
-		}
+//		String[] results = templateHeader.split("-");
+//
+//		for (int i = 0; i < results.length; i++) {
+//
+//			CategoryDataModel categoryDataModel = tableDataModelList.get(i);
+//			long categoryId = categoryDataModel.getCategoryId();
+//
+//			if (categoryId != 0) {
+//				JJCategory category = jJCategoryService
+//						.findJJCategory(categoryId);
+//
+//				List<JJRequirement> requirements = getRequirementsList(
+//						category, product, version, project, true);
+//
+//				categoryDataModel = new CategoryDataModel(
+//						getListOfRequiremntUtils(requirements),
+//						category.getId(), category.getName(), true,
+//						jJRequirementService, jJCategoryService,
+//						jJChapterService, jJTaskService);
+//
+//				tableDataModelList.set(i, categoryDataModel);
+//			}
+//		}
 
 		System.out.println("fin load");
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -2102,8 +2110,7 @@ public class JJRequirementBean {
 		changeHigh = true;
 	}
 
-	public void updateTemplate(long id, Dialog dialog, boolean rendered,
-			boolean add) {
+	public void updateTemplate(long id,boolean rendered,boolean add) {
 
 		long t = System.currentTimeMillis();
 		if (add) {
@@ -2251,10 +2258,7 @@ public class JJRequirementBean {
 				}
 			}
 
-		}
-
-		if (dialog != null)
-			dialog.setVisible(false);
+		}		
 		categoryList = null;
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 	}
@@ -2287,7 +2291,7 @@ public class JJRequirementBean {
 
 			for (JJCategory cat : categories) {
 				if (cat.getEnabled())
-					updateTemplate(cat.getId(), null, true, true);
+					updateTemplate(cat.getId(),true, true);
 			}
 			logger.info("REQ-Tracker=" + (System.currentTimeMillis() - t));
 		} else {
@@ -2302,11 +2306,10 @@ public class JJRequirementBean {
 
 			for (JJCategory cat : categories) {
 				if (cat.getEnabled())
-					updateTemplate(cat.getId(), null, false, true);
+					updateTemplate(cat.getId(),false, true);
 			}
 			updateTemplate(((LoginBean) LoginBean.findBean("loginBean"))
-					.getAuthorisationService().getCategory().getId(), null,
-					true, true);
+					.getAuthorisationService().getCategory().getId(),true, true);
 			logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 
 		}
@@ -2417,9 +2420,9 @@ public class JJRequirementBean {
 
 		if (contact != null) {
 			long t = System.currentTimeMillis();
-			project = LoginBean.getProject();
-			product = LoginBean.getProduct();
-			version = LoginBean.getVersion();
+//			project = LoginBean.getProject();
+//			product = LoginBean.getProduct();
+//			version = LoginBean.getVersion();
 
 			loadParameter();
 			templateHeader = "";
@@ -3182,7 +3185,7 @@ public class JJRequirementBean {
 			} else {
 				for (JJRequirement r : requirements) {
 					saveJJRequirement(r);
-					updateDataTable(r, ADD_OPERATION);
+					updateDataTable(r, r.getCategory(), ADD_OPERATION);
 				}
 
 				FacesMessage facesMessage = MessageFactory
@@ -3534,6 +3537,7 @@ public class JJRequirementBean {
 		filterValue = null;
 		filterButton = null;
 		viewLinkRequirement = null;
+		tableDataModelList = null;
 		loadData();
 		closeDialog(false, true);
 		// oncomplete="PF('blockUIWidget').unblock();"
@@ -3619,7 +3623,7 @@ public class JJRequirementBean {
 			if (((JJRequirementBean) LoginBean.findBean("jJRequirementBean")) != null
 					&& req != null) {
 				((JJRequirementBean) LoginBean.findBean("jJRequirementBean"))
-						.updateDataTable(req,
+						.updateDataTable(req, req.getCategory(),
 								JJRequirementBean.UPDATE_OPERATION);
 			}
 
@@ -3750,7 +3754,7 @@ public class JJRequirementBean {
 				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
-		b = jJRequirementService.updateJJRequirement(b);
+		// b = jJRequirementService.updateJJRequirement(b);
 		updateRowState(b, jJRequirementService, b);
 		return jJRequirementService.findJJRequirement(b.getId());
 	}

@@ -487,6 +487,10 @@ div#contentPanel_content {
 	font-weight: bold;
 }
 
+.requirement-table table thead tr th{
+	padding: 5px !important;
+}
+
 .reqAction-column {
 	text-align: center;
 	vertical-align: middle;
@@ -1601,6 +1605,11 @@ div.highLightRevised2 {
 	min-height: 20px !important;
 	height: 30px;
 	width: 30px !important;
+}
+
+.CounterStyle {
+	padding: 5px 5px !important;
+	text-align: center;
 }
 
 .ui-datatable-scrollable-theadclone th span.ui-column-title {

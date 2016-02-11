@@ -220,7 +220,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 	public void setSelectedChapter(JJChapter selectedChapter) {
 		this.selectedChapter = selectedChapter;
 	}
-
+	
 	public CategoryDataModel(List<JJRequirement> data, long categoryId,
 			String nameDataModel, boolean rendered,
 			JJRequirementService requirementService,
@@ -595,6 +595,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 		// rowCount
 		int dataSize = data.size();
 		this.setRowCount(dataSize);
+		
 
 		// paginate
 		if (dataSize > pageSize) {

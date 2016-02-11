@@ -50,6 +50,10 @@
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<param-value>6LfGCgATAAAAABcV6g0sjdeQUmT7lq4VsIcBw7Y6</param-value>
 	</context-param>
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>auto</param-value>
+	</context-param>
 	<!-- <listener> -->
 	<!-- <listener-class>com.starit.janjoonweb.ui.mb.util.MySessionListener</listener-class> -->
 	<!-- </listener> -->

@@ -203,7 +203,7 @@ public class JJCategoryBean {
 			jJRequirementBean.setCategoryList(null);
 			jJRequirementBean.setCategoryDataModel(null);
 			if (!category.getEnabled())
-				jJRequirementBean.updateTemplate(category.getId(), null, true,
+				jJRequirementBean.updateTemplate(category.getId(), true,
 						false);
 
 		}

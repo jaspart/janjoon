@@ -498,14 +498,35 @@ public class JJTaskBean {
 				return "";
 		} else if (ttt != null && scrum != null && loginBean.isMobile()) {
 			if (ttt.getRequirement() != null)
-				return "TASK[" + ttt.getId() + "]-REQ["
-						+ ttt.getRequirement().getId() + "]";
+				return "TASK["
+						+ ttt.getId()
+						+ "]-REQ["
+						+ ttt.getRequirement().getId()
+						+ "] "
+						+ ttt.getName()
+								.replace("\'", " ")
+								.substring(0,
+										Math.min(10, ttt.getName().length()));
 			else if (ttt.getBug() != null)
-				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId()
-						+ "]";
+				return "TASK["
+						+ ttt.getId()
+						+ "]-BUG["
+						+ ttt.getBug().getId()
+						+ "] "
+						+ ttt.getName()
+								.replace("\'", " ")
+								.substring(0,
+										Math.min(10, ttt.getName().length()));
 			else if (ttt.getTestcase() != null)
-				return "TASK[" + ttt.getId() + "]-TESTCASE["
-						+ ttt.getTestcase().getId() + "]";
+				return "TASK["
+						+ ttt.getId()
+						+ "]-TESTCASE["
+						+ ttt.getTestcase().getId()
+						+ "] "
+						+ ttt.getName()
+								.replace("\'", " ")
+								.substring(0,
+										Math.min(10, ttt.getName().length()));
 			else
 				return "";
 		} else

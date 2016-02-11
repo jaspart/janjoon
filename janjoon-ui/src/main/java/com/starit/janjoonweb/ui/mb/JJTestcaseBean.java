@@ -181,6 +181,7 @@ public class JJTestcaseBean {
 	private JJCategory category;
 	private TreeNode rootNode;
 	private TreeNode selectedNode;
+	private Integer rowCount;
 	// private List<TestCaseRecap> testCaseRecaps;
 	private List<JJTestcase> testcases;
 	private boolean rendredTestCaseRecaps;
@@ -299,17 +300,15 @@ public class JJTestcaseBean {
 
 				}
 				if (rowNames != null) {
-					width = 180 + (rowNames.size() * 70) + "";
+					width = 230 + (rowNames.size() * 70) + "";
 					width = "width: " + width + "px";
 
-					if (180 + (rowNames.size() * 70) > 910)
+					if (230 + (rowNames.size() * 70) > 910)
 						width = "";
 				} else
-					width = "width: " + 170 + "px";
+					width = "width: " + 220 + "px";
 
 			}
-			// utiliser l'objet admin dans image streamer
-			// changer les bouton rating dans bug et requirelent
 		}
 		return rowNames;
 	}
@@ -350,7 +349,7 @@ public class JJTestcaseBean {
 	}
 
 	public Integer getScrollHeight() {
-		if ((colNames.size() * 50) > 550)
+		if ((colNames.size() * 45) > 550)
 			return 550;
 		else
 			return null;
@@ -425,6 +424,14 @@ public class JJTestcaseBean {
 
 	public void setSelectedNode(TreeNode selectedNode) {
 		this.selectedNode = selectedNode;
+	}
+	
+	public Integer getRowCount() {		
+		return rowCount;
+	}
+
+	public void setRowCount(Integer rowCount) {
+		this.rowCount = rowCount;
 	}
 
 	public List<TestCaseRecap> getTestCaseRecaps() {
@@ -670,47 +677,19 @@ public class JJTestcaseBean {
 		if (object instanceof JJBuild) {
 
 			JJBuild build = (JJBuild) object;
-			// int i = 0;
+			
 			if (build.getAllTestcases() != null)
 				build.setAllTestcases(!build.getAllTestcases());
 			else
 				build.setAllTestcases(true);
 			jJBuildBean.updateJJBuild(build);
-			// jJBuildBean.setBuilds(null);
+			
 
 			build = jJBuildService.findJJBuild(build.getId());
 			if (jJBuildBean.getBuild() != null
 					&& build.equals(jJBuildBean.getBuild()))
 				jJBuildBean.setBuild(build);
-			// rowNames.set(rowNames.indexOf(build), build);
-			//
-			// if(rowNames.size()>1)
-			// {
-			// while (i < colNames.size()) {
-			//
-			// boolean val = (colNames.get(i).getAllBuilds() != null &&
-			// colNames
-			// .get(i).getAllBuilds());
-			//
-			// if (!val)
-			// val = build.getAllTestcases() != null
-			// && build.getAllTestcases();
-			//
-			// if (!val)
-			// val = jJTestcaseService
-			// .findJJTestcase(colNames.get(i).getId())
-			// .getBuilds().contains(build);
-			//
-			// value.get(i).set(rowNames.indexOf(build), val);
-			// i++;
-			// }
-			// }else
-			// {
-			// rowNames = null;
-			// colNames = null;
-			// }
-			//
-
+	
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -719,32 +698,13 @@ public class JJTestcaseBean {
 
 		} else if (object instanceof JJTestcase) {
 
-			JJTestcase test = (JJTestcase) object;
-			int i = 0;
+			JJTestcase test = (JJTestcase) object;			
 			if (test.getAllBuilds() != null)
 				test.setAllBuilds(!test.getAllBuilds());
 			else
 				test.setAllBuilds(true);
 			updateJJTestcase(test);
-			// test = jJTestcaseService.findJJTestcase(test.getId());
-			//
-			// colNames.set(colNames.indexOf(test), test);
-			//
-			// while (i < rowNames.size()) {
-			//
-			// boolean val = (test.getAllBuilds() != null && test
-			// .getAllBuilds());
-			//
-			// if (!val)
-			// val = rowNames.get(i).getAllTestcases() != null
-			// && rowNames.get(i).getAllTestcases();
-			//
-			// if (!val)
-			// val = test.getBuilds().contains(rowNames.get(i));
-			//
-			// value.get(colNames.indexOf(test)).set(i, val);
-			// i++;
-			// }
+	
 
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
@@ -772,9 +732,7 @@ public class JJTestcaseBean {
 		if (successOperation) {
 
 			updateJJTestcase(columnName);
-			// colNames.set(colIdx,
-			// jJTestcaseService.findJJTestcase(columnName.getId()));
-			// value.get(colIdx).set(rowIdx, !value.get(colIdx).get(rowIdx));
+			
 			createTestcaseTree();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -784,7 +742,7 @@ public class JJTestcaseBean {
 
 	}
 
-	public void loadData(Dialog dialog, JJCategory c, boolean projNull) {
+	public void loadData(JJCategory c, boolean projNull) {
 
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
@@ -945,9 +903,7 @@ public class JJTestcaseBean {
 		} catch (NumberFormatException e) {
 
 			if (projNull)
-				this.project = null;
-			if (dialog != null)
-				dialog.setVisible(false);
+				this.project = null;			
 
 			if (c != null)
 				category = c;
@@ -1301,6 +1257,7 @@ public class JJTestcaseBean {
 		categoryModel = null;
 		testcases = null;
 		rootNode = new DefaultTreeNode("Root", null);
+		rowCount = 0;
 
 		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
 				.getBuild();
@@ -1361,6 +1318,7 @@ public class JJTestcaseBean {
 
 				for (JJTestcase test : testWithOutChapter) {
 					String type = getType(test);
+					rowCount ++;
 					TreeNode newNode3 = new DefaultTreeNode(type, test, newNode);
 
 					if (testcase != null && testcase.equals(test)) {
@@ -1569,6 +1527,7 @@ public class JJTestcaseBean {
 						build, true, true, false)) {
 			JJTestcase test = testcaseEntry;
 			String type = getType(test);
+			rowCount ++;
 			TreeNode newNode3 = new DefaultTreeNode(type, test, newNode);
 			if (testcase != null && testcase.equals(test)) {
 				selectedNode = newNode3;

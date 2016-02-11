@@ -21,7 +21,6 @@
 	overflow-x: hidden;
 	border: rgba(255, 0, 0, 0);
 	padding: 2px;
-/* 	background: #F2F2F2; */
 	width: auto;
 }
 </style>
@@ -48,7 +47,7 @@
 									offIcon="fa fa-close Fs16 White"
 									id="Mcategory_#{category.category.id}">
 									<p:ajax
-										listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
+										listener="#{jJRequirementBean.updateTemplate(category.category.id,true,category.checked)}"
 										update="@form" onstart="PF('blockUIWidget').block()"
 										oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 								</p:selectBooleanButton>
@@ -71,7 +70,7 @@
 							title="#{loginBean.checkMessage(category)}"
 							style="#{jJRequirementBean.getMarginLeft(category)}">
 							<p:ajax
-								listener="#{jJRequirementBean.updateTemplate(category.category.id,null,true,category.checked)}"
+								listener="#{jJRequirementBean.updateTemplate(category.category.id,true,category.checked)}"
 								update="@form" onstart="PF('blockUIWidget').block()"
 								oncomplete="PF('blockUIWidget').unblock();updateDataTable();" />
 						</p:selectBooleanButton>
@@ -102,8 +101,7 @@
 					<p:inputSwitch id="mineSpec" value="#{jJRequirementBean.mine}"
 						offLabel="#{messages.specification_table_requirement_all}"
 						onLabel="#{messages.specification_table_requirement_mine}">
-						<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-							oncomplete="PF('blockUIWidget').unblock()"
+						<p:ajax event="change" oncomplete="updateDataTable();"
 							listener="#{jJRequirementBean.filterTable}" />
 					</p:inputSwitch>
 					<p:commandButton icon="fa fa-cloud-download Fs20"
@@ -170,8 +168,6 @@
 				oncomplete="PF('blockUIWidget').unblock();updateTreeHeight();" />
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
-				<!-- 				<f:event type="preRenderView" listener="#{loginBean.updateGrowl}" -->
-				<!-- 					oncomplete="PF('dataTable_#{loop.index}_Widget').clearFilters();" /> -->
 				<div id="#{tableDataModel.id}_#{tableDataModel.expanded}"
 					style="display: none;" class="treeWidth"></div>
 				<h:panelGroup id="panelGroup_#{loop.index}" layout="block"
@@ -224,15 +220,26 @@
 							<f:facet name="header">
 								<h:panelGroup layout="block" styleClass="Container">
 									<h:panelGroup layout="block" style="float: right !important;"
-										styleClass="#{!jJRequirementBean.expand or tableDataModel.expanded ? 'Container40' : 'Container100'} Responsive100 Fs20">
-										<h:outputText style="font-family: 'roboto_condensedlight';"
-											value="#{loginBean.checkMessage(tableDataModel.category)}" />
+										styleClass="#{!jJRequirementBean.expand or tableDataModel.expanded ? 'Container40' : 'Container70'} Responsive100">
+										<h:panelGroup layout="block" styleClass="ContainerIndent Fs20">
+											<h:outputText style="font-family: 'roboto_condensedlight';"
+												value="#{loginBean.checkMessage(tableDataModel.category)}" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container30"
+										rendered="#{jJRequirementBean.expand and !tableDataModel.expanded}">
+										<h:panelGroup layout="block" styleClass="ContainerIndent TexAlCenter">
+											<p:inputText id="counter2" readonly="true"
+												styleClass="Red CounterStyle" size="4"
+												value="#{tableDataModel.rowCount}" />
+										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block"
 										rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}"
 										styleClass="Container60 Responsive100">
 										<h:panelGroup layout="block" styleClass="Container25">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndent TexAlCenter">
 												<p:commandButton icon="fa fa-arrows-h F20"
 													onstart="PF('blockUIWidget').block()"
 													oncomplete="PF('dataTable_#{loop.index}_Widget').filter();PF('blockUIWidget').unblock();updateDataTable();"
@@ -241,7 +248,8 @@
 											</h:panelGroup>
 										</h:panelGroup>
 										<h:panelGroup layout="block" styleClass="Container25">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndent TexAlCenter">
 												<p:commandButton id="manageChapterButton"
 													icon="fa fa-folder Fs20"
 													title="#{jJChapterBean.warnMessage}"
@@ -253,7 +261,8 @@
 											</h:panelGroup>
 										</h:panelGroup>
 										<h:panelGroup layout="block" styleClass="Container25">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndent TexAlCenter">
 												<p:commandButton
 													actionListener="#{jJChapterBean.updateCategoryId(tableDataModel,jJRequirementBean)}"
 													title="#{messages.specification_req_exportTo}"
@@ -265,7 +274,8 @@
 											</h:panelGroup>
 										</h:panelGroup>
 										<h:panelGroup layout="block" styleClass="Container25">
-											<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<h:panelGroup layout="block"
+												styleClass="ContainerIndent TexAlCenter">
 												<p:commandButton id="newRequirementButton"
 													icon="fa fa-plus-square Fs20" resetValues="true"
 													title="#{loginBean.authorisationService.wRequiementMSG}"
@@ -282,21 +292,13 @@
 							</f:facet>
 							<p:column style="text-align: center;"
 								rendered="#{!jJRequirementBean.expand or tableDataModel.expanded}">
-								<!-- 								<p:commandLink -->
-								<!-- 									actionListener="#{jJRequirementBean.onrate(reqUtil)}" id="rate" -->
-								<!-- 									update=":growlForm :messageCreationForm :headerForm:communicationButton @this" -->
-								<!-- 									onstart="PF('blockUIWidget').block()" -->
-								<!-- 									oncomplete="PF('blockUIWidget').unblock()"> -->
-
-								<!-- 									<p:graphicImage -->
-								<!-- 										name="#{!jJRequirementBean.isRated(reqUtil) ? 'blackstar.ico' : 'yelstar.ico'}" -->
-								<!-- 										width="16" height="16" cache="false" library="images" -->
-								<!-- 										title="#{!jJRequirementBean.isRated(reqUtil) ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}" /> -->
-
-								<!-- 								</p:commandLink> -->
-
+								<f:facet name="header">
+									<p:inputText id="counter1" readonly="true"
+										styleClass="Red CounterStyle" size="4"
+										value="#{tableDataModel.rowCount}" />
+								</f:facet>
 								<p:commandButton id="rate"
-									actionListener="#{jJRequirementBean.onrate(reqUtil)}" 
+									actionListener="#{jJRequirementBean.onrate(reqUtil)}"
 									update=":growlForm :messageCreationForm :headerForm:communicationButton @this"
 									onstart="PF('blockUIWidget').block()"
 									oncomplete="PF('blockUIWidget').unblock()"
@@ -307,6 +309,7 @@
 
 							<p:column filterBy="#{reqUtil.state.name}"
 								filterMatchMode="exact" styleClass="requirement-column">
+
 								<f:facet name="filter">
 									<p:selectOneMenu var="type"
 										panelStyleClass="specSelectOneMenuPanel"
@@ -331,8 +334,8 @@
 												value="#{type != null ? messages['specification_'.concat(type)] : messages.label_all}" />
 										</p:column>
 										<p:ajax event="change" onstart="PF('blockUIWidget').block()"
-											update="@this" oncomplete="PF('blockUIWidget').unblock();" />
-
+											update="@this #{!jJRequirementBean.expand or tableDataModel.expanded? 'counter1':'counter2'}"
+											oncomplete="PF('blockUIWidget').unblock();" />
 									</p:selectOneMenu>
 								</f:facet>
 								<p:cellEditor>

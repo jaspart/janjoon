@@ -697,15 +697,13 @@ public class JJContactBean {
 		if (jJRequirementBean.getTableDataModelList() != null) {
 			for (JJCategory category : oldCategories) {
 				if (!this.getLoggedContactCategories().contains(category)) {
-					jJRequirementBean.updateTemplate(category.getId(), null,
-							true, false);
+					jJRequirementBean.updateTemplate(category.getId(),true, false);
 				}
 			}
 
 			for (JJCategory category : this.getLoggedContactCategories()) {
 				if (!oldCategories.contains(category) && category.getEnabled()) {
-					jJRequirementBean.updateTemplate(category.getId(), null,
-							true, true);
+					jJRequirementBean.updateTemplate(category.getId(),true, true);
 				}
 			}
 		}

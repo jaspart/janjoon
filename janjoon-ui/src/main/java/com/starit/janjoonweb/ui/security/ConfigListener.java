@@ -224,14 +224,14 @@ public class ConfigListener implements ServletContextListener {
 
 		}
 
-		 for(JJRequirement req:jJRequirementService.findAllJJRequirements())
-		 {
-		 if(req.getState() != null)
-		 {
-		 req.setState(null);
-		 jJRequirementService.updateJJRequirement(req);
-		 }
-		 }
+//		 for(JJRequirement req:jJRequirementService.findAllJJRequirements())
+//		 {
+//		 if(req.getState() != null)
+//		 {
+//		 req.setState(null);
+//		 jJRequirementService.updateJJRequirement(req);
+//		 }
+//		 }
 
 		// for(JJRight right:jJRightService.findAllJJRights())
 		// {
@@ -1146,10 +1146,10 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 
-		JJCompany company = jJCompanyService.getCompanyByName("StarIt");
-		if (company == null)
-			company = jJCompanyService.getActifCompanies().get(0);
-		jJMessageService.updateAll(company);
+//		JJCompany company = jJCompanyService.getCompanyByName("StarIt");
+//		if (company == null)
+//			company = jJCompanyService.getActifCompanies().get(0);
+//		jJMessageService.updateAll(company);
 
 		//
 		// int i = 0;
