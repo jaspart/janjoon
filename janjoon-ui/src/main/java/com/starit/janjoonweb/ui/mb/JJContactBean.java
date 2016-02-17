@@ -41,22 +41,22 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 public class JJContactBean {
 
 	@Autowired
-	private JJConfigurationService jJConfigurationService;
+	private JJConfigurationService	jJConfigurationService;
 
 	@Autowired
-	private JJProfileService jJProfileService;
+	private JJProfileService		jJProfileService;
 
 	@Autowired
-	private JJCategoryService jJCategoryService;
+	private JJCategoryService		jJCategoryService;
 
 	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder	encoder;
 
 	@Autowired
-	private JJPermissionService jJPermissionService;
+	private JJPermissionService		jJPermissionService;
 
 	@Autowired
-	private JJRightService jJRightService;
+	private JJRightService			jJRightService;
 
 	public void setjJRightService(JJRightService jJRightService) {
 		this.jJRightService = jJRightService;
@@ -70,22 +70,22 @@ public class JJContactBean {
 		this.contactState = contactState;
 	}
 
-	private JJContact contactAdmin;
-	private Contact contactUtil;
-	private ContactCalendarUtil calendarUtil;
+	private JJContact				contactAdmin;
+	private Contact					contactUtil;
+	private ContactCalendarUtil		calendarUtil;
 	// private List<JJCategory> categories;
-	private List<JJCategory> loggedContactCategories;
-	private List<JJVersion> versionList;
-	private LazyContactDataModel contactsLazyModel;
-	private String message;
-	private boolean disabledContactMode;
-	private boolean disabledPermissionMode;
-	private boolean contactState;
-	private Date startDate;
-	private Date endDate;
+	private List<JJCategory>		loggedContactCategories;
+	private List<JJVersion>			versionList;
+	private LazyContactDataModel	contactsLazyModel;
+	private String					message;
+	private boolean					disabledContactMode;
+	private boolean					disabledPermissionMode;
+	private boolean					contactState;
+	private Date					startDate;
+	private Date					endDate;
 
-	private List<JJContact> deletedContact;
-	private List<JJContact> restoredContact;
+	private List<JJContact>			deletedContact;
+	private List<JJContact>			restoredContact;
 
 	public LazyContactDataModel getContactsLazyModel() {
 
@@ -94,8 +94,7 @@ public class JJContactBean {
 		if (!loginBean.getAuthorisationService().isAdminCompany())
 			company = LoginBean.getCompany();
 		if (contactsLazyModel == null) {
-			contactsLazyModel = new LazyContactDataModel(jJContactService,
-					company);
+			contactsLazyModel = new LazyContactDataModel(jJContactService, company);
 		}
 
 		return contactsLazyModel;
@@ -103,11 +102,9 @@ public class JJContactBean {
 
 	public Contact getContactUtil() {
 		if (contactUtil == null)
-			contactUtil = new Contact(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					jJPermissionService.getPermissions(((LoginBean) LoginBean
-							.findBean("loginBean")).getContact(), true, null,
-							null, null));
+			contactUtil = new Contact(((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+			        jJPermissionService.getPermissions(((LoginBean) LoginBean.findBean("loginBean")).getContact(), true,
+			                null, null, null));
 		return contactUtil;
 	}
 
@@ -123,8 +120,7 @@ public class JJContactBean {
 		this.encoder = encoder;
 	}
 
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -138,8 +134,7 @@ public class JJContactBean {
 
 	public ContactCalendarUtil getCalendarUtil() {
 		if (calendarUtil == null)
-			calendarUtil = new ContactCalendarUtil(
-					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			calendarUtil = new ContactCalendarUtil(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		return calendarUtil;
 	}
 
@@ -176,11 +171,9 @@ public class JJContactBean {
 	public List<JJVersion> getVersionList() {
 
 		if (((LoginBean) LoginBean.findBean("loginBean")).getContact() != null) {
-			JJContact c = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			JJContact c = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 			c.setLastVersion(null);
-			versionList = jJVersionService.getVersions(true, true,
-					c.getLastProduct(), LoginBean.getCompany(), true);
+			versionList = jJVersionService.getVersions(true, true, c.getLastProduct(), LoginBean.getCompany(), true);
 		}
 		return versionList;
 	}
@@ -214,23 +207,19 @@ public class JJContactBean {
 	}
 
 	public List<JJCategory> getCategories() {
-		return jJCategoryService.getCategories(null, false, true, true,
-				LoginBean.getCompany());
+		return jJCategoryService.getCategories(null, false, true, true, LoginBean.getCompany());
 
 	}
 
 	public List<JJCategory> getLoggedContactCategories() {
 
 		if (loggedContactCategories == null)
-			loggedContactCategories = new ArrayList<JJCategory>(
-					jJContactService.findJJContact(
-							((LoginBean) LoginBean.findBean("loginBean"))
-									.getContact().getId()).getCategories());
+			loggedContactCategories = new ArrayList<JJCategory>(jJContactService
+			        .findJJContact(((LoginBean) LoginBean.findBean("loginBean")).getContact().getId()).getCategories());
 		return loggedContactCategories;
 	}
 
-	public void setLoggedContactCategories(
-			List<JJCategory> loggedContactCategories) {
+	public void setLoggedContactCategories(List<JJCategory> loggedContactCategories) {
 		this.loggedContactCategories = loggedContactCategories;
 	}
 
@@ -253,8 +242,7 @@ public class JJContactBean {
 	public List<JJContact> getDeletedContact() {
 		if (deletedContact == null) {
 			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-			deletedContact = jJContactService.getContacts(false,
-					LoginBean.getCompany(), loginBean.getContact());
+			deletedContact = jJContactService.getContacts(false, LoginBean.getCompany(), loginBean.getContact());
 		}
 
 		return deletedContact;
@@ -280,9 +268,8 @@ public class JJContactBean {
 			updateJJContact(con);
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
-				"Contact", "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_restored",
+		        FacesMessage.SEVERITY_INFO, "Contact", "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedContact = null;
@@ -329,17 +316,14 @@ public class JJContactBean {
 
 			contactAdmin.setEnabled(false);
 			contactAdmin.setUpdatedDate(new Date());
-			contactAdmin.setUpdatedBy(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact());
+			contactAdmin.setUpdatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			if (!jJContactService.updateJJContactTransaction(contactAdmin)) {
 
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"jjcontact_unsuccessfully_created",
-						FacesMessage.SEVERITY_ERROR, "Contact");
+				FacesMessage facesMessage = MessageFactory.getMessage("jjcontact_unsuccessfully_created",
+				        FacesMessage.SEVERITY_ERROR, "Contact");
 				contactAdmin.setEmail("");
 				contactAdmin.setPassword("");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 
 		}
@@ -353,40 +337,32 @@ public class JJContactBean {
 
 		if (contactAdmin.getId() == null) {
 
-			contactAdmin.setDescription("This contact is "
-					+ contactAdmin.getFirstname() + " "
-					+ contactAdmin.getName());
-			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
-					.trim()));
+			contactAdmin
+			        .setDescription("This contact is " + contactAdmin.getFirstname() + " " + contactAdmin.getName());
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 			contactAdmin.setCreationDate(new Date());
-			contactAdmin.setCreatedBy(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact());
+			contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 
 			if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
 				disabledContactMode = true;
 				disabledPermissionMode = false;
 
-				jJPermissionBean
-						.setPermissionDataModel(new ArrayList<PermissionDataModel>());
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				LoginBean loginBean = (LoginBean) session
-						.getAttribute("loginBean");
+				jJPermissionBean.setPermissionDataModel(new ArrayList<PermissionDataModel>());
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 				if (contactAdmin.equals(loginBean.getContact()))
 					loginBean.getAuthorisationService().setSession(session);
 
-				facesMessage = MessageFactory.getMessage(
-						"message_successfully_created",
-						FacesMessage.SEVERITY_INFO, "Contact", "");
+				facesMessage = MessageFactory.getMessage("message_successfully_created", FacesMessage.SEVERITY_INFO,
+				        "Contact", "");
 				// contacts.add(contactAdmin);
 
 			} else {
 
-				facesMessage = MessageFactory.getMessage(
-						"jjcontact_unsuccessfully_created",
-						FacesMessage.SEVERITY_ERROR, "Contact");
+				facesMessage = MessageFactory.getMessage("jjcontact_unsuccessfully_created",
+				        FacesMessage.SEVERITY_ERROR, "Contact");
 				contactAdmin.setEmail("");
 				contactAdmin.setPassword("");
 			}
@@ -400,36 +376,27 @@ public class JJContactBean {
 
 	public void save(JJPermissionBean jJPermissionBean) {
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		contactAdmin.setUpdatedDate(new Date());
 		contactAdmin.setUpdatedBy(contact);
 		boolean changed = false;
 
-		if (!contactAdmin
-				.getPassword()
-				.trim()
-				.equals(jJContactService.findJJContact(contactAdmin.getId())
-						.getPassword().trim())) {
-			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
-					.trim()));
+		if (!contactAdmin.getPassword().trim()
+		        .equals(jJContactService.findJJContact(contactAdmin.getId()).getPassword().trim())) {
+			contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 		}
 
 		if (contact.equals(contactAdmin)) {
 			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
 			if (contactAdmin.getLastProject() == null
-					|| !contactAdmin.getCompany().equals(
-							contactAdmin.getLastProject().getCompany())) {
-				contactAdmin.setLastProject(jJPermissionService
-						.getDefaultProject(contactAdmin));
+			        || !contactAdmin.getCompany().equals(contactAdmin.getLastProject().getCompany())) {
+				contactAdmin.setLastProject(jJPermissionService.getDefaultProject(contactAdmin));
 				changed = true;
 			}
 
 			if (contactAdmin.getLastProduct() == null
-					|| !contactAdmin.getCompany().equals(
-							contactAdmin.getLastProduct().getCompany())) {
-				contactAdmin.setLastProduct(jJPermissionService
-						.getDefaultProduct(contactAdmin));
+			        || !contactAdmin.getCompany().equals(contactAdmin.getLastProduct().getCompany())) {
+				contactAdmin.setLastProduct(jJPermissionService.getDefaultProduct(contactAdmin));
 				changed = true;
 			}
 		}
@@ -439,36 +406,28 @@ public class JJContactBean {
 			if (changed) {
 
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
-				JJProjectBean jjProjectBean = (JJProjectBean) session
-						.getAttribute("jJProjectBean");
-				JJProductBean jjProductBean = (JJProductBean) session
-						.getAttribute("jJProductBean");
+				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
+				JJProjectBean jjProjectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
+				JJProductBean jjProductBean = (JJProductBean) session.getAttribute("jJProductBean");
 
 				jjProjectBean.getProjectList();
-				if (jjProjectBean.getProjectList().contains(
-						contactAdmin.getLastProject()))
+				if (jjProjectBean.getProjectList().contains(contactAdmin.getLastProject()))
 					jjProjectBean.setProject(contactAdmin.getLastProject());
 
 				jjProductBean.getProductList();
-				if (jjProductBean.getProductList().contains(
-						contactAdmin.getLastProduct())) {
+				if (jjProductBean.getProductList().contains(contactAdmin.getLastProduct())) {
 					jjProductBean.setProduct(contactAdmin.getLastProduct());
 				}
 
 			}
-			List<JJPermission> permissions = jJPermissionService
-					.getPermissions(contactAdmin, true, null, null, null);
+			List<JJPermission> permissions = jJPermissionService.getPermissions(contactAdmin, true, null, null, null);
 
-			List<PermissionDataModel> permissionDataModels = jJPermissionBean
-					.getPermissionDataModel();
+			List<PermissionDataModel> permissionDataModels = jJPermissionBean.getPermissionDataModel();
 
 			List<JJPermission> selectedPermissions = new ArrayList<JJPermission>();
 			for (PermissionDataModel permissionDataModel : permissionDataModels) {
 				if (permissionDataModel.getCheckPermission()) {
-					selectedPermissions
-							.add(permissionDataModel.getPermission());
+					selectedPermissions.add(permissionDataModel.getPermission());
 
 				}
 			}
@@ -517,21 +476,18 @@ public class JJContactBean {
 			// else
 			// contacts.add(contactAdmin);
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 			loginBean.getAuthorisationService().setSession(session);
 
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 
 			if (jJSprintBean != null && jJSprintBean.getSprintList() != null
-					&& !jJSprintBean.getSprintList().isEmpty()) {
+			        && !jJSprintBean.getSprintList().isEmpty()) {
 
 				for (SprintUtil sprintUtil : jJSprintBean.getSprintList()) {
-					if (sprintUtil.getContacts() != null
-							&& sprintUtil.getContacts().contains(contactAdmin)) {
+					if (sprintUtil.getContacts() != null && sprintUtil.getContacts().contains(contactAdmin)) {
 						sprintUtil.setPriseReal(null);
 						sprintUtil.setPriseSold(null);
 					}
@@ -539,10 +495,8 @@ public class JJContactBean {
 				}
 			}
 
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					MessageFactory.getMessage("message_successfully_updated",
-							"Contact", ""));
+			FacesContext.getCurrentInstance().addMessage(null,
+			        MessageFactory.getMessage("message_successfully_updated", "Contact", ""));
 
 			RequestContext context = RequestContext.getCurrentInstance();
 
@@ -559,10 +513,8 @@ public class JJContactBean {
 			}
 			contactsLazyModel = null;
 		} else
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mail Exist",
-							"Contact"));
+			FacesContext.getCurrentInstance().addMessage(null,
+			        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mail Exist", "Contact"));
 
 	}
 
@@ -615,11 +567,9 @@ public class JJContactBean {
 	// }
 
 	public void addMessage() {
-		String summary = contactAdmin.getEnabled() ? "Active Contact"
-				: "Inactive Contact";
+		String summary = contactAdmin.getEnabled() ? "Active Contact" : "Inactive Contact";
 
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(summary));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
 	}
 
 	public void closeDialog(JJPermissionBean jJPermissionBean) {
@@ -640,22 +590,18 @@ public class JJContactBean {
 
 	}
 
-	public void removeVacation(LoginBean loginBean, JJContact jJContact,
-			Date start, Date end) {
+	public void removeVacation(LoginBean loginBean, JJContact jJContact, Date start, Date end) {
 		calendarUtil = new ContactCalendarUtil(jJContact);
 		try {
-			jJContact.setCalendar(calendarUtil.removeVacation(
-					jJContact.getCalendar(), start, end));
+			jJContact.setCalendar(calendarUtil.removeVacation(jJContact.getCalendar(), start, end));
 			jJContact.setUpdatedDate(new Date());
 			jJContactService.updateJJContact(jJContact);
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 			loginBean.getAuthorisationService().setSession(session);
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-					"Contact " + loginBean.getContact().getName(), "");
+			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+			        FacesMessage.SEVERITY_INFO, "Contact " + loginBean.getContact().getName(), "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			session.setAttribute("jJContactBean", new JJContactBean());
 		} catch (Exception e) {
@@ -673,47 +619,40 @@ public class JJContactBean {
 		jJContactService.updateJJContact(jJContact);
 		startDate = null;
 		endDate = null;
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		loginBean.getAuthorisationService().setSession(session);
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-				"Contact " + loginBean.getContact().getName(), "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+		        FacesMessage.SEVERITY_INFO, "Contact " + loginBean.getContact().getName(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		session.setAttribute("jJContactBean", new JJContactBean());
 	}
 
-	public void updateUserConfiguration(LoginBean loginBean,
-			JJRequirementBean jJRequirementBean) {
-		JJContact jJContact = contactUtil.getJJContact(jJContactService
-				.getContactByEmail(loginBean.getUsername(), true));
-		List<JJCategory> oldCategories = new ArrayList<>(
-				jJContact.getCategories());
+	public void updateUserConfiguration(LoginBean loginBean, JJRequirementBean jJRequirementBean) {
+		JJContact jJContact = contactUtil
+		        .getJJContact(jJContactService.getContactByEmail(loginBean.getUsername(), true));
+		List<JJCategory> oldCategories = new ArrayList<>(jJContact.getCategories());
 		jJContact.setUpdatedDate(new Date());
-		jJContact.setCategories(new HashSet<JJCategory>(this
-				.getLoggedContactCategories()));
+		jJContact.setCategories(new HashSet<JJCategory>(this.getLoggedContactCategories()));
 		jJContactService.updateJJContact(jJContact);
 
 		if (jJRequirementBean.getTableDataModelList() != null) {
 			for (JJCategory category : oldCategories) {
 				if (!this.getLoggedContactCategories().contains(category)) {
-					jJRequirementBean.updateTemplate(category.getId(),true, false);
+					jJRequirementBean.updateTemplate(category.getId(), true, false);
 				}
 			}
 
 			for (JJCategory category : this.getLoggedContactCategories()) {
 				if (!oldCategories.contains(category) && category.getEnabled()) {
-					jJRequirementBean.updateTemplate(category.getId(),true, true);
+					jJRequirementBean.updateTemplate(category.getId(), true, true);
 				}
 			}
 		}
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		loginBean.getAuthorisationService().setSession(session);
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", FacesMessage.SEVERITY_INFO,
-				"Contact " + loginBean.getContact().getName(), "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+		        FacesMessage.SEVERITY_INFO, "Contact " + loginBean.getContact().getName(), "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
@@ -742,21 +681,17 @@ public class JJContactBean {
 
 	public String signUp() {
 
-		contactAdmin.setDescription("This contact is "
-				+ contactAdmin.getFirstname() + " " + contactAdmin.getName()
-				+ " registred By signUp page");
+		contactAdmin.setDescription("This contact is " + contactAdmin.getFirstname() + " " + contactAdmin.getName()
+		        + " registred By signUp page");
 		String password = contactAdmin.getPassword();
-		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword()
-				.trim()));
+		contactAdmin.setPassword(encoder.encode(contactAdmin.getPassword().trim()));
 		contactAdmin.setCreationDate(new Date());
 		contactAdmin.setEnabled(true);
-		contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact());
+		contactAdmin.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 
 		if (jJContactService.saveJJContactTransaction(contactAdmin)) {
 
-			JJProfile customProfile = jJProfileService.getOneProfile(
-					"CustomProfile", null, true);
+			JJProfile customProfile = jJProfileService.getOneProfile("CustomProfile", null, true);
 			if (customProfile == null) {
 
 				customProfile = createCustomProfile();
@@ -768,8 +703,7 @@ public class JJContactBean {
 			permission.setEnabled(true);
 			jJPermissionService.saveJJPermission(permission);
 
-			((LoginBean) LoginBean.findBean("loginBean")).signUpLogin(
-					contactAdmin.getEmail(), password);
+			((LoginBean) LoginBean.findBean("loginBean")).signUpLogin(contactAdmin.getEmail(), password);
 			contactAdmin = null;
 			return "success";
 
@@ -784,18 +718,15 @@ public class JJContactBean {
 
 	public void updateJJContact(JJContact b) {
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		if (contact.equals(b)) {
 			b.setUpdatedBy(b);
 			((LoginBean) LoginBean.findBean("loginBean")).setContact(null);
-			if (b.getLastProject() == null
-					|| !b.getCompany().equals(b.getLastProject().getCompany())) {
+			if (b.getLastProject() == null || !b.getCompany().equals(b.getLastProject().getCompany())) {
 				b.setLastProject(jJPermissionService.getDefaultProject(contact));
 			}
 
-			if (b.getLastProduct() == null
-					|| !b.getCompany().equals(b.getLastProduct().getCompany())) {
+			if (b.getLastProduct() == null || !b.getCompany().equals(b.getLastProduct().getCompany())) {
 				b.setLastProduct(jJPermissionService.getDefaultProduct(contact));
 			}
 		} else
@@ -810,8 +741,7 @@ public class JJContactBean {
 		customProfile.setEnabled(true);
 		jJProfileService.saveJJProfile(customProfile);
 
-		String[] names = { "Project", "Product", "Contact", "Version", "Build",
-				"Category", "Phase" };
+		String[] names = { "Project", "Product", "Contact", "Version", "Build", "Category", "Phase" };
 
 		for (String name : names) {
 			JJRight right = new JJRight();
@@ -824,8 +754,8 @@ public class JJContactBean {
 			jJRightService.saveJJRight(right);
 		}
 
-		String[] names2 = { "Requirement", "Testcase", "Teststep", "Bug",
-				"Sprint", "Testcaseexecution", "Teststepexecution" };
+		String[] names2 = { "Requirement", "Testcase", "Teststep", "Bug", "Sprint", "Testcaseexecution",
+		        "Teststepexecution" };
 
 		for (String name : names2) {
 			JJRight right = new JJRight();
@@ -873,8 +803,7 @@ public class JJContactBean {
 	}
 
 	private boolean getContactDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("AdminUserDialog",
-				"admin.user.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("AdminUserDialog", "admin.user.create.saveandclose");
 	}
 
 	// edit Calendar
@@ -887,8 +816,7 @@ public class JJContactBean {
 		if (workDays == null)
 			workDays = calendarUtil.getWorkDays();
 
-		if (calendarUtil != null
-				&& (workDays == null || workDays.contains(null))) {
+		if (calendarUtil != null && (workDays == null || workDays.contains(null))) {
 			int i = 0;
 			if (workDays == null)
 				workDays = new ArrayList<ChunkTime>();
@@ -909,22 +837,19 @@ public class JJContactBean {
 		return workDays;
 	}
 
-	public void timeSelectListener(ChunkTime day, int type,
-			LoginBean loginBean, JJContact jJContact) throws IOException {
+	public void timeSelectListener(ChunkTime day, int type, LoginBean loginBean, JJContact jJContact)
+	        throws IOException {
 
 		if (type == 1
-				&& ((day.getStartDate1() != null && day.getEndDate1() != null) || (day
-						.getStartDate1() == null && day.getEndDate1() == null))
-				|| (type == 2 && ((day.getStartDate2() != null && day
-						.getEndDate2() != null) || (day.getStartDate2() == null && day
-						.getEndDate2() == null)))) {
+		        && ((day.getStartDate1() != null && day.getEndDate1() != null)
+		                || (day.getStartDate1() == null && day.getEndDate1() == null))
+		        || (type == 2 && ((day.getStartDate2() != null && day.getEndDate2() != null)
+		                || (day.getStartDate2() == null && day.getEndDate2() == null)))) {
 
 			boolean up = true;
-			if (day.getStartDate1() != null
-					&& day.getStartDate1().after(day.getEndDate1()))
+			if (day.getStartDate1() != null && day.getStartDate1().after(day.getEndDate1()))
 				up = false;
-			if (up && day.getStartDate2() != null
-					&& day.getStartDate2().after(day.getEndDate2()))
+			if (up && day.getStartDate2() != null && day.getStartDate2().after(day.getEndDate2()))
 				up = false;
 			if (up) {
 				calendarUtil = new ContactCalendarUtil(jJContact);
@@ -932,25 +857,20 @@ public class JJContactBean {
 				jJContact.setUpdatedDate(new Date());
 				jJContactService.updateJJContact(jJContact);
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
 				loginBean.getAuthorisationService().setSession(session);
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"message_successfully_updated",
-						FacesMessage.SEVERITY_INFO, "Contact "
-								+ loginBean.getContact().getName(), "");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+				        FacesMessage.SEVERITY_INFO, "Contact " + loginBean.getContact().getName(), "");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 				session.setAttribute("jJContactBean", new JJContactBean());
 
 			} else {
 
 				String message = "validator_date_startAfterEndCompany";
-				FacesMessage facesMessage = MessageFactory.getMessage(message,
-						FacesMessage.SEVERITY_ERROR, new Object());
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesMessage facesMessage = MessageFactory.getMessage(message, FacesMessage.SEVERITY_ERROR,
+				        new Object());
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 
 		}

@@ -78,21 +78,19 @@ import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 @SuppressWarnings({ "unused", "deprecation" })
 public class JJChapterBean {
 
-	static Logger logger = Logger.getLogger(JJChapterBean.class);
+	static Logger					logger	= Logger.getLogger(JJChapterBean.class);
 
 	@Autowired
-	public JJConfigurationService jJConfigurationService;
+	public JJConfigurationService	jJConfigurationService;
 
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
 	@Autowired
 	JJRequirementService jJRequirementService;
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
@@ -103,36 +101,36 @@ public class JJChapterBean {
 		this.jJTestcaseService = jJTestcaseService;
 	}
 
-	private JJChapter chapter;
-	private JJChapter parentChapter;
-	private List<JJChapter> chapterList;
+	private JJChapter		chapter;
+	private JJChapter		parentChapter;
+	private List<JJChapter>	chapterList;
 
-	private JJProject project;
-	private JJCategory category;
+	private JJProject		project;
+	private JJCategory		category;
 
-	private boolean disabledProject;
+	private boolean			disabledProject;
 
 	/**
 	 * Transfer Tree
 	 */
-	private TreeNode leftRoot;
-	private TreeNode selectedLeftNode;
-	private TreeNode rightRoot;
-	private TreeNode selectedRightNode;
+	private TreeNode		leftRoot;
+	private TreeNode		selectedLeftNode;
+	private TreeNode		rightRoot;
+	private TreeNode		selectedRightNode;
 
 	/**
 	 * Manage chapter Tree
 	 */
-	private TreeNode chapterRoot;
-	private TreeNode selectedChapterNode;
+	private TreeNode		chapterRoot;
+	private TreeNode		selectedChapterNode;
 
-	private long categoryId;
+	private long			categoryId;
 
-	private String warnMessage;
+	private String			warnMessage;
 
-	private boolean disabledChapter;
+	private boolean			disabledChapter;
 
-	private boolean chapterState;
+	private boolean			chapterState;
 
 	public JJChapter getChapter() {
 		return chapter;
@@ -153,14 +151,13 @@ public class JJChapterBean {
 	public List<JJChapter> getChapterList() {
 
 		if (chapter == null || chapter.getId() == null) {
-			chapterList = jJChapterService.getChapters(LoginBean.getCompany(),
-					project, category, true, new ArrayList<String>());
+			chapterList = jJChapterService.getChapters(LoginBean.getCompany(), project, category, true,
+			        new ArrayList<String>());
 		} else {
 			List<String> list = getChildren(chapter);
 			list.add(String.valueOf(chapter.getId()));
 
-			chapterList = jJChapterService.getChapters(LoginBean.getCompany(),
-					project, category, true, list);
+			chapterList = jJChapterService.getChapters(LoginBean.getCompany(), project, category, true, list);
 		}
 
 		return chapterList;
@@ -302,8 +299,7 @@ public class JJChapterBean {
 
 	public void editChapter() {
 
-		Long idChapter = Long.parseLong(getSplitFromString(selectedChapterNode
-				.getData().toString(), 1));
+		Long idChapter = Long.parseLong(getSplitFromString(selectedChapterNode.getData().toString(), 1));
 		chapter = jJChapterService.findJJChapter(idChapter);
 		parentChapter = chapter.getParent();
 
@@ -314,30 +310,24 @@ public class JJChapterBean {
 	}
 
 	public void deleteChapter() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
-				.getAttribute("jJRequirementBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) session.getAttribute("jJRequirementBean");
 
 		if (jJRequirementBean == null)
 			jJRequirementBean = new JJRequirementBean();
 
-		RequirementBean requirementBean = (RequirementBean) session
-				.getAttribute("requirementBean");
+		RequirementBean requirementBean = (RequirementBean) session.getAttribute("requirementBean");
 
 		if (requirementBean != null)
 			requirementBean.setRootNode(null);
 
-		long idSelectedChapter = Long.parseLong(getSplitFromString(
-				selectedChapterNode.getData().toString(), 1));
+		long idSelectedChapter = Long.parseLong(getSplitFromString(selectedChapterNode.getData().toString(), 1));
 
-		JJChapter selectedChapter = jJChapterService
-				.findJJChapter(idSelectedChapter);
+		JJChapter selectedChapter = jJChapterService.findJJChapter(idSelectedChapter);
 
 		JJChapter parentSelectedChapter = selectedChapter.getParent();
 
-		SortedMap<Integer, Object> elements = getSortedElements(
-				parentSelectedChapter, project, category, false);
+		SortedMap<Integer, Object> elements = getSortedElements(parentSelectedChapter, project, category, false);
 
 		int increment = elements.lastKey() + 1;
 
@@ -378,9 +368,8 @@ public class JJChapterBean {
 
 		loadData(categoryId);
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", FacesMessage.SEVERITY_ERROR,
-				selectedChapterNode.getData(), "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted",
+		        FacesMessage.SEVERITY_ERROR, selectedChapterNode.getData(), "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		selectedChapterNode = null;
@@ -400,14 +389,13 @@ public class JJChapterBean {
 			updateJJChapter(chapter);
 			message = "message_successfully_updated";
 
-			RequirementBean requirementBean = (RequirementBean) LoginBean
-					.findBean("requirementBean");
+			RequirementBean requirementBean = (RequirementBean) LoginBean.findBean("requirementBean");
 			if (requirementBean != null)
 				requirementBean.setRootNode(null);
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_chapter", "").getDetail(), "");
+		        MessageFactory.getMessage("label_chapter", "").getDetail(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -428,12 +416,11 @@ public class JJChapterBean {
 
 		chapterRoot = new DefaultTreeNode("RootChapter", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				LoginBean.getCompany(), project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project, category,
+		        true, true);
 
 		for (JJChapter chapter : parentChapters) {
-			TreeNode node = createTree(chapter, chapterRoot, project, category,
-					0);
+			TreeNode node = createTree(chapter, chapterRoot, project, category, 0);
 		}
 
 	}
@@ -447,14 +434,12 @@ public class JJChapterBean {
 		JJVersion version = LoginBean.getVersion();
 		JJProduct product = LoginBean.getProduct();
 
-		List<JJRequirement> jJRequirementList = jJRequirementService
-				.getRequirements(LoginBean.getCompany(), category, loginBean
-						.getAuthorizedMap("Requirement", project, product),
-						version, null, null, true, true, false, false, null);
+		List<JJRequirement> jJRequirementList = jJRequirementService.getRequirements(LoginBean.getCompany(), category,
+		        loginBean.getAuthorizedMap("Requirement", project, product), version, null, null, true, true, false,
+		        false, null);
 
 		for (JJRequirement requirement : jJRequirementList) {
-			TreeNode node = new DefaultTreeNode("R-" + requirement.getId()
-					+ "- " + requirement.getName(), leftRoot);
+			TreeNode node = new DefaultTreeNode("R-" + requirement.getId() + "- " + requirement.getName(), leftRoot);
 		}
 
 		// Chapter Tree ALL Chapters and Requirements requirment.getChapter
@@ -462,8 +447,8 @@ public class JJChapterBean {
 		// null
 		rightRoot = new DefaultTreeNode("rightRoot", null);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				LoginBean.getCompany(), project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project, category,
+		        true, true);
 
 		for (JJChapter chapter : parentChapters) {
 			TreeNode node = createTree(chapter, rightRoot, project, category, 1);
@@ -475,8 +460,7 @@ public class JJChapterBean {
 
 	private List<String> getChildren(JJChapter parent) {
 		List<String> list = new ArrayList<String>();
-		List<JJChapter> children = jJChapterService.getChildrenOfParentChapter(
-				parent, true, false);
+		List<JJChapter> children = jJChapterService.getChildrenOfParentChapter(parent, true, false);
 
 		for (JJChapter child : children) {
 			list.add(String.valueOf(child.getId()));
@@ -486,43 +470,36 @@ public class JJChapterBean {
 	}
 
 	// Recursive function to create tree
-	public TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
-			JJProject project, JJCategory category, int index) {
+	public TreeNode createTree(JJChapter chapterParent, TreeNode rootNode, JJProject project, JJCategory category,
+	        int index) {
 
-		TreeNode newNode = new DefaultTreeNode("C-" + chapterParent.getId()
-				+ "- " + chapterParent.getName(), rootNode);
+		TreeNode newNode = new DefaultTreeNode("C-" + chapterParent.getId() + "- " + chapterParent.getName(), rootNode);
 
 		if (index == 0) {
-			List<JJChapter> chapterChildren = jJChapterService
-					.getChildrenOfParentChapter(chapterParent, true, true);
+			List<JJChapter> chapterChildren = jJChapterService.getChildrenOfParentChapter(chapterParent, true, true);
 
 			for (JJChapter chapterChild : chapterChildren) {
 				if (chapterChild.getEnabled()) {
-					TreeNode newNode2 = createTree(chapterChild, newNode,
-							project, category, index);
+					TreeNode newNode2 = createTree(chapterChild, newNode, project, category, index);
 
 				}
 			}
 		} else if (index == 1) {
 
-			SortedMap<Integer, Object> elements = getSortedElements(
-					chapterParent, project, category, true);
+			SortedMap<Integer, Object> elements = getSortedElements(chapterParent, project, category, true);
 			for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 				String className = entry.getValue().getClass().getSimpleName();
 
 				if (className.equalsIgnoreCase("JJChapter")) {
 
 					JJChapter chapter = (JJChapter) entry.getValue();
-					TreeNode newNode2 = createTree(chapter, newNode, project,
-							category, index);
+					TreeNode newNode2 = createTree(chapter, newNode, project, category, index);
 
 				} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-					JJRequirement requirement = (JJRequirement) entry
-							.getValue();
-					TreeNode newNode3 = new DefaultTreeNode("R-"
-							+ requirement.getId() + "- "
-							+ requirement.getName(), newNode);
+					JJRequirement requirement = (JJRequirement) entry.getValue();
+					TreeNode newNode3 = new DefaultTreeNode("R-" + requirement.getId() + "- " + requirement.getName(),
+					        newNode);
 				}
 
 			}
@@ -534,15 +511,13 @@ public class JJChapterBean {
 		return newNode;
 	}
 
-	public void updateCategoryId(CategoryDataModel tableDataModel,
-			JJRequirementBean jJRequirementBean) {
+	public void updateCategoryId(CategoryDataModel tableDataModel, JJRequirementBean jJRequirementBean) {
 		categoryId = tableDataModel.getCategoryId();
 		jJRequirementBean.setCategoryDataModel(tableDataModel);
 	}
 
 	@SuppressWarnings("unchecked")
-	public StreamedContent getPreProcessPDF() throws IOException,
-			BadElementException, DocumentException {
+	public StreamedContent getPreProcessPDF() throws IOException, BadElementException, DocumentException {
 		this.getProject();
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		Document pdf = new Document();
@@ -576,44 +551,34 @@ public class JJChapterBean {
 
 		StyleSheet style = new StyleSheet();
 		style.loadTagStyle("body", "font", "Times New Roman");
-		((LoginBean) LoginBean.findBean("loginBean")).loadStyleSheet(style,
-				"specs.document.stylesheet");
+		((LoginBean) LoginBean.findBean("loginBean")).loadStyleSheet(style, "specs.document.stylesheet");
 		JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
-		Phrase phrase = new Phrase(20, new Chunk("\n" + category.getName()
-				+ " Specification \n" + project.getName() + "\n" + "\n" + "\n",
-				fontChapter));
+		Phrase phrase = new Phrase(20, new Chunk(
+		        "\n" + category.getName() + " Specification \n" + project.getName() + "\n" + "\n" + "\n", fontChapter));
 
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(phrase);
 
-		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(
-				LoginBean.getCompany(), project, category, true, true);
+		List<JJChapter> parentChapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project, category,
+		        true, true);
 
 		for (JJChapter chapter : parentChapters) {
-			createTreeDocument(chapter, category, paragraph, fontNote,
-					fontChapter, fontRequirement, style);
+			createTreeDocument(chapter, category, paragraph, fontNote, fontChapter, fontRequirement, style);
 		}
 
-		List<JJRequirement> withOutChapter = jJRequirementService
-				.getRequirementsWithOutChapter(LoginBean.getCompany(),
-						category, loginBean.getAuthorizedMap("Requirement",
-								project, LoginBean.getProduct()), LoginBean
-								.getVersion(), null, true, true);
+		List<JJRequirement> withOutChapter = jJRequirementService.getRequirementsWithOutChapter(LoginBean.getCompany(),
+		        category, loginBean.getAuthorizedMap("Requirement", project, LoginBean.getProduct()),
+		        LoginBean.getVersion(), null, true, true);
 		if (withOutChapter != null && !withOutChapter.isEmpty()) {
-			paragraph.add(new Chunk("\n "
-					+ MessageFactory.getMessage(
-							"specification_tree_withOutChapter", "")
-							.getDetail() + "\n", fontChapter));
+			paragraph.add(new Chunk(
+			        "\n " + MessageFactory.getMessage("specification_tree_withOutChapter", "").getDetail() + "\n",
+			        fontChapter));
 
 			for (JJRequirement requirement : withOutChapter) {
-				paragraph
-						.add(new Chunk(MessageFactory.getMessage(
-								"label_requirement", "").getDetail()
-								+ ": " + requirement.getName() + "\n",
-								fontRequirement));
-				StringReader strReader = new StringReader(
-						requirement.getDescription());
+				paragraph.add(new Chunk(MessageFactory.getMessage("label_requirement", "").getDetail() + ": "
+				        + requirement.getName() + "\n", fontRequirement));
+				StringReader strReader = new StringReader(requirement.getDescription());
 
 				// StringReader strReader = new StringReader(
 				// requirement.getDescription());
@@ -622,8 +587,7 @@ public class JJChapterBean {
 					// List<String> imgUrlRequi = getImageUrlList(requirement
 					// .getDescription());
 					// int k = 0;
-					List<Element> arrList = HTMLWorkerImpl.parseToList(
-							strReader, style);
+					List<Element> arrList = HTMLWorkerImpl.parseToList(strReader, style);
 
 					for (int i = 0; i < arrList.size(); ++i) {
 						Element e = (Element) arrList.get(i);
@@ -632,8 +596,7 @@ public class JJChapterBean {
 							for (Chunk chunk : (List<Chunk>) e.getChunks()) {
 								if (chunk.getImage() != null) {
 
-									com.itextpdf.text.Image img = chunk
-											.getImage();
+									com.itextpdf.text.Image img = chunk.getImage();
 									paragraph.add(Chunk.NEWLINE);
 									paragraph.add(img);
 									paragraph.add(Chunk.NEWLINE);
@@ -647,11 +610,8 @@ public class JJChapterBean {
 						}
 					}
 					paragraph.add(Chunk.NEWLINE);
-					if (requirement.getNote() != null
-							&& requirement.getNote().length() > 2) {
-						paragraph.add("Note: "
-								+ new Chunk(requirement.getNote() + "\n",
-										fontNote));
+					if (requirement.getNote() != null && requirement.getNote().length() > 2) {
+						paragraph.add("Note: " + new Chunk(requirement.getNote() + "\n", fontNote));
 					}
 				} catch (ELException e) {
 					System.err.println(e.getMessage());
@@ -664,29 +624,22 @@ public class JJChapterBean {
 		pdf.add(paragraph);
 		pdf.close();
 
-		return new DefaultStreamedContent(new ByteArrayInputStream(
-				baos.toByteArray()), "pdf", category.getName().toUpperCase()
-				.trim()
-				+ "-Spec.pdf");
+		return new DefaultStreamedContent(new ByteArrayInputStream(baos.toByteArray()), "pdf",
+		        category.getName().toUpperCase().trim() + "-Spec.pdf");
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createTreeDocument(JJChapter chapterParent,
-			JJCategory category, Paragraph paragraph, Font fontNote,
-			Font fontChapter, Font fontRequirement, StyleSheet style)
-			throws IOException {
+	private void createTreeDocument(JJChapter chapterParent, JJCategory category, Paragraph paragraph, Font fontNote,
+	        Font fontChapter, Font fontRequirement, StyleSheet style) throws IOException {
 
-		paragraph.add(new Chunk("\n Chapter:" + chapterParent.getName() + "\n",
-				fontChapter));
+		paragraph.add(new Chunk("\n Chapter:" + chapterParent.getName() + "\n", fontChapter));
 
-		StringReader strChapitre = new StringReader(
-				chapterParent.getDescription());
+		StringReader strChapitre = new StringReader(chapterParent.getDescription());
 		// List<String> imgUrl =
 		// getImageUrlList(chapterParent.getDescription());
 		// int k = 0;
 
-		List<Element> arrChapitre = HTMLWorkerImpl.parseToList(strChapitre,
-				style);
+		List<Element> arrChapitre = HTMLWorkerImpl.parseToList(strChapitre, style);
 		for (int i = 0; i < arrChapitre.size(); ++i) {
 			Element e = (Element) arrChapitre.get(i);
 
@@ -708,31 +661,24 @@ public class JJChapterBean {
 		}
 		paragraph.add(Chunk.NEWLINE);
 
-		SortedMap<Integer, Object> elements = getSortedElements(chapterParent,
-				project, category, true);
+		SortedMap<Integer, Object> elements = getSortedElements(chapterParent, project, category, true);
 		for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 			String className = entry.getValue().getClass().getSimpleName();
 
 			if (className.equalsIgnoreCase("JJChapter")) {
 				JJChapter chapter = (JJChapter) entry.getValue();
-				createTreeDocument(chapter, category, paragraph, fontNote,
-						fontChapter, fontRequirement, style);
+				createTreeDocument(chapter, category, paragraph, fontNote, fontChapter, fontRequirement, style);
 
 			} else if (className.equalsIgnoreCase("JJRequirement")) {
 				JJRequirement requirement = (JJRequirement) entry.getValue();
-				paragraph
-						.add(new Chunk(MessageFactory.getMessage(
-								"label_requirement", "").getDetail()
-								+ ": " + requirement.getName() + "\n",
-								fontRequirement));
-				StringReader strReader = new StringReader(
-						requirement.getDescription());
+				paragraph.add(new Chunk(MessageFactory.getMessage("label_requirement", "").getDetail() + ": "
+				        + requirement.getName() + "\n", fontRequirement));
+				StringReader strReader = new StringReader(requirement.getDescription());
 
 				// List<String> imgUrlRequi = getImageUrlList(requirement
 				// .getDescription());
 				// k = 0;
-				List<Element> arrList = HTMLWorkerImpl.parseToList(strReader,
-						style);
+				List<Element> arrList = HTMLWorkerImpl.parseToList(strReader, style);
 				for (int i = 0; i < arrList.size(); ++i) {
 					Element e = (Element) arrList.get(i);
 
@@ -754,36 +700,28 @@ public class JJChapterBean {
 					}
 				}
 				paragraph.add(Chunk.NEWLINE);
-				if (requirement.getNote() != null
-						&& requirement.getNote().length() > 2) {
-					paragraph
-							.add("Note: "
-									+ new Chunk(requirement.getNote() + "\n",
-											fontNote));
+				if (requirement.getNote() != null && requirement.getNote().length() > 2) {
+					paragraph.add("Note: " + new Chunk(requirement.getNote() + "\n", fontNote));
 				}
 			}
 		}
 	}
 
-	private SortedMap<Integer, Object> getSortedElements(JJChapter parent,
-			JJProject project, JJCategory category, boolean onlyActif) {
+	private SortedMap<Integer, Object> getSortedElements(JJChapter parent, JJProject project, JJCategory category,
+	        boolean onlyActif) {
 
 		SortedMap<Integer, Object> elements = new TreeMap<Integer, Object>();
 
 		if (parent != null) {
 
-			List<JJChapter> chapters = jJChapterService
-					.getChildrenOfParentChapter(parent, onlyActif, true);
+			List<JJChapter> chapters = jJChapterService.getChildrenOfParentChapter(parent, onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
 			}
 
-			List<JJRequirement> requirements = jJRequirementService
-					.getRequirementChildrenWithChapterSortedByOrder(
-							LoginBean.getCompany(), parent,
-							LoginBean.getProduct(), LoginBean.getVersion(),
-							onlyActif);
+			List<JJRequirement> requirements = jJRequirementService.getRequirementChildrenWithChapterSortedByOrder(
+			        LoginBean.getCompany(), parent, LoginBean.getProduct(), LoginBean.getVersion(), onlyActif);
 
 			for (JJRequirement requirement : requirements) {
 				if (requirement.getOrdering() != null)
@@ -792,8 +730,8 @@ public class JJChapterBean {
 			}
 		} else {
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					LoginBean.getCompany(), project, category, onlyActif, true);
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project, category,
+			        onlyActif, true);
 
 			for (JJChapter chapter : chapters) {
 				elements.put(chapter.getOrdering(), chapter);
@@ -804,14 +742,12 @@ public class JJChapterBean {
 
 	}
 
-	private SortedMap<Integer, JJTestcase> getSortedTestcases(
-			JJRequirement requirement, JJChapter chapter) {
+	private SortedMap<Integer, JJTestcase> getSortedTestcases(JJRequirement requirement, JJChapter chapter) {
 
 		SortedMap<Integer, JJTestcase> elements = new TreeMap<Integer, JJTestcase>();
 
-		List<JJTestcase> testcases = jJTestcaseService.getTestcases(
-				requirement, chapter, LoginBean.getVersion(), null, false,
-				true, false);
+		List<JJTestcase> testcases = jJTestcaseService.getTestcases(requirement, chapter, LoginBean.getVersion(), null,
+		        false, true, false);
 
 		for (JJTestcase testcase : testcases) {
 			elements.put(testcase.getOrdering(), testcase);
@@ -828,8 +764,7 @@ public class JJChapterBean {
 
 	public void handleSelectParentChapter() {
 
-		SortedMap<Integer, Object> elements = getSortedElements(parentChapter,
-				project, category, false);
+		SortedMap<Integer, Object> elements = getSortedElements(parentChapter, project, category, false);
 
 		chapter.setParent(parentChapter);
 
@@ -850,20 +785,16 @@ public class JJChapterBean {
 
 	public void onDragDrop(TreeDragDropEvent event) {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
-				.getAttribute("jJRequirementBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) session.getAttribute("jJRequirementBean");
 		if (jJRequirementBean == null)
 			jJRequirementBean = new JJRequirementBean();
 
-		RequirementBean requirementBean = (RequirementBean) session
-				.getAttribute("requirementBean");
+		RequirementBean requirementBean = (RequirementBean) session.getAttribute("requirementBean");
 		if (requirementBean != null)
 			requirementBean.setRootNode(null);
 
-		JJTestcaseBean testcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		JJTestcaseBean testcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 		if (testcaseBean == null)
 			testcaseBean = new JJTestcaseBean();
 
@@ -882,11 +813,9 @@ public class JJChapterBean {
 
 		if (dragNodeData.startsWith("R-")) {
 
-			long requirementID = Long.parseLong(getSplitFromString(
-					dragNodeData, 1));
+			long requirementID = Long.parseLong(getSplitFromString(dragNodeData, 1));
 
-			JJRequirement REQUIREMENT = jJRequirementService
-					.findJJRequirement(requirementID);
+			JJRequirement REQUIREMENT = jJRequirementService.findJJRequirement(requirementID);
 
 			JJChapter requirementCHAPTER = REQUIREMENT.getChapter();
 
@@ -899,8 +828,7 @@ public class JJChapterBean {
 
 					int requirementOrder = REQUIREMENT.getOrdering();
 
-					elements = getSortedElements(requirementCHAPTER, project,
-							category, false);
+					elements = getSortedElements(requirementCHAPTER, project, category, false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -911,11 +839,9 @@ public class JJChapterBean {
 
 					subElements.remove(requirementOrder);
 
-					for (Map.Entry<Integer, Object> entry : subElements
-							.entrySet()) {
+					for (Map.Entry<Integer, Object> entry : subElements.entrySet()) {
 
-						String className = entry.getValue().getClass()
-								.getSimpleName();
+						String className = entry.getValue().getClass().getSimpleName();
 						if (className.equalsIgnoreCase("JJChapter")) {
 
 							JJChapter chapter = (JJChapter) entry.getValue();
@@ -927,8 +853,7 @@ public class JJChapterBean {
 
 						} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-							JJRequirement requirement = (JJRequirement) entry
-									.getValue();
+							JJRequirement requirement = (JJRequirement) entry.getValue();
 
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
@@ -942,8 +867,7 @@ public class JJChapterBean {
 
 						SortedMap<Integer, JJTestcase> tempTestcases;
 
-						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
-								.entrySet()) {
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases.entrySet()) {
 
 							int testcaseOrder = entry.getKey();
 
@@ -960,8 +884,7 @@ public class JJChapterBean {
 
 							testcase = null;
 
-							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
-									.entrySet()) {
+							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases.entrySet()) {
 
 								testcase = tmpEntry.getValue();
 								int lastOrder = testcase.getOrdering();
@@ -980,15 +903,13 @@ public class JJChapterBean {
 
 				}
 
-				long chapterID = Long.parseLong(getSplitFromString(
-						dropNodeData, 1));
+				long chapterID = Long.parseLong(getSplitFromString(dropNodeData, 1));
 
 				JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
 
 				elements = getSortedElements(CHAPTER, project, category, false);
 
-				SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(
-						null, CHAPTER);
+				SortedMap<Integer, JJTestcase> testcases1 = getSortedTestcases(null, CHAPTER);
 
 				if (elements.isEmpty()) {
 					REQUIREMENT.setOrdering(0);
@@ -996,8 +917,7 @@ public class JJChapterBean {
 
 					if (dropIndex < elements.size()) {
 						int i = 0;
-						for (Map.Entry<Integer, Object> entry : elements
-								.entrySet()) {
+						for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 							if (i == dropIndex) {
 								i = entry.getKey();
 								break;
@@ -1008,32 +928,26 @@ public class JJChapterBean {
 						}
 
 						subElements = elements.tailMap(i);
-						for (Map.Entry<Integer, Object> entry : subElements
-								.entrySet()) {
+						for (Map.Entry<Integer, Object> entry : subElements.entrySet()) {
 
-							String className = entry.getValue().getClass()
-									.getSimpleName();
+							String className = entry.getValue().getClass().getSimpleName();
 							if (className.equalsIgnoreCase("JJChapter")) {
 
-								JJChapter chapter = (JJChapter) entry
-										.getValue();
+								JJChapter chapter = (JJChapter) entry.getValue();
 
 								int lastOrder = chapter.getOrdering();
 								chapter.setOrdering(lastOrder + 1);
 
 								updateJJChapter(chapter);
 
-							} else if (className
-									.equalsIgnoreCase("JJRequirement")) {
+							} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-								JJRequirement requirement = (JJRequirement) entry
-										.getValue();
+								JJRequirement requirement = (JJRequirement) entry.getValue();
 
 								int lastOrder = requirement.getOrdering();
 								requirement.setOrdering(lastOrder + 1);
 
-								jJRequirementBean
-										.updateJJRequirement(requirement);
+								jJRequirementBean.updateJJRequirement(requirement);
 							}
 
 						}
@@ -1062,8 +976,7 @@ public class JJChapterBean {
 
 					int i = 0;
 
-					for (Map.Entry<Integer, JJTestcase> entry : subTestcases
-							.entrySet()) {
+					for (Map.Entry<Integer, JJTestcase> entry : subTestcases.entrySet()) {
 
 						int order = i + increment;
 
@@ -1078,28 +991,21 @@ public class JJChapterBean {
 					}
 				}
 
-				message = MessageFactory.getMessage(
-						"chapter_successfully_droped",
-						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
-						MessageFactory.getMessage("label_requirement", "")
-								.getDetail());
+				message = MessageFactory.getMessage("chapter_successfully_droped", FacesMessage.SEVERITY_INFO,
+				        dragNodeData, dropNodeData, MessageFactory.getMessage("label_requirement", "").getDetail());
 
 			} else if (dropNodeData.startsWith("leftRoot")) {
 
 				if (requirementCHAPTER == null) {
-					message = MessageFactory.getMessage(
-							"chapter_unsuccessfully_dropedNoChanges",
-							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData,
-							MessageFactory.getMessage("label_requirement", "")
-									.getDetail());
+					message = MessageFactory.getMessage("chapter_unsuccessfully_dropedNoChanges",
+					        FacesMessage.SEVERITY_WARN, dragNodeData, dropNodeData,
+					        MessageFactory.getMessage("label_requirement", "").getDetail());
 
 				} else {
 
 					int requirementOrder = REQUIREMENT.getOrdering();
 
-					elements = getSortedElements(requirementCHAPTER, project,
-							category, false);
+					elements = getSortedElements(requirementCHAPTER, project, category, false);
 
 					subElements = elements.tailMap(requirementOrder);
 
@@ -1110,11 +1016,9 @@ public class JJChapterBean {
 
 					subElements.remove(requirementOrder);
 
-					for (Map.Entry<Integer, Object> entry : subElements
-							.entrySet()) {
+					for (Map.Entry<Integer, Object> entry : subElements.entrySet()) {
 
-						String className = entry.getValue().getClass()
-								.getSimpleName();
+						String className = entry.getValue().getClass().getSimpleName();
 						if (className.equalsIgnoreCase("JJChapter")) {
 
 							JJChapter chapter = (JJChapter) entry.getValue();
@@ -1126,8 +1030,7 @@ public class JJChapterBean {
 
 						} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-							JJRequirement requirement = (JJRequirement) entry
-									.getValue();
+							JJRequirement requirement = (JJRequirement) entry.getValue();
 
 							int lastOrder = requirement.getOrdering();
 							requirement.setOrdering(lastOrder - 1);
@@ -1141,8 +1044,7 @@ public class JJChapterBean {
 
 						SortedMap<Integer, JJTestcase> tempTestcases;
 
-						for (Map.Entry<Integer, JJTestcase> entry : subTestcases
-								.entrySet()) {
+						for (Map.Entry<Integer, JJTestcase> entry : subTestcases.entrySet()) {
 
 							int testcaseOrder = entry.getKey();
 
@@ -1156,8 +1058,7 @@ public class JJChapterBean {
 
 							testcase = null;
 
-							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases
-									.entrySet()) {
+							for (Map.Entry<Integer, JJTestcase> tmpEntry : tempTestcases.entrySet()) {
 
 								testcase = tmpEntry.getValue();
 
@@ -1178,73 +1079,51 @@ public class JJChapterBean {
 						tempTestcases = null;
 					}
 
-					message = MessageFactory.getMessage(
-							"chapter_successfully_detached",
-							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData,
-							MessageFactory.getMessage("label_requirement", "")
-									.getDetail());
+					message = MessageFactory.getMessage("chapter_successfully_detached", FacesMessage.SEVERITY_WARN,
+					        dragNodeData, dropNodeData, MessageFactory.getMessage("label_requirement", "").getDetail());
 
 				}
 
-			} else if (dropNodeData.startsWith("R-")
-					|| dropNodeData.startsWith("rightRoot")) {
-				message = MessageFactory.getMessage(
-						"chapter_unsuccessfully_droped_notAllowed",
-						FacesMessage.SEVERITY_ERROR, dragNodeData,
-						dropNodeData,
-						MessageFactory.getMessage("label_requirement", "")
-								.getDetail());
+			} else if (dropNodeData.startsWith("R-") || dropNodeData.startsWith("rightRoot")) {
+				message = MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
+				        FacesMessage.SEVERITY_ERROR, dragNodeData, dropNodeData,
+				        MessageFactory.getMessage("label_requirement", "").getDetail());
 
 			}
 
 		} else if (dragNodeData.startsWith("C-")) {
 
-			long chapterID = Long
-					.parseLong(getSplitFromString(dragNodeData, 1));
+			long chapterID = Long.parseLong(getSplitFromString(dragNodeData, 1));
 
 			JJChapter CHAPTER = jJChapterService.findJJChapter(chapterID);
 			JJChapter chapterParent = CHAPTER.getParent();
 			int chapterOrder = CHAPTER.getOrdering();
 
-			if (dropNodeData.startsWith("C-")
-					|| dropNodeData.equalsIgnoreCase("rightRoot")) {
+			if (dropNodeData.startsWith("C-") || dropNodeData.equalsIgnoreCase("rightRoot")) {
 
 				JJChapter newChapterPARENT = null;
 
 				if (dropNodeData.equalsIgnoreCase("rightRoot")) {
 
-					message = MessageFactory.getMessage(
-							"chapter_parent_document",
-							FacesMessage.SEVERITY_WARN, dragNodeData,
-							dropNodeData,
-							MessageFactory.getMessage("label_chapter", "")
-									.getDetail());
+					message = MessageFactory.getMessage("chapter_parent_document", FacesMessage.SEVERITY_WARN,
+					        dragNodeData, dropNodeData, MessageFactory.getMessage("label_chapter", "").getDetail());
 				} else {
-					long newChapterPARENTID = Long
-							.parseLong(getSplitFromString(dropNodeData, 1));
-					newChapterPARENT = jJChapterService
-							.findJJChapter(newChapterPARENTID);
+					long newChapterPARENTID = Long.parseLong(getSplitFromString(dropNodeData, 1));
+					newChapterPARENT = jJChapterService.findJJChapter(newChapterPARENTID);
 
-					message = MessageFactory.getMessage(
-							"chapter_successfully_droped",
-							FacesMessage.SEVERITY_INFO, dragNodeData,
-							dropNodeData,
-							MessageFactory.getMessage("label_chapter", "")
-									.getDetail());
+					message = MessageFactory.getMessage("chapter_successfully_droped", FacesMessage.SEVERITY_INFO,
+					        dragNodeData, dropNodeData, MessageFactory.getMessage("label_chapter", "").getDetail());
 				}
 
 				// Update the last chapter list
 
-				elements = getSortedElements(chapterParent, project, category,
-						false);
+				elements = getSortedElements(chapterParent, project, category, false);
 
 				subElements = elements.tailMap(chapterOrder);
 
 				CHAPTER.setParent(null);
 
-				SortedMap<Integer, Object> tmpElements = getSortedElements(
-						null, project, category, false);
+				SortedMap<Integer, Object> tmpElements = getSortedElements(null, project, category, false);
 
 				CHAPTER.setOrdering(tmpElements.lastKey() + 1);
 
@@ -1254,8 +1133,7 @@ public class JJChapterBean {
 
 				for (Map.Entry<Integer, Object> entry : subElements.entrySet()) {
 
-					String className = entry.getValue().getClass()
-							.getSimpleName();
+					String className = entry.getValue().getClass().getSimpleName();
 					if (className.equalsIgnoreCase("JJChapter")) {
 
 						JJChapter chapter = (JJChapter) entry.getValue();
@@ -1267,8 +1145,7 @@ public class JJChapterBean {
 
 					} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-						JJRequirement requirement = (JJRequirement) entry
-								.getValue();
+						JJRequirement requirement = (JJRequirement) entry.getValue();
 
 						int lastOrder = requirement.getOrdering();
 						requirement.setOrdering(lastOrder - 1);
@@ -1280,8 +1157,7 @@ public class JJChapterBean {
 
 				// End Update the last chapter list
 
-				elements = getSortedElements(newChapterPARENT, project,
-						category, false);
+				elements = getSortedElements(newChapterPARENT, project, category, false);
 
 				if (newChapterPARENT == null) {
 					elements.remove(CHAPTER.getOrdering());
@@ -1294,8 +1170,7 @@ public class JJChapterBean {
 					if (dropIndex < elements.size()) {
 
 						int i = 0;
-						for (Map.Entry<Integer, Object> entry : elements
-								.entrySet()) {
+						for (Map.Entry<Integer, Object> entry : elements.entrySet()) {
 							if (i == dropIndex) {
 								i = entry.getKey();
 								break;
@@ -1306,32 +1181,26 @@ public class JJChapterBean {
 						}
 
 						subElements = elements.tailMap(i);
-						for (Map.Entry<Integer, Object> entry : subElements
-								.entrySet()) {
+						for (Map.Entry<Integer, Object> entry : subElements.entrySet()) {
 
-							String className = entry.getValue().getClass()
-									.getSimpleName();
+							String className = entry.getValue().getClass().getSimpleName();
 							if (className.equalsIgnoreCase("JJChapter")) {
 
-								JJChapter chapter = (JJChapter) entry
-										.getValue();
+								JJChapter chapter = (JJChapter) entry.getValue();
 
 								int lastOrder = chapter.getOrdering();
 								chapter.setOrdering(lastOrder + 1);
 
 								updateJJChapter(chapter);
 
-							} else if (className
-									.equalsIgnoreCase("JJRequirement")) {
+							} else if (className.equalsIgnoreCase("JJRequirement")) {
 
-								JJRequirement requirement = (JJRequirement) entry
-										.getValue();
+								JJRequirement requirement = (JJRequirement) entry.getValue();
 
 								int lastOrder = requirement.getOrdering();
 								requirement.setOrdering(lastOrder + 1);
 
-								jJRequirementBean
-										.updateJJRequirement(requirement);
+								jJRequirementBean.updateJJRequirement(requirement);
 							}
 
 						}
@@ -1345,13 +1214,10 @@ public class JJChapterBean {
 				CHAPTER.setParent(newChapterPARENT);
 				updateJJChapter(CHAPTER);
 
-			} else if (dropNodeData.startsWith("R-")
-					|| dropNodeData.equalsIgnoreCase("leftRoot")) {
-				message = MessageFactory.getMessage(
-						"chapter_unsuccessfully_droped_notAllowed",
-						FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
-						MessageFactory.getMessage("label_chapter", "")
-								.getDetail());
+			} else if (dropNodeData.startsWith("R-") || dropNodeData.equalsIgnoreCase("leftRoot")) {
+				message = MessageFactory.getMessage("chapter_unsuccessfully_droped_notAllowed",
+				        FacesMessage.SEVERITY_INFO, dragNodeData, dropNodeData,
+				        MessageFactory.getMessage("label_chapter", "").getDetail());
 
 			}
 
@@ -1370,12 +1236,9 @@ public class JJChapterBean {
 	}
 
 	private void editCategoryTable() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJRequirementBean jJRequirementBean = (JJRequirementBean) session
-				.getAttribute("jJRequirementBean");
-		if (jJRequirementBean != null
-				&& jJRequirementBean.getTableDataModelList() != null)
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJRequirementBean jJRequirementBean = (JJRequirementBean) session.getAttribute("jJRequirementBean");
+		if (jJRequirementBean != null && jJRequirementBean.getTableDataModelList() != null)
 			jJRequirementBean.editOneColumn(category);
 	}
 
@@ -1524,22 +1387,19 @@ public class JJChapterBean {
 
 	public void saveJJChapter(JJChapter b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJChapterService.saveJJChapter(b);
 	}
 
 	public void updateJJChapter(JJChapter b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJChapterService.updateJJChapter(b);
 	}
 
 	private boolean getChapterDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("ChapterDialog",
-				"chapter.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("ChapterDialog", "chapter.create.saveandclose");
 	}
 }

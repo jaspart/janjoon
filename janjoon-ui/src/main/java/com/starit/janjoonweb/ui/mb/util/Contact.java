@@ -13,14 +13,14 @@ import com.starit.janjoonweb.domain.JJVersion;
 
 public class Contact {
 
-	private String name;
-	private String email;
-	private String firstname;
-	private JJProject lastProject;
-	private JJProduct lastProduct;
-	private JJVersion lastVersion;
-	private Set<JJCategory> categories = new HashSet<JJCategory>();
-	private Set<JJPermission> permissions = new HashSet<JJPermission>();
+	private String				name;
+	private String				email;
+	private String				firstname;
+	private JJProject			lastProject;
+	private JJProduct			lastProduct;
+	private JJVersion			lastVersion;
+	private Set<JJCategory>		categories	= new HashSet<JJCategory>();
+	private Set<JJPermission>	permissions	= new HashSet<JJPermission>();
 
 	public String getName() {
 		return name;
@@ -110,7 +110,7 @@ public class Contact {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof Contact) && (getEmail() != null) ? getEmail()
-				.equals(((Contact) object).getEmail()) : (object == this);
+		return (object instanceof Contact) && (getEmail() != null) ? getEmail().equals(((Contact) object).getEmail())
+		        : (object == this);
 	}
 }

@@ -17,9 +17,7 @@ public class JJRequirementConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return value instanceof JJRequirement ? ((JJRequirement) value)
-				.getName() : "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value instanceof JJRequirement ? ((JJRequirement) value).getName() : "";
 	}
 }

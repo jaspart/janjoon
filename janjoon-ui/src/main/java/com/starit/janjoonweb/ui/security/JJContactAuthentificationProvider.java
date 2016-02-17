@@ -19,19 +19,18 @@ import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
 
 @Component("contactAuthentificationProvider")
-public class JJContactAuthentificationProvider implements
-		AuthenticationProvider, Serializable {
+public class JJContactAuthentificationProvider implements AuthenticationProvider, Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
 
 	@Autowired
-	JJContactService jJContactService;
+	JJContactService			jJContactService;
 
 	@Autowired
-	BCryptPasswordEncoder encoder;
+	BCryptPasswordEncoder		encoder;
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -42,8 +41,7 @@ public class JJContactAuthentificationProvider implements
 	}
 
 	@Override
-	public Authentication authenticate(Authentication authentication)
-			throws AuthenticationException {
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();

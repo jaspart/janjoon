@@ -20,13 +20,13 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class CalendarUtil {
 
-	private static String WORK_DAYS = "weekday";
-	private static String HOLIDAYS = "holiday";
+	private static String	WORK_DAYS	= "weekday";
+	private static String	HOLIDAYS	= "holiday";
 
-	private JJCompany company;
-	private String hour_format;
-	private List<Date> holidays;
-	private List<ChunkTime> workDays;
+	private JJCompany		company;
+	private String			hour_format;
+	private List<Date>		holidays;
+	private List<ChunkTime>	workDays;
 
 	public CalendarUtil(JJCompany company) {
 		this.company = company;
@@ -68,32 +68,27 @@ public class CalendarUtil {
 			else {
 				Date staDate1, enDate1, staDate2, endDate2;
 				try {
-					staDate1 = new SimpleDateFormat(hour_format).parse(workDay
-							.substring(0, 5));
+					staDate1 = new SimpleDateFormat(hour_format).parse(workDay.substring(0, 5));
 
 				} catch (ParseException e) {
 					staDate1 = null;
 				}
 				try {
-					enDate1 = new SimpleDateFormat(hour_format).parse(workDay
-							.substring(6, 11));
+					enDate1 = new SimpleDateFormat(hour_format).parse(workDay.substring(6, 11));
 				} catch (ParseException e) {
 					enDate1 = null;
 				}
 				try {
-					staDate2 = new SimpleDateFormat(hour_format).parse(workDay
-							.substring(14, 19));
+					staDate2 = new SimpleDateFormat(hour_format).parse(workDay.substring(14, 19));
 				} catch (ParseException | StringIndexOutOfBoundsException e) {
 					staDate2 = null;
 				}
 				try {
-					endDate2 = new SimpleDateFormat(hour_format).parse(workDay
-							.substring(20, 25));
+					endDate2 = new SimpleDateFormat(hour_format).parse(workDay.substring(20, 25));
 				} catch (ParseException | StringIndexOutOfBoundsException e) {
 					endDate2 = null;
 				}
-				workDays.add(new ChunkTime(i, staDate1, enDate1, staDate2,
-						endDate2));
+				workDays.add(new ChunkTime(i, staDate1, enDate1, staDate2, endDate2));
 			}
 
 			i++;
@@ -109,20 +104,15 @@ public class CalendarUtil {
 			workDays = new ArrayList<ChunkTime>();
 
 			try {
-				starDate1 = new SimpleDateFormat(getHour_format())
-						.parse("08:00");
-				endDate1 = new SimpleDateFormat(getHour_format())
-						.parse("12:00");
+				starDate1 = new SimpleDateFormat(getHour_format()).parse("08:00");
+				endDate1 = new SimpleDateFormat(getHour_format()).parse("12:00");
 
-				starDate2 = new SimpleDateFormat(getHour_format())
-						.parse("13:00");
-				endDate2 = new SimpleDateFormat(getHour_format())
-						.parse("18:00");
+				starDate2 = new SimpleDateFormat(getHour_format()).parse("13:00");
+				endDate2 = new SimpleDateFormat(getHour_format()).parse("18:00");
 
 				workDays.add(new ChunkTime(0));
 				for (int k = 1; k < 6; k++) {
-					workDays.add(new ChunkTime(k, starDate1, endDate1,
-							starDate2, endDate2));
+					workDays.add(new ChunkTime(k, starDate1, endDate1, starDate2, endDate2));
 				}
 				workDays.add(new ChunkTime(6));
 			} catch (ParseException e) {
@@ -150,12 +140,9 @@ public class CalendarUtil {
 
 		for (Object key : Collections.list(properties.keys())) {
 			if (key.toString().contains(HOLIDAYS)) {
-				String hol = properties.getProperty((String) key).toString()
-						.trim()
-						+ year;
+				String hol = properties.getProperty((String) key).toString().trim() + year;
 				try {
-					holidays.add(getZeroTimeDate(new SimpleDateFormat(
-							day_format).parse(hol)));
+					holidays.add(getZeroTimeDate(new SimpleDateFormat(day_format).parse(hol)));
 				} catch (ParseException e) {
 
 				}
@@ -165,11 +152,9 @@ public class CalendarUtil {
 
 		LocaleBean localBean = (LocaleBean) LoginBean.findBean("localeBean");
 
-		if (workDays != null
-				&& localBean != null
-				&& localBean.getLocale() != null
-				&& localBean.getLocale().toString().toLowerCase()
-						.contains("fr") && workDays.get(0).getDayNumber() == 0) {
+		if (workDays != null && localBean != null && localBean.getLocale() != null
+		        && localBean.getLocale().toString().toLowerCase().contains("fr")
+		        && workDays.get(0).getDayNumber() == 0) {
 			List<ChunkTime> work = new ArrayList<ChunkTime>();
 			i = 1;
 			while (i < 7) {
@@ -243,8 +228,7 @@ public class CalendarUtil {
 		return getZeroTimeDate(cal.getTime());
 	}
 
-	public static String addHoliday(Date date, String calendar, int size)
-			throws IOException {
+	public static String addHoliday(Date date, String calendar, int size) throws IOException {
 		Properties properties = new Properties();
 		// String calendar = company.getCalendar();
 		if (calendar == null) {
@@ -252,9 +236,7 @@ public class CalendarUtil {
 		}
 		properties.load(new StringReader(calendar));
 		DateFormat f = new SimpleDateFormat("dd/MM/");
-		properties.setProperty(
-				HOLIDAYS + "." + String.format("%01d", size + 1),
-				f.format(date));
+		properties.setProperty(HOLIDAYS + "." + String.format("%01d", size + 1), f.format(date));
 
 		StringWriter writer = new StringWriter();
 		properties.list(new PrintWriter(writer));
@@ -262,8 +244,7 @@ public class CalendarUtil {
 
 	}
 
-	public static String removeHoliday(Date date, String calendar, int index)
-			throws IOException {
+	public static String removeHoliday(Date date, String calendar, int index) throws IOException {
 
 		Properties properties = new Properties();
 
@@ -275,8 +256,7 @@ public class CalendarUtil {
 
 		for (Object key : Collections.list(properties.keys())) {
 			if (key.toString().contains(HOLIDAYS)
-					&& properties.getProperty((String) key).equalsIgnoreCase(
-							f.format(date))) {
+			        && properties.getProperty((String) key).equalsIgnoreCase(f.format(date))) {
 				properties.remove(key);
 			}
 		}
@@ -296,17 +276,13 @@ public class CalendarUtil {
 		DateFormat f = new SimpleDateFormat("HH:mm");
 		String value;
 		if (day.getStartDate1() != null && day.getStartDate2() != null)
-			value = f.format(day.getStartDate1()) + "-"
-					+ f.format(day.getEndDate1()) + " & "
-					+ f.format(day.getStartDate2()) + "-"
-					+ f.format(day.getEndDate2());
+			value = f.format(day.getStartDate1()) + "-" + f.format(day.getEndDate1()) + " & "
+			        + f.format(day.getStartDate2()) + "-" + f.format(day.getEndDate2());
 		else {
 			if (day.getStartDate1() != null)
-				value = f.format(day.getStartDate1()) + "-"
-						+ f.format(day.getEndDate1());
+				value = f.format(day.getStartDate1()) + "-" + f.format(day.getEndDate1());
 			else if (day.getStartDate2() != null)
-				value = f.format(day.getStartDate2()) + "-"
-						+ f.format(day.getEndDate2());
+				value = f.format(day.getStartDate2()) + "-" + f.format(day.getEndDate2());
 			else
 				value = "null";
 		}

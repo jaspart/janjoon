@@ -17,15 +17,13 @@ public class JJJobBean {
 
 	public void saveJJJob(JJJob b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJJobService.saveJJJob(b);
 	}
 
 	public void updateJJJob(JJJob b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJJobService.updateJJJob(b);

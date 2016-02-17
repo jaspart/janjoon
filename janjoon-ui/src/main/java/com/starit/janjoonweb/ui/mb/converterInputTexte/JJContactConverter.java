@@ -19,8 +19,7 @@ public class JJContactConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		return value instanceof JJContact ? ((JJContact) value).getName() : "";
 	}
 }

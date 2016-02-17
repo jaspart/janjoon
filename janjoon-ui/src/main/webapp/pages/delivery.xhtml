@@ -20,11 +20,9 @@
 	<ui:define name="content">
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form style="width:100%;display:none;">
-				<p:remoteCommand onstart="PF('blockUIWidget').block()"
-					name="tabChangeHelper"
+				<p:remoteCommand name="tabChangeHelper"
 					actionListener="#{jJVersionBean.onTabDeliveryChange}"
-					update=":versionTabView:deliveryForm :activeDeliveryIndexForm"
-					oncomplete="PF('blockUIWidget').unblock()" />
+					update=":versionTabView:deliveryForm :activeDeliveryIndexForm" />
 			</h:form>
 
 			<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
@@ -73,9 +71,7 @@
 										ChangeLog
 									</f:facet>
 											<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
-												update="buildDataTable"
-												onstart="updateRowExapansion();PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()" />
+												update="buildDataTable"	onstart="updateRowExapansion();" />
 											<p:column style="width:15%;">
 												<p:rowToggler />
 												<p:commandLink target="_blank" style="float: right;"
@@ -95,9 +91,7 @@
 													itemValue="#{status}" var="status" size="10"
 													converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
 													completeMethod="#{jJBuildBean.completeStatus}">
-													<p:ajax event="itemSelect"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock()"
+													<p:ajax event="itemSelect"														
 														listener="#{jJBuildBean.changeEvent(build,versionDataModel)}"
 														update="buildDataTable :growlForm" />
 												</p:autoComplete>

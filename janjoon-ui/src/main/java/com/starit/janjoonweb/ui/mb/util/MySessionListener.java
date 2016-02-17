@@ -17,22 +17,19 @@ public class MySessionListener implements HttpSessionListener {
 	}
 
 	public void sessionCreated(HttpSessionEvent event) {
-		logger.info("Current Session created : " + event.getSession().getId()
-				+ " at " + new Date());
+		logger.info("Current Session created : " + event.getSession().getId() + " at " + new Date());
 
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
 		// get the destroying session…
 		HttpSession session = event.getSession();
-		logger.info("Current Session destroyed :" + session.getId()
-				+ " Logging out user…");
+		logger.info("Current Session destroyed :" + session.getId() + " Logging out user…");
 
 		try {
 			prepareLogoutInfoAndLogoutActiveUser(session);
 		} catch (Exception e) {
-			logger.error("Error while logging out at " + " destroyed : "
-					+ e.getMessage());
+			logger.error("Error while logging out at " + " destroyed : " + e.getMessage());
 		}
 	}
 
@@ -42,8 +39,7 @@ public class MySessionListener implements HttpSessionListener {
 	 * 
 	 * @throws IOException
 	 */
-	public void prepareLogoutInfoAndLogoutActiveUser(HttpSession httpSession)
-			throws IOException {
+	public void prepareLogoutInfoAndLogoutActiveUser(HttpSession httpSession) throws IOException {
 		// logger.info("Contact logged out");
 		// ExternalContext ec = fContext.getExternalContext();
 		// httpSession.invalidate();

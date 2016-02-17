@@ -7,8 +7,8 @@ import com.starit.janjoonweb.domain.JJTestcase;
 
 public class TestCaseChartUtil {
 
-	private JJTestcase testcase;
-	private String success;
+	private JJTestcase	testcase;
+	private String		success;
 
 	public TestCaseChartUtil(JJTestcase testcase) {
 		this.testcase = testcase;
@@ -31,8 +31,7 @@ public class TestCaseChartUtil {
 		this.success = success;
 	}
 
-	public static List<TestCaseChartUtil> getTestCaseUtilFromJJTesCase(
-			List<JJTestcase> jjTestcases) {
+	public static List<TestCaseChartUtil> getTestCaseUtilFromJJTesCase(List<JJTestcase> jjTestcases) {
 		List<TestCaseChartUtil> list = new ArrayList<TestCaseChartUtil>();
 		for (JJTestcase c : jjTestcases) {
 			list.add(new TestCaseChartUtil(c));

@@ -30,25 +30,24 @@ import com.starit.janjoonweb.domain.JJVersion;
 public class JJTestcaseexecutionBean {
 
 	@Autowired
-	private JJTaskService jJTaskService;
+	private JJTaskService			jJTaskService;
 
 	@Autowired
-	private JJRequirementService jJRequirementService;
+	private JJRequirementService	jJRequirementService;
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
 	}
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	private JJTestcaseexecution testcaseexecution;
+	private JJTestcaseexecution				testcaseexecution;
 
-	private List<TestCaseexecutionRecap> testCaseexecutionRecaps;
+	private List<TestCaseexecutionRecap>	testCaseexecutionRecaps;
 
-	private Boolean status;
+	private Boolean							status;
 
 	public JJTestcaseexecution getTestcaseexecution() {
 		return testcaseexecution;
@@ -62,34 +61,29 @@ public class JJTestcaseexecutionBean {
 
 		testCaseexecutionRecaps = new ArrayList<TestCaseexecutionRecap>();
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
 		JJTestcase testcase = jJTestcaseBean.getTestcase();
 
-		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");
+		JJBuildBean jJBuildBean = (JJBuildBean) session.getAttribute("jJBuildBean");
 
 		JJBuild build = jJBuildBean.getBuild();
 
 		if (testcase != null && testcase.getId() != null) {
 
-			List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-					.getTestcaseexecutions(testcase, build, true, true, false);
+			List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService.getTestcaseexecutions(testcase,
+			        build, true, true, false);
 
 			for (JJTestcaseexecution testcaseexecution : testcaseexecutions) {
-				testCaseexecutionRecaps.add(new TestCaseexecutionRecap(
-						testcaseexecution));
+				testCaseexecutionRecaps.add(new TestCaseexecutionRecap(testcaseexecution));
 			}
 		}
 
 		return testCaseexecutionRecaps;
 	}
 
-	public void setTestCaseexecutionRecaps(
-			List<TestCaseexecutionRecap> testCaseexecutionRecaps) {
+	public void setTestCaseexecutionRecaps(List<TestCaseexecutionRecap> testCaseexecutionRecaps) {
 		this.testCaseexecutionRecaps = testCaseexecutionRecaps;
 	}
 
@@ -101,24 +95,20 @@ public class JJTestcaseexecutionBean {
 		this.status = status;
 	}
 
-	public void loadTestcaseexecution(
-			JJTeststepexecutionBean jJTeststepexecutionBean) {
+	public void loadTestcaseexecution(JJTeststepexecutionBean jJTeststepexecutionBean) {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
 		JJTestcase testcase = jJTestcaseBean.getTestcase();
 
-		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");
+		JJBuildBean jJBuildBean = (JJBuildBean) session.getAttribute("jJBuildBean");
 
 		JJBuild build = jJBuildBean.getBuild();
 
-		List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService
-				.getTestcaseexecutions(testcase, build, true, false, true);
+		List<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionService.getTestcaseexecutions(testcase, build,
+		        true, false, true);
 		if (!testcaseexecutions.isEmpty()) {
 			JJTestcaseexecution testcaseexecution = testcaseexecutions.get(0);
 			if (testcaseexecution.getPassed() != null) {
@@ -146,27 +136,22 @@ public class JJTestcaseexecutionBean {
 
 		// Boolean status = testcaseexecution.getPassed();
 
-		JJTestcaseexecution tce = jJTestcaseexecutionService
-				.findJJTestcaseexecution(testcaseexecution.getId());
+		JJTestcaseexecution tce = jJTestcaseexecutionService.findJJTestcaseexecution(testcaseexecution.getId());
 
 		tce.setPassed(status);
 		updateJJTestcaseexecution(tce, new MutableInt(0));
 
-		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-				null, false, null, tce.getTestcase(), tce.getBuild(), true,
-				false, true, null);
+		List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null, null, false, null, null,tce.getTestcase(),
+		        tce.getBuild(), true, false, true, null);
 		if (!tasks.isEmpty()) {
 			JJTask task = tasks.get(0);
-			task.setName(tce.getTestcase().getName() + "_"
-					+ tce.getBuild().getName().trim().toUpperCase());
+			task.setName(tce.getTestcase().getName() + "_" + tce.getBuild().getName().trim().toUpperCase());
 
 			task.setEndDateReal(new Date());
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJTaskBean jJTaskBean = (JJTaskBean) session
-					.getAttribute("jJTaskBean");
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJTaskBean jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 			jJTaskBean.saveJJTask(task, true, new MutableInt(0));
 
 		}
@@ -188,47 +173,38 @@ public class JJTestcaseexecutionBean {
 
 	public Set<JJTestcaseexecution> getTestcaseexecutions() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJBuildBean jJBuildBean = (JJBuildBean) session
-				.getAttribute("jJBuildBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJBuildBean jJBuildBean = (JJBuildBean) session.getAttribute("jJBuildBean");
 
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
-		return jJTestcaseexecutionService.getTestcaseexecutions(
-				LoginBean.getProject(), LoginBean.getProduct(),
-				LoginBean.getVersion(), jJTestcaseBean.getCategory(),
-				jJTestcaseBean.getChapter(), jJBuildBean.getBuild(), true,
-				true, jJTestcaseBean.getChapter() == null);
+		return jJTestcaseexecutionService.getTestcaseexecutions(LoginBean.getProject(), LoginBean.getProduct(),
+		        LoginBean.getVersion(), jJTestcaseBean.getCategory(), jJTestcaseBean.getChapter(),
+		        jJBuildBean.getBuild(), true, true, jJTestcaseBean.getChapter() == null);
 	}
 
 	public void saveJJTestcaseexecution(JJTestcaseexecution b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJTestcaseexecutionService.saveJJTestcaseexecution(b);
 	}
 
-	public void updateJJTestcaseexecution(JJTestcaseexecution b,
-			MutableInt updateReq) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+	public void updateJJTestcaseexecution(JJTestcaseexecution b, MutableInt updateReq) {
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		b = jJTestcaseexecutionService.updateJJTestcaseexecution(b);
 
 		if (updateReq.intValue() == 1)
-			JJRequirementBean.updateRowState(b.getTestcase().getRequirement(),
-					jJRequirementService, b);
+			JJRequirementBean.updateRowState(b.getTestcase().getRequirement(), jJRequirementService, b);
 	}
 
 	public class TestCaseexecutionRecap {
 
-		private JJTestcaseexecution testcaseexecution;
+		private JJTestcaseexecution	testcaseexecution;
 
-		private String status;
+		private String				status;
 
 		public TestCaseexecutionRecap(JJTestcaseexecution testcaseexecution) {
 			super();

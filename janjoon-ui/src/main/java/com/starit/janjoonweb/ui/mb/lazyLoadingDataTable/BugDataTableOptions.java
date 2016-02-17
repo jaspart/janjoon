@@ -19,13 +19,13 @@ import org.springframework.stereotype.Component;
 @Component("bugDataTableOptions")
 public class BugDataTableOptions {
 
-	private int first;
-	private List<SortMeta> multiSortMeta;
-	private Map<String, Object> filters;
-	private String importance;
-	private String status;
-	private String criticity;
-	private boolean mine;
+	private int					first;
+	private List<SortMeta>		multiSortMeta;
+	private Map<String, Object>	filters;
+	private String				importance;
+	private String				status;
+	private String				criticity;
+	private boolean				mine;
 
 	public String getImportance() {
 		return importance;
@@ -55,8 +55,7 @@ public class BugDataTableOptions {
 
 	}
 
-	public BugDataTableOptions(int first, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters, boolean mine) {
+	public BugDataTableOptions(int first, List<SortMeta> multiSortMeta, Map<String, Object> filters, boolean mine) {
 
 		this.first = first;
 		this.multiSortMeta = multiSortMeta;
@@ -84,9 +83,8 @@ public class BugDataTableOptions {
 		}
 	}
 
-	public void dataTableInit(DataTable dataTable, InputSwitch mineBugs,
-			InputText glbFilter, SelectOneMenu criticitySelect,
-			SelectOneMenu importanceSelect, SelectOneMenu statusSelect) {
+	public void dataTableInit(DataTable dataTable, InputSwitch mineBugs, InputText glbFilter,
+	        SelectOneMenu criticitySelect, SelectOneMenu importanceSelect, SelectOneMenu statusSelect) {
 
 		dataTable.setFirst(first);
 		dataTable.setFilters(filters);

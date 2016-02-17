@@ -8,8 +8,8 @@ import com.starit.janjoonweb.domain.JJRequirement;
 
 public class CategorieRequirement {
 
-	private JJCategory category;
-	private List<JJRequirement> requirements;
+	private JJCategory			category;
+	private List<JJRequirement>	requirements;
 
 	public CategorieRequirement(JJCategory category) {
 
@@ -33,29 +33,24 @@ public class CategorieRequirement {
 		this.requirements = requirements;
 	}
 
-	public static List<CategorieRequirement> initCategorieRequirement(
-			JJRequirement requirement, List<JJCategory> categories) {
+	public static List<CategorieRequirement> initCategorieRequirement(JJRequirement requirement,
+	        List<JJCategory> categories) {
 
 		List<CategorieRequirement> categorieRequirements = new ArrayList<CategorieRequirement>();
 
 		for (JJCategory category : categories) {
 			if (!category.equals(requirement.getCategory())) {
-				CategorieRequirement cateReq = new CategorieRequirement(
-						category);
+				CategorieRequirement cateReq = new CategorieRequirement(category);
 				for (JJRequirement req : requirement.getRequirementLinkDown()) {
 
-					if (req.getCategory().getName()
-							.equalsIgnoreCase(category.getName())
-							&& req.getEnabled())
+					if (req.getCategory().getName().equalsIgnoreCase(category.getName()) && req.getEnabled())
 						cateReq.getRequirements().add(req);
 
 				}
 
 				for (JJRequirement req : requirement.getRequirementLinkUp()) {
 
-					if (req.getCategory().getName()
-							.equalsIgnoreCase(category.getName())
-							&& req.getEnabled())
+					if (req.getCategory().getName().equalsIgnoreCase(category.getName()) && req.getEnabled())
 						cateReq.getRequirements().add(req);
 
 				}

@@ -35,25 +35,25 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 @SuppressWarnings("deprecation")
 public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
-	static Logger logger = Logger.getLogger(CategoryDataModel.class);
-	private static final long serialVersionUID = 1L;
-	private String nameDataModel;
-	private long categoryId;
-	private int activeIndex = -1;
-	private float coverageProgress = -1;
-	private float completionProgress = -1;
-	private List<JJRequirement> allRequirements;
-	private boolean rendered;
-	private TreeNode chapterTree;
-	private boolean expanded;
-	private String rowStyleClassFilter = null;
-	private boolean filterChapter;
-	private JJChapter selectedChapter;
+	static Logger					logger				= Logger.getLogger(CategoryDataModel.class);
+	private static final long		serialVersionUID	= 1L;
+	private String					nameDataModel;
+	private long					categoryId;
+	private int						activeIndex			= -1;
+	private float					coverageProgress	= -1;
+	private float					completionProgress	= -1;
+	private List<JJRequirement>		allRequirements;
+	private boolean					rendered;
+	private TreeNode				chapterTree;
+	private boolean					expanded;
+	private String					rowStyleClassFilter	= null;
+	private boolean					filterChapter;
+	private JJChapter				selectedChapter;
 
-	private JJChapterService jJChapterService;
-	private JJCategoryService jJCategoryService;
-	private JJRequirementService jJRequirementService;
-	private JJTaskService jJTaskService;
+	private JJChapterService		jJChapterService;
+	private JJCategoryService		jJCategoryService;
+	private JJRequirementService	jJRequirementService;
+	private JJTaskService			jJTaskService;
 
 	public String getId() {
 
@@ -147,8 +147,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
 	public void settingSousChapter(JJChapter ch, TreeNode chapterNode) {
 		TreeNode node = new DefaultTreeNode("chapter", ch, chapterNode);
-		List<JJChapter> sous_Chapters = jJChapterService
-				.getChildrenOfParentChapter(ch, true, true);
+		List<JJChapter> sous_Chapters = jJChapterService.getChildrenOfParentChapter(ch, true, true);
 		for (JJChapter c : sous_Chapters) {
 			settingSousChapter(c, node);
 		}
@@ -163,22 +162,18 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			chapterTree = new DefaultTreeNode("Root", null);
 			JJProject project = LoginBean.getProject();
 
-			TreeNode categoryNode = new DefaultTreeNode("category",
-					jJCategoryService.findJJCategory(categoryId), chapterTree);
+			TreeNode categoryNode = new DefaultTreeNode("category", jJCategoryService.findJJCategory(categoryId),
+			        chapterTree);
 
 			categoryNode.setExpanded(true);
 
-			List<JJChapter> chapters = jJChapterService.getParentsChapter(
-					LoginBean.getCompany(), project,
-					jJCategoryService.findJJCategory(categoryId), true, true);
+			List<JJChapter> chapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project,
+			        jJCategoryService.findJJCategory(categoryId), true, true);
 
-			new DefaultTreeNode("withOutChapter", "withOutChapter",
-					categoryNode);
+			new DefaultTreeNode("withOutChapter", "withOutChapter", categoryNode);
 			for (JJChapter ch : chapters) {
-				TreeNode chapterNode = new DefaultTreeNode("chapter", ch,
-						categoryNode);
-				List<JJChapter> sous_Chapters = jJChapterService
-						.getChildrenOfParentChapter(ch, true, true);
+				TreeNode chapterNode = new DefaultTreeNode("chapter", ch, categoryNode);
+				List<JJChapter> sous_Chapters = jJChapterService.getChildrenOfParentChapter(ch, true, true);
 				for (JJChapter c : sous_Chapters) {
 					settingSousChapter(c, chapterNode);
 				}
@@ -220,15 +215,12 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 	public void setSelectedChapter(JJChapter selectedChapter) {
 		this.selectedChapter = selectedChapter;
 	}
-	
-	public CategoryDataModel(List<JJRequirement> data, long categoryId,
-			String nameDataModel, boolean rendered,
-			JJRequirementService requirementService,
-			JJCategoryService categoryService, JJChapterService chapterService,
-			JJTaskService taskService) {
+
+	public CategoryDataModel(List<JJRequirement> data, long categoryId, String nameDataModel, boolean rendered,
+	        JJRequirementService requirementService, JJCategoryService categoryService, JJChapterService chapterService,
+	        JJTaskService taskService) {
 		if (data != null)
-			this.allRequirements = new ArrayList<JJRequirement>(
-					new HashSet<JJRequirement>(data));
+			this.allRequirements = new ArrayList<JJRequirement>(new HashSet<JJRequirement>(data));
 		else
 			this.allRequirements = new ArrayList<JJRequirement>();
 		this.categoryId = categoryId;
@@ -258,19 +250,14 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			JJCategory category = jJCategoryService.findJJCategory(categoryId);
 			boolean containCategory = false;
 
-			JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
-					.findBean("jJStatusBean");
+			JJStatusBean jJStatusBean = (JJStatusBean) LoginBean.findBean("jJStatusBean");
 
-			if (jJStatusBean != null
-					&& jJStatusBean.getCategoryDataModel() != null
-					&& !jJStatusBean.getCategoryDataModel().isEmpty()) {
+			if (jJStatusBean != null && jJStatusBean.getCategoryDataModel() != null
+			        && !jJStatusBean.getCategoryDataModel().isEmpty()) {
 				for (int i = 0; i < jJStatusBean.getCategoryDataModel().size(); i++) {
-					if (jJStatusBean.getCategoryDataModel().get(i)
-							.getCategory().equals(category)
-							&& jJStatusBean.getCategoryDataModel().get(i)
-									.getCoverageProgress() > -1) {
-						coverageProgress = jJStatusBean.getCategoryDataModel()
-								.get(i).getCoverageProgress();
+					if (jJStatusBean.getCategoryDataModel().get(i).getCategory().equals(category)
+					        && jJStatusBean.getCategoryDataModel().get(i).getCoverageProgress() > -1) {
+						coverageProgress = jJStatusBean.getCategoryDataModel().get(i).getCoverageProgress();
 						containCategory = true;
 						i = jJStatusBean.getCategoryDataModel().size();
 					}
@@ -279,63 +266,34 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			}
 			if (!containCategory) {
 
-				boolean isLowCategory = jJCategoryService.isLowLevel(category,
-						LoginBean.getCompany());
-				boolean isHighCategory = jJCategoryService.isHighLevel(
-						category, LoginBean.getCompany());
+				boolean isLowCategory = jJCategoryService.isLowLevel(category, LoginBean.getCompany());
+				boolean isHighCategory = jJCategoryService.isHighLevel(category, LoginBean.getCompany());
 
 				for (JJRequirement requirement : allRequirements) {
 					{
-						requirement = JJRequirementBean.getRowState(
-								requirement, jJRequirementService);
-						if (requirement
-								.getState()
-								.getName()
-								.equalsIgnoreCase(
-										JJRequirementBean.jJRequirement_InProgress)
-								|| requirement
-										.getState()
-										.getName()
-										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_InTesting)
-								|| requirement
-										.getState()
-										.getName()
-										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_Finished)) {
+						requirement = JJRequirementBean.getRowState(requirement, jJRequirementService);
+						if (requirement.getState().getName()
+						        .equalsIgnoreCase(JJRequirementBean.jJRequirement_InProgress)
+						        || requirement.getState().getName()
+						                .equalsIgnoreCase(JJRequirementBean.jJRequirement_InTesting)
+						        || requirement.getState().getName()
+						                .equalsIgnoreCase(JJRequirementBean.jJRequirement_Finished)) {
 							compteur++;
-						} else if (isLowCategory
-								&& requirement
-										.getState()
-										.getName()
-										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_Specified)) {
+						} else if (isLowCategory && requirement.getState().getName()
+						        .equalsIgnoreCase(JJRequirementBean.jJRequirement_Specified)) {
 							compteur++;
 
-						} else if (isHighCategory
-								&& (requirement
-										.getState()
-										.getName()
-										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_Specified) || jJTaskService
-										.haveTask(requirement, true, false,
-												false))) {
+						} else if (isHighCategory && (requirement.getState().getName()
+						        .equalsIgnoreCase(JJRequirementBean.jJRequirement_Specified)
+						        || jJTaskService.haveTask(requirement, true, false, false))) {
 
 							compteur += 0.5;
 
-						} else if (!isHighCategory
-								&& !isLowCategory
-								&& requirement
-										.getState()
-										.getName()
-										.equalsIgnoreCase(
-												JJRequirementBean.jJRequirement_Specified)) {
+						} else if (!isHighCategory && !isLowCategory && requirement.getState().getName()
+						        .equalsIgnoreCase(JJRequirementBean.jJRequirement_Specified)) {
 							compteur++;
-						} else if (!isHighCategory
-								&& !isLowCategory
-								&& (jJRequirementService
-										.haveLinkUp(requirement) || jJRequirementService
-										.haveLinkDown(requirement))) {
+						} else if (!isHighCategory && !isLowCategory && (jJRequirementService.haveLinkUp(requirement)
+						        || jJRequirementService.haveLinkDown(requirement))) {
 							compteur += 0.5;
 						}
 					}
@@ -351,8 +309,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			}
 
 		}
-		logger.info("calculCoverageProgress_TaskTracker="
-				+ (System.currentTimeMillis() - t));
+		logger.info("calculCoverageProgress_TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	public void calculCompletionProgress() {
@@ -361,21 +318,15 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
 			JJCategory category = jJCategoryService.findJJCategory(categoryId);
 
-			JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
-					.findBean("jJStatusBean");
+			JJStatusBean jJStatusBean = (JJStatusBean) LoginBean.findBean("jJStatusBean");
 			boolean containCategory = false;
 
-			if (jJStatusBean != null
-					&& jJStatusBean.getCategoryDataModel() != null
-					&& !jJStatusBean.getCategoryDataModel().isEmpty()) {
+			if (jJStatusBean != null && jJStatusBean.getCategoryDataModel() != null
+			        && !jJStatusBean.getCategoryDataModel().isEmpty()) {
 				for (int i = 0; i < jJStatusBean.getCategoryDataModel().size(); i++) {
-					if (jJStatusBean.getCategoryDataModel().get(i)
-							.getCategory().equals(category)
-							&& jJStatusBean.getCategoryDataModel().get(i)
-									.getCompletionProgress() > -1) {
-						completionProgress = jJStatusBean
-								.getCategoryDataModel().get(i)
-								.getCompletionProgress();
+					if (jJStatusBean.getCategoryDataModel().get(i).getCategory().equals(category)
+					        && jJStatusBean.getCategoryDataModel().get(i).getCompletionProgress() > -1) {
+						completionProgress = jJStatusBean.getCategoryDataModel().get(i).getCompletionProgress();
 						containCategory = true;
 						i = jJStatusBean.getCategoryDataModel().size();
 					}
@@ -399,8 +350,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			}
 
 		}
-		logger.error("calculCompletionProgress_TaskTracker="
-				+ (System.currentTimeMillis() - t));
+		logger.error("calculCompletionProgress_TaskTracker=" + (System.currentTimeMillis() - t));
 	}
 
 	private float calculCompletion(JJRequirement r) {
@@ -418,21 +368,12 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 		}
 
 		int hasTaskCompleted = 0;
-		if (JJRequirementBean.getRowState(r, jJRequirementService).getState()
-				.getName()
-				.equalsIgnoreCase(JJRequirementBean.jJRequirement_InProgress)
-				|| JJRequirementBean
-						.getRowState(r, jJRequirementService)
-						.getState()
-						.getName()
-						.equalsIgnoreCase(
-								JJRequirementBean.jJRequirement_InTesting)
-				|| JJRequirementBean
-						.getRowState(r, jJRequirementService)
-						.getState()
-						.getName()
-						.equalsIgnoreCase(
-								JJRequirementBean.jJRequirement_Finished)) {
+		if (JJRequirementBean.getRowState(r, jJRequirementService).getState().getName()
+		        .equalsIgnoreCase(JJRequirementBean.jJRequirement_InProgress)
+		        || JJRequirementBean.getRowState(r, jJRequirementService).getState().getName()
+		                .equalsIgnoreCase(JJRequirementBean.jJRequirement_InTesting)
+		        || JJRequirementBean.getRowState(r, jJRequirementService).getState().getName()
+		                .equalsIgnoreCase(JJRequirementBean.jJRequirement_Finished)) {
 			compteur++;
 			hasTaskCompleted = 1;
 		}
@@ -461,8 +402,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
 	public StreamedContent getFile() {
 
-		String buffer = "<category name=\"" + nameDataModel.toUpperCase()
-				+ "\">";
+		String buffer = "<category name=\"" + nameDataModel.toUpperCase() + "\">";
 		for (JJRequirement rrr : allRequirements) {
 			String description = "";
 			StringReader strReader = new StringReader(rrr.getDescription());
@@ -476,59 +416,48 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 			}
 			if (arrList != null)
 				for (int i = 0; i < arrList.size(); ++i) {
-					description = description
-							+ ((Element) arrList.get(i)).toString();
+					description = description + ((Element) arrList.get(i)).toString();
 				}
 			else
 				description = rrr.getDescription();
 
-			description = description.replace("[", " ").replace("]", "")
-					.replace("&#39;", "'").replace("\"", "'")
-					.replace("&&", "and").replace("<", "").replace(">", "");
+			description = description.replace("[", " ").replace("]", "").replace("&#39;", "'").replace("\"", "'")
+			        .replace("&&", "and").replace("<", "").replace(">", "");
 			String note = rrr.getNote();
 			if (note != null)
-				note = note.replace("[", " ").replace("]", "")
-						.replace("&#39;", "'").replace("\"", "'")
-						.replace("&&", "and").replace("<", "").replace(">", "");
+				note = note.replace("[", " ").replace("]", "").replace("&#39;", "'").replace("\"", "'")
+				        .replace("&&", "and").replace("<", "").replace(">", "");
 
 			String chapterName = "";
 			if (rrr.getChapter() != null)
 				chapterName = rrr.getChapter().getName();
-			String s = "<requirement name=\"" + rrr.getName() + "\""
-					+ System.getProperty("line.separator") + "description=\""
-					+ description + "\"" + System.getProperty("line.separator")
-					+ "enabled=\"1\"" + System.getProperty("line.separator")
-					+ "note=\"" + note + "\""
-					+ System.getProperty("line.separator") + "chapter=\""
-					+ chapterName + "\" />";
+			String s = "<requirement name=\"" + rrr.getName() + "\"" + System.getProperty("line.separator")
+			        + "description=\"" + description + "\"" + System.getProperty("line.separator") + "enabled=\"1\""
+			        + System.getProperty("line.separator") + "note=\"" + note + "\""
+			        + System.getProperty("line.separator") + "chapter=\"" + chapterName + "\" />";
 			buffer = buffer + System.getProperty("line.separator") + s;
 		}
 		buffer = buffer + System.getProperty("line.separator") + "</category>";
 		InputStream stream = new ByteArrayInputStream(buffer.getBytes());
 
-		return new DefaultStreamedContent(stream, "xml",
-				nameDataModel.toUpperCase() + "-Spec.xml");
+		return new DefaultStreamedContent(stream, "xml", nameDataModel.toUpperCase() + "-Spec.xml");
 
 	}
 
 	public boolean checkChapter(JJRequirement req) {
 
-		boolean check = !filterChapter
-				|| (selectedChapter == null && req.getChapter() == null)
-				|| (selectedChapter != null && req.getChapter() != null && selectedChapter
-						.equals(req.getChapter()));
+		boolean check = !filterChapter || (selectedChapter == null && req.getChapter() == null)
+		        || (selectedChapter != null && req.getChapter() != null && selectedChapter.equals(req.getChapter()));
 
 		if (check)
 			return check;
 		else {
-			List<JJChapter> list = jJChapterService.getChildrenOfParentChapter(
-					selectedChapter, true, true);
+			List<JJChapter> list = jJChapterService.getChildrenOfParentChapter(selectedChapter, true, true);
 
 			int i = 0;
 			while (!check && i < list.size()) {
 				check = !filterChapter
-						|| (list.get(i) != null && req.getChapter() != null && list
-								.get(i).equals(req.getChapter()));
+				        || (list.get(i) != null && req.getChapter() != null && list.get(i).equals(req.getChapter()));
 				i++;
 			}
 
@@ -538,52 +467,40 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof CategoryDataModel) && (categoryId != 0) ? categoryId == ((CategoryDataModel) object)
-				.getCategoryId() : (object == this);
+		return (object instanceof CategoryDataModel) && (categoryId != 0)
+		        ? categoryId == ((CategoryDataModel) object).getCategoryId() : (object == this);
 	}
 
 	@Override
-	public List<JJRequirement> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJRequirement> load(int first, int pageSize, List<SortMeta> multiSortMeta,
+	        Map<String, Object> filters) {
 		List<JJRequirement> data = new ArrayList<JJRequirement>();
-		String filterValue = ((JJRequirementBean) LoginBean
-				.findBean("jJRequirementBean")).getFilterValue();
-		boolean mine = ((JJRequirementBean) LoginBean
-				.findBean("jJRequirementBean")).isMine();
-		JJRequirement viewLinkRequirement = ((JJRequirementBean) LoginBean
-				.findBean("jJRequirementBean")).getViewLinkRequirement();
+		String filterValue = ((JJRequirementBean) LoginBean.findBean("jJRequirementBean")).getFilterValue();
+		boolean mine = ((JJRequirementBean) LoginBean.findBean("jJRequirementBean")).isMine();
+		JJRequirement viewLinkRequirement = ((JJRequirementBean) LoginBean.findBean("jJRequirementBean"))
+		        .getViewLinkRequirement();
 		// String filterButton = ((JJRequirementBean) LoginBean
 		// .findBean("jJRequirementBean")).getFilterButton();
 		JJContact mineContact = null;
 		if (mine)
-			mineContact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			mineContact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		for (JJRequirement req : allRequirements) {
 			boolean match = true;
 
 			match = (filterValue == null || filterValue.isEmpty())
-					|| (req.getName().toLowerCase().contains(filterValue
-							.toLowerCase()))
-					|| ((req.getId() + "").contains(filterValue.toLowerCase()));
+			        || (req.getName().toLowerCase().contains(filterValue.toLowerCase()))
+			        || ((req.getId() + "").contains(filterValue.toLowerCase()));
 			match = match
-					&& (mineContact == null
-							|| (req.getUpdatedBy() != null && req
-									.getUpdatedBy().equals(mineContact)) || (req
-							.getCreatedBy() != null && req.getCreatedBy()
-							.equals(mineContact)));
+			        && (mineContact == null || (req.getUpdatedBy() != null && req.getUpdatedBy().equals(mineContact))
+			                || (req.getCreatedBy() != null && req.getCreatedBy().equals(mineContact)));
 
-			match = match
-					&& (viewLinkRequirement == null
-							|| (viewLinkRequirement.equals(req)) || (viewLinkRequirement
-							.getRequirementLinkDown().contains(req) || viewLinkRequirement
-							.getRequirementLinkUp().contains(req)));
+			match = match && (viewLinkRequirement == null || (viewLinkRequirement.equals(req))
+			        || (viewLinkRequirement.getRequirementLinkDown().contains(req)
+			                || viewLinkRequirement.getRequirementLinkUp().contains(req)));
 
-			match = match
-					&& ((rowStyleClassFilter == null
-							|| rowStyleClassFilter.isEmpty() || (req.getState() != null && req
-							.getState().getName()
-							.equalsIgnoreCase(rowStyleClassFilter))));
+			match = match && ((rowStyleClassFilter == null || rowStyleClassFilter.isEmpty()
+			        || (req.getState() != null && req.getState().getName().equalsIgnoreCase(rowStyleClassFilter))));
 
 			match = match && checkChapter(req);
 
@@ -595,7 +512,6 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 		// rowCount
 		int dataSize = data.size();
 		this.setRowCount(dataSize);
-		
 
 		// paginate
 		if (dataSize > pageSize) {

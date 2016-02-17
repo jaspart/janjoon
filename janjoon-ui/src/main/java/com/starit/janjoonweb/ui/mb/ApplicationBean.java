@@ -26,8 +26,7 @@ public class ApplicationBean {
 			return column;
 		}
 		final Pattern p = Pattern.compile("[A-Z][^A-Z]*");
-		final Matcher m = p.matcher(Character.toUpperCase(column.charAt(0))
-				+ column.substring(1));
+		final Matcher m = p.matcher(Character.toUpperCase(column.charAt(0)) + column.substring(1));
 		final StringBuilder builder = new StringBuilder();
 		while (m.find()) {
 			builder.append(m.group()).append(" ");
@@ -40,11 +39,9 @@ public class ApplicationBean {
 	@PostConstruct
 	public void init() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-		JJWorkflowBean jJWorkflowBean = (JJWorkflowBean) session
-				.getAttribute("jJWorkflowBean");
+		JJWorkflowBean jJWorkflowBean = (JJWorkflowBean) session.getAttribute("jJWorkflowBean");
 		if (jJWorkflowBean == null)
 			jJWorkflowBean = new JJWorkflowBean();
 

@@ -19,18 +19,16 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.util.ConnectionStatistics;
 
-public class LazyConnectionStatistiquesDataModel extends
-		LazyDataModel<ConnectionStatistics> {
+public class LazyConnectionStatistiquesDataModel extends LazyDataModel<ConnectionStatistics> {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private JJAuditLogService jJAuditLogService;
-	private JJCompany company;
+	private static final long	serialVersionUID	= 1L;
+	private JJAuditLogService	jJAuditLogService;
+	private JJCompany			company;
 
-	public LazyConnectionStatistiquesDataModel(
-			JJAuditLogService auditLogService, JJCompany company) {
+	public LazyConnectionStatistiquesDataModel(JJAuditLogService auditLogService, JJCompany company) {
 
 		this.company = company;
 
@@ -48,8 +46,7 @@ public class LazyConnectionStatistiquesDataModel extends
 	@Override
 	public ConnectionStatistics getRowData(String rowKey) {
 
-		return getConnectionStatic(jJAuditLogService.findJJAuditLog(Long
-				.parseLong(rowKey)));
+		return getConnectionStatic(jJAuditLogService.findJJAuditLog(Long.parseLong(rowKey)));
 	}
 
 	@Override
@@ -59,8 +56,8 @@ public class LazyConnectionStatistiquesDataModel extends
 	}
 
 	@Override
-	public List<ConnectionStatistics> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<ConnectionStatistics> load(int first, int pageSize, List<SortMeta> multiSortMeta,
+	        Map<String, Object> filters) {
 
 		List<ConnectionStatistics> data = new ArrayList<ConnectionStatistics>();
 		MutableInt size = new MutableInt(0);
@@ -80,19 +77,16 @@ public class LazyConnectionStatistiquesDataModel extends
 		}
 	}
 
-	public List<ConnectionStatistics> load(MutableInt size, int first,
-			int pageSize, List<SortMeta> multiSortMeta,
-			Map<String, Object> filters) {
+	public List<ConnectionStatistics> load(MutableInt size, int first, int pageSize, List<SortMeta> multiSortMeta,
+	        Map<String, Object> filters) {
 
-		List<JJAuditLog> loginLogs = jJAuditLogService.getAuditLogByObject(
-				"JJContact", null, company, ConnectionStatistics.LOGIN_OBJECT,
-				first, pageSize, size, multiSortMeta, filters);
+		List<JJAuditLog> loginLogs = jJAuditLogService.getAuditLogByObject("JJContact", null, company,
+		        ConnectionStatistics.LOGIN_OBJECT, first, pageSize, size, multiSortMeta, filters);
 		List<ConnectionStatistics> connectionStatistics = new ArrayList<ConnectionStatistics>();
 
 		for (JJAuditLog loginLog : loginLogs) {
 			ConnectionStatistics connStat = new ConnectionStatistics(loginLog,
-					jJAuditLogService.getLogoutAuditLog(loginLog.getContact(),
-							loginLog.getAuditLogDate()));
+			        jJAuditLogService.getLogoutAuditLog(loginLog.getContact(), loginLog.getAuditLogDate()));
 			if (connStat.getContact() != null)
 				connectionStatistics.add(connStat);
 		}
@@ -103,8 +97,7 @@ public class LazyConnectionStatistiquesDataModel extends
 
 	public ConnectionStatistics getConnectionStatic(JJAuditLog loginLog) {
 		ConnectionStatistics connStat = new ConnectionStatistics(loginLog,
-				jJAuditLogService.getLogoutAuditLog(loginLog.getContact(),
-						loginLog.getAuditLogDate()));
+		        jJAuditLogService.getLogoutAuditLog(loginLog.getContact(), loginLog.getAuditLogDate()));
 		return connStat;
 	}
 

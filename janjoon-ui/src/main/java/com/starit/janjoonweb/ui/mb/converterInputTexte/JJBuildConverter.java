@@ -19,8 +19,7 @@ public class JJBuildConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		return value instanceof JJBuild ? ((JJBuild) value).getName() : "";
 	}
 }

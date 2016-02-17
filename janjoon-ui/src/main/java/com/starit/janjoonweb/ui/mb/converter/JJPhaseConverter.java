@@ -11,9 +11,8 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 @RooJsfConverter(entity = JJPhase.class)
 public class JJPhaseConverter {
 
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return (value instanceof JJPhase && ((JJPhase) value).getId() != null) ? ((JJPhase) value)
-				.getId().toString() : "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return (value instanceof JJPhase && ((JJPhase) value).getId() != null) ? ((JJPhase) value).getId().toString()
+		        : "";
 	}
 }

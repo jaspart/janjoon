@@ -18,17 +18,17 @@ import com.starit.janjoonweb.domain.JJRight;
 @RooJsfManagedBean(entity = JJRight.class, beanName = "jJRightBean")
 public class JJRightBean {
 
-	private JJRight rightAdmin;
-	private List<RightDataModel> rightDataModel;
+	private JJRight					rightAdmin;
+	private List<RightDataModel>	rightDataModel;
 
-	private JJCategory category;
-	private String object;
-	private List<String> objects;
+	private JJCategory				category;
+	private String					object;
+	private List<String>			objects;
 
-	private boolean checkRight;
-	private boolean checkRights;
-	private boolean oldCheckRights;
-	private boolean disabledCheckRight;
+	private boolean					checkRight;
+	private boolean					checkRights;
+	private boolean					oldCheckRights;
+	private boolean					disabledCheckRight;
 
 	public JJRight getRightAdmin() {
 		return rightAdmin;
@@ -57,9 +57,8 @@ public class JJRightBean {
 	public List<JJCategory> getCategories() {
 
 		return jJCategoryService.getCategories(null, false, true, true,
-				((LoginBean) LoginBean.findBean("loginBean"))
-						.getAuthorisationService().isSuperAdmin() ? null
-						: LoginBean.getCompany());
+		        ((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().isSuperAdmin() ? null
+		                : LoginBean.getCompany());
 
 	}
 
@@ -133,11 +132,8 @@ public class JJRightBean {
 
 	public void addRight() {
 
-		if (((LoginBean) LoginBean.findBean("loginBean"))
-				.getAuthorisationService().isAdminCompany()
-				|| !rightAdmin.getX()
-				|| !(object.equalsIgnoreCase("*") || object
-						.equalsIgnoreCase("company"))) {
+		if (((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany()
+		        || !rightAdmin.getX() || !(object.equalsIgnoreCase("*") || object.equalsIgnoreCase("company"))) {
 			if (rightDataModel == null) {
 				rightDataModel = new ArrayList<RightDataModel>();
 			}
@@ -147,10 +143,8 @@ public class JJRightBean {
 
 			rightDataModel.add(new RightDataModel(rightAdmin, true, false));
 			newRight();
-		} else if (!((LoginBean) LoginBean.findBean("loginBean"))
-				.getAuthorisationService().isAdminCompany()) {
-			FacesMessage facesMessage = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Not Authorized", null);
+		} else if (!((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany()) {
+			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Not Authorized", null);
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -206,9 +200,9 @@ public class JJRightBean {
 
 	public class RightDataModel {
 
-		private JJRight right;
-		private boolean checkRight;
-		private boolean old;
+		private JJRight	right;
+		private boolean	checkRight;
+		private boolean	old;
 
 		public RightDataModel(JJRight right, boolean checkRight, boolean old) {
 			super();

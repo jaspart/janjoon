@@ -17,8 +17,8 @@ public class LazyCompanyDataModel extends LazyDataModel<JJCompany> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private JJCompanyService jJCompanyService;
+	private static final long	serialVersionUID	= 1L;
+	private JJCompanyService	jJCompanyService;
 
 	public LazyCompanyDataModel(JJCompanyService jJCompanyService) {
 
@@ -45,16 +45,13 @@ public class LazyCompanyDataModel extends LazyDataModel<JJCompany> {
 	}
 
 	@Override
-	public List<JJCompany> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJCompany> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		System.err.println("FIRST " + first);
 		List<JJCompany> data = new ArrayList<JJCompany>();
 		MutableInt size = new MutableInt(1);
-		if (((LoginBean) LoginBean.findBean("loginBean"))
-				.getAuthorisationService().isAdminCompany())
-			data = jJCompanyService.load(size, first, pageSize, multiSortMeta,
-					filters);
+		if (((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany())
+			data = jJCompanyService.load(size, first, pageSize, multiSortMeta, filters);
 		else
 			data.add(LoginBean.getCompany());
 

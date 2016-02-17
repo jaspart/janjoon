@@ -27,14 +27,13 @@ public class JJAuditLogBean {
 			JJCompany company = null;
 			if (!loginBean.getAuthorisationService().isAdminCompany())
 				company = LoginBean.getCompany();
-			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
-					jJAuditLogService, company);
+			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(jJAuditLogService, company);
 		}
 		return connectionStatistiquesListTable;
 	}
 
 	public void setConnectionStatistiquesListTable(
-			LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
+	        LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
 		this.connectionStatistiquesListTable = connectionStatistiquesListTable;
 	}
 

@@ -17,9 +17,7 @@ public class JJCriticityConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return value instanceof JJCriticity ? ((JJCriticity) value).getName()
-				: "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value instanceof JJCriticity ? ((JJCriticity) value).getName() : "";
 	}
 }

@@ -28,22 +28,22 @@ import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 @RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
 public class JJBuildBean {
 
-	private int index;
-	private String buildName;
-	private JJBuild build;
-	private List<JJBuild> builds;
-	private List<JJStatus> statuts;
-	private List<BuildUtil> buildUtils;
+	private int					index;
+	private String				buildName;
+	private JJBuild				build;
+	private List<JJBuild>		builds;
+	private List<JJStatus>		statuts;
+	private List<BuildUtil>		buildUtils;
 	// private List<BuildDataModel> buildDataModelList;
 
 	@Autowired
-	private JJProductService jJProductService;
+	private JJProductService	jJProductService;
 
 	@Autowired
-	private JJPhaseService jJPhaseService;
+	private JJPhaseService		jJPhaseService;
 
 	@Autowired
-	private JJStatusService jJStatusService;
+	private JJStatusService		jJStatusService;
 
 	public void setjJPhaseService(JJPhaseService jJPhaseService) {
 		this.jJPhaseService = jJPhaseService;
@@ -86,14 +86,12 @@ public class JJBuildBean {
 	}
 
 	public List<JJBuild> getBuilds() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 
 		JJVersion version = jJVersionBean.getVersion();
-		builds = jJBuildService.getBuilds(((JJProductBean) session
-				.getAttribute("jJProductBean")).getProduct(), version, true);
+		builds = jJBuildService.getBuilds(((JJProductBean) session.getAttribute("jJProductBean")).getProduct(), version,
+		        true);
 
 		return builds;
 	}
@@ -129,17 +127,13 @@ public class JJBuildBean {
 
 	public void getZipFile(JJBuild build) {
 
-		if (build.getDescription().contains("")
-				&& build.getDescription().contains(".zip")) {
+		if (build.getDescription().contains("") && build.getDescription().contains(".zip")) {
 			try {
 				String URL = build.getDescription().substring(
-						build.getDescription().indexOf("[URL]=")
-								+ "[URL]=".length(),
-						build.getDescription().indexOf(".zip")
-								+ ".zip".length());
+				        build.getDescription().indexOf("[URL]=") + "[URL]=".length(),
+				        build.getDescription().indexOf(".zip") + ".zip".length());
 
-				ExternalContext externalContext = FacesContext
-						.getCurrentInstance().getExternalContext();
+				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
 				externalContext.redirect(URL);
 			} catch (Exception e) {
@@ -157,10 +151,8 @@ public class JJBuildBean {
 		if (statuts == null)
 			statuts = jJStatusService.getStatus("Build", true, null, true);
 		for (JJStatus jJStatus : statuts) {
-			String jJStatusStr = String.valueOf(jJStatus.getName() + " "
-					+ jJStatus.getDescription() + " "
-					+ jJStatus.getCreationDate() + " "
-					+ jJStatus.getUpdatedDate());
+			String jJStatusStr = String.valueOf(jJStatus.getName() + " " + jJStatus.getDescription() + " "
+			        + jJStatus.getCreationDate() + " " + jJStatus.getUpdatedDate());
 			if (jJStatusStr.toLowerCase().contains(query.toLowerCase())) {
 				suggestions.add(jJStatus);
 			}
@@ -170,10 +162,8 @@ public class JJBuildBean {
 
 	public void changeEvent(JJBuild b, VersionDataModelUtil buildDataModel) {
 		updateJJBuild(b);
-		buildDataModel.getBuilds().set(buildDataModel.getBuilds().indexOf(b),
-				jJBuildService.findJJBuild(b.getId()));
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Build", "");
+		buildDataModel.getBuilds().set(buildDataModel.getBuilds().indexOf(b), jJBuildService.findJJBuild(b.getId()));
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Build", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -189,24 +179,19 @@ public class JJBuildBean {
 			version = jJVersionService.findJJVersion(v.getId());
 
 		if (version == null) {
-			v.setProduct(((JJProductBean) LoginBean.findBean("jJProductBean"))
-					.getProductAdmin());
-			((JJVersionBean) LoginBean.findBean("jJVersionBean"))
-					.saveJJVersion(v);
+			v.setProduct(((JJProductBean) LoginBean.findBean("jJProductBean")).getProductAdmin());
+			((JJVersionBean) LoginBean.findBean("jJVersionBean")).saveJJVersion(v);
 			version = jJVersionService.findJJVersion(v.getId());
 		}
 		long l = version.getId();
 
 		int i = BuildUtil.BuildUtil(version, buildUtils);
 		if (i == -1)
-			buildUtils.add(new BuildUtil(version, jJBuildService.getBuilds(
-					version, true, true)));
+			buildUtils.add(new BuildUtil(version, jJBuildService.getBuilds(version, true, true)));
 
-		index = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l),
-				buildUtils);
+		index = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l), buildUtils);
 		System.out.println(index + "/" + l);
-		System.out.println("size :"
-				+ buildUtils.get(index).getVersionBuilds().size());
+		System.out.println("size :" + buildUtils.get(index).getVersionBuilds().size());
 
 	}
 
@@ -217,24 +202,19 @@ public class JJBuildBean {
 
 	public void updateVersionBuilds(long id) {
 
-		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(id),
-				buildUtils);
+		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(id), buildUtils);
 		BuildUtil buildutil = buildUtils.get(i);
 		buildutil.updateVersionBuilds(this);
-		buildUtils.set(
-				i,
-				new BuildUtil(buildutil.getVersion(), jJBuildService.getBuilds(
-						buildutil.getVersion(), true, true)));
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Version", "e");
+		buildUtils.set(i,
+		        new BuildUtil(buildutil.getVersion(), jJBuildService.getBuilds(buildutil.getVersion(), true, true)));
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Version", "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 
 	public void addBuild(Long l) {
 
-		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l),
-				buildUtils);
+		int i = BuildUtil.BuildUtil(jJVersionService.findJJVersion(l), buildUtils);
 		BuildUtil buildUtil = buildUtils.get(i);
 		JJVersion version = buildUtil.getVersion();
 		JJBuild b = new JJBuild();
@@ -245,20 +225,14 @@ public class JJBuildBean {
 
 		if (saveJJBuild(b)) {
 			buildName = null;
-			buildUtils.set(
-					i,
-					new BuildUtil(version, jJBuildService.getBuilds(version,
-							true, true)));
+			buildUtils.set(i, new BuildUtil(version, jJBuildService.getBuilds(version, true, true)));
 
 			index = i;
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_created", "Build", "");
+			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_created", "Build", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nom Exist",
-							"Build"));
+			FacesContext.getCurrentInstance().addMessage(null,
+			        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nom Exist", "Build"));
 		}
 
 	}
@@ -315,25 +289,21 @@ public class JJBuildBean {
 	public boolean updateJJBuild(JJBuild b) {
 
 		if (b.getVersion() == null) {
-			JJContact contact = ((LoginBean) ((HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false)).getAttribute("loginBean")).getContact();
+			JJContact contact = ((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false)).getAttribute("loginBean")).getContact();
 			b.setUpdatedBy(contact);
 			b.setUpdatedDate(new Date());
 			jJBuildService.updateJJBuild(b);
 			return true;
 
 		} else {
-			JJBuild buil = jJBuildService.getBuildByName(b.getVersion(),
-					b.getName());
+			JJBuild buil = jJBuildService.getBuildByName(b.getVersion(), b.getName());
 
 			if (buil != null) {
 				if (buil.getId().equals(b.getId())) {
 
-					JJContact contact = ((LoginBean) ((HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false)).getAttribute("loginBean"))
-							.getContact();
+					JJContact contact = ((LoginBean) ((HttpSession) FacesContext.getCurrentInstance()
+					        .getExternalContext().getSession(false)).getAttribute("loginBean")).getContact();
 					b.setUpdatedBy(contact);
 					b.setUpdatedDate(new Date());
 					jJBuildService.updateJJBuild(b);
@@ -342,10 +312,8 @@ public class JJBuildBean {
 					return false;
 
 			} else {
-				JJContact contact = ((LoginBean) ((HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false)).getAttribute("loginBean"))
-						.getContact();
+				JJContact contact = ((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false)).getAttribute("loginBean")).getContact();
 				b.setUpdatedBy(contact);
 				b.setUpdatedDate(new Date());
 				jJBuildService.updateJJBuild(b);
@@ -359,9 +327,8 @@ public class JJBuildBean {
 
 		if (!buildNameExist(b.getName(), b.getVersion())) {
 			b.setCreationDate(new Date());
-			JJContact contact = ((LoginBean) ((HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false)).getAttribute("loginBean")).getContact();
+			JJContact contact = ((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false)).getAttribute("loginBean")).getContact();
 			b.setCreatedBy(contact);
 			jJBuildService.saveJJBuild(b);
 			return true;

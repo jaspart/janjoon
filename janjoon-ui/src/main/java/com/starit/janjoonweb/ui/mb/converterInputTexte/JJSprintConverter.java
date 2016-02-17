@@ -17,8 +17,7 @@ public class JJSprintConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		return value instanceof JJSprint ? ((JJSprint) value).getName() : "";
 	}
 }

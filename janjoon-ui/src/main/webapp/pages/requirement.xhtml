@@ -117,9 +117,7 @@
 													<h:panelGroup layout="block" styleClass="ContainerIndent">
 														<p:commandButton
 															actionListener="#{requirementBean.onrate}" id="rate"
-															rendered="#{requirementBean.requirement != null}"
-															onstart="PF('blockUIWidget').block()"
-															oncomplete="PF('blockUIWidget').unblock()"
+															rendered="#{requirementBean.requirement != null}"															
 															title="#{!requirementBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}"
 															styleClass="GrayButton"
 															icon="fa fa-star Fs20 #{requirementBean.rated ? 'Yellow' : 'BoldGray'}"
@@ -144,8 +142,7 @@
 															update=":chapterDialogPanel"
 															disabled="#{jJChapterBean.disabledChapter or jJProjectBean.project == null or requirementBean.category == null}"
 															actionListener="#{jJChapterBean.loadData(requirementBean.category.id)}"
-															onstart="PF('blockUIWidget').block()"
-															oncomplete="PF('blockUIWidget').unblock();PF('chapterDialogWidget').show()" />
+															oncomplete="PF('chapterDialogWidget').show()" />
 													</h:panelGroup>
 												</h:panelGroup>
 												<h:panelGroup layout="block" styleClass="Container20">
@@ -156,8 +153,7 @@
 															disabled="#{jJRequirementBean.disabledRequirement or !loginBean.authorisationService.wRequiement or requirementBean.category == null}"
 															actionListener="#{jJRequirementBean.newRequirement(requirementBean.category.id)}"
 															update=":requirementDialogPanel :requirementDialogHeader"
-															resetValues="true" onstart="PF('blockUIWidget').block()"
-															oncomplete="PF('blockUIWidget').unblock();PF('requirementDialogWidget').show()" />
+															resetValues="true" oncomplete="PF('requirementDialogWidget').show()" />
 													</h:panelGroup>
 												</h:panelGroup>
 
@@ -174,11 +170,8 @@
 														<f:selectItems value="#{requirementBean.categories}"
 															var="cat" itemLabel="#{loginBean.checkMessage(cat)}"
 															itemValue="#{cat}" />
-														<p:ajax onstart="PF('blockUIWidget').block()"
-															event="change"
-															listener="#{requirementBean.categorySelectionChanged}"
-															update=":treeForm"
-															oncomplete="PF('blockUIWidget').unblock();" />
+														<p:ajax event="change" listener="#{requirementBean.categorySelectionChanged}"
+															update=":treeForm" />
 
 													</p:selectOneMenu>
 												</h:panelGroup>
@@ -202,10 +195,7 @@
 												var="node" selectionMode="single"
 												styleClass="reqTree Container99"
 												selection="#{requirementBean.selectedNode}" dynamic="true">
-												<p:ajax event="select"
-													listener="#{requirementBean.onNodeSelect}"
-													onstart="PF('blockUIWidget').block()"
-													oncomplete="PF('blockUIWidget').unblock()" />
+												<p:ajax event="select"	listener="#{requirementBean.onNodeSelect}" />
 
 												<p:treeNode type="projet">
 
@@ -372,11 +362,8 @@
 									<h:panelGroup layout="block"
 										styleClass="Container50 Responsive50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
-											<p:commandButton onstart="PF('blockUIWidget').block()"
-												action="#{requirementBean.save(jJRequirementBean)}"
-												oncomplete="PF('blockUIWidget').unblock()"
-												update=":growlForm"
-												value="#{messages.specification_create_save_button}" />
+											<p:commandButton action="#{requirementBean.save(jJRequirementBean)}"												
+												update=":growlForm" value="#{messages.specification_create_save_button}" />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block"
@@ -422,8 +409,7 @@
 												<p:commandButton id="createButton" style="width: 100%;"
 													icon="fa fa-plus-square Fs20" resetValues="true"
 													actionListener="#{requirementBean.loadData(categorieRequirement)}"
-													onstart="PF('blockUIWidget').block()" update=":linkForm"
-													oncomplete="PF('blockUIWidget').unblock();PF('linkDialogWidget').show()" />
+													update=":linkForm" oncomplete="PF('linkDialogWidget').show()" />
 												<h:outputText
 													value="#{loginBean.checkMessage(categorieRequirement.category)}" />
 											</f:facet>
@@ -491,8 +477,7 @@
 
 
 							<f:facet name="footer">
-								<p:commandButton onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()" id="update"
+								<p:commandButton id="update"
 									disabled="#{empty requirementBean.reqtestCases}"
 									update="testCaseDataTable :growlForm"
 									value="#{messages.label_update}" process="testCaseDataTable"
@@ -505,9 +490,7 @@
 									<f:validateLength maximum="100" />
 									<p:ajax event="keyup" update="addTestCase" />
 								</p:inputText>
-								<p:commandButton id="addTestCase"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
+								<p:commandButton id="addTestCase"									
 									style="font-size: 1.0em !important;float:right;top: -3px;"
 									update="@form :growlForm"
 									disabled="#{empty requirementBean.testCaseName}"
@@ -553,9 +536,7 @@
 			modal="true" widgetVar="linkDialogWidget" dynamic="true"
 			resizable="false">
 			<p:ajax event="close" update=":linkForm"
-				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();updateTree()"
-				listener="#{requirementBean.closeLinkDialog}" />
+				oncomplete="updateTree()" listener="#{requirementBean.closeLinkDialog}" />
 			<p:outputPanel>
 				<pe:blockUI widgetVar="requirementBlockUIWidget"
 					target="requirementDialogPanel">
@@ -596,9 +577,8 @@
 			responsive="true" header="#{messages.specification_chapter_header}"
 			modal="true" widgetVar="chapterDialogWidget" dynamic="true"
 			resizable="false">
-			<p:ajax event="close" update=":treeForm"
-				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();updateTree();"
+			<p:ajax event="close" update=":treeForm"				
+				oncomplete="updateTree();"
 				listener="#{jJChapterBean.closeDialog}" />
 			<p:outputPanel id="chapterDialogPanel">
 				<ui:include src="chapterDialog.xhtml" />

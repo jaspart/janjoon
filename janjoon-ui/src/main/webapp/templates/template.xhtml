@@ -107,14 +107,14 @@
 
 					</h:panelGrid>
 
-					<pe:blockUI widgetVar="blockUIWidget">
-						<h:panelGrid columns="2">
-							<p:graphicImage name="images/preloader.gif" library="rioLayout"
-								style="vertical-align: middle;" />
-							<h:outputText value="#{messages.label_refresh}"
-								style="white-space: nowrap;" />
-						</h:panelGrid>
-					</pe:blockUI>		
+<!-- 					<pe:blockUI widgetVar="blockUIWidget"> -->
+<!-- 						<h:panelGrid columns="2"> -->
+<!-- 							<p:graphicImage name="images/preloader.gif" library="rioLayout" -->
+<!-- 								style="vertical-align: middle;" /> -->
+<!-- 							<h:outputText value="#{messages.label_refresh}" -->
+<!-- 								style="white-space: nowrap;" /> -->
+<!-- 						</h:panelGrid> -->
+<!-- 					</pe:blockUI>		 -->
 				</h:panelGroup>
 				
 				<p:dialog modal="true" widgetVar="progressDialog" header="Status"
@@ -124,12 +124,11 @@
 						style="vertical-align: middle;" />
 				</p:dialog>
 				
-				<p:ajaxStatus
+				<p:ajaxStatus 
 					style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
 					<f:facet name="start">
 						<p:graphicImage name="images/preloader.gif" library="rioLayout" />
 					</f:facet>
-
 					<f:facet name="complete">
 						<h:outputText value="" />
 					</f:facet>

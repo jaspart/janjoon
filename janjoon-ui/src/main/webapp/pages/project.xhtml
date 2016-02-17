@@ -190,9 +190,7 @@
 					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:commandButton id="viewCloseButton" styleClass="GrayButton"
-								value="#{messages.label_cancel}"
-								oncomplete="PF('blockUIWidget').unblock()"
-								onstart="PF('blockUIWidget').block()"
+								value="#{messages.label_cancel}"								
 								onclick="PF('restoreProjectDialogWidget').hide()" type="button" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -320,8 +318,6 @@
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:commandButton id="viewCloseButton" styleClass="GrayButton"
 							value="#{messages.label_cancel}"
-							oncomplete="PF('blockUIWidget').unblock()"
-							onstart="PF('blockUIWidget').block()"
 							onclick="PF('projectDialogWidget').hide()" type="button" />
 					</h:panelGroup>
 				</h:panelGroup>

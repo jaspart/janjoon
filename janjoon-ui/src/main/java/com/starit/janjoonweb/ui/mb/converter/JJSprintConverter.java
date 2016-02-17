@@ -11,9 +11,8 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 @RooJsfConverter(entity = JJSprint.class)
 public class JJSprintConverter {
 
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return (value instanceof JJSprint && ((JJSprint) value).getId() != null) ? ((JJSprint) value)
-				.getId().toString() : "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return (value instanceof JJSprint && ((JJSprint) value).getId() != null) ? ((JJSprint) value).getId().toString()
+		        : "";
 	}
 }

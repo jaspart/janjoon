@@ -59,46 +59,46 @@ import com.starit.janjoonweb.ui.mb.util.service.TreeOperation;
 @Component("jJDevelopment")
 public class DevelopmentBean implements Serializable {
 
-	static Logger logger = Logger.getLogger("DevelopmentBean");
-	private static final long serialVersionUID = 1L;
-	private boolean render;
+	static Logger					logger				= Logger.getLogger("DevelopmentBean");
+	private static final long		serialVersionUID	= 1L;
+	private boolean					render;
 
 	@Autowired
-	private JJStatusService jJStatusService;
+	private JJStatusService			jJStatusService;
 
-	private JJConfigurationService jJConfigurationService;
+	private JJConfigurationService	jJConfigurationService;
 
-	private JJTaskBean jJTaskBean;
-
-	@Autowired
-	private JJTaskService jJTaskService;
+	private JJTaskBean				jJTaskBean;
 
 	@Autowired
-	private JJMessageService jJMessageService;
+	private JJTaskService			jJTaskService;
 
 	@Autowired
-	private JJCriticityService jJCriticityService;
+	private JJMessageService		jJMessageService;
 
-	private boolean init;
-	private AbstractConfigManager configManager;
-	private TreeOperation treeOperation;
-	private String type;
-	private int activeTabIndex;
-	private TreeNode tree;
-	private TreeNode selectedTree;
-	private ArrayList<FileMap> files;
-	private String comment;
-	private JJProject project;
-	private JJProduct product;
-	private JJVersion version;
-	private JJContact contact;
-	private JJConfiguration configuration;
-	private List<JJTask> tasks;
-	private boolean check;
-	private JJTask task;
-	private int fileIndex;
-	private String createdFileName;
-	private boolean fileOrFolder = true;
+	@Autowired
+	private JJCriticityService		jJCriticityService;
+
+	private boolean					init;
+	private AbstractConfigManager	configManager;
+	private TreeOperation			treeOperation;
+	private String					type;
+	private int						activeTabIndex;
+	private TreeNode				tree;
+	private TreeNode				selectedTree;
+	private ArrayList<FileMap>		files;
+	private String					comment;
+	private JJProject				project;
+	private JJProduct				product;
+	private JJVersion				version;
+	private JJContact				contact;
+	private JJConfiguration			configuration;
+	private List<JJTask>			tasks;
+	private boolean					check;
+	private JJTask					task;
+	private int						fileIndex;
+	private String					createdFileName;
+	private boolean					fileOrFolder		= true;
 
 	public boolean isInit() {
 		return init;
@@ -108,8 +108,7 @@ public class DevelopmentBean implements Serializable {
 		this.init = init;
 	}
 
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -135,10 +134,8 @@ public class DevelopmentBean implements Serializable {
 
 	public DevelopmentBean() throws FileNotFoundException, IOException {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJConfigurationBean configurationBean = (JJConfigurationBean) session
-				.getAttribute("jJConfigurationBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJConfigurationBean configurationBean = (JJConfigurationBean) session.getAttribute("jJConfigurationBean");
 		if (configurationBean == null)
 			configurationBean = new JJConfigurationBean();
 		jJConfigurationService = configurationBean.getJjConfigurationService();
@@ -149,9 +146,8 @@ public class DevelopmentBean implements Serializable {
 	public DevelopmentBean(DevelopmentBean devBean) {
 
 		if (jJTaskBean == null) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
 			if (jJTaskBean == null)
 				jJTaskBean = new JJTaskBean();
@@ -167,8 +163,7 @@ public class DevelopmentBean implements Serializable {
 
 	public void initJJDevlopment() throws FileNotFoundException, IOException {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
 		if (jJTaskBean == null)
 			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
@@ -182,11 +177,9 @@ public class DevelopmentBean implements Serializable {
 		product = LoginBean.getProduct();
 		project = LoginBean.getProject();
 
-		configuration = jJConfigurationService.getConfigurations(
-				"ConfigurationManager", null, true).get(0);
+		configuration = jJConfigurationService.getConfigurations("ConfigurationManager", null, true).get(0);
 
-		if (configuration != null && getConfigManager() != null
-				&& version != null && product != null) {
+		if (configuration != null && getConfigManager() != null && version != null && product != null) {
 			long t = System.currentTimeMillis();
 			render = true;
 			treeOperation = new TreeOperation(configManager);
@@ -199,13 +192,12 @@ public class DevelopmentBean implements Serializable {
 
 			}
 			if (selectedTree != null && selectedTree.getData() instanceof File
-					&& ((File) selectedTree.getData()).isFile()) {
+			        && ((File) selectedTree.getData()).isFile()) {
 				File file = (File) selectedTree.getData();
 				files = new ArrayList<FileMap>();
 				try (FileInputStream inputStream = new FileInputStream(file)) {
 					String fileTexte = IOUtils.toString(inputStream);
-					FileMap filemap = new FileMap(file.getName(), fileTexte,
-							file);
+					FileMap filemap = new FileMap(file.getName(), fileTexte, file);
 					files.add(filemap);
 				}
 				selectedTree = null;
@@ -227,19 +219,16 @@ public class DevelopmentBean implements Serializable {
 
 				}
 			}
-			FacesMessage facesMessage = MessageFactory.getMessage(growlMessage,
-					FacesMessage.SEVERITY_ERROR, "");
+			FacesMessage facesMessage = MessageFactory.getMessage(growlMessage, FacesMessage.SEVERITY_ERROR, "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 	}
 
 	public void reloadRepository() throws FileNotFoundException, IOException {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-		if (!(product == LoginBean.getProduct() && version == LoginBean
-				.getVersion())) {
+		if (!(product == LoginBean.getProduct() && version == LoginBean.getVersion())) {
 
 			version = LoginBean.getVersion();
 
@@ -259,27 +248,21 @@ public class DevelopmentBean implements Serializable {
 
 					}
 				}
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						growlMessage, FacesMessage.SEVERITY_ERROR, "");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesMessage facesMessage = MessageFactory.getMessage(growlMessage, FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 			}
 		} else {
 
 			if (project != LoginBean.getProject()) {
-				DevelopmentBean jJDevelopment = (DevelopmentBean) session
-						.getAttribute("jJDevelopment");
-				jJDevelopment.setTasks(jJTaskService.getTasksByProduct(
-						LoginBean.getProduct(), LoginBean.getProject()));
+				DevelopmentBean jJDevelopment = (DevelopmentBean) session.getAttribute("jJDevelopment");
+				jJDevelopment.setTasks(jJTaskService.getTasksByProduct(LoginBean.getProduct(), LoginBean.getProject()));
 				jJDevelopment.setTask(null);
 			}
 			if (!render) {
 				String growlMessage = "dev.notAvailableProduct.label";
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						growlMessage, FacesMessage.SEVERITY_ERROR, "");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesMessage facesMessage = MessageFactory.getMessage(growlMessage, FacesMessage.SEVERITY_ERROR, "");
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 		}
 
@@ -288,53 +271,40 @@ public class DevelopmentBean implements Serializable {
 	public AbstractConfigManager getConfigManager() {
 
 		long t = System.currentTimeMillis();
-		if (configuration.getParam().equalsIgnoreCase("git") && product != null
-				&& version != null) {
+		if (configuration.getParam().equalsIgnoreCase("git") && product != null && version != null) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 
-			String url = configuration.getVal()
-					+ product.getName().replace(" ", "-") + ".git";
+			String url = configuration.getVal() + product.getName().replace(" ", "-") + ".git";
 			if (testUrl(url)) {
 				try {
 					configManager = new GitConfigManager(1, contact.getName(),
-							(String) session.getAttribute("password"));
-					String path = System.getProperty("user.home")
-							+ File.separator + "git" + File.separator
-							+ contact.getName() + File.separator;
+					        (String) session.getAttribute("password"));
+					String path = System.getProperty("user.home") + File.separator + "git" + File.separator
+					        + contact.getName() + File.separator;
 
-					path = configManager.cloneRemoteRepository(url,
-							product.getName(), path);
-					if (path != null
-							&& !path.equalsIgnoreCase("InvalidRemoteException")
-							&& !path.equalsIgnoreCase("TransportException")) {
-						configManager = new GitConfigManager(url, path,
-								contact.getName(),
-								(String) session.getAttribute("password"));
+					path = configManager.cloneRemoteRepository(url, product.getName(), path);
+					if (path != null && !path.equalsIgnoreCase("InvalidRemoteException")
+					        && !path.equalsIgnoreCase("TransportException")) {
+						configManager = new GitConfigManager(url, path, contact.getName(),
+						        (String) session.getAttribute("password"));
 
 					} else if (path == null) {
-						path = System.getProperty("user.home") + File.separator
-								+ "git" + File.separator + contact.getName()
-								+ File.separator + product.getName()
-								+ File.separator;
-						configManager = new GitConfigManager(url, path,
-								contact.getName(),
-								(String) session.getAttribute("password"));
+						path = System.getProperty("user.home") + File.separator + "git" + File.separator
+						        + contact.getName() + File.separator + product.getName() + File.separator;
+						configManager = new GitConfigManager(url, path, contact.getName(),
+						        (String) session.getAttribute("password"));
 
 					} else {
 						configManager = null;
 
 					}
 				} catch (JGitInternalException e) {
-					String path = System.getProperty("user.home")
-							+ File.separator + "git" + File.separator
-							+ contact.getName() + File.separator
-							+ product.getName() + File.separator;
-					configManager = new GitConfigManager(url, path,
-							contact.getName(),
-							(String) session.getAttribute("password"));
+					String path = System.getProperty("user.home") + File.separator + "git" + File.separator
+					        + contact.getName() + File.separator + product.getName() + File.separator;
+					configManager = new GitConfigManager(url, path, contact.getName(),
+					        (String) session.getAttribute("password"));
 
 				}
 			} else {
@@ -343,22 +313,15 @@ public class DevelopmentBean implements Serializable {
 
 			}
 
-		} else if (configuration.getParam().equalsIgnoreCase("svn")
-				&& product != null && version != null) {
+		} else if (configuration.getParam().equalsIgnoreCase("svn") && product != null && version != null) {
 
-			String path = System.getProperty("user.home") + File.separator
-					+ "svn" + File.separator + contact.getName()
-					+ File.separator;
-			configManager = new SvnConfigManager("",
-					"https://svn.riouxsvn.com/testchemakh", path, "chemakh",
-					"taraji0000", product.getName(), version.getName());
-			logger.error("SvnConfigManager ="
-					+ (System.currentTimeMillis() - t));
-			configManager
-					.cloneRemoteRepository(
-							"https://svn.riouxsvn.com/testchemakh/"
-									+ product.getName(), product.getName(),
-							path);
+			String path = System.getProperty("user.home") + File.separator + "svn" + File.separator + contact.getName()
+			        + File.separator;
+			configManager = new SvnConfigManager("", "https://svn.riouxsvn.com/testchemakh", path, "chemakh",
+			        "taraji0000", product.getName(), version.getName());
+			logger.error("SvnConfigManager =" + (System.currentTimeMillis() - t));
+			configManager.cloneRemoteRepository("https://svn.riouxsvn.com/testchemakh/" + product.getName(),
+			        product.getName(), path);
 
 		} else
 			configManager = null;
@@ -554,11 +517,11 @@ public class DevelopmentBean implements Serializable {
 
 			}
 
-			growlMessage = MessageFactory.getMessage("dev.updateToHead.label",
-					FacesMessage.SEVERITY_INFO, configManager.getUrl());
+			growlMessage = MessageFactory.getMessage("dev.updateToHead.label", FacesMessage.SEVERITY_INFO,
+			        configManager.getUrl());
 		} else {
-			growlMessage = MessageFactory.getMessage("dev.errorSynchro.label",
-					FacesMessage.SEVERITY_ERROR, configManager.getUrl());
+			growlMessage = MessageFactory.getMessage("dev.errorSynchro.label", FacesMessage.SEVERITY_ERROR,
+			        configManager.getUrl());
 
 		}
 		FacesContext.getCurrentInstance().addMessage(null, growlMessage);
@@ -590,11 +553,9 @@ public class DevelopmentBean implements Serializable {
 		message.setVersioning(version);
 		message.setEnabled(true);
 		message.setTask(task);
-		message.setCriticity(jJCriticityService
-				.getCriticityByName("INFO", true));
+		message.setCriticity(jJCriticityService.getCriticityByName("INFO", true));
 		message.setMessage(comment);
-		message.setDescription("Message For" + task.getName() + "nl"
-				+ task.getDescription());
+		message.setDescription("Message For" + task.getName() + "nl" + task.getDescription());
 		message.setName("Message For" + task.getName());
 		saveJJMessage(message);
 
@@ -608,25 +569,18 @@ public class DevelopmentBean implements Serializable {
 		}
 
 		jJTaskBean.saveJJTask(task, false, new MutableInt(0));
-		if (task.getSprint() != null
-				&& LoginBean.findBean("jJSprintBean") != null) {
-			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
-					.findBean("jJSprintBean");
+		if (task.getSprint() != null && LoginBean.findBean("jJSprintBean") != null) {
+			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
 			if (jJSprintBean.contains(task.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
-						.getId(), jJSprintBean.getSprintList());
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintBean.getJJSprintService()
-							.findJJSprint(task.getSprint().getId()),
-							jJTaskService.getSprintTasks(
-									jJSprintBean.getJJSprintService()
-											.findJJSprint(
-													task.getSprint().getId()),
-									LoginBean.getProduct()),
-							jJSprintBean.getJJContactService(), jJTaskService);
+					s = new SprintUtil(jJSprintBean.getJJSprintService().findJJSprint(task.getSprint().getId()),
+					        jJTaskService.getSprintTasks(
+					                jJSprintBean.getJJSprintService().findJJSprint(task.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJSprintBean.getJJContactService(), jJTaskService);
 					// sprintUtil.setRenderTaskForm(false);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 
@@ -634,21 +588,17 @@ public class DevelopmentBean implements Serializable {
 
 		FacesMessage growlMessage = null;
 
-		if (configManager.checkIn(null, task.getId() + ":" + task.getName()
-				+ " : " + comment)) {
-			FacesMessage commitMessage = MessageFactory.getMessage(
-					"dev.commitSuccess.label", FacesMessage.SEVERITY_INFO, "");
+		if (configManager.checkIn(null, task.getId() + ":" + task.getName() + " : " + comment)) {
+			FacesMessage commitMessage = MessageFactory.getMessage("dev.commitSuccess.label",
+			        FacesMessage.SEVERITY_INFO, "");
 			FacesContext.getCurrentInstance().addMessage(null, commitMessage);
-			if (configManager.getType().equalsIgnoreCase("git")
-					&& configManager.pushRepository()) {
-				growlMessage = MessageFactory.getMessage(
-						"dev.pushSucces.label", FacesMessage.SEVERITY_INFO, "");
+			if (configManager.getType().equalsIgnoreCase("git") && configManager.pushRepository()) {
+				growlMessage = MessageFactory.getMessage("dev.pushSucces.label", FacesMessage.SEVERITY_INFO, "");
 
 				comment = "";
 				task = null;
 			} else if (configManager.getType().equalsIgnoreCase("git")) {
-				growlMessage = MessageFactory.getMessage("dev.pushError.label",
-						FacesMessage.SEVERITY_ERROR, "");
+				growlMessage = MessageFactory.getMessage("dev.pushError.label", FacesMessage.SEVERITY_ERROR, "");
 			} else {
 				comment = null;
 				task = null;
@@ -656,8 +606,7 @@ public class DevelopmentBean implements Serializable {
 
 		} else {
 
-			growlMessage = MessageFactory.getMessage("dev.commitError.label",
-					FacesMessage.SEVERITY_ERROR, "");
+			growlMessage = MessageFactory.getMessage("dev.commitError.label", FacesMessage.SEVERITY_ERROR, "");
 
 		}
 		if (growlMessage != null)
@@ -697,8 +646,7 @@ public class DevelopmentBean implements Serializable {
 				try (FileInputStream inputStream = new FileInputStream(file)) {
 
 					String fileTexte = IOUtils.toString(inputStream);
-					FileMap filemap = new FileMap(file.getName(), fileTexte,
-							file);
+					FileMap filemap = new FileMap(file.getName(), fileTexte, file);
 					files.add(filemap);
 					i = contains(file);
 					filemap.setIndex(i);
@@ -712,20 +660,16 @@ public class DevelopmentBean implements Serializable {
 				}
 			}
 			activeTabIndex = i;
-			RequestContext.getCurrentInstance().execute(
-					"PF('fileTabview').select(" + activeTabIndex + ");");
+			RequestContext.getCurrentInstance().execute("PF('fileTabview').select(" + activeTabIndex + ");");
 
 		}
 
 	}
 
-	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event)
-			throws InterruptedException, IOException {
+	public void valueChangeHandlerCodeMirror(AjaxBehaviorEvent event) throws InterruptedException, IOException {
 
-		CodeMirror cm = (CodeMirror) event.getComponent().getAttributes()
-				.get("cm");
-		FileInputStream inputStream = new FileInputStream(files.get(
-				activeTabIndex).getFile());
+		CodeMirror cm = (CodeMirror) event.getComponent().getAttributes().get("cm");
+		FileInputStream inputStream = new FileInputStream(files.get(activeTabIndex).getFile());
 
 		String fileTexte = IOUtils.toString(inputStream);
 		String cmValue = cm.getValue().toString();
@@ -769,8 +713,7 @@ public class DevelopmentBean implements Serializable {
 		int i = 0;
 		int j = -1;
 		while (i < files.size()) {
-			if (files.get(i).getFile().getAbsolutePath()
-					.equalsIgnoreCase(f.getAbsolutePath())) {
+			if (files.get(i).getFile().getAbsolutePath().equalsIgnoreCase(f.getAbsolutePath())) {
 				j = i;
 				i = files.size();
 			} else
@@ -792,9 +735,8 @@ public class DevelopmentBean implements Serializable {
 		if (i != -1) {
 			updatetabView(i, files.get(i));
 		}
-		FacesMessage msg = MessageFactory.getMessage(
-				"dev.file_successfully_deleted", FacesMessage.SEVERITY_INFO,
-				f.getName());
+		FacesMessage msg = MessageFactory.getMessage("dev.file_successfully_deleted", FacesMessage.SEVERITY_INFO,
+		        f.getName());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
@@ -802,10 +744,8 @@ public class DevelopmentBean implements Serializable {
 	private void saveFiles(File f) throws IOException {
 		if (!f.isDirectory()) {
 			FileMap fMap = new FileMap(f.getName(), null, f);
-			if (files.contains(fMap)
-					&& files.get(files.indexOf(fMap)).isChange()) {
-				configManager.setFileTexte(f, files.get(files.indexOf(fMap))
-						.getTexte());
+			if (files.contains(fMap) && files.get(files.indexOf(fMap)).isChange()) {
+				configManager.setFileTexte(f, files.get(files.indexOf(fMap)).getTexte());
 			}
 		} else {
 			if (f.list().length != 0) {
@@ -827,16 +767,14 @@ public class DevelopmentBean implements Serializable {
 
 		configManager.checkIn(f, "commitFile" + f.getName());
 
-		FacesMessage msg = MessageFactory.getMessage(
-				"dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,
-				f.getName());
+		FacesMessage msg = MessageFactory.getMessage("dev.file_successfully_commited", FacesMessage.SEVERITY_INFO,
+		        f.getName());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
 	public void saveFile() {
 
-		configManager.setFileTexte(files.get(fileIndex).getFile(),
-				files.get(fileIndex).getTexte());
+		configManager.setFileTexte(files.get(fileIndex).getFile(), files.get(fileIndex).getTexte());
 		updatetabView(fileIndex, files.get(fileIndex));
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('saveFileDialogWidget').hide()");
@@ -861,67 +799,51 @@ public class DevelopmentBean implements Serializable {
 		FacesMessage msg = null;
 		if (selectedTree != null) {
 			if (fileOrFolder) {
-				if (treeOperation.addFile(version.getName(),
-						(File) selectedTree.getData(), createdFileName)) {
-					msg = MessageFactory.getMessage(
-							"dev.file_successfully_created",
-							FacesMessage.SEVERITY_INFO, createdFileName);
-					tree = configManager.listRepositoryContent(version
-							.getName());
+				if (treeOperation.addFile(version.getName(), (File) selectedTree.getData(), createdFileName)) {
+					msg = MessageFactory.getMessage("dev.file_successfully_created", FacesMessage.SEVERITY_INFO,
+					        createdFileName);
+					tree = configManager.listRepositoryContent(version.getName());
 
 				} else {
-					msg = MessageFactory.getMessage(
-							"dev.file_unsuccessfully_created",
-							FacesMessage.SEVERITY_ERROR, createdFileName);
+					msg = MessageFactory.getMessage("dev.file_unsuccessfully_created", FacesMessage.SEVERITY_ERROR,
+					        createdFileName);
 
 				}
 
 			} else {
-				if (treeOperation.addFolder(version.getName(),
-						(File) selectedTree.getData(), createdFileName)) {
-					msg = MessageFactory.getMessage(
-							"dev.file_successfully_created",
-							FacesMessage.SEVERITY_INFO, createdFileName);
-					tree = configManager.listRepositoryContent(version
-							.getName());
+				if (treeOperation.addFolder(version.getName(), (File) selectedTree.getData(), createdFileName)) {
+					msg = MessageFactory.getMessage("dev.file_successfully_created", FacesMessage.SEVERITY_INFO,
+					        createdFileName);
+					tree = configManager.listRepositoryContent(version.getName());
 
 				} else {
-					msg = MessageFactory.getMessage(
-							"dev.file_unsuccessfully_created",
-							FacesMessage.SEVERITY_ERROR, createdFileName);
+					msg = MessageFactory.getMessage("dev.file_unsuccessfully_created", FacesMessage.SEVERITY_ERROR,
+					        createdFileName);
 				}
 			}
 
 		} else {
 			if (fileOrFolder) {
-				if (treeOperation.addFile(version.getName(), null,
-						createdFileName)) {
-					msg = MessageFactory.getMessage(
-							"dev.file_successfully_created",
-							FacesMessage.SEVERITY_INFO, createdFileName);
-					tree = configManager.listRepositoryContent(version
-							.getName());
+				if (treeOperation.addFile(version.getName(), null, createdFileName)) {
+					msg = MessageFactory.getMessage("dev.file_successfully_created", FacesMessage.SEVERITY_INFO,
+					        createdFileName);
+					tree = configManager.listRepositoryContent(version.getName());
 
 				} else {
-					msg = MessageFactory.getMessage(
-							"dev.file_unsuccessfully_created",
-							FacesMessage.SEVERITY_ERROR, createdFileName);
+					msg = MessageFactory.getMessage("dev.file_unsuccessfully_created", FacesMessage.SEVERITY_ERROR,
+					        createdFileName);
 
 				}
 
 			} else {
-				if (treeOperation.addFolder(version.getName(), null,
-						createdFileName)) {
-					msg = MessageFactory.getMessage(
-							"dev.file_successfully_created",
-							FacesMessage.SEVERITY_INFO, createdFileName);
-					tree = configManager.listRepositoryContent(version
-							.getName());
+				if (treeOperation.addFolder(version.getName(), null, createdFileName)) {
+					msg = MessageFactory.getMessage("dev.file_successfully_created", FacesMessage.SEVERITY_INFO,
+					        createdFileName);
+					tree = configManager.listRepositoryContent(version.getName());
 
 				} else {
-					msg = MessageFactory.getMessage(
-							"dev.file_unsuccessfully_created",
-							FacesMessage.SEVERITY_ERROR, createdFileName);
+					msg = MessageFactory.getMessage("dev.file_unsuccessfully_created", FacesMessage.SEVERITY_ERROR,
+					        createdFileName);
 
 				}
 			}
@@ -939,35 +861,27 @@ public class DevelopmentBean implements Serializable {
 		try {
 			boolean upload;
 			if (selectedTree != null)
-				upload = treeOperation.uploadFile(version.getName(),
-						(File) selectedTree.getData(), event.getFile()
-								.getFileName(), event.getFile()
-								.getInputstream());
+				upload = treeOperation.uploadFile(version.getName(), (File) selectedTree.getData(),
+				        event.getFile().getFileName(), event.getFile().getInputstream());
 			else
-				upload = treeOperation.uploadFile(version.getName(), null,
-						event.getFile().getFileName(), event.getFile()
-								.getInputstream());
+				upload = treeOperation.uploadFile(version.getName(), null, event.getFile().getFileName(),
+				        event.getFile().getInputstream());
 
 			if (upload) {
-				FacesMessage msg = MessageFactory.getMessage(
-						"dev.file_successfully_uploaded",
-						FacesMessage.SEVERITY_INFO, event.getFile()
-								.getFileName());
+				FacesMessage msg = MessageFactory.getMessage("dev.file_successfully_uploaded",
+				        FacesMessage.SEVERITY_INFO, event.getFile().getFileName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				tree = configManager.listRepositoryContent(version.getName());
 				RequestContext context = RequestContext.getCurrentInstance();
 				context.execute("PF('createFileDialogWidget').hide()");
 			} else {
-				FacesMessage msg = MessageFactory.getMessage(
-						"dev.file_unsuccessfully_uploaded",
-						FacesMessage.SEVERITY_ERROR, event.getFile()
-								.getFileName());
+				FacesMessage msg = MessageFactory.getMessage("dev.file_unsuccessfully_uploaded",
+				        FacesMessage.SEVERITY_ERROR, event.getFile().getFileName());
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		} catch (IOException e) {
-			FacesMessage msg = MessageFactory.getMessage(
-					"dev.file_unsuccessfully_uploaded",
-					FacesMessage.SEVERITY_ERROR, event.getFile().getFileName());
+			FacesMessage msg = MessageFactory.getMessage("dev.file_unsuccessfully_uploaded",
+			        FacesMessage.SEVERITY_ERROR, event.getFile().getFileName());
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 
@@ -975,8 +889,7 @@ public class DevelopmentBean implements Serializable {
 
 	public String getActiveIndex() {
 
-		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
-				: "0";
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1" : "0";
 
 	}
 
@@ -1018,9 +931,8 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void saveJJMessage(JJMessage m) {
-		JJContact contact = ((LoginBean) ((HttpSession) FacesContext
-				.getCurrentInstance().getExternalContext().getSession(false))
-				.getAttribute("loginBean")).getContact();
+		JJContact contact = ((LoginBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false)).getAttribute("loginBean")).getContact();
 		m.setCreatedBy(contact);
 		m.setCreationDate(new Date());
 		jJMessageService.saveJJMessage(m);

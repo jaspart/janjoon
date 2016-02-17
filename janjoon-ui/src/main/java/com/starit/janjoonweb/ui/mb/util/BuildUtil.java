@@ -9,9 +9,9 @@ import com.starit.janjoonweb.ui.mb.JJBuildBean;
 
 public class BuildUtil {
 
-	private JJVersion version;
-	private List<JJBuild> versionBuilds;
-	private List<JJBuild> versionSelectedBuilds;
+	private JJVersion		version;
+	private List<JJBuild>	versionBuilds;
+	private List<JJBuild>	versionSelectedBuilds;
 
 	public BuildUtil(JJVersion version, List<JJBuild> versionBuilds) {
 

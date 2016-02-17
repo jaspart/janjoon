@@ -12,9 +12,9 @@ public class CategoryUtil implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private JJCategory category;
-	private boolean checked;
+	private static final long	serialVersionUID	= 1L;
+	private JJCategory			category;
+	private boolean				checked;
 
 	public CategoryUtil(JJCategory category, boolean checked) {
 
@@ -38,9 +38,8 @@ public class CategoryUtil implements Serializable {
 		this.checked = checked;
 	}
 
-	public static List<CategoryUtil> getCategoryList(
-			List<JJCategory> categories,
-			List<CategoryDataModel> tableDataModelList) {
+	public static List<CategoryUtil> getCategoryList(List<JJCategory> categories,
+	        List<CategoryDataModel> tableDataModelList) {
 		List<CategoryUtil> categoryUtils = new ArrayList<CategoryUtil>();
 
 		for (JJCategory c : categories) {
@@ -49,8 +48,8 @@ public class CategoryUtil implements Serializable {
 				int i = 0;
 
 				while (i < tableDataModelList.size() && !checked) {
-					checked = tableDataModelList.get(i).getCategoryId() == c
-							.getId() && tableDataModelList.get(i).getRendered();
+					checked = tableDataModelList.get(i).getCategoryId() == c.getId()
+					        && tableDataModelList.get(i).getRendered();
 					i++;
 				}
 
@@ -66,13 +65,11 @@ public class CategoryUtil implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof CategoryUtil) && (getCategory() != null) ? getCategory()
-				.equals(((CategoryUtil) object).getCategory())
-				: (object == this);
+		return (object instanceof CategoryUtil) && (getCategory() != null)
+		        ? getCategory().equals(((CategoryUtil) object).getCategory()) : (object == this);
 	}
 
-	public static List<CategoryUtil> getCategoryList(
-			List<JJCategory> categories, JJCategory category) {
+	public static List<CategoryUtil> getCategoryList(List<JJCategory> categories, JJCategory category) {
 		List<CategoryUtil> categoryUtils = new ArrayList<CategoryUtil>();
 
 		for (JJCategory c : categories) {

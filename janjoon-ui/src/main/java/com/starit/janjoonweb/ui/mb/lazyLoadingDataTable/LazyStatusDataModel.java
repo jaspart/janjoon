@@ -17,8 +17,8 @@ public class LazyStatusDataModel extends LazyDataModel<JJStatus> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	JJStatusService statusService;
+	private static final long	serialVersionUID	= 1L;
+	JJStatusService				statusService;
 
 	public LazyStatusDataModel(JJStatusService statusService) {
 
@@ -37,13 +37,11 @@ public class LazyStatusDataModel extends LazyDataModel<JJStatus> {
 	}
 
 	@Override
-	public List<JJStatus> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJStatus> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJStatus> data = new ArrayList<JJStatus>();
 		MutableInt size = new MutableInt(0);
-		data = statusService
-				.load(size, first, pageSize, multiSortMeta, filters);
+		data = statusService.load(size, first, pageSize, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

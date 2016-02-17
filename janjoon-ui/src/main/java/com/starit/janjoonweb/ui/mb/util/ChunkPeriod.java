@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class ChunkPeriod {
 
-	private Date startVacation;
-	private Date endVacation;
+	private Date	startVacation;
+	private Date	endVacation;
 
 	public ChunkPeriod(Date startVacation, Date endVacation) {
 

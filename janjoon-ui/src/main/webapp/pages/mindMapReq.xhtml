@@ -11,9 +11,7 @@
 		<p:mindmap value="#{jJRequirementBean.reqRoot}" 
 			style="width: 500px;height: 500px;border: 1px solid black;">
 			<p:ajax event="select" listener="#{jJRequirementBean.onNodeSelect}" />
-			<p:ajax event="dblselect" onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();"
-				update=":requirementDialog"
+			<p:ajax event="dblselect" update=":requirementDialog"
 				disabled="#{!loginBean.authorisationService.wRequiement}"
 				listener="#{jJRequirementBean.onNodeDblselect}" />
 		</p:mindmap>

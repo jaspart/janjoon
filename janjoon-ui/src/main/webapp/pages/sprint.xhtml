@@ -39,15 +39,25 @@
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container60">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:selectManyMenu id="sprintcts" scrollHeight="150"
-									value="#{jjsprint.sprint.contacts}"
+								<p:selectCheckboxMenu id="sprintcts"
 									disabled="#{jjsprint.neditabale}"
-									converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-									showCheckbox="true">
+									validator="listCategoriesValidator"
+									label="#{jjsprint.contactsLabel}" value="#{jjsprint.contacts}"
+									scrollHeight="150"
+									converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 									<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
 										itemLabel="#{ctc.firstname} #{ctc.name}" itemValue="#{ctc}" />
-									<f:validator validatorId="listCategoriesValidator" />
-								</p:selectManyMenu>
+									<p:ajax event="change" update="@this" immediate="true" />
+								</p:selectCheckboxMenu>
+								<!-- 								<p:selectManyMenu id="sprintcts" scrollHeight="150" -->
+								<!-- 									value="#{jjsprint.sprint.contacts}" -->
+								<!-- 									disabled="#{jjsprint.neditabale}" -->
+								<!-- 									converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" -->
+								<!-- 									showCheckbox="true"> -->
+								<!-- 									<f:selectItems value="#{jJSprintBean.contacts}" var="ctc" -->
+								<!-- 										itemLabel="#{ctc.firstname} #{ctc.name}" itemValue="#{ctc}" /> -->
+								<!-- 									<f:validator validatorId="listCategoriesValidator" /> -->
+								<!-- 								</p:selectManyMenu> -->
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
@@ -111,8 +121,7 @@
 								<p:remoteCommand name="createSprint"
 									update=":projecttabview :growlForm"
 									action="#{jJSprintBean.createSprint}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+									oncomplete="updateTabViewWidth();" />
 							</h:panelGroup>
 						</h:panelGroup>
 
@@ -123,9 +132,8 @@
 									immediate="true" icon="fa fa-check Fs16"
 									disabled="#{!jjsprint.neditabale or !loginBean.authorisationService.wProject}"
 									actionListener="#{jJSprintBean.doneEvent}"
-									onstart="PF('blockUIWidget').block()"
 									title="#{messages.project_scrum_done_button}"
-									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();">
+									oncomplete="updateTabViewWidth();">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 								</p:commandButton>
 							</h:panelGroup>
@@ -135,8 +143,7 @@
 								<p:commandButton value="#{messages.project_gantt_import_button}"
 									disabled="#{!jjsprint.neditabale}" id="createTaskttButton"
 									icon="fa fa-plus-square Fs16" immediate="true"
-									onstart="PF('blockUIWidget').block()" resetValues="true"
-									oncomplete="PF('blockUIWidget').unblock()"
+									resetValues="true"
 									actionListener="#{jJTaskBean.loadImportFormat}"
 									title="#{messages.project_gantt_import_button}">
 									<f:attribute name="sprintUtilValue" value="#{jjsprint}" />

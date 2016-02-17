@@ -21,18 +21,18 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJPermission.class, beanName = "jJPermissionBean")
 public class JJPermissionBean {
 
-	private JJPermission permissionAdmin;
+	private JJPermission				permissionAdmin;
 
-	private List<PermissionDataModel> permissionDataModel;
+	private List<PermissionDataModel>	permissionDataModel;
 
-	private JJProfile profile;
+	private JJProfile					profile;
 	// private List<JJProfile> profiles;
-	private JJProject project;
-	private JJProduct product;
-	private boolean checkPermission;
-	private boolean checkPermissions;
-	private boolean oldCheckPermissions;
-	private boolean disabledCheckPermission;
+	private JJProject					project;
+	private JJProduct					product;
+	private boolean						checkPermission;
+	private boolean						checkPermissions;
+	private boolean						oldCheckPermissions;
+	private boolean						disabledCheckPermission;
 
 	public JJPermissionService getJJPermissionService() {
 		return this.jJPermissionService;
@@ -50,8 +50,7 @@ public class JJPermissionBean {
 		return permissionDataModel;
 	}
 
-	public void setPermissionDataModel(
-			List<PermissionDataModel> permissionDataModel) {
+	public void setPermissionDataModel(List<PermissionDataModel> permissionDataModel) {
 		this.permissionDataModel = permissionDataModel;
 	}
 
@@ -65,12 +64,11 @@ public class JJPermissionBean {
 
 	public List<JJProfile> getProfiles() {
 
-		JJContact contactAdmin = ((JJContactBean) LoginBean
-				.findBean("jJContactBean")).getContactAdmin();
+		JJContact contactAdmin = ((JJContactBean) LoginBean.findBean("jJContactBean")).getContactAdmin();
 		if (contactAdmin.getId() != null) {
-			return jJProfileService.getProfiles(true, jJPermissionService
-					.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean"))
-							.getContact()), contactAdmin.getCompany());
+			return jJProfileService.getProfiles(true,
+			        jJPermissionService.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean")).getContact()),
+			        contactAdmin.getCompany());
 		} else
 			return new ArrayList<JJProfile>();
 	}
@@ -89,12 +87,10 @@ public class JJPermissionBean {
 
 	public List<JJProject> getProjects() {
 
-		JJContact contactAdmin = ((JJContactBean) LoginBean
-				.findBean("jJContactBean")).getContactAdmin();
+		JJContact contactAdmin = ((JJContactBean) LoginBean.findBean("jJContactBean")).getContactAdmin();
 		List<JJProject> projects = new ArrayList<JJProject>();
 		if (contactAdmin.getId() != null) {
-			projects = jJProjectService.getProjects(contactAdmin.getCompany(),
-					contactAdmin, true, true);
+			projects = jJProjectService.getProjects(contactAdmin.getCompany(), contactAdmin, true, true);
 		}
 
 		return projects;
@@ -110,13 +106,11 @@ public class JJPermissionBean {
 
 	public List<JJProduct> getProducts() {
 
-		JJContact contactAdmin = ((JJContactBean) LoginBean
-				.findBean("jJContactBean")).getContactAdmin();
+		JJContact contactAdmin = ((JJContactBean) LoginBean.findBean("jJContactBean")).getContactAdmin();
 		List<JJProduct> products = new ArrayList<JJProduct>();
 		if (contactAdmin.getId() != null) {
 
-			products = jJProductService.getProducts(contactAdmin.getCompany(),
-					contactAdmin, true, true);
+			products = jJProductService.getProducts(contactAdmin.getCompany(), contactAdmin, true, true);
 
 		}
 		return products;
@@ -170,14 +164,13 @@ public class JJPermissionBean {
 
 			for (PermissionDataModel permissionData : permissionDataModel) {
 
-				if ((permissionData.getProfile().getId()
-						.equals(profile.getId()))
-						&& (((permissionData.getProject() == null) && (project == null)) || (((permissionData
-								.getProject() != null) && (project != null)) && permissionData
-								.getProject().getId().equals(project.getId())))
-						&& (((permissionData.getProduct() == null) && (product == null)) || (((permissionData
-								.getProduct() != null) && (product != null)) && permissionData
-								.getProduct().getId().equals(product.getId())))) {
+				if ((permissionData.getProfile().getId().equals(profile.getId()))
+				        && (((permissionData.getProject() == null) && (project == null))
+				                || (((permissionData.getProject() != null) && (project != null))
+				                        && permissionData.getProject().getId().equals(project.getId())))
+				        && (((permissionData.getProduct() == null) && (product == null))
+				                || (((permissionData.getProduct() != null) && (product != null))
+				                        && permissionData.getProduct().getId().equals(product.getId())))) {
 					valide = false;
 
 					break;
@@ -186,15 +179,11 @@ public class JJPermissionBean {
 		}
 
 		if (valide) {
-			permissionDataModel.add(new PermissionDataModel(permissionAdmin,
-					profile, project, product, true, false));
+			permissionDataModel.add(new PermissionDataModel(permissionAdmin, profile, project, product, true, false));
 			newPermission();
 		} else {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					MessageFactory.getMessage(
-							"admin_contact_addPermission_warning",
-							FacesMessage.SEVERITY_ERROR, "Permission"));
+			FacesContext.getCurrentInstance().addMessage(null, MessageFactory
+			        .getMessage("admin_contact_addPermission_warning", FacesMessage.SEVERITY_ERROR, "Permission"));
 		}
 
 	}
@@ -202,13 +191,11 @@ public class JJPermissionBean {
 	public void fillPermissionTable(JJContact contact) {
 		permissionDataModel = new ArrayList<PermissionDataModel>();
 
-		List<JJPermission> permissions = jJPermissionService.getPermissions(
-				contact, true, null, null, null);
+		List<JJPermission> permissions = jJPermissionService.getPermissions(contact, true, null, null, null);
 
 		for (JJPermission permission : permissions) {
-			permissionDataModel.add(new PermissionDataModel(permission,
-					permission.getProfile(), permission.getProject(),
-					permission.getProduct(), true, true));
+			permissionDataModel.add(new PermissionDataModel(permission, permission.getProfile(),
+			        permission.getProject(), permission.getProduct(), true, true));
 		}
 
 		checkPermissions = true;
@@ -252,16 +239,15 @@ public class JJPermissionBean {
 
 	public class PermissionDataModel {
 
-		private JJPermission permission;
-		private JJProfile profile;
-		private JJProject project;
-		private JJProduct product;
-		private boolean checkPermission;
-		private boolean old;
+		private JJPermission	permission;
+		private JJProfile		profile;
+		private JJProject		project;
+		private JJProduct		product;
+		private boolean			checkPermission;
+		private boolean			old;
 
-		public PermissionDataModel(JJPermission permission, JJProfile profile,
-				JJProject project, JJProduct product, boolean checkPermission,
-				boolean old) {
+		public PermissionDataModel(JJPermission permission, JJProfile profile, JJProject project, JJProduct product,
+		        boolean checkPermission, boolean old) {
 			super();
 			this.permission = permission;
 			this.profile = profile;

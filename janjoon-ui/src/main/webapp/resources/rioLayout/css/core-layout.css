@@ -216,6 +216,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container5{ width:5%; float:left;}
 
 .ContainerIndent{display:block; margin:0px auto; padding:10px;}
+.ContainerIndentHeader{display:block; margin:0px auto;padding: 15px 10px;}
 .ContainerIndentLabel{display:block; margin:0px auto;padding: 20px 10px;}
 
 /* Text Aligns */
@@ -290,7 +291,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive{width:33.3%; float:left; margin-left:0px !important; margin-right:0px !important;}	
 	.Responsive50{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
-	
+	.ContainerIndentHeader{padding: 5px;}
     
     /* make auto of element width attribute on mobile devices with media queries */
     .WidAutoOnMobile{width:auto !important;}
@@ -310,6 +311,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
+	.ContainerIndentHeader{padding: 5px;}
 	.ContainerIndentLabel{padding: 15px 5px;}
 	.MarLeftQuarter{ margin-left:15%;}
 	
@@ -360,6 +362,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
+	.ContainerIndentHeader{padding: 5px;}
 	.ContainerIndentLabel{padding: 10px 5px;}
 	.MarLeftQuarter{ margin-left:10%;}
 	
@@ -412,6 +415,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 	.Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 	
 	.ContainerIndent{padding:5px;}
+	.ContainerIndentHeader{padding: 5px;}
 	.ContainerIndentLabel{padding: 10px 5px;}
 	.MarLeftQuarter{ margin-left:5%;}
 	

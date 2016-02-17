@@ -15,16 +15,15 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class VersionDataModelUtil {
 
-	private String name;
-	private JJVersion version;
-	private List<JJBuild> builds;
-	private List<JJRequirement> requirementRoadMap;
-	private List<JJBug> bugRoadMap;
+	private String				name;
+	private JJVersion			version;
+	private List<JJBuild>		builds;
+	private List<JJRequirement>	requirementRoadMap;
+	private List<JJBug>			bugRoadMap;
 
 	public VersionDataModelUtil(JJVersion version, JJBuildService jjBuildService) {
 
-		JJRequirementBean requirementBean = (JJRequirementBean) LoginBean
-				.findBean("jJRequirementBean");
+		JJRequirementBean requirementBean = (JJRequirementBean) LoginBean.findBean("jJRequirementBean");
 		JJBugBean bugBean = (JJBugBean) LoginBean.findBean("jJBugBean");
 
 		this.version = version;
@@ -36,13 +35,11 @@ public class VersionDataModelUtil {
 		if (bugBean == null)
 			bugBean = new JJBugBean();
 
-		this.requirementRoadMap = requirementBean
-				.getInfinshedRequirement(version);
+		this.requirementRoadMap = requirementBean.getInfinshedRequirement(version);
 		this.bugRoadMap = bugBean.getInfinshedBugs(version);
 
-		this.name = (version != null) ? version.getProduct().getName() + "/"
-				+ version.getName() : MessageFactory.getMessage(
-				"label_noVersion").getDetail();
+		this.name = (version != null) ? version.getProduct().getName() + "/" + version.getName()
+		        : MessageFactory.getMessage("label_noVersion").getDetail();
 	}
 
 	public String getName() {
@@ -87,10 +84,8 @@ public class VersionDataModelUtil {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof VersionDataModelUtil)
-				&& (getVersion() != null) ? getVersion().equals(
-				((VersionDataModelUtil) object).getVersion())
-				: (object == this);
+		return (object instanceof VersionDataModelUtil) && (getVersion() != null)
+		        ? getVersion().equals(((VersionDataModelUtil) object).getVersion()) : (object == this);
 	}
 
 }

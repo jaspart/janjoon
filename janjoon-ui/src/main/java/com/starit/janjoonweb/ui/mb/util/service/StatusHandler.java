@@ -105,7 +105,7 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
 			 */
 			pathChangeType = "I";
 		} else if (contentsStatus == SVNStatusType.STATUS_MISSING
-				|| contentsStatus == SVNStatusType.STATUS_INCOMPLETE) {
+		        || contentsStatus == SVNStatusType.STATUS_INCOMPLETE) {
 			/*
 			 * The file, directory or symbolic link item is under version
 			 * control but is missing or somehow incomplete. The item can be
@@ -135,8 +135,7 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
 			 * to be distinct objects with distinct histories.
 			 */
 			pathChangeType = "R";
-		} else if (contentsStatus == SVNStatusType.STATUS_NONE
-				|| contentsStatus == SVNStatusType.STATUS_NORMAL) {
+		} else if (contentsStatus == SVNStatusType.STATUS_NONE || contentsStatus == SVNStatusType.STATUS_NORMAL) {
 			/*
 			 * The item was not modified (normal).
 			 */
@@ -151,7 +150,7 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
 		String remoteChangeType = " ";
 
 		if (status.getRemotePropertiesStatus() != SVNStatusType.STATUS_NONE
-				|| status.getRemoteContentsStatus() != SVNStatusType.STATUS_NONE) {
+		        || status.getRemoteContentsStatus() != SVNStatusType.STATUS_NONE) {
 			/*
 			 * the local item is out of date
 			 */
@@ -240,34 +239,20 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
 		long lastChangedRevision = status.getCommittedRevision().getNumber();
 		String offset = "                                ";
 		String[] offsets = new String[3];
-		offsets[0] = offset.substring(0, 6 - String.valueOf(workingRevision)
-				.length());
-		offsets[1] = offset.substring(0, 6 - String
-				.valueOf(lastChangedRevision).length());
+		offsets[0] = offset.substring(0, 6 - String.valueOf(workingRevision).length());
+		offsets[1] = offset.substring(0, 6 - String.valueOf(lastChangedRevision).length());
 		// status
 		offsets[2] = offset.substring(0,
-				offset.length()
-						- (status.getAuthor() != null ? status.getAuthor()
-								.length() : 1));
+		        offset.length() - (status.getAuthor() != null ? status.getAuthor().length() : 1));
 		/*
 		 * status is shown in the manner of the native Subversion command line
 		 * client's command "svn status"
 		 */
-		System.out.println(pathChangeType
-				+ propertiesChangeType
-				+ (isLocked ? "L" : " ")
-				+ (isAddedWithHistory ? "+" : " ")
-				+ (isSwitched ? "S" : " ")
-				+ lockLabel
-				+ "  "
-				+ remoteChangeType
-				+ "  "
-				+ workingRevision
-				+ offsets[0]
-				+ (lastChangedRevision >= 0 ? String
-						.valueOf(lastChangedRevision) : "?") + offsets[1]
-				+ (status.getAuthor() != null ? status.getAuthor() : "?")
-				+ offsets[2] + status.getFile().getPath());
+		System.out.println(pathChangeType + propertiesChangeType + (isLocked ? "L" : " ")
+		        + (isAddedWithHistory ? "+" : " ") + (isSwitched ? "S" : " ") + lockLabel + "  " + remoteChangeType
+		        + "  " + workingRevision + offsets[0]
+		        + (lastChangedRevision >= 0 ? String.valueOf(lastChangedRevision) : "?") + offsets[1]
+		        + (status.getAuthor() != null ? status.getAuthor() : "?") + offsets[2] + status.getFile().getPath());
 	}
 
 	/*
@@ -288,8 +273,7 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
 		 * won't be dispatched.
 		 */
 		if (action == SVNEventAction.STATUS_COMPLETED) {
-			System.out.println("Status against revision:  "
-					+ event.getRevision());
+			System.out.println("Status against revision:  " + event.getRevision());
 		}
 
 	}

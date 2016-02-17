@@ -19,9 +19,7 @@ public class JJCategoryConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return value instanceof JJCategory ? ((JJCategory) value).getName()
-				: "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value instanceof JJCategory ? ((JJCategory) value).getName() : "";
 	}
 }

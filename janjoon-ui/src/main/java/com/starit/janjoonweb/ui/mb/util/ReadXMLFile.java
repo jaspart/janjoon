@@ -37,16 +37,12 @@ import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
 
 public class ReadXMLFile {
 
-	public static List<JJRequirement> getRequirementsFromXml(InputStream file,
-			JJCategoryService jJCategoryService,
-			JJRequirementService jJRequirementService,
-			JJChapterService jJChapterService, JJProject project,
-			JJCompany company, JJProduct product, JJVersion version,
-			JJStatus status) throws SAXParseException {
+	public static List<JJRequirement> getRequirementsFromXml(InputStream file, JJCategoryService jJCategoryService,
+	        JJRequirementService jJRequirementService, JJChapterService jJChapterService, JJProject project,
+	        JJCompany company, JJProduct product, JJVersion version, JJStatus status) throws SAXParseException {
 		List<JJRequirement> requirements = new ArrayList<JJRequirement>();
 		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(file);
 
@@ -55,10 +51,9 @@ public class ReadXMLFile {
 			// http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 			doc.getDocumentElement().normalize();
 
-			System.out.println("Root element :"
-					+ doc.getDocumentElement().getNodeName());
-			JJCategory category = jJCategoryService.getCategory(doc
-					.getDocumentElement().getAttribute("name"), company, true);
+			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+			JJCategory category = jJCategoryService.getCategory(doc.getDocumentElement().getAttribute("name"), company,
+			        true);
 
 			NodeList nList = doc.getElementsByTagName("requirement");
 
@@ -74,14 +69,11 @@ public class ReadXMLFile {
 
 					Element eElement = (Element) nNode;
 					JJRequirement requirement = new JJRequirement();
-					JJChapter chapter = jJChapterService.getChapterByName(
-							category, eElement.getAttribute("chapter"),
-							project, company);
+					JJChapter chapter = jJChapterService.getChapterByName(category, eElement.getAttribute("chapter"),
+					        project, company);
 					requirement.setName(eElement.getAttribute("name"));
-					requirement.setDescription(eElement
-							.getAttribute("description"));
-					requirement.setEnabled(!eElement.getAttribute("enabled")
-							.equals("0"));
+					requirement.setDescription(eElement.getAttribute("description"));
+					requirement.setEnabled(!eElement.getAttribute("enabled").equals("0"));
 					requirement.setNote(eElement.getAttribute("note"));
 					requirement.setChapter(chapter);
 					requirement.setProject(project);
@@ -90,22 +82,15 @@ public class ReadXMLFile {
 					requirement.setVersioning(version);
 					requirements.add(requirement);
 					requirement.setStatus(status);
-					SortedMap<Integer, Object> elements = JJRequirementBean
-							.getSortedElements(chapter, project, category,
-									true, jJChapterService,
-									jJRequirementService);
+					SortedMap<Integer, Object> elements = JJRequirementBean.getSortedElements(chapter, project,
+					        category, true, jJChapterService, jJRequirementService);
 					requirement.setOrdering(elements.lastKey() + 1);
 
-					System.out.println("name : "
-							+ eElement.getAttribute("name"));
-					System.out.println("description : "
-							+ eElement.getAttribute("description"));
-					System.out.println("enabled : "
-							+ eElement.getAttribute("enabled"));
-					System.out.println("note : "
-							+ eElement.getAttribute("note"));
-					System.out.println("chapter : "
-							+ eElement.getAttribute("chapter"));
+					System.out.println("name : " + eElement.getAttribute("name"));
+					System.out.println("description : " + eElement.getAttribute("description"));
+					System.out.println("enabled : " + eElement.getAttribute("enabled"));
+					System.out.println("note : " + eElement.getAttribute("note"));
+					System.out.println("chapter : " + eElement.getAttribute("chapter"));
 
 				}
 			}
@@ -115,11 +100,10 @@ public class ReadXMLFile {
 		return requirements;
 	}
 
-	public static List<Object> getTestcasesFromXml(JJTestcaseBean testCaseBean,
-			InputStream stream, JJTestcaseService jjTestcaseService,
-			JJCategoryService jJCategoryService,
-			JJRequirementService jJRequirementService, JJProject project,
-			JJProduct product, JJCompany company) throws SAXParseException {
+	public static List<Object> getTestcasesFromXml(JJTestcaseBean testCaseBean, InputStream stream,
+	        JJTestcaseService jjTestcaseService, JJCategoryService jJCategoryService,
+	        JJRequirementService jJRequirementService, JJProject project, JJProduct product, JJCompany company)
+	                throws SAXParseException {
 
 		List<JJTestcase> testests = new ArrayList<JJTestcase>();
 		List<JJTeststep> teststeps = new ArrayList<JJTeststep>();
@@ -131,10 +115,9 @@ public class ReadXMLFile {
 			Document doc = dBuilder.parse(stream);
 			doc.getDocumentElement().normalize();
 
-			System.out.println("Root element :"
-					+ doc.getDocumentElement().getNodeName());
-			JJCategory category = jJCategoryService.getCategory(doc
-					.getDocumentElement().getAttribute("name"), company, true);
+			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+			JJCategory category = jJCategoryService.getCategory(doc.getDocumentElement().getAttribute("name"), company,
+			        true);
 
 			NodeList nList = doc.getElementsByTagName("testcase");
 
@@ -147,68 +130,48 @@ public class ReadXMLFile {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 					Element eElement = (Element) nNode;
-					JJRequirement requirement = jJRequirementService
-							.getRequirementByName(category, project, product,
-									eElement.getAttribute("Requirement"), null);
+					JJRequirement requirement = jJRequirementService.getRequirementByName(category, project, product,
+					        eElement.getAttribute("Requirement"), null);
 					if (requirement != null) {
 						JJTestcase testcase = new JJTestcase();
 						testcase.setName(eElement.getAttribute("name"));
-						testcase.setDescription(eElement
-								.getAttribute("description"));
+						testcase.setDescription(eElement.getAttribute("description"));
 						testcase.setRequirement(requirement);
-						testcase.setEnabled(!eElement.getAttribute("enabled")
-								.equalsIgnoreCase("0"));
-						testcase.setAutomatic(!eElement.getAttribute(
-								"Automatic").equalsIgnoreCase("0"));
-						testcase.setOrdering(jjTestcaseService
-								.getMaxOrdering(requirement));
+						testcase.setEnabled(!eElement.getAttribute("enabled").equalsIgnoreCase("0"));
+						testcase.setAutomatic(!eElement.getAttribute("Automatic").equalsIgnoreCase("0"));
+						testcase.setOrdering(jjTestcaseService.getMaxOrdering(requirement));
 						testCaseBean.saveJJTestcase(testcase);
-						testcase = jjTestcaseService.findJJTestcase(testcase
-								.getId());
+						testcase = jjTestcaseService.findJJTestcase(testcase.getId());
 
-						System.out.println("name : "
-								+ eElement.getAttribute("name"));
-						System.out.println("description : "
-								+ eElement.getAttribute("description"));
-						System.out.println("enabled : "
-								+ eElement.getAttribute("enabled"));
-						System.out.println("note : "
-								+ eElement.getAttribute("Automatic"));
-						System.out.println("chapter : "
-								+ eElement.getAttribute("Requirement"));
+						System.out.println("name : " + eElement.getAttribute("name"));
+						System.out.println("description : " + eElement.getAttribute("description"));
+						System.out.println("enabled : " + eElement.getAttribute("enabled"));
+						System.out.println("note : " + eElement.getAttribute("Automatic"));
+						System.out.println("chapter : " + eElement.getAttribute("Requirement"));
 
-						NodeList tList = eElement
-								.getElementsByTagName("teststep");
+						NodeList tList = eElement.getElementsByTagName("teststep");
 
 						for (int i = 0; i < tList.getLength(); i++) {
 
 							Node tNode = tList.item(i);
 
-							System.out.println("\nCurrent Element :"
-									+ tNode.getNodeName());
+							System.out.println("\nCurrent Element :" + tNode.getNodeName());
 
 							if (tNode.getNodeType() == Node.ELEMENT_NODE) {
 
 								Element tElement = (Element) tNode;
 								JJTeststep teststep = new JJTeststep();
 								teststep.setTestcase(testcase);
-								teststep.setActionstep(tElement
-										.getAttribute("actionstep"));
-								teststep.setResultstep(tElement
-										.getAttribute("actionstep"));
+								teststep.setActionstep(tElement.getAttribute("actionstep"));
+								teststep.setResultstep(tElement.getAttribute("actionstep"));
 								teststep.setEnabled(true);
-								teststep.setName(teststep.getActionstep() + " "
-										+ teststep.getResultstep());
-								teststep.setDescription("This is "
-										+ teststep.getActionstep() + " "
-										+ teststep.getResultstep()
-										+ " description");
+								teststep.setName(teststep.getActionstep() + " " + teststep.getResultstep());
+								teststep.setDescription("This is " + teststep.getActionstep() + " "
+								        + teststep.getResultstep() + " description");
 								// testests.add(testcase);
 								teststeps.add(teststep);
-								System.out.println("actionstep : "
-										+ tElement.getAttribute("actionstep"));
-								System.out.println("resultstep : "
-										+ tElement.getAttribute("resultstep"));
+								System.out.println("actionstep : " + tElement.getAttribute("actionstep"));
+								System.out.println("resultstep : " + tElement.getAttribute("resultstep"));
 							}
 							testests.add(testcase);
 						}

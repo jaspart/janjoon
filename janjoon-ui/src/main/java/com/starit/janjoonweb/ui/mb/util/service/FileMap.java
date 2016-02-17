@@ -8,12 +8,12 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FileMap {
 
-	private int index;
-	private String title;
-	private String texte;
-	private boolean change = false;
-	private File file;
-	private String mode;
+	private int		index;
+	private String	title;
+	private String	texte;
+	private boolean	change	= false;
+	private File	file;
+	private String	mode;
 
 	public FileMap(String title, String texte, File file) throws IOException {
 
@@ -87,10 +87,8 @@ public class FileMap {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof FileMap) && (getFile() != null) ? getFile()
-				.getAbsolutePath().equals(
-						((FileMap) object).getFile().getAbsolutePath())
-				: (object == this);
+		return (object instanceof FileMap) && (getFile() != null)
+		        ? getFile().getAbsolutePath().equals(((FileMap) object).getFile().getAbsolutePath()) : (object == this);
 	}
 
 }

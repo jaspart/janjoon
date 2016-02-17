@@ -6,14 +6,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.primefaces.component.progressbar.*;
+import org.primefaces.component.progressbar.ProgressBar;
+import org.primefaces.component.progressbar.ProgressBarRenderer;
 
 public class ProgressBarRendererImpl extends ProgressBarRenderer {
 
 	@Override
-	public void encodeEnd(FacesContext context, UIComponent component)
-			throws IOException {
-		ProgressBar progressBar = (ProgressBar) component;
+	public void encodeEnd(final FacesContext context, final UIComponent component) throws IOException {
+		final ProgressBar progressBar = (ProgressBar) component;
 
 		encodeMarkup(context, progressBar);
 
@@ -22,15 +22,14 @@ public class ProgressBarRendererImpl extends ProgressBarRenderer {
 		}
 	}
 
-	protected void encodeMarkup(FacesContext context, ProgressBar progressBar)
-			throws IOException {
-		ResponseWriter writer = context.getResponseWriter();
-		int value = progressBar.getValue();
-		String labelTemplate = progressBar.getLabelTemplate();
-		String style = progressBar.getStyle();
+	@Override
+	protected void encodeMarkup(final FacesContext context, final ProgressBar progressBar) throws IOException {
+		final ResponseWriter writer = context.getResponseWriter();
+		final int value = progressBar.getValue();
+		final String labelTemplate = progressBar.getLabelTemplate();
+		final String style = progressBar.getStyle();
 		String styleClass = progressBar.getStyleClass();
-		styleClass = styleClass == null ? ProgressBar.CONTAINER_CLASS
-				: ProgressBar.CONTAINER_CLASS + " " + styleClass;
+		styleClass = styleClass == null ? ProgressBar.CONTAINER_CLASS : ProgressBar.CONTAINER_CLASS + " " + styleClass;
 
 		if (progressBar.isDisabled()) {
 			styleClass = styleClass + " ui-state-disabled";
@@ -47,11 +46,9 @@ public class ProgressBarRendererImpl extends ProgressBarRenderer {
 		writer.startElement("div", progressBar);
 		writer.writeAttribute("class", ProgressBar.VALUE_CLASS, null);
 		if (value != 0) {
-			writer.writeAttribute("style",
-					"display:block;width:" + value + "%", style);
+			writer.writeAttribute("style", "display:block;width:" + value + "%", style);
 		} else {
-			writer.writeAttribute("style", "display:block;width:" + 0 + "%",
-					style);
+			writer.writeAttribute("style", "display:block;width:" + 0 + "%", style);
 		}
 		writer.endElement("div");
 
@@ -60,8 +57,7 @@ public class ProgressBarRendererImpl extends ProgressBarRenderer {
 		writer.writeAttribute("class", ProgressBar.LABEL_CLASS, null);
 		if (labelTemplate != null) {
 			writer.writeAttribute("style", "display:block", style);
-			writer.write(labelTemplate.replaceAll("\\{value\\}",
-					String.valueOf(value)));
+			writer.write(labelTemplate.replaceAll("\\{value\\}", String.valueOf(value)));
 		}
 		writer.endElement("div");
 

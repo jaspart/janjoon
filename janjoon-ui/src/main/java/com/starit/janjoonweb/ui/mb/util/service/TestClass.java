@@ -9,20 +9,15 @@ import java.util.Properties;
 
 public class TestClass {
 
-	public static void main(String[] args) throws FileNotFoundException,
-			IOException {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 
 		Properties properties = new Properties();
-		String path = TestClass.class.getResource(
-				"/com/starit/janjoonweb/ui/mb/i18n/messages_fr.properties")
-				.getFile();
+		String path = TestClass.class.getResource("/com/starit/janjoonweb/ui/mb/i18n/messages_fr.properties").getFile();
 		properties.load(new FileInputStream(path));
 		List<Object> list1 = Collections.list(properties.keys());
 
 		Properties prop = new Properties();
-		String pa = TestClass.class.getResource(
-				"/com/starit/janjoonweb/ui/mb/i18n/messages_en.properties")
-				.getFile();
+		String pa = TestClass.class.getResource("/com/starit/janjoonweb/ui/mb/i18n/messages_en.properties").getFile();
 		prop.load(new FileInputStream(pa));
 		List<Object> list2 = Collections.list(prop.keys());
 

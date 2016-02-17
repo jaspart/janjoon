@@ -13,15 +13,12 @@ import com.starit.janjoonweb.domain.JJVersion;
 public class BugValidator implements Validator {
 
 	@Override
-	public void validate(FacesContext facesContext, UIComponent component,
-			Object object) throws ValidatorException {
+	public void validate(FacesContext facesContext, UIComponent component, Object object) throws ValidatorException {
 
-		JJVersion version = (JJVersion) component.getAttributes().get(
-				"jJbugVersion");
+		JJVersion version = (JJVersion) component.getAttributes().get("jJbugVersion");
 		if (version == null) {
 			if (object == null) {
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_bug_versionOrBuildRequired", "Bug");
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_bug_versionOrBuildRequired", "Bug");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}

@@ -10,6 +10,4 @@ privileged aspect JJMessageBean_Roo_Serializable {
     
     declare parents: JJMessageBean implements Serializable;
     
-    private static final long JJMessageBean.serialVersionUID = 1L;
-    
 }

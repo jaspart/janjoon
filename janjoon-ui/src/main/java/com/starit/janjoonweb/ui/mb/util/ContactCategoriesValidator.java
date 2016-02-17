@@ -16,24 +16,20 @@ import com.starit.janjoonweb.domain.JJCategory;
 public class ContactCategoriesValidator implements Validator {
 
 	@Override
-	public void validate(FacesContext context, UIComponent component,
-			Object value) throws ValidatorException {
+	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 
 		try {
 			List<Object> selectedItemscheckbox = (List<Object>) value;
 
-			if (component.getId().contains("categories")
-					&& selectedItemscheckbox.size() > 3) {
+			if (component.getId().contains("categories") && selectedItemscheckbox.size() > 3) {
 
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_contact_max3Item", "Contact");
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_contact_max3Item", "Contact");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
-			} else if (selectedItemscheckbox == null
-					|| selectedItemscheckbox.isEmpty()) {
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_contact_shouldSelectContat", "Contact");
+			} else if (selectedItemscheckbox == null || selectedItemscheckbox.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_contact_shouldSelectContat",
+				        "Contact");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -42,18 +38,15 @@ public class ContactCategoriesValidator implements Validator {
 
 			Set<Object> selectedItemscheckbox = (Set<Object>) value;
 
-			if (component.getId().contains("categories")
-					&& selectedItemscheckbox.size() > 3) {
+			if (component.getId().contains("categories") && selectedItemscheckbox.size() > 3) {
 
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_contact_max3Item", "Contact");
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_contact_max3Item", "Contact");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
-			} else if (selectedItemscheckbox == null
-					|| selectedItemscheckbox.isEmpty()) {
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_contact_shouldSelectContat", "Contact");
+			} else if (selectedItemscheckbox == null || selectedItemscheckbox.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_contact_shouldSelectContat",
+				        "Contact");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}

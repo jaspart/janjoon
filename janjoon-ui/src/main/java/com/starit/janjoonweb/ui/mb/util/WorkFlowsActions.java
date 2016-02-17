@@ -42,43 +42,42 @@ import com.starit.janjoonweb.ui.mb.RequirementBean;
 public class WorkFlowsActions {
 
 	@Autowired
-	private JJBugService jJBugService;
+	private JJBugService			jJBugService;
 
 	@Autowired
-	private JJBuildService jJBuildService;
+	private JJBuildService			jJBuildService;
 
 	@Autowired
-	private JJRequirementService jJRequirementService;
+	private JJRequirementService	jJRequirementService;
 
 	@Autowired
-	private JJCriticityService jJCriticityService;
+	private JJCriticityService		jJCriticityService;
 
 	@Autowired
-	private JJMessageService jJMessageService;
+	private JJMessageService		jJMessageService;
 
 	@Autowired
-	private JJTaskService jJTaskService;
+	private JJTaskService			jJTaskService;
 
 	@Autowired
-	private JJProjectService jJProjectService;
+	private JJProjectService		jJProjectService;
 
 	@Autowired
-	private JJStatusService jJStatusService;
+	private JJStatusService			jJStatusService;
 
 	@Autowired
-	private JJWorkflowService jJWorkflowService;
+	private JJWorkflowService		jJWorkflowService;
 
 	@Autowired
-	private JJPermissionService jJPermissionService;
+	private JJPermissionService		jJPermissionService;
 
-	private MailingService mailingService;
+	private MailingService			mailingService;
 
 	public void setjJBugService(JJBugService jJBugService) {
 		this.jJBugService = jJBugService;
 	}
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
@@ -128,27 +127,17 @@ public class WorkFlowsActions {
 		if (object instanceof JJRequirement) {
 			JJRequirement requirement = (JJRequirement) object;
 			if (requirement.getId() != null) {
-				JJRequirement oldRequirement = jJRequirementService
-						.findJJRequirement(requirement.getId());
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
-				if (requirement.getStatus() != null
-						&& oldRequirement.getStatus() != null
-						&& !oldRequirement.getStatus().equals(
-								requirement.getStatus())) {
-					JJCriticity criticity = jJCriticityService
-							.getCriticityByName("INFO", true);
-					JJStatus status = jJStatusService.getOneStatus("NEW",
-							"Message", true);
+				JJRequirement oldRequirement = jJRequirementService.findJJRequirement(requirement.getId());
+				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+				if (requirement.getStatus() != null && oldRequirement.getStatus() != null
+				        && !oldRequirement.getStatus().equals(requirement.getStatus())) {
+					JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
+					JJStatus status = jJStatusService.getOneStatus("NEW", "Message", true);
 
 					JJMessage mes = new JJMessage();
 					mes.setName("Requirement :"
-							+ requirement.getName()
-									.substring(
-											0,
-											Math.min(70, requirement.getName()
-													.length()))
-							+ " status changed");
+					        + requirement.getName().substring(0, Math.min(70, requirement.getName().length()))
+					        + " status changed");
 					mes.setCreatedBy(contact);
 					mes.setCriticity(criticity);
 					mes.setStatus(status);
@@ -156,19 +145,14 @@ public class WorkFlowsActions {
 					mes.setProject(requirement.getProject());
 					mes.setProduct(requirement.getProduct());
 					mes.setRequirement(requirement);
-					mes.setDescription("Requirement :" + requirement.getName()
-							+ " status changed from "
-							+ oldRequirement.getStatus().getName() + " to "
-							+ requirement.getStatus().getName());
+					mes.setDescription("Requirement :" + requirement.getName() + " status changed from "
+					        + oldRequirement.getStatus().getName() + " to " + requirement.getStatus().getName());
 					mes.setCreationDate(new Date());
 					mes.setEnabled(true);
-					mes.setMessage("Requirement :" + requirement.getName()
-							+ " status changed from "
-							+ oldRequirement.getStatus().getName() + " to "
-							+ requirement.getStatus().getName());
+					mes.setMessage("Requirement :" + requirement.getName() + " status changed from "
+					        + oldRequirement.getStatus().getName() + " to " + requirement.getStatus().getName());
 					jJMessageService.saveJJMessage(mes);
-					((LoginBean) LoginBean.findBean("loginBean"))
-							.setMessageCount(null);
+					((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 				}
 			}
 
@@ -176,20 +160,15 @@ public class WorkFlowsActions {
 			JJBug bug = (JJBug) object;
 			if (bug.getId() != null) {
 				JJBug oldBug = jJBugService.findJJBug(bug.getId());
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
+				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 				if (bug.getStatus() != null && oldBug.getStatus() != null
-						&& !oldBug.getStatus().equals(bug.getStatus())) {
-					JJCriticity criticity = jJCriticityService
-							.getCriticityByName("INFO", true);
-					JJStatus status = jJStatusService.getOneStatus("NEW",
-							"Message", true);
+				        && !oldBug.getStatus().equals(bug.getStatus())) {
+					JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
+					JJStatus status = jJStatusService.getOneStatus("NEW", "Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Bug :"
-							+ bug.getName().substring(0,
-									Math.min(70, bug.getName().length()))
-							+ "status changed");
+					mes.setName("Bug :" + bug.getName().substring(0, Math.min(70, bug.getName().length()))
+					        + "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);
@@ -197,19 +176,14 @@ public class WorkFlowsActions {
 					mes.setProduct(bug.getProduct());
 					mes.setProject(bug.getProject());
 					mes.setBug(bug);
-					mes.setDescription("Bug :" + bug.getName()
-							+ " status changed from "
-							+ oldBug.getStatus().getName() + " to "
-							+ bug.getStatus().getName());
+					mes.setDescription("Bug :" + bug.getName() + " status changed from " + oldBug.getStatus().getName()
+					        + " to " + bug.getStatus().getName());
 					mes.setCreationDate(new Date());
 					mes.setEnabled(true);
-					mes.setMessage("Bug :" + bug.getName()
-							+ " status changed from "
-							+ oldBug.getStatus().getName() + " to "
-							+ bug.getStatus().getName());
+					mes.setMessage("Bug :" + bug.getName() + " status changed from " + oldBug.getStatus().getName()
+					        + " to " + bug.getStatus().getName());
 					jJMessageService.saveJJMessage(mes);
-					((LoginBean) LoginBean.findBean("loginBean"))
-							.setMessageCount(null);
+					((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 				}
 			}
 
@@ -217,20 +191,15 @@ public class WorkFlowsActions {
 			JJTask task = (JJTask) object;
 			if (task.getId() != null) {
 				JJTask oldTask = jJTaskService.findJJTask(task.getId());
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
+				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 				if (task.getStatus() != null && oldTask.getStatus() != null
-						&& !oldTask.getStatus().equals(task.getStatus())) {
-					JJCriticity criticity = jJCriticityService
-							.getCriticityByName("INFO", true);
-					JJStatus status = jJStatusService.getOneStatus("NEW",
-							"Message", true);
+				        && !oldTask.getStatus().equals(task.getStatus())) {
+					JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
+					JJStatus status = jJStatusService.getOneStatus("NEW", "Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Task :"
-							+ task.getName().substring(0,
-									Math.min(70, task.getName().length()))
-							+ "status changed");
+					mes.setName("Task :" + task.getName().substring(0, Math.min(70, task.getName().length()))
+					        + "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);
@@ -238,19 +207,14 @@ public class WorkFlowsActions {
 					mes.setProduct(task.getProduct());
 					mes.setProject(task.getProject());
 					mes.setTask(task);
-					mes.setDescription("Task :" + task.getName()
-							+ " status changed from "
-							+ oldTask.getStatus().getName() + " to "
-							+ task.getStatus().getName());
+					mes.setDescription("Task :" + task.getName() + " status changed from "
+					        + oldTask.getStatus().getName() + " to " + task.getStatus().getName());
 					mes.setCreationDate(new Date());
 					mes.setEnabled(true);
-					mes.setMessage("Task :" + task.getName()
-							+ " status changed from "
-							+ oldTask.getStatus().getName() + " to "
-							+ task.getStatus().getName());
+					mes.setMessage("Task :" + task.getName() + " status changed from " + oldTask.getStatus().getName()
+					        + " to " + task.getStatus().getName());
 					jJMessageService.saveJJMessage(mes);
-					((LoginBean) LoginBean.findBean("loginBean"))
-							.setMessageCount(null);
+					((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 				}
 			}
 
@@ -258,20 +222,15 @@ public class WorkFlowsActions {
 			JJBuild build = (JJBuild) object;
 			if (build.getId() != null) {
 				JJBuild oldbuild = jJBuildService.findJJBuild(build.getId());
-				JJContact contact = ((LoginBean) LoginBean
-						.findBean("loginBean")).getContact();
+				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 				if (build.getStatus() != null && oldbuild.getStatus() != null
-						&& !oldbuild.getStatus().equals(build.getStatus())) {
-					JJCriticity criticity = jJCriticityService
-							.getCriticityByName("INFO", true);
-					JJStatus status = jJStatusService.getOneStatus("NEW",
-							"Message", true);
+				        && !oldbuild.getStatus().equals(build.getStatus())) {
+					JJCriticity criticity = jJCriticityService.getCriticityByName("INFO", true);
+					JJStatus status = jJStatusService.getOneStatus("NEW", "Message", true);
 
 					JJMessage mes = new JJMessage();
-					mes.setName("Build :"
-							+ build.getName().substring(0,
-									Math.min(70, build.getName().length()))
-							+ "status changed");
+					mes.setName("Build :" + build.getName().substring(0, Math.min(70, build.getName().length()))
+					        + "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);
@@ -279,19 +238,14 @@ public class WorkFlowsActions {
 					mes.setProduct(build.getVersion().getProduct());
 					mes.setProject(LoginBean.getProject());
 					mes.setBuild(build);
-					mes.setDescription("Build :" + build.getName()
-							+ " status changed from "
-							+ oldbuild.getStatus().getName() + " to "
-							+ build.getStatus().getName());
+					mes.setDescription("Build :" + build.getName() + " status changed from "
+					        + oldbuild.getStatus().getName() + " to " + build.getStatus().getName());
 					mes.setCreationDate(new Date());
 					mes.setEnabled(true);
-					mes.setMessage("Build :" + build.getName()
-							+ " status changed from "
-							+ oldbuild.getStatus().getName() + " to "
-							+ build.getStatus().getName());
+					mes.setMessage("Build :" + build.getName() + " status changed from "
+					        + oldbuild.getStatus().getName() + " to " + build.getStatus().getName());
 					jJMessageService.saveJJMessage(mes);
-					((LoginBean) LoginBean.findBean("loginBean"))
-							.setMessageCount(null);
+					((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 				}
 			}
 
@@ -322,11 +276,9 @@ public class WorkFlowsActions {
 				else
 					oldStatus = "Null";
 
-				longText = obj + " Status has changed from  :" + oldStatus
-						+ " to " + afterStatus;
+				longText = obj + " Status has changed from  :" + oldStatus + " to " + afterStatus;
 			} else {
-				longText = "new " + obj + " creation with the status :"
-						+ afterStatus;
+				longText = "new " + obj + " creation with the status :" + afterStatus;
 			}
 
 		} else if (objet instanceof JJTask) {
@@ -345,11 +297,9 @@ public class WorkFlowsActions {
 					oldStatus = oldTask.getStatus().getName();
 				else
 					oldStatus = "Null";
-				longText = obj + " Status has changed from  :" + oldStatus
-						+ " to " + afterStatus;
+				longText = obj + " Status has changed from  :" + oldStatus + " to " + afterStatus;
 			} else {
-				longText = "new " + obj + " creation with the status :"
-						+ afterStatus;
+				longText = "new " + obj + " creation with the status :" + afterStatus;
 			}
 
 		} else if (objet instanceof JJRequirement) {
@@ -364,18 +314,15 @@ public class WorkFlowsActions {
 				afterStatus = "Null";
 
 			if (requirement.getId() != null) {
-				JJRequirement oldRequirement = jJRequirementService
-						.findJJRequirement(requirement.getId());
+				JJRequirement oldRequirement = jJRequirementService.findJJRequirement(requirement.getId());
 				String oldStatus = null;
 				if (oldRequirement.getStatus() != null)
 					oldStatus = oldRequirement.getStatus().getName();
 				else
 					oldStatus = "Null";
-				longText = obj + " Status has changed from  :" + oldStatus
-						+ " to " + afterStatus;
+				longText = obj + " Status has changed from  :" + oldStatus + " to " + afterStatus;
 			} else {
-				longText = "new " + obj + " creation with the status :"
-						+ afterStatus;
+				longText = "new " + obj + " creation with the status :" + afterStatus;
 			}
 
 		} else if (objet instanceof JJBuild) {
@@ -396,11 +343,9 @@ public class WorkFlowsActions {
 					oldStatus = oldBuild.getStatus().getName();
 				else
 					oldStatus = "Null";
-				longText = obj + " Status has changed from  :" + oldStatus
-						+ " to " + afterStatus;
+				longText = obj + " Status has changed from  :" + oldStatus + " to " + afterStatus;
 			} else {
-				longText = "new " + obj + " creation with the status :"
-						+ afterStatus;
+				longText = "new " + obj + " creation with the status :" + afterStatus;
 			}
 
 		}
@@ -408,13 +353,11 @@ public class WorkFlowsActions {
 		if (obj != null) {
 			JJAuditLog auditLog = new JJAuditLog();
 			auditLog.setAuditLogDate(new Date());
-			auditLog.setContact(((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact());
+			auditLog.setContact(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			auditLog.setObjet(obj);
 			auditLog.setKeyName("Status Changed for " + obj);
 			auditLog.setKeyValue(longText);
-			JJAuditLogBean jJAuditLogBean = ((JJAuditLogBean) LoginBean
-					.findBean("jJAuditLogBean"));
+			JJAuditLogBean jJAuditLogBean = ((JJAuditLogBean) LoginBean.findBean("jJAuditLogBean"));
 			if (jJAuditLogBean == null)
 				jJAuditLogBean = new JJAuditLogBean();
 
@@ -426,40 +369,32 @@ public class WorkFlowsActions {
 
 	public void setRequirementToRELEASEDWorkFlow(Object objet) {
 
-		System.err
-				.println("setRequirementToREALEASEDWorkFlow Successufuly Executed");
+		System.err.println("setRequirementToREALEASEDWorkFlow Successufuly Executed");
 		if (objet instanceof JJTask) {
 			JJTask task = (JJTask) objet;
 			JJStatus status = task.getStatus();
 			if (status != null && task.getRequirement() != null) {
 
-				JJRequirement req = jJRequirementService.findJJRequirement(task
-						.getRequirement().getId());
+				JJRequirement req = jJRequirementService.findJJRequirement(task.getRequirement().getId());
 
 				if (status.getName().equalsIgnoreCase("IN PROGRESS")
-						&& (req.getStatus() == null || !req.getStatus()
-								.getName().equalsIgnoreCase("RELEASED"))) {
+				        && (req.getStatus() == null || !req.getStatus().getName().equalsIgnoreCase("RELEASED"))) {
 
 					// JJRequirementBean jJRequirementBean = (JJRequirementBean)
 					// LoginBean
 					// .findBean("jJRequirementBean");
-					JJStatus reqStatus = jJStatusService.getOneStatus(
-							"RELEASED", "Requirement", true);
+					JJStatus reqStatus = jJStatusService.getOneStatus("RELEASED", "Requirement", true);
 					req.setStatus(reqStatus);
 					// if (jJRequirementBean == null)
 					// jJRequirementBean = new JJRequirementBean();
 					jJRequirementService.updateJJRequirement(req);
 
-					if (((RequirementBean) LoginBean
-							.findBean("requirementBean")) != null)
-						((RequirementBean) LoginBean
-								.findBean("requirementBean")).setRootNode(null);
-					JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
-							.findBean("jJRequirementBean");
+					if (((RequirementBean) LoginBean.findBean("requirementBean")) != null)
+						((RequirementBean) LoginBean.findBean("requirementBean")).setRootNode(null);
+					JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean.findBean("jJRequirementBean");
 					if (jJRequirementBean != null)
-						jJRequirementBean.updateDataTable(
-								task.getRequirement(),task.getRequirement().getCategory(),
-								JJRequirementBean.UPDATE_OPERATION);
+						jJRequirementBean.updateDataTable(task.getRequirement(), task.getRequirement().getCategory(),
+						        JJRequirementBean.UPDATE_OPERATION);
 				}
 
 			}
@@ -480,9 +415,7 @@ public class WorkFlowsActions {
 				if (!businessRequirements.isEmpty()) {
 					if (mailingService == null)
 						mailingService = new MailingService();
-					String taskTitle = ((JJTaskBean) LoginBean
-							.findBean("jJTaskBean"))
-							.getDialogHeader(task, null);
+					String taskTitle = ((JJTaskBean) LoginBean.findBean("jJTaskBean")).getDialogHeader(task, null);
 
 					for (JJRequirement req : businessRequirements) {
 						System.err.println("REQUIREMENT_" + req.getName());
@@ -496,18 +429,14 @@ public class WorkFlowsActions {
 
 	}
 
-	private void fillBusinessRequirements(JJRequirement requirement,
-			Set<JJRequirement> businessRequirements) {
+	private void fillBusinessRequirements(JJRequirement requirement, Set<JJRequirement> businessRequirements) {
 
-		requirement = jJRequirementService.findJJRequirement(requirement
-				.getId());
-		if (requirement.getCategory() != null
-				&& requirement.getCategory().getStage() != null
-				&& requirement.getCategory().getStage() == 1)
+		requirement = jJRequirementService.findJJRequirement(requirement.getId());
+		if (requirement.getCategory() != null && requirement.getCategory().getStage() != null
+		        && requirement.getCategory().getStage() == 1)
 			businessRequirements.add(requirement);
 		else {
-			Set<JJRequirement> linkDownRequirement = requirement
-					.getRequirementLinkDown();
+			Set<JJRequirement> linkDownRequirement = requirement.getRequirementLinkDown();
 
 			for (JJRequirement req : linkDownRequirement) {
 				fillBusinessRequirements(req, businessRequirements);
@@ -522,8 +451,7 @@ public class WorkFlowsActions {
 		// System.err.println("sendMailWorkFlow Successufuly Executed");
 		if (object instanceof JJTask) {
 			JJTask task = (JJTask) object;
-			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 			if (jJTaskService.findJJTask(task.getId()).getEndDateReal() == null) {
 				if (mailingService == null)
@@ -531,22 +459,18 @@ public class WorkFlowsActions {
 
 				StringReader description = null;
 				if (task.getRequirement() != null)
-					description = new StringReader(task.getRequirement()
-							.getDescription());
+					description = new StringReader(task.getRequirement().getDescription());
 				else if (task.getBug() != null)
-					description = new StringReader(task.getBug()
-							.getDescription());
+					description = new StringReader(task.getBug().getDescription());
 				else if (task.getTestcase() != null)
-					description = new StringReader(task.getTestcase()
-							.getDescription());
+					description = new StringReader(task.getTestcase().getDescription());
 
 				String subject = "";
 				List arrList = null;
 				try {
 					arrList = HTMLWorker.parseToList(description, null);
 					for (int i = 0; i < arrList.size(); ++i) {
-						subject = subject
-								+ ((Element) arrList.get(i)).toString();
+						subject = subject + ((Element) arrList.get(i)).toString();
 					}
 				} catch (Exception e) {
 					subject = description.toString();
@@ -554,14 +478,11 @@ public class WorkFlowsActions {
 
 				subject = subject.replace("[", " ").replace("]", "");
 
-				List<JJContact> contacts = jJPermissionService.areAuthorized(
-						contact.getCompany(), null, task.getProject(),
-						task.getProduct(), "sprintContact");
-				if (task.getProduct() != null
-						&& !contacts.contains(task.getProduct().getManager()))
+				List<JJContact> contacts = jJPermissionService.areAuthorized(contact.getCompany(), null,
+				        task.getProject(), task.getProduct(), "sprintContact");
+				if (task.getProduct() != null && !contacts.contains(task.getProduct().getManager()))
 					contacts.add(task.getProduct().getManager());
-				mailingService.sendMail(task.getProject().getManager()
-						.getEmail(), contacts, task, subject);
+				mailingService.sendMail(task.getProject().getManager().getEmail(), contacts, task, subject);
 
 			}
 
@@ -572,21 +493,21 @@ public class WorkFlowsActions {
 
 		for (JJWorkflow workFlow : workflows) {
 			switch (workFlow.getActionWorkflow()) {
-			case "setRequirementToRELEASEDWorkFlow":
-				this.setRequirementToRELEASEDWorkFlow(object);
-				break;
-			case "createMessageWorkFlow":
-				this.createMessageWorkFlow(object);
-				break;
-			case "loggingWorkFlow":
-				this.loggingWorkFlow(object);
-				break;
-			case "sendMailWorkFlow":
-				this.sendMailWorkFlow(object);
-				break;
-			case "sendMailToBusinessReqCreatorWorkFlow":
-				this.sendMailToBusinessReqCreatorWorkFlow(object);
-				break;
+				case "setRequirementToRELEASEDWorkFlow":
+					this.setRequirementToRELEASEDWorkFlow(object);
+					break;
+				case "createMessageWorkFlow":
+					this.createMessageWorkFlow(object);
+					break;
+				case "loggingWorkFlow":
+					this.loggingWorkFlow(object);
+					break;
+				case "sendMailWorkFlow":
+					this.sendMailWorkFlow(object);
+					break;
+				case "sendMailToBusinessReqCreatorWorkFlow":
+					this.sendMailToBusinessReqCreatorWorkFlow(object);
+					break;
 			}
 		}
 	}

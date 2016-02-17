@@ -11,7 +11,7 @@ public interface JJTaskService {
 
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
 			JJProduct product, JJContact contact, JJChapter chapter,
-			boolean nullChapter, JJRequirement requirement,
+			boolean nullChapter, JJRequirement requirement,JJStatus status,
 			JJTestcase testcase, JJBuild build, boolean onlyActif,
 			boolean sortedByCreationDate, boolean withBuild, String objet);
 
@@ -40,6 +40,8 @@ public interface JJTaskService {
 
 	public List<JJTask> getToDoTasks(JJContact contact);
 
-	public List<JJTask> getTastksByVersion(JJVersion jJversion);
+	public List<JJTask> getTasksByVersion(JJVersion jJversion);
+	
+	public List<JJTask> getTasksByObject(JJSprint sprint,JJProject project,JJProduct product,String object,boolean done);
 
 }

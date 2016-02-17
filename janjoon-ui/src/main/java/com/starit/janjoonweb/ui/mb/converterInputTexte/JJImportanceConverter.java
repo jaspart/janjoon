@@ -19,9 +19,7 @@ public class JJImportanceConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return value instanceof JJImportance ? ((JJImportance) value).getName()
-				: "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value instanceof JJImportance ? ((JJImportance) value).getName() : "";
 	}
 }

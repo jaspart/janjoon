@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -13,7 +12,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJConfigurationService;
-import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
@@ -27,82 +25,115 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJProfileBean {
 
 	@Autowired
-	public JJConfigurationService jJConfigurationService;
-
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
-		this.jJConfigurationService = jJConfigurationService;
-	}
+	public JJConfigurationService	jJConfigurationService;
 
 	@Autowired
-	public JJRightService jJRightService;
+	public JJRightService			jJRightService;
 
 	@Autowired
-	private JJPermissionService jJPermissionService;
+	private JJPermissionService		jJPermissionService;
 
-	public void setjJRightService(JJRightService jJRightService) {
-		this.jJRightService = jJRightService;
+	private JJProfile				profileAdmin;
+
+	private LazyProfileDataModel	profileListTable;
+
+	private String					message;
+
+	private boolean					disabledProfileMode;
+	private boolean					disabledRightMode;
+
+	private boolean					profileState;
+
+	public void addProfile(final JJRightBean jJRightBean) {
+
+		if (profileAdmin.getId() == null) {
+
+			saveJJProfile(profileAdmin);
+
+			disabledProfileMode = true;
+			disabledRightMode = false;
+
+			jJRightBean.setRightDataModel(new ArrayList<RightDataModel>());
+
+			FacesContext.getCurrentInstance().addMessage(null,
+			        MessageFactory.getMessage("message_successfully_created", "Profile", ""));
+			profileListTable = null;
+
+		}
 	}
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
-		this.jJPermissionService = jJPermissionService;
+	public void closeDialog(final JJRightBean jJRightBean) {
+
+		profileAdmin = null;
+		jJRightBean.setRightAdmin(null);
+		jJRightBean.setRightDataModel(null);
+		jJRightBean.setCategory(null);
+		jJRightBean.setObject(null);
+		jJRightBean.setObjects(null);
+		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false);
+		final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		loginBean.getAuthorisationService().setSession(session);
 	}
 
-	private JJProfile profileAdmin;
-	private LazyProfileDataModel profileListTable;
+	public void deleteProfile() {
 
-	private String message;
+		if (profileAdmin != null) {
 
-	private boolean disabledProfileMode;
-	private boolean disabledRightMode;
+			profileAdmin.setEnabled(false);
+			updateJJProfile(profileAdmin);
+			final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+			loginBean.getAuthorisationService().setSession(session);
+			profileListTable = null;
 
-	private boolean profileState;
-
-	public JJProfile getProfileAdmin() {
-		return profileAdmin;
+		}
 	}
 
-	public void setProfileAdmin(JJProfile profileAdmin) {
-		this.profileAdmin = profileAdmin;
-	}
+	public void editProfile(final JJRightBean jJRightBean) {
+		message = "admin_profile_edit_title";
 
-	public LazyProfileDataModel getProfileListTable() {
+		jJRightBean.setDisabledCheckRight(false);
+		jJRightBean.newRight();
+		jJRightBean.fillRightTable(profileAdmin);
 
-		if (profileListTable == null)
-			profileListTable = new LazyProfileDataModel(jJProfileService,
-					jJPermissionService);
-		return profileListTable;
-	}
+		disabledProfileMode = false;
+		disabledRightMode = false;
 
-	public void setProfileListTable(LazyProfileDataModel profileListTable) {
-		this.profileListTable = profileListTable;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
+		profileState = false;
 	}
 
 	public boolean getDisabledProfileMode() {
 		return disabledProfileMode;
 	}
 
-	public void setDisabledProfileMode(boolean disabledProfileMode) {
-		this.disabledProfileMode = disabledProfileMode;
-	}
-
 	public boolean getDisabledRightMode() {
 		return disabledRightMode;
 	}
 
-	public void setDisabledRightMode(boolean disabledRightMode) {
-		this.disabledRightMode = disabledRightMode;
+	public String getMessage() {
+		return message;
 	}
 
-	public void newProfile(JJRightBean jJRightBean) {
+	public JJProfile getProfileAdmin() {
+		return profileAdmin;
+	}
+
+	private boolean getProfileDialogConfiguration() {
+
+		return jJConfigurationService.getDialogConfig("ProfileDialog", "profile.create.saveandclose");
+	}
+
+	public LazyProfileDataModel getProfileListTable() {
+
+		if (profileListTable == null) {
+			profileListTable = new LazyProfileDataModel(jJProfileService, jJPermissionService);
+		}
+		return profileListTable;
+	}
+
+	public void newProfile(final JJRightBean jJRightBean) {
 		message = "admin_profile_new_title";
 
 		profileAdmin = new JJProfile();
@@ -118,56 +149,7 @@ public class JJProfileBean {
 		profileState = true;
 	}
 
-	public void editProfile(JJRightBean jJRightBean) {
-		message = "admin_profile_edit_title";
-
-		jJRightBean.setDisabledCheckRight(false);
-		jJRightBean.newRight();
-		jJRightBean.fillRightTable(profileAdmin);
-
-		disabledProfileMode = false;
-		disabledRightMode = false;
-
-		profileState = false;
-	}
-
-	public void deleteProfile() {
-
-		if (profileAdmin != null) {
-
-			profileAdmin.setEnabled(false);
-			updateJJProfile(profileAdmin);
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-			loginBean.getAuthorisationService().setSession(session);
-			profileListTable = null;
-
-		}
-	}
-
-	public void addProfile(JJRightBean jJRightBean) {
-
-		if (profileAdmin.getId() == null) {
-
-			saveJJProfile(profileAdmin);
-
-			disabledProfileMode = true;
-			disabledRightMode = false;
-
-			jJRightBean.setRightDataModel(new ArrayList<RightDataModel>());
-
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					MessageFactory.getMessage("message_successfully_created",
-							"Profile", ""));
-			profileListTable = null;
-
-		}
-	}
-
-	public void save(JJRightBean jJRightBean) {
+	public void save(final JJRightBean jJRightBean) {
 
 		System.out.println("in save right");
 
@@ -175,11 +157,11 @@ public class JJProfileBean {
 
 		profileAdmin = jJProfileService.findJJProfile(profileAdmin.getId());
 
-		List<JJRight> rights = jJRightService.getRights(profileAdmin, true);
+		final List<JJRight> rights = jJRightService.getRights(profileAdmin, true);
 
-		List<RightDataModel> rightDataModels = jJRightBean.getRightDataModel();
-		List<JJRight> selectedRights = new ArrayList<JJRight>();
-		for (RightDataModel rightDataModel : rightDataModels) {
+		final List<RightDataModel> rightDataModels = jJRightBean.getRightDataModel();
+		final List<JJRight> selectedRights = new ArrayList<JJRight>();
+		for (final RightDataModel rightDataModel : rightDataModels) {
 			if (rightDataModel.getCheckRight()) {
 				selectedRights.add(rightDataModel.getRight());
 
@@ -188,7 +170,7 @@ public class JJProfileBean {
 
 		if (!selectedRights.isEmpty() && !rights.isEmpty()) {
 
-			for (JJRight right : selectedRights) {
+			for (final JJRight right : selectedRights) {
 				if (right.getId() == null) {
 					right.setProfile(profileAdmin);
 
@@ -197,35 +179,35 @@ public class JJProfileBean {
 				}
 			}
 
-			List<Long> longs = new ArrayList<Long>();
-			for (JJRight right : rights) {
+			final List<Long> longs = new ArrayList<Long>();
+			for (final JJRight right : rights) {
 				if (!selectedRights.contains(right)) {
 					longs.add(right.getId());
 				}
 			}
-			for (long l : longs) {
-				JJRight r = jJRightService.findJJRight(l);
+			for (final long l : longs) {
+				final JJRight r = jJRightService.findJJRight(l);
 				r.setEnabled(false);
 				jJRightBean.updateJJRight(r);
 			}
 
 		} else if (selectedRights.isEmpty() && !rights.isEmpty()) {
 
-			List<Long> longs = new ArrayList<Long>();
-			for (JJRight right : rights) {
+			final List<Long> longs = new ArrayList<Long>();
+			for (final JJRight right : rights) {
 
 				longs.add(right.getId());
 
 			}
-			for (long l : longs) {
-				JJRight r = jJRightService.findJJRight(l);
+			for (final long l : longs) {
+				final JJRight r = jJRightService.findJJRight(l);
 				r.setEnabled(false);
 				jJRightBean.updateJJRight(r);
 			}
 
 		} else if (!selectedRights.isEmpty() && rights.isEmpty()) {
 
-			for (JJRight right : selectedRights) {
+			for (final JJRight right : selectedRights) {
 				right.setProfile(profileAdmin);
 
 				profileAdmin.getRights().add(right);
@@ -236,16 +218,14 @@ public class JJProfileBean {
 
 		System.out.println("herer");
 
-		FacesContext.getCurrentInstance().addMessage(
-				null,
-				MessageFactory.getMessage("message_successfully_updated",
-						"Profile", ""));
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		FacesContext.getCurrentInstance().addMessage(null,
+		        MessageFactory.getMessage("message_successfully_updated", "Profile", ""));
+		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false);
+		final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		loginBean.getAuthorisationService().setSession(session);
 
-		RequestContext context = RequestContext.getCurrentInstance();
+		final RequestContext context = RequestContext.getCurrentInstance();
 
 		if (profileState) {
 			if (getProfileDialogConfiguration()) {
@@ -261,31 +241,43 @@ public class JJProfileBean {
 		profileListTable = null;
 	}
 
-	public void closeDialog(JJRightBean jJRightBean) {
-
-		profileAdmin = null;
-		jJRightBean.setRightAdmin(null);
-		jJRightBean.setRightDataModel(null);
-		jJRightBean.setCategory(null);
-		jJRightBean.setObject(null);
-		jJRightBean.setObjects(null);
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
-		loginBean.getAuthorisationService().setSession(session);
-	}
-
-	private boolean getProfileDialogConfiguration() {
-
-		return jJConfigurationService.getDialogConfig("ProfileDialog",
-				"profile.create.saveandclose");
-	}
-
-	public void saveJJProfile(JJProfile b) {
+	public void saveJJProfile(final JJProfile b) {
 		jJProfileService.saveJJProfile(b);
 	}
 
-	public void updateJJProfile(JJProfile b) {
+	public void setDisabledProfileMode(final boolean disabledProfileMode) {
+		this.disabledProfileMode = disabledProfileMode;
+	}
+
+	public void setDisabledRightMode(final boolean disabledRightMode) {
+		this.disabledRightMode = disabledRightMode;
+	}
+
+	public void setjJConfigurationService(final JJConfigurationService jJConfigurationService) {
+		this.jJConfigurationService = jJConfigurationService;
+	}
+
+	public void setjJPermissionService(final JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+
+	public void setjJRightService(final JJRightService jJRightService) {
+		this.jJRightService = jJRightService;
+	}
+
+	public void setMessage(final String message) {
+		this.message = message;
+	}
+
+	public void setProfileAdmin(final JJProfile profileAdmin) {
+		this.profileAdmin = profileAdmin;
+	}
+
+	public void setProfileListTable(final LazyProfileDataModel profileListTable) {
+		this.profileListTable = profileListTable;
+	}
+
+	public void updateJJProfile(final JJProfile b) {
 		jJProfileService.updateJJProfile(b);
 	}
 }

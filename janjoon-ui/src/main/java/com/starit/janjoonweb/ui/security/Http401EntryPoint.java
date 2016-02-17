@@ -13,30 +13,24 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 
-public class Http401EntryPoint implements AuthenticationEntryPoint,
-		Serializable {
+public class Http401EntryPoint implements AuthenticationEntryPoint, Serializable {
 
-	private String timeoutPage = "pages/login.jsf";
-	private static final long serialVersionUID = 1L;
-	static Logger logger = Logger.getLogger("Http401EntryPoint-Logger");
+	private String				timeoutPage			= "pages/login.jsf";
+	private static final long	serialVersionUID	= 1L;
+	static Logger				logger				= Logger.getLogger("Http401EntryPoint-Logger");
 
 	@Override
-	public void commence(HttpServletRequest request,
-			HttpServletResponse response, AuthenticationException authException)
-			throws IOException, ServletException {
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+	        AuthenticationException authException) throws IOException, ServletException {
 
-		logger.info("Session is invalid! redirecting to timeoutpage : "
-				+ timeoutPage);
+		logger.info("Session is invalid! redirecting to timeoutpage : " + timeoutPage);
 
-		if ((request instanceof HttpServletRequest)
-				&& (response instanceof HttpServletResponse)) {
+		if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-			String timeoutUrl = httpServletRequest.getContextPath() + "/"
-					+ httpServletRequest.getRequestURI();
+			String timeoutUrl = httpServletRequest.getContextPath() + "/" + httpServletRequest.getRequestURI();
 
-			logger.info("Session is invalid! redirecting to timeoutpage : "
-					+ timeoutUrl);
+			logger.info("Session is invalid! redirecting to timeoutpage : " + timeoutUrl);
 
 			httpServletResponse.sendRedirect(timeoutUrl);
 			return;

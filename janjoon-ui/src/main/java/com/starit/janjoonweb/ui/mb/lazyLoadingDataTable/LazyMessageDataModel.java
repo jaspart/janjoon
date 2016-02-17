@@ -9,7 +9,6 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
-import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
@@ -22,16 +21,15 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	JJMessageService messageService;
-	JJProject project;
-	JJProduct product;
-	JJCompany company;
-	JJContact contact;
+	private static final long	serialVersionUID	= 1L;
+	JJMessageService			messageService;
+	JJProject					project;
+	JJProduct					product;
+	JJCompany					company;
+	JJContact					contact;
 
-	public LazyMessageDataModel(JJMessageService messageService,
-			JJProject project, JJProduct product, JJCompany company,
-			JJContact contact) {
+	public LazyMessageDataModel(JJMessageService messageService, JJProject project, JJProduct product,
+	        JJCompany company, JJContact contact) {
 		this.project = project;
 		this.product = product;
 		this.company = company;
@@ -39,6 +37,7 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 		this.messageService = messageService;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public JJMessage getRowData(String rowKey) {
 
@@ -57,8 +56,8 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 	}
 
 	@Override
-	public List<JJMessage> load(int first, int pageSize, String sortField,
-			SortOrder sortOrder, Map<String, Object> filters) {
+	public List<JJMessage> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+	        Map<String, Object> filters) {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
 
@@ -72,8 +71,8 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 		}
 
 		MutableInt size = new MutableInt(0);
-		data = messageService.getActifMessages(size, first, pageSize,
-				multiSortMeta, filters, project, product, company, contact);
+		data = messageService.getActifMessages(size, first, pageSize, multiSortMeta, filters, project, product, company,
+		        contact);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 
@@ -91,13 +90,12 @@ public class LazyMessageDataModel extends LazyDataModel<JJMessage> {
 	}
 
 	@Override
-	public List<JJMessage> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJMessage> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJMessage> data = new ArrayList<JJMessage>();
 		MutableInt size = new MutableInt(0);
-		data = messageService.getActifMessages(size, first, pageSize,
-				multiSortMeta, filters, project, product, company, contact);
+		data = messageService.getActifMessages(size, first, pageSize, multiSortMeta, filters, project, product, company,
+		        contact);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

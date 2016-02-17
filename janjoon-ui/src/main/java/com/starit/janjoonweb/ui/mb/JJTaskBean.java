@@ -93,23 +93,23 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 @RooJsfManagedBean(entity = JJTask.class, beanName = "jJTaskBean")
 public class JJTaskBean {
 
-	public static String Planned = "planned";
-	public static String Real = "real";
-	public static String Revised = "revised";
-	public static final String UPDATE_OPERATION = "update";
-	public static final String DELETE_OPERATION = "delete";
-	public static final String ADD_OPERATION = "add";
+	public static String		Planned				= "planned";
+	public static String		Real				= "real";
+	public static String		Revised				= "revised";
+	public static final String	UPDATE_OPERATION	= "update";
+	public static final String	DELETE_OPERATION	= "delete";
+	public static final String	ADD_OPERATION		= "add";
 
 	@Autowired
-	private JJChapterService jJChapterService;
+	private JJChapterService	jJChapterService;
 
-	private TaskData selectedTaskData;
-
-	@Autowired
-	private JJPermissionService jJPermissionService;
+	private TaskData			selectedTaskData;
 
 	@Autowired
-	private JJProjectService jJProjectService;
+	private JJPermissionService	jJPermissionService;
+
+	@Autowired
+	private JJProjectService	jJProjectService;
 
 	public void setjJProjectService(JJProjectService jJProjectService) {
 		this.jJProjectService = jJProjectService;
@@ -130,44 +130,44 @@ public class JJTaskBean {
 		this.jJCategoryService = jJCategoryService;
 	}
 
-	private List<TaskData> tasksData;
-	private JJTask task;
+	private List<TaskData>		tasksData;
+	private JJTask				task;
 
-	private TimelineModel model;
+	private TimelineModel		model;
 
-	private Date start;
-	private Date end;
-	private long zoomMin;
-	private long zoomMax;
-	private String sortMode;
+	private Date				start;
+	private Date				end;
+	private long				zoomMin;
+	private long				zoomMax;
+	private String				sortMode;
 	// private List<JJContact> contacts;
 
-	private JJProject project;
-	private JJProduct product;
-	private JJVersion version;
+	private JJProject			project;
+	private JJProduct			product;
+	private JJVersion			version;
 
-	private JJSprint sprint;
-	private List<JJSprint> sprints;
-	private List<JJTask> toDoTasks;
+	private JJSprint			sprint;
+	private List<JJSprint>		sprints;
+	private List<JJTask>		toDoTasks;
 
-	private boolean disabledImportButton;
-	private boolean disabledFilter;
-	private boolean checkAll;
+	private boolean				disabledImportButton;
+	private boolean				disabledFilter;
+	private boolean				checkAll;
 
-	private JJSprint importSprint;
-	private String mode;
+	private JJSprint			importSprint;
+	private String				mode;
 
-	private JJCategory importCategory;
-	private List<JJCategory> importCategoryList;
+	private JJCategory			importCategory;
+	private List<JJCategory>	importCategoryList;
 
-	private JJStatus importStatus;
-	private List<JJStatus> importStatusList;
+	private JJStatus			importStatus;
+	private List<JJStatus>		importStatusList;
 
-	private String objet;
-	private List<String> objets;
+	private String				objet;
+	private List<String>		objets;
 
-	private List<ImportFormat> importFormats;
-	private List<ImportFormat> selectedImportFormat;
+	private List<ImportFormat>	importFormats;
+	private List<ImportFormat>	selectedImportFormat;
 
 	// private boolean copyObjets;
 	// private boolean oldCopyObjects;
@@ -388,8 +388,7 @@ public class JJTaskBean {
 
 		if (objet != null) {
 
-			importCategoryList = jJCategoryService.getCategories(null, false,
-					true, true, LoginBean.getCompany());
+			importCategoryList = jJCategoryService.getCategories(null, false, true, true, LoginBean.getCompany());
 
 		} else {
 			importCategoryList = null;
@@ -420,8 +419,7 @@ public class JJTaskBean {
 			} else if (objet.equalsIgnoreCase("testcase")) {
 				return null;
 			}
-			importStatusList = jJStatusService.getStatus(objet, true, names,
-					true);
+			importStatusList = jJStatusService.getStatus(objet, true, names, true);
 			return importStatusList;
 		} else {
 			return null;
@@ -481,52 +479,28 @@ public class JJTaskBean {
 	public String getDialogHeader(JJTask ttt, String scrum) {
 
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		if (ttt != null
-				&& ((scrum == null) || (scrum != null && !loginBean.isMobile()))) {
+		if (ttt != null && ((scrum == null) || (scrum != null && !loginBean.isMobile()))) {
 			if (ttt.getRequirement() != null)
-				return "TASK[" + ttt.getId() + "]-REQ["
-						+ ttt.getRequirement().getId() + "] "
-						+ ttt.getName().replace("\'", " ");
+				return "TASK[" + ttt.getId() + "]-REQ[" + ttt.getRequirement().getId() + "] "
+				        + ttt.getName().replace("\'", " ");
 			else if (ttt.getBug() != null)
-				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId()
-						+ "] " + ttt.getName().replace("\'", " ");
+				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId() + "] "
+				        + ttt.getName().replace("\'", " ");
 			else if (ttt.getTestcase() != null)
-				return "TASK[" + ttt.getId() + "]-TESTCASE["
-						+ ttt.getTestcase().getId() + "] "
-						+ ttt.getName().replace("\'", " ");
+				return "TASK[" + ttt.getId() + "]-TESTCASE[" + ttt.getTestcase().getId() + "] "
+				        + ttt.getName().replace("\'", " ");
 			else
 				return "";
 		} else if (ttt != null && scrum != null && loginBean.isMobile()) {
 			if (ttt.getRequirement() != null)
-				return "TASK["
-						+ ttt.getId()
-						+ "]-REQ["
-						+ ttt.getRequirement().getId()
-						+ "] "
-						+ ttt.getName()
-								.replace("\'", " ")
-								.substring(0,
-										Math.min(10, ttt.getName().length()));
+				return "TASK[" + ttt.getId() + "]-REQ[" + ttt.getRequirement().getId() + "] "
+				        + ttt.getName().replace("\'", " ").substring(0, Math.min(10, ttt.getName().length()));
 			else if (ttt.getBug() != null)
-				return "TASK["
-						+ ttt.getId()
-						+ "]-BUG["
-						+ ttt.getBug().getId()
-						+ "] "
-						+ ttt.getName()
-								.replace("\'", " ")
-								.substring(0,
-										Math.min(10, ttt.getName().length()));
+				return "TASK[" + ttt.getId() + "]-BUG[" + ttt.getBug().getId() + "] "
+				        + ttt.getName().replace("\'", " ").substring(0, Math.min(10, ttt.getName().length()));
 			else if (ttt.getTestcase() != null)
-				return "TASK["
-						+ ttt.getId()
-						+ "]-TESTCASE["
-						+ ttt.getTestcase().getId()
-						+ "] "
-						+ ttt.getName()
-								.replace("\'", " ")
-								.substring(0,
-										Math.min(10, ttt.getName().length()));
+				return "TASK[" + ttt.getId() + "]-TESTCASE[" + ttt.getTestcase().getId() + "] "
+				        + ttt.getName().replace("\'", " ").substring(0, Math.min(10, ttt.getName().length()));
 			else
 				return "";
 		} else
@@ -546,44 +520,35 @@ public class JJTaskBean {
 
 		} else {
 
-			calendarUtil = new ContactCalendarUtil(jJProjectService
-					.findJJProject(LoginBean.getProject().getId()).getManager()
-					.getCompany());
+			calendarUtil = new ContactCalendarUtil(
+			        jJProjectService.findJJProject(LoginBean.getProject().getId()).getManager().getCompany());
 
 		}
 
-		if ((beforeUpdateTT.getWorkloadPlanned() == null && task
-				.getWorkloadPlanned() != null)
-				|| (task.getWorkloadPlanned() != null && !task
-						.getWorkloadPlanned().equals(
-								beforeUpdateTT.getWorkloadPlanned())))
+		if ((beforeUpdateTT.getWorkloadPlanned() == null && task.getWorkloadPlanned() != null)
+		        || (task.getWorkloadPlanned() != null
+		                && !task.getWorkloadPlanned().equals(beforeUpdateTT.getWorkloadPlanned())))
 			calendarUtil.getEndDate(task, Planned, jJTaskService);
 		else {
-			if ((beforeUpdateTT.getEndDatePlanned() == null && task
-					.getEndDatePlanned() != null)
-					|| (task.getEndDatePlanned() != null && !task
-							.getEndDatePlanned().equals(
-									beforeUpdateTT.getEndDatePlanned())))
+			if ((beforeUpdateTT.getEndDatePlanned() == null && task.getEndDatePlanned() != null)
+			        || (task.getEndDatePlanned() != null
+			                && !task.getEndDatePlanned().equals(beforeUpdateTT.getEndDatePlanned())))
 				calendarUtil.getStartDate(task, Planned, jJTaskService);
 			else {
-				if ((beforeUpdateTT.getStartDatePlanned() == null && task
-						.getStartDatePlanned() != null)
-						|| (task.getStartDatePlanned() != null && !task
-								.getStartDatePlanned().equals(
-										beforeUpdateTT.getStartDatePlanned())))
+				if ((beforeUpdateTT.getStartDatePlanned() == null && task.getStartDatePlanned() != null)
+				        || (task.getStartDatePlanned() != null
+				                && !task.getStartDatePlanned().equals(beforeUpdateTT.getStartDatePlanned())))
 					calendarUtil.getEndDate(task, Planned, jJTaskService);
 			}
 		}
 
 		if (task.getStatus() != null) {
-			if (beforeUpdateTT.getStatus() == null
-					|| !beforeUpdateTT.getStatus().equals(task.getStatus())) {
+			if (beforeUpdateTT.getStatus() == null || !beforeUpdateTT.getStatus().equals(task.getStatus())) {
 				if (task.getStatus().getName().equalsIgnoreCase("todo")) {
 					task.setStartDateReal(null);
 					task.setEndDateReal(null);
 					task.setWorkloadReal(null);
-				} else if (task.getStatus().getName()
-						.equalsIgnoreCase("in progress")) {
+				} else if (task.getStatus().getName().equalsIgnoreCase("in progress")) {
 					task.setEndDateReal(null);
 					task.setWorkloadReal(null);
 					if (task.getStartDateReal() == null)
@@ -599,8 +564,7 @@ public class JJTaskBean {
 			}
 		} else {
 			task.setStatus(jJStatusService.getOneStatus("TODO", "Task", true));
-			if (beforeUpdateTT.getStatus() == null
-					|| !beforeUpdateTT.getStatus().equals(task.getStatus())) {
+			if (beforeUpdateTT.getStatus() == null || !beforeUpdateTT.getStatus().equals(task.getStatus())) {
 
 				task.setStartDateReal(null);
 				task.setEndDateReal(null);
@@ -612,84 +576,61 @@ public class JJTaskBean {
 		saveJJTask(task, true, new MutableInt(0));
 		// task = jJTaskService.findJJTask(task.getId());
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-		if ((ss != null || task.getSprint() != null)
-				&& session.getAttribute("jJSprintBean") != null) {
+		if ((ss != null || task.getSprint() != null) && session.getAttribute("jJSprintBean") != null) {
 
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 
 			if (ss != null && task.getSprint() != null) {
-				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
-						.getId(), jJSprintBean.getSprintList());
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint().getId(), jJSprintBean.getSprintList());
 
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(task
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(task.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
+					s = new SprintUtil(jJSprintService.findJJSprint(task.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(task.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 				if (!ss.equals(task.getSprint())) {
-					s = SprintUtil.getSprintUtil(ss.getId(),
-							jJSprintBean.getSprintList());
+					s = SprintUtil.getSprintUtil(ss.getId(), jJSprintBean.getSprintList());
 
 					if (s != null) {
-						s = new SprintUtil(jJSprintService.findJJSprint(ss
-								.getId()), jJTaskService.getSprintTasks(
-								jJSprintService.findJJSprint(ss.getId()),
-								LoginBean.getProduct()), jJContactService,
-								jJTaskService);
+						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()), jJTaskService
+						        .getSprintTasks(jJSprintService.findJJSprint(ss.getId()), LoginBean.getProduct()),
+						        jJContactService, jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
-						jJSprintBean.getSprintList()
-								.set(jJSprintBean.contains(s.getSprint()
-										.getId()), s);
+						jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 					}
 				}
 			} else {
 				if (task.getSprint() != null) {
 
-					SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
-							.getId(), jJSprintBean.getSprintList());
+					SprintUtil s = SprintUtil.getSprintUtil(task.getSprint().getId(), jJSprintBean.getSprintList());
 
 					if (s != null) {
-						s = new SprintUtil(jJSprintService.findJJSprint(task
-								.getSprint().getId()),
-								jJTaskService.getSprintTasks(
-										jJSprintService.findJJSprint(task
-												.getSprint().getId()),
-										LoginBean.getProduct()),
-								jJContactService, jJTaskService);
+						s = new SprintUtil(jJSprintService.findJJSprint(task.getSprint().getId()),
+						        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(task.getSprint().getId()),
+						                LoginBean.getProduct()),
+						        jJContactService, jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
-						jJSprintBean.getSprintList()
-								.set(jJSprintBean.contains(s.getSprint()
-										.getId()), s);
+						jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 					}
 
 				} else {
-					SprintUtil s = SprintUtil.getSprintUtil(ss.getId(),
-							jJSprintBean.getSprintList());
+					SprintUtil s = SprintUtil.getSprintUtil(ss.getId(), jJSprintBean.getSprintList());
 
 					if (s != null) {
-						s = new SprintUtil(jJSprintService.findJJSprint(ss
-								.getId()), jJTaskService.getSprintTasks(
-								jJSprintService.findJJSprint(ss.getId()),
-								LoginBean.getProduct()), jJContactService,
-								jJTaskService);
+						s = new SprintUtil(jJSprintService.findJJSprint(ss.getId()), jJTaskService
+						        .getSprintTasks(jJSprintService.findJJSprint(ss.getId()), LoginBean.getProduct()),
+						        jJContactService, jJTaskService);
 
 						// sprintUtil.setRenderTaskForm(false);
-						jJSprintBean.getSprintList()
-								.set(jJSprintBean.contains(s.getSprint()
-										.getId()), s);
+						jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 					}
 				}
 			}
@@ -705,39 +646,31 @@ public class JJTaskBean {
 		if (operation.equalsIgnoreCase("main")) {
 			toDoTasks = null;
 			initToDoTasks(null);
-		} else if (operation.equalsIgnoreCase("dev")
-				&& LoginBean.findBean("jJDevelopment") != null) {
+		} else if (operation.equalsIgnoreCase("dev") && LoginBean.findBean("jJDevelopment") != null) {
+			((DevelopmentBean) LoginBean.findBean("jJDevelopment")).setTask(task);
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment"))
-					.setTask(task);
-			((DevelopmentBean) LoginBean.findBean("jJDevelopment"))
-					.setTasks(jJTaskService.getTasksByProduct(
-							LoginBean.getProduct(), LoginBean.getProject()));
+			        .setTasks(jJTaskService.getTasksByProduct(LoginBean.getProduct(), LoginBean.getProject()));
 		}
 
 		if (!validation_error) {
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_updated",
-					MessageFactory.getMessage("label_task", "").getDetail(),
-					"e");
+			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+			        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
-			RequestContext.getCurrentInstance().execute(
-					"PF('viewTaskDialogWidget').hide()");
+			RequestContext.getCurrentInstance().execute("PF('viewTaskDialogWidget').hide()");
 			RequestContext.getCurrentInstance().update("growlForm");
 		}
 
 	}
 
-	private boolean validateTaskDataFields(boolean start, String field,
-			Date date, JJTask tt) {
+	private boolean validateTaskDataFields(boolean start, String field, Date date, JJTask tt) {
 
 		boolean error = false;
 
 		if (tt.getSprint() != null) {
 
 			if (date.compareTo(tt.getSprint().getStartDate())
-					* CalendarUtil.getAfterDay(tt.getSprint().getEndDate())
-							.compareTo(date) < 0) {
+			        * CalendarUtil.getAfterDay(tt.getSprint().getEndDate()).compareTo(date) < 0) {
 
 				error = true;
 
@@ -746,66 +679,49 @@ public class JJTaskBean {
 				if (field.equals(Revised)) {
 					if (start) {
 						tt.setStartDateRevised(tt.getSprint().getStartDate());
-						facesMessage = MessageFactory
-								.getMessage(
-										"validator_date_startAfterEndORStartBeforeStart",
-										MessageFactory.getMessage("label_task",
-												"").getDetail(), "Sprint");
+						facesMessage = MessageFactory.getMessage("validator_date_startAfterEndORStartBeforeStart",
+						        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 						facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 					} else {
 
-						facesMessage = MessageFactory.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
+						facesMessage = MessageFactory.getMessage("validator_date_endAfterEndOREndBeforeStart",
+						        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 						facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 						ContactCalendarUtil calendarUtil;
 						if (tt.getAssignedTo() != null) {
-							calendarUtil = new ContactCalendarUtil(
-									tt.getAssignedTo());
+							calendarUtil = new ContactCalendarUtil(tt.getAssignedTo());
 
 						} else {
-							calendarUtil = new ContactCalendarUtil(tt
-									.getProject().getManager().getCompany());
+							calendarUtil = new ContactCalendarUtil(tt.getProject().getManager().getCompany());
 						}
-						calendarUtil.getEndDate(tt, JJTaskBean.Revised,
-								jJTaskService);
+						calendarUtil.getEndDate(tt, JJTaskBean.Revised, jJTaskService);
 					}
 				} else if (field.equals(Real)) {
 					if (start) {
 						tt.setStartDateReal(tt.getSprint().getStartDate());
-						facesMessage = MessageFactory
-								.getMessage(
-										"validator_date_startAfterEndORStartBeforeStart",
-										MessageFactory.getMessage("label_task",
-												"").getDetail(), "Sprint");
+						facesMessage = MessageFactory.getMessage("validator_date_startAfterEndORStartBeforeStart",
+						        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 						facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 					} else {
 
-						facesMessage = MessageFactory.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
+						facesMessage = MessageFactory.getMessage("validator_date_endAfterEndOREndBeforeStart",
+						        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 						facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 						ContactCalendarUtil calendarUtil;
 						if (tt.getAssignedTo() != null) {
-							calendarUtil = new ContactCalendarUtil(
-									tt.getAssignedTo());
+							calendarUtil = new ContactCalendarUtil(tt.getAssignedTo());
 
 						} else {
-							calendarUtil = new ContactCalendarUtil(tt
-									.getProject().getManager().getCompany());
+							calendarUtil = new ContactCalendarUtil(tt.getProject().getManager().getCompany());
 						}
-						calendarUtil.getEndDate(tt, JJTaskBean.Real,
-								jJTaskService);
+						calendarUtil.getEndDate(tt, JJTaskBean.Real, jJTaskService);
 
 					}
 				}
 				if (facesMessage != null)
-					FacesContext.getCurrentInstance().addMessage(null,
-							facesMessage);
+					FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 		}
 		return error;
@@ -818,32 +734,21 @@ public class JJTaskBean {
 
 		if (task.getSprint() != null) {
 
-			if (task.getStartDatePlanned().compareTo(
-					task.getSprint().getStartDate())
-					* CalendarUtil.getAfterDay(task.getSprint().getEndDate())
-							.compareTo(task.getStartDatePlanned()) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_startAfterEndORStartBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
+			if (task.getStartDatePlanned().compareTo(task.getSprint().getStartDate()) * CalendarUtil
+			        .getAfterDay(task.getSprint().getEndDate()).compareTo(task.getStartDatePlanned()) < 0) {
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEndORStartBeforeStart",
+				        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				error = true;
 
 				task.setStartDatePlanned(task.getSprint().getStartDate());
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 
-			if (task.getEndDatePlanned().compareTo(
-					task.getSprint().getStartDate())
-					* CalendarUtil.getAfterDay(task.getSprint().getEndDate())
-							.compareTo(task.getEndDatePlanned()) < 0) {
-				FacesMessage facesMessage = MessageFactory
-						.getMessage(
-								"validator_date_endAfterEndOREndBeforeStart",
-								MessageFactory.getMessage("label_task", "")
-										.getDetail(), "Sprint");
+			if (task.getEndDatePlanned().compareTo(task.getSprint().getStartDate())
+			        * CalendarUtil.getAfterDay(task.getSprint().getEndDate()).compareTo(task.getEndDatePlanned()) < 0) {
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEndOREndBeforeStart",
+				        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 				error = true;
 
@@ -852,14 +757,11 @@ public class JJTaskBean {
 					calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
 
 				} else {
-					calendarUtil = new ContactCalendarUtil(task.getProject()
-							.getManager().getCompany());
+					calendarUtil = new ContactCalendarUtil(task.getProject().getManager().getCompany());
 				}
 
-				calendarUtil
-						.getEndDate(task, JJTaskBean.Planned, jJTaskService);
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				calendarUtil.getEndDate(task, JJTaskBean.Planned, jJTaskService);
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 			}
 		}
@@ -903,8 +805,7 @@ public class JJTaskBean {
 	public List<JJStatus> completeStatusTask(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("Task", true, null,
-				true)) {
+		for (JJStatus jJStatus : jJStatusService.getStatus("Task", true, null, true)) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJStatus);
@@ -916,8 +817,7 @@ public class JJTaskBean {
 	public List<JJStatus> completeTaskType(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("TaskType", true,
-				null, true)) {
+		for (JJStatus jJStatus : jJStatusService.getStatus("TaskType", true, null, true)) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJStatus);
@@ -933,22 +833,18 @@ public class JJTaskBean {
 		if (task.getSprint() == null) {
 			JJProject proj = task.getProject();
 
-			for (JJContact jJContact : jJPermissionService.areAuthorized(proj
-					.getManager().getCompany(), null, proj, null,
-					"sprintContact", null, true, null, true)) {
+			for (JJContact jJContact : jJPermissionService.areAuthorized(proj.getManager().getCompany(), null, proj,
+			        null, "sprintContact", null, true, null, true)) {
 				String jJCriticityStr = String.valueOf(jJContact.getName());
-				if (jJCriticityStr.toLowerCase()
-						.startsWith(query.toLowerCase())) {
+				if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 					suggestions.add(jJContact);
 				}
 			}
 		} else {
-			JJSprint sp = jJSprintService
-					.findJJSprint(task.getSprint().getId());
+			JJSprint sp = jJSprintService.findJJSprint(task.getSprint().getId());
 			for (JJContact jJContact : sp.getContacts()) {
 				String jJCriticityStr = String.valueOf(jJContact.getName());
-				if (jJCriticityStr.toLowerCase()
-						.startsWith(query.toLowerCase())) {
+				if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 					suggestions.add(jJContact);
 				}
 			}
@@ -961,9 +857,8 @@ public class JJTaskBean {
 		List<JJSprint> suggestions = new ArrayList<JJSprint>();
 		suggestions.add(null);
 
-		JJProject proj = (JJProject) UIComponent
-				.getCurrentComponent(FacesContext.getCurrentInstance())
-				.getAttributes().get("project");
+		JJProject proj = (JJProject) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+		        .get("project");
 
 		for (JJSprint jJSprint : jJSprintService.getSprints(proj, true)) {
 			String jJCriticityStr = String.valueOf(jJSprint.getName());
@@ -994,8 +889,7 @@ public class JJTaskBean {
 
 	public void loadData() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 
 		if (loginBean.getAuthorisationService().isrProject()) {
@@ -1037,8 +931,7 @@ public class JJTaskBean {
 			// 65 = ASCII A
 			int k = 65;
 
-			List<JJChapter> chapters = jJChapterService.getChapters(
-					LoginBean.getCompany(), project, true);
+			List<JJChapter> chapters = jJChapterService.getChapters(LoginBean.getCompany(), project, true);
 			List<JJTask> allJJtask = null;
 			if (!sortMode.equalsIgnoreCase("chapter"))
 				allJJtask = new ArrayList<JJTask>();
@@ -1048,17 +941,14 @@ public class JJTaskBean {
 				Map<Date, String> max = new TreeMap<Date, String>();
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
-				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null,
-						null, null, true, true, false, "Requirement"));
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null,
+				        null, null, null, true, true, false, "Requirement"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null,
-						null, null, true, true, false, "Testcase"));
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null,
+				        null, null, null, true, true, false, "Testcase"));
 
-				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null,
-						null, null, true, true, false, "Bug"));
+				tasks.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null,
+				        null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
@@ -1080,18 +970,16 @@ public class JJTaskBean {
 						JJTask tt = Tasks.get(key);
 
 						char c = (char) k;
-						String group = "<span style=display:none>" + c
-								+ "</span>";
+						String group = "<span style=display:none>" + c + "</span>";
 						// + task.getName();
 						TaskData taskData = null;
 						boolean add = false;
 
 						new GregorianCalendar(2010, 1, 1).getTime();
-						model.add(new TimelineEvent(tt, new GregorianCalendar(
-								Calendar.getInstance().get(Calendar.YEAR) - 5,
-								1, 1).getTime(), new GregorianCalendar(Calendar
-								.getInstance().get(Calendar.YEAR) + 5, 1, 1)
-								.getTime(), false, group, "invisible"));
+						model.add(new TimelineEvent(tt,
+						        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+						        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(),
+						        false, group, "invisible"));
 
 						if (tt.getStartDateReal() != null) {
 
@@ -1101,9 +989,8 @@ public class JJTaskBean {
 							else
 								endDate = tt.getEndDateReal();
 
-							TimelineEvent event = new TimelineEvent(tt,
-									tt.getStartDateReal(), endDate, true,
-									group, Real);
+							TimelineEvent event = new TimelineEvent(tt, tt.getStartDateReal(), endDate, true, group,
+							        Real);
 
 							model.add(event);
 
@@ -1123,9 +1010,8 @@ public class JJTaskBean {
 							else
 								endDate = tt.getEndDateRevised();
 
-							TimelineEvent event = new TimelineEvent(tt,
-									tt.getStartDateRevised(), endDate, true,
-									group, styleClass);
+							TimelineEvent event = new TimelineEvent(tt, tt.getStartDateRevised(), endDate, true, group,
+							        styleClass);
 							model.add(event);
 
 							int workload = 0;
@@ -1137,9 +1023,7 @@ public class JJTaskBean {
 								workload = tt.getWorkloadRevised();
 
 							if (!add)
-								taskData = new TaskData(tt, chapter,
-										tt.getStartDateRevised(), endDate,
-										workload, true);
+								taskData = new TaskData(tt, chapter, tt.getStartDateRevised(), endDate, workload, true);
 						} else {
 
 							String style = null;
@@ -1147,48 +1031,39 @@ public class JJTaskBean {
 								style = "planned1";
 							else
 								style = "planned2";
-							TimelineEvent event = new TimelineEvent(tt,
-									tt.getStartDatePlanned(),
-									tt.getEndDatePlanned(), true, group, style);
+							TimelineEvent event = new TimelineEvent(tt, tt.getStartDatePlanned(),
+							        tt.getEndDatePlanned(), true, group, style);
 							model.add(event);
 
 							if (!add)
-								taskData = new TaskData(tt, chapter,
-										tt.getStartDatePlanned(),
-										tt.getEndDatePlanned(),
-										tt.getWorkloadPlanned(), false);
+								taskData = new TaskData(tt, chapter, tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+								        tt.getWorkloadPlanned(), false);
 						}
 
 						tasksData.add(taskData);
 
 						if (tt.getStartDatePlanned() != null) {
-							min.put(tt.getStartDatePlanned(), tt
-									.getStartDatePlanned().toString());
+							min.put(tt.getStartDatePlanned(), tt.getStartDatePlanned().toString());
 						}
 
 						if (tt.getStartDateRevised() != null) {
-							min.put(tt.getStartDateRevised(), tt
-									.getStartDateRevised().toString());
+							min.put(tt.getStartDateRevised(), tt.getStartDateRevised().toString());
 						}
 
 						if (tt.getStartDateReal() != null) {
-							min.put(tt.getStartDateReal(), tt
-									.getStartDateReal().toString());
+							min.put(tt.getStartDateReal(), tt.getStartDateReal().toString());
 						}
 
 						if (tt.getEndDatePlanned() != null) {
-							max.put(tt.getEndDatePlanned(), tt
-									.getEndDatePlanned().toString());
+							max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned().toString());
 						}
 
 						if (tt.getEndDateRevised() != null) {
-							max.put(tt.getEndDateRevised(), tt
-									.getEndDateRevised().toString());
+							max.put(tt.getEndDateRevised(), tt.getEndDateRevised().toString());
 						}
 
 						if (tt.getEndDateReal() != null) {
-							max.put(tt.getEndDateReal(), tt.getEndDateReal()
-									.toString());
+							max.put(tt.getEndDateReal(), tt.getEndDateReal().toString());
 						}
 
 						k++;
@@ -1214,18 +1089,13 @@ public class JJTaskBean {
 
 						char c = (char) k;
 
-						String group = "<span style=display:none>" + c
-								+ "</span>";
+						String group = "<span style=display:none>" + c + "</span>";
 						// + task.getName();
-						TimelineEvent event = new TimelineEvent(chapter, start,
-								end, false, group, "chapter");
+						TimelineEvent event = new TimelineEvent(chapter, start, end, false, group, "chapter");
 						model.add(new TimelineEvent(chapter,
-								new GregorianCalendar(Calendar.getInstance()
-										.get(Calendar.YEAR) - 5, 1, 1)
-										.getTime(), new GregorianCalendar(
-										Calendar.getInstance().get(
-												Calendar.YEAR) + 5, 1, 1)
-										.getTime(), false, group, "invisible"));
+						        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+						        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(),
+						        false, group, "invisible"));
 
 						model.add(event);
 						k++;
@@ -1239,12 +1109,11 @@ public class JJTaskBean {
 
 			task = null;
 		} else {
-			String path = FacesContext.getCurrentInstance()
-					.getExternalContext().getRequestContextPath();
+			String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 
 			try {
 				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect(path + "/pages/main.jsf?faces-redirect=true");
+				        .redirect(path + "/pages/main.jsf?faces-redirect=true");
 			} catch (IOException e) {
 
 				e.printStackTrace();
@@ -1255,23 +1124,19 @@ public class JJTaskBean {
 
 	public void loadSortedData(List<JJTask> allTasks, int k) {
 
-		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				true, false, false, "requirement"));
-		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				true, false, false, "bug"));
-		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				true, false, false, "Testcase"));
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null, null, true, null, null,
+		        null, null, true, false, false, "requirement"));
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null, null, true, null, null,
+		        null, null, true, false, false, "bug"));
+		allTasks.addAll(jJTaskService.getTasks(sprint, project, LoginBean.getProduct(), null, null, true, null, null,
+		        null, null, true, false, false, "Testcase"));
 
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
 			@Override
 			public int compare(JJTask o1, JJTask o2) {
 				if (sortMode.equalsIgnoreCase("StartDatePlanned")) {
-					return o1.getStartDatePlanned().compareTo(
-							o2.getStartDatePlanned());
+					return o1.getStartDatePlanned().compareTo(o2.getStartDatePlanned());
 
 				} else if (sortMode.equalsIgnoreCase("StartDateReal")) {
 					Date o1Date, o2Date;
@@ -1304,11 +1169,10 @@ public class JJTaskBean {
 			TaskData taskData = null;
 			// System.err.println(group + "/" + tt.getName());
 
-			model.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
-					.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
-					new GregorianCalendar(Calendar.getInstance().get(
-							Calendar.YEAR) + 5, 1, 1).getTime(), false, group,
-					"invisible"));
+			model.add(new TimelineEvent(tt,
+			        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+			        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(), false, group,
+			        "invisible"));
 
 			if (tt.getStartDateReal() != null) {
 
@@ -1318,8 +1182,7 @@ public class JJTaskBean {
 				else
 					endDate = tt.getEndDateReal();
 
-				TimelineEvent event = new TimelineEvent(tt,
-						tt.getStartDateReal(), endDate, true, group, Real);
+				TimelineEvent event = new TimelineEvent(tt, tt.getStartDateReal(), endDate, true, group, Real);
 
 				model.add(event);
 
@@ -1339,9 +1202,7 @@ public class JJTaskBean {
 				else
 					styleClass = "revised2";
 
-				TimelineEvent event = new TimelineEvent(tt,
-						tt.getStartDateRevised(), endDate, true, group,
-						styleClass);
+				TimelineEvent event = new TimelineEvent(tt, tt.getStartDateRevised(), endDate, true, group, styleClass);
 				model.add(event);
 
 				int workload = 0;
@@ -1353,8 +1214,7 @@ public class JJTaskBean {
 					workload = tt.getWorkloadRevised();
 
 				if (!add)
-					taskData = new TaskData(tt, chapter,
-							tt.getStartDateRevised(), endDate, workload, true);
+					taskData = new TaskData(tt, chapter, tt.getStartDateRevised(), endDate, workload, true);
 			} else {
 
 				String style = null;
@@ -1363,15 +1223,13 @@ public class JJTaskBean {
 				else
 					style = "planned2";
 
-				TimelineEvent event = new TimelineEvent(tt,
-						tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
-						group, style);
+				TimelineEvent event = new TimelineEvent(tt, tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
+				        group, style);
 				model.add(event);
 
 				if (!add)
-					taskData = new TaskData(tt, chapter,
-							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
-							tt.getWorkloadPlanned(), false);
+					taskData = new TaskData(tt, chapter, tt.getStartDatePlanned(), tt.getEndDatePlanned(),
+					        tt.getWorkloadPlanned(), false);
 			}
 
 			tasksData.add(taskData);
@@ -1396,9 +1254,8 @@ public class JJTaskBean {
 
 		} else {
 
-			calendarUtil = new ContactCalendarUtil(jJProjectService
-					.findJJProject(LoginBean.getProject().getId()).getManager()
-					.getCompany());
+			calendarUtil = new ContactCalendarUtil(
+			        jJProjectService.findJJProject(LoginBean.getProject().getId()).getManager().getCompany());
 
 		}
 		Object newValue = event.getNewValue();
@@ -1409,8 +1266,7 @@ public class JJTaskBean {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				task.setStartDateRevised(date);
-				validation_error = validateTaskDataFields(true, Revised, date,
-						task);
+				validation_error = validateTaskDataFields(true, Revised, date, task);
 
 				if (taskData.getWorkload() != null) {
 
@@ -1423,8 +1279,7 @@ public class JJTaskBean {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				task.setEndDateRevised(date);
-				validation_error = validateTaskDataFields(false, Revised, date,
-						task);
+				validation_error = validateTaskDataFields(false, Revised, date, task);
 
 				if (taskData.getStartDate() != null) {
 					task.setStartDateRevised(taskData.getStartDate());
@@ -1457,8 +1312,7 @@ public class JJTaskBean {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				task.setStartDateReal(date);
-				validation_error = validateTaskDataFields(true, Real, date,
-						task);
+				validation_error = validateTaskDataFields(true, Real, date, task);
 
 				if (task.getWorkloadReal() != null) {
 					calendarUtil.getEndDate(task, Real, jJTaskService);
@@ -1470,11 +1324,9 @@ public class JJTaskBean {
 			if (newValue != null) {
 				Date date = (Date) newValue;
 				task.setEndDateReal(date);
-				validation_error = validateTaskDataFields(false, Real, date,
-						task);
+				validation_error = validateTaskDataFields(false, Real, date, task);
 
-				if (task.getStartDateReal() == null
-						&& task.getWorkloadReal() != null)
+				if (task.getStartDateReal() == null && task.getWorkloadReal() != null)
 					calendarUtil.getStartDate(task, Real, jJTaskService);
 			}
 		} else if (columnKey.contains("wr")) {
@@ -1538,48 +1390,38 @@ public class JJTaskBean {
 		if (valid) {
 
 			String[] keys = columnKey.split(":");
-			RequestContext.getCurrentInstance().execute(
-					"setRowIndex(" + keys[keys.length - 2] + ")");
+			RequestContext.getCurrentInstance().execute("setRowIndex(" + keys[keys.length - 2] + ")");
 
 			saveJJTask(task, true, new MutableInt(0));
 			// task = jJTaskService.findJJTask(task.getId());
 			updateView(task, UPDATE_OPERATION);
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 
-			if (task.getSprint() != null
-					&& session.getAttribute("jJSprintBean") != null) {
+			if (task.getSprint() != null && session.getAttribute("jJSprintBean") != null) {
 
-				JJSprintBean jJSprintBean = (JJSprintBean) session
-						.getAttribute("jJSprintBean");
-				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint()
-						.getId(), jJSprintBean.getSprintList());
+				JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
+				SprintUtil s = SprintUtil.getSprintUtil(task.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(task
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(task.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
+					s = new SprintUtil(jJSprintService.findJJSprint(task.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(task.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 			reset();
 
 			if (!validation_error)
-				facesMessage = MessageFactory.getMessage(
-						"message_successfully_updated", MessageFactory
-								.getMessage("label_task", "").getDetail(), "e");
+				facesMessage = MessageFactory.getMessage("message_successfully_updated",
+				        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 			// RequestContext.getCurrentInstance().equals("onCellEditTableComplete");
 
 		} else {
-			facesMessage = MessageFactory.getMessage(
-					"message_unsuccessfully_updated", MessageFactory
-							.getMessage("label_task", "").getDetail(), "de la");
+			facesMessage = MessageFactory.getMessage("message_unsuccessfully_updated",
+			        MessageFactory.getMessage("label_task", "").getDetail(), "de la");
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 		}
 		if (facesMessage != null)
@@ -1673,25 +1515,19 @@ public class JJTaskBean {
 		//
 		if (duplicatedTask.getSprint() != null) {
 
-			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
-					.findBean("jJSprintBean");
-			if (jJSprintBean != null
-					&& jJSprintBean
-							.contains(duplicatedTask.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(duplicatedTask
-						.getSprint().getId(), jJSprintBean.getSprintList());
+			JJSprintBean jJSprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
+			if (jJSprintBean != null && jJSprintBean.contains(duplicatedTask.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(duplicatedTask.getSprint().getId(),
+				        jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(
-							jJSprintService.findJJSprint(duplicatedTask
-									.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(duplicatedTask.getSprint()
-											.getId()), LoginBean.getProduct()),
-							jJContactService, jJTaskService);
+					s = new SprintUtil(jJSprintService.findJJSprint(duplicatedTask.getSprint().getId()),
+					        jJTaskService.getSprintTasks(
+					                jJSprintService.findJJSprint(duplicatedTask.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 
@@ -1718,11 +1554,9 @@ public class JJTaskBean {
 			importSprint = null;
 		} else if (mode.equalsIgnoreCase("scrum")) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 			jJSprintBean.attrListener(e);
 
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -1747,37 +1581,32 @@ public class JJTaskBean {
 			Date startDate = format.getStartDate();
 			if (format.getStartDate() == null) {
 				validationFailed = true;
-				message = MessageFactory.getMessage(
-						"validator_task_startDateRequired",
-						FacesMessage.SEVERITY_ERROR, "ttt");
+				message = MessageFactory.getMessage("validator_task_startDateRequired", FacesMessage.SEVERITY_ERROR,
+				        "ttt");
 
 			} else {
 				if (mode.equalsIgnoreCase("scrum")) {
-					if (startDate.before(((JJSprintBean) LoginBean
-							.findBean("jJSprintBean")).getSprintUtil()
-							.getSprint().getStartDate())) {
+					if (startDate.before(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint()
+					        .getStartDate())) {
 
-						format.setStartDate(((JJSprintBean) LoginBean
-								.findBean("jJSprintBean")).getSprintUtil()
-								.getSprint().getStartDate());
+						format.setStartDate(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil()
+						        .getSprint().getStartDate());
 						// validationFailed = true;
 						// message = MessageFactory.getMessage(
 						// "validator_date_startBeforeStart",
 						// MessageFactory.getMessage("label_task", "")
 						// .getDetail(), "Sprint");
 						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-					} else if (startDate.after(((JJSprintBean) LoginBean
-							.findBean("jJSprintBean")).getSprintUtil()
-							.getSprint().getEndDate())) {
+					} else if (startDate.after(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil()
+					        .getSprint().getEndDate())) {
 						// validationFailed = true;
 						// message = MessageFactory.getMessage(
 						// "validator_date_startAfterEnd",
 						// MessageFactory.getMessage("label_task", "")
 						// .getDetail(), "Sprint");
 						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
-						format.setStartDate(((JJSprintBean) LoginBean
-								.findBean("jJSprintBean")).getSprintUtil()
-								.getSprint().getStartDate());
+						format.setStartDate(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil()
+						        .getSprint().getStartDate());
 					}
 				} else {
 					if (sprint != null) {
@@ -1810,14 +1639,12 @@ public class JJTaskBean {
 				if (workload == null) {
 
 					validationFailed = true;
-					message = MessageFactory
-							.getMessage("validator_task_workloadRequired");
+					message = MessageFactory.getMessage("validator_task_workloadRequired");
 					message.setSeverity(FacesMessage.SEVERITY_ERROR);
 				} else if (workload <= 0) {
 
 					validationFailed = true;
-					message = MessageFactory
-							.getMessage("validator_task_workloadNegatif");
+					message = MessageFactory.getMessage("validator_task_workloadNegatif");
 					message.setSeverity(FacesMessage.SEVERITY_ERROR);
 				}
 
@@ -1829,10 +1656,8 @@ public class JJTaskBean {
 			RequestContext.getCurrentInstance().execute("importTask()");
 		else {
 			FacesContext.getCurrentInstance().addMessage(null, message);
-			RequestContext
-					.getCurrentInstance()
-					.execute(
-							"PF('taskImportDialogWidget').jq.effect('shake', {times:5}, 100)");
+			RequestContext.getCurrentInstance()
+			        .execute("PF('taskImportDialogWidget').jq.effect('shake', {times:5}, 100)");
 		}
 
 	}
@@ -1863,16 +1688,13 @@ public class JJTaskBean {
 
 			if (objet.equalsIgnoreCase("Bug")) {
 
-				for (JJBug bug : jJBugService.getImportBugs(
-						LoginBean.getCompany(), project,
-						LoginBean.getProduct(), version, importCategory,
-						importStatus, true)) {
+				for (JJBug bug : jJBugService.getImportBugs(LoginBean.getCompany(), project, LoginBean.getProduct(),
+				        version, importCategory, importStatus, true)) {
 
 					if (!checkAll) {
 
 						if (!jJTaskService.haveTask(bug, true, false, false)) {
-							importFormats.add(new ImportFormat(bug.getName(),
-									bug));
+							importFormats.add(new ImportFormat(bug.getName(), bug));
 						}
 
 					} else {
@@ -1881,47 +1703,35 @@ public class JJTaskBean {
 				}
 
 			} else if (objet.equalsIgnoreCase("Requirement")) {
-				LoginBean loginBean = (LoginBean) LoginBean
-						.findBean("loginBean");
-				for (JJRequirement requirement : jJRequirementService
-						.getRequirements(LoginBean.getCompany(),
-								importCategory, loginBean.getAuthorizedMap(
-										"Requirement", project, product),
-								version, importStatus, null, false, true,
-								false, false, null)) {
+				LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+				for (JJRequirement requirement : jJRequirementService.getRequirements(LoginBean.getCompany(),
+				        importCategory, loginBean.getAuthorizedMap("Requirement", project, product), version,
+				        importStatus, null, false, true, false, false, null)) {
 
 					if (!checkAll) {
 
-						if (!jJTaskService.haveTask(requirement, true, false,
-								true)) {
-							importFormats.add(new ImportFormat(requirement
-									.getName(), requirement));
+						if (!jJTaskService.haveTask(requirement, true, false, true)) {
+							importFormats.add(new ImportFormat(requirement.getName(), requirement));
 						}
 					} else {
 
-						importFormats.add(new ImportFormat(requirement
-								.getName(), requirement));
+						importFormats.add(new ImportFormat(requirement.getName(), requirement));
 					}
 				}
 
 			} else if (objet.equalsIgnoreCase("Testcase")) {
 
-				for (JJTestcase testcase : jJTestcaseService
-						.getImportTestcases(null, project,
-								LoginBean.getProduct(), LoginBean.getVersion(),
-								null, true, false)) {
+				for (JJTestcase testcase : jJTestcaseService.getImportTestcases(null, project, LoginBean.getProduct(),
+				        LoginBean.getVersion(), null, true, false)) {
 
 					if (!checkAll) {
 
-						if (!jJTaskService
-								.haveTask(testcase, true, false, true)) {
-							importFormats.add(new ImportFormat(testcase
-									.getName(), testcase));
+						if (!jJTaskService.haveTask(testcase, true, false, true)) {
+							importFormats.add(new ImportFormat(testcase.getName(), testcase));
 						}
 					} else {
 
-						importFormats.add(new ImportFormat(testcase.getName(),
-								testcase));
+						importFormats.add(new ImportFormat(testcase.getName(), testcase));
 					}
 				}
 			}
@@ -1968,13 +1778,11 @@ public class JJTaskBean {
 	public void importTask() {
 
 		long startTime = System.nanoTime();
-		JJContact c = jJProjectService.findJJProject(
-				LoginBean.getProject().getId()).getManager();
+		JJContact c = jJProjectService.findJJProject(LoginBean.getProject().getId()).getManager();
 		if (c == null)
 			c = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
-		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(
-				c.getCompany());
+		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(c.getCompany());
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH");
 
 		for (ImportFormat format : selectedImportFormat) {
@@ -1991,15 +1799,12 @@ public class JJTaskBean {
 
 			if (format.getStartDate() == null) {
 				if (this.sprint != null && mode.equalsIgnoreCase("planning"))
-					task.setStartDatePlanned(calendarUtil
-							.nextWorkingDate(sprint.getStartDate()));
+					task.setStartDatePlanned(calendarUtil.nextWorkingDate(sprint.getStartDate()));
 				else
-					task.setStartDatePlanned(calendarUtil
-							.nextWorkingDate(new Date()));
+					task.setStartDatePlanned(calendarUtil.nextWorkingDate(new Date()));
 
 			} else {
-				task.setStartDatePlanned(calendarUtil.nextWorkingDate(format
-						.getStartDate()));
+				task.setStartDatePlanned(calendarUtil.nextWorkingDate(format.getStartDate()));
 			}
 
 			if (format.getWorkload() != null) {
@@ -2013,11 +1818,9 @@ public class JJTaskBean {
 
 				JJRequirement requirement = (JJRequirement) format.getObject();
 
-				name = requirement.getName() + " (" + df.format(new Date())
-						+ "h)";
+				name = requirement.getName() + " (" + df.format(new Date()) + "h)";
 
-				requirement = jJRequirementService
-						.findJJRequirement(requirement.getId());
+				requirement = jJRequirementService.findJJRequirement(requirement.getId());
 
 				requirement.getTasks().add(task);
 
@@ -2053,28 +1856,23 @@ public class JJTaskBean {
 
 			task.setName(name);
 			task.setDescription("This is task " + task.getName());
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 
 			if (mode.equalsIgnoreCase("scrum")) {
 
-				JJSprintBean jJSprintBean = (JJSprintBean) session
-						.getAttribute("jJSprintBean");
+				JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 				task.setCreationDate(new Date());
 				// exception name size
-				task.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
-						.getContact());
-				JJStatus status = jJStatusService.getOneStatus("TODO", "Task",
-						true);
+				task.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
+				JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
 				if (status != null)
 					task.setStatus(status);
 				task.setEnabled(true);
 				task.setSprint(jJSprintBean.getSprintUtil().getSprint());
 
 				if (format.getStartDate() == null) {
-					task.setStartDatePlanned(jJSprintBean.getSprintUtil()
-							.getSprint().getStartDate());
+					task.setStartDatePlanned(jJSprintBean.getSprintUtil().getSprint().getStartDate());
 					if (task.getWorkloadPlanned() != null)
 						calendarUtil.getEndDate(task, Planned, jJTaskService);
 				}
@@ -2091,20 +1889,15 @@ public class JJTaskBean {
 		}
 
 		if (mode.equalsIgnoreCase("planning")) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
 			if (sprint != null && session.getAttribute("jJSprintBean") != null) {
 
 				sprint = jJSprintService.findJJSprint(sprint.getId());
 
-				JJSprintBean jJSprintBean = (JJSprintBean) session
-						.getAttribute("jJSprintBean");
-				jJSprintBean.getSprintList().set(
-						jJSprintBean.contains(sprint.getId()),
-						new SprintUtil(sprint, jJTaskService.getSprintTasks(
-								sprint, LoginBean.getProduct()),
-								jJContactService, jJTaskService));
+				JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
+				jJSprintBean.getSprintList().set(jJSprintBean.contains(sprint.getId()), new SprintUtil(sprint,
+				        jJTaskService.getSprintTasks(sprint, LoginBean.getProduct()), jJContactService, jJTaskService));
 
 			}
 			RequestContext context = RequestContext.getCurrentInstance();
@@ -2114,23 +1907,17 @@ public class JJTaskBean {
 
 		} else if (mode.equalsIgnoreCase("scrum")) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 
 			if (!jJSprintBean.getSprintUtil().isRender()) {
 
-				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean
-						.getSprintUtil().getSprint().getId());
+				JJSprint sprint = jJSprintService.findJJSprint(jJSprintBean.getSprintUtil().getSprint().getId());
 				SprintUtil sprintUtil = new SprintUtil(sprint,
-						jJTaskService.getSprintTasks(sprint,
-								LoginBean.getProduct()), jJContactService,
-						jJTaskService);
+				        jJTaskService.getSprintTasks(sprint, LoginBean.getProduct()), jJContactService, jJTaskService);
 				jJSprintBean.setSprintUtil(sprintUtil);
-				jJSprintBean.getSprintList().set(
-						jJSprintBean.contains(sprint.getId()), sprintUtil);
+				jJSprintBean.getSprintList().set(jJSprintBean.contains(sprint.getId()), sprintUtil);
 
 			}
 
@@ -2140,8 +1927,7 @@ public class JJTaskBean {
 			String message = "message_successfully_created";
 
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_task", "").getDetail(),
-					"e");
+			        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
@@ -2239,23 +2025,20 @@ public class JJTaskBean {
 	public void saveJJTask(JJTask ttt, boolean update, MutableInt updateReq) {
 
 		if (update) {
-			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 			ttt.setUpdatedBy(contact);
 			ttt.setUpdatedDate(new Date());
 			ttt = jJTaskService.updateJJTask(ttt);
 		} else {
 
 			ttt.setCreationDate(new Date());
-			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-					.getContact();
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 			ttt.setCreatedBy(contact);
 			jJTaskService.saveJJTask(ttt);
 			ttt = jJTaskService.findJJTask(ttt.getId());
 		}
 		if (updateReq.intValue() == 1)
-			JJRequirementBean.updateRowState(ttt.getRequirement(),
-					jJRequirementService, ttt);
+			JJRequirementBean.updateRowState(ttt.getRequirement(), jJRequirementService, ttt);
 
 	}
 
@@ -2270,9 +2053,8 @@ public class JJTaskBean {
 				else if (mode.equalsIgnoreCase("planning"))
 					importFormat.setStartDate(new Date());
 				else
-					importFormat.setStartDate(((JJSprintBean) LoginBean
-							.findBean("jJSprintBean")).getSprintUtil()
-							.getSprint().getStartDate());
+					importFormat.setStartDate(((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil()
+					        .getSprint().getStartDate());
 
 			} else if (!event.isSelected()) {
 				importFormat.setStartDate(null);
@@ -2289,9 +2071,8 @@ public class JJTaskBean {
 		else if (mode.equalsIgnoreCase("planning"))
 			importFormat.setStartDate(new Date());
 		else
-			importFormat.setStartDate(((JJSprintBean) LoginBean
-					.findBean("jJSprintBean")).getSprintUtil().getSprint()
-					.getStartDate());
+			importFormat.setStartDate(
+			        ((JJSprintBean) LoginBean.findBean("jJSprintBean")).getSprintUtil().getSprint().getStartDate());
 	}
 
 	public void copyObjetListener(UnselectEvent event) {
@@ -2301,11 +2082,11 @@ public class JJTaskBean {
 
 	public class ImportFormat {
 
-		private String name;
-		private Object object;
-		private Date startDate;
-		private Integer workload;
-		private JJStatus taskType;
+		private String		name;
+		private Object		object;
+		private Date		startDate;
+		private Integer		workload;
+		private JJStatus	taskType;
 
 		public ImportFormat() {
 			super();
@@ -2359,28 +2140,27 @@ public class JJTaskBean {
 
 		@Override
 		public boolean equals(Object object) {
-			return (object instanceof ImportFormat) && (getObject() != null) ? getObject()
-					.equals(((ImportFormat) object).getObject())
-					: (object == this);
+			return (object instanceof ImportFormat) && (getObject() != null)
+			        ? getObject().equals(((ImportFormat) object).getObject()) : (object == this);
 		}
 
 	}
 
 	public class TaskData {
-		private JJTask task;
-		private JJChapter chapter;
-		private Date startDate;
-		private Date endDate;
-		private Integer workload;
-		private boolean revisedDate;
-		private List<String> tasks;
-		private List<String> selectedTasks;
-		private String icone;
+		private JJTask			task;
+		private JJChapter		chapter;
+		private Date			startDate;
+		private Date			endDate;
+		private Integer			workload;
+		private boolean			revisedDate;
+		private List<String>	tasks;
+		private List<String>	selectedTasks;
+		private String			icone;
 
-		private List<JJTask> storeTasks;
+		private List<JJTask>	storeTasks;
 
-		public TaskData(JJTask task, JJChapter chapter, Date startDate,
-				Date endDate, Integer workload, boolean revisedDate) {
+		public TaskData(JJTask task, JJChapter chapter, Date startDate, Date endDate, Integer workload,
+		        boolean revisedDate) {
 			super();
 			this.task = task;
 
@@ -2393,24 +2173,20 @@ public class JJTaskBean {
 			storeTasks = new ArrayList<JJTask>();
 			Set<JJTask> taskList = task.getBeforeTasks();
 			for (JJTask tt : taskList) {
-				if (tt.getEnabled() && (tt.getChapter() != null)
-						&& (task.getChapter() != null)
-						&& tt.getChapter().equals(task.getChapter())) {
+				if (tt.getEnabled() && (tt.getChapter() != null) && (task.getChapter() != null)
+				        && tt.getChapter().equals(task.getChapter())) {
 					storeTasks.add(tt);
 				}
 			}
 			List<JJTask> list = new ArrayList<JJTask>();
-			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, true, false, false, "Requirement"));
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null, null,
+			        null, null, true, false, false, "Requirement"));
 
-			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, true, false, false, "Testcase"));
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null, null,
+			        null, null, true, false, false, "Testcase"));
 
-			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, true, false, false, "Bug"));
+			list.addAll(jJTaskService.getTasks(sprint, null, LoginBean.getProduct(), null, chapter, true, null, null,
+			        null, null, true, false, false, "Bug"));
 
 			list.remove(task);
 
@@ -2525,10 +2301,7 @@ public class JJTaskBean {
 		private List<String> convertTaskListToStringList(List<JJTask> tasks) {
 			List<String> list = new ArrayList<String>();
 			for (JJTask task : tasks) {
-				String entry = task.getId()
-						+ "-"
-						+ task.getName().substring(0,
-								Math.min(10, task.getName().length()));
+				String entry = task.getId() + "-" + task.getName().substring(0, Math.min(10, task.getName().length()));
 				list.add(entry);
 			}
 
@@ -2538,17 +2311,13 @@ public class JJTaskBean {
 
 	public void reset() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJSprintBean sprintBean = (JJSprintBean) session
-				.getAttribute("jJSprintBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJSprintBean sprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 
 		if (sprintBean != null) {
 			if (getJJTask_().getSprint() != null) {
-				if (getJJTask_().getSprint().getProject() != null
-						&& sprintBean.getProject() != null) {
-					if (sprintBean.getProject().equals(
-							getJJTask_().getSprint().getProject())) {
+				if (getJJTask_().getSprint().getProject() != null && sprintBean.getProject() != null) {
+					if (sprintBean.getProject().equals(getJJTask_().getSprint().getProject())) {
 						session.setAttribute("jJSprintBean", new JJSprintBean());
 					}
 				}
@@ -2560,8 +2329,7 @@ public class JJTaskBean {
 	}
 
 	public void copyName(JJTask ttt) {
-		StringSelection stringSelection = new StringSelection(
-				this.getDialogHeader(ttt, null));
+		StringSelection stringSelection = new StringSelection(this.getDialogHeader(ttt, null));
 		Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clpbrd.setContents(stringSelection, null);
 	}
@@ -2569,49 +2337,38 @@ public class JJTaskBean {
 	public void deleteTaskData() {
 
 		RequestContext context = RequestContext.getCurrentInstance();
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJSprintBean jJSprintBean = (JJSprintBean) session
-				.getAttribute("jJSprintBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
 		JJTask tJjTask = null;
 
 		if (!mode.equalsIgnoreCase("scrum")) {
 
-			tJjTask = jJTaskService.findJJTask(selectedTaskData.getTask()
-					.getId());
+			tJjTask = jJTaskService.findJJTask(selectedTaskData.getTask().getId());
 			tJjTask.setEnabled(false);
 			saveJJTask(tJjTask, true, new MutableInt(0));
 			updateView(tJjTask, DELETE_OPERATION);
 
-			if (tJjTask.getSprint() != null
-					&& jJSprintBean.contains(tJjTask.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(tJjTask.getSprint()
-						.getId(), jJSprintBean.getSprintList());
+			if (tJjTask.getSprint() != null && jJSprintBean.contains(tJjTask.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tJjTask.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(tJjTask
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(tJjTask.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
+					s = new SprintUtil(jJSprintService.findJJSprint(tJjTask.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(tJjTask.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
 
 					// sprintUtil.setRenderTaskForm(false);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_deleted",
-					MessageFactory.getMessage("label_task", "").getDetail(),
-					"e");
+			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted",
+			        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			context.execute("PF('deleteDialogWidget').hide()");
 		} else {
 
 			tJjTask = jJSprintBean.getTask();
 			jJSprintBean.deleteTask();
-			updateView(jJTaskService.findJJTask(tJjTask.getId()),
-					DELETE_OPERATION);
+			updateView(jJTaskService.findJJTask(tJjTask.getId()), DELETE_OPERATION);
 
 		}
 
@@ -2635,8 +2392,8 @@ public class JJTaskBean {
 		this.viewPanel = viewPanel;
 	}
 
-	private TreeNode selectedTree;
-	private JJRequirement selectedReq;
+	private TreeNode		selectedTree;
+	private JJRequirement	selectedReq;
 
 	public JJRequirement getSelectedReq() {
 		return selectedReq;
@@ -2679,8 +2436,7 @@ public class JJTaskBean {
 					// + task.getRequirement().getName());
 
 					taskTreeNode = new DefaultTreeNode("Requirement :", null);
-					DefaultTreeNode tree = new DefaultTreeNode(
-							task.getRequirement(), taskTreeNode);
+					DefaultTreeNode tree = new DefaultTreeNode(task.getRequirement(), taskTreeNode);
 
 					// System.out.println("TreeNode "
 					// + task.getRequirement().getName());
@@ -2759,91 +2515,49 @@ public class JJTaskBean {
 			endDateDay = new Date();
 
 		String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-				+ System.getProperty("line.separator")
-				+ "<Project xmlns=\"http://schemas.microsoft.com/project\">"
-				+ System.getProperty("line.separator")
-				+ "<SaveVersion>9</SaveVersion>"
-				+ System.getProperty("line.separator")
-				+ "<Title>"
-				+ LoginBean.getProject().getName()
-				+ "</Title>"
-				+ System.getProperty("line.separator")
-				+ "<ScheduleFromStart>1</ScheduleFromStart>"
-				+ System.getProperty("line.separator")
-				+ "<StartDate>"
-				+ f1.format(startDateDay)
-				+ "T"
-				+ f2.format(startDateDay)
-				+ "</StartDate>"
-				+ System.getProperty("line.separator")
-				+ " <FinishDate>"
-				+ System.getProperty("line.separator")
-				+ f1.format(endDateDay)
-				+ "T"
-				+ f2.format(endDateDay)
-				+ "</FinishDate>"
-				+ System.getProperty("line.separator")
-				+ "<DefaultStartTime>09:00:00</DefaultStartTime>"
-				+ System.getProperty("line.separator")
-				+ "<MinutesPerDay>480</MinutesPerDay>"
-				+ System.getProperty("line.separator")
-				+ "<MinutesPerWeek>2400</MinutesPerWeek>"
-				+ System.getProperty("line.separator")
-				+ "<DaysPerMonth>20</DaysPerMonth>"
-				+ System.getProperty("line.separator")
-				+ "<DurationFormat>7</DurationFormat>"
-				+ System.getProperty("line.separator")
-				+ "<WorkFormat>2</WorkFormat>"
-				+ System.getProperty("line.separator")
-				+ "<WeekStartDay>1</WeekStartDay>"
-				+ System.getProperty("line.separator")
-				+ "<CurrentDate>"
-				+ f1.format(new Date())
-				+ "T"
-				+ f2.format(new Date())
-				+ "</CurrentDate>"
-				+ System.getProperty("line.separator")
-				+ "<Tasks>";
+		        + System.getProperty("line.separator") + "<Project xmlns=\"http://schemas.microsoft.com/project\">"
+		        + System.getProperty("line.separator") + "<SaveVersion>9</SaveVersion>"
+		        + System.getProperty("line.separator") + "<Title>" + LoginBean.getProject().getName() + "</Title>"
+		        + System.getProperty("line.separator") + "<ScheduleFromStart>1</ScheduleFromStart>"
+		        + System.getProperty("line.separator") + "<StartDate>" + f1.format(startDateDay) + "T"
+		        + f2.format(startDateDay) + "</StartDate>" + System.getProperty("line.separator") + " <FinishDate>"
+		        + System.getProperty("line.separator") + f1.format(endDateDay) + "T" + f2.format(endDateDay)
+		        + "</FinishDate>" + System.getProperty("line.separator")
+		        + "<DefaultStartTime>09:00:00</DefaultStartTime>" + System.getProperty("line.separator")
+		        + "<MinutesPerDay>480</MinutesPerDay>" + System.getProperty("line.separator")
+		        + "<MinutesPerWeek>2400</MinutesPerWeek>" + System.getProperty("line.separator")
+		        + "<DaysPerMonth>20</DaysPerMonth>" + System.getProperty("line.separator")
+		        + "<DurationFormat>7</DurationFormat>" + System.getProperty("line.separator")
+		        + "<WorkFormat>2</WorkFormat>" + System.getProperty("line.separator") + "<WeekStartDay>1</WeekStartDay>"
+		        + System.getProperty("line.separator") + "<CurrentDate>" + f1.format(new Date()) + "T"
+		        + f2.format(new Date()) + "</CurrentDate>" + System.getProperty("line.separator") + "<Tasks>";
 		for (TaskData tt : tasksData) {
 
-			buffer = buffer + System.getProperty("line.separator") + "<Task>"
-					+ "<UID>1</UID>" + System.getProperty("line.separator")
-					+ "<ID>1</ID>" + System.getProperty("line.separator")
-					+ "<Name>" + tt.getTask().getName() + "</Name>"
-					+ System.getProperty("line.separator") + "<Type>0</Type>"
-					+ System.getProperty("line.separator")
-					+ "<IsNull>0</IsNull>"
-					+ System.getProperty("line.separator") + "<WBS>1</WBS>"
-					+ System.getProperty("line.separator")
-					+ "<OutlineNumber>1</OutlineNumber>"
-					+ System.getProperty("line.separator")
-					+ "<OutlineLevel>1</OutlineLevel>"
-					+ System.getProperty("line.separator")
-					+ "<Priority>500</Priority>"
-					+ System.getProperty("line.separator") + "<Start>"
-					+ f1.format(tt.getTask().getStartDatePlanned()) + "T"
-					+ f2.format(tt.getTask().getStartDatePlanned())
-					+ "</Start>" + System.getProperty("line.separator")
-					+ "<Finish>" + f1.format(tt.getTask().getEndDatePlanned())
-					+ "T" + f2.format(tt.getTask().getEndDatePlanned())
-					+ "</Finish>" + System.getProperty("line.separator")
-					+ "<DurationFormat>7</DurationFormat>"
-					+ System.getProperty("line.separator") + "</Task>";
+			buffer = buffer + System.getProperty("line.separator") + "<Task>" + "<UID>1</UID>"
+			        + System.getProperty("line.separator") + "<ID>1</ID>" + System.getProperty("line.separator")
+			        + "<Name>" + tt.getTask().getName() + "</Name>" + System.getProperty("line.separator")
+			        + "<Type>0</Type>" + System.getProperty("line.separator") + "<IsNull>0</IsNull>"
+			        + System.getProperty("line.separator") + "<WBS>1</WBS>" + System.getProperty("line.separator")
+			        + "<OutlineNumber>1</OutlineNumber>" + System.getProperty("line.separator")
+			        + "<OutlineLevel>1</OutlineLevel>" + System.getProperty("line.separator")
+			        + "<Priority>500</Priority>" + System.getProperty("line.separator") + "<Start>"
+			        + f1.format(tt.getTask().getStartDatePlanned()) + "T"
+			        + f2.format(tt.getTask().getStartDatePlanned()) + "</Start>" + System.getProperty("line.separator")
+			        + "<Finish>" + f1.format(tt.getTask().getEndDatePlanned()) + "T"
+			        + f2.format(tt.getTask().getEndDatePlanned()) + "</Finish>" + System.getProperty("line.separator")
+			        + "<DurationFormat>7</DurationFormat>" + System.getProperty("line.separator") + "</Task>";
 
 		}
-		buffer = buffer + System.getProperty("line.separator") + "</Tasks>"
-				+ System.getProperty("line.separator") + "<Resources/>"
-				+ System.getProperty("line.separator") + "<Assignments/>"
-				+ System.getProperty("line.separator") + "</Project>";
+		buffer = buffer + System.getProperty("line.separator") + "</Tasks>" + System.getProperty("line.separator")
+		        + "<Resources/>" + System.getProperty("line.separator") + "<Assignments/>"
+		        + System.getProperty("line.separator") + "</Project>";
 		InputStream stream = new ByteArrayInputStream(buffer.getBytes());
-		return new DefaultStreamedContent(stream, "xml", LoginBean.getProject()
-				.getName().toUpperCase()
-				+ "-Planning.xml");
+		return new DefaultStreamedContent(stream, "xml",
+		        LoginBean.getProject().getName().toUpperCase() + "-Planning.xml");
 	}
 
 	// Timeline operation
-	public int findInEventTimeLine(List<TimelineEvent> events, JJTask t,
-			boolean real) {
+	public int findInEventTimeLine(List<TimelineEvent> events, JJTask t, boolean real) {
 
 		int j = -1;
 		int i = 0;
@@ -2857,9 +2571,8 @@ public class JJTaskBean {
 			// + real);
 
 			if (events.get(i).getData() instanceof JJTask
-					&& !(events.get(i).getStyleClass().equalsIgnoreCase(Real) ^ real)
-					&& !events.get(i).getStyleClass()
-							.equalsIgnoreCase("invisible")) {
+			        && !(events.get(i).getStyleClass().equalsIgnoreCase(Real) ^ real)
+			        && !events.get(i).getStyleClass().equalsIgnoreCase("invisible")) {
 				JJTask tt = (JJTask) events.get(i).getData();
 				if (t.equals(tt)) {
 
@@ -2896,11 +2609,9 @@ public class JJTaskBean {
 		for (JJTask t : listTasks) {
 
 			if (t.getStartDateRevised() != null) {
-				min.put(t.getStartDateRevised(), t.getStartDateRevised()
-						.toString());
+				min.put(t.getStartDateRevised(), t.getStartDateRevised().toString());
 			} else if (t.getStartDatePlanned() != null) {
-				min.put(t.getStartDatePlanned(), t.getStartDatePlanned()
-						.toString());
+				min.put(t.getStartDatePlanned(), t.getStartDatePlanned().toString());
 			}
 
 			if (t.getStartDateReal() != null) {
@@ -2951,8 +2662,7 @@ public class JJTaskBean {
 					end = date;
 				}
 
-				TimelineEvent event = new TimelineEvent(chapter, start, end,
-						false, group, "chapter");
+				TimelineEvent event = new TimelineEvent(chapter, start, end, false, group, "chapter");
 
 				events.add(event);
 
@@ -2965,11 +2675,9 @@ public class JJTaskBean {
 				while (i1 < events.size()) {
 
 					if (events.get(i1).getData() instanceof JJChapter
-							&& (events.get(i1).getStyleClass()
-									.equalsIgnoreCase("invisible"))) {
+					        && (events.get(i1).getStyleClass().equalsIgnoreCase("invisible"))) {
 
-						if (chapter.equals((JJChapter) model.getEvents()
-								.get(i1).getData())) {
+						if (chapter.equals((JJChapter) model.getEvents().get(i1).getData())) {
 							j1 = i1;
 							i1 = events.size();
 						}
@@ -2990,8 +2698,7 @@ public class JJTaskBean {
 	public void onDeleteTimelineEvent(TimelineModificationEvent e) {
 		// get clone of the TimelineEvent to be deleted
 
-		selectedTaskData = tasksData.get(containTaskData(((JJTask) e
-				.getTimelineEvent().getData()).getId()));
+		selectedTaskData = tasksData.get(containTaskData(((JJTask) e.getTimelineEvent().getData()).getId()));
 		mode = "planning";
 	}
 
@@ -3060,22 +2767,18 @@ public class JJTaskBean {
 
 		} else {
 
-			calendarUtil = new ContactCalendarUtil(jJProjectService
-					.findJJProject(LoginBean.getProject().getId()).getManager()
-					.getCompany());
+			calendarUtil = new ContactCalendarUtil(
+			        jJProjectService.findJJProject(LoginBean.getProject().getId()).getManager().getCompany());
 
 		}
 
 		if (group.equalsIgnoreCase(Real)) {
 
-			tt.setStartDateReal(calendarUtil.nextWorkingDate(ev
-					.getTimelineEvent().getStartDate()));
-			tt.setEndDateReal(calendarUtil.nextWorkingDate(ev
-					.getTimelineEvent().getEndDate()));
+			tt.setStartDateReal(calendarUtil.nextWorkingDate(ev.getTimelineEvent().getStartDate()));
+			tt.setEndDateReal(calendarUtil.nextWorkingDate(ev.getTimelineEvent().getEndDate()));
 
-			tt.setWorkloadReal(Math.round(calendarUtil.calculateWorkLoad(
-					tt.getStartDateReal(), tt.getEndDateReal(), jJTaskService,
-					tt)));
+			tt.setWorkloadReal(Math.round(
+			        calendarUtil.calculateWorkLoad(tt.getStartDateReal(), tt.getEndDateReal(), jJTaskService, tt)));
 
 			saveJJTask(tt, true, new MutableInt(0));
 			// tt = jJTaskService.findJJTask(tt.getId());
@@ -3093,16 +2796,13 @@ public class JJTaskBean {
 			updateView(tt, UPDATE_OPERATION);
 
 		} else if (group.toLowerCase().contains(Planned.toLowerCase())
-				|| group.toLowerCase().contains(Revised.toLowerCase())) {
+		        || group.toLowerCase().contains(Revised.toLowerCase())) {
 
-			tt.setStartDateRevised(calendarUtil.nextWorkingDate(ev
-					.getTimelineEvent().getStartDate()));
-			tt.setEndDateRevised(calendarUtil.nextWorkingDate(ev
-					.getTimelineEvent().getEndDate()));
+			tt.setStartDateRevised(calendarUtil.nextWorkingDate(ev.getTimelineEvent().getStartDate()));
+			tt.setEndDateRevised(calendarUtil.nextWorkingDate(ev.getTimelineEvent().getEndDate()));
 
-			tt.setWorkloadRevised(Math.round(calendarUtil.calculateWorkLoad(
-					tt.getStartDateRevised(), tt.getEndDateRevised(), null,
-					null)));
+			tt.setWorkloadRevised(Math.round(
+			        calendarUtil.calculateWorkLoad(tt.getStartDateRevised(), tt.getEndDateRevised(), null, null)));
 			saveJJTask(tt, true, new MutableInt(0));
 			// tt = jJTaskService.findJJTask(tt.getId());
 
@@ -3124,24 +2824,17 @@ public class JJTaskBean {
 
 		if (tt != null && tt.getSprint() != null) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			if (jJSprintBean != null
-					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
-						jJSprintBean.getSprintList());
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
+			if (jJSprintBean != null && jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(tt
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 
@@ -3150,10 +2843,8 @@ public class JJTaskBean {
 		reset();
 		if (tt != null) {
 
-			FacesMessage facesMessage = MessageFactory.getMessage(
-					"message_successfully_updated",
-					MessageFactory.getMessage("label_task", "").getDetail(),
-					"e");
+			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+			        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
@@ -3161,9 +2852,8 @@ public class JJTaskBean {
 
 	public void onSprintUpdate(JJSprint sprint) {
 
-		for (JJTask tt : jJTaskService.getSprintTasks(
-				jJSprintService.findJJSprint(sprint.getId()),
-				LoginBean.getProduct())) {
+		for (JJTask tt : jJTaskService.getSprintTasks(jJSprintService.findJJSprint(sprint.getId()),
+		        LoginBean.getProduct())) {
 
 			if (containTaskData(tt.getId()) != -1)
 				updateView(tt, UPDATE_OPERATION);
@@ -3201,20 +2891,16 @@ public class JJTaskBean {
 						workLoad = tt.getWorkloadPlanned();
 				}
 
-				TaskData tskst = new TaskData(tt,
-						tasksData.get(i).getChapter(), startDate, endDate,
-						workLoad, tt.getStartDateRevised() != null);
+				TaskData tskst = new TaskData(tt, tasksData.get(i).getChapter(), startDate, endDate, workLoad,
+				        tt.getStartDateRevised() != null);
 
 				tasksData.set(i, tskst);
 			} else
 				tasksData.remove(i);
 
-		} else if (operation.equalsIgnoreCase(ADD_OPERATION)
-				&& tasksData != null) {
+		} else if (operation.equalsIgnoreCase(ADD_OPERATION) && tasksData != null) {
 			if (sortMode == null || sortMode.equalsIgnoreCase("chapter")) {
-				if (tt.getChapter() != null
-						&& (this.sprint == null || (this.sprint.equals(tt
-								.getSprint())))) {
+				if (tt.getChapter() != null && (this.sprint == null || (this.sprint.equals(tt.getSprint())))) {
 					Date startDate = null, endDate = null;
 					int workLoad = 0;
 
@@ -3238,14 +2924,12 @@ public class JJTaskBean {
 							workLoad = tt.getWorkloadPlanned();
 					}
 
-					TaskData tskst = new TaskData(tt, tt.getChapter(),
-							startDate, endDate, workLoad,
-							tt.getStartDateRevised() != null);
+					TaskData tskst = new TaskData(tt, tt.getChapter(), startDate, endDate, workLoad,
+					        tt.getStartDateRevised() != null);
 					tasksData.add(tskst);
 					chapter = tt.getChapter();
 				}
-			} else if (this.sprint == null
-					|| (this.sprint.equals(tt.getSprint()))) {
+			} else if (this.sprint == null || (this.sprint.equals(tt.getSprint()))) {
 				Date startDate = null, endDate = null;
 				int workLoad = 0;
 
@@ -3269,8 +2953,8 @@ public class JJTaskBean {
 						workLoad = tt.getWorkloadPlanned();
 				}
 
-				TaskData tskst = new TaskData(tt, tt.getChapter(), startDate,
-						endDate, workLoad, tt.getStartDateRevised() != null);
+				TaskData tskst = new TaskData(tt, tt.getChapter(), startDate, endDate, workLoad,
+				        tt.getStartDateRevised() != null);
 				tasksData.add(tskst);
 			}
 
@@ -3279,8 +2963,7 @@ public class JJTaskBean {
 
 	}
 
-	public void replaceRealTimelineEvent(List<TimelineEvent> events, JJTask tt,
-			String operation) {
+	public void replaceRealTimelineEvent(List<TimelineEvent> events, JJTask tt, String operation) {
 
 		int i = findInEventTimeLine(events, tt, true);
 		if (i != -1) {
@@ -3302,12 +2985,10 @@ public class JJTaskBean {
 				}
 
 				if (startDate != null)
-					events.add(new TimelineEvent(tt, startDate, endDate, true,
-							group, Real));
+					events.add(new TimelineEvent(tt, startDate, endDate, true, group, Real));
 
 			}
-		} else if (!operation.equalsIgnoreCase(DELETE_OPERATION)
-				&& tt.getStartDateReal() != null) {
+		} else if (!operation.equalsIgnoreCase(DELETE_OPERATION) && tt.getStartDateReal() != null) {
 
 			Date startDate = null, endDate = null;
 
@@ -3320,8 +3001,7 @@ public class JJTaskBean {
 			int j = findInEventTimeLine(events, tt, false);
 			if (j != -1) {
 				String group = events.get(j).getGroup();
-				events.add(new TimelineEvent(tt, startDate, endDate, true,
-						group, Real));
+				events.add(new TimelineEvent(tt, startDate, endDate, true, group, Real));
 			}
 
 		}
@@ -3342,8 +3022,7 @@ public class JJTaskBean {
 				while (i1 < events.size()) {
 
 					if (events.get(i1).getData() instanceof JJTask
-							&& (events.get(i1).getStyleClass()
-									.equalsIgnoreCase("invisible"))) {
+					        && (events.get(i1).getStyleClass().equalsIgnoreCase("invisible"))) {
 
 						if (tt.equals((JJTask) events.get(i1).getData())) {
 							j1 = i1;
@@ -3389,8 +3068,7 @@ public class JJTaskBean {
 				}
 				String group = events.get(j).getGroup();
 				events.remove(j);
-				events.add(new TimelineEvent(tt, startDate, endDate, true,
-						group, styleClass));
+				events.add(new TimelineEvent(tt, startDate, endDate, true, group, styleClass));
 
 			} else if (j != -1) {
 				events.remove(j);
@@ -3401,7 +3079,7 @@ public class JJTaskBean {
 				updateChapterTimeLineEvent(chapter);
 
 		} else if (model != null && operation.equalsIgnoreCase(ADD_OPERATION)
-				&& (sprint == null || (sprint.equals(tt.getSprint())))) {
+		        && (sprint == null || (sprint.equals(tt.getSprint())))) {
 			String group = null;
 			List<TimelineEvent> events = model.getEvents();
 			/* Get Chapter Group */
@@ -3409,11 +3087,9 @@ public class JJTaskBean {
 				int i = 0;
 				int j = -1;
 				while (i < events.size()) {
-					if (events.get(i).getStyleClass()
-							.equalsIgnoreCase("chapter")) {
+					if (events.get(i).getStyleClass().equalsIgnoreCase("chapter")) {
 
-						if (((JJChapter) events.get(i).getData())
-								.equals(chapter)) {
+						if (((JJChapter) events.get(i).getData()).equals(chapter)) {
 							j = i;
 							group = events.get(j).getGroup();
 							i = events.size();
@@ -3445,8 +3121,7 @@ public class JJTaskBean {
 								kd++;
 
 							char c = (char) kd;
-							event.setGroup("<span style=display:none>" + c
-									+ "</span>");
+							event.setGroup("<span style=display:none>" + c + "</span>");
 							events.set(i, event);
 						}
 
@@ -3464,11 +3139,10 @@ public class JJTaskBean {
 				char c = (char) k;
 				group = "<span style=display:none>" + c + "</span>";
 				new GregorianCalendar(2010, 1, 1).getTime();
-				events.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
-						.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
-						new GregorianCalendar(Calendar.getInstance().get(
-								Calendar.YEAR) + 5, 1, 1).getTime(), false,
-						group, "invisible"));
+				events.add(new TimelineEvent(tt,
+				        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+				        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(), false,
+				        group, "invisible"));
 
 				if (tt.getStartDateReal() != null) {
 
@@ -3478,8 +3152,7 @@ public class JJTaskBean {
 					else
 						endDate = tt.getEndDateReal();
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateReal(), endDate, true, group, Real);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDateReal(), endDate, true, group, Real);
 
 					events.add(event);
 
@@ -3499,9 +3172,8 @@ public class JJTaskBean {
 					else
 						endDate = tt.getEndDateRevised();
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateRevised(), endDate, true, group,
-							styleClass);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDateRevised(), endDate, true, group,
+					        styleClass);
 					events.add(event);
 				} else {
 
@@ -3510,36 +3182,30 @@ public class JJTaskBean {
 						style = "planned1";
 					else
 						style = "planned2";
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
-							true, group, style);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
+					        group, style);
 					events.add(event);
 
 				}
 
 				if (tt.getStartDatePlanned() != null) {
-					min.put(tt.getStartDatePlanned(), tt.getStartDatePlanned()
-							.toString());
+					min.put(tt.getStartDatePlanned(), tt.getStartDatePlanned().toString());
 				}
 
 				if (tt.getStartDateRevised() != null) {
-					min.put(tt.getStartDateRevised(), tt.getStartDateRevised()
-							.toString());
+					min.put(tt.getStartDateRevised(), tt.getStartDateRevised().toString());
 				}
 
 				if (tt.getStartDateReal() != null) {
-					min.put(tt.getStartDateReal(), tt.getStartDateReal()
-							.toString());
+					min.put(tt.getStartDateReal(), tt.getStartDateReal().toString());
 				}
 
 				if (tt.getEndDatePlanned() != null) {
-					max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned()
-							.toString());
+					max.put(tt.getEndDatePlanned(), tt.getEndDatePlanned().toString());
 				}
 
 				if (tt.getEndDateRevised() != null) {
-					max.put(tt.getEndDateRevised(), tt.getEndDateRevised()
-							.toString());
+					max.put(tt.getEndDateRevised(), tt.getEndDateRevised().toString());
 				}
 
 				if (tt.getEndDateReal() != null) {
@@ -3565,14 +3231,11 @@ public class JJTaskBean {
 					c = (char) k;
 					group = "<span style=display:none>" + c + "</span>";
 					// + task.getName();
-					TimelineEvent event = new TimelineEvent(chapter, start,
-							end, false, group, "chapter");
+					TimelineEvent event = new TimelineEvent(chapter, start, end, false, group, "chapter");
 					events.add(new TimelineEvent(chapter,
-							new GregorianCalendar(Calendar.getInstance().get(
-									Calendar.YEAR) - 5, 1, 1).getTime(),
-							new GregorianCalendar(Calendar.getInstance().get(
-									Calendar.YEAR) + 5, 1, 1).getTime(), false,
-							group, "invisible"));
+					        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+					        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(), false,
+					        group, "invisible"));
 
 					events.add(event);
 
@@ -3592,11 +3255,10 @@ public class JJTaskBean {
 				char c = (char) k;
 				group = "<span style=display:none>" + c + "</span>";
 
-				events.add(new TimelineEvent(tt, new GregorianCalendar(Calendar
-						.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
-						new GregorianCalendar(Calendar.getInstance().get(
-								Calendar.YEAR) + 5, 1, 1).getTime(), false,
-						group, "invisible"));
+				events.add(new TimelineEvent(tt,
+				        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) - 5, 1, 1).getTime(),
+				        new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR) + 5, 1, 1).getTime(), false,
+				        group, "invisible"));
 
 				if (tt.getStartDateReal() != null) {
 
@@ -3606,8 +3268,7 @@ public class JJTaskBean {
 					else
 						endDate = tt.getEndDateReal();
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateReal(), endDate, true, group, Real);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDateReal(), endDate, true, group, Real);
 
 					events.add(event);
 
@@ -3627,9 +3288,8 @@ public class JJTaskBean {
 					else
 						styleClass = "revised2";
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDateRevised(), endDate, true, group,
-							styleClass);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDateRevised(), endDate, true, group,
+					        styleClass);
 					events.add(event);
 
 				} else {
@@ -3640,9 +3300,8 @@ public class JJTaskBean {
 					else
 						style = "planned2";
 
-					TimelineEvent event = new TimelineEvent(tt,
-							tt.getStartDatePlanned(), tt.getEndDatePlanned(),
-							true, group, style);
+					TimelineEvent event = new TimelineEvent(tt, tt.getStartDatePlanned(), tt.getEndDatePlanned(), true,
+					        group, style);
 					events.add(event);
 				}
 			}
@@ -3662,8 +3321,7 @@ public class JJTaskBean {
 
 		if (sortMode.equalsIgnoreCase("chapter")) {
 
-			return ((JJChapter) taskData1).getCreationDate().compareTo(
-					((JJChapter) taskData2).getCreationDate());
+			return ((JJChapter) taskData1).getCreationDate().compareTo(((JJChapter) taskData2).getCreationDate());
 
 		} else
 			return 1;
@@ -3673,8 +3331,7 @@ public class JJTaskBean {
 	// ToDoTask Layout
 	public void initToDoTasks(ComponentSystemEvent e) {
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 
 		if (contact != null)
 			toDoTasks = jJTaskService.getToDoTasks(contact);
@@ -3682,10 +3339,10 @@ public class JJTaskBean {
 	}
 
 	// shedule imputaion
-	private ScheduleModel lazyEventModel;
-	private Date scheduleInitialDate;
-	private String scheduleInitialView;
-	private int activeTabTeamIndex;
+	private ScheduleModel	lazyEventModel;
+	private Date			scheduleInitialDate;
+	private String			scheduleInitialView;
+	private int				activeTabTeamIndex;
 
 	public ScheduleModel getLazyEventModel() {
 		if (lazyEventModel == null)
@@ -3695,14 +3352,11 @@ public class JJTaskBean {
 
 				@Override
 				public void loadEvents(Date start, Date end) {
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
-					LoginBean loginBean = (LoginBean) session
-							.getAttribute("loginBean");
-					List<JJTask> tasks = jJTaskService.getTasks(
-							LoginBean.getProject(), LoginBean.getProduct(),
-							loginBean.getContact(), start, end);
+					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			                .getSession(false);
+					LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+					List<JJTask> tasks = jJTaskService.getTasks(LoginBean.getProject(), LoginBean.getProduct(),
+			                loginBean.getContact(), start, end);
 
 					for (JJTask t : tasks) {
 						Date s, e;
@@ -3717,20 +3371,17 @@ public class JJTaskBean {
 
 						calendar = Calendar.getInstance();
 
-						calendar.setTime(t.getEndDateReal() != null ? t
-								.getEndDateReal() : end);
+						calendar.setTime(t.getEndDateReal() != null ? t.getEndDateReal() : end);
 						calendar.set(Calendar.SECOND, 0);
 						calendar.set(Calendar.MILLISECOND, 0);
 
 						e = calendar.getTime();
 
-						DefaultScheduleEvent ev = new DefaultScheduleEvent(
-								t.getName(), s, e, t);
+						DefaultScheduleEvent ev = new DefaultScheduleEvent(t.getName(), s, e, t);
 						ev.setDescription(getDialogHeader(t, null));
 						addEvent(ev);
 					}
-					scheduleInitialDate = new Date(
-							(end.getTime() + start.getTime()) / 2);
+					scheduleInitialDate = new Date((end.getTime() + start.getTime()) / 2);
 				}
 			};
 		return lazyEventModel;
@@ -3776,8 +3427,7 @@ public class JJTaskBean {
 
 	public void onViewChange(SelectEvent selectEvent) {
 
-		scheduleInitialDate = (Date) ((Schedule) selectEvent.getComponent())
-				.getInitialDate();
+		scheduleInitialDate = (Date) ((Schedule) selectEvent.getComponent()).getInitialDate();
 		scheduleInitialView = ((Schedule) selectEvent.getComponent()).getView();
 	}
 
@@ -3794,32 +3444,24 @@ public class JJTaskBean {
 
 		if (tt.getSprint() != null) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			if (jJSprintBean != null
-					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
-						jJSprintBean.getSprintList());
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
+			if (jJSprintBean != null && jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(tt
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated",
-				MessageFactory.getMessage("label_task", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+		        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -3837,38 +3479,30 @@ public class JJTaskBean {
 
 		if (tt.getSprint() != null) {
 
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			JJSprintBean jJSprintBean = (JJSprintBean) session
-					.getAttribute("jJSprintBean");
-			if (jJSprintBean != null
-					&& jJSprintBean.contains(tt.getSprint().getId()) != -1) {
-				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(),
-						jJSprintBean.getSprintList());
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			        .getSession(false);
+			JJSprintBean jJSprintBean = (JJSprintBean) session.getAttribute("jJSprintBean");
+			if (jJSprintBean != null && jJSprintBean.contains(tt.getSprint().getId()) != -1) {
+				SprintUtil s = SprintUtil.getSprintUtil(tt.getSprint().getId(), jJSprintBean.getSprintList());
 				if (s != null) {
-					s = new SprintUtil(jJSprintService.findJJSprint(tt
-							.getSprint().getId()),
-							jJTaskService.getSprintTasks(jJSprintService
-									.findJJSprint(tt.getSprint().getId()),
-									LoginBean.getProduct()), jJContactService,
-							jJTaskService);
-					jJSprintBean.getSprintList().set(
-							jJSprintBean.contains(s.getSprint().getId()), s);
+					s = new SprintUtil(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					        jJTaskService.getSprintTasks(jJSprintService.findJJSprint(tt.getSprint().getId()),
+					                LoginBean.getProduct()),
+					        jJContactService, jJTaskService);
+					jJSprintBean.getSprintList().set(jJSprintBean.contains(s.getSprint().getId()), s);
 				}
 			}
 
 		}
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated",
-				MessageFactory.getMessage("label_task", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+		        MessageFactory.getMessage("label_task", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 
-	private ScheduleModel lazyEventModelAll;
-	private Date scheduleInitialDateAll;
-	private String scheduleInitialViewAll;
+	private ScheduleModel	lazyEventModelAll;
+	private Date			scheduleInitialDateAll;
+	private String			scheduleInitialViewAll;
 
 	public ScheduleModel getLazyEventModelAll() {
 		if (lazyEventModelAll == null)
@@ -3879,14 +3513,11 @@ public class JJTaskBean {
 				@Override
 				public void loadEvents(Date start, Date end) {
 
-					List<JJTask> tasks = jJTaskService.getTasks(
-							LoginBean.getProject(), LoginBean.getProduct(),
-							null, start, end);
-					HttpSession session = (HttpSession) FacesContext
-							.getCurrentInstance().getExternalContext()
-							.getSession(false);
-					LoginBean loginBean = (LoginBean) session
-							.getAttribute("loginBean");
+					List<JJTask> tasks = jJTaskService.getTasks(LoginBean.getProject(), LoginBean.getProduct(), null,
+			                start, end);
+					HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+			                .getSession(false);
+					LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 
 					for (JJTask t : tasks) {
 						Date s, e;
@@ -3901,25 +3532,20 @@ public class JJTaskBean {
 
 						calendar = Calendar.getInstance();
 
-						calendar.setTime(t.getEndDateReal() != null ? t
-								.getEndDateReal() : end);
+						calendar.setTime(t.getEndDateReal() != null ? t.getEndDateReal() : end);
 						calendar.set(Calendar.SECOND, 0);
 						calendar.set(Calendar.MILLISECOND, 0);
 
 						e = calendar.getTime();
-						DefaultScheduleEvent ev = new DefaultScheduleEvent(
-								t.getName(), s, e, t);
+						DefaultScheduleEvent ev = new DefaultScheduleEvent(t.getName(), s, e, t);
 						ev.setDescription(getDialogHeader(t, null));
 
-						if (t.getAssignedTo() == null
-								|| !t.getAssignedTo().equals(
-										loginBean.getContact())) {
+						if (t.getAssignedTo() == null || !t.getAssignedTo().equals(loginBean.getContact())) {
 							ev.setStyleClass("scheduleNotMine");
 						}
 						addEvent(ev);
 					}
-					scheduleInitialDateAll = new Date(
-							(end.getTime() + start.getTime()) / 2);
+					scheduleInitialDateAll = new Date((end.getTime() + start.getTime()) / 2);
 				}
 			};
 		return lazyEventModelAll;
@@ -3957,17 +3583,14 @@ public class JJTaskBean {
 
 	public void onViewChangeAll(SelectEvent selectEvent) {
 
-		scheduleInitialDateAll = (Date) ((Schedule) selectEvent.getComponent())
-				.getInitialDate();
-		scheduleInitialViewAll = ((Schedule) selectEvent.getComponent())
-				.getView();
+		scheduleInitialDateAll = (Date) ((Schedule) selectEvent.getComponent()).getInitialDate();
+		scheduleInitialViewAll = ((Schedule) selectEvent.getComponent()).getView();
 	}
 
 	public void onTabTeamChange() {
 
 		FacesContext context = FacesContext.getCurrentInstance();
-		Map<String, String> paramMap = context.getExternalContext()
-				.getRequestParameterMap();
+		Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
 		if (paramMap.get("activeTeamIndex") != null) {
 			String paramIndex = paramMap.get("activeTeamIndex");
 			setActiveTabTeamIndex(Integer.valueOf(paramIndex));
@@ -3976,8 +3599,8 @@ public class JJTaskBean {
 	}
 
 	// layout options
-	private LayoutOptions layoutOptionsOne;
-	private String stateOne;
+	private LayoutOptions	layoutOptionsOne;
+	private String			stateOne;
 
 	public LayoutOptions getLayoutOptionsOne() {
 		return layoutOptionsOne;
@@ -4037,8 +3660,7 @@ public class JJTaskBean {
 
 	public String getActiveIndex() {
 
-		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1"
-				: "0";
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1" : "0";
 
 	}
 
@@ -4061,8 +3683,8 @@ public class JJTaskBean {
 	}
 
 	public HtmlPanelGrid populateViewPanelGrid() {
-		return (HtmlPanelGrid) FacesContext.getCurrentInstance()
-				.getApplication().createComponent(HtmlPanelGrid.COMPONENT_TYPE);
+		return (HtmlPanelGrid) FacesContext.getCurrentInstance().getApplication()
+		        .createComponent(HtmlPanelGrid.COMPONENT_TYPE);
 	}
 
 }

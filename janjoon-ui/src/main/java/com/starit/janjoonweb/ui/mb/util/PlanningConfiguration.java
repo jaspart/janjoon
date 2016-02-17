@@ -10,81 +10,66 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class PlanningConfiguration {
 
-	private JJConfigurationService jJConfigurationService;
-	private JJConfiguration planingTabsConf;
-	private boolean renderScrum;
-	private boolean renderGantt;
-	private boolean render;
-	private String firstPage;
-	private String secondPage;
-	private String firstPageHeader;
-	private String secondPageHeader;
+	private JJConfigurationService	jJConfigurationService;
+	private JJConfiguration			planingTabsConf;
+	private boolean					renderScrum;
+	private boolean					renderGantt;
+	private boolean					render;
+	private String					firstPage;
+	private String					secondPage;
+	private String					firstPageHeader;
+	private String					secondPageHeader;
 
 	public PlanningConfiguration(JJConfigurationService jJConfigurationService) {
 
 		this.jJConfigurationService = jJConfigurationService;
 
-		renderScrum = getPlaningTabsConf().getVal().toLowerCase()
-				.contains("scrum".toLowerCase());
+		renderScrum = getPlaningTabsConf().getVal().toLowerCase().contains("scrum".toLowerCase());
 
-		renderGantt = getPlaningTabsConf().getVal().toLowerCase()
-				.contains("gantt".toLowerCase());
+		renderGantt = getPlaningTabsConf().getVal().toLowerCase().contains("gantt".toLowerCase());
 
 		if (!renderScrum) {
 			render = false;
 			firstPage = "gantt.xhtml";
-			firstPageHeader = MessageFactory.getMessage(
-					"project_gantt_menuitem", "").getDetail();
+			firstPageHeader = MessageFactory.getMessage("project_gantt_menuitem", "").getDetail();
 			secondPage = "scrum.xhtml";
-			secondPageHeader = MessageFactory.getMessage(
-					"project_scrum_menuitem", "").getDetail();
+			secondPageHeader = MessageFactory.getMessage("project_scrum_menuitem", "").getDetail();
 
 		} else if (!renderGantt) {
 			render = false;
 			firstPage = "scrum.xhtml";
-			firstPageHeader = MessageFactory.getMessage(
-					"project_scrum_menuitem", "").getDetail();
+			firstPageHeader = MessageFactory.getMessage("project_scrum_menuitem", "").getDetail();
 			secondPage = "gantt.xhtml";
-			secondPageHeader = MessageFactory.getMessage(
-					"project_gantt_menuitem", "").getDetail();
+			secondPageHeader = MessageFactory.getMessage("project_gantt_menuitem", "").getDetail();
 		} else {
 			render = true;
-			int scrumIndex = getPlaningTabsConf().getVal().toLowerCase()
-					.indexOf("scrum".toLowerCase());
-			int ganttIndex = getPlaningTabsConf().getVal().toLowerCase()
-					.indexOf("gantt".toLowerCase());
+			int scrumIndex = getPlaningTabsConf().getVal().toLowerCase().indexOf("scrum".toLowerCase());
+			int ganttIndex = getPlaningTabsConf().getVal().toLowerCase().indexOf("gantt".toLowerCase());
 
 			if (scrumIndex < ganttIndex) {
 				firstPage = "scrum.xhtml";
-				firstPageHeader = MessageFactory.getMessage(
-						"project_scrum_menuitem", "").getDetail();
+				firstPageHeader = MessageFactory.getMessage("project_scrum_menuitem", "").getDetail();
 				secondPage = "gantt.xhtml";
-				secondPageHeader = MessageFactory.getMessage(
-						"project_gantt_menuitem", "").getDetail();
+				secondPageHeader = MessageFactory.getMessage("project_gantt_menuitem", "").getDetail();
 			} else {
 				firstPage = "gantt.xhtml";
-				firstPageHeader = MessageFactory.getMessage(
-						"project_gantt_menuitem", "").getDetail();
+				firstPageHeader = MessageFactory.getMessage("project_gantt_menuitem", "").getDetail();
 				secondPage = "scrum.xhtml";
-				secondPageHeader = MessageFactory.getMessage(
-						"project_scrum_menuitem", "").getDetail();
+				secondPageHeader = MessageFactory.getMessage("project_scrum_menuitem", "").getDetail();
 
 			}
 		}
 
 		if (!renderGantt && LoginBean.findBean("jJSprintBean") != null)
-			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-					.setActiveTabGantIndex(0);
+			((JJSprintBean) LoginBean.findBean("jJSprintBean")).setActiveTabGantIndex(0);
 
 		if (!renderScrum && LoginBean.findBean("jJSprintBean") != null)
-			((JJSprintBean) LoginBean.findBean("jJSprintBean"))
-					.setActiveTabGantIndex(0);
+			((JJSprintBean) LoginBean.findBean("jJSprintBean")).setActiveTabGantIndex(0);
 
 	}
 
 	public static int getSrumIndex() {
-		PlanningConfiguration configuration = ((LoginBean) LoginBean
-				.findBean("loginBean")).getPlanningConfiguration();
+		PlanningConfiguration configuration = ((LoginBean) LoginBean.findBean("loginBean")).getPlanningConfiguration();
 		if (configuration.getFirstPage().contains("scrum"))
 			return 0;
 		else
@@ -92,8 +77,7 @@ public class PlanningConfiguration {
 	}
 
 	public static int getGanttIndex() {
-		PlanningConfiguration configuration = ((LoginBean) LoginBean
-				.findBean("loginBean")).getPlanningConfiguration();
+		PlanningConfiguration configuration = ((LoginBean) LoginBean.findBean("loginBean")).getPlanningConfiguration();
 		if (configuration.getFirstPage().contains("gantt"))
 			return 0;
 		else
@@ -162,24 +146,20 @@ public class PlanningConfiguration {
 
 	public JJConfiguration getPlaningTabsConf() {
 		if (planingTabsConf == null) {
-			List<JJConfiguration> conf = jJConfigurationService
-					.getConfigurations("planning", "project.type", true);
+			List<JJConfiguration> conf = jJConfigurationService.getConfigurations("planning", "project.type", true);
 			if (conf != null && !conf.isEmpty())
 				planingTabsConf = conf.get(0);
 			else {
 				JJConfiguration configuration = new JJConfiguration();
 				configuration.setName("planning");
-				configuration
-						.setDescription("specify available tab in planing vue");
-				configuration.setCreatedBy(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact());
+				configuration.setDescription("specify available tab in planing vue");
+				configuration.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 				configuration.setCreationDate(new Date());
 				configuration.setEnabled(true);
 				configuration.setParam("project.type");
 				configuration.setVal("gantt,scrum");
 				jJConfigurationService.saveJJConfiguration(configuration);
-				planingTabsConf = jJConfigurationService.getConfigurations(
-						"planning", "project.type", true).get(0);
+				planingTabsConf = jJConfigurationService.getConfigurations("planning", "project.type", true).get(0);
 			}
 
 		}

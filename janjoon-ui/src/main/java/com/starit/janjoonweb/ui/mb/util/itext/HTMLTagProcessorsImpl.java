@@ -10,8 +10,7 @@ import com.itextpdf.text.html.simpleparser.TableWrapper;
 
 @SuppressWarnings("deprecation")
 @Deprecated
-public class HTMLTagProcessorsImpl extends
-		HashMap<String, HTMLTagProcessorImpl> {
+public class HTMLTagProcessorsImpl extends HashMap<String, HTMLTagProcessorImpl> {
 
 	/**
 	 * Creates a Map containing supported tags.
@@ -56,401 +55,538 @@ public class HTMLTagProcessorsImpl extends
 	 * Object that processes the following tags: i, em, b, strong, s, strike, u,
 	 * sup, sub
 	 */
-	public static final HTMLTagProcessorImpl EM_STRONG_STRIKE_SUP_SUP = new HTMLTagProcessorImpl() {
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) {
-			tag = mapTag(tag);
-			attrs.put(tag, null);
-			worker.updateChain(tag, attrs);
-		}
+	public static final HTMLTagProcessorImpl	EM_STRONG_STRIKE_SUP_SUP	= new HTMLTagProcessorImpl() {
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs) {
+			                                                                        tag = mapTag(tag);
+			                                                                        attrs.put(tag, null);
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-			tag = mapTag(tag);
-			worker.updateChain(tag);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+			                                                                        tag = mapTag(tag);
+			                                                                        worker.updateChain(tag);
+		                                                                        }
 
-		/**
-		 * Maps em to i, strong to b, and strike to s. This is a convention: the
-		 * style parser expects i, b and s.
-		 * 
-		 * @param tag
-		 *            the original tag
-		 * @return the mapped tag
-		 */
-		private String mapTag(String tag) {
-			if (HtmlTags.EM.equalsIgnoreCase(tag))
-				return HtmlTags.I;
-			if (HtmlTags.STRONG.equalsIgnoreCase(tag))
-				return HtmlTags.B;
-			if (HtmlTags.STRIKE.equalsIgnoreCase(tag))
-				return HtmlTags.S;
-			return tag;
-		}
+		                                                                        /**
+		                                                                         * Maps
+		                                                                         * em
+		                                                                         * to
+		                                                                         * i,
+		                                                                         * strong
+		                                                                         * to
+		                                                                         * b,
+		                                                                         * and
+		                                                                         * strike
+		                                                                         * to
+		                                                                         * s.
+		                                                                         * This
+		                                                                         * is
+		                                                                         * a
+		                                                                         * convention:
+		                                                                         * the
+		                                                                         * style
+		                                                                         * parser
+		                                                                         * expects
+		                                                                         * i,
+		                                                                         * b
+		                                                                         * and
+		                                                                         * s.
+		                                                                         * 
+		                                                                         * @param tag
+		                                                                         *            the
+		                                                                         *            original
+		                                                                         *            tag
+		                                                                         * @return the
+		                                                                         *         mapped
+		                                                                         *         tag
+		                                                                         */
+		                                                                        private String mapTag(String tag) {
+			                                                                        if (HtmlTags.EM
+	                                                                                        .equalsIgnoreCase(tag))
+				                                                                        return HtmlTags.I;
+			                                                                        if (HtmlTags.STRONG
+	                                                                                        .equalsIgnoreCase(tag))
+				                                                                        return HtmlTags.B;
+			                                                                        if (HtmlTags.STRIKE
+	                                                                                        .equalsIgnoreCase(tag))
+				                                                                        return HtmlTags.S;
+			                                                                        return tag;
+		                                                                        }
 
-	};
+	                                                                        };
 
 	/**
 	 * Object that processes the a tag.
 	 */
-	public static final HTMLTagProcessorImpl A = new HTMLTagProcessorImpl() {
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) {
-			worker.updateChain(tag, attrs);
-			worker.flushContent();
-		}
+	public static final HTMLTagProcessorImpl	A							= new HTMLTagProcessorImpl() {
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs) {
+			                                                                        worker.updateChain(tag, attrs);
+			                                                                        worker.flushContent();
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-			worker.processLink();
-			worker.updateChain(tag);
-		}
-	};
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+			                                                                        worker.processLink();
+			                                                                        worker.updateChain(tag);
+		                                                                        }
+	                                                                        };
 
 	/**
 	 * Object that processes the br tag.
 	 */
-	public static final HTMLTagProcessorImpl BR = new HTMLTagProcessorImpl() {
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) {
-			worker.newLine();
-		}
+	public static final HTMLTagProcessorImpl	BR							= new HTMLTagProcessorImpl() {
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs) {
+			                                                                        worker.newLine();
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl UL_OL = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	UL_OL						= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingLI())
-				worker.endElement(HtmlTags.LI);
-			worker.setSkipText(true);
-			worker.updateChain(tag, attrs);
-			;
-			worker.pushToStack(worker.createList(tag));
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingLI())
+				                                                                        worker.endElement(HtmlTags.LI);
+			                                                                        worker.setSkipText(true);
+			                                                                        worker.updateChain(tag, attrs);
+			                                                                        ;
+			                                                                        worker.pushToStack(
+	                                                                                        worker.createList(tag));
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessorImpls#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingLI())
-				worker.endElement(HtmlTags.LI);
-			worker.setSkipText(false);
-			worker.updateChain(tag);
-			worker.processList();
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessorImpls#endElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingLI())
+				                                                                        worker.endElement(HtmlTags.LI);
+			                                                                        worker.setSkipText(false);
+			                                                                        worker.updateChain(tag);
+			                                                                        worker.processList();
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl HR = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	HR							= new HTMLTagProcessorImpl() {
 
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			worker.pushToStack(worker.createLineSeparator(attrs));
-		}
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.pushToStack(
+	                                                                                        worker.createLineSeparator(
+	                                                                                                attrs));
+		                                                                        }
 
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-		}
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl SPAN = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	SPAN						= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) {
-			worker.updateChain(tag, attrs);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.itextpdf.text.html.simpleparser.HTMLWorker,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs) {
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-			worker.updateChain(tag);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+			                                                                        worker.updateChain(tag);
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl H = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	H							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (!attrs.containsKey(HtmlTags.SIZE)) {
-				int v = 7 - Integer.parseInt(tag.substring(1));
-				attrs.put(HtmlTags.SIZE, Integer.toString(v));
-			}
-			worker.updateChain(tag, attrs);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (!attrs.containsKey(
+	                                                                                        HtmlTags.SIZE)) {
+				                                                                        int v = 7 - Integer.parseInt(
+	                                                                                            tag.substring(1));
+				                                                                        attrs.put(HtmlTags.SIZE,
+	                                                                                            Integer.toString(v));
+			                                                                        }
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			worker.updateChain(tag);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.updateChain(tag);
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl LI = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	LI							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingLI())
-				worker.endElement(tag);
-			worker.setSkipText(false);
-			worker.setPendingLI(true);
-			worker.updateChain(tag, attrs);
-			worker.pushToStack(worker.createListItem());
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingLI())
+				                                                                        worker.endElement(tag);
+			                                                                        worker.setSkipText(false);
+			                                                                        worker.setPendingLI(true);
+			                                                                        worker.updateChain(tag, attrs);
+			                                                                        worker.pushToStack(
+	                                                                                        worker.createListItem());
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			worker.setPendingLI(false);
-			worker.setSkipText(true);
-			worker.updateChain(tag);
-			worker.processListItem();
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.setPendingLI(false);
+			                                                                        worker.setSkipText(true);
+			                                                                        worker.updateChain(tag);
+			                                                                        worker.processListItem();
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl PRE = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	PRE							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (!attrs.containsKey(HtmlTags.FACE)) {
-				attrs.put(HtmlTags.FACE, "Courier");
-			}
-			worker.updateChain(tag, attrs);
-			worker.setInsidePRE(true);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (!attrs.containsKey(
+	                                                                                        HtmlTags.FACE)) {
+				                                                                        attrs.put(HtmlTags.FACE,
+	                                                                                            "Courier");
+			                                                                        }
+			                                                                        worker.updateChain(tag, attrs);
+			                                                                        worker.setInsidePRE(true);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			worker.updateChain(tag);
-			worker.setInsidePRE(false);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.updateChain(tag);
+			                                                                        worker.setInsidePRE(false);
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl DIV = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	DIV							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			worker.updateChain(tag, attrs);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			worker.updateChain(tag);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.updateChain(tag);
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl TABLE = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	TABLE						= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @throws DocumentException
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			TableWrapper table = new TableWrapper(attrs);
-			worker.pushToStack(table);
-			worker.pushTableState();
-			worker.setPendingTD(false);
-			worker.setPendingTR(false);
-			worker.setSkipText(true);
-			// Table alignment should not affect children elements, thus remove
-			attrs.remove(HtmlTags.ALIGN);
-			// In case this is a nested table reset colspan and rowspan
-			attrs.put(HtmlTags.COLSPAN, "1");
-			attrs.put(HtmlTags.ROWSPAN, "1");
-			worker.updateChain(tag, attrs);
-		}
+		                                                                        /**
+		                                                                         * @throws DocumentException
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        TableWrapper table = new TableWrapper(
+	                                                                                        attrs);
+			                                                                        worker.pushToStack(table);
+			                                                                        worker.pushTableState();
+			                                                                        worker.setPendingTD(false);
+			                                                                        worker.setPendingTR(false);
+			                                                                        worker.setSkipText(true);
+			                                                                        // Table
+	                                                                                // alignment
+	                                                                                // should
+	                                                                                // not
+	                                                                                // affect
+	                                                                                // children
+	                                                                                // elements,
+	                                                                                // thus
+	                                                                                // remove
+			                                                                        attrs.remove(HtmlTags.ALIGN);
+			                                                                        // In
+	                                                                                // case
+	                                                                                // this
+	                                                                                // is
+	                                                                                // a
+	                                                                                // nested
+	                                                                                // table
+	                                                                                // reset
+	                                                                                // colspan
+	                                                                                // and
+	                                                                                // rowspan
+			                                                                        attrs.put(HtmlTags.COLSPAN, "1");
+			                                                                        attrs.put(HtmlTags.ROWSPAN, "1");
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingTR())
-				worker.endElement(HtmlTags.TR);
-			worker.updateChain(tag);
-			worker.processTable();
-			worker.popTableState();
-			worker.setSkipText(false);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingTR())
+				                                                                        worker.endElement(HtmlTags.TR);
+			                                                                        worker.updateChain(tag);
+			                                                                        worker.processTable();
+			                                                                        worker.popTableState();
+			                                                                        worker.setSkipText(false);
+		                                                                        }
 
-	};
-	public static final HTMLTagProcessorImpl TR = new HTMLTagProcessorImpl() {
+	                                                                        };
+	public static final HTMLTagProcessorImpl	TR							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @throws DocumentException
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingTR())
-				worker.endElement(tag);
-			worker.setSkipText(true);
-			worker.setPendingTR(true);
-			worker.updateChain(tag, attrs);
-		}
+		                                                                        /**
+		                                                                         * @throws DocumentException
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingTR())
+				                                                                        worker.endElement(tag);
+			                                                                        worker.setSkipText(true);
+			                                                                        worker.setPendingTR(true);
+			                                                                        worker.updateChain(tag, attrs);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingTD())
-				worker.endElement(HtmlTags.TD);
-			worker.setPendingTR(false);
-			worker.updateChain(tag);
-			worker.processRow();
-			worker.setSkipText(true);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingTD())
+				                                                                        worker.endElement(HtmlTags.TD);
+			                                                                        worker.setPendingTR(false);
+			                                                                        worker.updateChain(tag);
+			                                                                        worker.processRow();
+			                                                                        worker.setSkipText(true);
+		                                                                        }
 
-	};
-	public static final HTMLTagProcessorImpl TD = new HTMLTagProcessorImpl() {
+	                                                                        };
+	public static final HTMLTagProcessorImpl	TD							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @throws DocumentException
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException {
-			worker.carriageReturn();
-			if (worker.isPendingTD())
-				worker.endElement(tag);
-			worker.setSkipText(false);
-			worker.setPendingTD(true);
-			worker.updateChain(HtmlTags.TD, attrs);
-			worker.pushToStack(worker.createCell(tag));
-		}
+		                                                                        /**
+		                                                                         * @throws DocumentException
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        if (worker.isPendingTD())
+				                                                                        worker.endElement(tag);
+			                                                                        worker.setSkipText(false);
+			                                                                        worker.setPendingTD(true);
+			                                                                        worker.updateChain(HtmlTags.TD,
+	                                                                                        attrs);
+			                                                                        worker.pushToStack(
+	                                                                                        worker.createCell(tag));
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag)
-				throws DocumentException {
-			worker.carriageReturn();
-			worker.setPendingTD(false);
-			worker.updateChain(HtmlTags.TD);
-			worker.setSkipText(true);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag)
+	                                                                                            throws DocumentException {
+			                                                                        worker.carriageReturn();
+			                                                                        worker.setPendingTD(false);
+			                                                                        worker.updateChain(HtmlTags.TD);
+			                                                                        worker.setSkipText(true);
+		                                                                        }
 
-	};
+	                                                                        };
 
-	public static final HTMLTagProcessorImpl IMG = new HTMLTagProcessorImpl() {
+	public static final HTMLTagProcessorImpl	IMG							= new HTMLTagProcessorImpl() {
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String, java.util.Map)
-		 */
-		public void startElement(HTMLWorkerImpl worker, String tag,
-				Map<String, String> attrs) throws DocumentException,
-				IOException {
-			worker.updateChain(tag, attrs);
-			worker.processImage(worker.createImage(attrs), attrs);
-			worker.updateChain(tag);
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#startElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String,
+		                                                                         *      java.util.Map)
+		                                                                         */
+		                                                                        public void startElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag,
+	                                                                                    Map<String, String> attrs)
+	                                                                                            throws DocumentException,
+	                                                                                            IOException {
+			                                                                        worker.updateChain(tag, attrs);
+			                                                                        worker.processImage(
+	                                                                                        worker.createImage(attrs),
+	                                                                                        attrs);
+			                                                                        worker.updateChain(tag);
+		                                                                        }
 
-		/**
-		 * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
-		 *      java.lang.String)
-		 */
-		public void endElement(HTMLWorkerImpl worker, String tag) {
-		}
+		                                                                        /**
+		                                                                         * @see com.itextpdf.text.html.simpleparser.HTMLTagProcessors#endElement(com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl,
+		                                                                         *      java.lang.String)
+		                                                                         */
+		                                                                        public void endElement(
+	                                                                                    HTMLWorkerImpl worker,
+	                                                                                    String tag) {
+		                                                                        }
 
-	};
+	                                                                        };
 
 	/** Serial version UID. */
-	private static final long serialVersionUID = -959260811961222824L;
+	private static final long					serialVersionUID			= -959260811961222824L;
 }

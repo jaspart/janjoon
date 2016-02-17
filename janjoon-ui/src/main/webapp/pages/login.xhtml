@@ -8,7 +8,7 @@
 
 <h:head>
 	<link rel="shortcut icon" type="image/png"
-		href="#{request.contextPath}/resources/images/janjoon_logo.ico" />	
+		href="#{request.contextPath}/resources/images/janjoon_logo.ico" />
 	<f:facet name="first">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -23,18 +23,21 @@
 <h:body styleClass="loginbodyjanjoon">
 	<h:form id="login" method="post">
 		<p:growl showDetail="true" id="auth" />
-		<h:panelGroup layout="block" styleClass="Wid90 DispBlock MarAuto TexAlCenter">
-			<h:panelGroup layout="block" styleClass="Wid33 MarAuto WidAutoOnMobile">
+		<h:panelGroup layout="block"
+			styleClass="Wid90 DispBlock MarAuto TexAlCenter">
+			<h:panelGroup layout="block"
+				styleClass="Wid33 MarAuto WidAutoOnMobile">
 				<h:graphicImage name="janjoon_logo.ico" library="images"
 					style="width:40%; max-width:200px;" />
-				<h:panelGroup layout="block" styleClass="EmptyBox10"/>
+				<h:panelGroup layout="block" styleClass="EmptyBox10" />
 				<h:panelGroup layout="block" styleClass="Card ShadowEffect">
-					<h:panelGroup layout="block" styleClass="EmptyBox20"/>
-					<h:panelGroup layout="block" styleClass="Wid100 OvHidden BigTopic Fs30">
+					<h:panelGroup layout="block" styleClass="EmptyBox20" />
+					<h:panelGroup layout="block"
+						styleClass="Wid100 OvHidden BigTopic Fs30">
 						<i class="icon-users Fs40"></i>
 						#{messages.login_pleaseLogin_header}
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="EmptyBox20"/>
+					<h:panelGroup layout="block" styleClass="EmptyBox20" />
 					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:inputText id="username"
 							placeholder="#{messages.login_username_label}"
@@ -44,14 +47,14 @@
 							<f:validator validatorId="emailValidator" />
 						</p:inputText>
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="EmptyBox10"/>
+					<h:panelGroup layout="block" styleClass="EmptyBox10" />
 					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:password id="password" value="#{loginBean.password}"
 							required="true" styleClass="Wid80 TexAlCenter Fs18"
 							placeholder="#{messages.login_password_label}"
 							requiredMessage="#{messages.login_necessaryPassword_label}" />
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="EmptyBox30"/>
+					<h:panelGroup layout="block" styleClass="EmptyBox30" />
 					<p:selectBooleanCheckbox value="#{loginBean.agreeTerms}">
 						<p:ajax event="change" update="submit" />
 					</p:selectBooleanCheckbox>
@@ -61,41 +64,37 @@
 						<h:outputLabel styleClass="Fs14"
 							value="#{messages.login_terms_label}" />
 					</h:outputLink>
-					<h:panelGroup layout="block" styleClass="EmptyBox30"/>
+					<h:panelGroup layout="block" styleClass="EmptyBox30" />
 					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:commandButton id="submit"
 							value="#{messages.login_login_button}"
-							onstart="PF('blockUIWidget').block()"
-							onerror="PF('blockUIWidget').unblock()"
-							oncomplete="PF('blockUIWidget').unblock()"
 							action="#{loginBean.login}" icon="fa fa-key"
 							styleClass="GreenButton Wid60 Fs18 White RaisedButton"
 							disabled="#{!loginBean.agreeTerms}" update=":login:auth" />
 					</h:panelGroup>
-					<h:panelGroup layout="block" styleClass="EmptyBox5"/>
+					<h:panelGroup layout="block" styleClass="EmptyBox5" />
 					<h:panelGroup layout="block" styleClass="Wid100">
 						<p:button value="#{messages.signup_message}" icon="fa fa-sign-in"
 							styleClass="Wid60 Fs18 White RaisedButton"
 							href="/pages/signup.jsf?faces-redirect=true" />
 					</h:panelGroup>
-					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox20"></h:panelGroup> -->
 					<h:panelGroup layout="block" styleClass="Separator"></h:panelGroup>
-					<!-- 					<h:panelGroup layout="block" styleClass="EmptyBox10"></h:panelGroup> -->
 					<h:panelGroup layout="block" styleClass="Wid100">
 						<ui:insert name="footer">
 							<ui:include src="../templates/footer.xhtml" />
 						</ui:insert>
 					</h:panelGroup>
-					<pe:blockUI widgetVar="blockUIWidget">
-						<h:panelGrid columns="2">
-							<p:graphicImage name="images/preloader.gif" library="rioLayout"
-								style="vertical-align: middle;" />
-							<h:outputText value="#{messages.label_refresh}"
-								style="white-space: nowrap;" />
-						</h:panelGrid>
-					</pe:blockUI>
 				</h:panelGroup>
 			</h:panelGroup>
+			<p:ajaxStatus
+				style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+				<f:facet name="start">
+					<p:graphicImage name="images/preloader.gif" library="rioLayout" />
+				</f:facet>
+				<f:facet name="complete">
+					<h:outputText value="" />
+				</f:facet>
+			</p:ajaxStatus>
 		</h:panelGroup>
 		<h:outputStylesheet name="css/core-layout.css" library="rioLayout" />
 		<h:outputStylesheet name="standard.css" library="css" />

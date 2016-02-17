@@ -86,15 +86,25 @@
 											</h:panelGroup>
 											<h:panelGroup layout="block" styleClass="Container60">
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:selectManyMenu id="sprintcts"
+													<p:selectCheckboxMenu id="sprintcts"
+														validator="listCategoriesValidator"
+														label="#{jjsprint.contactsLabel}"
 														value="#{jjsprint.contacts}" scrollHeight="150"
-														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
-														showCheckbox="true">
+														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
 															itemLabel="#{ctc.firstname} #{ctc.name}"
 															itemValue="#{ctc}" />
-														<f:validator validatorId="listCategoriesValidator" />
-													</p:selectManyMenu>
+														<p:ajax event="change" update="@this" immediate="true" />
+													</p:selectCheckboxMenu>
+													<!-- 													<p:selectManyMenu id="sprintcts" -->
+													<!-- 														value="#{jjsprint.contacts}" scrollHeight="150" -->
+													<!-- 														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" -->
+													<!-- 														showCheckbox="true"> -->
+													<!-- 														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc" -->
+													<!-- 															itemLabel="#{ctc.firstname} #{ctc.name}" -->
+													<!-- 															itemValue="#{ctc}" /> -->
+													<!-- 														<f:validator validatorId="listCategoriesValidator" /> -->
+													<!-- 													</p:selectManyMenu> -->
 												</h:panelGroup>
 											</h:panelGroup>
 										</h:panelGroup>
@@ -222,8 +232,7 @@
 														value="#{messages.label_save}" icon="fa fa-check Fs16"
 														process="@this,sprintName,sprintED,sprintSD,sprintcts"
 														actionListener="#{jJSprintBean.attrListener}"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+														oncomplete="updateTabViewWidth();"
 														update=":projecttabview:SprintTabView:sprintForm :growlForm">
 														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 														<f:attribute name="create" value="edit" />
@@ -231,8 +240,7 @@
 													<p:remoteCommand name="editSprint"
 														update=":projecttabview :growlForm"
 														action="#{jJSprintBean.editSprint}"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+														oncomplete="updateTabViewWidth();" />
 												</h:panelGroup>
 											</h:panelGroup>
 											<h:panelGroup layout="block"
@@ -244,8 +252,7 @@
 														disabled="{!loginBean.authorisationService.wProject}"
 														value="#{messages.label_delete}" icon="fa fa-trash Fs16"
 														action="#{jJSprintBean.deleteSprint(jjsprint)}"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+														oncomplete="updateTabViewWidth();"
 														update=":projecttabview :growlForm">
 														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
 													</p:commandButton>
@@ -258,9 +265,7 @@
 														value="#{messages.project_gantt_import_button}"
 														id="createTaskttButton" icon="fa fa-plus-square Fs16"
 														update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :importTaskDialogPanel :growlForm"
-														immediate="true" onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock();"
-														resetValues="true"
+														immediate="true" resetValues="true"
 														actionListener="#{jJTaskBean.loadImportFormat}"
 														title="#{messages.project_gantt_import_button}">
 														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
@@ -546,8 +551,7 @@
 							disabled="#{jjsprint.disableDragDrop}"
 							activeStyleClass="highLightRow" datasource="todo">
 							<p:ajax listener="#{jJSprintBean.addTaskToProg}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+								oncomplete="updateTabViewWidth();"
 								update=":projecttabview :growlForm">
 							</p:ajax>
 						</p:droppable>
@@ -557,8 +561,7 @@
 							disabled="#{jjsprint.disableDragDrop}"
 							activeStyleClass="highLightRow" datasource="prog">
 							<p:ajax listener="#{jJSprintBean.addTaskToDone}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+								oncomplete="updateTabViewWidth();"
 								update=":projecttabview :editBugDialog :growlForm">
 							</p:ajax>
 						</p:droppable>
@@ -568,8 +571,7 @@
 							disabled="#{jjsprint.disableDragDrop}"
 							activeStyleClass="highLightRow" datasource="prog">
 							<p:ajax listener="#{jJSprintBean.addTaskToTodo}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+								oncomplete="updateTabViewWidth();"
 								update=":projecttabview :growlForm">
 							</p:ajax>
 						</p:droppable>
@@ -579,8 +581,7 @@
 							disabled="#{jjsprint.disableDragDrop}"
 							activeStyleClass="highLightRow" datasource="done">
 							<p:ajax listener="#{jJSprintBean.addTaskToTodo}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+								oncomplete="updateTabViewWidth();"
 								update=":projecttabview :growlForm">
 							</p:ajax>
 						</p:droppable>
@@ -591,8 +592,7 @@
 							disabled="#{jjsprint.disableDragDrop}"
 							activeStyleClass="highLightRow" datasource="done">
 							<p:ajax listener="#{jJSprintBean.addTaskToProg}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+								oncomplete="updateTabViewWidth();"
 								update=":projecttabview :growlForm">
 							</p:ajax>
 						</p:droppable>

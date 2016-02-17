@@ -141,9 +141,7 @@
 															itemLabel="#{messages.contact_anyProject}" />
 														<f:selectItems value="#{jJProjectBean.projectList}"
 															var="p" itemLabel="#{p.name}" itemValue="#{p}" />
-														<p:ajax onstart="PF('blockUIWidget').block()"
-															oncomplete="PF('blockUIWidget').unblock()"
-															update="configForm" />
+														<p:ajax update="configForm" />
 													</p:selectOneMenu>
 												</h:panelGroup>
 											</h:panelGroup>
@@ -171,9 +169,7 @@
 														itemLabel="#{messages.contact_anyProduct}" />
 													<f:selectItems value="#{jJProductBean.productList}" var="p"
 														itemLabel="#{p.name}" itemValue="#{p}" />
-													<p:ajax onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock()"
-														update="configForm" />
+													<p:ajax update="configForm" />
 												</p:selectOneMenu>
 											</h:panelGroup>
 										</h:panelGroup>
@@ -229,9 +225,7 @@
 									<h:panelGroup layout="block" styleClass="Container100">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="submit" icon="fa fa-save Fs16"
-												update=":vacationForm configForm :workdaysCalendar :growlForm "
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()"
+												update=":vacationForm configForm :workdaysCalendar :growlForm "												
 												value="#{messages.contact_submit}"
 												action="#{jJContactBean.updateUserConfiguration(loginBean,jJRequirementBean)}" />
 										</h:panelGroup>
@@ -334,9 +328,7 @@
 										mode="popup">
 										<p:ajax event="timeSelect"
 											update=":workdaysCalendar :vacationForm :configForm :growlForm"
-											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
-											onstart="PF('blockUIWidget').block();"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}" />
 									</pe:timePicker>
 									<!-- 									<p:calendar value="#{day.startDate1}" pattern="HH:mm"  -->
 									<!-- 										timeOnly="true" readonlyInput="true" showButtonPanel="true"> -->
@@ -353,9 +345,7 @@
 										locale="#{localeBean.locale}">
 										<p:ajax event="timeSelect"
 											update=":workdaysCalendar :vacationForm :configForm :growlForm"
-											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}"
-											onstart="PF('blockUIWidget').block();"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											listener="#{jJContactBean.timeSelectListener(day,1,loginBean,loginBean.contact)}" />
 									</pe:timePicker>
 								</p:column>
 								<p:column width="15%">
@@ -364,9 +354,7 @@
 										mode="popup">
 										<p:ajax event="timeSelect"
 											update=":workdaysCalendar :vacationForm :configForm :growlForm"
-											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
-											onstart="PF('blockUIWidget').block();"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}" />
 									</pe:timePicker>
 								</p:column>
 								<p:column width="15%">
@@ -375,9 +363,7 @@
 										locale="#{localeBean.locale}">
 										<p:ajax event="timeSelect"
 											update=":workdaysCalendar :vacationForm :configForm :growlForm"
-											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"
-											onstart="PF('blockUIWidget').block();"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"/>
 									</pe:timePicker>
 								</p:column>
 							</p:dataTable>
@@ -397,8 +383,6 @@
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton icon="fa fa-trash Fs16"
 												update="vacationForm :configForm :workdaysCalendar :growlForm"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()"
 												title="#{messages.label_delete}" immediate="true"
 												actionListener="#{jJContactBean.removeVacation(loginBean,loginBean.contact,vacation.startVacation,vacation.endVacation)}"
 												styleClass="littleButton" />
@@ -470,8 +454,6 @@
 											<h:panelGroup layout="block" styleClass="ContainerIndent">
 												<p:commandButton id="addVacation"
 													icon="fa fa-plus-square Fs20"
-													onstart="PF('blockUIWidget').block()"
-													oncomplete="PF('blockUIWidget').unblock()"
 													disabled="#{jJContactBean.startDate == null || jJContactBean.endDate == null}"
 													update="vacationForm :configForm :workdaysCalendar :growlForm"
 													action="#{jJContactBean.addVacation(loginBean,loginBean.contact)}"
@@ -494,8 +476,7 @@
 					<p:fileUpload
 						fileUploadListener="#{licenseBean.handleContactFileUpload}"
 						mode="advanced" dragDropSupport="true"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock();PF('changePhotoDialogWidget').hide()"
+						oncomplete="PF('changePhotoDialogWidget').hide()"
 						update=":vacationForm :configForm :workdaysCalendar :growlForm"
 						sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg|jpg)$/" />
 				</h:form>

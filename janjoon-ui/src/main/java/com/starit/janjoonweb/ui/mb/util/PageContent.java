@@ -4,8 +4,8 @@ import java.util.List;
 
 public class PageContent {
 
-	String page;
-	List<String> objects;
+	String			page;
+	List<String>	objects;
 
 	public PageContent(String page, List<String> list) {
 

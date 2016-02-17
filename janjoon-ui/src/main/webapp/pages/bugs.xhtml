@@ -20,8 +20,8 @@
 		<h:form id="bugForm">
 			<f:event type="preRenderComponent"
 				listener="#{bugDataTableOptions.dataTableInit(dataTable,mineBugs,glbFilter,criticitySelect,importanceSelect,statusSelect)}" />
-			<pe:blockUI target="bugTable2" content="blockUIContent"
-				widgetVar="blockUIWidget2" />
+<!-- 			<pe:blockUI target="bugTable2" content="blockUIContent" -->
+<!-- 				widgetVar="blockUIWidget2" /> -->
 			<h:panelGrid id="blockUIContent" columns="2"
 				style="display:none;table-layout:auto;">
 				<p:graphicImage name="images/preloader.gif" library="rioLayout"
@@ -116,18 +116,17 @@
 							update="bugTable2:deleteMButton  bugTable2:subscribeMButton" />
 						<p:ajax event="toggleSelect"
 							update="bugTable2:deleteMButton bugTable2:subscribeMButton" />
-						<p:ajax event="page" onstart="PF('blockUIWidget2').block()"
-							oncomplete="PF('blockUIWidget2').unblock()" />
-						<p:ajax event="sort" onstart="PF('blockUIWidget2').block()"
-							oncomplete="PF('blockUIWidget2').unblock()" />
+<!-- 						<p:ajax event="page" onstart="PF('blockUIWidget2').block()" -->
+<!-- 							oncomplete="PF('blockUIWidget2').unblock()" /> -->
+<!-- 						<p:ajax event="sort" onstart="PF('blockUIWidget2').block()" -->
+<!-- 							oncomplete="PF('blockUIWidget2').unblock()" /> -->
 						<!-- 						<p:ajax event="filter" onstart="PF('blockUIWidget2').block()" -->
 						<!-- 							oncomplete="PF('blockUIWidget2').unblock()" /> -->
 
-						<p:ajax event="rowDblselect"
-							onstart="PF('blockUIWidget2').block()"
+						<p:ajax event="rowDblselect"							
 							update=":createPanel :bugDialogHeader" resetValues="true"
 							listener="#{jJBugBean.onRowDblClckSelect}"
-							oncomplete="PF('blockUIWidget2').unblock();PF('createDialogWidget').show()"
+							oncomplete="PF('createDialogWidget').show()"
 							title="#{messages.label_edit}" />
 
 						<f:facet name="header">
@@ -186,8 +185,6 @@
 												id="subscribeMButton" icon="fa fa-star Gray Fs20"
 												styleClass="GrayButton"
 												update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()"
 												actionListener="#{jJBugBean.onRateMultiple}"
 												disabled="#{empty jJBugBean.selectedBugList}" />
 										</h:panelGroup>
@@ -233,9 +230,7 @@
 
 							<!-- 							</p:commandLink> -->
 
-							<p:commandButton actionListener="#{jJBugBean.onrate(bug)}"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()"
+							<p:commandButton actionListener="#{jJBugBean.onrate(bug)}"								
 								update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
 								styleClass="MarLeftQuarter GrayButton littleButton"
 								icon="fa fa-star Fs20 #{jJBugBean.isRated(bug) ? 'Yellow' : 'BoldGray'}"

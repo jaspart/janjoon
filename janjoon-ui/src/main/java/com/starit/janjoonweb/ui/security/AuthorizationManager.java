@@ -17,46 +17,46 @@ import com.starit.janjoonweb.ui.mb.util.PageContent;
 @Component("authorizationManager")
 public class AuthorizationManager implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
 
 	@Autowired
-	JJPermissionService jJPermissionService;
+	JJPermissionService			jJPermissionService;
 
 	public void setjJPermissionService(JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
-	JJContact contact;
+	JJContact						contact;
 
-	public static List<PageContent> pageContents = new ArrayList<PageContent>() {
-		{
-			List<String> objects = new ArrayList<String>() {
+	public static List<PageContent>	pageContents	= new ArrayList<PageContent>() {
+		                                                {
+			                                                List<String> objects = new ArrayList<String>() {
 
-				{
-					add("Build");
-				}
+				                                                {
+					                                                add("Build");
+				                                                }
 
-			};
-			add(new PageContent("development", objects));
+			                                                };
+			                                                add(new PageContent("development", objects));
 
-			objects = new ArrayList<String>() {
-				{
-					add("Requirement");
-				}
+			                                                objects = new ArrayList<String>() {
+				                                                {
+					                                                add("Requirement");
+				                                                }
 
-			};
-			add(new PageContent("specifications", objects));
+			                                                };
+			                                                add(new PageContent("specifications", objects));
 
-			objects = new ArrayList<String>() {
-				{
-					add("Sprint");
-					add("Task");
-				}
+			                                                objects = new ArrayList<String>() {
+				                                                {
+					                                                add("Sprint");
+					                                                add("Task");
+				                                                }
 
-			};
-			add(new PageContent("planning", objects));
-		}
-	};
+			                                                };
+			                                                add(new PageContent("planning", objects));
+		                                                }
+	                                                };
 
 	public JJContact getContact() {
 		return contact;
@@ -70,22 +70,18 @@ public class AuthorizationManager implements Serializable {
 
 	}
 
-	public boolean isAuthorized(JJContact contact, JJProject project,
-			JJProduct product, String objet, JJCategory category, Boolean r,
-			Boolean w, Boolean x) {
-		return jJPermissionService.isAuthorized(contact, project, product,
-				objet, category, r, w, x);
+	public boolean isAuthorized(JJContact contact, JJProject project, JJProduct product, String objet,
+	        JJCategory category, Boolean r, Boolean w, Boolean x) {
+		return jJPermissionService.isAuthorized(contact, project, product, objet, category, r, w, x);
 	}
 
-	public boolean getAuthorization(String page, JJProject project,
-			JJProduct product) {
+	public boolean getAuthorization(String page, JJProject project, JJProduct product) {
 		int i = contain(page);
 		if (i == -1)
 			return true;
 		else {
 
-			return jJPermissionService.isAuthorized(contact, project, product,
-					pageContents.get(i).getObjects().get(0));
+			return jJPermissionService.isAuthorized(contact, project, product, pageContents.get(i).getObjects().get(0));
 
 		}
 

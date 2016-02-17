@@ -19,12 +19,11 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private JJProfileService profileService;
-	private JJPermissionService permissionService;
+	private static final long	serialVersionUID	= 1L;
+	private JJProfileService	profileService;
+	private JJPermissionService	permissionService;
 
-	public LazyProfileDataModel(JJProfileService profileService,
-			JJPermissionService jJPermissionService) {
+	public LazyProfileDataModel(JJProfileService profileService, JJPermissionService jJPermissionService) {
 
 		this.profileService = profileService;
 		this.permissionService = jJPermissionService;
@@ -42,42 +41,32 @@ public class LazyProfileDataModel extends LazyDataModel<JJProfile> {
 	}
 
 	@Override
-	public List<JJProfile> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJProfile> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
-		SelectOneMenu objectComponent = (SelectOneMenu) LoginBean
-				.findComponent("objectComponent");
-		SelectOneMenu rComponent = (SelectOneMenu) LoginBean
-				.findComponent("rComponent");
-		SelectOneMenu wComponent = (SelectOneMenu) LoginBean
-				.findComponent("wComponent");
-		SelectOneMenu xComponent = (SelectOneMenu) LoginBean
-				.findComponent("xComponent");
+		SelectOneMenu objectComponent = (SelectOneMenu) LoginBean.findComponent("objectComponent");
+		SelectOneMenu rComponent = (SelectOneMenu) LoginBean.findComponent("rComponent");
+		SelectOneMenu wComponent = (SelectOneMenu) LoginBean.findComponent("wComponent");
+		SelectOneMenu xComponent = (SelectOneMenu) LoginBean.findComponent("xComponent");
 
 		System.out.println(rComponent.getValue());
 
-		if (rComponent.getValue() != null
-				&& !rComponent.getValue().equals("nottrue"))
+		if (rComponent.getValue() != null && !rComponent.getValue().equals("nottrue"))
 			filters.put("rComponent", rComponent.getValue().equals("true"));
 
-		if (wComponent.getValue() != null
-				&& !wComponent.getValue().equals("nottrue"))
+		if (wComponent.getValue() != null && !wComponent.getValue().equals("nottrue"))
 			filters.put("wComponent", wComponent.getValue().equals("true"));
 
-		if (xComponent.getValue() != null
-				&& !xComponent.getValue().equals("nottrue"))
+		if (xComponent.getValue() != null && !xComponent.getValue().equals("nottrue"))
 			filters.put("xComponent", xComponent.getValue().equals("true"));
 
-		if (objectComponent.getValue() != null
-				&& !objectComponent.getValue().equals("all"))
+		if (objectComponent.getValue() != null && !objectComponent.getValue().equals("all"))
 			filters.put("objectComponent", objectComponent.getValue());
 
 		List<JJProfile> data = new ArrayList<JJProfile>();
 		MutableInt size = new MutableInt(0);
-		data = profileService.load(size, first, pageSize, multiSortMeta,
-				filters, permissionService.isSuperAdmin(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact()), LoginBean
-						.getCompany());
+		data = profileService.load(size, first, pageSize, multiSortMeta, filters,
+		        permissionService.isSuperAdmin(((LoginBean) LoginBean.findBean("loginBean")).getContact()),
+		        LoginBean.getCompany());
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

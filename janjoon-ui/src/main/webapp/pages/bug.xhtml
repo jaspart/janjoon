@@ -20,8 +20,6 @@
 								<p:commandButton
 									actionListener="#{jJBugBean.onrate(jJBugBean.viewBug)}"
 									rendered="#{loginBean.enable and jJBugBean.viewBug != null and jJBugBean.viewBug.id != null}"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
 									styleClass="GrayButton"
 									icon="fa fa-star Fs20 #{jJBugBean.isRated(jJBugBean.viewBug) ? 'Yellow' : 'BoldGray'}"
 									update=":growlForm :messageCreationForm :headerForm:communicationButton :bugForm"
@@ -261,8 +259,6 @@
 											completeMethod="#{jJBugBean.completeReqBug}">
 											<p:ajax event="itemSelect"
 												listener="#{jJBugBean.persistJJBug}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()"
 												update=":bugForm :growlForm :linkForm" />
 											<p:column>
 												<h:outputText value="#{fn:substring(requirement.name,0,30)}"
@@ -298,8 +294,6 @@
 											</p:column>
 											<p:ajax event="itemSelect"
 												listener="#{jJBugBean.persistJJBug}"
-												onstart="PF('blockUIWidget').block()"
-												oncomplete="PF('blockUIWidget').unblock()"
 												update=":bugForm :growlForm :linkForm" />
 											<f:attribute name="requirement"
 												value="#{jJBugBean.viewBug.requirement}" />

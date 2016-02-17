@@ -24,10 +24,9 @@
 								itemLabel="#{messages.project_gantt_select_label}" />
 							<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
 								itemLabel="#{spr.name}" itemValue="#{spr}" />
-							<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-								listener="#{jJTaskBean.sprintSelectionChanged}"
+							<p:ajax event="change" listener="#{jJTaskBean.sprintSelectionChanged}"
 								update=":projecttabview:planningForm "
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+								oncomplete="updateTabViewWidth();" />
 						</p:selectOneMenu>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -49,10 +48,9 @@
 								itemLabel="#{messages.project_gantt_table_startreal_title}" />
 							<f:selectItem itemValue="StartDatePlanned"
 								itemLabel="#{messages.project_gantt_table_startplanned_title}" />
-							<p:ajax onstart="PF('blockUIWidget').block()" event="change"
-								listener="#{jJTaskBean.SortBySelectionChanged}"
+							<p:ajax event="change" listener="#{jJTaskBean.SortBySelectionChanged}"
 								update=":projecttabview:planningForm :projecttabview:sprintForm"
-								oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+								oncomplete="updateTabViewWidth();" />
 						</p:selectOneMenu>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -92,12 +90,11 @@
 
 	<h:form id="planningForm" style="width:100%">
 		<h:outputScript library="js" name="scrollTab.js" />
-		<f:event type="preRenderComponent"
-			oncomplete="PF('blockUIWidget').unblock();"
+		<f:event type="preRenderComponent"			
 			listener="#{jJTaskBean.loadingData()}" />
 		<p:remoteCommand name="onCellEditTableComplete"
 			update=":projecttabview" onstart="saveScrollPos();"
-			oncomplete="autoScroll();PF('blockUIWidget').unblock();updateTabViewWidth();" />
+			oncomplete="autoScroll();updateTabViewWidth();" />
 		<h:panelGroup layout="block" styleClass="Container">
 			<pe:layout fullPage="false" style="height:600px;"
 				styleClass="Container100" options="#{jJTaskBean.layoutOptionsOne}"
@@ -130,8 +127,7 @@
 						editable="true" editMode="cell">
 
 						<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
-							process="@widgetVar(nameWidget)"
-							onstart="PF('blockUIWidget').block()"
+							process="@widgetVar(nameWidget)"							
 							onsuccess="onCellEditTableComplete();updateTabViewWidth();"
 							update="taskDataTable :projecttabview:planningForm:timeline :growlForm" />
 
@@ -452,12 +448,10 @@
 						<p:ajax event="changed"
 							update=":projecttabview:planningForm:timeline :projecttabview:planningForm:taskDataTable :projecttabview:SprintTabView :growlForm"
 							listener="#{jJTaskBean.onChangeTimelineEvent}"
-							onstart="getTimelineEvent();saveScrollPos();PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock();autoScroll();highlightEvent();updateTabViewWidth();" />
+							onstart="getTimelineEvent();saveScrollPos();"
+							oncomplete="autoScroll();highlightEvent();updateTabViewWidth();" />
 						<p:ajax event="edit" update=":viewTaskForm :viewTaskDialogHeader"
-							resetValues="true" listener="#{jJTaskBean.onEditTimelineEvent}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" />
+							resetValues="true" listener="#{jJTaskBean.onEditTimelineEvent}" />
 
 						<h:outputText id="tt" title="#{task.name}" value="#{task.name}"
 							rendered="#{task != null}" />
@@ -479,8 +473,8 @@
 				<p:commandButton id="duplicateYesButton"
 					value="#{messages.label_yes}" action="#{jJTaskBean.duplicateTask}"
 					update=":projecttabview:planningForm :projecttabview:SprintTabView :growlForm"
-					onstart="PF('blockUIWidget').block();saveScrollPos();"
-					oncomplete="autoScroll();PF('blockUIWidget').unblock();PF('duplicateTaskDialogWidget').hide();updateTabViewWidth();" />
+					onstart="saveScrollPos();"
+					oncomplete="autoScroll();PF('duplicateTaskDialogWidget').hide();updateTabViewWidth();" />
 				<p:commandButton id="duplicateNoButton" value="#{messages.label_no}"
 					onclick="PF('duplicateTaskDialogWidget').hide()" type="button" />
 			</h:form>

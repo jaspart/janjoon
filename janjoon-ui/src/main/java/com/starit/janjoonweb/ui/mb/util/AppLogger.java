@@ -40,37 +40,37 @@ import com.starit.janjoonweb.ui.mb.LoginBean;
 @Configurable
 public class AppLogger {
 
-	static Logger logger = Logger.getLogger("AppLogger-Logger");
+	static Logger					logger	= Logger.getLogger("AppLogger-Logger");
 
 	@Autowired
-	private JJBugService jJBugService;
+	private JJBugService			jJBugService;
 
 	@Autowired
-	private JJBuildService jJBuildService;
+	private JJBuildService			jJBuildService;
 
 	@Autowired
-	private JJRequirementService jJRequirementService;
+	private JJRequirementService	jJRequirementService;
 
 	@Autowired
-	private JJCriticityService jJCriticityService;
+	private JJCriticityService		jJCriticityService;
 
 	@Autowired
-	private JJMessageService jJMessageService;
+	private JJMessageService		jJMessageService;
 
 	@Autowired
-	private JJTaskService jJTaskService;
+	private JJTaskService			jJTaskService;
 
 	@Autowired
-	private JJProjectService jJProjectService;
+	private JJProjectService		jJProjectService;
 
 	@Autowired
-	private JJStatusService jJStatusService;
+	private JJStatusService			jJStatusService;
 
 	@Autowired
-	private WorkFlowsActions workFlowsActions;
+	private WorkFlowsActions		workFlowsActions;
 
 	@Autowired
-	private JJWorkflowService jJWorkflowService;
+	private JJWorkflowService		jJWorkflowService;
 
 	public void setjJBugService(JJBugService jJBugService) {
 		this.jJBugService = jJBugService;
@@ -80,8 +80,7 @@ public class AppLogger {
 		this.jJBuildService = jJBuildService;
 	}
 
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
@@ -127,77 +126,60 @@ public class AppLogger {
 			List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 			if (object instanceof JJBug) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJBug bug = (JJBug) object;
 				if (bug.getId() != null && bug.getEnabled()) {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
-							oldBug.getStatus(), bug.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("bug", oldBug.getStatus(), bug.getStatus(), null,
+					        true);
 				} else if (bug.getEnabled()) {
 					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
-							jJStatusService.getOneStatus("Any", "*", true),
-							bug.getStatus(), null, true);
+					        jJStatusService.getOneStatus("Any", "*", true), bug.getStatus(), null, true);
 				}
 			} else if (object instanceof JJRequirement) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJRequirement requirement = (JJRequirement) object;
 				if (requirement.getId() != null && requirement.getEnabled()) {
 					long id = requirement.getId();
-					JJRequirement oldRequirement = jJRequirementService
-							.findJJRequirement(id);
-					workFlows = jJWorkflowService.getObjectWorkFlows(
-							"requirement", oldRequirement.getStatus(),
-							requirement.getStatus(), null, true);
+					JJRequirement oldRequirement = jJRequirementService.findJJRequirement(id);
+					workFlows = jJWorkflowService.getObjectWorkFlows("requirement", oldRequirement.getStatus(),
+					        requirement.getStatus(), null, true);
 				} else if (requirement.getEnabled()) {
-					workFlows = jJWorkflowService.getObjectWorkFlows(
-							"requirement",
-							jJStatusService.getOneStatus("Any", "*", true),
-							requirement.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("requirement",
+					        jJStatusService.getOneStatus("Any", "*", true), requirement.getStatus(), null, true);
 				}
 			} else if (object instanceof JJMessage) {
 				JJMessage message = (JJMessage) object;
 				if (message.getId() != null && message.getEnabled()) {
-					JJMessage oldTestcase = jJMessageService
-							.findJJMessage(message.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows("message",
-							oldTestcase.getStatus(), message.getStatus(), null,
-							true);
+					JJMessage oldTestcase = jJMessageService.findJJMessage(message.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("message", oldTestcase.getStatus(),
+					        message.getStatus(), null, true);
 				} else if (message.getEnabled()) {
-					workFlows = jJWorkflowService.getObjectWorkFlows("message",
-							null, message.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("message", null, message.getStatus(), null, true);
 				}
 			} else if (object instanceof JJBuild) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJBuild build = (JJBuild) object;
 				if (build.getId() != null && build.getEnabled()) {
-					JJBuild oldTestcase = jJBuildService.findJJBuild(build
-							.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows("build",
-							oldTestcase.getStatus(), build.getStatus(), null,
-							true);
+					JJBuild oldTestcase = jJBuildService.findJJBuild(build.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("build", oldTestcase.getStatus(),
+					        build.getStatus(), null, true);
 				} else if (build.getEnabled()) {
-					workFlows = jJWorkflowService.getObjectWorkFlows("build",
-							null, build.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("build", null, build.getStatus(), null, true);
 				}
 			}
 
@@ -216,74 +198,58 @@ public class AppLogger {
 			List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 			if (object instanceof JJBug) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJBug bug = (JJBug) object;
 				if (bug.getId() != null) {
 					JJBug oldBug = jJBugService.findJJBug(bug.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
-							oldBug.getStatus(), bug.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("bug", oldBug.getStatus(), bug.getStatus(), null,
+					        true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows("bug",
-							null, bug.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("bug", null, bug.getStatus(), null, true);
 				}
 			} else if (object instanceof JJRequirement) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJRequirement requirement = (JJRequirement) object;
 				if (requirement.getId() != null) {
-					JJRequirement oldRequirement = jJRequirementService
-							.findJJRequirement(requirement.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows(
-							"requirement", oldRequirement.getStatus(),
-							requirement.getStatus(), null, true);
+					JJRequirement oldRequirement = jJRequirementService.findJJRequirement(requirement.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("requirement", oldRequirement.getStatus(),
+					        requirement.getStatus(), null, true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows(
-							"requirement", null, requirement.getStatus(), null,
-							true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("requirement", null, requirement.getStatus(), null,
+					        true);
 				}
 			} else if (object instanceof JJMessage) {
 				JJMessage message = (JJMessage) object;
 				if (message.getId() != null) {
-					JJMessage oldMessage = jJMessageService
-							.findJJMessage(message.getId());
-					workFlows = jJWorkflowService.getObjectWorkFlows("message",
-							oldMessage.getStatus(), message.getStatus(), null,
-							true);
+					JJMessage oldMessage = jJMessageService.findJJMessage(message.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("message", oldMessage.getStatus(),
+					        message.getStatus(), null, true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows("message",
-							null, message.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("message", null, message.getStatus(), null, true);
 				}
 			} else if (object instanceof JJBuild) {
 
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
-				JJVersionBean jJVersionBean = (JJVersionBean) session
-						.getAttribute("jJVersionBean");
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
+				JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 				jJVersionBean.setVersionDataModelList(null);
 
 				JJBuild build = (JJBuild) object;
 				if (build.getId() != null) {
-					JJBuild oldBuild = jJBuildService
-							.findJJBuild(build.getId());
-					workFlows = jJWorkflowService
-							.getObjectWorkFlows("build", oldBuild.getStatus(),
-									build.getStatus(), null, true);
+					JJBuild oldBuild = jJBuildService.findJJBuild(build.getId());
+					workFlows = jJWorkflowService.getObjectWorkFlows("build", oldBuild.getStatus(), build.getStatus(),
+					        null, true);
 				} else {
-					workFlows = jJWorkflowService.getObjectWorkFlows("build",
-							null, build.getStatus(), null, true);
+					workFlows = jJWorkflowService.getObjectWorkFlows("build", null, build.getStatus(), null, true);
 				}
 			}
 			workFlowsActions.iterateOverWorkFlows(workFlows, object);
@@ -300,13 +266,8 @@ public class AppLogger {
 		JJRequirement requirement = testExec.getTestcase().getRequirement();
 		boolean update = false;
 		if (requirement.getState() != null)
-			update = requirement.getState().getName()
-					.equalsIgnoreCase(JJRequirementBean.jJRequirement_Finished)
-					|| requirement
-							.getState()
-							.getName()
-							.equalsIgnoreCase(
-									JJRequirementBean.jJRequirement_InTesting);
+			update = requirement.getState().getName().equalsIgnoreCase(JJRequirementBean.jJRequirement_Finished)
+			        || requirement.getState().getName().equalsIgnoreCase(JJRequirementBean.jJRequirement_InTesting);
 		if (update)
 			updateReq.setValue(1);
 
@@ -322,14 +283,11 @@ public class AppLogger {
 		if (task.getId() == null)
 			task.setCreationDate(new Date());
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session
-				.getAttribute("jJVersionBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
 		jJVersionBean.setVersionDataModelList(null);
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		if (task.getId() == null) {
 			task.setCreatedBy(contact);
 		} else {
@@ -342,15 +300,12 @@ public class AppLogger {
 
 		if (task.getAssignedTo() != null && task.getId() != null) {
 			calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
-			assignedTo = !task.getAssignedTo().equals(
-					jJTaskService.findJJTask(task.getId()).getAssignedTo());
+			assignedTo = !task.getAssignedTo().equals(jJTaskService.findJJTask(task.getId()).getAssignedTo());
 		} else {
-			calendarUtil = new ContactCalendarUtil(jJProjectService
-					.findJJProject(LoginBean.getProject().getId()).getManager()
-					.getCompany());
+			calendarUtil = new ContactCalendarUtil(
+			        jJProjectService.findJJProject(LoginBean.getProject().getId()).getManager().getCompany());
 			if (task.getId() != null)
-				assignedTo = jJTaskService.findJJTask(task.getId())
-						.getAssignedTo() != null;
+				assignedTo = jJTaskService.findJJTask(task.getId()).getAssignedTo() != null;
 		}
 
 		boolean planned = false;
@@ -360,17 +315,13 @@ public class AppLogger {
 		if (task.getStartDatePlanned() != null) {
 
 			if (task.getId() != null) {
-				if ((!task.getStartDatePlanned().equals(
-						jJTaskService.findJJTask(task.getId())
-								.getStartDatePlanned()))
-						|| assignedTo) {
-					task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
-							.getStartDatePlanned()));
+				if ((!task.getStartDatePlanned().equals(jJTaskService.findJJTask(task.getId()).getStartDatePlanned()))
+				        || assignedTo) {
+					task.setStartDatePlanned(calendarUtil.nextWorkingDate(task.getStartDatePlanned()));
 					planned = true;
 				}
 			} else {
-				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task
-						.getStartDatePlanned()));
+				task.setStartDatePlanned(calendarUtil.nextWorkingDate(task.getStartDatePlanned()));
 				planned = true;
 			}
 
@@ -379,82 +330,62 @@ public class AppLogger {
 		if (task.getEndDatePlanned() != null) {
 
 			if (task.getId() != null) {
-				if ((!task.getEndDatePlanned().equals(
-						jJTaskService.findJJTask(task.getId())
-								.getEndDatePlanned()))
-						|| assignedTo) {
-					task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
-							.getEndDatePlanned()));
+				if ((!task.getEndDatePlanned().equals(jJTaskService.findJJTask(task.getId()).getEndDatePlanned()))
+				        || assignedTo) {
+					task.setEndDatePlanned(calendarUtil.nextWorkingDate(task.getEndDatePlanned()));
 					planned = true;
 				}
 			} else {
-				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task
-						.getEndDatePlanned()));
+				task.setEndDatePlanned(calendarUtil.nextWorkingDate(task.getEndDatePlanned()));
 				planned = true;
 			}
 
 		}
 
-		if (task.getEndDatePlanned() != null
-				&& task.getStartDatePlanned() != null && planned)
-			task.setWorkloadPlanned(Math.round(calendarUtil.calculateWorkLoad(
-					task.getStartDatePlanned(), task.getEndDatePlanned(), null,
-					null)));
+		if (task.getEndDatePlanned() != null && task.getStartDatePlanned() != null && planned)
+			task.setWorkloadPlanned(Math.round(
+			        calendarUtil.calculateWorkLoad(task.getStartDatePlanned(), task.getEndDatePlanned(), null, null)));
 
 		if (task.getStartDateReal() != null) {
 			if (task.getId() != null) {
-				if ((!task.getStartDateReal().equals(
-						jJTaskService.findJJTask(task.getId())
-								.getStartDateReal()))
-						|| assignedTo) {
-					task.setStartDateReal(calendarUtil.nextWorkingDate(task
-							.getStartDateReal()));
+				if ((!task.getStartDateReal().equals(jJTaskService.findJJTask(task.getId()).getStartDateReal()))
+				        || assignedTo) {
+					task.setStartDateReal(calendarUtil.nextWorkingDate(task.getStartDateReal()));
 					real = true;
 				}
 			} else {
-				task.setStartDateReal(calendarUtil.nextWorkingDate(task
-						.getStartDateReal()));
+				task.setStartDateReal(calendarUtil.nextWorkingDate(task.getStartDateReal()));
 				real = true;
 			}
 		}
 
 		if (task.getEndDateReal() != null) {
 			if (task.getId() != null) {
-				if ((!task.getEndDateReal()
-						.equals(jJTaskService.findJJTask(task.getId())
-								.getEndDateReal()))
-						|| assignedTo) {
-					task.setEndDateReal(calendarUtil.nextWorkingDate(task
-							.getEndDateReal()));
+				if ((!task.getEndDateReal().equals(jJTaskService.findJJTask(task.getId()).getEndDateReal()))
+				        || assignedTo) {
+					task.setEndDateReal(calendarUtil.nextWorkingDate(task.getEndDateReal()));
 					real = true;
 				}
 			} else {
-				task.setEndDateReal(calendarUtil.nextWorkingDate(task
-						.getEndDateReal()));
+				task.setEndDateReal(calendarUtil.nextWorkingDate(task.getEndDateReal()));
 				System.err.println("getEndDateReal Date modified");
 			}
 		}
 
-		if (task.getEndDateReal() != null && task.getStartDateReal() != null
-				&& real)
-			task.setWorkloadReal(Math.round(calendarUtil.calculateWorkLoad(
-					task.getStartDateReal(), task.getEndDateReal(),
-					jJTaskService, task)));
+		if (task.getEndDateReal() != null && task.getStartDateReal() != null && real)
+			task.setWorkloadReal(Math.round(calendarUtil.calculateWorkLoad(task.getStartDateReal(),
+			        task.getEndDateReal(), jJTaskService, task)));
 
 		if (task.getStartDateRevised() != null) {
 			if (task.getId() != null) {
-				if ((!task.getStartDateRevised().equals(
-						jJTaskService.findJJTask(task.getId())
-								.getStartDateRevised()))
-						|| assignedTo) {
-					task.setStartDateRevised(calendarUtil.nextWorkingDate(task
-							.getStartDateRevised()));
+				if ((!task.getStartDateRevised().equals(jJTaskService.findJJTask(task.getId()).getStartDateRevised()))
+				        || assignedTo) {
+					task.setStartDateRevised(calendarUtil.nextWorkingDate(task.getStartDateRevised()));
 					System.err.println("getStartDateRevised Date modified");
 					revised = true;
 				}
 			} else {
-				task.setStartDateRevised(calendarUtil.nextWorkingDate(task
-						.getStartDateRevised()));
+				task.setStartDateRevised(calendarUtil.nextWorkingDate(task.getStartDateRevised()));
 				System.err.println("getStartDateRevised Date modified");
 				revised = true;
 			}
@@ -463,73 +394,57 @@ public class AppLogger {
 		if (task.getEndDateRevised() != null) {
 
 			if (task.getId() != null) {
-				if ((!task.getEndDateRevised().equals(
-						jJTaskService.findJJTask(task.getId())
-								.getEndDateRevised()))
-						|| assignedTo) {
-					task.setEndDateRevised(calendarUtil.nextWorkingDate(task
-							.getEndDateRevised()));
+				if ((!task.getEndDateRevised().equals(jJTaskService.findJJTask(task.getId()).getEndDateRevised()))
+				        || assignedTo) {
+					task.setEndDateRevised(calendarUtil.nextWorkingDate(task.getEndDateRevised()));
 					System.err.println("getEndDateRevised Date modified");
 					revised = true;
 				}
 			} else {
-				task.setEndDateRevised(calendarUtil.nextWorkingDate(task
-						.getEndDateRevised()));
+				task.setEndDateRevised(calendarUtil.nextWorkingDate(task.getEndDateRevised()));
 				System.err.println("getEndDateRevised Date modified");
 				revised = true;
 			}
 		}
 
-		if (task.getEndDateRevised() != null
-				&& task.getStartDateRevised() != null && revised)
-			task.setWorkloadRevised(Math.round(calendarUtil.calculateWorkLoad(
-					task.getStartDateRevised(), task.getEndDateRevised(), null,
-					null)));
+		if (task.getEndDateRevised() != null && task.getStartDateRevised() != null && revised)
+			task.setWorkloadRevised(Math.round(
+			        calendarUtil.calculateWorkLoad(task.getStartDateRevised(), task.getEndDateRevised(), null, null)));
 
 		boolean update = task.getRequirement() != null;
 
 		if (task.getStartDateReal() == null
-				&& (task.getStatus() == null || !task.getStatus().getName()
-						.equalsIgnoreCase("todo"))) {
+		        && (task.getStatus() == null || !task.getStatus().getName().equalsIgnoreCase("todo"))) {
 			if (update) {
-				update = (task.getStatus() == null || task.getStatus()
-						.getName().equalsIgnoreCase("DONE"));
+				update = (task.getStatus() == null || task.getStatus().getName().equalsIgnoreCase("DONE"));
 			}
 
 			task.setStatus(jJStatusService.getOneStatus("TODO", "Task", true));
 		} else if (task.getStartDateReal() != null) {
 			if (task.getEndDateReal() == null
-					&& (task.getStatus() == null || !task.getStatus().getName()
-							.equalsIgnoreCase("IN PROGRESS"))) {
+			        && (task.getStatus() == null || !task.getStatus().getName().equalsIgnoreCase("IN PROGRESS"))) {
 				if (update) {
-					update = (task.getStatus() == null || task.getStatus()
-							.getName().equalsIgnoreCase("DONE"));
+					update = (task.getStatus() == null || task.getStatus().getName().equalsIgnoreCase("DONE"));
 				}
 
-				task.setStatus(jJStatusService.getOneStatus("IN PROGRESS",
-						"Task", true));
+				task.setStatus(jJStatusService.getOneStatus("IN PROGRESS", "Task", true));
 			} else if (task.getEndDateReal() != null
-					&& (task.getStatus() == null || !task.getStatus().getName()
-							.equalsIgnoreCase("DONE"))) {
-				task.setStatus(jJStatusService.getOneStatus("DONE", "Task",
-						true));
+			        && (task.getStatus() == null || !task.getStatus().getName().equalsIgnoreCase("DONE"))) {
+				task.setStatus(jJStatusService.getOneStatus("DONE", "Task", true));
 			}
 		}
 		if (update)
 			updateReq.setValue(1);
-		logger.info("operation : " + joinPoint.getSignature().toShortString()
-				+ " :successful " + task.getName());
+		logger.info("operation : " + joinPoint.getSignature().toShortString() + " :successful " + task.getName());
 		// callingJJTaskWorkFlows
 		List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 
 		if (task.getId() != null) {
 			JJTask oldtask = jJTaskService.findJJTask(task.getId());
-			workFlows = jJWorkflowService.getObjectWorkFlows("task",
-					oldtask.getStatus(), task.getStatus(), null, true);
+			workFlows = jJWorkflowService.getObjectWorkFlows("task", oldtask.getStatus(), task.getStatus(), null, true);
 		} else {
-			workFlows = jJWorkflowService.getObjectWorkFlows("task",
-					jJStatusService.getOneStatus("Any", "*", true),
-					task.getStatus(), null, true);
+			workFlows = jJWorkflowService.getObjectWorkFlows("task", jJStatusService.getOneStatus("Any", "*", true),
+			        task.getStatus(), null, true);
 		}
 
 		workFlowsActions.iterateOverWorkFlows(workFlows, task);

@@ -6,9 +6,9 @@ import com.starit.janjoonweb.domain.JJBug;
 
 public class LazySorter implements Comparator<JJBug> {
 
-	private String sortField;
+	private String		sortField;
 
-	private SortOrder sortOrder;
+	private SortOrder	sortOrder;
 
 	public LazySorter(String sortField, SortOrder sortOrder) {
 		this.sortField = sortField;

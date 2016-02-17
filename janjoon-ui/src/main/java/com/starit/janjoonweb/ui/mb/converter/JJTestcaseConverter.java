@@ -11,9 +11,8 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 @RooJsfConverter(entity = JJTestcase.class)
 public class JJTestcaseConverter {
 
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return (value instanceof JJTestcase && ((JJTestcase) value).getId() != null) ? ((JJTestcase) value)
-				.getId().toString() : "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return (value instanceof JJTestcase && ((JJTestcase) value).getId() != null)
+		        ? ((JJTestcase) value).getId().toString() : "";
 	}
 }

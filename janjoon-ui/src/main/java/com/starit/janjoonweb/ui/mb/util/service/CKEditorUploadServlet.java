@@ -23,31 +23,28 @@ import org.apache.log4j.Logger;
 
 public class CKEditorUploadServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -7570633768412575697L;
+	private static final long		serialVersionUID		= -7570633768412575697L;
 
-	static Logger logger = Logger.getLogger("CKEditorUploadServlet");
-	private static final String ERROR_FILE_UPLOAD = "An error occurred to the file upload process.";
-	private static final String ERROR_NO_FILE_UPLOAD = "No file is present for upload process.";
-	private static final String ERROR_INVALID_CALLBACK = "Invalid callback.";
-	private static final String CKEDITOR_CONTENT_TYPE = "text/html; charset=UTF-8";
-	private static final String CKEDITOR_HEADER_NAME = "Cache-Control";
-	private static final String CKEDITOR_HEADER_VALUE = "no-cache";
-	public static final String CKEDITOR_DIR = "upload" + File.separator
-			+ "images";
+	static Logger					logger					= Logger.getLogger("CKEditorUploadServlet");
+	private static final String		ERROR_FILE_UPLOAD		= "An error occurred to the file upload process.";
+	private static final String		ERROR_NO_FILE_UPLOAD	= "No file is present for upload process.";
+	private static final String		ERROR_INVALID_CALLBACK	= "Invalid callback.";
+	private static final String		CKEDITOR_CONTENT_TYPE	= "text/html; charset=UTF-8";
+	private static final String		CKEDITOR_HEADER_NAME	= "Cache-Control";
+	private static final String		CKEDITOR_HEADER_VALUE	= "no-cache";
+	public static final String		CKEDITOR_DIR			= "upload" + File.separator + "images";
 
-	private static final Pattern PATTERN = Pattern.compile("[\\w\\d]*");
+	private static final Pattern	PATTERN					= Pattern.compile("[\\w\\d]*");
 
-	private String errorMessage = "";
+	private String					errorMessage			= "";
 
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		File directory = new File(CKEDITOR_DIR);
 
@@ -79,8 +76,7 @@ public class CKEditorUploadServlet extends HttpServlet {
 
 				StringBuilder sb = new StringBuilder();
 				sb.append("data:image;base64,");
-				sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(
-						((FileItem) items.get(0)).get(), false)));
+				sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(((FileItem) items.get(0)).get(), false)));
 				imageString = sb.toString();
 
 			} else {
@@ -117,8 +113,8 @@ public class CKEditorUploadServlet extends HttpServlet {
 		// System.out.println(uploadedFile.getCanonicalPath() + "--" +
 		// pathToFile);
 		// String pathToFile =uploadedFile.getPath();
-		out.println("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction("
-				+ callback + ",'" + imageString + "','" + errorMessage + "')");
+		out.println("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" + callback + ",'"
+		        + imageString + "','" + errorMessage + "')");
 		out.println("</script>");
 		out.flush();
 		out.close();

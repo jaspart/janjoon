@@ -26,8 +26,7 @@
 		<h:outputScript library="js" name="test.js" />
 	</ui:define>
 	<ui:define name="content">
-		<f:event type="preRenderView"
-			oncomplete="PF('blockUIWidget').unblock()"
+		<f:event type="preRenderView"			
 			listener="#{jJTestcaseBean.loadData(null,false)}" />
 
 		<h:panelGroup layout="block" styleClass="Container">
@@ -120,9 +119,7 @@
 																itemLabel="#{bld.name}" itemValue="#{bld}" />
 															<p:ajax process="@this" partialSubmit="true"
 																listener="#{jJTestcaseBean.createTestcaseTree()}"
-																update=":testFormWest :testFormCenter :container"
-																onstart="PF('blockUIWidget').block()"
-																oncomplete="PF('blockUIWidget').unblock()" />
+																update=":testFormWest :testFormCenter :container" />
 														</p:selectOneMenu>
 													</h:panelGroup>
 												</h:panelGroup>
@@ -151,11 +148,9 @@
 															<f:selectItems value="#{jJTestcaseBean.categoryList}"
 																var="cat" itemLabel="#{loginBean.checkMessage(cat)}"
 																itemValue="#{cat}" />
-															<p:ajax onstart="PF('blockUIWidget').block()"
-																event="change"
+															<p:ajax event="change"
 																listener="#{jJTestcaseBean.loadData(jJTestcaseBean.category,true)}"
-																update=":testFormWest :testFormCenter :container"
-																oncomplete="PF('blockUIWidget').unblock();" />
+																update=":testFormWest :testFormCenter :container" />
 
 														</p:selectOneMenu>
 													</h:panelGroup>
@@ -199,18 +194,15 @@
 														title="#{messages.specification_import_button} XML"
 														icon="fa fa-arrow-up Fs20"
 														disabled="#{jJProjectBean.project == null}"
-														update=":importXMLForm"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock();PF('testImportXMLDialogWidget').show()" />
+														update=":importXMLForm"														
+														oncomplete="PF('testImportXMLDialogWidget').show()" />
 												</h:panelGroup>
 											</h:panelGroup>
 
 											<h:panelGroup layout="block" styleClass="Container20">
 												<h:panelGroup layout="block" styleClass="ContainerIndent">
 													<p:commandButton actionListener="#{jJTestcaseBean.onrate}"
-														rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock()"
+														rendered="#{jJTestcaseBean.rendredTestCaseHistorical}"														
 														title="#{!jJTestcaseBean.rated ? messages.requirement_subscription_rate_title : messages.requirement_subscription_cancel_rate_title}"
 														styleClass="GrayButton"
 														icon="fa fa-star Fs20 #{jJTestcaseBean.rated ? 'Yellow' : 'BoldGray'}"
@@ -234,9 +226,7 @@
 												selection="#{jJTestcaseBean.selectedNode}" dynamic="true">
 												<p:ajax event="select"
 													listener="#{jJTestcaseBean.onNodeSelect}"
-													update=":testFormCenter :testFormWest :container :testcaseDialogForm :testcaseDialogHeader"
-													onstart="PF('blockUIWidget').block()"
-													oncomplete="PF('blockUIWidget').unblock()" />
+													update=":testFormCenter :testFormWest :container :testcaseDialogForm :testcaseDialogHeader" />
 												<p:treeNode type="project">
 													<h:outputText value="P-#{node.id}-#{node.name}"
 														styleClass="TestcaseChapter" />
@@ -354,9 +344,7 @@
 											icon="fa Fs18 #{columnName.allBuilds ? 'fa-check Green' : 'fa-close Red'}"
 											styleClass="littleButton GrayButton"
 											update=":growlForm :testFormCenter :testFormWest :container"
-											actionListener="#{jJTestcaseBean.onCellEdit(columnName,jJBuildBean,true)}"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											actionListener="#{jJTestcaseBean.onCellEdit(columnName,jJBuildBean,true)}" />
 
 									</h:panelGroup>
 
@@ -379,9 +367,7 @@
 													icon="fa Fs18 #{rowName.allTestcases ? 'fa-check Green' : 'fa-close Red'}"
 													styleClass="littleButton GrayButton"
 													update=":growlForm :testFormCenter :testFormWest :container"
-													actionListener="#{jJTestcaseBean.onCellEdit(rowName,jJBuildBean,true)}"
-													onstart="PF('blockUIWidget').block()"
-													oncomplete="PF('blockUIWidget').unblock();" />
+													actionListener="#{jJTestcaseBean.onCellEdit(rowName,jJBuildBean,true)}" />
 											</h:panelGroup>
 										</h:panelGroup>
 									</f:facet>
@@ -392,9 +378,7 @@
 										value="#{jJTestcaseBean.value[colIdx][rowIdx]}">
 										<p:ajax
 											update=":growlForm :testFormCenter :testFormWest :container"
-											listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}"
-											onstart="PF('blockUIWidget').block()"
-											oncomplete="PF('blockUIWidget').unblock();" />
+											listener="#{jJTestcaseBean.onCellEdit(colIdx,rowIdx)}" />
 									</p:selectBooleanCheckbox>
 								</p:columns>
 							</p:dataTable>

@@ -21,9 +21,8 @@ public interface HTMLTagProcessorImpl {
 	 * @throws DocumentException
 	 * @throws IOException
 	 */
-	public abstract void startElement(HTMLWorkerImpl htmlWorkerImpl,
-			String tag, Map<String, String> attrs) throws DocumentException,
-			IOException;
+	public abstract void startElement(HTMLWorkerImpl htmlWorkerImpl, String tag, Map<String, String> attrs)
+	        throws DocumentException, IOException;
 
 	/**
 	 * Implement this class to tell the HTMLWorker what to do when an close tag
@@ -35,6 +34,5 @@ public interface HTMLTagProcessorImpl {
 	 *            the tag that was encountered
 	 * @throws DocumentException
 	 */
-	public abstract void endElement(HTMLWorkerImpl worker, String tag)
-			throws DocumentException;
+	public abstract void endElement(HTMLWorkerImpl worker, String tag) throws DocumentException;
 }

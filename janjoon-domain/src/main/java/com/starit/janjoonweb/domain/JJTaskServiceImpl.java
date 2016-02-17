@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.management.ObjectInstance;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -56,7 +55,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 	}
 
 	@Override
-	public List<JJTask> getTastksByVersion(JJVersion jJversion) {
+	public List<JJTask> getTasksByVersion(JJVersion jJversion) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTask> criteriaQuery = criteriaBuilder
 				.createQuery(JJTask.class);
@@ -270,11 +269,25 @@ public class JJTaskServiceImpl implements JJTaskService {
 		return result.getResultList();
 
 	}
+	
+	public List<JJTask> getTasksByObject(JJSprint sprint,JJProject project,JJProduct product,String object,boolean done)
+	{
+
+		Set<JJTask> returnedValue = new HashSet<JJTask>();		
+		JJStatus status = null;
+		if (done) status = jJStatusService.getOneStatus("DONE", "task", true);
+		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, project,
+				product, null, null, false, null, status,null ,null, true, false,
+				false, object)));		
+
+		return new ArrayList<JJTask>(returnedValue);
+
+	}
 
 	@Override
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
 			JJProduct product, JJContact contact, JJChapter chapter,
-			boolean nullChapter, JJRequirement requirement,
+			boolean nullChapter, JJRequirement requirement,JJStatus status,
 			JJTestcase testcase, JJBuild build, boolean onlyActif,
 			boolean sortedByCreationDate, boolean withBuild, String objet) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -292,6 +305,10 @@ public class JJTaskServiceImpl implements JJTaskService {
 
 		if (sprint != null) {
 			predicates.add(criteriaBuilder.equal(from.get("sprint"), sprint));
+		}
+		
+		if (status != null) {
+			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
 
 		if (objet != null && project != null && chapter == null) {
@@ -439,7 +456,7 @@ public class JJTaskServiceImpl implements JJTaskService {
 			List<JJTask> resuList = new ArrayList<JJTask>();
 			resuList.addAll(entityManager.createQuery(select).getResultList());
 			resuList.addAll(getTasks(sprint, project, product, contact,
-					chapter, nullChapter, requirement, testcase, build,
+					chapter, nullChapter, requirement,status, testcase, build,
 					onlyActif, sortedByCreationDate, withBuild, "b"));
 			return resuList;
 
@@ -756,13 +773,13 @@ public class JJTaskServiceImpl implements JJTaskService {
 		Set<JJTask> returnedValue = new HashSet<JJTask>();
 
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null, null,null, true, false,
 				false, "requirement")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null,null ,null, true, false,
 				false, "bug")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(sprint, null,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null,null, null, true, false,
 				false, "testcase")));
 
 		return new ArrayList<JJTask>(returnedValue);
@@ -775,13 +792,13 @@ public class JJTaskServiceImpl implements JJTaskService {
 		Set<JJTask> returnedValue = new HashSet<JJTask>();
 
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null, null,null, true, false,
 				false, "requirement")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null,null, null, true, false,
 				false, "bug")));
 		returnedValue.addAll(new HashSet<JJTask>(getTasks(null, project,
-				product, null, null, false, null, null, null, true, false,
+				product, null, null, false, null, null,null,null, true, false,
 				false, "testcase")));
 
 		return new ArrayList<JJTask>(returnedValue);

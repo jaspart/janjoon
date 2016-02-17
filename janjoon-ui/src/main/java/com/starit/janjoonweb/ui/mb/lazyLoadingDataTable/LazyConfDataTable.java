@@ -17,8 +17,8 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	JJConfigurationService configurationService;
+	private static final long	serialVersionUID	= 1L;
+	JJConfigurationService		configurationService;
 
 	public LazyConfDataTable(JJConfigurationService configurationService) {
 
@@ -37,13 +37,12 @@ public class LazyConfDataTable extends LazyDataModel<JJConfiguration> {
 	}
 
 	@Override
-	public List<JJConfiguration> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJConfiguration> load(int first, int pageSize, List<SortMeta> multiSortMeta,
+	        Map<String, Object> filters) {
 
 		List<JJConfiguration> data = new ArrayList<JJConfiguration>();
 		MutableInt size = new MutableInt(0);
-		data = configurationService.load(size, first, pageSize, null, null,
-				true, multiSortMeta, filters);
+		data = configurationService.load(size, first, pageSize, null, null, true, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

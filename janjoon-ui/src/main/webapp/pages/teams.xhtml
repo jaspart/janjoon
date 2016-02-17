@@ -9,10 +9,8 @@
 <ui:composition template="../templates/template.xhtml">
 	<ui:define name="content">
 		<h:form style="width:100%;display:none;">
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper" update=":teamTabView"
-				actionListener="#{jJTaskBean.onTabTeamChange}"
-				oncomplete="PF('blockUIWidget').unblock()" />
+			<p:remoteCommand name="tabChangeHelper" update=":teamTabView"
+				actionListener="#{jJTaskBean.onTabTeamChange}" />
 		</h:form>
 		<p:tabView id="teamTabView" widgetVar="teamTabView"
 			activeIndex="#{jJTaskBean.activeTabTeamIndex}"
@@ -25,17 +23,12 @@
 						view="#{jJTaskBean.scheduleInitialView}" timeFormat="HH:mm">
 						<p:ajax event="eventSelect" listener="#{jJTaskBean.onEventSelect}"
 							update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
-							resetValues="true" onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" />
-						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" />
+							resetValues="true" />
+						<p:ajax event="viewChange" listener="#{jJTaskBean.onViewChange}" />
 						<p:ajax event="eventMove" listener="#{jJTaskBean.onEventMove}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" update=":growlForm" />
+							update=":growlForm" />
 						<p:ajax event="eventResize" listener="#{jJTaskBean.onEventResize}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" update=":growlForm" />
+							update=":growlForm" />
 					</p:schedule>
 				</h:form>
 			</p:tab>
@@ -50,29 +43,21 @@
 						<p:ajax event="eventSelect"
 							listener="#{jJTaskBean.onEventSelectAll}"
 							update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
-							resetValues="true" onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" />
+							resetValues="true" />
 						<p:ajax event="viewChange"
-							listener="#{jJTaskBean.onViewChangeAll}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()" />
+							listener="#{jJTaskBean.onViewChangeAll}" />
 						<p:ajax event="eventMove" listener="#{jJTaskBean.onEventMove}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :teamTabView" />
 						<p:ajax event="eventResize" listener="#{jJTaskBean.onEventResize}"
-							onstart="PF('blockUIWidget').block()"
-							oncomplete="PF('blockUIWidget').unblock()"
 							update=":growlForm :teamTabView" />
 					</p:schedule>
 				</h:form>
 			</p:tab>
 		</p:tabView>
- 
-		<p:dialog id="viewTaskDialog" responsive="true"
-			modal="true" widgetVar="viewTaskDialogWidget" dynamic="true"
-			resizable="false" maximizable="false" showEffect="fade"
-			draggable="false">
+
+		<p:dialog id="viewTaskDialog" responsive="true" modal="true"
+			widgetVar="viewTaskDialogWidget" dynamic="true" resizable="false"
+			maximizable="false" showEffect="fade" draggable="false">
 			<p:ajax event="close" update=":teamTabView"
 				listener="#{jJTaskBean.closeEvent('team')}" />
 			<f:facet name="header">
@@ -81,11 +66,11 @@
 			</f:facet>
 			<p:outputPanel id="viewTaskPanel">
 				<h:form id="viewTaskForm" enctype="multipart/form-data">
-					<p:remoteCommand name="updateForm" update=":viewTaskForm" />					
-						<ui:include src="taskDialog.xhtml">
-							<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
-							<ui:param name="View" value="main" />
-						</ui:include>						
+					<p:remoteCommand name="updateForm" update=":viewTaskForm" />
+					<ui:include src="taskDialog.xhtml">
+						<ui:param name="JJTask_" value="#{jJTaskBean.task}" />
+						<ui:param name="View" value="main" />
+					</ui:include>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

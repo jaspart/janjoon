@@ -15,25 +15,21 @@ public class MessageFactory {
 	private MessageFactory() {
 	}
 
-	public static FacesMessage getMessage(final Locale locale,
-			final String messageId, final FacesMessage.Severity severity,
-			final Object... params) {
+	public static FacesMessage getMessage(final Locale locale, final String messageId,
+	        final FacesMessage.Severity severity, final Object... params) {
 		final FacesMessage facesMessage = getMessage(locale, messageId, params);
 		facesMessage.setSeverity(severity);
 		return facesMessage;
 	}
 
-	public static String checkMessage(final String messageId,
-			final Object... params) {
+	public static String checkMessage(final String messageId, final Object... params) {
 
 		String summary = null;
 		final FacesContext context = FacesContext.getCurrentInstance();
-		final ResourceBundle bundle = context.getApplication()
-				.getResourceBundle(context, "messages");
+		final ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
 
 		try {
-			summary = getFormattedText(getLocale(),
-					bundle.getString(messageId), params);
+			summary = getFormattedText(getLocale(), bundle.getString(messageId), params);
 		} catch (final MissingResourceException e) {
 			summary = null;
 		}
@@ -41,24 +37,20 @@ public class MessageFactory {
 		return summary;
 	}
 
-	public static FacesMessage getMessage(final Locale locale,
-			final String messageId, final Object... params) {
+	public static FacesMessage getMessage(final Locale locale, final String messageId, final Object... params) {
 		String summary = null;
 		String detail = null;
 		final FacesContext context = FacesContext.getCurrentInstance();
-		final ResourceBundle bundle = context.getApplication()
-				.getResourceBundle(context, "messages");
+		final ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
 
 		try {
-			summary = getFormattedText(locale, bundle.getString(messageId),
-					params);
+			summary = getFormattedText(locale, bundle.getString(messageId), params);
 		} catch (final MissingResourceException e) {
 			summary = messageId;
 		}
 
 		try {
-			detail = getFormattedText(locale,
-					bundle.getString(messageId + DEFAULT_DETAIL_SUFFIX), params);
+			detail = getFormattedText(locale, bundle.getString(messageId + DEFAULT_DETAIL_SUFFIX), params);
 		} catch (final MissingResourceException e) {
 			// NoOp
 		}
@@ -66,29 +58,25 @@ public class MessageFactory {
 		return new FacesMessage(summary, detail);
 	}
 
-	public static FacesMessage getMessage(final String messageId,
-			final FacesMessage.Severity severity, final Object... params) {
-		final FacesMessage facesMessage = getMessage(getLocale(), messageId,
-				params);
+	public static FacesMessage getMessage(final String messageId, final FacesMessage.Severity severity,
+	        final Object... params) {
+		final FacesMessage facesMessage = getMessage(getLocale(), messageId, params);
 		facesMessage.setSeverity(severity);
 		return facesMessage;
 	}
 
-	public static FacesMessage getMessage(final String messageId,
-			final Object... params) {
+	public static FacesMessage getMessage(final String messageId, final Object... params) {
 		return getMessage(getLocale(), messageId, params);
 	}
 
-	private static String getFormattedText(final Locale locale,
-			final String message, final Object params[]) {
+	private static String getFormattedText(final Locale locale, final String message, final Object params[]) {
 		MessageFormat messageFormat = null;
 
 		if (params == null || message == null) {
 			return message;
 		}
 
-		messageFormat = locale == null ? new MessageFormat(message)
-				: new MessageFormat(message, locale);
+		messageFormat = locale == null ? new MessageFormat(message) : new MessageFormat(message, locale);
 		return messageFormat.format(params);
 	}
 

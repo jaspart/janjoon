@@ -49,26 +49,25 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
 public class JJBugBean {
 
-	public static final String BUG_SUBSCRIPTION_RATE = "bug_subscription_rate";
-	public static final String BUG_SUBSCRIPTION_CANCEL_RATE = "bug_subscription_cancel_rate";
+	public static final String		BUG_SUBSCRIPTION_RATE			= "bug_subscription_rate";
+	public static final String		BUG_SUBSCRIPTION_CANCEL_RATE	= "bug_subscription_cancel_rate";
 
 	@Autowired
-	private JJImportanceService jJImportanceService;
+	private JJImportanceService		jJImportanceService;
 
 	@Autowired
-	private JJPermissionService jJPermissionService;
+	private JJPermissionService		jJPermissionService;
 
 	@Autowired
-	private JJTaskService jJTaskService;
+	private JJTaskService			jJTaskService;
 
 	@Autowired
-	private JJMessageService jJMessageService;
+	private JJMessageService		jJMessageService;
 
 	@Autowired
-	private JJConfigurationService jJConfigurationService;
+	private JJConfigurationService	jJConfigurationService;
 
-	public void setjJConfigurationService(
-			JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -89,21 +88,21 @@ public class JJBugBean {
 	}
 
 	// Bug_page attributes
-	private JJBug viewBug;
-	private List<JJTask> viewBugTasks;
+	private JJBug				viewBug;
+	private List<JJTask>		viewBugTasks;
 
-	private JJBug JJBug_;
+	private JJBug				JJBug_;
 
-	private JJProject bugProjectSelected;
+	private JJProject			bugProjectSelected;
 	// private boolean rated;
 	// private JJRequirement bugRequirementSelected;
-	private JJProject project;
-	private LazyBugDataModel bugList;
-	private List<JJBug> selectedBugList;
-	private SelectItem[] criticityOptions;
-	private SelectItem[] importanceOptions;
-	private SelectItem[] statusOptions;
-	private List<JJMessage> communicationMessages;
+	private JJProject			project;
+	private LazyBugDataModel	bugList;
+	private List<JJBug>			selectedBugList;
+	private SelectItem[]		criticityOptions;
+	private SelectItem[]		importanceOptions;
+	private SelectItem[]		statusOptions;
+	private List<JJMessage>		communicationMessages;
 
 	public JJProject getBugProjectSelected() {
 		return bugProjectSelected;
@@ -152,14 +151,12 @@ public class JJBugBean {
 	}
 
 	public boolean isRated(JJBug b) {
-		return (((LoginBean) LoginBean.findBean("loginBean")).getContact()
-				.getBugs().contains(b));
+		return (((LoginBean) LoginBean.findBean("loginBean")).getContact().getBugs().contains(b));
 	}
 
 	public String getMessage() {
 
-		return (JJBug_ == null || JJBug_.getId() == null) ? "bug_create_title"
-				: "bug_edit_title";
+		return (JJBug_ == null || JJBug_.getId() == null) ? "bug_create_title" : "bug_edit_title";
 	}
 
 	public JJProject getProject() {
@@ -174,8 +171,7 @@ public class JJBugBean {
 	public LazyBugDataModel getBugList() {
 		if (bugList == null) {
 
-			bugList = new LazyBugDataModel(jJBugService, project,
-					LoginBean.getProduct(), LoginBean.getVersion());
+			bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 			initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 		}
 
@@ -228,43 +224,35 @@ public class JJBugBean {
 
 			if (bugList == null) {
 				project = null;
-				bugList = new LazyBugDataModel(jJBugService, project,
-						LoginBean.getProduct(), LoginBean.getVersion());
+				bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 				initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 			} else if (project != null) {
 
 				project = null;
-				bugList = new LazyBugDataModel(jJBugService, project,
-						LoginBean.getProduct(), LoginBean.getVersion());
+				bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 				initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 			} else {
 				if (bugList.getVersion() != null) {
 					if (!bugList.getVersion().equals(LoginBean.getVersion())) {
-						bugList = new LazyBugDataModel(jJBugService, project,
-								LoginBean.getProduct(), LoginBean.getVersion());
-						initJJBugTable(LoginBean.getProduct(),
-								LoginBean.getVersion());
+						bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+						        LoginBean.getVersion());
+						initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 					}
 				} else if (LoginBean.getVersion() != null) {
-					bugList = new LazyBugDataModel(jJBugService, project,
-							LoginBean.getProduct(), LoginBean.getVersion());
-					initJJBugTable(LoginBean.getProduct(),
-							LoginBean.getVersion());
+					bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+					        LoginBean.getVersion());
+					initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 				} else {
 					if (bugList.getProduct() != null) {
-						if (!bugList.getProduct()
-								.equals(LoginBean.getProduct())) {
-							bugList = new LazyBugDataModel(jJBugService,
-									project, LoginBean.getProduct(),
-									LoginBean.getVersion());
-							initJJBugTable(LoginBean.getProduct(),
-									LoginBean.getVersion());
+						if (!bugList.getProduct().equals(LoginBean.getProduct())) {
+							bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+							        LoginBean.getVersion());
+							initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 						}
 					} else if (LoginBean.getProduct() != null) {
-						bugList = new LazyBugDataModel(jJBugService, project,
-								LoginBean.getProduct(), LoginBean.getVersion());
-						initJJBugTable(LoginBean.getProduct(),
-								LoginBean.getVersion());
+						bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+						        LoginBean.getVersion());
+						initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 					}
 
 				}
@@ -275,43 +263,35 @@ public class JJBugBean {
 
 			if (bugList == null) {
 				project = LoginBean.getProject();
-				bugList = new LazyBugDataModel(jJBugService, project,
-						LoginBean.getProduct(), LoginBean.getVersion());
+				bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 				initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 			} else if (!project.equals(LoginBean.getProject())) {
 				project = LoginBean.getProject();
-				bugList = new LazyBugDataModel(jJBugService, project,
-						LoginBean.getProduct(), LoginBean.getVersion());
+				bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 				initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 			} else {
 
 				if (bugList.getVersion() != null) {
 					if (!bugList.getVersion().equals(LoginBean.getVersion())) {
-						bugList = new LazyBugDataModel(jJBugService, project,
-								LoginBean.getProduct(), LoginBean.getVersion());
-						initJJBugTable(LoginBean.getProduct(),
-								LoginBean.getVersion());
+						bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+						        LoginBean.getVersion());
+						initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 					}
 				} else if (LoginBean.getVersion() != null) {
-					bugList = new LazyBugDataModel(jJBugService, project,
-							LoginBean.getProduct(), LoginBean.getVersion());
-					initJJBugTable(LoginBean.getProduct(),
-							LoginBean.getVersion());
+					bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+					        LoginBean.getVersion());
+					initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 				} else {
 					if (bugList.getProduct() != null) {
-						if (!bugList.getProduct()
-								.equals(LoginBean.getProduct())) {
-							bugList = new LazyBugDataModel(jJBugService,
-									project, LoginBean.getProduct(),
-									LoginBean.getVersion());
-							initJJBugTable(LoginBean.getProduct(),
-									LoginBean.getVersion());
+						if (!bugList.getProduct().equals(LoginBean.getProduct())) {
+							bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+							        LoginBean.getVersion());
+							initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 						}
 					} else if (LoginBean.getProduct() != null) {
-						bugList = new LazyBugDataModel(jJBugService, project,
-								LoginBean.getProduct(), LoginBean.getVersion());
-						initJJBugTable(LoginBean.getProduct(),
-								LoginBean.getVersion());
+						bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(),
+						        LoginBean.getVersion());
+						initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 					}
 
 				}
@@ -319,8 +299,7 @@ public class JJBugBean {
 			}
 		} else {
 			project = LoginBean.getProject();
-			bugList = new LazyBugDataModel(jJBugService, project,
-					LoginBean.getProduct(), LoginBean.getVersion());
+			bugList = new LazyBugDataModel(jJBugService, project, LoginBean.getProduct(), LoginBean.getVersion());
 			initJJBugTable(LoginBean.getProduct(), LoginBean.getVersion());
 		}
 
@@ -331,8 +310,7 @@ public class JJBugBean {
 			b.setEnabled(false);
 			updateJJBug(b);
 		}
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Bug", "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -341,8 +319,7 @@ public class JJBugBean {
 
 		getJJBug_().setEnabled(false);
 		updateJJBug(getJJBug_());
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_deleted", "Bug", "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -353,20 +330,17 @@ public class JJBugBean {
 		List<JJStatus> status = new ArrayList<JJStatus>();
 		List<JJImportance> importances = new ArrayList<JJImportance>();
 
-		List<JJBug> data = jJBugService.getBugs(
-				(JJCompany) LoginBean.findBean("JJCompany"), project,
-				jjProduct, jjVersion);
+		List<JJBug> data = jJBugService.getBugs((JJCompany) LoginBean.findBean("JJCompany"), project, jjProduct,
+		        jjVersion);
 		for (JJBug b : data) {
 
-			if (b.getCriticity() != null
-					&& !listContaines(criticities, b.getCriticity()))
+			if (b.getCriticity() != null && !listContaines(criticities, b.getCriticity()))
 				criticities.add(b.getCriticity());
 
 			if (b.getStatus() != null && !listContaines(status, b.getStatus()))
 				status.add(b.getStatus());
 
-			if (b.getImportance() != null
-					&& !listContaines(importances, b.getImportance()))
+			if (b.getImportance() != null && !listContaines(importances, b.getImportance()))
 				importances.add(b.getImportance());
 
 		}
@@ -383,24 +357,20 @@ public class JJBugBean {
 
 		SelectItem[] options = new SelectItem[data.size() + 1];
 
-		options[0] = new SelectItem("", MessageFactory.getMessage("label_all")
-				.getDetail());
+		options[0] = new SelectItem("", MessageFactory.getMessage("label_all").getDetail());
 		for (int i = 0; i < data.size(); i++) {
 
 			if (data.get(i) instanceof JJCriticity) {
 				JJCriticity criticity = (JJCriticity) data.get(i);
-				options[i + 1] = new SelectItem(criticity.getName(),
-						criticity.getName());
+				options[i + 1] = new SelectItem(criticity.getName(), criticity.getName());
 			} else if (data.get(i) instanceof JJStatus) {
 				JJStatus status = (JJStatus) data.get(i);
 				options[i + 1] = new SelectItem(status.getName(),
-						MessageFactory.getMessage("status_" + status.getName(),
-								"").getDetail());
+				        MessageFactory.getMessage("status_" + status.getName(), "").getDetail());
 
 			} else if (data.get(i) instanceof JJImportance) {
 				JJImportance importance = (JJImportance) data.get(i);
-				options[i + 1] = new SelectItem(importance.getName(),
-						importance.getName());
+				options[i + 1] = new SelectItem(importance.getName(), importance.getName());
 			}
 
 		}
@@ -468,23 +438,20 @@ public class JJBugBean {
 
 	public void reset() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		session.setAttribute("jJBugBean", new JJBugBean());
 
 	}
 
 	public void saveBug() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
 		JJTeststepexecutionBean jJTeststepexecutionBean = (JJTeststepexecutionBean) session
-				.getAttribute("jJTeststepexecutionBean");
+		        .getAttribute("jJTeststepexecutionBean");
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
-				.getAttribute("jJTestcaseexecutionBean");
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		        .getAttribute("jJTestcaseexecutionBean");
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
 		JJBug_ = jJTeststepexecutionBean.getBug();
 		JJBug_.setProject(bugProjectSelected);
@@ -492,8 +459,7 @@ public class JJBugBean {
 		if (JJBug_.getId() == null) {
 
 			JJTeststep teststep = jJTeststepService
-					.findJJTeststep(jJTeststepexecutionBean
-							.getTeststepexecution().getTeststep().getId());
+			        .findJJTeststep(jJTeststepexecutionBean.getTeststepexecution().getTeststep().getId());
 
 			JJBug_.setTeststep(teststep);
 			// teststep.getBugs().add(JJBug_);
@@ -508,11 +474,9 @@ public class JJBugBean {
 		context.execute("PF('bugTestDialogWidget').hide()");
 		RequestContext.getCurrentInstance().update("growlForm");
 
-		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean,
-				jJTeststepexecutionBean);
+		jJTestcaseBean.runTestcase(jJTestcaseexecutionBean, jJTeststepexecutionBean);
 
-		jJTeststepexecutionBean.setActiveIndex(jJTeststepexecutionBean
-				.getElements().size());
+		jJTeststepexecutionBean.setActiveIndex(jJTeststepexecutionBean.getElements().size());
 
 		// if (jJTeststepexecutionBean.getDisabledTestcase()) {
 		// jJTeststepexecutionBean.nextTab();
@@ -525,8 +489,7 @@ public class JJBugBean {
 
 	public void persistBugTask() {
 		updateJJBug(JJBug_);
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug", "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 	}
@@ -543,8 +506,7 @@ public class JJBugBean {
 		project = null;
 		viewBug = jJBugService.findJJBug(viewBug.getId());
 
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug", "");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
@@ -578,15 +540,13 @@ public class JJBugBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug",
-				"");
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		System.err.println(facesMessage.getDetail());
 
 		if (hideBugDialog()) {
-			RequestContext.getCurrentInstance().execute(
-					"PF('createDialogWidget').hide()");
+			RequestContext.getCurrentInstance().execute("PF('createDialogWidget').hide()");
 
 			RequestContext.getCurrentInstance().update("growlForm");
 		}
@@ -618,53 +578,36 @@ public class JJBugBean {
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug",
-				"");
-		((LoginBean) LoginBean.findBean("loginBean"))
-				.setFacesMessage(facesMessage);
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Bug", "");
+		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
 
 		bugList = null;
 		project = null;
 
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						FacesContext.getCurrentInstance().getExternalContext()
-								.getRequestContextPath()
-								+ "/pages/bug.jsf?bug="
-								+ viewBug.getId()
-								+ "&faces-redirect=true");
+		FacesContext.getCurrentInstance().getExternalContext()
+		        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+		                + "/pages/bug.jsf?bug=" + viewBug.getId() + "&faces-redirect=true");
 
 	}
 
 	public void bugInfo() throws IOException {
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						FacesContext.getCurrentInstance().getExternalContext()
-								.getRequestContextPath()
-								+ "/pages/bug.jsf?bug="
-								+ viewBug.getId()
-								+ "&faces-redirect=true");
+		FacesContext.getCurrentInstance().getExternalContext()
+		        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
+		                + "/pages/bug.jsf?bug=" + viewBug.getId() + "&faces-redirect=true");
 
 	}
 
 	public void checkBug(ComponentSystemEvent e) throws IOException {
 
-		HttpServletRequest request = (HttpServletRequest) FacesContext
-				.getCurrentInstance().getExternalContext().getRequest();
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+		        .getRequest();
 		String value = request.getParameter("bug");
 		try {
 			long id = Long.parseLong(value);
 
-			JJProductBean jJProductBean = ((JJProductBean) LoginBean
-					.findBean("jJProductBean"));
-			JJVersionBean jJVersionBean = ((JJVersionBean) LoginBean
-					.findBean("jJVersionBean"));
-			JJProjectBean jJProjectBean = ((JJProjectBean) LoginBean
-					.findBean("jJProjectBean"));
+			JJProductBean jJProductBean = ((JJProductBean) LoginBean.findBean("jJProductBean"));
+			JJVersionBean jJVersionBean = ((JJVersionBean) LoginBean.findBean("jJVersionBean"));
+			JJProjectBean jJProjectBean = ((JJProjectBean) LoginBean.findBean("jJProjectBean"));
 
 			viewBug = jJBugService.findJJBug(id);
 
@@ -675,8 +618,7 @@ public class JJBugBean {
 			if (show) {
 				if (viewBug.getVersioning() != null)
 					prod = viewBug.getVersioning().getProduct();
-				else if (viewBug.getBuild() != null
-						&& viewBug.getBuild().getVersion() != null)
+				else if (viewBug.getBuild() != null && viewBug.getBuild().getVersion() != null)
 					prod = viewBug.getBuild().getVersion().getProduct();
 			}
 
@@ -685,22 +627,17 @@ public class JJBugBean {
 
 			if (show) {
 
-				show = jJPermissionService.isAuthorized(((LoginBean) LoginBean
-						.findBean("loginBean")).getContact(), viewBug
-						.getProject(), prod, "Bug");
+				show = jJPermissionService.isAuthorized(((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+				        viewBug.getProject(), prod, "Bug");
 			}
 
-			if (show
-					&& viewBug.getProject() != null
-					&& !jJProjectBean.getProjectList().contains(
-							viewBug.getProject()))
+			if (show && viewBug.getProject() != null && !jJProjectBean.getProjectList().contains(viewBug.getProject()))
 				show = false;
 
 			if (show) {
 				boolean change = false;
-				HttpSession session = (HttpSession) FacesContext
-						.getCurrentInstance().getExternalContext()
-						.getSession(false);
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+				        .getSession(false);
 
 				if (jJProjectBean.getProject() == null) {
 					change = true;
@@ -712,8 +649,7 @@ public class JJBugBean {
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
-				} else if (!jJProjectBean.getProject().equals(
-						viewBug.getProject())) {
+				} else if (!jJProjectBean.getProject().equals(viewBug.getProject())) {
 					change = true;
 					jJProjectBean.setProject(viewBug.getProject());
 					jJProductBean.setProduct(prod);
@@ -732,16 +668,13 @@ public class JJBugBean {
 						session.setAttribute("jJTaskBean", new JJTaskBean());
 						session.setAttribute("jJStatusBean", new JJStatusBean());
 						session.setAttribute("jJSprintBean", new JJSprintBean());
-					} else if (viewBug.getVersioning() != null
-							&& jJVersionBean.getVersion() != null) {
-						if (!viewBug.getVersioning().equals(
-								jJVersionBean.getVersion())) {
+					} else if (viewBug.getVersioning() != null && jJVersionBean.getVersion() != null) {
+						if (!viewBug.getVersioning().equals(jJVersionBean.getVersion())) {
 							change = true;
 							jJVersionBean.getVersionList();
 							jJVersionBean.setVersion(viewBug.getVersioning());
 
-							session.setAttribute("jJStatusBean",
-									new JJStatusBean());
+							session.setAttribute("jJStatusBean", new JJStatusBean());
 						}
 					}
 				}
@@ -751,42 +684,30 @@ public class JJBugBean {
 					// String viewId = ctx.getViewRoot().getViewId();
 
 					if (session.getAttribute("jJTestcaseBean") != null) {
-						JJCategory cat = ((JJTestcaseBean) session
-								.getAttribute("jJTestcaseBean")).getCategory();
-						session.setAttribute("jJTestcaseBean",
-								new JJTestcaseBean());
-						((JJTestcaseBean) session
-								.getAttribute("jJTestcaseBean"))
-								.setCategory(cat);
+						JJCategory cat = ((JJTestcaseBean) session.getAttribute("jJTestcaseBean")).getCategory();
+						session.setAttribute("jJTestcaseBean", new JJTestcaseBean());
+						((JJTestcaseBean) session.getAttribute("jJTestcaseBean")).setCategory(cat);
 					}
 
 					bugList = null;
 					session.setAttribute("jJMessageBean", null);
 					session.setAttribute("jJRequirementBean", null);
+					((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 					((LoginBean) LoginBean.findBean("loginBean"))
-							.setMessageCount(null);
-					((LoginBean) LoginBean.findBean("loginBean"))
-							.setAuthorisationService(new AuthorisationService(
-									(HttpSession) FacesContext
-											.getCurrentInstance()
-											.getExternalContext()
-											.getSession(false),
-									((LoginBean) LoginBean
-											.findBean("loginBean"))
-											.getContact()));
+					        .setAuthorisationService(new AuthorisationService(
+					                (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+					                        .getSession(false),
+					                ((LoginBean) LoginBean.findBean("loginBean")).getContact()));
 				}
 
-				viewBugTasks = jJTaskService.getImportTasks(viewBug, null,
-						null, true);
+				viewBugTasks = jJTaskService.getImportTasks(viewBug, null, null, true);
 				// rated = (((LoginBean) LoginBean.findBean("loginBean"))
 				// .getContact().getBugs().contains(viewBug));
 			} else {
 				viewBug = null;
-				FacesMessage facesMessage = MessageFactory.getMessage(
-						"validator_page_access", "Bug");
+				FacesMessage facesMessage = MessageFactory.getMessage("validator_page_access", "Bug");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
-				((LoginBean) LoginBean.findBean("loginBean"))
-						.setFacesMessage(facesMessage);
+				((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
 			}
 
 		} catch (NumberFormatException ex) {
@@ -819,14 +740,11 @@ public class JJBugBean {
 	}
 
 	public boolean hideBugDialog() {
-		if (jJConfigurationService.getConfigurations("BugDialog",
-				"bugs.bug.create.saveandclose", true).isEmpty()) {
+		if (jJConfigurationService.getConfigurations("BugDialog", "bugs.bug.create.saveandclose", true).isEmpty()) {
 			JJConfiguration configuration = new JJConfiguration();
 			configuration.setName("BugDialog");
-			configuration
-					.setDescription("specify action after submit in bug dialog");
-			configuration.setCreatedBy(((LoginBean) LoginBean
-					.findBean("loginBean")).getContact());
+			configuration.setDescription("specify action after submit in bug dialog");
+			configuration.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean")).getContact());
 			configuration.setCreationDate(new Date());
 			configuration.setEnabled(true);
 			configuration.setParam("bugs.bug.create.saveandclose");
@@ -834,54 +752,53 @@ public class JJBugBean {
 			jJConfigurationService.saveJJConfiguration(configuration);
 		}
 
-		return jJConfigurationService.getDialogConfig("BugDialog",
-				"bugs.bug.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("BugDialog", "bugs.bug.create.saveandclose");
 
 	}
 
 	public void saveJJBug(JJBug b) {
 
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJBugService.saveJJBug(b);
 
-		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
-				.findBean("jJStatusBean");
-		if (jJStatusBean != null)
+		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean.findBean("jJStatusBean");
+		if (jJStatusBean != null) {
 			jJStatusBean.setBugPieChart(null);
+			jJStatusBean.setBugLineModel(null);
+			jJStatusBean.setBugMetergauge(null);
+		}
 	}
 
 	public void updateJJBug(JJBug b) {
 
 		if (b.getRequirement() != null && b.getProject() != null
-				&& !b.getRequirement().getProject().equals(b.getProject()))
+		        && !b.getRequirement().getProject().equals(b.getProject()))
 			b.setRequirement(null);
 
-		if (b.getRequirement() != null
-				&& b.getTeststep() != null
-				&& !b.getTeststep().getTestcase().getRequirement()
-						.equals(b.getRequirement()))
+		if (b.getRequirement() != null && b.getTeststep() != null
+		        && !b.getTeststep().getTestcase().getRequirement().equals(b.getRequirement()))
 			b.setTeststep(null);
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJBugService.updateJJBug(b);
 
-		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
-				.findBean("jJStatusBean");
-		if (jJStatusBean != null)
+		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean.findBean("jJStatusBean");
+		if (jJStatusBean != null) {
 			jJStatusBean.setBugPieChart(null);
+			jJStatusBean.setBugLineModel(null);
+			jJStatusBean.setBugMetergauge(null);
+		}
 	}
 
 	public void changeEvent(String field, JJBug b) {
 
 		if (field.equalsIgnoreCase("project"))
-			// bugRequirementSelected = null;
-			b.setRequirement(null);
+		    // bugRequirementSelected = null;
+		    b.setRequirement(null);
 		else {
 			if (field.equalsIgnoreCase("version"))
 				b.setBuild(null);
@@ -891,10 +808,8 @@ public class JJBugBean {
 	public List<JJBug> getInfinshedBugs(JJVersion jJversion) {
 		List<JJBug> infinshedBugs = new ArrayList<JJBug>();
 
-		for (JJBug b : jJBugService.getBugs(null, LoginBean.getProject(), null,
-				jJversion)) {
-			if (!jJTaskService.haveTask(b, true, true, false)
-					&& jJversion == b.getVersioning())
+		for (JJBug b : jJBugService.getBugs(null, LoginBean.getProject(), null, jJversion)) {
+			if (!jJTaskService.haveTask(b, true, true, false) && jJversion == b.getVersioning())
 				infinshedBugs.add(b);
 		}
 
@@ -906,14 +821,12 @@ public class JJBugBean {
 		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		JJProduct prod = LoginBean.getProduct();
-		JJProject proj = (JJProject) UIComponent
-				.getCurrentComponent(FacesContext.getCurrentInstance())
-				.getAttributes().get("project");
+		JJProject proj = (JJProject) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
+		        .get("project");
 		suggestions.add(null);
 
-		for (JJRequirement req : jJRequirementService.getRequirements(
-				(JJCompany) LoginBean.findBean("JJCompany"),
-				loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
+		for (JJRequirement req : jJRequirementService.getRequirements((JJCompany) LoginBean.findBean("JJCompany"),
+		        loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -939,15 +852,12 @@ public class JJBugBean {
 		List<JJTeststep> suggestions = new ArrayList<JJTeststep>();
 
 		FacesContext context = FacesContext.getCurrentInstance();
-		JJRequirement requirement = (JJRequirement) UIComponent
-				.getCurrentComponent(context).getAttributes()
-				.get("requirement");
-		JJProject proj = (JJProject) UIComponent.getCurrentComponent(context)
-				.getAttributes().get("project");
+		JJRequirement requirement = (JJRequirement) UIComponent.getCurrentComponent(context).getAttributes()
+		        .get("requirement");
+		JJProject proj = (JJProject) UIComponent.getCurrentComponent(context).getAttributes().get("project");
 
 		suggestions.add(null);
-		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(
-				requirement, proj)) {
+		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(requirement, proj)) {
 			String jJCriticityStr = String.valueOf(testStep.getName());
 			if (jJCriticityStr.toLowerCase().contains(query.toLowerCase())) {
 				suggestions.add(testStep);
@@ -959,14 +869,12 @@ public class JJBugBean {
 	public List<JJBuild> completeBuildBug(String query) {
 
 		FacesContext context = FacesContext.getCurrentInstance();
-		JJVersion versioning = (JJVersion) UIComponent
-				.getCurrentComponent(context).getAttributes().get("version");
+		JJVersion versioning = (JJVersion) UIComponent.getCurrentComponent(context).getAttributes().get("version");
 
 		List<JJBuild> suggestions = new ArrayList<JJBuild>();
 
 		suggestions.add(null);
-		for (JJBuild req : jJBuildService.getBuilds(LoginBean.getProduct(),
-				versioning, true)) {
+		for (JJBuild req : jJBuildService.getBuilds(LoginBean.getProduct(), versioning, true)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -980,8 +888,8 @@ public class JJBugBean {
 		List<JJVersion> suggestions = new ArrayList<JJVersion>();
 		suggestions.add(null);
 
-		for (JJVersion req : jJVersionService.getVersions(true, prod != null,
-				prod, (JJCompany) LoginBean.findBean("JJCompany"), true)) {
+		for (JJVersion req : jJVersionService.getVersions(true, prod != null, prod,
+		        (JJCompany) LoginBean.findBean("JJCompany"), true)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -994,8 +902,7 @@ public class JJBugBean {
 		List<JJSprint> suggestions = new ArrayList<JJSprint>();
 		suggestions.add(null);
 
-		for (JJSprint req : jJSprintService
-				.getSprints(bugProjectSelected, true)) {
+		for (JJSprint req : jJSprintService.getSprints(bugProjectSelected, true)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -1007,8 +914,7 @@ public class JJBugBean {
 	public List<JJStatus> completeStatusBug(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("Bug", true, null,
-				true)) {
+		for (JJStatus jJStatus : jJStatusService.getStatus("Bug", true, null, true)) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJStatus);
@@ -1019,30 +925,24 @@ public class JJBugBean {
 
 	public void onrate(JJBug b) {
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		if (!contact.getBugs().contains(b)) {
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
 			}
 			contact.getBugs().add(jJBugService.findJJBug(b.getId()));
 
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
+				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean"))
-					.updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory
-					.getMessage(BUG_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1051,23 +951,18 @@ public class JJBugBean {
 
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
+				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean"))
-					.updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
 			}
 
-			FacesMessage facesMessage = MessageFactory
-					.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1075,30 +970,24 @@ public class JJBugBean {
 	}
 
 	public void oncancel() {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		if (contact.getBugs().contains(viewBug)) {
 			contact.getBugs().remove(jJBugService.findJJBug(viewBug.getId()));
 
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext
-						.getExternalContext().getSession(false);
+				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean"))
-					.updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-						.setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
 			}
 
-			FacesMessage facesMessage = MessageFactory
-					.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1106,35 +995,28 @@ public class JJBugBean {
 	}
 
 	public void onRateMultiple() {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		for (JJBug b : selectedBugList) {
 
 			if (!contact.getBugs().contains(b)) {
-				((LoginBean) LoginBean.findBean("loginBean"))
-						.setMessageCount(null);
+				((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 				if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-					((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-							.setAlertMessages(null);
-					((JJMessageBean) LoginBean.findBean("jJMessageBean"))
-							.setMainMessages(null);
+					((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
+					((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
 				}
 				contact.getBugs().add(jJBugService.findJJBug(b.getId()));
 
 				if (LoginBean.findBean("jJContactBean") == null) {
 					FacesContext fContext = FacesContext.getCurrentInstance();
-					HttpSession session = (HttpSession) fContext
-							.getExternalContext().getSession(false);
+					HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
 					session.setAttribute("jJProjectBean", new JJProjectBean());
 				}
 			}
 		}
 
-		((JJContactBean) LoginBean.findBean("jJContactBean"))
-				.updateJJContact(contact);
+		((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
 
-		FacesMessage facesMessage = MessageFactory
-				.getMessage(BUG_SUBSCRIPTION_RATE);
+		FacesMessage facesMessage = MessageFactory.getMessage(BUG_SUBSCRIPTION_RATE);
 		facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -1144,8 +1026,7 @@ public class JJBugBean {
 	public List<JJCriticity> completeCriticityBug(String query) {
 		List<JJCriticity> suggestions = new ArrayList<JJCriticity>();
 		suggestions.add(null);
-		for (JJCriticity jJCriticity : jJCriticityService.getCriticities("Bug",
-				true)) {
+		for (JJCriticity jJCriticity : jJCriticityService.getCriticities("Bug", true)) {
 			String jJCriticityStr = String.valueOf(jJCriticity.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJCriticity);

@@ -12,23 +12,20 @@
 	</ui:define>
 	<ui:define name="content">
 		<h:form style="width:100%;display:none;">
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper" update=":statsTabView"
+			<p:remoteCommand name="tabChangeHelper" update=":statsTabView"
 				actionListener="#{jJStatusBean.onTabStatChange}"
-				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+				oncomplete="updateTabViewWidth();" />
 
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="sprintTabChangeHelper"
+			<p:remoteCommand name="sprintTabChangeHelper"
 				update=":statsTabView:activeSprintIndexForm"
 				actionListener="#{jJStatusBean.onTabStatChange}"
-				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+				oncomplete="updateTabViewWidth();" />
 		</h:form>
 		<!-- 		<p:commandButton value="#{messages.specification_video_help_title}" -->
 		<!-- 			id="videoHelpBtn" icon="ui-icon-video" -->
 		<!-- 			onclick="PF('videoHelpWidget').show()" type="button" -->
 		<!-- 			style="float: right;" /> -->
-		<f:event type="preRenderComponent"
-			oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+		<f:event type="preRenderComponent" oncomplete="updateTabViewWidth();"
 			listener="#{jJStatusBean.loadData()}" />
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<p:tabView id="statsTabView" widgetVar="statsTabView" dynamic="false"
@@ -136,6 +133,45 @@
 								<li>#{messages.statistique_bug_bugKpi_help}</li>
 								<li>#{messages.statistique_bug_bugpieChart_help}</li>
 							</ul>
+							<p:panelGrid style="width: 100%;">
+								<f:facet name="header">
+									<p:row>
+										<p:column colspan="6">Code des Couleurs</p:column>
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #0288D1 !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_bug_blue}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #05C6BC0 !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_bug_purple}" />
+									</p:column>
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #59A45D !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_bug_green}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_bug_blue_text}" />
+									</p:column>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_bug_purple_text}" />
+									</p:column>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_bug_green_text}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
 						</p:panelGrid>
 					</p:overlayPanel>
 					<h:form id="bugForm">
@@ -149,19 +185,24 @@
 							</h:panelGroup>
 
 							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive100">
+								styleClass="Container45 Responsive100">
 								<p:chart id="custom" responsive="true"
 									rendered="#{jJStatusBean.bugPieChart != null}"
 									model="#{jJStatusBean.bugPieChart}" style="height:300px"
 									type="pie" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive100">
+								styleClass="Container45 Responsive100">
 
 								<p:chart type="metergauge" model="#{jJStatusBean.bugMetergauge}"
 									style="height:300px"
 									rendered="#{jJStatusBean.bugMetergauge != null}"
 									responsive="true" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100">
+								<p:chart type="line" model="#{jJStatusBean.bugLineModel}"
+									rendered="#{jJStatusBean.bugLineModel != null}"
+									responsive="true" style="height:500px;" />
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:form>

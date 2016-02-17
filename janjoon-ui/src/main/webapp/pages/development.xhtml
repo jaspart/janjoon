@@ -26,8 +26,7 @@
 	</ui:define>
 	<ui:define name="content">
 		<h:form>
-			<p:remoteCommand name="updateHeader"
-				oncomplete="PF('blockUIWidget').unblock()"
+			<p:remoteCommand name="updateHeader"				
 				update=":contentPanel :growlForm" />
 		</h:form>
 		<h:panelGroup layout="block" styleClass="Container">
@@ -89,8 +88,6 @@
 																	styleClass="ContainerIndent">
 																	<p:commandButton id="fetchFromRepo" immediate="true"
 																		process="@this" icon="fa Fs20 fa-refresh"
-																		onstart="PF('blockUIWidget').block()"
-																		oncomplete="PF('blockUIWidget').unblock()"
 																		actionListener="#{jJDevelopment.pull}"
 																		update=":form :growlForm" />
 																</h:panelGroup>
@@ -248,8 +245,6 @@
 												<p:column>
 													<p:commandButton value="#{messages['dev.submit.button']}"
 														id="submit" icon="Fs20 fa fa-save"
-														onstart="PF('blockUIWidget').block()"
-														oncomplete="PF('blockUIWidget').unblock()"
 														actionListener="#{jJDevelopment.commit}"
 														update=":growlForm,:form" />
 												</p:column>
@@ -368,10 +363,9 @@
 			header="#{messages['dev.commitFileDialog.header']}" severity="alarm">
 			<p:outputPanel id="commitPanel">
 				<h:form id="commitForm">
-					<p:commandButton id="commitYesButton" value="#{messages.label_yes}"
-						onstart="PF('blockUIWidget').block()"
+					<p:commandButton id="commitYesButton" value="#{messages.label_yes}"						
 						action="#{jJDevelopment.commitFile}" update=":form :growlForm"
-						oncomplete="PF('commitFileDialogWidget').hide(),PF('blockUIWidget').unblock()" />
+						oncomplete="PF('commitFileDialogWidget').hide()" />
 					<p:commandButton id="commitNoButton" value="#{messages.label_no}"
 						onclick="PF('commitFileDialogWidget').hide()" type="button" />
 				</h:form>
@@ -419,9 +413,7 @@
 						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="createSaveButton"
-									value="#{messages.label_save}" update=":form,:growlForm"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock()"
+									value="#{messages.label_save}" update=":form,:growlForm"									
 									action="#{jJDevelopment.CreateFile}" />
 							</h:panelGroup>
 						</h:panelGroup>
@@ -464,9 +456,7 @@
 				<h:form id="uploadFileForm">
 					<p:fileUpload id="uploadFileButton"
 						fileUploadListener="#{jJDevelopment.handleFileUpload}"
-						onstart="PF('blockUIWidget').block()"
-						oncomplete="PF('blockUIWidget').unblock()" mode="advanced"
-						dragDropSupport="false" update=":form :growlForm"
+						mode="advanced"	dragDropSupport="false" update=":form :growlForm"
 						sizeLimit="1000000" fileLimit="4" />
 				</h:form>
 			</p:outputPanel>

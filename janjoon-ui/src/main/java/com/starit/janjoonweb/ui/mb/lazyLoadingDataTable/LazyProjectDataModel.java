@@ -17,12 +17,11 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private JJProjectService projectService;
-	private JJCompany company;
+	private static final long	serialVersionUID	= 1L;
+	private JJProjectService	projectService;
+	private JJCompany			company;
 
-	public LazyProjectDataModel(JJProjectService projectService,
-			JJCompany company) {
+	public LazyProjectDataModel(JJProjectService projectService, JJCompany company) {
 
 		this.company = company;
 		this.projectService = projectService;
@@ -56,13 +55,11 @@ public class LazyProjectDataModel extends LazyDataModel<JJProject> {
 	}
 
 	@Override
-	public List<JJProject> load(int first, int pageSize,
-			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJProject> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJProject> data = new ArrayList<JJProject>();
 		MutableInt size = new MutableInt(0);
-		data = projectService.load(company, size, first, pageSize,
-				multiSortMeta, filters);
+		data = projectService.load(company, size, first, pageSize, multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

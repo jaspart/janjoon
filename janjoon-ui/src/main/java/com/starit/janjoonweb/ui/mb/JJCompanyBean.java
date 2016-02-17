@@ -31,19 +31,19 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJCompany.class, beanName = "jJCompanyBean")
 public class JJCompanyBean {
 
-	private String calendar;
-	private LazyCompanyDataModel lazyCompanyList;
-	private String updatedCompanyCalendar;
-	private boolean update;
-	private boolean disabledsaveCalendar;
-	private List<JJCompany> companies;
-	private SelectItem[] companyOptions;
-	private String headerMessage;
-	private JJCompany companie;
-	private byte[] logo;
-	private CalendarUtil calendarUtil;
-	private Date day;
-	private List<ChunkTime> workDays;
+	private String					calendar;
+	private LazyCompanyDataModel	lazyCompanyList;
+	private String					updatedCompanyCalendar;
+	private boolean					update;
+	private boolean					disabledsaveCalendar;
+	private List<JJCompany>			companies;
+	private SelectItem[]			companyOptions;
+	private String					headerMessage;
+	private JJCompany				companie;
+	private byte[]					logo;
+	private CalendarUtil			calendarUtil;
+	private Date					day;
+	private List<ChunkTime>			workDays;
 
 	public String getCalendar() {
 		return calendar;
@@ -131,8 +131,7 @@ public class JJCompanyBean {
 
 		if (companies == null) {
 			if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()
-					&& ((LoginBean) LoginBean.findBean("loginBean"))
-							.getAuthorisationService().isAdminCompany())
+			        && ((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService().isAdminCompany())
 				companies = jJCompanyService.getActifCompanies();
 			else if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
 				companies = new ArrayList<JJCompany>();
@@ -159,12 +158,10 @@ public class JJCompanyBean {
 			getCompanies();
 			companyOptions = new SelectItem[companies.size() + 1];
 
-			companyOptions[0] = new SelectItem("", MessageFactory.getMessage(
-					"label_all").getDetail());
+			companyOptions[0] = new SelectItem("", MessageFactory.getMessage("label_all").getDetail());
 			int i = 0;
 			for (JJCompany comp : companies) {
-				companyOptions[i + 1] = new SelectItem(comp.getName(),
-						comp.getName());
+				companyOptions[i + 1] = new SelectItem(comp.getName(), comp.getName());
 				i++;
 
 			}
@@ -200,8 +197,7 @@ public class JJCompanyBean {
 		if (workDays == null && companie != null)
 			workDays = calendarUtil.getWorkDays();
 
-		if (calendarUtil != null
-				&& (workDays == null || workDays.contains(null))) {
+		if (calendarUtil != null && (workDays == null || workDays.contains(null))) {
 			int i = 0;
 			if (workDays == null)
 				workDays = new ArrayList<ChunkTime>();
@@ -240,8 +236,7 @@ public class JJCompanyBean {
 	}
 
 	public void addHoliday() throws IOException {
-		updatedCompanyCalendar = CalendarUtil.addHoliday(day,
-				updatedCompanyCalendar, holidays.size());
+		updatedCompanyCalendar = CalendarUtil.addHoliday(day, updatedCompanyCalendar, holidays.size());
 		disabledsaveCalendar = false;
 		holidays.add(day);
 		day = null;
@@ -249,8 +244,7 @@ public class JJCompanyBean {
 	}
 
 	public void removeHoliday(Date holiday) throws IOException {
-		updatedCompanyCalendar = CalendarUtil.removeHoliday(holiday,
-				updatedCompanyCalendar, holidays.indexOf(holiday));
+		updatedCompanyCalendar = CalendarUtil.removeHoliday(holiday, updatedCompanyCalendar, holidays.indexOf(holiday));
 		disabledsaveCalendar = false;
 		holidays.remove(holiday);
 	}
@@ -258,26 +252,20 @@ public class JJCompanyBean {
 	public void timeSelectListener(ChunkTime day, int type) throws IOException {
 
 		if (type == 1
-				&& ((day.getStartDate1() != null && day.getEndDate1() != null) || (day
-						.getStartDate1() == null && day.getEndDate1() == null))
-				|| (type == 2 && ((day.getStartDate2() != null && day
-						.getEndDate2() != null) || (day.getStartDate2() == null && day
-						.getEndDate2() == null)))) {
+		        && ((day.getStartDate1() != null && day.getEndDate1() != null)
+		                || (day.getStartDate1() == null && day.getEndDate1() == null))
+		        || (type == 2 && ((day.getStartDate2() != null && day.getEndDate2() != null)
+		                || (day.getStartDate2() == null && day.getEndDate2() == null)))) {
 
 			boolean up = true;
-			if (day.getStartDate1() != null
-					&& day.getStartDate1().after(day.getEndDate1()))
+			if (day.getStartDate1() != null && day.getStartDate1().after(day.getEndDate1()))
 				up = false;
-			if (up && day.getStartDate2() != null
-					&& day.getStartDate2().after(day.getEndDate2()))
+			if (up && day.getStartDate2() != null && day.getStartDate2().after(day.getEndDate2()))
 				up = false;
 
-			if (up
-					&& type == 2
-					&& day.getStartDate2() != null
-					&& ((day.getStartDate1() != null && day.getStartDate2()
-							.before(day.getStartDate1())) || (day.getEndDate1() != null && day
-							.getStartDate2().before(day.getEndDate1()))))
+			if (up && type == 2 && day.getStartDate2() != null
+			        && ((day.getStartDate1() != null && day.getStartDate2().before(day.getStartDate1()))
+			                || (day.getEndDate1() != null && day.getStartDate2().before(day.getEndDate1()))))
 				up = false;
 
 			if (up) {
@@ -286,10 +274,9 @@ public class JJCompanyBean {
 			} else {
 
 				String message = "validator_date_startAfterEndCompany";
-				FacesMessage facesMessage = MessageFactory.getMessage(message,
-						FacesMessage.SEVERITY_ERROR, new Object());
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
+				FacesMessage facesMessage = MessageFactory.getMessage(message, FacesMessage.SEVERITY_ERROR,
+				        new Object());
+				FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 			}
 
 		}
@@ -304,15 +291,13 @@ public class JJCompanyBean {
 			while (i < 7) {
 				if (i != 0 && i != 6)
 
-					System.err.println(output.format(calendar.getWorkDays()
-							.get(i).getStartDate1()));
+					System.err.println(output.format(calendar.getWorkDays().get(i).getStartDate1()));
 				i++;
 			}
 			output = new SimpleDateFormat("dd/MM/yyyy");
 			i = 0;
 			while (i < calendar.getHolidays().size()) {
-				System.err
-						.println(output.format(calendar.getHolidays().get(i)));
+				System.err.println(output.format(calendar.getHolidays().get(i)));
 				i++;
 			}
 
@@ -336,8 +321,7 @@ public class JJCompanyBean {
 
 		companie.setCalendar(updatedCompanyCalendar);
 		updateJJCompany(companie);
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		if (LoginBean.getCompany().equals(companie))
 			loginBean.getAuthorisationService().setSession(session);
@@ -346,9 +330,8 @@ public class JJCompanyBean {
 		companyOptions = null;
 		logo = null;
 
-		FacesMessage facesMessage = MessageFactory
-				.getMessage("message_successfully_updated", MessageFactory
-						.getMessage("label_company", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
+		        MessageFactory.getMessage("label_company", "").getDetail(), "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -364,8 +347,7 @@ public class JJCompanyBean {
 			companyOptions = null;
 			String message = "message_successfully_deleted";
 			FacesMessage facesMessage = MessageFactory.getMessage(message,
-					MessageFactory.getMessage("label_company", "").getDetail(),
-					"e");
+			        MessageFactory.getMessage("label_company", "").getDetail(), "e");
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
@@ -392,8 +374,7 @@ public class JJCompanyBean {
 
 		}
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
 		if (LoginBean.getCompany().equals(companie))
 			loginBean.getAuthorisationService().setSession(session);
@@ -402,8 +383,8 @@ public class JJCompanyBean {
 		companyOptions = null;
 		logo = null;
 
-		facesMessage = MessageFactory.getMessage(message, MessageFactory
-				.getMessage("label_company", "").getDetail(), "e");
+		facesMessage = MessageFactory.getMessage(message, MessageFactory.getMessage("label_company", "").getDetail(),
+		        "e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -415,15 +396,13 @@ public class JJCompanyBean {
 	public void saveJJCompany(JJCompany b) {
 
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJCompanyService.saveJJCompany(b);
 	}
 
 	public void updateJJCompany(JJCompany b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCompanyService.updateJJCompany(b);
@@ -431,8 +410,7 @@ public class JJCompanyBean {
 
 	public void handleFileUpload(FileUploadEvent event) throws IOException {
 
-		Scanner s = new Scanner(event.getFile().getInputstream())
-				.useDelimiter("\\A");
+		Scanner s = new Scanner(event.getFile().getInputstream()).useDelimiter("\\A");
 		calendar = (s.hasNext() ? s.next() : "");
 	}
 }

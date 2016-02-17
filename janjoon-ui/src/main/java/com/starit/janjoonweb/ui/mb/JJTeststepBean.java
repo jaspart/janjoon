@@ -10,7 +10,6 @@ import java.util.TreeMap;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.component.datatable.DataTable;
@@ -21,10 +20,8 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJStatusService;
-import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
@@ -33,37 +30,71 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = JJTeststep.class, beanName = "jJTeststepBean")
 public class JJTeststepBean {
 
-	private JJTeststep teststep;
+	private JJTeststep			teststep;
 
-	private List<JJTeststep> teststeps;
+	private List<JJTeststep>	teststeps;
 
-	private boolean actionTeststep;
+	private boolean				actionTeststep;
 
 	@Autowired
-	private JJStatusService jJStatusService;
+	private JJStatusService		jJStatusService;
 
-	public void setjJStatusService(JJStatusService jJStatusService) {
-		this.jJStatusService = jJStatusService;
+	public void cancelEditTestStep(final RowEditEvent event) {
+
+		// FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
+		// "Teststep");
+		// FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		newTeststep();
+
+	}
+
+	public void deleteTestStep() {
+
+		final JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
+		ts.setEnabled(false);
+		jJTeststepService.deleteJJTeststep(ts);
+
+		newTeststep();
+
+		actionTeststep = true;
+
+	}
+
+	public void editTestStep(final RowEditEvent event) {
+
+		final JJTeststep ts = jJTeststepService.findJJTeststep(((JJTeststep) event.getObject()).getId());
+
+		ts.setName(ts.getActionstep() + " " + ts.getResultstep());
+
+		ts.setDescription("This is " + ts.getActionstep() + " " + ts.getResultstep() + " description");
+
+		updateJJTeststep(ts);
+
+		newTeststep();
+
+		actionTeststep = true;
+
+		final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Teststep", "");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+
+	public boolean getActionTeststep() {
+		return actionTeststep;
 	}
 
 	public JJTeststep getTeststep() {
 		return teststep;
 	}
 
-	public void setTeststep(JJTeststep teststep) {
-		this.teststep = teststep;
-	}
-
 	public List<JJTeststep> getTeststeps() {
 
 		teststeps = new ArrayList<JJTeststep>();
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false);
+		final JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
-		JJTestcase testcase = jJTestcaseBean.getTestcase();
+		final JJTestcase testcase = jJTestcaseBean.getTestcase();
 
 		if (testcase != null && testcase.getId() != null) {
 
@@ -73,96 +104,42 @@ public class JJTeststepBean {
 		return teststeps;
 	}
 
-	public void setTeststeps(List<JJTeststep> teststeps) {
-		this.teststeps = teststeps;
-	}
+	public void initCkeditor(final RowEditEvent event) {
 
-	public boolean getActionTeststep() {
-		return actionTeststep;
-	}
+		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
+			final DataTable table = (DataTable) event.getSource();
+			final int activeRow = table.getRowIndex();
+			final int lenth = table.getRowCount();
 
-	public void setActionTeststep(boolean actionTeststep) {
-		this.actionTeststep = actionTeststep;
-	}
+			for (int i = 0; i < lenth; i++) {
+				if (i != activeRow) {
+					RequestContext.getCurrentInstance()
+					        .execute("jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq(" + i
+					                + ").each(function(){jQuery(this).click()});");
+				}
+			}
 
-	public boolean isBugFixed(JJBug bug) {
-
-		return bug.getStatus() != null
-				&& bug.getStatus().getName().equalsIgnoreCase("fixed");
-
-	}
-
-	public void onbugCheckStatus(JJBug bug, JJBugBean jJBugBean) {
-
-		bug.setStatus(jJStatusService.getOneStatus("FIXED", "Bug", true));
-		jJBugBean.updateJJBug(bug);
-
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Bug", "");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
-	}
-
-	public void newTeststep() {
-
-		teststep = new JJTeststep();
-		teststep.setCreationDate(new Date());
-		teststep.setEnabled(true);
-
-	}
-
-	public void save() {
-
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
-
-		JJTestcase tc = jJTestcaseService.findJJTestcase(jJTestcaseBean
-				.getTestcase().getId());
-
-		if (teststep.getId() == null) {
-
-			manageTeststepOrder(tc);
-
-			teststep.setTestcase(tc);
-			// tc.getTeststeps().add(teststep);
-
-			teststep.setName("Teststep for " + tc.getName());
-
-			teststep.setDescription("This is " + teststep.getActionstep() + " "
-					+ teststep.getResultstep() + " description");
-
-			saveJJTeststep(teststep);
-			newTeststep();
-
-			actionTeststep = true;
+			RequestContext.getCurrentInstance().execute("PF('testTabView').select(0)");
+			RequestContext.getCurrentInstance().execute("PF('testTabView').select(1)");
 		}
-
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_created", "Teststep", "");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-
 	}
 
 	public void insertTestStep() {
 
 		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
 
-		int ordering = ts.getOrdering();
+		final int ordering = ts.getOrdering();
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-				.getAttribute("jJTestcaseBean");
+		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false);
+		final JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
 
-		JJTestcase testcase = jJTestcaseService.findJJTestcase(jJTestcaseBean
-				.getTestcase().getId());
+		final JJTestcase testcase = jJTestcaseService.findJJTestcase(jJTestcaseBean.getTestcase().getId());
 
-		Set<JJTeststep> teststeps = testcase.getTeststeps();
+		final Set<JJTeststep> teststeps = testcase.getTeststeps();
 
-		SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
-		for (JJTeststep teststep : teststeps) {
+		final SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
+		for (final JJTeststep teststep : teststeps) {
 			elements.put(teststep.getOrdering(), teststep);
 		}
 
@@ -183,14 +160,13 @@ public class JJTeststepBean {
 
 		// teststeps = new HashSet<JJTeststep>();
 
-		for (Map.Entry<Integer, JJTeststep> entry : subElements.entrySet()) {
+		for (final Map.Entry<Integer, JJTeststep> entry : subElements.entrySet()) {
 
-			JJTeststep tmpTeststep = entry.getValue();
+			final JJTeststep tmpTeststep = entry.getValue();
 
-			JJTeststep teststep = jJTeststepService.findJJTeststep(tmpTeststep
-					.getId());
+			final JJTeststep teststep = jJTeststepService.findJJTeststep(tmpTeststep.getId());
 
-			int order = teststep.getOrdering();
+			final int order = teststep.getOrdering();
 
 			teststep.setOrdering(order + 1);
 
@@ -222,111 +198,34 @@ public class JJTeststepBean {
 
 		ts.setName(ts.getActionstep() + " " + ts.getResultstep());
 
-		ts.setDescription("This is " + ts.getActionstep() + " "
-				+ ts.getResultstep() + " ts");
+		ts.setDescription("This is " + ts.getActionstep() + " " + ts.getResultstep() + " ts");
 
 		saveJJTeststep(ts);
 
 		actionTeststep = true;
 
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage("Test Step Inserted !"));
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Test Step Inserted !"));
 	}
 
-	public void initCkeditor(RowEditEvent event) {
+	public boolean isBugFixed(final JJBug bug) {
 
-		if (!((LoginBean) LoginBean.findBean("loginBean")).isMobile()) {
-			DataTable table = (DataTable) event.getSource();
-			int activeRow = table.getRowIndex();
-			int lenth = table.getRowCount();
-
-			for (int i = 0; i < lenth; i++)
-				if (i != activeRow)
-					RequestContext
-							.getCurrentInstance()
-							.execute(
-									"jQuery('.ui-datatable-data tr').find('span.ui-icon-close').eq("
-											+ i
-											+ ").each(function(){jQuery(this).click()});");
-
-			RequestContext.getCurrentInstance().execute(
-					"PF('testTabView').select(0)");
-			RequestContext.getCurrentInstance().execute(
-					"PF('testTabView').select(1)");
-		}
-	}
-
-	public void editTestStep(RowEditEvent event) {
-
-		JJTeststep ts = jJTeststepService.findJJTeststep(((JJTeststep) event
-				.getObject()).getId());
-
-		ts.setName(ts.getActionstep() + " " + ts.getResultstep());
-
-		ts.setDescription("This is " + ts.getActionstep() + " "
-				+ ts.getResultstep() + " description");
-
-		updateJJTeststep(ts);
-
-		newTeststep();
-
-		actionTeststep = true;
-
-		FacesMessage facesMessage = MessageFactory.getMessage(
-				"message_successfully_updated", "Teststep", "");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	}
-
-	public void cancelEditTestStep(RowEditEvent event) {
-
-		// FacesMessage facesMessage = MessageFactory.getMessage("Cancel Edit",
-		// "Teststep");
-		// FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		newTeststep();
+		return bug.getStatus() != null && bug.getStatus().getName().equalsIgnoreCase("fixed");
 
 	}
 
-	public void saveJJTeststep(JJTeststep b) {
-		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		b.setCreatedBy(contact);
-		jJTeststepService.saveJJTeststep(b);
-	}
+	private void manageTeststepOrder(final JJTestcase testcase) {
 
-	public void updateJJTeststep(JJTeststep b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		b.setUpdatedBy(contact);
-		b.setUpdatedDate(new Date());
-		jJTeststepService.updateJJTeststep(b);
-	}
-
-	public void deleteTestStep() {
-
-		JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
-		ts.setEnabled(false);
-		jJTeststepService.deleteJJTeststep(ts);
-
-		newTeststep();
-
-		actionTeststep = true;
-
-	}
-
-	private void manageTeststepOrder(JJTestcase testcase) {
-
-		SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
+		final SortedMap<Integer, JJTeststep> elements = new TreeMap<Integer, JJTeststep>();
 
 		// JJTestcase tc = jJTestcaseService.findJJTestcase(testcase.getId());
 
-		Set<JJTeststep> teststeps = testcase.getTeststeps();
+		final Set<JJTeststep> teststeps = testcase.getTeststeps();
 
 		// System.out.println("teststeps size " + teststeps.size());
 
-		for (JJTeststep teststep : teststeps) {
+		for (final JJTeststep teststep : teststeps) {
 
-			JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
+			final JJTeststep ts = jJTeststepService.findJJTeststep(teststep.getId());
 
 			elements.put(ts.getOrdering(), ts);
 		}
@@ -340,6 +239,85 @@ public class JJTeststepBean {
 		// System.out.println("teststep.getOrdering() " +
 		// teststep.getOrdering());
 
+	}
+
+	public void newTeststep() {
+
+		teststep = new JJTeststep();
+		teststep.setCreationDate(new Date());
+		teststep.setEnabled(true);
+
+	}
+
+	public void onbugCheckStatus(final JJBug bug, final JJBugBean jJBugBean) {
+
+		bug.setStatus(jJStatusService.getOneStatus("FIXED", "Bug", true));
+		jJBugBean.updateJJBug(bug);
+
+		final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated", "Bug", "");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void save() {
+
+		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+		        .getSession(false);
+		final JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
+
+		final JJTestcase tc = jJTestcaseService.findJJTestcase(jJTestcaseBean.getTestcase().getId());
+
+		if (teststep.getId() == null) {
+
+			manageTeststepOrder(tc);
+
+			teststep.setTestcase(tc);
+			// tc.getTeststeps().add(teststep);
+
+			teststep.setName("Teststep for " + tc.getName());
+
+			teststep.setDescription(
+			        "This is " + teststep.getActionstep() + " " + teststep.getResultstep() + " description");
+
+			saveJJTeststep(teststep);
+			newTeststep();
+
+			actionTeststep = true;
+		}
+
+		final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_created", "Teststep", "");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+	}
+
+	public void saveJJTeststep(final JJTeststep b) {
+		b.setCreationDate(new Date());
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setCreatedBy(contact);
+		jJTeststepService.saveJJTeststep(b);
+	}
+
+	public void setActionTeststep(final boolean actionTeststep) {
+		this.actionTeststep = actionTeststep;
+	}
+
+	public void setjJStatusService(final JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
+
+	public void setTeststep(final JJTeststep teststep) {
+		this.teststep = teststep;
+	}
+
+	public void setTeststeps(final List<JJTeststep> teststeps) {
+		this.teststeps = teststeps;
+	}
+
+	public void updateJJTeststep(final JJTeststep b) {
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		b.setUpdatedBy(contact);
+		b.setUpdatedDate(new Date());
+		jJTeststepService.updateJJTeststep(b);
 	}
 
 }

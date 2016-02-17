@@ -18,15 +18,13 @@ public class JJImportanceBean {
 
 	public void saveJJImportance(JJImportance b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJImportanceService.saveJJImportance(b);
 	}
 
 	public void updateJJImportance(JJImportance b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJImportanceService.updateJJImportance(b);

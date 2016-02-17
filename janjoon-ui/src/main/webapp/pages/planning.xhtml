@@ -16,16 +16,13 @@
 		<h:form id="formId" style="width:100%;display:none;">
 			<p:remoteCommand update=":projecttabview:SprintTabView:sprintForm"
 				name="updateTabSprint" />
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="tabChangeHelper" update=":projecttabview"
-				actionListener="#{jJSprintBean.onTabSprintChange}"
-				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+			<p:remoteCommand name="tabChangeHelper" update=":projecttabview"
+				actionListener="#{jJSprintBean.onTabSprintChange}" oncomplete="updateTabViewWidth();" />
 
-			<p:remoteCommand onstart="PF('blockUIWidget').block()"
-				name="sprintTabChangeHelper"
+			<p:remoteCommand name="sprintTabChangeHelper"
 				update="projecttabview:activeSprintIndexForm"
 				actionListener="#{jJSprintBean.onTabSprintChange}"
-				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();" />
+				oncomplete="updateTabViewWidth();" />
 		</h:form>
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
@@ -77,9 +74,7 @@
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container25 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:commandButton id="submitButton"
-								onstart="PF('blockUIWidget').block()"
-								oncomplete="PF('blockUIWidget').unblock()" icon="fa fa-save"
+							<p:commandButton id="submitButton" icon="fa fa-save"
 								disabled="#{!loginBean.authorisationService.adminProject}"
 								value="#{messages.admin_project_new_save_button}"
 								update=":projectForm :headerForm :growlForm"
@@ -127,8 +122,8 @@
 						value="#{messages.bug_delete_yes_button}"
 						action="#{jJTaskBean.deleteTaskData}"
 						update=":projecttabview :growlForm"
-						onstart="saveScrollPos();PF('blockUIWidget').block()"
-						oncomplete="autoScroll();PF('blockUIWidget').unblock();updateTabViewWidth();" />
+						onstart="saveScrollPos()"
+						oncomplete="autoScroll();updateTabViewWidth();" />
 					<p:commandButton id="deleteNoButton"
 						value="#{messages.bug_delete_no_button}"
 						onclick="PF('deleteDialogWidget').hide()" type="button" />
@@ -139,10 +134,8 @@
 			header="#{messages.project_gantt_import_button}" modal="true"
 			draggable="false" styleClass="disable-scroll"
 			widgetVar="taskImportDialogWidget" dynamic="true" resizable="false">
-			<p:ajax event="close" update=":projecttabview"
-				onstart="PF('blockUIWidget').block()"
-				oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
-				listener="#{jJTaskBean.closeDialogImport}" />
+			<p:ajax event="close" update=":projecttabview"				
+				oncomplete="updateTabViewWidth();" listener="#{jJTaskBean.closeDialogImport}" />
 			<p:outputPanel id="importTaskDialogPanel">
 				<ui:insert name="importTask">
 					<ui:include src="importTask.xhtml" />
@@ -154,8 +147,8 @@
 			resizable="false" widgetVar="viewTaskDialogWidget" dynamic="true"
 			showEffect="fade" responsive="true">
 			<p:ajax event="close" update=":projecttabview"
-				onstart="#{jJTaskBean.mode eq 'planning' ? 'saveScrollPos()' : ''};PF('blockUIWidget').block()"
-				oncomplete="#{jJTaskBean.mode eq 'planning' ? 'autoScroll()' : ''};PF('blockUIWidget').unblock();updateTabViewWidth();"
+				onstart="#{jJTaskBean.mode eq 'planning' ? 'saveScrollPos()' : ''};"
+				oncomplete="#{jJTaskBean.mode eq 'planning' ? 'autoScroll()' : ''};updateTabViewWidth();"
 				listener="#{jJTaskBean.closeEvent('planning')}" />
 			<f:facet name="header">
 				<p:outputLabel id="viewTaskDialogHeader"
@@ -220,8 +213,7 @@
 									icon="fa fa-save Fs16"
 									action="#{jJSprintBean.persistBugTask}"
 									update=":projecttabview :growlForm"
-									onstart="PF('blockUIWidget').block()"
-									oncomplete="PF('blockUIWidget').unblock();updateTabViewWidth();"
+									oncomplete="updateTabViewWidth();"
 									onsuccess="PF('editBugDialogWidget').hide()" />
 							</h:panelGroup>
 						</h:panelGroup>
@@ -230,7 +222,6 @@
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
 								<p:commandButton id="taskBugCloseButton" styleClass="GrayButton"
 									value="#{messages.bug_edit_close_button}"
-									oncomplete="PF('blockUIWidget').unblock()"
 									onclick="PF('editBugDialogWidget').hide()" type="button" />
 							</h:panelGroup>
 						</h:panelGroup>

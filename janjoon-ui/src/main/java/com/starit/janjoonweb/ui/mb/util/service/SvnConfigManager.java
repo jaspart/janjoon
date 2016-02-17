@@ -29,20 +29,19 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 public class SvnConfigManager extends AbstractConfigManager {
 
-	private static final long serialVersionUID = 1L;
-	private SVNRepository repository;
-	private static final Logger logger = Logger
-			.getLogger(SvnConfigManager.class);
+	private static final long		serialVersionUID	= 1L;
+	private SVNRepository			repository;
+	private static final Logger		logger				= Logger.getLogger(SvnConfigManager.class);
 
-	private static SVNClientManager ourClientManager;
-	private static ISVNEventHandler myCommitEventHandler;
-	private static ISVNEventHandler myUpdateEventHandler;
-	private static ISVNEventHandler myWCEventHandler;
-	private static SVNURL svnURL;
+	private static SVNClientManager	ourClientManager;
+	private static ISVNEventHandler	myCommitEventHandler;
+	private static ISVNEventHandler	myUpdateEventHandler;
+	private static ISVNEventHandler	myWCEventHandler;
+	private static SVNURL			svnURL;
 
 	@SuppressWarnings("deprecation")
-	public SvnConfigManager(String type, String url, String path, String login,
-			String password, String productName, String VersionName) {
+	public SvnConfigManager(String type, String url, String path, String login, String password, String productName,
+	        String VersionName) {
 
 		super("SVN", url, path, login, password);
 		DAVRepositoryFactory.setup();
@@ -64,23 +63,18 @@ public class SvnConfigManager extends AbstractConfigManager {
 			repository.setAuthenticationManager(authManager);
 			ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
 
-			ourClientManager = SVNClientManager.newInstance(options,
-					authManager);
+			ourClientManager = SVNClientManager.newInstance(options, authManager);
 
-			ourClientManager.getCommitClient().setEventHandler(
-					myCommitEventHandler);
+			ourClientManager.getCommitClient().setEventHandler(myCommitEventHandler);
 
-			ourClientManager.getUpdateClient().setEventHandler(
-					myUpdateEventHandler);
+			ourClientManager.getUpdateClient().setEventHandler(myUpdateEventHandler);
 
 			ourClientManager.getWCClient().setEventHandler(myWCEventHandler);
 
 			this.path = path + productName;
 
-			logger.info("Repository Root: "
-					+ repository.getRepositoryRoot(true));
-			logger.info("Repository UUID: "
-					+ repository.getRepositoryUUID(true));
+			logger.info("Repository Root: " + repository.getRepositoryRoot(true));
+			logger.info("Repository UUID: " + repository.getRepositoryUUID(true));
 		} catch (SVNException e) {
 			repository = null;
 		}
@@ -88,9 +82,8 @@ public class SvnConfigManager extends AbstractConfigManager {
 			try {
 				svnURL = SVNURL.parseURIDecoded(url);
 				svnURL = svnURL.appendPath(productName, false);
-				ourClientManager.getCommitClient().doMkDir(
-						new SVNURL[] { svnURL },
-						"make " + productName + " directory");
+				ourClientManager.getCommitClient().doMkDir(new SVNURL[] { svnURL },
+				        "make " + productName + " directory");
 			} catch (SVNException e) {
 
 			}
@@ -106,9 +99,8 @@ public class SvnConfigManager extends AbstractConfigManager {
 					try {
 						svnURL = svnURL.appendPath(version, false);
 
-						ourClientManager.getCommitClient().doMkDir(
-								new SVNURL[] { svnURL },
-								"make " + version + " directory");
+						ourClientManager.getCommitClient().doMkDir(new SVNURL[] { svnURL },
+						        "make " + version + " directory");
 
 					} catch (SVNException e) {
 						svnURL = svnURL.appendPath(version, false);
@@ -149,8 +141,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 				files = new File[] { new File(this.path) };
 			else
 				files = new File[] { f };
-			SVNCommitInfo v = commitClient.doCommit(files, false, message,
-					false, true);
+			SVNCommitInfo v = commitClient.doCommit(files, false, message, false, true);
 			System.out.println(v.toString());
 			if (v.getNewRevision() == -1)
 				return false;
@@ -174,8 +165,8 @@ public class SvnConfigManager extends AbstractConfigManager {
 		 * returns the number of the revision at which the working copy is
 		 */
 		try {
-			updateClient.doCheckout(SVNURL.parseURIDecoded(url),
-					new File(path), SVNRevision.HEAD, SVNRevision.HEAD, true);
+			updateClient.doCheckout(SVNURL.parseURIDecoded(url), new File(path), SVNRevision.HEAD, SVNRevision.HEAD,
+			        true);
 			return true;
 		} catch (SVNException e) {
 			return false;
@@ -191,13 +182,11 @@ public class SvnConfigManager extends AbstractConfigManager {
 			try {
 				File file = new File(path + "/" + name);
 				// Check out
-				SVNUpdateClient updateClient = new SVNUpdateClient(
-						repository.getAuthenticationManager(), null);
+				SVNUpdateClient updateClient = new SVNUpdateClient(repository.getAuthenticationManager(), null);
 				updateClient.setIgnoreExternals(false);
 				// System.out.println("test");
 
-				updateClient.doCheckout(SVNURL.parseURIDecoded(url), file,
-						SVNRevision.HEAD, SVNRevision.HEAD, true);
+				updateClient.doCheckout(SVNURL.parseURIDecoded(url), file, SVNRevision.HEAD, SVNRevision.HEAD, true);
 				return null;
 			} catch (SVNException e) {
 				e.printStackTrace();
@@ -243,8 +232,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 					try {
 						myfile.createNewFile();
 
-						logger.info("Add file " + myfile + " to repository at "
-								+ path);
+						logger.info("Add file " + myfile + " to repository at " + path);
 						addEntry(myfile);
 
 						return true;
@@ -257,8 +245,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 				}
 
 			} else {
-				logger.error("error throw add file operation :IOException"
-						+ e.getMessage());
+				logger.error("error throw add file operation :IOException" + e.getMessage());
 				return false;
 			}
 
@@ -270,8 +257,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 	@Override
 	public boolean createRepository(String path) {
 		try {
-			SVNURL tgtURL = SVNRepositoryFactory.createLocalRepository(
-					new File(path), true, false);
+			SVNURL tgtURL = SVNRepositoryFactory.createLocalRepository(new File(path), true, false);
 			return true;
 		} catch (SVNException e) {
 			e.printStackTrace();
@@ -283,8 +269,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 	@Override
 	public TreeNode listRepositoryContent(String version) {
 
-		DefaultTreeNode root = new DefaultTreeNode("folder", path + "/"
-				+ version, null);
+		DefaultTreeNode root = new DefaultTreeNode("folder", path + "/" + version, null);
 
 		repositoryTreeNode(new File(path + "/" + version), root);
 
@@ -300,8 +285,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 			if (!files[i].getName().equalsIgnoreCase(".git")) {
 
 				if (files[i].isDirectory()) {
-					DefaultTreeNode tree = new DefaultTreeNode("folder",
-							files[i], root);
+					DefaultTreeNode tree = new DefaultTreeNode("folder", files[i], root);
 					repositoryTreeNode(files[i], tree);
 					File[] t = files[i].listFiles();
 					int j = 0;
@@ -332,8 +316,7 @@ public class SvnConfigManager extends AbstractConfigManager {
 		 * returns the number of the revision wcPath was updated to
 		 */
 		try {
-			System.out.println(updateClient.doUpdate(new File(path),
-					SVNRevision.HEAD, true));
+			System.out.println(updateClient.doUpdate(new File(path), SVNRevision.HEAD, true));
 			return true;
 		} catch (SVNException e) {
 			return false;

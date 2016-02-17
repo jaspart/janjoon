@@ -16,8 +16,7 @@ public class JJStatusConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		return value instanceof JJStatus ? ((JJStatus) value).getName() : "";
 	}
 }

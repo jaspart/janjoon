@@ -18,15 +18,13 @@ public class JJPhaseBean {
 
 	public void saveJJPhase(JJPhase b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setCreatedBy(contact);
 		jJPhaseService.saveJJPhase(b);
 	}
 
 	public void updateJJPhase(JJPhase b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJPhaseService.updateJJPhase(b);

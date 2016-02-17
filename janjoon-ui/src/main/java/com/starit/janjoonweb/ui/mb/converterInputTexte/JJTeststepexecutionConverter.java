@@ -17,9 +17,7 @@ public class JJTeststepexecutionConverter implements Converter {
 	}
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component,
-			Object value) {
-		return value instanceof JJTeststepexecution ? ((JJTeststepexecution) value)
-				.getName() : "";
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value instanceof JJTeststepexecution ? ((JJTeststepexecution) value).getName() : "";
 	}
 }
