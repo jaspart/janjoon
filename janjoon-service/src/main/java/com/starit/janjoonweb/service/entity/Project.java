@@ -157,8 +157,9 @@ public class Project {
 	}
 
 	public boolean equals(Object object) {
-		return (object instanceof Project) && (getId() != null) ? getId()
-				.equals(((Project) object).getId()) : (object == this);
+		return (object instanceof Project) && (getId() != null)
+				? getId().equals(((Project) object).getId())
+				: (object == this);
 	}
 
 	@Override
@@ -171,7 +172,8 @@ public class Project {
 				+ ", updatedBy=" + updatedBy + ", ]";
 	}
 
-	public static Response getListProjectFromJJProject(List<JJProject> jJProject) {
+	public static Response getListProjectFromJJProject(
+			List<JJProject> jJProject) {
 		List<Project> projets = new ArrayList<Project>();
 		GenericEntity<List<Project>> entity = new GenericEntity<List<Project>>(
 				projets) {

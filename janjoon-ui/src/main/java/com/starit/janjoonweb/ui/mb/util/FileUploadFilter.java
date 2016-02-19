@@ -20,21 +20,22 @@ import org.primefaces.webapp.MultipartRequest;
 
 public class FileUploadFilter implements Filter {
 
-	static Logger				logger					= Logger.getLogger("FileUploadFilter");
+	static Logger logger = Logger.getLogger("FileUploadFilter");
 
-	private final static String	THRESHOLD_SIZE_PARAM	= "thresholdSize";
+	private final static String THRESHOLD_SIZE_PARAM = "thresholdSize";
 
-	private final static String	UPLOAD_DIRECTORY_PARAM	= "uploadDirectory";
+	private final static String UPLOAD_DIRECTORY_PARAM = "uploadDirectory";
 
-	private String				thresholdSize;
+	private String thresholdSize;
 
-	private String				uploadDir;
+	private String uploadDir;
 
-	private boolean				bypass;
+	private boolean bypass;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		boolean isAtLeastJSF22 = detectJSF22();
-		String uploader = filterConfig.getServletContext().getInitParameter(Constants.ContextParams.UPLOADER);
+		String uploader = filterConfig.getServletContext()
+				.getInitParameter(Constants.ContextParams.UPLOADER);
 		if (uploader == null || uploader.equals("auto"))
 			bypass = isAtLeastJSF22 ? true : false;
 		else if (uploader.equals("native"))
@@ -47,8 +48,8 @@ public class FileUploadFilter implements Filter {
 		logger.info("FileUploadFilter initiated successfully");
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-	        throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain filterChain) throws IOException, ServletException {
 		if (bypass) {
 			logger.info("Parsing file upload request bypass");
 			filterChain.doFilter(request, response);
@@ -56,24 +57,28 @@ public class FileUploadFilter implements Filter {
 		}
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		boolean isMultipart = ServletFileUpload.isMultipartContent(httpServletRequest);
+		boolean isMultipart = ServletFileUpload
+				.isMultipartContent(httpServletRequest);
 
 		if (isMultipart) {
 			logger.info("Parsing file upload request");
 
 			DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
 			if (thresholdSize != null) {
-				diskFileItemFactory.setSizeThreshold(Integer.valueOf(thresholdSize));
+				diskFileItemFactory
+						.setSizeThreshold(Integer.valueOf(thresholdSize));
 			}
 			if (uploadDir != null) {
 				diskFileItemFactory.setRepository(new File(uploadDir));
 			}
 
-			ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
-			MultipartRequest multipartRequest = new MultipartRequest(httpServletRequest, servletFileUpload);
+			ServletFileUpload servletFileUpload = new ServletFileUpload(
+					diskFileItemFactory);
+			MultipartRequest multipartRequest = new MultipartRequest(
+					httpServletRequest, servletFileUpload);
 
 			logger.info(
-			        "File upload request parsed succesfully, continuing with filter chain with a wrapped multipart request");
+					"File upload request parsed succesfully, continuing with filter chain with a wrapped multipart request");
 
 			filterChain.doFilter(multipartRequest, response);
 		} else {
@@ -87,7 +92,8 @@ public class FileUploadFilter implements Filter {
 	}
 
 	private boolean detectJSF22() {
-		String version = FacesContext.class.getPackage().getImplementationVersion();
+		String version = FacesContext.class.getPackage()
+				.getImplementationVersion();
 
 		if (version != null) {
 			return version.startsWith("2.2");

@@ -18,8 +18,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
@@ -28,7 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJSprintSEQ")
-@Table(indexes = { @Index(unique = false, columnList = "project") })
+@Table(indexes = {@Index(unique = false, columnList = "project")})
 public class JJSprint {
 
 	@NotNull
@@ -76,7 +74,9 @@ public class JJSprint {
 	private Set<JJTask> obstacles = new HashSet<JJTask>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "JJSprintLinkJJContact", joinColumns = { @javax.persistence.JoinColumn(name = "Sprint_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id") })
+	@JoinTable(name = "JJSprintLinkJJContact", joinColumns = {
+			@javax.persistence.JoinColumn(name = "Sprint_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+					@javax.persistence.JoinColumn(name = "Contact_ID", referencedColumnName = "id")})
 	private Set<JJContact> contacts = new HashSet<JJContact>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sprint")
@@ -84,8 +84,9 @@ public class JJSprint {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJSprint) && (getId() != null) ? getId()
-				.equals(((JJSprint) object).getId()) : (object == this);
+		return (object instanceof JJSprint) && (getId() != null)
+				? getId().equals(((JJSprint) object).getId())
+				: (object == this);
 	}
 
 	public Set<JJContact> getContacts() {

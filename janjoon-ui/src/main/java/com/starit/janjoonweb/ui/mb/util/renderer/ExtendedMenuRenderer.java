@@ -14,15 +14,16 @@ import org.primefaces.util.ComponentUtils;
 
 public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 
-	protected void encodeLabel(FacesContext context, SelectOneMenu menu, List<SelectItem> selectItems)
-	        throws IOException {
+	protected void encodeLabel(FacesContext context, SelectOneMenu menu,
+			List<SelectItem> selectItems) throws IOException {
 		ResponseWriter writer = context.getResponseWriter();
 		String valueToRender = ComponentUtils.getValueToRender(context, menu);
 
 		if (menu.isEditable()) {
 			writer.startElement("input", null);
 			writer.writeAttribute("type", "text", null);
-			writer.writeAttribute("name", menu.getClientId(context) + "_editableInput", null);
+			writer.writeAttribute("name",
+					menu.getClientId(context) + "_editableInput", null);
 			writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS, null);
 
 			if (menu.getTabindex() != null) {
@@ -44,13 +45,18 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 			writer.endElement("input");
 		} else {
 			writer.startElement("label", null);
-			writer.writeAttribute("id", menu.getClientId(context) + "_label", null);
+			writer.writeAttribute("id", menu.getClientId(context) + "_label",
+					null);
 
-			if (valueToRender != null && menu.getAttributes().get("optionClasses") != null)
+			if (valueToRender != null
+					&& menu.getAttributes().get("optionClasses") != null)
+				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS
+						+ " Fs14 " + valueToRender.toString() + "_select",
+						null);
+			else if (menu.getAttributes().get("optionClasses") != null
+					|| menu.getAttributes().get("fontSize") != null)
 				writer.writeAttribute("class",
-				        SelectOneMenu.LABEL_CLASS + " Fs14 " + valueToRender.toString() + "_select", null);
-			else if (menu.getAttributes().get("optionClasses") != null || menu.getAttributes().get("fontSize") != null)
-				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS + " Fs14", null);
+						SelectOneMenu.LABEL_CLASS + " Fs14", null);
 			else
 				writer.writeAttribute("class", SelectOneMenu.LABEL_CLASS, null);
 			writer.write("&nbsp;");
@@ -58,8 +64,9 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 		}
 	}
 
-	protected void encodeOptionsAsTable(FacesContext context, SelectOneMenu menu, List<SelectItem> selectItems)
-	        throws IOException {
+	protected void encodeOptionsAsTable(FacesContext context,
+			SelectOneMenu menu, List<SelectItem> selectItems)
+					throws IOException {
 
 		ResponseWriter writer = context.getResponseWriter();
 		String var = menu.getVar();
@@ -73,34 +80,38 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 			String itemStyleClass = SelectOneMenu.ROW_CLASS;
 
 			if (itemValue != null && !itemValue.toString().isEmpty()
-			        && menu.getAttributes().get("optionClasses") != null)
-				itemStyleClass = itemStyleClass.replace("ui-widget-content", "") + " " + (String) itemValue;
+					&& menu.getAttributes().get("optionClasses") != null)
+				itemStyleClass = itemStyleClass.replace("ui-widget-content", "")
+						+ " " + (String) itemValue;
 
 			if (selectItem.isNoSelectionOption()) {
 				itemStyleClass = itemStyleClass + " ui-noselection-option";
 			}
 
-			context.getExternalContext().getRequestMap().put(var, selectItem.getValue());
+			context.getExternalContext().getRequestMap().put(var,
+					selectItem.getValue());
 
 			writer.startElement("tr", null);
 			writer.writeAttribute("class", itemStyleClass, null);
 			if ((itemValue == null || itemValue.toString().isEmpty())
-			        && menu.getAttributes().get("optionClasses") != null)
+					&& menu.getAttributes().get("optionClasses") != null)
 				writer.writeAttribute("style", "text-align: center;", null);
 
 			writer.writeAttribute("data-label", itemLabel, null);
 
 			if (selectItem.getDescription() != null) {
-				writer.writeAttribute("title", selectItem.getDescription(), null);
+				writer.writeAttribute("title", selectItem.getDescription(),
+						null);
 			}
 
 			if (itemValue instanceof String) {
 				writer.startElement("td", null);
 				writer.writeAttribute("colspan", columns.size(), null);
 				if (itemValue != null && !itemValue.toString().isEmpty()
-				        && menu.getAttributes().get("optionClasses") != null)
+						&& menu.getAttributes().get("optionClasses") != null)
 					writer.writeAttribute("style", "color: white;", null);
-				if (menu.getAttributes().get("optionClasses") != null || menu.getAttributes().get("fontSize") != null)
+				if (menu.getAttributes().get("optionClasses") != null
+						|| menu.getAttributes().get("fontSize") != null)
 					writer.writeAttribute("class", "Fs14", null);
 				writer.writeText(selectItem.getLabel(), null);
 				writer.endElement("td");

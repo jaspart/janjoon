@@ -103,15 +103,15 @@ public class BuildWS {
 		InputStream is = null;
 		try {
 
-			@SuppressWarnings({ "resource" })
+			@SuppressWarnings({"resource"})
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpget = null;
 			if (svnVersion != null)
 				httpget = new HttpGet(BASE_URI.replace("XXX", svnVersion));
 			else
 				httpget = new HttpGet(BASE_URI.replace("XXX", "175"));
-			String basic_auth = new String(Base64.encodeBase64(("lazher" + ":"
-					+ "root1234").getBytes()));
+			String basic_auth = new String(Base64
+					.encodeBase64(("lazher" + ":" + "root1234").getBytes()));
 			httpget.addHeader("Authorization", "Basic " + basic_auth);
 
 			HttpResponse httpResponse = httpClient.execute(httpget);
@@ -128,20 +128,19 @@ public class BuildWS {
 			return null;
 		}
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(is, "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				sb.append(line + "\n");
 			}
 			is.close();
-			return sb.toString().replace("<changes>", " ")
-					.replace("<msg>", " ").replace("</changes>", " ")
-					.replace("</msg>", " ");
+			return sb.toString().replace("<changes>", " ").replace("<msg>", " ")
+					.replace("</changes>", " ").replace("</msg>", " ");
 		} catch (Exception e) {
-			System.err.println("Buffer Error" + "Error converting result "
-					+ e.toString());
+			System.err.println(
+					"Buffer Error" + "Error converting result " + e.toString());
 			return null;
 		}
 
@@ -190,8 +189,7 @@ public class BuildWS {
 											buildName) != null)
 										return "Build " + buildName
 												+ " already exist for product="
-												+ productName
-												+ " and  version="
+												+ productName + " and  version="
 												+ versionName;
 									else {
 										String svnVersion = personParams
@@ -206,28 +204,30 @@ public class BuildWS {
 												+ version.getName());
 
 										b.setDescription(b.getDescription()
-												+ System.getProperty("line.separator")
+												+ System.getProperty(
+														"line.separator")
 												+ "[URL]="
-												+ ZIP_URL.replace(
-														"BUILD_NUMBER",
-														svnVersion).replace(
-														"REVISION_NUMBER",
-														buildNumber));
+												+ ZIP_URL
+														.replace("BUILD_NUMBER",
+																svnVersion)
+														.replace(
+																"REVISION_NUMBER",
+																buildNumber));
 										b.setCreatedBy(contact);
 										b.setCreationDate(new Date());
-										String commitMessage = getWebServiceAction(svnVersion);
+										String commitMessage = getWebServiceAction(
+												svnVersion);
 										if (commitMessage != null) {
-											List<JJTask> tasks = getCommitedTasks(commitMessage);
+											List<JJTask> tasks = getCommitedTasks(
+													commitMessage);
 											if (tasks != null)
 												b.setTasks(new HashSet<JJTask>(
 														tasks));
 										}
 										jJBuildService.saveJJBuild(b);
-										return "Build "
-												+ buildName
+										return "Build " + buildName
 												+ " has been created for product="
-												+ productName
-												+ " and  version="
+												+ productName + " and  version="
 												+ versionName;
 									}
 								}

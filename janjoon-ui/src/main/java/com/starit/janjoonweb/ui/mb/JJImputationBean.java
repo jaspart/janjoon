@@ -1,16 +1,9 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.Date;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJImputation;
-import com.starit.janjoonweb.domain.JJImputation;
-
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
+import com.starit.janjoonweb.domain.JJImputation;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJImputation.class, beanName = "jJImputationBean")

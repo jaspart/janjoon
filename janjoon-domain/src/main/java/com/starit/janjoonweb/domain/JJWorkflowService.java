@@ -8,7 +8,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJWorkflow.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJWorkflow.class})
 public interface JJWorkflowService {
 
 	public List<JJWorkflow> getObjectWorkFlows(String object, JJStatus source,

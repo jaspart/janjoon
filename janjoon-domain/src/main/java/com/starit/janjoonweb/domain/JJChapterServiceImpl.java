@@ -30,20 +30,20 @@ public class JJChapterServiceImpl implements JJChapterService {
 		Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.or(criteriaBuilder.equal(
-				from.get("chapter"), chapter)));
+		predicates.add(criteriaBuilder
+				.or(criteriaBuilder.equal(from.get("chapter"), chapter)));
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		if (have)
 			return have;
 		else {
 			int i = 0;
-			List<JJChapter> chapters = getChildrenOfParentChapter(chapter,
-					true, true);
+			List<JJChapter> chapters = getChildrenOfParentChapter(chapter, true,
+					true);
 
 			while (chapters != null && !chapters.isEmpty()
 					&& i < chapters.size() && !have) {
@@ -87,7 +87,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (sortedByOrder) {
 			select.orderBy(criteriaBuilder.asc(from.get("ordering")));
@@ -131,23 +131,23 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		if (ids == null || ids.isEmpty()) {
 
-			select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[]{}));
 
 		} else {
 
 			List<Predicate> idPredicates = new ArrayList<Predicate>();
 			for (String id : ids) {
 
-				idPredicates.add(criteriaBuilder.or(criteriaBuilder.notEqual(
-						from.get("id"), Long.valueOf(id))));
+				idPredicates.add(criteriaBuilder.or(criteriaBuilder
+						.notEqual(from.get("id"), Long.valueOf(id))));
 
 			}
 
-			Predicate idPredicate = criteriaBuilder.and(idPredicates
-					.toArray(new Predicate[] {}));
+			Predicate idPredicate = criteriaBuilder
+					.and(idPredicates.toArray(new Predicate[]{}));
 			predicates.add(idPredicate);
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 		}
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
@@ -187,7 +187,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 					criteriaBuilder.upper(from.<String> get("name")),
 					name.toUpperCase()));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJChapter> result = entityManager.createQuery(select);
 		if (result.getResultList().isEmpty())
@@ -221,7 +221,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		if (sotedByDate) {
 			select.orderBy(criteriaBuilder.asc(from.get("creationDate")));
 		}
@@ -256,7 +256,7 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		if (sortedByName) {
 			select.orderBy(criteriaBuilder.asc(from.get("name")));
 		}
@@ -283,7 +283,8 @@ public class JJChapterServiceImpl implements JJChapterService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (sortedByOrder) {
 			select.orderBy(criteriaBuilder.asc(from.get("ordering")));

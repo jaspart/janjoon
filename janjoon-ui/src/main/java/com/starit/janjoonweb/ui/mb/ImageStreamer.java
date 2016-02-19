@@ -27,10 +27,10 @@ import com.starit.janjoonweb.domain.JJProjectService;
 public class ImageStreamer {
 
 	@Autowired
-	JJContactService	jJContactService;
+	JJContactService jJContactService;
 
 	@Autowired
-	JJCompanyService	jJCompanyService;
+	JJCompanyService jJCompanyService;
 
 	public void setjJCompanyService(JJCompanyService jJCompanyService) {
 		this.jJCompanyService = jJCompanyService;
@@ -61,16 +61,19 @@ public class ImageStreamer {
 
 			return new DefaultStreamedContent();
 		} else {
-			String rated = context.getExternalContext().getRequestParameterMap().get("rated");
+			String rated = context.getExternalContext().getRequestParameterMap()
+					.get("rated");
 
 			if (rated.equalsIgnoreCase("true")) {
-				InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-				        .getResourceAsStream("/resources/images/yelstar.ico");
+				InputStream stream = FacesContext.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream("/resources/images/yelstar.ico");
 				return new DefaultStreamedContent(stream);
 
 			} else {
-				InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-				        .getResourceAsStream("/resources/images/blackstar.ico");
+				InputStream stream = FacesContext.getCurrentInstance()
+						.getExternalContext()
+						.getResourceAsStream("/resources/images/blackstar.ico");
 				return new DefaultStreamedContent(stream);
 			}
 
@@ -85,31 +88,39 @@ public class ImageStreamer {
 			return new DefaultStreamedContent();
 		} else {
 
-			String prodId = context.getExternalContext().getRequestParameterMap().get("ProdId");
+			String prodId = context.getExternalContext()
+					.getRequestParameterMap().get("ProdId");
 
 			JJProduct prod = null;
 			if (prodId != null && !prodId.isEmpty())
 				prod = jJProductService.findJJProduct(Long.valueOf(prodId));
 
-			if (context.getExternalContext().getRequestParameterMap().get("Edit") == null && prod != null
-			        && prod.getLogo() != null) {
+			if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") == null && prod != null
+					&& prod.getLogo() != null) {
 
-				return new DefaultStreamedContent(new ByteArrayInputStream(prod.getLogo()));
-			} else if (context.getExternalContext().getRequestParameterMap().get("Edit") != null) {
-				prod = ((JJProductBean) LoginBean.findBean("jJProductBean")).getProductAdmin();
+				return new DefaultStreamedContent(
+						new ByteArrayInputStream(prod.getLogo()));
+			} else if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") != null) {
+				prod = ((JJProductBean) LoginBean.findBean("jJProductBean"))
+						.getProductAdmin();
 
 				if (prod != null && prod.getLogo() != null) {
-					return new DefaultStreamedContent(new ByteArrayInputStream(prod.getLogo()));
+					return new DefaultStreamedContent(
+							new ByteArrayInputStream(prod.getLogo()));
 				} else {
-					InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-					        .getResourceAsStream("/resources/images/empty_company.png");
+					InputStream stream = FacesContext.getCurrentInstance()
+							.getExternalContext().getResourceAsStream(
+									"/resources/images/empty_company.png");
 					return new DefaultStreamedContent(stream, "image/jpg");
 
 				}
 
 			} else {
-				InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-				        .getResourceAsStream("/resources/images/empty_company.png");
+				InputStream stream = FacesContext.getCurrentInstance()
+						.getExternalContext().getResourceAsStream(
+								"/resources/images/empty_company.png");
 				return new DefaultStreamedContent(stream, "image/jpg");
 
 			}
@@ -123,31 +134,39 @@ public class ImageStreamer {
 		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 			return new DefaultStreamedContent();
 		} else {
-			String projId = context.getExternalContext().getRequestParameterMap().get("ProjId");
+			String projId = context.getExternalContext()
+					.getRequestParameterMap().get("ProjId");
 
 			JJProject proj = null;
 			if (projId != null && !projId.isEmpty())
 				proj = jJProjectService.findJJProject(Long.valueOf(projId));
 
-			if (context.getExternalContext().getRequestParameterMap().get("Edit") == null && proj != null
-			        && proj.getLogo() != null) {
+			if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") == null && proj != null
+					&& proj.getLogo() != null) {
 
-				return new DefaultStreamedContent(new ByteArrayInputStream(proj.getLogo()));
-			} else if (context.getExternalContext().getRequestParameterMap().get("Edit") != null) {
-				proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProjectAdmin();
+				return new DefaultStreamedContent(
+						new ByteArrayInputStream(proj.getLogo()));
+			} else if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") != null) {
+				proj = ((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+						.getProjectAdmin();
 
 				if (proj != null && proj.getLogo() != null) {
-					return new DefaultStreamedContent(new ByteArrayInputStream(proj.getLogo()));
+					return new DefaultStreamedContent(
+							new ByteArrayInputStream(proj.getLogo()));
 				} else {
-					InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-					        .getResourceAsStream("/resources/images/empty_company.png");
+					InputStream stream = FacesContext.getCurrentInstance()
+							.getExternalContext().getResourceAsStream(
+									"/resources/images/empty_company.png");
 					return new DefaultStreamedContent(stream, "image/jpg");
 
 				}
 
 			} else {
-				InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-				        .getResourceAsStream("/resources/images/empty_company.png");
+				InputStream stream = FacesContext.getCurrentInstance()
+						.getExternalContext().getResourceAsStream(
+								"/resources/images/empty_company.png");
 				return new DefaultStreamedContent(stream, "image/jpg");
 
 			}
@@ -160,31 +179,39 @@ public class ImageStreamer {
 		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 			return new DefaultStreamedContent();
 		} else {
-			String CompId = context.getExternalContext().getRequestParameterMap().get("CompId");
+			String CompId = context.getExternalContext()
+					.getRequestParameterMap().get("CompId");
 
 			JJCompany comp = null;
 			if (CompId != null && !CompId.isEmpty())
 				comp = jJCompanyService.findJJCompany(Long.valueOf(CompId));
 
-			if (context.getExternalContext().getRequestParameterMap().get("Edit") == null && comp != null
-			        && comp.getLogo() != null) {
+			if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") == null && comp != null
+					&& comp.getLogo() != null) {
 
-				return new DefaultStreamedContent(new ByteArrayInputStream(comp.getLogo()));
-			} else if (context.getExternalContext().getRequestParameterMap().get("Edit") != null) {
-				comp = ((JJCompanyBean) LoginBean.findBean("jJCompanyBean")).getCompanie();
+				return new DefaultStreamedContent(
+						new ByteArrayInputStream(comp.getLogo()));
+			} else if (context.getExternalContext().getRequestParameterMap()
+					.get("Edit") != null) {
+				comp = ((JJCompanyBean) LoginBean.findBean("jJCompanyBean"))
+						.getCompanie();
 
 				if (comp != null && comp.getLogo() != null) {
-					return new DefaultStreamedContent(new ByteArrayInputStream(comp.getLogo()));
+					return new DefaultStreamedContent(
+							new ByteArrayInputStream(comp.getLogo()));
 				} else {
-					InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-					        .getResourceAsStream("/resources/images/empty_company.png");
+					InputStream stream = FacesContext.getCurrentInstance()
+							.getExternalContext().getResourceAsStream(
+									"/resources/images/empty_company.png");
 					return new DefaultStreamedContent(stream, "image/jpg");
 
 				}
 
 			} else {
-				InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-				        .getResourceAsStream("/resources/images/empty_company.png");
+				InputStream stream = FacesContext.getCurrentInstance()
+						.getExternalContext().getResourceAsStream(
+								"/resources/images/empty_company.png");
 				return new DefaultStreamedContent(stream, "image/jpg");
 
 			}
@@ -199,36 +226,48 @@ public class ImageStreamer {
 			// that it will generate right URL.
 			return new DefaultStreamedContent();
 		} else {
-			String contactId = context.getExternalContext().getRequestParameterMap().get("contactId");
+			String contactId = context.getExternalContext()
+					.getRequestParameterMap().get("contactId");
 
 			if (contactId == null) {
 
-				JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+				JJContact contact = ((LoginBean) LoginBean
+						.findBean("loginBean")).getContact();
 				if (contact.getPicture() != null) {
-					return new DefaultStreamedContent(new ByteArrayInputStream(contact.getPicture()));
+					return new DefaultStreamedContent(
+							new ByteArrayInputStream(contact.getPicture()));
 				} else {
 
-					InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-					        .getResourceAsStream("/resources/images/default-user-2.jpg");
+					InputStream stream = FacesContext.getCurrentInstance()
+							.getExternalContext().getResourceAsStream(
+									"/resources/images/default-user-2.jpg");
 					return new DefaultStreamedContent(stream, "image/jpg");
 
 				}
 			} else {
-				String company = context.getExternalContext().getRequestParameterMap().get("company");
+				String company = context.getExternalContext()
+						.getRequestParameterMap().get("company");
 				if (company == null) {
-					JJContact contact = jJContactService.findJJContact(Long.valueOf(contactId));
+					JJContact contact = jJContactService
+							.findJJContact(Long.valueOf(contactId));
 					if (contact.getPicture() != null) {
-						return new DefaultStreamedContent(new ByteArrayInputStream(contact.getPicture()));
+						return new DefaultStreamedContent(
+								new ByteArrayInputStream(contact.getPicture()));
 					} else {
 
-						InputStream stream = FacesContext.getCurrentInstance().getExternalContext()
-						        .getResourceAsStream("/resources/images/default-user-2.jpg");
+						InputStream stream = FacesContext.getCurrentInstance()
+								.getExternalContext().getResourceAsStream(
+										"/resources/images/default-user-2.jpg");
 						return new DefaultStreamedContent(stream, "image/jpg");
 
 					}
 				} else {
-					return new DefaultStreamedContent(new ByteArrayInputStream(
-					        jJContactService.findJJContact(Long.valueOf(contactId)).getCompany().getLogo()));
+					return new DefaultStreamedContent(
+							new ByteArrayInputStream(
+									jJContactService
+											.findJJContact(
+													Long.valueOf(contactId))
+											.getCompany().getLogo()));
 				}
 
 			}
@@ -238,7 +277,7 @@ public class ImageStreamer {
 
 	public String getCkEditorToolBar() {
 		return "[['Source','Bold','Italic','Underline','Strike','NumberedList',"
-		        + "'BulletedList','Image','TextColor','BGColor','Undo','Table','-', 'RemoveFormat']]";
+				+ "'BulletedList','Image','TextColor','BGColor','Undo','Table','-', 'RemoveFormat']]";
 	}
 
 }

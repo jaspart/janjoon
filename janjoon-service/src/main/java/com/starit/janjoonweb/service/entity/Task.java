@@ -205,8 +205,9 @@ public class Task {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJTask) && (getId() != null) ? getId()
-				.equals(((Task) object).getId()) : (object == this);
+		return (object instanceof JJTask) && (getId() != null)
+				? getId().equals(((Task) object).getId())
+				: (object == this);
 	}
 
 	@Override
@@ -216,15 +217,16 @@ public class Task {
 				+ ", createdBy=" + createdBy + ", updatedDate=" + updatedDate
 				+ ", enabled=" + enabled + ", startDatePlanned="
 				+ startDatePlanned + ", endDatePlanned=" + endDatePlanned
-				+ ", startDateRevised=" + startDateRevised
-				+ ", endDateRevised=" + endDateRevised + ", startDateReal="
-				+ startDateReal + ", endDateReal=" + endDateReal
-				+ ", assignedTo=" + assignedTo + ", status=" + status + "]";
+				+ ", startDateRevised=" + startDateRevised + ", endDateRevised="
+				+ endDateRevised + ", startDateReal=" + startDateReal
+				+ ", endDateReal=" + endDateReal + ", assignedTo=" + assignedTo
+				+ ", status=" + status + "]";
 	}
 
 	public static Response getListTaskFrommJJTask(List<JJTask> jJTasks) {
 		List<Task> taches = new ArrayList<Task>();
-		GenericEntity<List<Task>> entity = new GenericEntity<List<Task>>(taches) {
+		GenericEntity<List<Task>> entity = new GenericEntity<List<Task>>(
+				taches) {
 		};
 		for (JJTask tache : jJTasks) {
 			taches.add(new Task(tache));

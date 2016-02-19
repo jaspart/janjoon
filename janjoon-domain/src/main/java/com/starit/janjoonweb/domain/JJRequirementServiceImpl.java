@@ -83,7 +83,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		return have;
 
@@ -105,14 +105,15 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJRequirement.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		return have;
 
 	}
 
 	public JJRequirement getRequirementByName(JJCategory category,
-			JJProject project, JJProduct product, String name, JJCompany company) {
+			JJProject project, JJProduct product, String name,
+			JJCompany company) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
 				.createQuery(JJRequirement.class);
@@ -148,7 +149,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					name.toUpperCase()));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
 
@@ -167,13 +169,13 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		Root<JJTestcase> from = criteriaQuery.from(JJTestcase.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("requirement"),
-				requirement));
+		predicates.add(
+				criteriaBuilder.equal(from.get("requirement"), requirement));
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJTestcase.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		return have;
 	}
@@ -196,8 +198,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (category != null) {
-				predicates.add(criteriaBuilder.equal(from.get("category"),
-						category));
+				predicates.add(
+						criteriaBuilder.equal(from.get("category"), category));
 			}
 
 			if (status != null) {
@@ -220,8 +222,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 							andPredicates.add(criteriaBuilder.equal(
 									from.get("product"), entry.getValue()));
 
-							orPredicates.add(criteriaBuilder.and(andPredicates
-									.toArray(new Predicate[] {})));
+							orPredicates.add(criteriaBuilder.and(
+									andPredicates.toArray(new Predicate[]{})));
 						} else
 							orPredicates.add(criteriaBuilder.equal(
 									from.get("project"), entry.getKey()));
@@ -234,11 +236,12 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 				}
 				if (!orPredicates.isEmpty())
-					predicates.add(criteriaBuilder.or(orPredicates
-							.toArray(new Predicate[] {})));
+					predicates.add(criteriaBuilder
+							.or(orPredicates.toArray(new Predicate[]{})));
 				else
-					predicates.add(criteriaBuilder.equal(from.join("project")
-							.join("manager").get("company"), company));
+					predicates.add(criteriaBuilder.equal(
+							from.join("project").join("manager").get("company"),
+							company));
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),
@@ -246,8 +249,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			}
 
 			if (version != null) {
-				predicates.add(criteriaBuilder.equal(from.get("versioning"),
-						version));
+				predicates.add(
+						criteriaBuilder.equal(from.get("versioning"), version));
 			}
 
 			if (onlyActif) {
@@ -256,8 +259,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			}
 
 			predicates.add(criteriaBuilder.isNull(from.get("chapter")));
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			if (orderByCreationdate) {
 				select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
@@ -275,8 +278,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, Map<JJProject, JJProduct> map,
 			JJVersion version, JJStatus status, JJChapter chapter,
-			boolean withChapter, boolean onlyActif,
-			boolean orderByCreationdate, boolean mine, JJContact contact) {
+			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,
+			boolean mine, JJContact contact) {
 
 		if (map != null) {
 			CriteriaBuilder criteriaBuilder = entityManager
@@ -291,8 +294,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (category != null) {
-				predicates.add(criteriaBuilder.equal(from.get("category"),
-						category));
+				predicates.add(
+						criteriaBuilder.equal(from.get("category"), category));
 			}
 
 			if (status != null) {
@@ -301,10 +304,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			}
 
 			if (contact != null && mine) {
-				Predicate condition1 = criteriaBuilder.equal(
-						from.get("createdBy"), contact);
-				Predicate condition2 = criteriaBuilder.equal(
-						from.get("updatedBy"), contact);
+				Predicate condition1 = criteriaBuilder
+						.equal(from.get("createdBy"), contact);
+				Predicate condition2 = criteriaBuilder
+						.equal(from.get("updatedBy"), contact);
 				predicates.add(criteriaBuilder.or(condition1, condition2));
 			}
 
@@ -323,8 +326,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 							andPredicates.add(criteriaBuilder.equal(
 									from.get("product"), entry.getValue()));
 
-							orPredicates.add(criteriaBuilder.and(andPredicates
-									.toArray(new Predicate[] {})));
+							orPredicates.add(criteriaBuilder.and(
+									andPredicates.toArray(new Predicate[]{})));
 						} else
 							orPredicates.add(criteriaBuilder.equal(
 									from.get("project"), entry.getKey()));
@@ -333,19 +336,20 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 							orPredicates.add(criteriaBuilder.equal(
 									from.get("product"), entry.getValue()));
 						} else {
-							predicates.add(criteriaBuilder.equal(
-									from.join("project").join("manager")
+							predicates.add(criteriaBuilder
+									.equal(from.join("project").join("manager")
 											.get("company"), company));
 						}
 					}
 
 				}
 				if (!orPredicates.isEmpty())
-					predicates.add(criteriaBuilder.or(orPredicates
-							.toArray(new Predicate[] {})));
+					predicates.add(criteriaBuilder
+							.or(orPredicates.toArray(new Predicate[]{})));
 				else
-					predicates.add(criteriaBuilder.equal(from.join("project")
-							.join("manager").get("company"), company));
+					predicates.add(criteriaBuilder.equal(
+							from.join("project").join("manager").get("company"),
+							company));
 			} else {
 				predicates.add(criteriaBuilder.equal(
 						from.join("project").join("manager").get("company"),
@@ -353,8 +357,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			}
 
 			if (version != null) {
-				predicates.add(criteriaBuilder.equal(from.get("versioning"),
-						version));
+				predicates.add(
+						criteriaBuilder.equal(from.get("versioning"), version));
 			}
 
 			if (withChapter) {
@@ -372,8 +376,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			if (orderByCreationdate) {
 				select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
@@ -403,8 +407,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		predicates.add(criteriaBuilder.equal(from.get("chapter"), chapter));
 
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("versioning"),
-					version));
+			predicates.add(
+					criteriaBuilder.equal(from.get("versioning"), version));
 		} else if (product != null) {
 			predicates.add(criteriaBuilder.equal(from.get("product"), product));
 		}
@@ -413,7 +417,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
@@ -464,14 +469,15 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		}
 
 		if (version != null) {
-			predicates.add(criteriaBuilder.equal(from.get("versioning"),
-					version));
+			predicates.add(
+					criteriaBuilder.equal(from.get("versioning"), version));
 		}
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 		return entityManager.createQuery(select).getSingleResult();
 
 	}
@@ -495,15 +501,15 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (category != null) {
-				predicates.add(criteriaBuilder.equal(from.get("category"),
-						category));
+				predicates.add(
+						criteriaBuilder.equal(from.get("category"), category));
 			}
 
 			if (creator != null) {
-				Predicate condition1 = criteriaBuilder.equal(
-						from.get("createdBy"), creator);
-				Predicate condition2 = criteriaBuilder.equal(
-						from.get("updatedBy"), creator);
+				Predicate condition1 = criteriaBuilder
+						.equal(from.get("createdBy"), creator);
+				Predicate condition2 = criteriaBuilder
+						.equal(from.get("updatedBy"), creator);
 				predicates.add(criteriaBuilder.or(condition1, condition2));
 			}
 
@@ -522,8 +528,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 							andPredicates.add(criteriaBuilder.equal(
 									from.get("product"), entry.getValue()));
 
-							orPredicates.add(criteriaBuilder.and(andPredicates
-									.toArray(new Predicate[] {})));
+							orPredicates.add(criteriaBuilder.and(
+									andPredicates.toArray(new Predicate[]{})));
 						} else
 							orPredicates.add(criteriaBuilder.equal(
 									from.get("project"), entry.getKey()));
@@ -536,11 +542,12 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 				}
 				if (!orPredicates.isEmpty())
-					predicates.add(criteriaBuilder.or(orPredicates
-							.toArray(new Predicate[] {})));
+					predicates.add(criteriaBuilder
+							.or(orPredicates.toArray(new Predicate[]{})));
 				else
-					predicates.add(criteriaBuilder.equal(from.join("project")
-							.join("manager").get("company"), company));
+					predicates.add(criteriaBuilder.equal(
+							from.join("project").join("manager").get("company"),
+							company));
 
 			} else {
 				predicates.add(criteriaBuilder.equal(
@@ -549,8 +556,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			}
 
 			if (version != null) {
-				predicates.add(criteriaBuilder.equal(from.get("versioning"),
-						version));
+				predicates.add(
+						criteriaBuilder.equal(from.get("versioning"), version));
 			}
 
 			if (onlyActif) {
@@ -558,8 +565,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						.add(criteriaBuilder.equal(from.get("enabled"), true));
 			}
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			if (orderByCreationdate) {
 				select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
@@ -599,10 +606,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					company));
 
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-			predicates.add(criteriaBuilder.isEmpty(from
-					.<List<JJRequirement>> get("requirementLinkDown")));
-			predicates.add(criteriaBuilder.isEmpty(from
-					.<List<JJRequirement>> get("requirementLinkUp")));
+			predicates.add(criteriaBuilder.isEmpty(
+					from.<List<JJRequirement>> get("requirementLinkDown")));
+			predicates.add(criteriaBuilder.isEmpty(
+					from.<List<JJRequirement>> get("requirementLinkUp")));
 
 			if (!map.isEmpty()) {
 				List<Predicate> orPredicates = new ArrayList<Predicate>();
@@ -612,24 +619,24 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					if (entry.getValue() != null) {
 						List<Predicate> andPredicates = new ArrayList<Predicate>();
 
-						andPredicates.add(criteriaBuilder.equal(
-								from.get("project"), entry.getKey()));
+						andPredicates.add(criteriaBuilder
+								.equal(from.get("project"), entry.getKey()));
 
-						andPredicates.add(criteriaBuilder.equal(
-								from.get("product"), entry.getValue()));
+						andPredicates.add(criteriaBuilder
+								.equal(from.get("product"), entry.getValue()));
 
-						orPredicates.add(criteriaBuilder.and(andPredicates
-								.toArray(new Predicate[] {})));
+						orPredicates.add(criteriaBuilder
+								.and(andPredicates.toArray(new Predicate[]{})));
 					} else
-						orPredicates.add(criteriaBuilder.equal(
-								from.get("project"), entry.getKey()));
+						orPredicates.add(criteriaBuilder
+								.equal(from.get("project"), entry.getKey()));
 
 				}
-				predicates.add(criteriaBuilder.or(orPredicates
-						.toArray(new Predicate[] {})));
+				predicates.add(criteriaBuilder
+						.or(orPredicates.toArray(new Predicate[]{})));
 
-				select.where(criteriaBuilder.and(predicates
-						.toArray(new Predicate[] {})));
+				select.where(criteriaBuilder
+						.and(predicates.toArray(new Predicate[]{})));
 
 				TypedQuery<JJRequirement> result = entityManager
 						.createQuery(select);
@@ -650,13 +657,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public JJStatus getRequirementState(JJRequirement requirement,
 			JJCompany company) {
 
-		boolean UP = haveLinkUp(requirement)
-				|| jJCategoryService.isHighLevel(requirement.getCategory(),
-						company);
+		boolean UP = haveLinkUp(requirement) || jJCategoryService
+				.isHighLevel(requirement.getCategory(), company);
 
-		boolean DOWN = haveLinkDown(requirement)
-				|| jJCategoryService.isLowLevel(requirement.getCategory(),
-						company);
+		boolean DOWN = haveLinkDown(requirement) || jJCategoryService
+				.isLowLevel(requirement.getCategory(), company);
 
 		// requirement = findJJRequirement(requirement.getId());
 

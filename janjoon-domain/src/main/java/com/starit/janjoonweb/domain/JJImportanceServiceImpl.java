@@ -46,12 +46,13 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 		List<Predicate> orPredicates = new ArrayList<Predicate>();
 		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "JJBug"));
 		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "Bug"));
-		Predicate orPredicate = criteriaBuilder.or(orPredicates
-				.toArray(new Predicate[] {}));
+		Predicate orPredicate = criteriaBuilder
+				.or(orPredicates.toArray(new Predicate[]{}));
 
 		predicates.add(orPredicate);
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJImportance> result = entityManager.createQuery(select);
 		return result.getResultList();

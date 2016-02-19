@@ -36,13 +36,14 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 		if (withProduct) {
 			if (product != null)
-				predicates.add(criteriaBuilder.equal(from.get("product"),
-						product));
+				predicates.add(
+						criteriaBuilder.equal(from.get("product"), product));
 			else {
 				predicates.add(criteriaBuilder.isNotNull(from.get("product")));
 				if (company != null)
-					predicates.add(criteriaBuilder.equal(from.join("product")
-							.join("manager").get("company"), company));
+					predicates.add(criteriaBuilder.equal(
+							from.join("product").join("manager").get("company"),
+							company));
 			}
 		} else if (company != null)
 			predicates.add(criteriaBuilder.equal(
@@ -53,7 +54,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (sortedbydate) {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
@@ -88,7 +89,7 @@ public class JJVersionServiceImpl implements JJVersionService {
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJVersion> result = entityManager.createQuery(select);
 

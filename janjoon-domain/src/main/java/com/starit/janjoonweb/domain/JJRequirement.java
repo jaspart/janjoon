@@ -29,7 +29,7 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRequirementSEQ")
-@Table(indexes = { @Index(unique = false, columnList = "project,category") })
+@Table(indexes = {@Index(unique = false, columnList = "project,category")})
 public class JJRequirement {
 
 	@NotNull
@@ -130,7 +130,9 @@ public class JJRequirement {
 	private Set<JJRequirement> requirementLinkDown = new HashSet<JJRequirement>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "JJRequirementLink", joinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkDOWN_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "ReqLinkUP_ID", referencedColumnName = "id") })
+	@JoinTable(name = "JJRequirementLink", joinColumns = {
+			@javax.persistence.JoinColumn(name = "ReqLinkDOWN_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+					@javax.persistence.JoinColumn(name = "ReqLinkUP_ID", referencedColumnName = "id")})
 	private Set<JJRequirement> requirementLinkUp = new HashSet<JJRequirement>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "requirement")
@@ -141,8 +143,9 @@ public class JJRequirement {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJRequirement) && (getId() != null) ? getId()
-				.equals(((JJRequirement) object).getId()) : (object == this);
+		return (object instanceof JJRequirement) && (getId() != null)
+				? getId().equals(((JJRequirement) object).getId())
+				: (object == this);
 	}
 
 	@Override

@@ -1,13 +1,15 @@
 package com.starit.janjoonweb.service.entity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.starit.janjoonweb.domain.JJProduct;
 
@@ -118,8 +120,9 @@ public class Product {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof Product) && (getId() != null) ? getId()
-				.equals(((Product) object).getId()) : (object == this);
+		return (object instanceof Product) && (getId() != null)
+				? getId().equals(((Product) object).getId())
+				: (object == this);
 	}
 
 	@Override

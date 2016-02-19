@@ -88,24 +88,25 @@ import com.itextpdf.text.xml.simpleparser.SimpleXMLParser;
 @Deprecated
 public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 
-	private static Logger						LOGGER	= LoggerFactory.getLogger(HTMLWorkerImpl.class);
+	private static Logger LOGGER = LoggerFactory
+			.getLogger(HTMLWorkerImpl.class);
 	/**
 	 * DocListener that will listen to the Elements produced by parsing the
 	 * HTML. This can be a com.lowagie.text.Document adding the elements to a
 	 * Document directly, or an HTMLWorkerImpl instance strong the objects in a
 	 * List
 	 */
-	protected DocListener						document;
+	protected DocListener document;
 
 	/**
 	 * The map with all the supported tags.
 	 * 
 	 * @since 5.0.6
 	 */
-	protected Map<String, HTMLTagProcessorImpl>	tags;
+	protected Map<String, HTMLTagProcessorImpl> tags;
 
 	/** The object defining all the styles. */
-	private StyleSheet							style	= new StyleSheet();
+	private StyleSheet style = new StyleSheet();
 
 	/**
 	 * Creates a new instance of HTMLWorkerImpl
@@ -128,8 +129,9 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 *            A StyleSheet
 	 * @since 5.0.6
 	 */
-	public HTMLWorkerImpl(final DocListener document, final Map<String, HTMLTagProcessorImpl> tags,
-	        final StyleSheet style) {
+	public HTMLWorkerImpl(final DocListener document,
+			final Map<String, HTMLTagProcessorImpl> tags,
+			final StyleSheet style) {
 		this.document = document;
 		setSupportedTags(tags);
 		setStyleSheet(style);
@@ -168,7 +170,7 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 */
 	public void parse(final Reader reader) throws IOException {
 		LOGGER.info(
-		        "Please note, there is a more extended version of the HTMLWorkerImpl available in the iText XMLWorker");
+				"Please note, there is a more extended version of the HTMLWorkerImpl available in the iText XMLWorker");
 		SimpleXMLParser.parse(this, null, reader, true);
 	}
 
@@ -179,21 +181,21 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * 
 	 * @since iText 5.0.6 (private => protected)
 	 */
-	protected Stack<Element>		stack	= new Stack<Element>();
+	protected Stack<Element> stack = new Stack<Element>();
 
 	/**
 	 * Keeps the content of the current paragraph
 	 * 
 	 * @since iText 5.0.6 (private => protected)
 	 */
-	protected Paragraph				currentParagraph;
+	protected Paragraph currentParagraph;
 
 	/**
 	 * The current hierarchy chain of tags.
 	 * 
 	 * @since 5.0.6
 	 */
-	private final ChainedProperties	chain	= new ChainedProperties();
+	private final ChainedProperties chain = new ChainedProperties();
 
 	/**
 	 * @see com.itextpdf.text.xml.simpleparser.SimpleXMLDocHandler#startDocument()
@@ -208,7 +210,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @see com.itextpdf.text.xml.simpleparser.SimpleXMLDocHandler#startElement(java.lang.String,
 	 *      java.util.Map)
 	 */
-	public void startElement(final String tag, final Map<String, String> attrs) {
+	public void startElement(final String tag,
+			final Map<String, String> attrs) {
 		HTMLTagProcessorImpl htmlTag = tags.get(tag);
 		if (htmlTag == null) {
 			return;
@@ -369,49 +372,49 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	IMG_PROVIDER	= "img_provider";
+	public static final String IMG_PROVIDER = "img_provider";
 
 	/**
 	 * Key used to store the image processor in the providers map.
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	IMG_PROCESSOR	= "img_interface";
+	public static final String IMG_PROCESSOR = "img_interface";
 
 	/**
 	 * Key used to store the image store in the providers map.
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	IMG_STORE		= "img_static";
+	public static final String IMG_STORE = "img_static";
 
 	/**
 	 * Key used to store the image baseurl provider in the providers map.
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	IMG_BASEURL		= "img_baseurl";
+	public static final String IMG_BASEURL = "img_baseurl";
 
 	/**
 	 * Key used to store the font provider in the providers map.
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	FONT_PROVIDER	= "font_factory";
+	public static final String FONT_PROVIDER = "font_factory";
 
 	/**
 	 * Key used to store the link provider in the providers map.
 	 * 
 	 * @since 5.0.6
 	 */
-	public static final String	LINK_PROVIDER	= "alink_interface";
+	public static final String LINK_PROVIDER = "alink_interface";
 
 	/**
 	 * Map containing providers such as a FontProvider or ImageProvider.
 	 * 
 	 * @since 5.0.6 (renamed from interfaceProps)
 	 */
-	private Map<String, Object>	providers		= new HashMap<String, Object>();
+	private Map<String, Object> providers = new HashMap<String, Object>();
 
 	/**
 	 * Setter for the providers. If a FontProvider is added, the ElementFactory
@@ -494,7 +497,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @since 5.0.6
 	 */
 	public LineSeparator createLineSeparator(final Map<String, String> attrs) {
-		return factory.createLineSeparator(attrs, currentParagraph.getLeading() / 2);
+		return factory.createLineSeparator(attrs,
+				currentParagraph.getLeading() / 2);
 	}
 
 	/**
@@ -507,7 +511,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @throws IOException
 	 * @since 5.0.6
 	 */
-	public Image createImage(final Map<String, String> attrs) throws DocumentException, IOException {
+	public Image createImage(final Map<String, String> attrs)
+			throws DocumentException, IOException {
 		String src = attrs.get(HtmlTags.SRC);
 		String sty = attrs.get(HtmlTags.STYLE);
 		if (src == null)
@@ -517,8 +522,10 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 		if (sty != null)
 			style = getStyle(sty);
 
-		Image img = factory.createImage(src, style, chain, document, (ImageProvider) providers.get(IMG_PROVIDER),
-		        (ImageStore) providers.get(IMG_STORE), (String) providers.get(IMG_BASEURL));
+		Image img = factory.createImage(src, style, chain, document,
+				(ImageProvider) providers.get(IMG_PROVIDER),
+				(ImageStore) providers.get(IMG_STORE),
+				(String) providers.get(IMG_BASEURL));
 		return img;
 	}
 
@@ -560,7 +567,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 			currentParagraph = new Paragraph();
 		}
 		// The link provider allows you to do additional processing
-		LinkProcessor i = (LinkProcessor) providers.get(HTMLWorkerImpl.LINK_PROVIDER);
+		LinkProcessor i = (LinkProcessor) providers
+				.get(HTMLWorkerImpl.LINK_PROVIDER);
 		if (i == null || !i.process(currentParagraph, chain)) {
 			// sets an Anchor for all the Chunks in the current paragraph
 			String href = chain.getProperty(HtmlTags.HREF);
@@ -641,9 +649,12 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @throws DocumentException
 	 * @since 5.0.6
 	 */
-	public void processImage(final Image img, final Map<String, String> attrs) throws DocumentException {
-		ImageProcessor processor = (ImageProcessor) providers.get(HTMLWorkerImpl.IMG_PROCESSOR);
-		if (processor == null || !processor.process(img, attrs, chain, document)) {
+	public void processImage(final Image img, final Map<String, String> attrs)
+			throws DocumentException {
+		ImageProcessor processor = (ImageProcessor) providers
+				.get(HTMLWorkerImpl.IMG_PROCESSOR);
+		if (processor == null
+				|| !processor.process(img, attrs, chain, document)) {
 			String align = attrs.get(HtmlTags.ALIGN);
 			if (align != null) {
 				carriageReturn();
@@ -733,30 +744,30 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	// state variables and methods
 
 	/** Stack to keep track of table tags. */
-	private final Stack<boolean[]>	tableState	= new Stack<boolean[]>();
+	private final Stack<boolean[]> tableState = new Stack<boolean[]>();
 
 	/** Boolean to keep track of TR tags. */
-	private boolean					pendingTR	= false;
+	private boolean pendingTR = false;
 
 	/** Boolean to keep track of TD and TH tags */
-	private boolean					pendingTD	= false;
+	private boolean pendingTD = false;
 
 	/** Boolean to keep track of LI tags */
-	private boolean					pendingLI	= false;
+	private boolean pendingLI = false;
 
 	/**
 	 * Boolean to keep track of PRE tags
 	 * 
 	 * @since 5.0.6 renamed from isPRE
 	 */
-	private boolean					insidePRE	= false;
+	private boolean insidePRE = false;
 
 	/**
 	 * Indicates if text needs to be skipped.
 	 * 
 	 * @since iText 5.0.6 (private => protected)
 	 */
-	protected boolean				skipText	= false;
+	protected boolean skipText = false;
 
 	/**
 	 * Pushes the values of pendingTR and pendingTD to a state stack.
@@ -764,7 +775,7 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @since 5.0.6
 	 */
 	public void pushTableState() {
-		tableState.push(new boolean[] { pendingTR, pendingTD });
+		tableState.push(new boolean[]{pendingTR, pendingTD});
 	}
 
 	/**
@@ -878,7 +889,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @return a List of Element objects
 	 * @throws IOException
 	 */
-	public static List<Element> parseToList(final Reader reader, final StyleSheet style) throws IOException {
+	public static List<Element> parseToList(final Reader reader,
+			final StyleSheet style) throws IOException {
 		return parseToList(reader, style, null);
 	}
 
@@ -894,8 +906,9 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @return a List of Element objects
 	 * @throws IOException
 	 */
-	public static List<Element> parseToList(final Reader reader, final StyleSheet style,
-	        final HashMap<String, Object> providers) throws IOException {
+	public static List<Element> parseToList(final Reader reader,
+			final StyleSheet style, final HashMap<String, Object> providers)
+					throws IOException {
 		return parseToList(reader, style, null, providers);
 	}
 
@@ -914,8 +927,10 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 * @throws IOException
 	 * @since 5.0.6
 	 */
-	public static List<Element> parseToList(final Reader reader, final StyleSheet style,
-	        final Map<String, HTMLTagProcessorImpl> tags, final HashMap<String, Object> providers) throws IOException {
+	public static List<Element> parseToList(final Reader reader,
+			final StyleSheet style,
+			final Map<String, HTMLTagProcessorImpl> tags,
+			final HashMap<String, Object> providers) throws IOException {
 		HTMLWorkerImpl worker = new HTMLWorkerImpl(null, tags, style);
 		worker.document = worker;
 		worker.setProviders(providers);
@@ -977,8 +992,8 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	/**
 	 * @see com.itextpdf.text.DocListener#setMargins(float, float, float, float)
 	 */
-	public boolean setMargins(final float marginLeft, final float marginRight, final float marginTop,
-	        final float marginBottom) {
+	public boolean setMargins(final float marginLeft, final float marginRight,
+			final float marginTop, final float marginBottom) {
 		return true;
 	}
 

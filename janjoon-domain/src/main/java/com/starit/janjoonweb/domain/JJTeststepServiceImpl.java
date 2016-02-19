@@ -42,8 +42,8 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 
 	@Override
-	public List<JJTeststep> getTeststeps(JJTestcase testcase,
-			boolean onlyActif, boolean sortedByOrder) {
+	public List<JJTeststep> getTeststeps(JJTestcase testcase, boolean onlyActif,
+			boolean sortedByOrder) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTeststep> criteriaQuery = criteriaBuilder
@@ -64,7 +64,8 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (sortedByOrder) {
 			select.orderBy(criteriaBuilder.asc(from.get("ordering")));
@@ -142,8 +143,8 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	public void deleteJJTeststep(JJTeststep JJTeststep_) {
 		// entityManager.remove(JJTeststep_);
 		// JJTeststepexecution teststep
-		Query q = entityManager
-				.createQuery("DELETE FROM JJTeststepexecution c WHERE c.teststep = :p");
+		Query q = entityManager.createQuery(
+				"DELETE FROM JJTeststepexecution c WHERE c.teststep = :p");
 		q.setParameter("p", JJTeststep_).executeUpdate();
 		q = entityManager
 				.createQuery("DELETE FROM JJBug c WHERE c.teststep = :p");

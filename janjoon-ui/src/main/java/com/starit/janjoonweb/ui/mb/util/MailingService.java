@@ -24,18 +24,19 @@ import com.starit.janjoonweb.domain.JJTask;
 
 public class MailingService {
 
-	private String	smtp_host;
-	private String	smtp_port;
-	private String	userName;
-	private String	password;
-	private boolean	error;
-	static Logger	logger	= Logger.getLogger("MailingService");
+	private String smtp_host;
+	private String smtp_port;
+	private String userName;
+	private String password;
+	private boolean error;
+	static Logger logger = Logger.getLogger("MailingService");
 
 	public MailingService() {
 
-		ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
-		        .getContext();
-		String path = servletContext.getRealPath("WEB-INF" + File.separator + "classes") + File.separator;
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
+		String path = servletContext.getRealPath(
+				"WEB-INF" + File.separator + "classes") + File.separator;
 		System.out.println(path);
 		Properties properties = new Properties();
 		try {
@@ -91,25 +92,30 @@ public class MailingService {
 			Properties props = new Properties();
 			props.put("mail.smtp.host", smtp_host);
 			props.put("mail.smtp.socketFactory.port", smtp_port);
-			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.auth", "true");
 			props.put("mail.smtp.port", smtp_port);
 
-			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(userName, password);
-				}
-			});
+			Session session = Session.getDefaultInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(userName,
+									password);
+						}
+					});
 
 			try {
 
 				Message message = new MimeMessage(session);
-				message.setRecipients(Message.RecipientType.TO,
-				        InternetAddress.parse(requirement.getCreatedBy().getEmail()));
+				message.setRecipients(Message.RecipientType.TO, InternetAddress
+						.parse(requirement.getCreatedBy().getEmail()));
 
-				message.setSubject("Requirement: " + requirement.getName() + " Started To Be Covred ");
+				message.setSubject("Requirement: " + requirement.getName()
+						+ " Started To Be Covred ");
 				message.setText("Requirement: " + requirement.getName()
-				        + "  has been treated and started to be covered by " + taskTitle);
+						+ "  has been treated and started to be covered by "
+						+ taskTitle);
 
 				Transport.send(message);
 
@@ -122,31 +128,38 @@ public class MailingService {
 		}
 	}
 
-	public void sendMail(String mail_to, List<JJContact> contacts, JJTask task, String subject) {
+	public void sendMail(String mail_to, List<JJContact> contacts, JJTask task,
+			String subject) {
 
 		if (!error) {
 			Properties props = new Properties();
 			props.put("mail.smtp.host", smtp_host);
 			props.put("mail.smtp.socketFactory.port", smtp_port);
-			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.auth", "true");
 			props.put("mail.smtp.port", smtp_port);
 
-			Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(userName, password);
-				}
-			});
+			Session session = Session.getDefaultInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(userName,
+									password);
+						}
+					});
 
 			try {
 
 				Message message = new MimeMessage(session);
-				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail_to));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(mail_to));
 				for (JJContact c : contacts)
 					if (!c.getEmail().equalsIgnoreCase(mail_to))
-						message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(c.getEmail()));
+						message.addRecipients(Message.RecipientType.CC,
+								InternetAddress.parse(c.getEmail()));
 				message.setSubject("Task: " + task.getName() + " Done ");
-				message.setText("Task: " + task.getName() + " Done " + "\n\n" + subject);
+				message.setText("Task: " + task.getName() + " Done " + "\n\n"
+						+ subject);
 
 				Transport.send(message);
 

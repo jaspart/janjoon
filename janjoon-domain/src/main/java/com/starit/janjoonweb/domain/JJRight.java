@@ -13,7 +13,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJRightSEQ")
-@Table(indexes = { @Index(unique = false, columnList = "profile") })
+@Table(indexes = {@Index(unique = false, columnList = "profile")})
 public class JJRight {
 
 	@NotNull
@@ -37,7 +37,8 @@ public class JJRight {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJRight) && (getId() != null) ? getId()
-				.equals(((JJRight) object).getId()) : (object == this);
+		return (object instanceof JJRight) && (getId() != null)
+				? getId().equals(((JJRight) object).getId())
+				: (object == this);
 	}
 }

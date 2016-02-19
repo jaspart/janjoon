@@ -16,16 +16,17 @@ import org.apache.log4j.Logger;
 
 public class SessionTimeoutFilter implements Filter {
 	// This should be your default Home or Login page or whatever
-	private String	timeoutPage	= "pages/login.jsf";
+	private String timeoutPage = "pages/login.jsf";
 
-	static Logger	logger		= Logger.getLogger("MySessionListener-Logger");
+	static Logger logger = Logger.getLogger("MySessionListener-Logger");
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-	        throws IOException, ServletException {
-		if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
+	public void doFilter(ServletRequest request, ServletResponse response,
+			FilterChain filterChain) throws IOException, ServletException {
+		if ((request instanceof HttpServletRequest)
+				&& (response instanceof HttpServletResponse)) {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 			// is session expire control required for this request?
@@ -33,9 +34,12 @@ public class SessionTimeoutFilter implements Filter {
 				// is session invalid?
 
 				if (isSessionInvalid(httpServletRequest)) {
-					String timeoutUrl = httpServletRequest.getContextPath() + "/" + getTimeoutPage();
+					String timeoutUrl = httpServletRequest.getContextPath()
+							+ "/" + getTimeoutPage();
 
-					logger.info("Session is invalid! redirecting to timeoutpage : " + timeoutUrl);
+					logger.info(
+							"Session is invalid! redirecting to timeoutpage : "
+									+ timeoutUrl);
 
 					httpServletResponse.sendRedirect(timeoutUrl);
 					return;
@@ -55,15 +59,18 @@ public class SessionTimeoutFilter implements Filter {
 	 * disable session control for it, filter will again redirect to it and this
 	 * will be result with an infinite loop…
 	 */
-	private boolean isSessionControlRequiredForThisResource(HttpServletRequest httpServletRequest) {
+	private boolean isSessionControlRequiredForThisResource(
+			HttpServletRequest httpServletRequest) {
 		String requestPath = httpServletRequest.getRequestURI();
-		boolean controlRequired = !StringUtils.contains(requestPath, getTimeoutPage());
+		boolean controlRequired = !StringUtils.contains(requestPath,
+				getTimeoutPage());
 		return controlRequired;
 	}
 
 	private boolean isSessionInvalid(HttpServletRequest httpServletRequest) {
-		boolean sessionInValid = (httpServletRequest.getRequestedSessionId() != null)
-		        && !httpServletRequest.isRequestedSessionIdValid();
+		boolean sessionInValid = (httpServletRequest
+				.getRequestedSessionId() != null)
+				&& !httpServletRequest.isRequestedSessionIdValid();
 		return sessionInValid;
 	}
 

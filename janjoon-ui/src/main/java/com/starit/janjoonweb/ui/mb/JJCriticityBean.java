@@ -2,14 +2,13 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.util.Date;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJCriticity;
+import javax.faces.component.html.HtmlPanelGrid;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJCriticity;
 
 @RooSerializable
 @RooJsfManagedBean(entity = JJCriticity.class, beanName = "jJCriticityBean")
@@ -21,15 +20,29 @@ public class JJCriticityBean {
 
 	public void saveJJCriticity(JJCriticity b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJCriticityService.saveJJCriticity(b);
 	}
 
 	public void updateJJCriticity(JJCriticity b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJCriticityService.updateJJCriticity(b);
+	}
+
+	public HtmlPanelGrid populateCreatePanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateEditPanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateViewPanel() {
+		return null;
 	}
 }

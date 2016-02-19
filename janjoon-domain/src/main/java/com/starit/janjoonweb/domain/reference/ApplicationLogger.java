@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.domain.reference;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -11,7 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
-import org.springframework.util.StringUtils;
 
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -48,7 +46,8 @@ public class ApplicationLogger {
 
 	}
 
-	// @AfterReturning("execution(* com.starit.janjoonweb.domain.JJRequirement.getDescription(..))")
+	// @AfterReturning("execution(*
+	// com.starit.janjoonweb.domain.JJRequirement.getDescription(..))")
 	// public void logAfterGetDescription(JoinPoint joinPoint) {
 	//
 	// logger.info("operation : " + joinPoint.getSignature().toShortString()
@@ -113,7 +112,8 @@ public class ApplicationLogger {
 			// for(String tableName:jJStatusService.getTablesName())
 			// {
 			// Query
-			// query=entityManager.createQuery("UPDATE "+tableName+" r SET  version = NULL WHERE  r.version =0");
+			// query=entityManager.createQuery("UPDATE "+tableName+" r SET
+			// version = NULL WHERE r.version =0");
 			// query.executeUpdate();
 			// }
 			//
@@ -125,7 +125,8 @@ public class ApplicationLogger {
 
 	}
 
-	// @After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
+	// @After("execution(*
+	// com.starit.janjoonweb.domain.JJTask.setEndDateReal(..))")
 	// public void setJJTaskWorkLoadReal(JoinPoint joinPoint)
 	// {
 	//
@@ -143,7 +144,8 @@ public class ApplicationLogger {
 	//
 	// }
 
-	// @After("execution(* com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
+	// @After("execution(*
+	// com.starit.janjoonweb.domain.JJTask.setEndDateRevised(..))")
 	// public void setJJTaskWorkLoadRevised(JoinPoint joinPoint)
 	// {
 	//
@@ -162,7 +164,8 @@ public class ApplicationLogger {
 	//
 	// }
 
-	// @After("execution(* com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
+	// @After("execution(*
+	// com.starit.janjoonweb.domain.JJTaskService.updateJJTask(..))")
 	public void startRequirement(JoinPoint joinPoint) {
 		// JJTask task=(JJTask) joinPoint.getThis();
 
@@ -173,8 +176,8 @@ public class ApplicationLogger {
 
 		if (status != null && task.getRequirement() != null) {
 
-			JJRequirement req = jJRequirementService.findJJRequirement(task
-					.getRequirement().getId());
+			JJRequirement req = jJRequirementService
+					.findJJRequirement(task.getRequirement().getId());
 
 			System.out.println(status.getName());
 

@@ -86,7 +86,8 @@ public class UpdateEventHandler implements ISVNEventHandler {
 			}
 		} else if (action == SVNEventAction.UPDATE_EXTERNAL) {
 			/* for externals definitions */
-			System.out.println("Fetching external item into '" + event.getFile().getAbsolutePath() + "'");
+			System.out.println("Fetching external item into '"
+					+ event.getFile().getAbsolutePath() + "'");
 			System.out.println("External at revision " + event.getRevision());
 			return;
 		} else if (action == SVNEventAction.UPDATE_COMPLETED) {
@@ -105,7 +106,8 @@ public class UpdateEventHandler implements ISVNEventHandler {
 			System.out.println("L     " + event.getChangelistName());
 			return;
 		} else if (action == SVNEventAction.LOCK_FAILED) {
-			System.out.println("failed to lock    " + event.getChangelistName());
+			System.out
+					.println("failed to lock    " + event.getChangelistName());
 			return;
 		}
 
@@ -149,7 +151,8 @@ public class UpdateEventHandler implements ISVNEventHandler {
 			lockLabel = "B";
 		}
 
-		System.out.println(pathChangeType + propertiesChangeType + lockLabel + "       " + event.getChangelistName());
+		System.out.println(pathChangeType + propertiesChangeType + lockLabel
+				+ "       " + event.getChangelistName());
 	}
 
 	/*

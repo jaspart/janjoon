@@ -1,16 +1,10 @@
 package com.starit.janjoonweb.ui.mb;
 
-import java.util.Date;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJCompany;
-import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiquesDataModel;
 
 @RooSerializable
@@ -27,13 +21,14 @@ public class JJAuditLogBean {
 			JJCompany company = null;
 			if (!loginBean.getAuthorisationService().isAdminCompany())
 				company = LoginBean.getCompany();
-			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(jJAuditLogService, company);
+			connectionStatistiquesListTable = new LazyConnectionStatistiquesDataModel(
+					jJAuditLogService, company);
 		}
 		return connectionStatistiquesListTable;
 	}
 
 	public void setConnectionStatistiquesListTable(
-	        LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
+			LazyConnectionStatistiquesDataModel connectionStatistiquesListTable) {
 		this.connectionStatistiquesListTable = connectionStatistiquesListTable;
 	}
 

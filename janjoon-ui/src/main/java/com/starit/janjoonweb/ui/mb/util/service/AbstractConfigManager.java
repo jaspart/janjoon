@@ -14,15 +14,16 @@ public abstract class AbstractConfigManager implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private String				type;
-	protected String			url;
-	protected String			path;
-	protected String			login;
-	protected String			password;
+	private String type;
+	protected String url;
+	protected String path;
+	protected String login;
+	protected String password;
 
-	public AbstractConfigManager(String type, String url, String path, String login, String password) {
+	public AbstractConfigManager(String type, String url, String path,
+			String login, String password) {
 		this.type = type;
 		this.url = url;
 		this.path = path;
@@ -76,7 +77,8 @@ public abstract class AbstractConfigManager implements Serializable {
 
 	public abstract boolean checkOut(String branche);
 
-	public abstract String cloneRemoteRepository(String url, String name, String path);
+	public abstract String cloneRemoteRepository(String url, String name,
+			String path);
 
 	public abstract boolean addFile(String Path, String name, boolean isFile);
 

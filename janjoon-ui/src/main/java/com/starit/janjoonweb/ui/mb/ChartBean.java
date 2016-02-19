@@ -41,20 +41,22 @@ public class ChartBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private LineChartModel	categoryModel;
-	private PieChartModel	pieChart;
-	private String			seriesColors		= "000000, 097D0B, D8115A";
-	private String			pieChartSerieColor	= "0000FF,00FF00,FF0000";
+	private LineChartModel categoryModel;
+	private PieChartModel pieChart;
+	private String seriesColors = "000000, 097D0B, D8115A";
+	private String pieChartSerieColor = "0000FF,00FF00,FF0000";
 
 	public ChartBean() {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
-		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session.getAttribute("jJTestcaseBean");
+		JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+				.getAttribute("jJTestcaseBean");
 
 		List<TestCaseChartUtil> testcases = TestCaseChartUtil
-		        .getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
+				.getTestCaseUtilFromJJTesCase(jJTestcaseBean.getTestcases());
 		if (testcases != null && !testcases.isEmpty()) {
 			createCategoryModel(testcases);
 			createPieChart(jJTestcaseBean, testcases);
@@ -72,9 +74,11 @@ public class ChartBean implements Serializable {
 
 	}
 
-	private void createPieChart(JJTestcaseBean jJTestcaseBean, List<TestCaseChartUtil> testcases) {
+	private void createPieChart(JJTestcaseBean jJTestcaseBean,
+			List<TestCaseChartUtil> testcases) {
 
-		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean")).getBuild();
+		JJBuild build = ((JJBuildBean) LoginBean.findBean("jJBuildBean"))
+				.getBuild();
 		JJVersion version = LoginBean.getVersion();
 
 		pieChart = new PieChartModel();
@@ -84,8 +88,8 @@ public class ChartBean implements Serializable {
 
 		for (TestCaseChartUtil test : testcases) {
 
-			Boolean isPassed = jJTestcaseBean.getjJTestcaseexecutionService().isPassed(test.getTestcase(), build,
-			        version);
+			Boolean isPassed = jJTestcaseBean.getjJTestcaseexecutionService()
+					.isPassed(test.getTestcase(), build, version);
 
 			if (isPassed == null)
 				noExec++;
@@ -115,7 +119,8 @@ public class ChartBean implements Serializable {
 
 	private void createCategoryModel(List<TestCaseChartUtil> testcases) {
 
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 		DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 		Set<String> datesTMP = new HashSet<String>();
@@ -127,13 +132,14 @@ public class ChartBean implements Serializable {
 		}
 
 		JJTestcaseexecutionBean jJTestcaseexecutionBean = (JJTestcaseexecutionBean) session
-		        .getAttribute("jJTestcaseexecutionBean");
+				.getAttribute("jJTestcaseexecutionBean");
 
 		if (jJTestcaseexecutionBean == null) {
 			jJTestcaseexecutionBean = new JJTestcaseexecutionBean();
 		}
 
-		Set<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionBean.getTestcaseexecutions();
+		Set<JJTestcaseexecution> testcaseexecutions = jJTestcaseexecutionBean
+				.getTestcaseexecutions();
 
 		for (JJTestcaseexecution tce : testcaseexecutions) {
 
@@ -171,7 +177,8 @@ public class ChartBean implements Serializable {
 
 			for (TestCaseChartUtil testcase : testcases) {
 
-				if (date.equalsIgnoreCase(f.format(testcase.getTestcase().getCreationDate()))) {
+				if (date.equalsIgnoreCase(
+						f.format(testcase.getTestcase().getCreationDate()))) {
 					compteur++;
 				}
 
@@ -184,8 +191,11 @@ public class ChartBean implements Serializable {
 					List<JJTestcaseexecution> exec = new ArrayList<JJTestcaseexecution>();
 					for (JJTestcaseexecution tce : testcaseexecutions) {
 						Date updatedDate = tce.getUpdatedDate();
-						if ((updatedDate != null) && (date.equalsIgnoreCase(f.format(updatedDate)))
-						        && (tce.getTestcase().equals(testcase.getTestcase()))) {
+						if ((updatedDate != null)
+								&& (date.equalsIgnoreCase(
+										f.format(updatedDate)))
+								&& (tce.getTestcase()
+										.equals(testcase.getTestcase()))) {
 
 							if (tce.getPassed() != null) {
 								exec.add(tce);
@@ -203,13 +213,18 @@ public class ChartBean implements Serializable {
 								testcase.setSuccess("compteurFailed");
 							}
 						} else {
-							Collections.sort(exec, new Comparator<JJTestcaseexecution>() {
+							Collections.sort(exec,
+									new Comparator<JJTestcaseexecution>() {
 
-								@Override
-								public int compare(JJTestcaseexecution o1, JJTestcaseexecution o2) {
-									return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
-								}
-							});
+										@Override
+										public int compare(
+												JJTestcaseexecution o1,
+												JJTestcaseexecution o2) {
+											return o2.getUpdatedDate()
+													.compareTo(o1
+															.getUpdatedDate());
+										}
+									});
 							if (exec.get(0).getPassed()) {
 								compteurSuccess++;
 								testcase.setSuccess("compteurSuccess");
@@ -225,16 +240,22 @@ public class ChartBean implements Serializable {
 				mapFailedTC.put(date, String.valueOf(compteurFailed));
 
 			} else {
-				compteurFailed = Integer.parseInt(mapFailedTC.get(dates.get(i - 1)));
-				compteurSuccess = Integer.parseInt(mapSuccessTC.get(dates.get(i - 1)));
-				mapTotalTC.put(date, String.valueOf(compteur + Integer.parseInt(mapTotalTC.get(dates.get(i - 1)))));
+				compteurFailed = Integer
+						.parseInt(mapFailedTC.get(dates.get(i - 1)));
+				compteurSuccess = Integer
+						.parseInt(mapSuccessTC.get(dates.get(i - 1)));
+				mapTotalTC.put(date, String.valueOf(compteur
+						+ Integer.parseInt(mapTotalTC.get(dates.get(i - 1)))));
 
 				for (TestCaseChartUtil testcase : testcases) {
 					List<JJTestcaseexecution> exec = new ArrayList<JJTestcaseexecution>();
 					for (JJTestcaseexecution tce : testcaseexecutions) {
 						Date updatedDate = tce.getUpdatedDate();
-						if ((updatedDate != null) && (date.equalsIgnoreCase(f.format(updatedDate)))
-						        && (tce.getTestcase().equals(testcase.getTestcase()))) {
+						if ((updatedDate != null)
+								&& (date.equalsIgnoreCase(
+										f.format(updatedDate)))
+								&& (tce.getTestcase()
+										.equals(testcase.getTestcase()))) {
 
 							if (tce.getPassed() != null) {
 								exec.add(tce);
@@ -246,7 +267,8 @@ public class ChartBean implements Serializable {
 						if (exec.size() == 1) {
 							if (exec.get(0).getPassed()) {
 								if (testcase.getSuccess() != null) {
-									if (testcase.getSuccess().equalsIgnoreCase("compteurFailed")) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurFailed")) {
 										compteurFailed--;
 										compteurSuccess++;
 										testcase.setSuccess("compteurSuccess");
@@ -258,7 +280,8 @@ public class ChartBean implements Serializable {
 
 							} else {
 								if (testcase.getSuccess() != null) {
-									if (testcase.getSuccess().equalsIgnoreCase("compteurSuccess")) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurSuccess")) {
 										compteurFailed++;
 										compteurSuccess--;
 										testcase.setSuccess("compteurFailed");
@@ -269,16 +292,22 @@ public class ChartBean implements Serializable {
 								}
 							}
 						} else {
-							Collections.sort(exec, new Comparator<JJTestcaseexecution>() {
+							Collections.sort(exec,
+									new Comparator<JJTestcaseexecution>() {
 
-								@Override
-								public int compare(JJTestcaseexecution o1, JJTestcaseexecution o2) {
-									return o2.getUpdatedDate().compareTo(o1.getUpdatedDate());
-								}
-							});
+										@Override
+										public int compare(
+												JJTestcaseexecution o1,
+												JJTestcaseexecution o2) {
+											return o2.getUpdatedDate()
+													.compareTo(o1
+															.getUpdatedDate());
+										}
+									});
 							if (exec.get(0).getPassed()) {
 								if (testcase.getSuccess() != null) {
-									if (testcase.getSuccess().equalsIgnoreCase("compteurFailed")) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurFailed")) {
 										compteurFailed--;
 										compteurSuccess++;
 										testcase.setSuccess("compteurSuccess");
@@ -290,7 +319,8 @@ public class ChartBean implements Serializable {
 
 							} else {
 								if (testcase.getSuccess() != null) {
-									if (testcase.getSuccess().equalsIgnoreCase("compteurSuccess")) {
+									if (testcase.getSuccess().equalsIgnoreCase(
+											"compteurSuccess")) {
 										compteurFailed++;
 										compteurSuccess--;
 										testcase.setSuccess("compteurFailed");
@@ -329,7 +359,8 @@ public class ChartBean implements Serializable {
 		} else
 
 			for (Map.Entry<String, String> entry : mapSuccessTC.entrySet()) {
-				successTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
+				successTC.set(entry.getKey(),
+						Integer.parseInt(entry.getValue()));
 			}
 
 		ChartSeries failedTC = new ChartSeries("Failed TC");
@@ -338,7 +369,8 @@ public class ChartBean implements Serializable {
 		} else
 
 			for (Map.Entry<String, String> entry : mapFailedTC.entrySet()) {
-				failedTC.set(entry.getKey(), Integer.parseInt(entry.getValue()));
+				failedTC.set(entry.getKey(),
+						Integer.parseInt(entry.getValue()));
 			}
 
 		categoryModel = new LineChartModel();
@@ -347,12 +379,14 @@ public class ChartBean implements Serializable {
 		categoryModel.addSeries(failedTC);
 		categoryModel.setAnimate(true);
 		categoryModel.setLegendPosition("ne");
-		categoryModel.setTitle(MessageFactory.getMessage("test_graph_testcase_title", "").getDetail());
+		categoryModel.setTitle(MessageFactory
+				.getMessage("test_graph_testcase_title", "").getDetail());
 		categoryModel.setSeriesColors(seriesColors);
 
 		DateAxis axis = new DateAxis();
 		axis.setTickAngle(-50);
-		axis.setLabel(MessageFactory.getMessage("test_graph_ordinate_label", "").getDetail());
+		axis.setLabel(MessageFactory.getMessage("test_graph_ordinate_label", "")
+				.getDetail());
 		axis.setTickFormat("%b %#d, %y");
 		categoryModel.getAxes().put(AxisType.X, axis);
 
@@ -361,8 +395,8 @@ public class ChartBean implements Serializable {
 		// categoryModel.getAxis(AxisType.X).setLabel(MessageFactory
 		// .getMessage("test_graph_ordinate_label", "").getDetail());
 
-		categoryModel.getAxis(AxisType.Y)
-		        .setLabel(MessageFactory.getMessage("test_graph_abscissa_label", "").getDetail());
+		categoryModel.getAxis(AxisType.Y).setLabel(MessageFactory
+				.getMessage("test_graph_abscissa_label", "").getDetail());
 	}
 
 	public String getSeriesColors() {

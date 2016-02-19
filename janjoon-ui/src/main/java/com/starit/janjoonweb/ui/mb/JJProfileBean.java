@@ -25,24 +25,24 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJProfileBean {
 
 	@Autowired
-	public JJConfigurationService	jJConfigurationService;
+	public JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	public JJRightService			jJRightService;
+	public JJRightService jJRightService;
 
 	@Autowired
-	private JJPermissionService		jJPermissionService;
+	private JJPermissionService jJPermissionService;
 
-	private JJProfile				profileAdmin;
+	private JJProfile profileAdmin;
 
-	private LazyProfileDataModel	profileListTable;
+	private LazyProfileDataModel profileListTable;
 
-	private String					message;
+	private String message;
 
-	private boolean					disabledProfileMode;
-	private boolean					disabledRightMode;
+	private boolean disabledProfileMode;
+	private boolean disabledRightMode;
 
-	private boolean					profileState;
+	private boolean profileState;
 
 	public void addProfile(final JJRightBean jJRightBean) {
 
@@ -55,8 +55,8 @@ public class JJProfileBean {
 
 			jJRightBean.setRightDataModel(new ArrayList<RightDataModel>());
 
-			FacesContext.getCurrentInstance().addMessage(null,
-			        MessageFactory.getMessage("message_successfully_created", "Profile", ""));
+			FacesContext.getCurrentInstance().addMessage(null, MessageFactory
+					.getMessage("message_successfully_created", "Profile", ""));
 			profileListTable = null;
 
 		}
@@ -70,9 +70,10 @@ public class JJProfileBean {
 		jJRightBean.setCategory(null);
 		jJRightBean.setObject(null);
 		jJRightBean.setObjects(null);
-		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-		        .getSession(false);
-		final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		final HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false);
+		final LoginBean loginBean = (LoginBean) session
+				.getAttribute("loginBean");
 		loginBean.getAuthorisationService().setSession(session);
 	}
 
@@ -82,9 +83,11 @@ public class JJProfileBean {
 
 			profileAdmin.setEnabled(false);
 			updateJJProfile(profileAdmin);
-			final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-			        .getSession(false);
-			final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+			final HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			final LoginBean loginBean = (LoginBean) session
+					.getAttribute("loginBean");
 			loginBean.getAuthorisationService().setSession(session);
 			profileListTable = null;
 
@@ -122,13 +125,15 @@ public class JJProfileBean {
 
 	private boolean getProfileDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("ProfileDialog", "profile.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("ProfileDialog",
+				"profile.create.saveandclose");
 	}
 
 	public LazyProfileDataModel getProfileListTable() {
 
 		if (profileListTable == null) {
-			profileListTable = new LazyProfileDataModel(jJProfileService, jJPermissionService);
+			profileListTable = new LazyProfileDataModel(jJProfileService,
+					jJPermissionService);
 		}
 		return profileListTable;
 	}
@@ -157,9 +162,11 @@ public class JJProfileBean {
 
 		profileAdmin = jJProfileService.findJJProfile(profileAdmin.getId());
 
-		final List<JJRight> rights = jJRightService.getRights(profileAdmin, true);
+		final List<JJRight> rights = jJRightService.getRights(profileAdmin,
+				true);
 
-		final List<RightDataModel> rightDataModels = jJRightBean.getRightDataModel();
+		final List<RightDataModel> rightDataModels = jJRightBean
+				.getRightDataModel();
 		final List<JJRight> selectedRights = new ArrayList<JJRight>();
 		for (final RightDataModel rightDataModel : rightDataModels) {
 			if (rightDataModel.getCheckRight()) {
@@ -218,11 +225,12 @@ public class JJProfileBean {
 
 		System.out.println("herer");
 
-		FacesContext.getCurrentInstance().addMessage(null,
-		        MessageFactory.getMessage("message_successfully_updated", "Profile", ""));
-		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-		        .getSession(false);
-		final LoginBean loginBean = (LoginBean) session.getAttribute("loginBean");
+		FacesContext.getCurrentInstance().addMessage(null, MessageFactory
+				.getMessage("message_successfully_updated", "Profile", ""));
+		final HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false);
+		final LoginBean loginBean = (LoginBean) session
+				.getAttribute("loginBean");
 		loginBean.getAuthorisationService().setSession(session);
 
 		final RequestContext context = RequestContext.getCurrentInstance();
@@ -253,11 +261,13 @@ public class JJProfileBean {
 		this.disabledRightMode = disabledRightMode;
 	}
 
-	public void setjJConfigurationService(final JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(
+			final JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-	public void setjJPermissionService(final JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			final JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -273,7 +283,8 @@ public class JJProfileBean {
 		this.profileAdmin = profileAdmin;
 	}
 
-	public void setProfileListTable(final LazyProfileDataModel profileListTable) {
+	public void setProfileListTable(
+			final LazyProfileDataModel profileListTable) {
 		this.profileListTable = profileListTable;
 	}
 

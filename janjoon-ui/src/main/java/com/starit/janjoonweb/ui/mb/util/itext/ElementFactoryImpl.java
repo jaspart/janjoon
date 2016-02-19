@@ -19,9 +19,11 @@ import com.itextpdf.text.html.simpleparser.ImageProvider;
 @SuppressWarnings("deprecation")
 public class ElementFactoryImpl extends ElementFactory {
 
-	public Image createImage(String src, final Map<String, String> attrs, final ChainedProperties chain,
-	        final DocListener document, final ImageProvider img_provider, final HashMap<String, Image> img_store,
-	        final String img_baseurl) throws DocumentException, IOException {
+	public Image createImage(String src, final Map<String, String> attrs,
+			final ChainedProperties chain, final DocListener document,
+			final ImageProvider img_provider,
+			final HashMap<String, Image> img_store, final String img_baseurl)
+					throws DocumentException, IOException {
 		Image img = null;
 		// getting the image using an image provider
 		if (img_provider != null)
@@ -38,7 +40,8 @@ public class ElementFactoryImpl extends ElementFactory {
 		// relative src references only
 		if (!src.startsWith("http") && img_baseurl != null) {
 			src = img_baseurl + src;
-		} else if (img == null && !src.startsWith("http") && !src.startsWith("data")) {
+		} else if (img == null && !src.startsWith("http")
+				&& !src.startsWith("data")) {
 			String path = chain.getProperty(HtmlTags.IMAGEPATH);
 			if (path == null)
 				path = "";
@@ -57,14 +60,16 @@ public class ElementFactoryImpl extends ElementFactory {
 		//
 		// System.err.println(key+":::"+attrs.get(key));
 		// }
-		float actualFontSize = HtmlUtilities.parseLength(chain.getProperty(HtmlTags.SIZE),
-		        HtmlUtilities.DEFAULT_FONT_SIZE);
+		float actualFontSize = HtmlUtilities.parseLength(
+				chain.getProperty(HtmlTags.SIZE),
+				HtmlUtilities.DEFAULT_FONT_SIZE);
 		if (actualFontSize <= 0f)
 			actualFontSize = HtmlUtilities.DEFAULT_FONT_SIZE;
 		String width = attrs.get(HtmlTags.WIDTH);
 		float widthInPoints = HtmlUtilities.parseLength(width, actualFontSize);
 		String height = attrs.get(HtmlTags.HEIGHT);
-		float heightInPoints = HtmlUtilities.parseLength(height, actualFontSize);
+		float heightInPoints = HtmlUtilities.parseLength(height,
+				actualFontSize);
 		if (widthInPoints > 0 && heightInPoints > 0) {
 			img.scaleAbsolute(widthInPoints, heightInPoints);
 		} else if (widthInPoints > 0) {

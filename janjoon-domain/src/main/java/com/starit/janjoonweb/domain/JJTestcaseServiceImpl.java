@@ -16,8 +16,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.SetJoin;
-import javax.persistence.criteria.Subquery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -72,15 +70,15 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (build != null
-				&& (build.getAllTestcases() == null || !build.getAllTestcases())) {
+		if (build != null && (build.getAllTestcases() == null
+				|| !build.getAllTestcases())) {
 			predicates.add(criteriaBuilder.or(
 					criteriaBuilder.isMember(build,
 							from.<Set<JJBuild>> get("builds")),
 					criteriaBuilder.equal(from.get("allBuilds"), true)));
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			if (sortedByOrder) {
 				select.orderBy(criteriaBuilder.asc(from.get("ordering")));
@@ -91,8 +89,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			}
 
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
-			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
-					result.getResultList()));
+			return new ArrayList<JJTestcase>(
+					new HashSet<JJTestcase>(result.getResultList()));
 		} else if (build == null && version != null
 				&& !jJBuildService.haveAllTestCases(version)) {
 
@@ -100,8 +98,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 			predicates.add(criteriaBuilder.equal(from.get("allBuilds"), true));
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
 			Set<JJTestcase> hash = new HashSet<JJTestcase>(
 					result.getResultList());
@@ -112,8 +110,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 					criteriaBuilder.equal(join.get("enabled"), true),
 					criteriaBuilder.equal(join.get("version"), version)));
 
-			select.where(criteriaBuilder.and(predicates2
-					.toArray(new Predicate[] {})));
+			select.where(criteriaBuilder
+					.and(predicates2.toArray(new Predicate[]{})));
 			TypedQuery<JJTestcase> result2 = entityManager.createQuery(select);
 			hash.addAll(result2.getResultList());
 			List<JJTestcase> list = new ArrayList<JJTestcase>(hash);
@@ -140,8 +138,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 					@Override
 					public int compare(JJTestcase o1, JJTestcase o2) {
-						return o1.getCreationDate().compareTo(
-								o2.getCreationDate());
+						return o1.getCreationDate()
+								.compareTo(o2.getCreationDate());
 					}
 				});
 			}
@@ -149,8 +147,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			return list;
 
 		} else {
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			if (sortedByOrder) {
 				select.orderBy(criteriaBuilder.asc(from.get("ordering")));
@@ -161,8 +159,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			}
 
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
-			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
-					result.getResultList()));
+			return new ArrayList<JJTestcase>(
+					new HashSet<JJTestcase>(result.getResultList()));
 		}
 
 	}
@@ -184,8 +182,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 		criteriaQuery.multiselect(from.get("name"));
-		criteriaQuery.where(criteriaBuilder.and(predicates
-				.toArray(new Predicate[] {})));
+		criteriaQuery.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<String> result = entityManager.createQuery(criteriaQuery);
 		return result.getResultList();
@@ -222,18 +220,18 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 		}
 
 		if (withOutChapter) {
-			predicates.add(criteriaBuilder.isNull(from.join("requirement").get(
-					"chapter")));
+			predicates.add(criteriaBuilder
+					.isNull(from.join("requirement").get("chapter")));
 
 		}
 
 		if (category != null) {
-			predicates.add(criteriaBuilder.isNotNull(from.join("requirement")
-					.get("category")));
-			predicates.add(criteriaBuilder.equal(
-					from.join("requirement").get("category"), category));
-			predicates.add(criteriaBuilder.equal(
-					from.join("requirement").get("enabled"), true));
+			predicates.add(criteriaBuilder
+					.isNotNull(from.join("requirement").get("category")));
+			predicates.add(criteriaBuilder
+					.equal(from.join("requirement").get("category"), category));
+			predicates.add(criteriaBuilder
+					.equal(from.join("requirement").get("enabled"), true));
 
 		}
 
@@ -241,18 +239,18 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		if (build != null
-				&& (build.getAllTestcases() == null || !build.getAllTestcases())) {
+		if (build != null && (build.getAllTestcases() == null
+				|| !build.getAllTestcases())) {
 			predicates.add(criteriaBuilder.or(
 					criteriaBuilder.isMember(build,
 							from.<Set<JJBuild>> get("builds")),
 					criteriaBuilder.equal(from.get("allBuilds"), true)));
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
-			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
-					result.getResultList()));
+			return new ArrayList<JJTestcase>(
+					new HashSet<JJTestcase>(result.getResultList()));
 
 		} else if (build == null && version != null
 				&& !jJBuildService.haveAllTestCases(version)) {
@@ -261,8 +259,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 
 			predicates.add(criteriaBuilder.equal(from.get("allBuilds"), true));
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
 			Set<JJTestcase> hash = new HashSet<JJTestcase>(
 					result.getResultList());
@@ -273,19 +271,19 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 					criteriaBuilder.equal(join.get("enabled"), true),
 					criteriaBuilder.equal(join.get("version"), version)));
 
-			select.where(criteriaBuilder.and(predicates2
-					.toArray(new Predicate[] {})));
+			select.where(criteriaBuilder
+					.and(predicates2.toArray(new Predicate[]{})));
 			TypedQuery<JJTestcase> result2 = entityManager.createQuery(select);
 			hash.addAll(result2.getResultList());
 
 			return new ArrayList<JJTestcase>(hash);
 		} else {
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			TypedQuery<JJTestcase> result = entityManager.createQuery(select);
-			return new ArrayList<JJTestcase>(new HashSet<JJTestcase>(
-					result.getResultList()));
+			return new ArrayList<JJTestcase>(
+					new HashSet<JJTestcase>(result.getResultList()));
 		}
 
 	}

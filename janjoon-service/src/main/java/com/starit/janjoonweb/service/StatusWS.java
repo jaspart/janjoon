@@ -27,8 +27,8 @@ public class StatusWS {
 	@javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
 	public Response getStatusName() {
 
-		return Status.getListContactFromJJStatut(jJStatusService.getStatus(
-				"task", true, null, true));
+		return Status.getListContactFromJJStatut(
+				jJStatusService.getStatus("task", true, null, true));
 
 	}
 

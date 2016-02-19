@@ -42,10 +42,11 @@ import org.primefaces.model.TreeNode;
 
 public class GitConfigManager extends AbstractConfigManager {
 
-	private static final Logger	logger				= Logger.getLogger(GitConfigManager.class);
-	private static final long	serialVersionUID	= 1L;
-	private Git					git;
-	private Repository			repository;
+	private static final Logger logger = Logger
+			.getLogger(GitConfigManager.class);
+	private static final long serialVersionUID = 1L;
+	private Git git;
+	private Repository repository;
 
 	public Repository getRepository() {
 		return repository;
@@ -63,9 +64,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			else
 				file = new File(path + "/.git");
 
-			repository = builder.setGitDir(file).setWorkTree(file.getParentFile())
-			        // scan up the file system tree
-			        .build();
+			repository = builder.setGitDir(file)
+					.setWorkTree(file.getParentFile())
+					// scan up the file system tree
+					.build();
 			git = new Git(repository);
 
 			logger.debug("GitConfigManager created");
@@ -92,9 +94,10 @@ public class GitConfigManager extends AbstractConfigManager {
 				file = new File(path + ".git");
 			else
 				file = new File(path + "/.git");
-			repository = builder.setGitDir(file).setWorkTree(file.getParentFile())
-			        // scan up the file system tree
-			        .build();
+			repository = builder.setGitDir(file)
+					.setWorkTree(file.getParentFile())
+					// scan up the file system tree
+					.build();
 			git = new Git(repository);
 			logger.debug("GitConfigManager created");
 
@@ -104,7 +107,8 @@ public class GitConfigManager extends AbstractConfigManager {
 		}
 	}
 
-	public GitConfigManager(String url, String path, String login, String password) {
+	public GitConfigManager(String url, String path, String login,
+			String password) {
 		super("GIT", url, path, login, password);
 
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -117,9 +121,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			else
 				file = new File(path + "/.git");
 
-			repository = builder.setGitDir(file).setWorkTree(file.getParentFile())
-			        // scan up the file system tree
-			        .build();
+			repository = builder.setGitDir(file)
+					.setWorkTree(file.getParentFile())
+					// scan up the file system tree
+					.build();
 			git = new Git(repository);
 
 			logger.debug("GitConfigManager created");
@@ -143,9 +148,10 @@ public class GitConfigManager extends AbstractConfigManager {
 			else
 				file = new File(path + "/.git");
 
-			repository = builder.setGitDir(file).setWorkTree(file.getParentFile())
-			        // scan up the file system tree
-			        .build();
+			repository = builder.setGitDir(file)
+					.setWorkTree(file.getParentFile())
+					// scan up the file system tree
+					.build();
 			git = new Git(repository);
 			logger.debug("GitConfigManager created");
 
@@ -176,23 +182,31 @@ public class GitConfigManager extends AbstractConfigManager {
 			return true;
 		} catch (NoHeadException e) {
 
-			logger.error("error throw commit operation :NoHeadException" + e.getMessage());
+			logger.error("error throw commit operation :NoHeadException"
+					+ e.getMessage());
 			return false;
 		} catch (NoMessageException e) {
-			logger.error("error throw commit operation :NoMessageException" + e.getMessage());
+			logger.error("error throw commit operation :NoMessageException"
+					+ e.getMessage());
 			return false;
 		} catch (UnmergedPathsException e) {
-			logger.error("error throw commit operation :UnmergedPathsException" + e.getMessage());
+			logger.error("error throw commit operation :UnmergedPathsException"
+					+ e.getMessage());
 			return false;
 		} catch (ConcurrentRefUpdateException e) {
-			logger.error("error throw commit operation :ConcurrentRefUpdateException" + e.getMessage());
+			logger.error(
+					"error throw commit operation :ConcurrentRefUpdateException"
+							+ e.getMessage());
 			return false;
 		} catch (WrongRepositoryStateException e) {
-			logger.error("error throw commit operation :WrongRepositoryStateException" + e.getMessage());
+			logger.error(
+					"error throw commit operation :WrongRepositoryStateException"
+							+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
 
-			logger.error("error throw commit operation :GitAPIException" + e.getMessage());
+			logger.error("error throw commit operation :GitAPIException"
+					+ e.getMessage());
 			return false;
 		}
 
@@ -208,23 +222,33 @@ public class GitConfigManager extends AbstractConfigManager {
 			CheckoutCommand checkOutCommand = git.checkout();
 			checkOutCommand.setName(branche);
 			checkOutCommand.call();
-			logger.debug(repository.getDirectory().getName() + " checked Out!!!");
+			logger.debug(
+					repository.getDirectory().getName() + " checked Out!!!");
 			return true;
 		} catch (RefAlreadyExistsException e) {
 
-			logger.error("error throw check out operation :RefAlreadyExistsException " + e.getMessage());
+			logger.error(
+					"error throw check out operation :RefAlreadyExistsException "
+							+ e.getMessage());
 			return false;
 		} catch (RefNotFoundException e) {
-			logger.error("error throw check out operation :RefNotFoundException " + e.getMessage());
+			logger.error(
+					"error throw check out operation :RefNotFoundException "
+							+ e.getMessage());
 			return false;
 		} catch (InvalidRefNameException e) {
-			logger.error("error throw check out operation :InvalidRefNameException " + e.getMessage());
+			logger.error(
+					"error throw check out operation :InvalidRefNameException "
+							+ e.getMessage());
 			return false;
 		} catch (CheckoutConflictException e) {
-			logger.error("error throw check out operation :CheckoutConflictException " + e.getMessage());
+			logger.error(
+					"error throw check out operation :CheckoutConflictException "
+							+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			logger.error("error throw check out operation :GitAPIException " + e.getMessage());
+			logger.error("error throw check out operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -247,7 +271,8 @@ public class GitConfigManager extends AbstractConfigManager {
 			return true;
 		} catch (IOException e) {
 
-			logger.error("error threw create repository operation :IOException" + e.getMessage());
+			logger.error("error threw create repository operation :IOException"
+					+ e.getMessage());
 			return false;
 		}
 
@@ -256,10 +281,13 @@ public class GitConfigManager extends AbstractConfigManager {
 	@Override
 	public TreeNode listRepositoryContent(String version) {
 
-		DefaultTreeNode root = new DefaultTreeNode("folder", repository.getDirectory().getParentFile() + "/" + version,
-		        null);
+		DefaultTreeNode root = new DefaultTreeNode("folder",
+				repository.getDirectory().getParentFile() + "/" + version,
+				null);
 
-		repositoryTreeNode(new File(repository.getDirectory().getParentFile() + "/" + version), root);
+		repositoryTreeNode(new File(
+				repository.getDirectory().getParentFile() + "/" + version),
+				root);
 
 		return root;
 
@@ -273,7 +301,8 @@ public class GitConfigManager extends AbstractConfigManager {
 			if (!files[i].getName().equalsIgnoreCase(".git")) {
 
 				if (files[i].isDirectory()) {
-					DefaultTreeNode tree = new DefaultTreeNode("folder", files[i], root);
+					DefaultTreeNode tree = new DefaultTreeNode("folder",
+							files[i], root);
 					repositoryTreeNode(files[i], tree);
 					File[] t = files[i].listFiles();
 					int j = 0;
@@ -302,7 +331,9 @@ public class GitConfigManager extends AbstractConfigManager {
 			cloneCommand.setURI(url);
 
 			if (login != null) {
-				cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(login, password));
+				cloneCommand.setCredentialsProvider(
+						new UsernamePasswordCredentialsProvider(login,
+								password));
 			}
 			cloneCommand.call();
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -310,38 +341,44 @@ public class GitConfigManager extends AbstractConfigManager {
 			try {
 				file = new File(path + "/" + name + "/.git");
 				repo = builder.setGitDir(file)
-				        // scan up the file system tree
-				        .build();
+						// scan up the file system tree
+						.build();
 
 				logger.debug("repository cloned !!");
 				return repo.getDirectory().getPath();
 			} catch (IOException e) {
 
-				logger.error("error throw clone operation :IOException" + e.getMessage());
+				logger.error("error throw clone operation :IOException"
+						+ e.getMessage());
 				return null;
 			}
 
 		} catch (InvalidRemoteException e) {
-			logger.error("error throw clone operation :InvalidRemoteException" + e.getMessage());
+			logger.error("error throw clone operation :InvalidRemoteException"
+					+ e.getMessage());
 			try {
 				delete(new File(path + "/" + name));
 			} catch (IOException e1) {
-				logger.error("error throw clone operation :IOException" + e1.getMessage());
+				logger.error("error throw clone operation :IOException"
+						+ e1.getMessage());
 			}
 			return "InvalidRemoteException";
 		} catch (TransportException e) {
 
-			logger.error("error throw clone operation :TransportException" + e.getMessage());
+			logger.error("error throw clone operation :TransportException"
+					+ e.getMessage());
 			try {
 				delete(new File(path + "/" + name));
 			} catch (IOException e1) {
 
-				logger.error("error throw clone operation :IOException" + e1.getMessage());
+				logger.error("error throw clone operation :IOException"
+						+ e1.getMessage());
 			}
 			return "TransportException";
 		} catch (GitAPIException e) {
 
-			logger.error("error throw clone operation :GitAPIException" + e.getMessage());
+			logger.error("error throw clone operation :GitAPIException"
+					+ e.getMessage());
 			return null;
 		}
 	}
@@ -358,12 +395,15 @@ public class GitConfigManager extends AbstractConfigManager {
 			pushCommand.setPushAll();
 			pushCommand.setForce(true);
 			if (login != null)
-				pushCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(login, password));
+				pushCommand.setCredentialsProvider(
+						new UsernamePasswordCredentialsProvider(login,
+								password));
 			pushCommand.call();
 			logger.debug("push repository operation done with success");
 			return true;
 		} catch (GitAPIException e) {
-			logger.error("error throw push operation :GitAPIException " + e.getMessage());
+			logger.error("error throw push operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -383,41 +423,55 @@ public class GitConfigManager extends AbstractConfigManager {
 			remoteConfig.update(config);
 			PullCommand putchCommand = git.pull();
 			if (login != null)
-				putchCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(login, password));
+				putchCommand.setCredentialsProvider(
+						new UsernamePasswordCredentialsProvider(login,
+								password));
 
 			putchCommand.call();
 			logger.debug("pull repository operation done with success");
 			return true;
 		} catch (URISyntaxException e) {
 
-			logger.error("error throw pull operation :URISyntaxException " + e.getMessage());
+			logger.error("error throw pull operation :URISyntaxException "
+					+ e.getMessage());
 			return false;
 		} catch (WrongRepositoryStateException e) {
-			logger.error("error throw pull operation :WrongRepositoryStateException " + e.getMessage());
+			logger.error(
+					"error throw pull operation :WrongRepositoryStateException "
+							+ e.getMessage());
 			return false;
 		} catch (InvalidConfigurationException e) {
-			logger.error("error throw pull operation :InvalidConfigurationException " + e.getMessage());
+			logger.error(
+					"error throw pull operation :InvalidConfigurationException "
+							+ e.getMessage());
 			return false;
 		} catch (DetachedHeadException e) {
-			logger.error("error throw pull operation :DetachedHeadException " + e.getMessage());
+			logger.error("error throw pull operation :DetachedHeadException "
+					+ e.getMessage());
 			return false;
 		} catch (InvalidRemoteException e) {
-			logger.error("error throw pull operation :InvalidRemoteException " + e.getMessage());
+			logger.error("error throw pull operation :InvalidRemoteException "
+					+ e.getMessage());
 			return false;
 		} catch (CanceledException e) {
-			logger.error("error throw pull operation :CanceledException " + e.getMessage());
+			logger.error("error throw pull operation :CanceledException "
+					+ e.getMessage());
 			return false;
 		} catch (RefNotFoundException e) {
-			logger.error("error throw pull operation :RefNotFoundException " + e.getMessage());
+			logger.error("error throw pull operation :RefNotFoundException "
+					+ e.getMessage());
 			return false;
 		} catch (NoHeadException e) {
-			logger.error("error throw pull operation :NoHeadException " + e.getMessage());
+			logger.error("error throw pull operation :NoHeadException "
+					+ e.getMessage());
 			return false;
 		} catch (TransportException e) {
-			logger.error("error throw pull operation :TransportException " + e.getMessage());
+			logger.error("error throw pull operation :TransportException "
+					+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			logger.error("error throw pull operation :GitAPIException " + e.getMessage());
+			logger.error("error throw pull operation :GitAPIException "
+					+ e.getMessage());
 			return false;
 		}
 
@@ -427,7 +481,8 @@ public class GitConfigManager extends AbstractConfigManager {
 	public boolean addFile(String path, String name, boolean isFile) {
 
 		path = path.replace(repository.getDirectory().getParent(), "");
-		File myfile = new File(repository.getDirectory().getParent() + "/" + path, name);
+		File myfile = new File(
+				repository.getDirectory().getParent() + "/" + path, name);
 		logger.info("add file operation started !!!");
 		try {
 
@@ -435,41 +490,53 @@ public class GitConfigManager extends AbstractConfigManager {
 				myfile.mkdirs();
 			myfile.createNewFile();
 			git.add().addFilepattern(".").call();
-			logger.info("Add file " + myfile + " to repository at " + repository.getDirectory());
+			logger.info("Add file " + myfile + " to repository at "
+					+ repository.getDirectory());
 			return true;
 		} catch (IOException e) {
-			File directory = new File(repository.getDirectory().getParent() + "/" + path);
+			File directory = new File(
+					repository.getDirectory().getParent() + "/" + path);
 			if (directory.mkdirs()) {
 				try {
 					git.add().addFilepattern(".").call();
 					myfile.createNewFile();
 					git.add().addFilepattern(".").call();
-					logger.info("Add file " + myfile + " to repository at " + repository.getDirectory());
+					logger.info("Add file " + myfile + " to repository at "
+							+ repository.getDirectory());
 					return true;
 				} catch (IOException e1) {
 
-					logger.error("error throw add file operation :IOException" + e1.getMessage());
+					logger.error("error throw add file operation :IOException"
+							+ e1.getMessage());
 					return false;
 				} catch (NoFilepatternException e1) {
-					logger.error("error throw add file operation :NoFilepatternException" + e1.getMessage());
+					logger.error(
+							"error throw add file operation :NoFilepatternException"
+									+ e1.getMessage());
 
 					return false;
 				} catch (GitAPIException e1) {
-					logger.error("error throw add file operation :GitAPIException" + e1.getMessage());
+					logger.error(
+							"error throw add file operation :GitAPIException"
+									+ e1.getMessage());
 
 					return false;
 				}
 
 			} else {
-				logger.error("error throw add file operation :IOException" + e.getMessage());
+				logger.error("error throw add file operation :IOException"
+						+ e.getMessage());
 
 				return false;
 			}
 		} catch (NoFilepatternException e) {
-			logger.error("error throw add file operation :NoFilepatternException" + e.getMessage());
+			logger.error(
+					"error throw add file operation :NoFilepatternException"
+							+ e.getMessage());
 			return false;
 		} catch (GitAPIException e) {
-			logger.error("error throw add file operation :GitAPIException" + e.getMessage());
+			logger.error("error throw add file operation :GitAPIException"
+					+ e.getMessage());
 			return false;
 		}
 

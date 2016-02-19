@@ -8,9 +8,12 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
@@ -35,7 +38,8 @@ public class JJContactServiceImpl implements JJContactService {
 		return jJPermissionService;
 	}
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -60,7 +64,8 @@ public class JJContactServiceImpl implements JJContactService {
 					email.toLowerCase()));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
 		if (result.getResultList().isEmpty())
@@ -85,7 +90,8 @@ public class JJContactServiceImpl implements JJContactService {
 
 		predicates.add(criteriaBuilder.equal(from.get("id"), id));
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJContact> result = entityManager.createQuery(select);
 		if (result.getResultList().isEmpty())
@@ -112,14 +118,14 @@ public class JJContactServiceImpl implements JJContactService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (company != null)
-				predicates.add(criteriaBuilder.equal(from.get("company"),
-						company));
+				predicates.add(
+						criteriaBuilder.equal(from.get("company"), company));
 
 			predicates
 					.add(criteriaBuilder.equal(from.get("enabled"), onlyActif));
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			TypedQuery<JJContact> result = entityManager.createQuery(select);
 
@@ -166,34 +172,40 @@ public class JJContactServiceImpl implements JJContactService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(criteriaBuilder.upper(from
-									.<String> get("firstname")),
+					predicates
+							.add(criteriaBuilder.or(
+									criteriaBuilder.like(
+											criteriaBuilder.upper(
+													from.<String> get("name")),
+											"%" + pairs.getValue() + "%"),
+									criteriaBuilder.like(
+											criteriaBuilder.upper(from
+													.<String> get("firstname")),
 									"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(criteriaBuilder.upper(from
-									.<String> get("email")),
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("email")),
 									"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(new StrFunction<Long>(
-									criteriaBuilder, from.<Long> get("id")),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
 									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("company")) {
 
-					predicates
-							.add(criteriaBuilder.equal(from.get("company")
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(criteriaBuilder.equal(
+							from.get("company").<String> get("name"),
+							pairs.getValue().toString()));
 
 				} else
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 
 			}
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -201,9 +213,11 @@ public class JJContactServiceImpl implements JJContactService {
 				SortOrder sortOrder = sortMeta.getSortOrder();
 				if (!sortField.contains("company")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else if (sortField.contains("company")) {
 					Join<JJContact, JJCompany> owner = from.join("company");
@@ -225,7 +239,7 @@ public class JJContactServiceImpl implements JJContactService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJContact.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();

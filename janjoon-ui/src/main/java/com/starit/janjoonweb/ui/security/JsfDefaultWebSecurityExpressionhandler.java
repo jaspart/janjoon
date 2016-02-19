@@ -12,12 +12,15 @@ import org.springframework.security.web.access.expression.WebSecurityExpressionH
 
 @SuppressWarnings("deprecation")
 public class JsfDefaultWebSecurityExpressionhandler
-        implements WebSecurityExpressionHandler, Serializable, SecurityExpressionHandler<FilterInvocation> {
+		implements
+			WebSecurityExpressionHandler,
+			Serializable,
+			SecurityExpressionHandler<FilterInvocation> {
 	/**
 	 * 
 	 */
-	private static final long					serialVersionUID	= 1L;
-	private DefaultWebSecurityExpressionHandler	delegate			= new DefaultWebSecurityExpressionHandler();
+	private static final long serialVersionUID = 1L;
+	private DefaultWebSecurityExpressionHandler delegate = new DefaultWebSecurityExpressionHandler();
 
 	@Override
 	public ExpressionParser getExpressionParser() {
@@ -25,7 +28,8 @@ public class JsfDefaultWebSecurityExpressionhandler
 	}
 
 	@Override
-	public EvaluationContext createEvaluationContext(Authentication authentication, FilterInvocation invocation) {
+	public EvaluationContext createEvaluationContext(
+			Authentication authentication, FilterInvocation invocation) {
 		return delegate.createEvaluationContext(authentication, invocation);
 	}
 }

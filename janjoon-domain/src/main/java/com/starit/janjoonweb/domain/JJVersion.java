@@ -24,7 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJVersionSEQ")
-@Table(indexes = { @Index(unique = true, columnList = "name,product") })
+@Table(indexes = {@Index(unique = true, columnList = "name,product")})
 public class JJVersion {
 
 	@NotNull
@@ -70,8 +70,9 @@ public class JJVersion {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJVersion) && (getId() != null) ? getId()
-				.equals(((JJVersion) object).getId()) : (object == this);
+		return (object instanceof JJVersion) && (getId() != null)
+				? getId().equals(((JJVersion) object).getId())
+				: (object == this);
 	}
 
 	public JJCompany getCompany() {

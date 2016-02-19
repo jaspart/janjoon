@@ -7,14 +7,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
@@ -34,8 +26,8 @@ public class TestClass {
 
 	// public static final String PATH_AGE = "/UserInfoService/age/";
 
-	public static void main(String[] args) throws NoSuchAlgorithmException,
-			KeyManagementException {
+	public static void main(String[] args)
+			throws NoSuchAlgorithmException, KeyManagementException {
 
 		InputStream is = null;
 		try {
@@ -51,8 +43,8 @@ public class TestClass {
 			// HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
 
 			HttpGet httpget = new HttpGet(BASE_URI);
-			String basic_auth = new String(Base64.encodeBase64(("lazher" + ":"
-					+ "root1234").getBytes()));
+			String basic_auth = new String(Base64
+					.encodeBase64(("lazher" + ":" + "root1234").getBytes()));
 			httpget.addHeader("Authorization", "Basic " + basic_auth);
 
 			HttpResponse httpResponse = httpClient.execute(httpget);
@@ -66,8 +58,8 @@ public class TestClass {
 			e.printStackTrace();
 		}
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(is, "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = reader.readLine()) != null) {
@@ -78,8 +70,8 @@ public class TestClass {
 			// BuildWS.getCommitedTasks(sb.substring(0));
 			is.close();
 		} catch (Exception e) {
-			System.err.println("Buffer Error" + "Error converting result "
-					+ e.toString());
+			System.err.println(
+					"Buffer Error" + "Error converting result " + e.toString());
 		}
 	}
 }

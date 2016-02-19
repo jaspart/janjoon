@@ -54,8 +54,8 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 
 		Root<JJWorkflow> from = criteriaQuery.from(JJWorkflow.class);
 
-		CriteriaQuery<String> select = criteriaQuery.select(from
-				.<String> get("objet"));
+		CriteriaQuery<String> select = criteriaQuery
+				.select(from.<String> get("objet"));
 
 		TypedQuery<String> result = entityManager.createQuery(select);
 		return new HashSet<String>(result.getResultList());
@@ -84,9 +84,10 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 						.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 			if (actionName != null)
-				predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(from
-						.<String> get("actionWorkflow")), actionName
-						.toLowerCase()));
+				predicates.add(criteriaBuilder.equal(
+						criteriaBuilder
+								.lower(from.<String> get("actionWorkflow")),
+						actionName.toLowerCase()));
 
 			if (object != null)
 				predicates.add(criteriaBuilder.equal(
@@ -94,18 +95,20 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 						object.toLowerCase()));
 
 			if (source != null)
-				predicates.add(criteriaBuilder.or(criteriaBuilder.equal(
-						from.get("source"), source), criteriaBuilder.equal(
-						from.get("source"),
-						jJStatusService.getOneStatus("Any", "*", true))));
+				predicates.add(criteriaBuilder.or(
+						criteriaBuilder.equal(from.get("source"), source),
+						criteriaBuilder.equal(from.get("source"),
+								jJStatusService.getOneStatus("Any", "*",
+										true))));
 
 			if (target != null)
-				predicates.add(criteriaBuilder.or(criteriaBuilder.equal(
-						from.get("target"), target), criteriaBuilder.equal(
-						from.get("target"),
-						jJStatusService.getOneStatus("Any", "*", true))));
+				predicates.add(criteriaBuilder.or(
+						criteriaBuilder.equal(from.get("target"), target),
+						criteriaBuilder.equal(from.get("target"),
+								jJStatusService.getOneStatus("Any", "*",
+										true))));
 
-			select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[]{}));
 
 			TypedQuery<JJWorkflow> result = entityManager.createQuery(select);
 
@@ -156,36 +159,37 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("target")) {
 
-					predicates
-							.add(criteriaBuilder.equal(from.get("target")
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(criteriaBuilder.equal(
+							from.get("target").<String> get("name"),
+							pairs.getValue().toString()));
 
 				} else if (pairs.getKey().toString().contains("source")) {
 
-					predicates
-							.add(criteriaBuilder.equal(from.get("source")
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(criteriaBuilder.equal(
+							from.get("source").<String> get("name"),
+							pairs.getValue().toString()));
 
 				} else if (pairs.getKey().toString().contains("objet")) {
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("objet"), "%" + pairs.getValue()
-									+ "%"));
+					predicates.add(
+							criteriaBuilder.like(from.<String> get("objet"),
+									"%" + pairs.getValue() + "%"));
 				}
 
 			}
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -194,9 +198,11 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 				if (!sortField.contains("source")
 						&& !sortField.contains("target")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else if (sortField.contains("target")) {
 					Join<JJWorkflow, JJStatus> owner = from.join("target");
@@ -226,7 +232,7 @@ public class JJWorkflowServiceImpl implements JJWorkflowService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJWorkflow.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();

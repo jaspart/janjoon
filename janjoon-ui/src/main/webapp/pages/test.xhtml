@@ -37,54 +37,54 @@
 						<p:panelGrid styleClass="Container100">
 							<f:facet name="header">
 								<p:row>
-									<p:column colspan="12">#{messages.test_color_title}</p:column>
+									<p:column colspan="6">#{messages.test_color_title}</p:column>
 								</p:row>
 							</f:facet>
 							<p:row>
-								<p:column colspan="2" styleClass="TestcaseSuccess">
-									<p:outputLabel
+								<p:column styleClass="TestcaseSuccess">
+									<p:outputLabel styleClass="Fs16 TestcaseSuccess"
 										value="#{messages.test_color_TestcaseSuccess_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseFailed">
-									<p:outputLabel
+								<p:column  styleClass="TestcaseFailed">
+									<p:outputLabel styleClass="Fs16 TestcaseFailed"
 										value="#{messages.test_color_TestcaseFailed_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseNotExecuted">
-									<p:outputLabel styleClass="White"
+								<p:column  styleClass="TestcaseNotExecuted">
+									<p:outputLabel styleClass="Fs16 TestcaseNotExecuted"
 										value="#{messages.test_color_TestcaseNotExecuted_title}" />
 								</p:column>
 							</p:row>
 							<p:row>
-								<p:column colspan="2" styleClass="TestcaseWithoutTeststep">
-									<p:outputLabel styleClass="White"
+								<p:column  styleClass="TestcaseWithoutTeststep">
+									<p:outputLabel styleClass="Fs16 TestcaseWithoutTeststep"
 										value="#{messages.test_color_TestcaseWithoutTeststep_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseNonFini">
-									<p:outputLabel
+								<p:column  styleClass="TestcaseNonFini">
+									<p:outputLabel styleClass="Fs16 TestcaseNonFini"
 										value="#{messages.test_color_TestcaseNonFini_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseChapter">
-									<p:outputLabel
+								<p:column  styleClass="TestcaseChapter">
+									<p:outputLabel styleClass="Fs16 TestcaseChapter"
 										value="#{messages.test_color_TestcaseChapter_title}" />
 								</p:column>
 							</p:row>
 							<p:row>
-								<p:column colspan="2" styleClass="TestcaseFailedWithoutBuild">
-									<p:outputLabel styleClass="White"
+								<p:column styleClass="TestcaseFailedWithoutBuild">
+									<p:outputLabel styleClass="Fs16 TestcaseFailedWithoutBuild"
 										value="#{messages.test_color_TestcaseFailedWithoutBuild_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseNonFiniWithoutBuild">
-									<p:outputLabel
+								<p:column styleClass="TestcaseNonFiniWithoutBuild">
+									<p:outputLabel styleClass="Fs16 TestcaseNonFiniWithoutBuild"
 										value="#{messages.test_color_TestcaseNonFiniWithoutBuild_title}" />
 								</p:column>
 
-								<p:column colspan="2" styleClass="TestcaseSuccessWithoutBuild">
-									<p:outputLabel styleClass="White"
+								<p:column styleClass="TestcaseSuccessWithoutBuild">
+									<p:outputLabel styleClass="Fs16 TestcaseSuccessWithoutBuild"
 										value="#{messages.test_color_TestcaseSuccessWithoutBuild_title}" />
 								</p:column>
 							</p:row>
@@ -407,17 +407,24 @@
 									<h:outputText
 										value="TC-#{tcr.testcase.id}-#{tcr.testcase.name}" />
 								</p:column>
-								<p:column exportable="false">
+								<p:column exportable="false" style="width: 20%" priority="2">
 									<f:facet name="header">
 										<h:outputText value="#{messages.test_table_status_title}" />
+									</f:facet>
+									<h:outputText rendered="#{tcr.testcase.status != null}" 
+									value="#{loginBean.checkMessage(tcr.testcase.status)}" />
+								</p:column>
+									<p:column exportable="false" style="width: 20%" priority="2">
+									<f:facet name="header">
+										<h:outputText value="Resultat" />
 									</f:facet>
 									<h:outputText value="#{tcr.status}" />
 								</p:column>
 
-								<p:column styleClass="action-column">
-									<f:facet name="header">
-										<h:outputText value="#{messages.test_table_action_title}" />
-									</f:facet>
+								<p:column styleClass="action-column" style="width: 10%" >
+<!-- 									<f:facet name="header"> -->
+<!-- 										<h:outputText  value="#{messages.test_table_action_title}" /> -->
+<!-- 									</f:facet> -->
 									<p:commandButton id="viewButton" type="button"
 										icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
 									<p:menu overlay="true" trigger="viewButton" my="right top"
@@ -487,9 +494,11 @@
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 						<h:panelGroup layout="block" styleClass="Container100">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<h:panelGroup styleClass="Card ShadowEffect HoverEffect">
 								<p:panel header="#{messages.test_requirement_progressBarHeader}"
 									rendered="#{jJTestcaseBean.rendredTestCaseRecaps}"
 									styleClass="Container99">
+									<h:panelGroup layout="block" styleClass="Container">
 									<h:panelGroup layout="block" styleClass="Container100">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">											
 											<h:panelGroup layout="block" styleClass="EmptyBox10" />
@@ -500,32 +509,36 @@
 												displayOnly="true" />
 											<h:panelGroup layout="block" styleClass="EmptyBox30" />
 										</h:panelGroup>
-									</h:panelGroup>
-								</p:panel>
+									</h:panelGroup></h:panelGroup>
+								</p:panel></h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container100">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<h:panelGroup styleClass="Card ShadowEffect HoverEffect">
 								<p:panel header="#{messages.test_requirement_pieChart}"
 									rendered="#{jJTestcaseBean.rendredTestCaseRecaps and jJTestcaseBean.pieChart != null}"
 									styleClass="Container99">
+									<h:panelGroup layout="block" styleClass="Container">
 									<h:panelGroup layout="block" styleClass="Container100">
 										<p:chart type="pie" id="custom"
 											model="#{jJTestcaseBean.pieChart}" style="height:200px;"
 											responsive="true"
 											rendered="#{jJTestcaseBean.rendredTestCaseRecaps  and jJTestcaseBean.pieChart != null}" />
 									</h:panelGroup>
-								</p:panel>
+									</h:panelGroup>
+								</p:panel></h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container100"
 						rendered="#{jJTestcaseBean.rendredTestCaseRecaps}">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<h:panelGroup styleClass="Card ShadowEffect HoverEffect">
 							<p:chart id="filled" model="#{jJTestcaseBean.categoryModel}"
 								style="height:300px;" responsive="true" type="line"
 								rendered="#{jJTestcaseBean.rendredTestCaseRecaps}" />
-						</h:panelGroup>
+						</h:panelGroup></h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50"
 						rendered="#{jJTestcaseBean.rendredTestCaseHistorical}">
@@ -584,7 +597,7 @@
 
 								</f:facet>
 
-								<p:column headerText="Order">
+								<p:column headerText="#{!loginBean.mobile ? 'Order':''}" style="width : 15%">
 									<h:outputText value="#{ts.ordering}" />
 								</p:column>
 
@@ -592,7 +605,7 @@
 									<h:outputText value="#{ts.actionstep}" escape="false"
 										style="white-space: pre-wrap;max-height: 35px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 								</p:column>
-								<p:column headerText="Result">
+								<p:column headerText="Result" priority="2">
 									<h:outputText value="#{ts.resultstep}" escape="false"
 										style="white-space: pre-wrap;max-height: 35px;min-height: 30px;display: block;overflow: hidden;word-wrap: break-word;text-overflow: ellipsis" />
 								</p:column>
@@ -657,7 +670,7 @@
 			style="padding:0px;" resizable="false" draggable="false"
 			minHeight="500" responsive="true" minWidth="500" showEffect="fade"
 			hideEffect="fade">
-			<video width="100%" height="100%" controls="true">
+			<video width="100%" height="100%" controls="controls">
 				<source src="https://www.starit.fr/jjtraining.mp4" type="video/mp4" />
 			</video>
 		</p:dialog>

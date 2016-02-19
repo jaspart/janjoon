@@ -37,10 +37,10 @@ public class JJWorkflowBean {
 		this.jJStatusService = jJStatusService;
 	}
 
-	private LazyWorkFlowDataTable	workflowList;
-	private JJWorkflow				selectedWorkFlow;
-	private SelectItem[]			objectOptions;
-	private boolean					renderCreate;
+	private LazyWorkFlowDataTable workflowList;
+	private JJWorkflow selectedWorkFlow;
+	private SelectItem[] objectOptions;
+	private boolean renderCreate;
 
 	public LazyWorkFlowDataTable getWorkflowList() {
 
@@ -78,7 +78,8 @@ public class JJWorkflowBean {
 			Set<String> objects = jJWorkflowService.getAllObject();
 			objectOptions = new SelectItem[objects.size() + 1];
 
-			objectOptions[0] = new SelectItem("", MessageFactory.getMessage("label_all").getDetail());
+			objectOptions[0] = new SelectItem("",
+					MessageFactory.getMessage("label_all").getDetail());
 			int i = 0;
 			for (String comp : objects) {
 				objectOptions[i + 1] = new SelectItem(comp, comp);
@@ -99,8 +100,10 @@ public class JJWorkflowBean {
 
 		selectedWorkFlow.setEnabled(false);
 		updateJJWorkflow(selectedWorkFlow);
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted",
-		        MessageFactory.getMessage("label_workflow", "").getDetail(), "");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted",
+				MessageFactory.getMessage("label_workflow", "").getDetail(),
+				"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		workflowList = null;
 		this.objectOptions = null;
@@ -131,7 +134,8 @@ public class JJWorkflowBean {
 		RequestContext.getCurrentInstance().update("growlForm");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-		        MessageFactory.getMessage("label_workflow", "").getDetail(), "");
+				MessageFactory.getMessage("label_workflow", "").getDetail(),
+				"");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		reset();
 		return findAllJJWorkflows();
@@ -156,8 +160,18 @@ public class JJWorkflowBean {
 
 	public List<String> completeObject(String query) {
 
-		String[] names = { "Task", "Requirement", "Bug", "Message", "Build" };
-		return Arrays.asList(names);
+		String[] names = {"Task", "Requirement", "Bug", "Message", "Build",
+				"TestCase"};
+		List<String> suggestions = new ArrayList<String>();
+
+		for (String str : Arrays.asList(names)) {
+
+			if (str.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(str);
+			}
+		}
+
+		return suggestions;
 
 	}
 
@@ -168,8 +182,8 @@ public class JJWorkflowBean {
 		Method[] methods = workFlowsActions.getClass().getMethods();
 
 		while (k < methods.length) {
-			System.err.println(methods[k].getName());
-			if (methods[k].getName().endsWith("WorkFlow"))
+			if (methods[k].getName().endsWith("WorkFlow") && methods[k]
+					.getName().toLowerCase().startsWith(query.toLowerCase()))
 				suggestions.add(methods[k].getName());
 			k++;
 		}
@@ -181,11 +195,13 @@ public class JJWorkflowBean {
 	public List<JJStatus> completeSource(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 
-		String objet = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
-		        .get("objet");
+		String objet = (String) UIComponent
+				.getCurrentComponent(FacesContext.getCurrentInstance())
+				.getAttributes().get("objet");
 		suggestions.add(jJStatusService.getOneStatus("Any", "*", true));
 		if (objet != null)
-			for (JJStatus jJStatus : jJStatusService.getStatus(objet, true, null, true)) {
+			for (JJStatus jJStatus : jJStatusService.getStatus(objet, true,
+					null, true)) {
 				String jJStatusStr = String.valueOf(jJStatus.getName());
 				if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
 					suggestions.add(jJStatus);
@@ -197,11 +213,13 @@ public class JJWorkflowBean {
 	public List<JJStatus> completeTarget(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 
-		String objet = (String) UIComponent.getCurrentComponent(FacesContext.getCurrentInstance()).getAttributes()
-		        .get("objet");
+		String objet = (String) UIComponent
+				.getCurrentComponent(FacesContext.getCurrentInstance())
+				.getAttributes().get("objet");
 		suggestions.add(jJStatusService.getOneStatus("Any", "*", true));
 		if (objet != null)
-			for (JJStatus jJStatus : jJStatusService.getStatus(objet, true, null, true)) {
+			for (JJStatus jJStatus : jJStatusService.getStatus(objet, true,
+					null, true)) {
 				String jJStatusStr = String.valueOf(jJStatus.getName());
 				if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
 					suggestions.add(jJStatus);
@@ -212,13 +230,15 @@ public class JJWorkflowBean {
 
 	public void saveJJWorkflow(JJWorkflow b) {
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJWorkflowService.saveJJWorkflow(b);
 	}
 
 	public void updateJJWorkflow(JJWorkflow b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJWorkflowService.updateJJWorkflow(b);

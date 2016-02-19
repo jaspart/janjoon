@@ -25,9 +25,10 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
-	static Logger				logger				= Logger.getLogger("MyJsfAjaxTimeoutPhaseListener-Logger");
-	private String				timeoutPage			= "/pages/login.jsf";
+	private static final long serialVersionUID = 1L;
+	static Logger logger = Logger
+			.getLogger("MyJsfAjaxTimeoutPhaseListener-Logger");
+	private String timeoutPage = "/pages/login.jsf";
 
 	public void afterPhase(PhaseEvent event) {
 	}
@@ -39,20 +40,25 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 		ExternalContext ec = fc.getExternalContext();
 		HttpServletResponse response = (HttpServletResponse) ec.getResponse();
 		HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		HttpSession session = (HttpSession) fc.getExternalContext()
+				.getSession(false);
 
 		if (timeoutPage == null) {
-			logger.info("JSF Ajax Timeout Setting is not configured. Do Nothing!");
+			logger.info(
+					"JSF Ajax Timeout Setting is not configured. Do Nothing!");
 			return;
 		}
 
 		String resourceUri = request.getContextPath() + "/resources";
 
 		boolean loginRequest = request.getRequestURI().contains(timeoutPage);
-		boolean resourceRequest = request.getRequestURI().startsWith(resourceUri) || request.getRequestURI()
-		        .startsWith(request.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER + "/");
+		boolean resourceRequest = request.getRequestURI()
+				.startsWith(resourceUri)
+				|| request.getRequestURI().startsWith(request.getContextPath()
+						+ ResourceHandler.RESOURCE_IDENTIFIER + "/");
 
-		if (session == null || session.getAttribute("password") == null && !(loginRequest || resourceRequest)) {
+		if (session == null || session.getAttribute("password") == null
+				&& !(loginRequest || resourceRequest)) {
 
 			if (ec.isResponseCommitted()) {
 				return;
@@ -60,27 +66,35 @@ public class MyJsfAjaxTimeoutPhaseListener implements PhaseListener {
 
 			try {
 
-				if (((rc != null && RequestContext.getCurrentInstance().isAjaxRequest())
-				        || (fc != null && fc.getPartialViewContext().isPartialRequest()))
-				        && fc.getResponseWriter() == null && fc.getRenderKit() == null) {
+				if (((rc != null
+						&& RequestContext.getCurrentInstance().isAjaxRequest())
+						|| (fc != null && fc.getPartialViewContext()
+								.isPartialRequest()))
+						&& fc.getResponseWriter() == null
+						&& fc.getRenderKit() == null) {
 
-					response.setCharacterEncoding(request.getCharacterEncoding());
+					response.setCharacterEncoding(
+							request.getCharacterEncoding());
 
 					RenderKitFactory factory = (RenderKitFactory) FactoryFinder
-					        .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+							.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 
 					RenderKit renderKit = factory.getRenderKit(fc,
-					        fc.getApplication().getViewHandler().calculateRenderKitId(fc));
+							fc.getApplication().getViewHandler()
+									.calculateRenderKitId(fc));
 
-					ResponseWriter responseWriter = renderKit.createResponseWriter(response.getWriter(), null,
-					        request.getCharacterEncoding());
+					ResponseWriter responseWriter = renderKit
+							.createResponseWriter(response.getWriter(), null,
+									request.getCharacterEncoding());
 					fc.setResponseWriter(responseWriter);
-					String url = ec.getRequestContextPath() + (timeoutPage != null ? timeoutPage : "");
+					String url = ec.getRequestContextPath()
+							+ (timeoutPage != null ? timeoutPage : "");
 					ec.redirect(url);
 				}
 
 			} catch (IOException e) {
-				logger.error("Redirect to the specified page " + timeoutPage + " failed");
+				logger.error("Redirect to the specified page " + timeoutPage
+						+ " failed");
 				throw new FacesException(e);
 			}
 		} else {

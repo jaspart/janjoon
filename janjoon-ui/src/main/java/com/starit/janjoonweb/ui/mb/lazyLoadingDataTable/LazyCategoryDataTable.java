@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.*;
 
@@ -16,11 +15,12 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
-	JJCategoryService			jJCategoryService;
-	JJCompany					company;
+	private static final long serialVersionUID = 1L;
+	JJCategoryService jJCategoryService;
+	JJCompany company;
 
-	public LazyCategoryDataTable(JJCategoryService jJCategoryService, JJCompany company) {
+	public LazyCategoryDataTable(JJCategoryService jJCategoryService,
+			JJCompany company) {
 
 		this.jJCategoryService = jJCategoryService;
 		this.company = company;
@@ -38,11 +38,13 @@ public class LazyCategoryDataTable extends LazyDataModel<JJCategory> {
 	}
 
 	@Override
-	public List<JJCategory> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJCategory> load(int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJCategory> data = new ArrayList<JJCategory>();
 		MutableInt size = new MutableInt(0);
-		data = jJCategoryService.load(size, first, pageSize, multiSortMeta, filters, company);
+		data = jJCategoryService.load(size, first, pageSize, multiSortMeta,
+				filters, company);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

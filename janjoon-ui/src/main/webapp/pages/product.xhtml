@@ -184,9 +184,9 @@
 								filter="#{!loginBean.mobile}" filterMatchMode="contains" required="true"
 								requiredMessage="#{messages.admin_product_new_manager_alert}"
 								widgetVar="productManagerWidget"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 								label="#{messages.admin_product_new_manager_label}">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+								
 								<f:selectItem itemLabel="#{messages.label_select}" itemValue="#{null}" />
 								<f:selectItems value="#{jJProductBean.productManagerList}"
 									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />

@@ -13,20 +13,14 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.JJBuildService;
-import com.starit.janjoonweb.domain.JJChapterService;
-import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJProjectService;
-import com.starit.janjoonweb.domain.JJRequirementService;
-import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.service.entity.Task;
 
 @Component("taskWS")
@@ -34,22 +28,22 @@ import com.starit.janjoonweb.service.entity.Task;
 public class TaskWS {
 	@Autowired
 	private JJTaskService jJTaskService;
-	@Autowired
-	private JJSprintService jJSprintService;
+	// @Autowired
+	// private JJSprintService jJSprintService;
 	@Autowired
 	private JJProductService jJProductService;
 	@Autowired
 	private JJProjectService jJProjectService;
-	@Autowired
-	private JJContactService jJContactService;
-	@Autowired
-	private JJChapterService jJChapterService;
-	@Autowired
-	private JJBuildService jJBuidService;
-	@Autowired
-	private JJRequirementService jJResquirementService;
-	@Autowired
-	private JJTestcaseService jJTestcaseService;
+	// @Autowired
+	// private JJContactService jJContactService;
+	// @Autowired
+	// private JJChapterService jJChapterService;
+	// @Autowired
+	// private JJBuildService jJBuidService;
+	// @Autowired
+	// private JJRequirementService jJRequirementService;
+	// @Autowired
+	// private JJTestcaseService jJTestcaseService;
 	@Autowired
 	private JJStatusService jJStatusService;
 
@@ -61,9 +55,9 @@ public class TaskWS {
 		this.jJTaskService = jJTaskService;
 	}
 
-	public void setjJSprintService(JJSprintService jJSprintService) {
-		this.jJSprintService = jJSprintService;
-	}
+	// public void setjJSprintService(JJSprintService jJSprintService) {
+	// this.jJSprintService = jJSprintService;
+	// }
 
 	public void setjJProductService(JJProductService jJProductService) {
 		this.jJProductService = jJProductService;
@@ -73,26 +67,26 @@ public class TaskWS {
 		this.jJProjectService = jJProjectService;
 	}
 
-	public void setjJContactService(JJContactService jJContactService) {
-		this.jJContactService = jJContactService;
-	}
-
-	public void setjJChapterService(JJChapterService jJChapterService) {
-		this.jJChapterService = jJChapterService;
-	}
-
-	public void setjJBuidService(JJBuildService jJBuidService) {
-		this.jJBuidService = jJBuidService;
-	}
-
-	public void setjJResquirementService(
-			JJRequirementService jJResquirementService) {
-		this.jJResquirementService = jJResquirementService;
-	}
-
-	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
-		this.jJTestcaseService = jJTestcaseService;
-	}
+	// public void setjJContactService(JJContactService jJContactService) {
+	// this.jJContactService = jJContactService;
+	// }
+	//
+	// public void setjJChapterService(JJChapterService jJChapterService) {
+	// this.jJChapterService = jJChapterService;
+	// }
+	//
+	// public void setjJBuidService(JJBuildService jJBuidService) {
+	// this.jJBuidService = jJBuidService;
+	// }
+	//
+	// public void setjJRequirementService(
+	// JJRequirementService jJResquirementService) {
+	// this.jJRequirementService = jJResquirementService;
+	// }
+	//
+	// public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+	// this.jJTestcaseService = jJTestcaseService;
+	// }
 
 	@POST
 	@Path("/listetache")
@@ -102,23 +96,19 @@ public class TaskWS {
 
 		String productName = tasksParameter.getFirst("product");
 		Long projectId = Long.parseLong(tasksParameter.getFirst("projectId"));
-		JJProduct product = new JJProduct();
-		JJProject project = new JJProject();
+		JJProduct product = null;
+		JJProject project = null;
 
 		if (productName != null)
 			product = jJProductService.getJJProductWithName(productName);
-		else
-			product = null;
 
 		if (projectId != null)
 			project = jJProjectService.findJJProject(projectId);
-		else
-			project = null;
 
 		if (project != null && product != null)
 
-			return Task.getListTaskFrommJJTask(jJTaskService.getTasksByProduct(
-					product, project));
+			return Task.getListTaskFrommJJTask(
+					jJTaskService.getTasksByProduct(product, project));
 		else
 			return null;
 	}
@@ -131,13 +121,11 @@ public class TaskWS {
 		Long taskID = Long.parseLong(Param.getFirst("TaskId"));
 		String status = Param.getFirst("statut");
 		JJStatus jjstatus = jJStatusService.getOneStatus(status, "Task", true);
-		JJTask task = new JJTask();
+		JJTask task = null;
 
 		if (taskID != null)
 			task = (JJTask) jJTaskService.findJJTask(taskID);
-		else
-			task = null;
-		System.out.println("not task exist");
+
 		if (status == null || jjstatus == null)
 			return "erreur";
 		else if (status != null && task != null) {

@@ -30,9 +30,9 @@ public class LicenseBean implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
-	private UploadedFile		file;
-	private Part				fileUplaod;
+	private static final long serialVersionUID = 1L;
+	private UploadedFile file;
+	private Part fileUplaod;
 
 	public UploadedFile getFile() {
 		return file;
@@ -45,7 +45,8 @@ public class LicenseBean implements Serializable {
 	public void handleCompLogoUpload(final FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");
-		final JJCompany company = ((JJCompanyBean) LoginBean.findBean("jJCompanyBean")).getCompanie();
+		final JJCompany company = ((JJCompanyBean) LoginBean
+				.findBean("jJCompanyBean")).getCompanie();
 		final byte[] bFile = new byte[(int) event.getFile().getSize()];
 
 		InputStream inputStream;
@@ -55,13 +56,15 @@ public class LicenseBean implements Serializable {
 			inputStream.close();
 			company.setLogo(bFile);
 
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Logo", "");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Logo", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (final IOException e) {
 
 			e.printStackTrace();
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_unsuccessfully_uploded", "Logo", "du");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_unsuccessfully_uploded", "Logo", "du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -71,7 +74,8 @@ public class LicenseBean implements Serializable {
 	public void handleContactFileUpload(final FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");
-		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		//
 		// File targetFolder = null;
 		// String userHome = System.getProperty("user.home");
@@ -114,13 +118,18 @@ public class LicenseBean implements Serializable {
 			contact.setPicture(bFile);
 			if (LoginBean.findBean("jJContactBean") == null) {
 				final FacesContext fContext = FacesContext.getCurrentInstance();
-				final HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
+				final HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
-			((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService()
-			        .setSession((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false));
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Photo", "e");
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+			((LoginBean) LoginBean.findBean("loginBean"))
+					.getAuthorisationService()
+					.setSession((HttpSession) FacesContext.getCurrentInstance()
+							.getExternalContext().getSession(false));
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Photo", "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -142,7 +151,8 @@ public class LicenseBean implements Serializable {
 		System.out.println(userHome + classPath);
 
 		// if (classPath.startsWith(userHome)) {
-		final String target = userHome + System.getProperty("file.separator") + "license";
+		final String target = userHome + System.getProperty("file.separator")
+				+ "license";
 		final File file = new File(target);
 		if (!file.exists()) {
 			file.mkdir();
@@ -157,7 +167,7 @@ public class LicenseBean implements Serializable {
 
 			final OutputStream out = new FileOutputStream(new File(targetFolder,
 
-			        event.getFile().getFileName()));
+					event.getFile().getFileName()));
 
 			int read = 0;
 
@@ -174,14 +184,15 @@ public class LicenseBean implements Serializable {
 			out.flush();
 
 			out.close();
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Licence", "e");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Licence", "e");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (final IOException e) {
 
 			e.printStackTrace();
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_unsuccessfully_uploded", "Licence",
-			        "de la");
+			final FacesMessage facesMessage = MessageFactory.getMessage(
+					"message_unsuccessfully_uploded", "Licence", "de la");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -191,7 +202,8 @@ public class LicenseBean implements Serializable {
 	public void handleProdLogoUpload(final FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");
-		final JJProduct product = ((JJProductBean) LoginBean.findBean("jJProductBean")).getProductAdmin();
+		final JJProduct product = ((JJProductBean) LoginBean
+				.findBean("jJProductBean")).getProductAdmin();
 		final byte[] bFile = new byte[(int) event.getFile().getSize()];
 
 		InputStream inputStream;
@@ -201,13 +213,15 @@ public class LicenseBean implements Serializable {
 			inputStream.close();
 			product.setLogo(bFile);
 
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Logo", "");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Logo", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (final IOException e) {
 
 			e.printStackTrace();
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_unsuccessfully_uploded", "Logo", "du");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_unsuccessfully_uploded", "Logo", "du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -217,7 +231,8 @@ public class LicenseBean implements Serializable {
 	public void handleProjLogoUpload(final FileUploadEvent event) {
 
 		System.out.println("STARTING_OPERATION");
-		final JJProject project = ((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProjectAdmin();
+		final JJProject project = ((JJProjectBean) LoginBean
+				.findBean("jJProjectBean")).getProjectAdmin();
 		final byte[] bFile = new byte[(int) event.getFile().getSize()];
 
 		InputStream inputStream;
@@ -227,13 +242,15 @@ public class LicenseBean implements Serializable {
 			inputStream.close();
 			project.setLogo(bFile);
 
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Logo", "");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Logo", "");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		} catch (final IOException e) {
 
 			e.printStackTrace();
-			final FacesMessage facesMessage = MessageFactory.getMessage("message_unsuccessfully_uploded", "Logo", "du");
+			final FacesMessage facesMessage = MessageFactory
+					.getMessage("message_unsuccessfully_uploded", "Logo", "du");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		}
@@ -251,14 +268,16 @@ public class LicenseBean implements Serializable {
 	public void upload() {
 		if (file != null) {
 
-			System.out.println("Succesful " + file.getFileName() + " is uploaded.");
+			System.out.println(
+					"Succesful " + file.getFileName() + " is uploaded.");
 
 		}
 	}
 
 	public void uploadTest() throws IOException {
 		System.out.println("STARTING_OPERATION");
-		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 
 		final byte[] bFile = new byte[(int) fileUplaod.getSize()];
 
@@ -272,13 +291,18 @@ public class LicenseBean implements Serializable {
 			contact.setPicture(bFile);
 			if (LoginBean.findBean("jJContactBean") == null) {
 				final FacesContext fContext = FacesContext.getCurrentInstance();
-				final HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
+				final HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
 				session.setAttribute("jJProjectBean", new JJProjectBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
-			((LoginBean) LoginBean.findBean("loginBean")).getAuthorisationService()
-			        .setSession((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false));
-			facesMessage = MessageFactory.getMessage("message_successfully_uploded", "Photo", "e");
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
+			((LoginBean) LoginBean.findBean("loginBean"))
+					.getAuthorisationService()
+					.setSession((HttpSession) FacesContext.getCurrentInstance()
+							.getExternalContext().getSession(false));
+			facesMessage = MessageFactory
+					.getMessage("message_successfully_uploded", "Photo", "e");
 
 		} catch (final FileNotFoundException e) {
 
@@ -289,13 +313,16 @@ public class LicenseBean implements Serializable {
 		}
 
 		if (facesMessage == null) {
-			facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error while File Upload", "Photo");
+			facesMessage = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Error while File Upload", "Photo");
 		}
 
-		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+		((LoginBean) LoginBean.findBean("loginBean"))
+				.setFacesMessage(facesMessage);
 		FacesContext.getCurrentInstance().getExternalContext()
-		        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
-		                + "/pages/contactConfig.jsf?&faces-redirect=true");
+				.redirect(FacesContext.getCurrentInstance().getExternalContext()
+						.getRequestContextPath()
+						+ "/pages/contactConfig.jsf?&faces-redirect=true");
 
 	}
 }

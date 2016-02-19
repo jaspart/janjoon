@@ -238,12 +238,11 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="projectManagerSelect"
 								value="#{jJProjectBean.projectManager}" effect="fade"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 								filter="#{!loginBean.mobile}" filterMatchMode="contains" required="true"
 								label="#{messages.admin_project_new_manager_label}"
 								requiredMessage="#{messages.admin_project_new_manager_alert}"
-								widgetVar="projectManagerWidget">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" />
+								widgetVar="projectManagerWidget">								
 								<f:selectItem itemLabel="#{messages.label_select}" itemValue="#{null}" />
 								<f:selectItems value="#{jJProjectBean.projectManagerList}"
 									var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />

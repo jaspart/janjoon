@@ -491,15 +491,6 @@ div#contentPanel_content {
 	padding: 5px !important;
 }
 
-.reqAction-column {
-	text-align: center;
-	vertical-align: middle;
-	padding-bottom: 1px !important;
-	padding-top: 1px !important;
-	padding-right: 1px !important;
-	padding-left: 1px !important;
-}
-
 .requirement-table .ui-datatable-empty-message td {
 	font-size: 16px !important;
 }
@@ -507,6 +498,15 @@ div#contentPanel_content {
 .requirement-table .ui-datatable-data tr {
 	height: 70px;
 	overflow: hidden;
+}
+
+.reqAction-column {
+	text-align: center;
+	vertical-align: middle;
+	padding-bottom: 1px !important;
+	padding-top: 1px !important;
+	padding-right: 1px !important;
+	padding-left: 1px !important;
 }
 
 .link-datatable .ui-datatable-header {
@@ -550,7 +550,7 @@ div#contentPanel_content {
 	text-align: left;
 	width: 75%;
 	height: 37px;
-	min-width: 200px !important;
+/* 	min-width: 200px !important; */
 }
 
 .product-column {
@@ -1202,6 +1202,19 @@ div.highLightRevised2 {
 	border-radius: .25em;
 }
 
+.PLANNED {
+	background-color: #003CFF !important;
+	padding: .2em .6em .3em;
+	font-size: 80%;
+	/* 	font-weight: 700; */
+	line-height: 1;
+	color: #fff !important;
+	text-align: center;
+	white-space: pre-line;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+
 .REOPENED {
 	background-color: #FF0000 !important;
 	padding: .2em .6em .3em;
@@ -1327,6 +1340,12 @@ div.highLightRevised2 {
 
 .ASSIGNED_select {
 	background-color: #00A5F7 !important;
+	color: #fff !important;
+	text-align: center;
+}
+
+.PLANNED_select {
+	background-color: #003CFF !important;
 	color: #fff !important;
 	text-align: center;
 }

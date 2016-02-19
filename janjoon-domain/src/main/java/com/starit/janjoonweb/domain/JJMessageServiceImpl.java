@@ -45,8 +45,8 @@ public class JJMessageServiceImpl implements JJMessageService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
 			if (field instanceof JJBug)
-				predicates.add(criteriaBuilder.equal(from.get("bug"),
-						(JJBug) field));
+				predicates.add(
+						criteriaBuilder.equal(from.get("bug"), (JJBug) field));
 
 			else if (field instanceof JJRequirement)
 				predicates.add(criteriaBuilder.equal(from.get("requirement"),
@@ -56,7 +56,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 				predicates.add(criteriaBuilder.equal(from.get("testcase"),
 						(JJTestcase) field));
 
-			select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[]{}));
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 			TypedQuery<JJMessage> result = entityManager.createQuery(select);
@@ -229,8 +229,8 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 	public static Integer safeLongToInt(long l) {
 		if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
-			throw new IllegalArgumentException(l
-					+ " cannot be cast to int without changing its value.");
+			throw new IllegalArgumentException(
+					l + " cannot be cast to int without changing its value.");
 		}
 		return (int) l;
 	}
@@ -272,70 +272,68 @@ public class JJMessageServiceImpl implements JJMessageService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				}
 
 				else if (pairs.getKey().toString().contains("product")) {
 					Join<JJMessage, JJProduct> owner = from.join("product");
-					predicates
-							.add(criteriaBuilder.equal(owner
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(owner.<String> get("name"),
+									pairs.getValue().toString()));
 
 				} else if (pairs.getKey().toString().contains("project")) {
 					Join<JJMessage, JJProject> owner = from.join("project");
-					predicates
-							.add(criteriaBuilder.equal(owner
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(owner.<String> get("name"),
+									pairs.getValue().toString()));
 				} else if (pairs.getKey().toString().contains("status")) {
 					Join<JJMessage, JJStatus> owner = from.join("status");
-					predicates
-							.add(criteriaBuilder.equal(owner
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(owner.<String> get("name"),
+									pairs.getValue().toString()));
 				} else if (pairs.getKey().toString().contains("createdBy")) {
 					Join<JJMessage, JJContact> owner = from.join("createdBy");
-					predicates
-							.add(criteriaBuilder.equal(owner
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(owner.<String> get("name"),
+									pairs.getValue().toString()));
 				} else if (pairs.getKey().toString().contains("criticity")) {
 					Join<JJMessage, JJCriticity> owner = from.join("criticity");
-					predicates
-							.add(criteriaBuilder.equal(owner
-									.<String> get("name"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(owner.<String> get("name"),
+									pairs.getValue().toString()));
 				} else
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 
 			}
 		}
 
 		List<Predicate> oRPredicate = new ArrayList<Predicate>();
 		if (contact != null) {
-			oRPredicate.add(criteriaBuilder.and(
-					criteriaBuilder.isNull(from.get("bug")),
-					criteriaBuilder.isNull(from.get("testcase")),
-					criteriaBuilder.isNull(from.get("requirement"))));
+			oRPredicate.add(
+					criteriaBuilder.and(criteriaBuilder.isNull(from.get("bug")),
+							criteriaBuilder.isNull(from.get("testcase")),
+							criteriaBuilder.isNull(from.get("requirement"))));
 
 			for (JJTestcase test : contact.getTestcases())
-				oRPredicate.add(criteriaBuilder.equal(from.get("testcase"),
-						test));
+				oRPredicate
+						.add(criteriaBuilder.equal(from.get("testcase"), test));
 
 			for (JJBug bug : contact.getBugs())
 				oRPredicate.add(criteriaBuilder.equal(from.get("bug"), bug));
 
 			for (JJRequirement req : contact.getRequirements())
-				oRPredicate.add(criteriaBuilder.equal(from.get("requirement"),
-						req));
+				oRPredicate.add(
+						criteriaBuilder.equal(from.get("requirement"), req));
 
 		}
 
@@ -346,45 +344,47 @@ public class JJMessageServiceImpl implements JJMessageService {
 				if (!(sortField.contains("createdBy")
 						|| sortField.contains("project")
 						|| sortField.contains("product")
-						|| sortField.contains("criticity") || sortField
-							.contains("status"))) {
+						|| sortField.contains("criticity")
+						|| sortField.contains("status"))) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else {
 					if (sortField.contains("project")) {
 						Join<JJMessage, JJProject> owner = from.join("project");
 
 						if (sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.desc(owner.get("name")));
 						else if (sortOrder.equals(SortOrder.ASCENDING)) {
-							select.orderBy(criteriaBuilder.asc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.asc(owner.get("name")));
 						}
 					} else if (sortField.contains("criticity")) {
 						Join<JJMessage, JJCriticity> owner = from
 								.join("criticity");
 
 						if (sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.desc(owner.get("name")));
 						else if (sortOrder.equals(SortOrder.ASCENDING)) {
-							select.orderBy(criteriaBuilder.asc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.asc(owner.get("name")));
 						}
 
 					} else if (sortField.contains("product")) {
 						Join<JJMessage, JJProduct> owner = from.join("product");
 
 						if (sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.desc(owner.get("name")));
 						else if (sortOrder.equals(SortOrder.ASCENDING)) {
-							select.orderBy(criteriaBuilder.asc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.asc(owner.get("name")));
 						}
 
 					} else if (sortField.contains("createdBy")) {
@@ -392,22 +392,22 @@ public class JJMessageServiceImpl implements JJMessageService {
 								.join("createdBy");
 
 						if (sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.desc(owner.get("name")));
 						else if (sortOrder.equals(SortOrder.ASCENDING)) {
-							select.orderBy(criteriaBuilder.asc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.asc(owner.get("name")));
 						}
 
 					} else if (sortField.contains("status")) {
 						Join<JJMessage, JJStatus> owner = from.join("status");
 
 						if (sortOrder.equals(SortOrder.DESCENDING))
-							select.orderBy(criteriaBuilder.desc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.desc(owner.get("name")));
 						else if (sortOrder.equals(SortOrder.ASCENDING)) {
-							select.orderBy(criteriaBuilder.asc(owner
-									.get("name")));
+							select.orderBy(
+									criteriaBuilder.asc(owner.get("name")));
 						}
 					}
 				}
@@ -418,9 +418,8 @@ public class JJMessageServiceImpl implements JJMessageService {
 			select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 		}
 
-		select.where(
-				criteriaBuilder.and(predicates.toArray(new Predicate[] {})),
-				criteriaBuilder.or(oRPredicate.toArray(new Predicate[] {})));
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{})),
+				criteriaBuilder.or(oRPredicate.toArray(new Predicate[]{})));
 
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 		size.setValue(result.getResultList().size());
@@ -442,8 +441,8 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		predicates.add(criteriaBuilder.equal(
-				from.join("criticity").get("name"), "ALERT"));
+		predicates.add(criteriaBuilder.equal(from.join("criticity").get("name"),
+				"ALERT"));
 
 		if (product != null) {
 			Predicate condition1 = criteriaBuilder.equal(from.get("product"),
@@ -465,27 +464,26 @@ public class JJMessageServiceImpl implements JJMessageService {
 
 		List<Predicate> oRPredicate = new ArrayList<Predicate>();
 		if (contact != null) {
-			oRPredicate.add(criteriaBuilder.and(
-					criteriaBuilder.isNull(from.get("bug")),
-					criteriaBuilder.isNull(from.get("testcase")),
-					criteriaBuilder.isNull(from.get("requirement"))));
+			oRPredicate.add(
+					criteriaBuilder.and(criteriaBuilder.isNull(from.get("bug")),
+							criteriaBuilder.isNull(from.get("testcase")),
+							criteriaBuilder.isNull(from.get("requirement"))));
 
 			for (JJTestcase test : contact.getTestcases())
-				oRPredicate.add(criteriaBuilder.equal(from.get("testcase"),
-						test));
+				oRPredicate
+						.add(criteriaBuilder.equal(from.get("testcase"), test));
 
 			for (JJBug bug : contact.getBugs())
 				oRPredicate.add(criteriaBuilder.equal(from.get("bug"), bug));
 
 			for (JJRequirement req : contact.getRequirements())
-				oRPredicate.add(criteriaBuilder.equal(from.get("requirement"),
-						req));
+				oRPredicate.add(
+						criteriaBuilder.equal(from.get("requirement"), req));
 
 		}
 
-		select.where(
-				criteriaBuilder.and(predicates.toArray(new Predicate[] {})),
-				criteriaBuilder.or(oRPredicate.toArray(new Predicate[] {})));
+		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{})),
+				criteriaBuilder.or(oRPredicate.toArray(new Predicate[]{})));
 
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -512,7 +510,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		predicates.add(criteriaBuilder.equal(from.get("company"), company));
 		// }
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -549,7 +547,7 @@ public class JJMessageServiceImpl implements JJMessageService {
 		predicates.add(criteriaBuilder.equal(from.get("company"), company));
 		// }
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		TypedQuery<JJMessage> result = entityManager.createQuery(select);
 
 		return result.getResultList();

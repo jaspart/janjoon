@@ -68,8 +68,8 @@ public class TestCaseWS {
 		Boolean status = null;
 
 		try {
-			teststepeexecutionId = Long.parseLong(params
-					.getFirst("teststepeexecution"));
+			teststepeexecutionId = Long
+					.parseLong(params.getFirst("teststepeexecution"));
 		} catch (NumberFormatException e) {
 			teststepeexecutionId = null;
 		}
@@ -111,8 +111,8 @@ public class TestCaseWS {
 		Boolean status = null;
 
 		try {
-			testcaseeexecutionId = Long.parseLong(params
-					.getFirst("testcaseeexecution"));
+			testcaseeexecutionId = Long
+					.parseLong(params.getFirst("testcaseeexecution"));
 		} catch (NumberFormatException e) {
 			testcaseeexecutionId = null;
 		}
@@ -191,8 +191,8 @@ public class TestCaseWS {
 				testcaseexecution = jJTestcaseexecutionService
 						.findJJTestcaseexecution(testcaseexecution.getId());
 
-				List<JJTeststep> teststeps = jJTeststepService.getTeststeps(
-						testcase, true, true);
+				List<JJTeststep> teststeps = jJTeststepService
+						.getTeststeps(testcase, true, true);
 
 				for (JJTeststep teststep : teststeps) {
 

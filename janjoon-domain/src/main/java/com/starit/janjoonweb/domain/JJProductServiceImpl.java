@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -47,7 +46,7 @@ public class JJProductServiceImpl implements JJProductService {
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJProduct> result = entityManager.createQuery(select);
 
@@ -66,8 +65,8 @@ public class JJProductServiceImpl implements JJProductService {
 
 			Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
 
-			CriteriaQuery<JJProduct> select = criteriaQuery.select(from
-					.<JJProduct> get("product"));
+			CriteriaQuery<JJProduct> select = criteriaQuery
+					.select(from.<JJProduct> get("product"));
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -75,7 +74,7 @@ public class JJProductServiceImpl implements JJProductService {
 			predicates.add(criteriaBuilder.isNotNull(from.get("product")));
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-			select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[]{}));
 
 			TypedQuery<JJProduct> result = entityManager.createQuery(select);
 			HashSet<JJProduct> products = new HashSet<JJProduct>(
@@ -83,8 +82,8 @@ public class JJProductServiceImpl implements JJProductService {
 
 			Root<JJBug> from2 = criteriaQuery.from(JJBug.class);
 
-			select = criteriaQuery.select(from2.join("versioning")
-					.<JJProduct> get("product"));
+			select = criteriaQuery.select(
+					from2.join("versioning").<JJProduct> get("product"));
 
 			predicates = new ArrayList<Predicate>();
 
@@ -93,7 +92,7 @@ public class JJProductServiceImpl implements JJProductService {
 			predicates.add(criteriaBuilder.isNotNull(from2.get("versioning")));
 			predicates.add(criteriaBuilder.equal(from2.get("enabled"), true));
 
-			select.where(predicates.toArray(new Predicate[] {}));
+			select.where(predicates.toArray(new Predicate[]{}));
 
 			TypedQuery<JJProduct> result2 = entityManager.createQuery(select);
 			products.addAll(result2.getResultList());
@@ -117,8 +116,8 @@ public class JJProductServiceImpl implements JJProductService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if (company != null)
-			predicates.add(criteriaBuilder.equal(
-					from.get("manager").get("company"), company));
+			predicates.add(criteriaBuilder
+					.equal(from.get("manager").get("company"), company));
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
@@ -128,30 +127,37 @@ public class JJProductServiceImpl implements JJProductService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(criteriaBuilder.upper(from
-									.<String> get("extname")),
+					predicates
+							.add(criteriaBuilder.or(
+									criteriaBuilder.like(
+											criteriaBuilder.upper(
+													from.<String> get("name")),
+											"%" + pairs.getValue() + "%"),
+									criteriaBuilder.like(
+											criteriaBuilder.upper(from
+													.<String> get("extname")),
 									"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(new StrFunction<Long>(
-									criteriaBuilder, from.<Long> get("id")),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
 									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("company")) {
 
-					predicates.add(criteriaBuilder.equal(from.get("manager")
-							.get("company").<String> get("name"), pairs
-							.getValue().toString()));
+					predicates
+							.add(criteriaBuilder.equal(
+									from.get("manager").get("company")
+											.<String> get("name"),
+									pairs.getValue().toString()));
 
 				} else
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 
 			}
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -159,9 +165,11 @@ public class JJProductServiceImpl implements JJProductService {
 				SortOrder sortOrder = sortMeta.getSortOrder();
 				if (!sortField.contains("company")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else if (sortField.contains("company")) {
 					Join<JJContact, JJCompany> owner = from.join("manager")
@@ -184,19 +192,19 @@ public class JJProductServiceImpl implements JJProductService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJProduct.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		// if (company != null) {
 		// String qu =
-		// "SELECT COUNT(r) FROM  JJProduct r Where r.manager.company = :c "
+		// "SELECT COUNT(r) FROM JJProduct r Where r.manager.company = :c "
 		// + "AND r.enabled = true ";
 		//
 		// Query query = entityManager.createQuery(qu);
 		// query.setParameter("c", company);
 		// size.setValue(Math.round((long) query.getSingleResult()));
 		// } else {
-		// String qu = "SELECT COUNT(r) FROM  JJProduct r Where"
+		// String qu = "SELECT COUNT(r) FROM JJProduct r Where"
 		// + " r.enabled = true ";
 		//
 		// Query query = entityManager.createQuery(qu);
@@ -225,21 +233,22 @@ public class JJProductServiceImpl implements JJProductService {
 						.from(JJPermission.class);
 				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
 
-				predicatesPermion.add(criteriaBuilder.equal(
-						fromPermission.get("contact"), contact));
+				predicatesPermion.add(criteriaBuilder
+						.equal(fromPermission.get("contact"), contact));
 
-				predicatesPermion.add(criteriaBuilder.equal(
-						fromPermission.get("enabled"), true));
+				predicatesPermion.add(criteriaBuilder
+						.equal(fromPermission.get("enabled"), true));
 
 				CriteriaQuery<JJPermission> selectPermission = criteriaPermission
 						.select(fromPermission);
-				selectPermission.where(predicatesPermion
-						.toArray(new Predicate[] {}));
+				selectPermission
+						.where(predicatesPermion.toArray(new Predicate[]{}));
 
 				TypedQuery<JJPermission> resultPermission = entityManager
 						.createQuery(selectPermission);
 
-				for (JJPermission permission : resultPermission.getResultList()) {
+				for (JJPermission permission : resultPermission
+						.getResultList()) {
 					if (permission.getProduct() != null) {
 						if (!products.contains(permission.getProduct()))
 							products.add(permission.getProduct());
@@ -260,13 +269,13 @@ public class JJProductServiceImpl implements JJProductService {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
 				if (onlyActif) {
-					predicates.add(criteriaBuilder.equal(from.get("enabled"),
-							true));
+					predicates.add(
+							criteriaBuilder.equal(from.get("enabled"), true));
 				}
-				predicates.add(criteriaBuilder.equal(
-						from.join("manager").get("company"), company));
+				predicates.add(criteriaBuilder
+						.equal(from.join("manager").get("company"), company));
 
-				select.where(predicates.toArray(new Predicate[] {}));
+				select.where(predicates.toArray(new Predicate[]{}));
 
 				TypedQuery<JJProduct> result = entityManager
 						.createQuery(select);

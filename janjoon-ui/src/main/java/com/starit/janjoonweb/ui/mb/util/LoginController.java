@@ -35,12 +35,14 @@ public class LoginController implements PhaseListener {
 	 */
 
 	public String doLogin() throws ServletException, IOException {
-		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
 
 		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
-		        .getRequestDispatcher("/j_spring_security_check");
+				.getRequestDispatcher("/j_spring_security_check");
 
-		dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
+		dispatcher.forward((ServletRequest) context.getRequest(),
+				(ServletResponse) context.getResponse());
 
 		FacesContext.getCurrentInstance().responseComplete();
 
@@ -53,14 +55,18 @@ public class LoginController implements PhaseListener {
 
 	@Override
 	public void beforePhase(PhaseEvent arg0) {
-		Exception e = (Exception) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-		        .get(WebAttributes.AUTHENTICATION_EXCEPTION);
+		Exception e = (Exception) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap()
+				.get(WebAttributes.AUTHENTICATION_EXCEPTION);
 
 		if (e instanceof BadCredentialsException) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-			        .put(WebAttributes.AUTHENTICATION_EXCEPTION, null);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-			        "Username or password not valid.", "Username or password not valid"));
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap()
+					.put(WebAttributes.AUTHENTICATION_EXCEPTION, null);
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Username or password not valid.",
+							"Username or password not valid"));
 		}
 
 	}

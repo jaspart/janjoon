@@ -24,7 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJChapterSEQ")
-@Table(indexes = { @Index(unique = false, columnList = "project,category") })
+@Table(indexes = {@Index(unique = false, columnList = "project,category")})
 public class JJChapter {
 
 	@NotNull
@@ -75,8 +75,9 @@ public class JJChapter {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJChapter) && (getId() != null) ? getId()
-				.equals(((JJChapter) object).getId()) : (object == this);
+		return (object instanceof JJChapter) && (getId() != null)
+				? getId().equals(((JJChapter) object).getId())
+				: (object == this);
 	}
 
 }

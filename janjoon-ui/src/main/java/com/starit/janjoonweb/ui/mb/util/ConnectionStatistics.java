@@ -9,17 +9,19 @@ import com.starit.janjoonweb.domain.JJContact;
 
 public class ConnectionStatistics {
 
-	private static SimpleDateFormat	formatter			= new SimpleDateFormat("dd/MM/yyyy HH:mm");
-	public static String			LOGIN_OBJECT		= "login_date";
-	public static String			LOGOUT_OBJECT		= "logout_date";
-	private final long				MINUTE_IN_MILLIS	= 60 * 1000;
-	private long					id;
-	private JJContact				contact;
-	private Date					loginDate;
-	private Date					logoutDate;
-	private Long					duration;
+	private static SimpleDateFormat formatter = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm");
+	public static String LOGIN_OBJECT = "login_date";
+	public static String LOGOUT_OBJECT = "logout_date";
+	private final long MINUTE_IN_MILLIS = 60 * 1000;
+	private long id;
+	private JJContact contact;
+	private Date loginDate;
+	private Date logoutDate;
+	private Long duration;
 
-	public ConnectionStatistics(JJAuditLog loginAuditLog, JJAuditLog logoutAuditLog) {
+	public ConnectionStatistics(JJAuditLog loginAuditLog,
+			JJAuditLog logoutAuditLog) {
 
 		try {
 			id = loginAuditLog.getId();
@@ -35,8 +37,11 @@ public class ConnectionStatistics {
 			if (logoutAuditLog != null) {
 				try {
 					logoutDate = formatter.parse(logoutAuditLog.getKeyValue());
-					this.setDuration(new Long(Math.round(this.getLogoutDate().getTime() / MINUTE_IN_MILLIS
-					        - this.getLoginDate().getTime() / MINUTE_IN_MILLIS)) + 1);
+					this.setDuration(new Long(Math.round(
+							this.getLogoutDate().getTime() / MINUTE_IN_MILLIS
+									- this.getLoginDate().getTime()
+											/ MINUTE_IN_MILLIS))
+							+ 1);
 
 				} catch (ParseException e) {
 					this.logoutDate = null;

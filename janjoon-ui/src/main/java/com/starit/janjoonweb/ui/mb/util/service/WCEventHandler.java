@@ -68,7 +68,8 @@ public class WCEventHandler implements ISVNEventHandler {
 			/*
 			 * Locking operation failed.
 			 */
-			System.out.println("failed to lock    " + event.getChangelistName());
+			System.out
+					.println("failed to lock    " + event.getChangelistName());
 			return;
 		}
 	}

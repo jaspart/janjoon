@@ -26,7 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJTestcaseSEQ")
-@Table(indexes = { @Index(unique = true, columnList = "requirement") })
+@Table(indexes = {@Index(unique = true, columnList = "requirement")})
 public class JJTestcase {
 
 	@NotNull
@@ -65,6 +65,9 @@ public class JJTestcase {
 	@ManyToOne
 	private JJSprint sprint;
 
+	@ManyToOne
+	private JJStatus status;
+
 	private Integer workload;
 
 	private Integer pricepoint;
@@ -74,7 +77,9 @@ public class JJTestcase {
 	private Boolean regression;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "JJBuildLinkJJTestcase", joinColumns = { @javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") })
+	@JoinTable(name = "JJBuildLinkJJTestcase", joinColumns = {
+			@javax.persistence.JoinColumn(name = "Testcase_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+					@javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id")})
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "testcase")
@@ -97,8 +102,9 @@ public class JJTestcase {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJTestcase) && (getId() != null) ? getId()
-				.equals(((JJTestcase) object).getId()) : (object == this);
+		return (object instanceof JJTestcase) && (getId() != null)
+				? getId().equals(((JJTestcase) object).getId())
+				: (object == this);
 	}
 
 	@Override

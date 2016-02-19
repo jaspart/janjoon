@@ -11,8 +11,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class JJTeststepexecutionServiceImpl implements
-		JJTeststepexecutionService {
+public class JJTeststepexecutionServiceImpl
+		implements
+			JJTeststepexecutionService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -64,7 +65,7 @@ public class JJTeststepexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		TypedQuery<JJTeststepexecution> result = entityManager
 				.createQuery(select);
 
@@ -88,8 +89,8 @@ public class JJTeststepexecutionServiceImpl implements
 		Predicate predicate1 = criteriaBuilder.equal(from.get("enabled"), true);
 		Predicate predicate2 = criteriaBuilder.equal(from.get("teststep"),
 				teststep);
-		Predicate predicate3 = criteriaBuilder.equal(
-				from.join("testcaseexecution").get("build"), build);
+		Predicate predicate3 = criteriaBuilder
+				.equal(from.join("testcaseexecution").get("build"), build);
 
 		select.where(criteriaBuilder.and(predicate2, predicate3, predicate1));
 
@@ -108,7 +109,8 @@ public class JJTeststepexecutionServiceImpl implements
 		jJTeststepexecutionRepository.save(teststepexecutions);
 	}
 
-	public void saveJJTeststepexecution(JJTeststepexecution JJTeststepexecution_) {
+	public void saveJJTeststepexecution(
+			JJTeststepexecution JJTeststepexecution_) {
 
 		jJTeststepexecutionRepository.save(JJTeststepexecution_);
 		JJTeststepexecution_ = jJTeststepexecutionRepository

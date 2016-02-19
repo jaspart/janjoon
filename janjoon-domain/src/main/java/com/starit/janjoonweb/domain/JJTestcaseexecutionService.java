@@ -5,7 +5,8 @@ import java.util.Set;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJTestcaseexecution.class })
+@RooService(domainTypes = {
+		com.starit.janjoonweb.domain.JJTestcaseexecution.class})
 public interface JJTestcaseexecutionService {
 
 	public List<JJTestcaseexecution> getTestcaseexecutions(JJTestcase testcase,

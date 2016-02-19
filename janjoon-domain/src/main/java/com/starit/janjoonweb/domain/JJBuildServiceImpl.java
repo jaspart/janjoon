@@ -35,7 +35,8 @@ public class JJBuildServiceImpl implements JJBuildService {
 		predicates.add(criteriaBuilder.equal(from.get("allTestcases"), true));
 		predicates.add(criteriaBuilder.isNotNull(from.get("allTestcases")));
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		return entityManager.createQuery(select).getSingleResult() > 0;
 
@@ -58,15 +59,15 @@ public class JJBuildServiceImpl implements JJBuildService {
 			predicates.add(criteriaBuilder.equal(from.get("version"), version));
 		} else if (product != null) {
 			predicates.add(criteriaBuilder.isNotNull(from.get("version")));
-			predicates.add(criteriaBuilder.equal(
-					from.join("version").get("product"), product));
+			predicates.add(criteriaBuilder
+					.equal(from.join("version").get("product"), product));
 		}
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
@@ -90,7 +91,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 		predicates.add(criteriaBuilder.equal(from.get("name"), buildName));
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);
@@ -116,8 +117,8 @@ public class JJBuildServiceImpl implements JJBuildService {
 
 		if (withVersion) {
 			if (version != null) {
-				predicates.add(criteriaBuilder.equal(from.get("version"),
-						version));
+				predicates.add(
+						criteriaBuilder.equal(from.get("version"), version));
 			} else {
 				predicates.add(criteriaBuilder.isNull(from.get("version")));
 			}
@@ -127,7 +128,7 @@ public class JJBuildServiceImpl implements JJBuildService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
 
 		TypedQuery<JJBuild> result = entityManager.createQuery(select);

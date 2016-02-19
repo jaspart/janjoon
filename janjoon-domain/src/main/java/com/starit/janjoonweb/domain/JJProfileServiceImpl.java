@@ -1,17 +1,14 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -49,14 +46,18 @@ public class JJProfileServiceImpl implements JJProfileService {
 			Root<JJRight> fromRight = subquery.from(JJRight.class);
 			List<Predicate> predicatesRight = new ArrayList<Predicate>();
 			subquery.select(fromRight.get("profile").<Long> get("id"));
-			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true), criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					"company".toLowerCase())));
-			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true), criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					"*".toLowerCase())));
+			predicatesRight.add(criteriaBuilder
+					.and(criteriaBuilder.equal(fromRight.get("x"), true),
+							criteriaBuilder.equal(
+									criteriaBuilder.lower(
+											fromRight.<String> get("objet")),
+									"company".toLowerCase())));
+			predicatesRight.add(criteriaBuilder
+					.and(criteriaBuilder.equal(fromRight.get("x"), true),
+							criteriaBuilder.equal(
+									criteriaBuilder.lower(
+											fromRight.<String> get("objet")),
+									"*".toLowerCase())));
 
 			// List<Predicate> predicatesCategory = new ArrayList<Predicate>();
 			// predicatesCategory.add(criteriaBuilder.equal(
@@ -73,11 +74,12 @@ public class JJProfileServiceImpl implements JJProfileService {
 			// "category").get("company")));
 			// }
 
-			subquery.where(criteriaBuilder.and(criteriaBuilder
-					.or(predicatesRight.toArray(new Predicate[] {})),
+			subquery.where(criteriaBuilder.and(
+					criteriaBuilder
+							.or(predicatesRight.toArray(new Predicate[]{})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
-					.not());
+			predicates.add(
+					criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		}
 		if (!isSuperAdmin) {
@@ -86,22 +88,22 @@ public class JJProfileServiceImpl implements JJProfileService {
 			List<Predicate> predicatesRight = new ArrayList<Predicate>();
 			subquery.select(fromRight.get("profile").<Long> get("id"));
 
-			predicatesRight.add(criteriaBuilder.equal(fromRight.get("enabled"),
-					true));
-			predicatesRight.add(criteriaBuilder.isNotNull(fromRight.get(
-					"category").get("company")));
+			predicatesRight
+					.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+			predicatesRight.add(criteriaBuilder
+					.isNotNull(fromRight.get("category").get("company")));
 			if (company != null)
 				predicatesRight.add(criteriaBuilder.notEqual(
 						fromRight.get("category").get("company"), company));
 
-			predicatesRight.add(criteriaBuilder.equal(fromRight.get("enabled"),
-					true));
+			predicatesRight
+					.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
-			subquery.where(criteriaBuilder.and(predicatesRight
-					.toArray(new Predicate[] {})));
+			subquery.where(criteriaBuilder
+					.and(predicatesRight.toArray(new Predicate[]{})));
 
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
-					.not());
+			predicates.add(
+					criteriaBuilder.in(from.get("id")).value(subquery).not());
 		}
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
@@ -113,54 +115,65 @@ public class JJProfileServiceImpl implements JJProfileService {
 			Boolean wComponent = (Boolean) filters.get("wComponent");
 			Boolean xComponent = (Boolean) filters.get("xComponent");
 
-			predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-					criteriaBuilder.upper(from.<String> get("name")), "%"
-							+ filters.get("globalFilter") + "%"),
-					criteriaBuilder.like(new StrFunction<Long>(criteriaBuilder,
-							from.<Long> get("id")),
-							"%" + filters.get("globalFilter") + "%")));
+			predicates
+					.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + filters.get("globalFilter") + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + filters.get("globalFilter") + "%")));
 
 			List<Predicate> allpredicates = new ArrayList<Predicate>();
 			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
 			Root<JJRight> fromRight = subquery.from(JJRight.class);
 
 			if (objectComponent != null)
-				allpredicates.add(criteriaBuilder.or(criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						objectComponent.toLowerCase()), criteriaBuilder.equal(
-						criteriaBuilder.lower(fromRight.<String> get("objet")),
-						"*".toLowerCase())));
+				allpredicates
+						.add(criteriaBuilder.or(
+								criteriaBuilder.equal(
+										criteriaBuilder.lower(fromRight
+												.<String> get("objet")),
+								objectComponent.toLowerCase()),
+						criteriaBuilder.equal(
+								criteriaBuilder
+										.lower(fromRight.<String> get("objet")),
+								"*".toLowerCase())));
 
 			if (rComponent != null)
-				allpredicates.add(criteriaBuilder.equal(fromRight.get("r"),
-						rComponent));
+				allpredicates.add(
+						criteriaBuilder.equal(fromRight.get("r"), rComponent));
 
 			if (wComponent != null)
-				allpredicates.add(criteriaBuilder.equal(fromRight.get("w"),
-						wComponent));
+				allpredicates.add(
+						criteriaBuilder.equal(fromRight.get("w"), wComponent));
 
 			if (xComponent != null)
-				allpredicates.add(criteriaBuilder.equal(fromRight.get("x"),
-						xComponent));
+				allpredicates.add(
+						criteriaBuilder.equal(fromRight.get("x"), xComponent));
 
 			if (!allpredicates.isEmpty()) {
 
 				List<Predicate> predicatesRight = new ArrayList<Predicate>();
 				subquery.select(fromRight.get("profile").<Long> get("id"));
 
-				predicatesRight.add(criteriaBuilder.and(allpredicates
-						.toArray(new Predicate[] {})));
+				predicatesRight.add(criteriaBuilder
+						.and(allpredicates.toArray(new Predicate[]{})));
 
-				subquery.where(criteriaBuilder.and(criteriaBuilder
-						.or(predicatesRight.toArray(new Predicate[] {})),
+				subquery.where(criteriaBuilder.and(
+						criteriaBuilder
+								.or(predicatesRight.toArray(new Predicate[]{})),
 						criteriaBuilder.equal(fromRight.get("enabled"), true)));
-				predicates.add(criteriaBuilder.in(from.get("id")).value(
-						subquery));
+				predicates.add(
+						criteriaBuilder.in(from.get("id")).value(subquery));
 			}
 
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -183,7 +196,7 @@ public class JJProfileServiceImpl implements JJProfileService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJProfile.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
@@ -213,19 +226,19 @@ public class JJProfileServiceImpl implements JJProfileService {
 		List<Predicate> predicatesRight = new ArrayList<Predicate>();
 		subquery.select(fromRight.get("profile").<Long> get("id"));
 
-		predicatesRight.add(criteriaBuilder.equal(fromRight.get("enabled"),
-				true));
-		predicatesRight.add(criteriaBuilder.isNotNull(fromRight.get("category")
-				.get("company")));
+		predicatesRight
+				.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+		predicatesRight.add(criteriaBuilder
+				.isNotNull(fromRight.get("category").get("company")));
 		if (company != null)
 			predicatesRight.add(criteriaBuilder.notEqual(
 					fromRight.get("category").get("company"), company));
 
-		predicatesRight.add(criteriaBuilder.equal(fromRight.get("enabled"),
-				true));
+		predicatesRight
+				.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
 
-		subquery.where(criteriaBuilder.and(predicatesRight
-				.toArray(new Predicate[] {})));
+		subquery.where(criteriaBuilder
+				.and(predicatesRight.toArray(new Predicate[]{})));
 
 		predicates
 				.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
@@ -237,7 +250,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 					name.toLowerCase()));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJProfile> result = entityManager.createQuery(select);
 
@@ -266,14 +280,18 @@ public class JJProfileServiceImpl implements JJProfileService {
 			Root<JJRight> fromRight = subquery.from(JJRight.class);
 			List<Predicate> predicatesRight = new ArrayList<Predicate>();
 			subquery.select(fromRight.get("profile").<Long> get("id"));
-			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true), criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					"company".toLowerCase())));
-			predicatesRight.add(criteriaBuilder.and(criteriaBuilder.equal(
-					fromRight.get("x"), true), criteriaBuilder.equal(
-					criteriaBuilder.lower(fromRight.<String> get("objet")),
-					"*".toLowerCase())));
+			predicatesRight.add(criteriaBuilder
+					.and(criteriaBuilder.equal(fromRight.get("x"), true),
+							criteriaBuilder.equal(
+									criteriaBuilder.lower(
+											fromRight.<String> get("objet")),
+									"company".toLowerCase())));
+			predicatesRight.add(criteriaBuilder
+					.and(criteriaBuilder.equal(fromRight.get("x"), true),
+							criteriaBuilder.equal(
+									criteriaBuilder.lower(
+											fromRight.<String> get("objet")),
+									"*".toLowerCase())));
 
 			// List<Predicate> predicatesCategory = new ArrayList<Predicate>();
 			// predicatesCategory.add(criteriaBuilder.equal(fromRight.get("enabled"),
@@ -291,12 +309,13 @@ public class JJProfileServiceImpl implements JJProfileService {
 			// "category").get("company")));
 			// }
 
-			subquery.where(criteriaBuilder.and(criteriaBuilder
-					.or(predicatesRight.toArray(new Predicate[] {})),
+			subquery.where(criteriaBuilder.and(
+					criteriaBuilder
+							.or(predicatesRight.toArray(new Predicate[]{})),
 					criteriaBuilder.equal(fromRight.get("enabled"), true)));
 
-			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery)
-					.not());
+			predicates.add(
+					criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		}
 		Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
@@ -321,16 +340,16 @@ public class JJProfileServiceImpl implements JJProfileService {
 		// predicatesRight.add(criteriaBuilder.or(condition1, condition2));
 		// }
 
-		predicatesRight.add(criteriaBuilder.equal(fromRight.get("enabled"),
-				true));
-		predicatesRight.add(criteriaBuilder.isNotNull(fromRight.get("category")
-				.get("company")));
+		predicatesRight
+				.add(criteriaBuilder.equal(fromRight.get("enabled"), true));
+		predicatesRight.add(criteriaBuilder
+				.isNotNull(fromRight.get("category").get("company")));
 		if (company != null)
 			predicatesRight.add(criteriaBuilder.notEqual(
 					fromRight.get("category").get("company"), company));
 
-		subquery.where(criteriaBuilder.and(predicatesRight
-				.toArray(new Predicate[] {})));
+		subquery.where(criteriaBuilder
+				.and(predicatesRight.toArray(new Predicate[]{})));
 
 		predicates
 				.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
@@ -339,7 +358,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJProfile> result = entityManager.createQuery(select);
 

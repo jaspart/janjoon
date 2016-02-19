@@ -3,9 +3,9 @@ package com.starit.janjoonweb.ui.mb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -18,10 +18,7 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
-import com.starit.janjoonweb.domain.JJPhase;
-import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProjectDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
@@ -30,27 +27,29 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJProjectBean {
 
 	@Autowired
-	public JJConfigurationService	jJConfigurationService;
+	public JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	JJPermissionService				jJPermissionService;
+	JJPermissionService jJPermissionService;
 
-	private JJProject				project;
-	private JJProject				projectAdmin;
-	private LazyProjectDataModel	projectListTable;
-	private JJContact				projectManager;
-	private List<JJContact>			projectManagerList;
-	private String					message;
-	private boolean					projectState;
+	private JJProject project;
+	private JJProject projectAdmin;
+	private LazyProjectDataModel projectListTable;
+	private JJContact projectManager;
+	private List<JJContact> projectManagerList;
+	private String message;
+	private boolean projectState;
 
-	private List<JJProject>			deletedProject;
-	private List<JJProject>			restoredProject;
+	private List<JJProject> deletedProject;
+	private List<JJProject> restoredProject;
 
-	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -70,8 +69,10 @@ public class JJProjectBean {
 
 	public void setProject(JJProject project) {
 		this.project = project;
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-		JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
 		jJVersionBean.setVersionDataModelList(null);
 	}
 
@@ -79,7 +80,8 @@ public class JJProjectBean {
 
 		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable())
 			return jJProjectService.getProjects(LoginBean.getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), true, false);
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					true, false);
 		else
 			return new ArrayList<JJProject>();
 	}
@@ -100,7 +102,8 @@ public class JJProjectBean {
 			company = LoginBean.getCompany();
 
 		if (projectListTable == null)
-			projectListTable = new LazyProjectDataModel(jJProjectService, company);
+			projectListTable = new LazyProjectDataModel(jJProjectService,
+					company);
 		return projectListTable;
 	}
 
@@ -119,11 +122,15 @@ public class JJProjectBean {
 	public List<JJContact> getProjectManagerList() {
 
 		if (projectAdmin.getId() == null)
-			projectManagerList = jJPermissionService.getManagers(LoginBean.getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), "Project");
+			projectManagerList = jJPermissionService.getManagers(
+					LoginBean.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Project");
 		else
-			projectManagerList = jJPermissionService.getManagers(projectAdmin.getManager().getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), "Project");
+			projectManagerList = jJPermissionService.getManagers(
+					projectAdmin.getManager().getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Project");
 
 		return projectManagerList;
 	}
@@ -143,7 +150,8 @@ public class JJProjectBean {
 	public List<JJProject> getDeletedProject() {
 		if (deletedProject == null) {
 			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-			deletedProject = jJProjectService.getProjectList(false, LoginBean.getCompany(), loginBean.getContact());
+			deletedProject = jJProjectService.getProjectList(false,
+					LoginBean.getCompany(), loginBean.getContact());
 		}
 
 		return deletedProject;
@@ -169,8 +177,9 @@ public class JJProjectBean {
 			updateJJProject(con);
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_restored",
-		        FacesMessage.SEVERITY_INFO, MessageFactory.getMessage("label_project", "").getDetail(), "");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
+				MessageFactory.getMessage("label_project", "").getDetail(), "");
 
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		deletedProject = null;
@@ -237,7 +246,7 @@ public class JJProjectBean {
 		}
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-		        MessageFactory.getMessage("label_project", "").getDetail(), "");
+				MessageFactory.getMessage("label_project", "").getDetail(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -266,15 +275,18 @@ public class JJProjectBean {
 		projectListTable = null;
 		message = "message_successfully_updated";
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
-		        MessageFactory.getMessage("label_project", "").getDetail(), "");
+				MessageFactory.getMessage("label_project", "").getDetail(), "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 
 	public void addMessage() {
-		String summary = projectAdmin.getEnabled() ? "Enabled Project" : "Disabled Project";
+		String summary = projectAdmin.getEnabled()
+				? "Enabled Project"
+				: "Disabled Project";
 
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(summary));
 	}
 
 	public void closeDialog() {
@@ -292,13 +304,15 @@ public class JJProjectBean {
 	public void saveJJProject(JJProject b) {
 
 		b.setCreationDate(new Date());
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJProjectService.saveJJProject(b);
 	}
 
 	public void updateJJProject(JJProject b) {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProjectService.updateJJProject(b);
@@ -306,7 +320,20 @@ public class JJProjectBean {
 
 	private boolean getProjectDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("ProjectDialog", "project.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("ProjectDialog",
+				"project.create.saveandclose");
+	}
+
+	public HtmlPanelGrid populateCreatePanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateEditPanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateViewPanel() {
+		return null;
 	}
 
 }

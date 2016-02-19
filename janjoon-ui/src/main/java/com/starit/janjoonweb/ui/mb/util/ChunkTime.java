@@ -7,13 +7,13 @@ import javax.faces.context.FacesContext;
 
 public class ChunkTime {
 
-	int		dayNumber;
-	String	day;
-	Date	startDate1;
-	Date	endDate1;
-	Date	startDate2;
-	Date	endDate2;
-	long	chunkWorkLoad;
+	int dayNumber;
+	String day;
+	Date startDate1;
+	Date endDate1;
+	Date startDate2;
+	Date endDate2;
+	long chunkWorkLoad;
 
 	public ChunkTime() {
 
@@ -30,7 +30,8 @@ public class ChunkTime {
 		this.chunkWorkLoad = 0;
 	}
 
-	public ChunkTime(int dayNumber, Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+	public ChunkTime(int dayNumber, Date startDate1, Date endDate1,
+			Date startDate2, Date endDate2) {
 		super();
 		this.dayNumber = dayNumber;
 		this.startDate1 = CalendarUtil.getZeroDate(startDate1);
@@ -42,7 +43,8 @@ public class ChunkTime {
 			l = endDate2.getTime() - startDate2.getTime();
 		else
 			l = 0;
-		this.chunkWorkLoad = ((endDate1.getTime() - startDate1.getTime()) + (l)) / (60 * 60 * 1000) % 24;
+		this.chunkWorkLoad = ((endDate1.getTime() - startDate1.getTime()) + (l))
+				/ (60 * 60 * 1000) % 24;
 		this.day = capitalizeDay(dayNumber);
 
 	}
@@ -110,8 +112,8 @@ public class ChunkTime {
 	}
 
 	public String capitalizeDay(int i) {
-		DateFormatSymbols dfs = new DateFormatSymbols(
-		        FacesContext.getCurrentInstance().getExternalContext().getRequestLocale());
+		DateFormatSymbols dfs = new DateFormatSymbols(FacesContext
+				.getCurrentInstance().getExternalContext().getRequestLocale());
 		String weekdays[] = dfs.getWeekdays();
 		String s = weekdays[i + 1];
 

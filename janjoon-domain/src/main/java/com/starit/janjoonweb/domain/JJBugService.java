@@ -7,7 +7,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJBug.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJBug.class})
 public interface JJBugService {
 	public List<JJBug> getBugs(JJCompany company, JJProject project,
 			JJProduct product, JJTeststep teststep, JJBuild build,

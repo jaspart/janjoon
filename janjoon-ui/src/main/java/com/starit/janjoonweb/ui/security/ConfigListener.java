@@ -5,10 +5,8 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -18,72 +16,104 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.starit.janjoonweb.domain.*;
+import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuildService;
+import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJCategoryService;
+import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJCompanyService;
+import com.starit.janjoonweb.domain.JJConfiguration;
+import com.starit.janjoonweb.domain.JJConfigurationService;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJImportance;
+import com.starit.janjoonweb.domain.JJImportanceService;
+import com.starit.janjoonweb.domain.JJMessageService;
+import com.starit.janjoonweb.domain.JJPermission;
+import com.starit.janjoonweb.domain.JJPermissionService;
+import com.starit.janjoonweb.domain.JJPhase;
+import com.starit.janjoonweb.domain.JJPhaseService;
+import com.starit.janjoonweb.domain.JJProductService;
+import com.starit.janjoonweb.domain.JJProfile;
+import com.starit.janjoonweb.domain.JJProfileService;
+import com.starit.janjoonweb.domain.JJProjectService;
+import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJRight;
+import com.starit.janjoonweb.domain.JJRightService;
+import com.starit.janjoonweb.domain.JJSprintService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
+import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJVersionService;
+import com.starit.janjoonweb.domain.JJWorkflow;
+import com.starit.janjoonweb.domain.JJWorkflowService;
 
 public class ConfigListener implements ServletContextListener {
 
 	@Autowired
-	JJMessageService			jJMessageService;
+	JJMessageService jJMessageService;
 
 	@Autowired
-	JJImportanceService			jJImportanceService;
+	JJImportanceService jJImportanceService;
 
 	@Autowired
-	JJCompanyService			jJCompanyService;
+	JJCompanyService jJCompanyService;
 
 	@Autowired
-	JJBugService				jJBugService;
+	JJBugService jJBugService;
 
 	@Autowired
-	JJConfigurationService		jJConfigurationService;
+	JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	JJProjectService			jJProjectService;
+	JJProjectService jJProjectService;
 
 	@Autowired
-	JJStatusService				jJStatusService;
+	JJStatusService jJStatusService;
 
 	@Autowired
-	JJBuildService				jJBuildService;
+	JJBuildService jJBuildService;
 
 	@Autowired
-	JJSprintService				jJSprintService;
+	JJSprintService jJSprintService;
 
 	@Autowired
-	JJProductService			jJProductService;
+	JJProductService jJProductService;
 
 	@Autowired
-	JJCriticityService			jJCriticityService;
+	JJCriticityService jJCriticityService;
 
 	@Autowired
-	JJVersionService			jJVersionService;
+	JJVersionService jJVersionService;
 
 	@Autowired
-	JJCategoryService			jJCategoryService;
+	JJCategoryService jJCategoryService;
 
 	@Autowired
-	JJRequirementService		jJRequirementService;
+	JJRequirementService jJRequirementService;
 
 	@Autowired
-	JJContactService			jJContactService;
+	JJContactService jJContactService;
 
 	@Autowired
-	JJPermissionService			jJPermissionService;
+	JJPermissionService jJPermissionService;
 
 	@Autowired
-	JJRightService				jJRightService;
+	JJRightService jJRightService;
 
 	@Autowired
-	JJTaskService				jJTaskService;
+	JJTaskService jJTaskService;
 
 	@Autowired
-	JJProfileService			jJProfileService;
+	JJProfileService jJProfileService;
 
 	@Autowired
-	JJPhaseService				jJPhaseService;
+	JJPhaseService jJPhaseService;
 
 	@Autowired
-	private JJWorkflowService	jJWorkflowService;
+	private JJWorkflowService jJWorkflowService;
 
 	public void setjJPhaseService(JJPhaseService jJPhaseService) {
 		this.jJPhaseService = jJPhaseService;
@@ -101,7 +131,8 @@ public class ConfigListener implements ServletContextListener {
 		this.jJBugService = jJBugService;
 	}
 
-	public void setjJConfigurationService(JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(
+			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
@@ -141,7 +172,8 @@ public class ConfigListener implements ServletContextListener {
 		this.jJCategoryService = jJCategoryService;
 	}
 
-	public void setjJRequirementService(JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
@@ -149,7 +181,8 @@ public class ConfigListener implements ServletContextListener {
 		this.jJContactService = jJContactService;
 	}
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -171,8 +204,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext())
-		        .getAutowireCapableBeanFactory().autowireBean(this);
+		WebApplicationContextUtils
+				.getRequiredWebApplicationContext(sce.getServletContext())
+				.getAutowireCapableBeanFactory().autowireBean(this);
 		try {
 			initApplication(true);
 		} catch (FileNotFoundException e) {
@@ -194,14 +228,16 @@ public class ConfigListener implements ServletContextListener {
 
 	}
 
-	private void initApplication(boolean index) throws FileNotFoundException, URISyntaxException {
+	private void initApplication(boolean index)
+			throws FileNotFoundException, URISyntaxException {
 
 		if (index) {
 			if (jJCompanyService.findAllJJCompanys().isEmpty()) {
 
 				JJCompany company = new JJCompany();
 				company.setName("StarIt");
-				company.setDescription(company.getName() + "Message-CompanyDescription");
+				company.setDescription(
+						company.getName() + "Message-CompanyDescription");
 				company.setCreationDate(new Date());
 				company.setEnabled(true);
 				company.setCalendar(convertStreamToString(company.getName()));
@@ -258,7 +294,7 @@ public class ConfigListener implements ServletContextListener {
 		//
 
 		if (jJImportanceService.findAllJJImportances().isEmpty()) {
-			String[] names = { "High", "Medium", "Low" };
+			String[] names = {"High", "Medium", "Low"};
 			Integer i = 3;
 
 			for (String name : names) {
@@ -268,7 +304,8 @@ public class ConfigListener implements ServletContextListener {
 				importance.setObjet("Bug");
 				importance.setLevelImportance(i);
 				importance.setName(name);
-				importance.setDescription(name + " :Bug Importance Description");
+				importance
+						.setDescription(name + " :Bug Importance Description");
 				jJImportanceService.saveJJImportance(importance);
 				i--;
 
@@ -277,7 +314,7 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJCriticityService.getCriticities("Message", true).isEmpty()) {
 
-			String[] names = { "ALERT", "INFO" };
+			String[] names = {"ALERT", "INFO"};
 
 			for (String name : names) {
 				JJCriticity criticity = new JJCriticity();
@@ -293,7 +330,7 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJCriticityService.getCriticities("Bug", true).isEmpty()) {
 
-			String[] names = { "ALERT", "INFO" };
+			String[] names = {"ALERT", "INFO"};
 
 			for (String name : names) {
 				JJCriticity criticity = new JJCriticity();
@@ -415,15 +452,23 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		// }
 
-		String[] objects = { "Requirement", "Bug", "Message", "Task", "Build", "TaskType", "RequirementState" };
+		String[] objects = {"Requirement", "Bug", "Message", "Task", "Build",
+				"TaskType", "RequirementState", "TestCase"};
 
 		for (String object : objects) {
 
 			List<String> names = new ArrayList<String>();
 
-			if (jJStatusService.getStatus(object, true, new ArrayList<String>(), false).isEmpty()) {
+			if (jJStatusService
+					.getStatus(object, true, new ArrayList<String>(), false)
+					.isEmpty()) {
 
-				if (object.equalsIgnoreCase("RequirementState")) {
+				if (object.equalsIgnoreCase("TestCase")) {
+					names.add("NEW");
+					names.add("PLANNED");
+					names.add("Finished");
+
+				} else if (object.equalsIgnoreCase("RequirementState")) {
 					names.add("Specified");
 					names.add("UnLinked");
 					names.add("InProgress");
@@ -482,6 +527,16 @@ public class ConfigListener implements ServletContextListener {
 			}
 		}
 
+		if (jJStatusService.getOneStatus("PLANNED", "Bug", true) == null) {
+			JJStatus status = new JJStatus();
+			status.setObjet("Bug");
+			status.setName("PLANNED");
+			status.setCreationDate(new Date());
+			status.setDescription("A JJStatus defined as " + "Planned");
+			status.setEnabled(true);
+			jJStatusService.saveJJStatus(status);
+		}
+
 		if (jJStatusService.getOneStatus("Any", "*", true) == null) {
 			JJStatus status = new JJStatus();
 			status.setObjet("*");
@@ -524,7 +579,8 @@ public class ConfigListener implements ServletContextListener {
 			workFlow.setDescription(workFlow.getActionWorkflow());
 			workFlow.setObjet("Task");
 			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
-			workFlow.setTarget(jJStatusService.getOneStatus("IN PROGRESS", "task", true));
+			workFlow.setTarget(
+					jJStatusService.getOneStatus("IN PROGRESS", "task", true));
 			jJWorkflowService.saveJJWorkflow(workFlow);
 
 			workFlow = new JJWorkflow();
@@ -535,7 +591,8 @@ public class ConfigListener implements ServletContextListener {
 			workFlow.setDescription(workFlow.getActionWorkflow());
 			workFlow.setObjet("Task");
 			workFlow.setSource(jJStatusService.getOneStatus("Any", "*", true));
-			workFlow.setTarget(jJStatusService.getOneStatus("Done", "task", true));
+			workFlow.setTarget(
+					jJStatusService.getOneStatus("Done", "task", true));
 			jJWorkflowService.saveJJWorkflow(workFlow);
 
 		}
@@ -600,14 +657,17 @@ public class ConfigListener implements ServletContextListener {
 		//
 		// }
 
-		if (jJCategoryService.getCategories(null, false, true, true, null).isEmpty()) {
-			String[] names = { "BUSINESS", "FUNCTIONAL", "TECHNICAL", "ARCHITECTURE", "SECURITY" };
+		if (jJCategoryService.getCategories(null, false, true, true, null)
+				.isEmpty()) {
+			String[] names = {"BUSINESS", "FUNCTIONAL", "TECHNICAL",
+					"ARCHITECTURE", "SECURITY"};
 			for (String name : names) {
 				int stage = 0;
 				if (name.equalsIgnoreCase("BUSINESS")) {
 					stage = 1;
-				} else if (name.equalsIgnoreCase("FUNCTIONAL") || name.equalsIgnoreCase("ARCHITECTURE")
-				        || name.equalsIgnoreCase("SECURITY")) {
+				} else if (name.equalsIgnoreCase("FUNCTIONAL")
+						|| name.equalsIgnoreCase("ARCHITECTURE")
+						|| name.equalsIgnoreCase("SECURITY")) {
 					stage = 2;
 				} else if (name.equalsIgnoreCase("TECHNICAL")) {
 					stage = 3;
@@ -626,8 +686,8 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJProfileService.findAllJJProfiles().isEmpty()) {
 
-			String[] names = { "ProjectManager", "ProductManager", "CEO", "CTO", "Tester", "Developer",
-			        "CustomProfile" };
+			String[] names = {"ProjectManager", "ProductManager", "CEO", "CTO",
+					"Tester", "Developer", "CustomProfile"};
 			for (String name : names) {
 				JJProfile profile = new JJProfile();
 				profile.setName(name);
@@ -639,18 +699,29 @@ public class ConfigListener implements ServletContextListener {
 
 		if (jJRightService.findAllJJRights().isEmpty()) {
 
-			JJCategory businessCategory = jJCategoryService.getCategory("BUSINESS", null, true);
-			JJCategory functionalCategory = jJCategoryService.getCategory("FUNCTIONAL", null, true);
-			JJCategory technicalCategory = jJCategoryService.getCategory("TECHNICAL", null, true);
-			JJCategory architectureCategory = jJCategoryService.getCategory("ARCHITECTURE", null, true);
+			JJCategory businessCategory = jJCategoryService
+					.getCategory("BUSINESS", null, true);
+			JJCategory functionalCategory = jJCategoryService
+					.getCategory("FUNCTIONAL", null, true);
+			JJCategory technicalCategory = jJCategoryService
+					.getCategory("TECHNICAL", null, true);
+			JJCategory architectureCategory = jJCategoryService
+					.getCategory("ARCHITECTURE", null, true);
 
-			JJProfile projectManagerProfile = jJProfileService.getOneProfile("ProjectManager", null, true);
-			JJProfile productManagerProfile = jJProfileService.getOneProfile("ProductManager", null, true);
-			JJProfile ceoProfile = jJProfileService.getOneProfile("CEO", null, true);
-			JJProfile ctoProfile = jJProfileService.getOneProfile("CTO", null, true);
-			JJProfile testerProfile = jJProfileService.getOneProfile("Tester", null, true);
-			JJProfile developerProfile = jJProfileService.getOneProfile("Developer", null, true);
-			JJProfile customProfile = jJProfileService.getOneProfile("CustomProfile", null, true);
+			JJProfile projectManagerProfile = jJProfileService
+					.getOneProfile("ProjectManager", null, true);
+			JJProfile productManagerProfile = jJProfileService
+					.getOneProfile("ProductManager", null, true);
+			JJProfile ceoProfile = jJProfileService.getOneProfile("CEO", null,
+					true);
+			JJProfile ctoProfile = jJProfileService.getOneProfile("CTO", null,
+					true);
+			JJProfile testerProfile = jJProfileService.getOneProfile("Tester",
+					null, true);
+			JJProfile developerProfile = jJProfileService
+					.getOneProfile("Developer", null, true);
+			JJProfile customProfile = jJProfileService
+					.getOneProfile("CustomProfile", null, true);
 
 			// Project Manager Profile
 			JJRight right = new JJRight();
@@ -953,7 +1024,8 @@ public class ConfigListener implements ServletContextListener {
 			JJContact contact = new JJContact();
 			contact.setName("janjoon");
 			contact.setFirstname("mailer");
-			contact.setDescription("This contact is " + contact.getFirstname() + " " + contact.getName());
+			contact.setDescription("This contact is " + contact.getFirstname()
+					+ " " + contact.getName());
 			contact.setPassword(passwordEncoder.encode("BeHappy2012"));
 			contact.setEnabled(true);
 			contact.setEmail("janjoon.mailer@gmail.com");
@@ -1160,14 +1232,16 @@ public class ConfigListener implements ServletContextListener {
 	// return "";
 	// }
 
-	public String convertStreamToString(String company) throws FileNotFoundException, URISyntaxException {
+	public String convertStreamToString(String company)
+			throws FileNotFoundException, URISyntaxException {
 
 		// InputStream
 		// is=ConfigListener.class.getResourceAsStream("/resources/Calandar"+
 		// company);
 
-		FileInputStream inputStream = new FileInputStream(
-		        this.getClass().getResource("/Calendar" + company + ".properties").getFile());
+		FileInputStream inputStream = new FileInputStream(this.getClass()
+				.getResource("/Calendar" + company + ".properties").getFile());
+		@SuppressWarnings("resource")
 		Scanner s = new Scanner(inputStream).useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";
 

@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJTeststepexecution.class })
+@RooService(domainTypes = {
+		com.starit.janjoonweb.domain.JJTeststepexecution.class})
 public interface JJTeststepexecutionService {
 
 	public List<JJTeststepexecution> getAllTeststepexecutions();

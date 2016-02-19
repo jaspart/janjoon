@@ -41,16 +41,16 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
 			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));
-			orPredicates.add(criteriaBuilder.equal(from.get("objet"), "JJ"
-					+ object));
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+			orPredicates.add(
+					criteriaBuilder.equal(from.get("objet"), "JJ" + object));
+			Predicate orPredicate = criteriaBuilder
+					.or(orPredicates.toArray(new Predicate[]{}));
 
 			predicates.add(orPredicate);
 
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJCriticity> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -77,7 +77,8 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 			predicates.add(criteriaBuilder.equal(from.get("name"), name));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJCriticity> result = entityManager.createQuery(select);
 		return result.getResultList().get(0);

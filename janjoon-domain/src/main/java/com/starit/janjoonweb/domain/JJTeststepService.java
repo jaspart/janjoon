@@ -5,11 +5,11 @@ import java.util.Set;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJTeststep.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJTeststep.class})
 public interface JJTeststepService {
 
-	public List<JJTeststep> getTeststeps(JJTestcase testcase,
-			boolean onlyActif, boolean sortedByOrder);
+	public List<JJTeststep> getTeststeps(JJTestcase testcase, boolean onlyActif,
+			boolean sortedByOrder);
 
 	public void saveTeststeps(Set<JJTeststep> teststeps);
 

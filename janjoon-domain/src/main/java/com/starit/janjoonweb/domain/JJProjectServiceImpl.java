@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,7 +33,8 @@ public class JJProjectServiceImpl implements JJProjectService {
 	@Autowired
 	private JJPermissionService jJPermissionService;
 
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -54,13 +54,13 @@ public class JJProjectServiceImpl implements JJProjectService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (company != null)
-				predicates.add(criteriaBuilder.equal(
-						from.get("manager").get("company"), company));
+				predicates.add(criteriaBuilder
+						.equal(from.get("manager").get("company"), company));
 
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), enabled));
 
-			select.where(criteriaBuilder.and(predicates
-					.toArray(new Predicate[] {})));
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			TypedQuery<JJProject> result = entityManager.createQuery(select);
 
@@ -84,8 +84,8 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (company != null)
-			predicates.add(criteriaBuilder.equal(
-					from.get("manager").get("company"), company));
+			predicates.add(criteriaBuilder
+					.equal(from.get("manager").get("company"), company));
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
@@ -95,27 +95,32 @@ public class JJProjectServiceImpl implements JJProjectService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("company")) {
 
-					predicates.add(criteriaBuilder.equal(from.get("manager")
-							.get("company").<String> get("name"), pairs
-							.getValue().toString()));
+					predicates
+							.add(criteriaBuilder.equal(
+									from.get("manager").get("company")
+											.<String> get("name"),
+									pairs.getValue().toString()));
 
 				} else
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 
 			}
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -123,9 +128,11 @@ public class JJProjectServiceImpl implements JJProjectService {
 				SortOrder sortOrder = sortMeta.getSortOrder();
 				if (!sortField.contains("company")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else if (sortField.contains("company")) {
 					Join<JJContact, JJCompany> owner = from.join("manager")
@@ -148,7 +155,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJProject.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
@@ -169,7 +176,7 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJProject> result = entityManager.createQuery(select);
 
@@ -192,20 +199,21 @@ public class JJProjectServiceImpl implements JJProjectService {
 				Root<JJPermission> fromPermission = criteriaPermission
 						.from(JJPermission.class);
 				List<Predicate> predicatesPermion = new ArrayList<Predicate>();
-				predicatesPermion.add(criteriaBuilder.equal(
-						fromPermission.get("enabled"), true));
+				predicatesPermion.add(criteriaBuilder
+						.equal(fromPermission.get("enabled"), true));
 
-				predicatesPermion.add(criteriaBuilder.equal(
-						fromPermission.get("contact"), contact));
+				predicatesPermion.add(criteriaBuilder
+						.equal(fromPermission.get("contact"), contact));
 				CriteriaQuery<JJPermission> selectPermission = criteriaPermission
 						.select(fromPermission);
-				selectPermission.where(predicatesPermion
-						.toArray(new Predicate[] {}));
+				selectPermission
+						.where(predicatesPermion.toArray(new Predicate[]{}));
 
 				TypedQuery<JJPermission> resultPermission = entityManager
 						.createQuery(selectPermission);
 
-				for (JJPermission permission : resultPermission.getResultList()) {
+				for (JJPermission permission : resultPermission
+						.getResultList()) {
 					if (permission.getProject() != null) {
 						if (!projects.contains(permission.getProject()))
 							projects.add(permission.getProject());
@@ -225,15 +233,15 @@ public class JJProjectServiceImpl implements JJProjectService {
 
 				List<Predicate> predicates = new ArrayList<Predicate>();
 
-				predicates.add(criteriaBuilder.equal(
-						from.join("manager").get("company"), company));
+				predicates.add(criteriaBuilder
+						.equal(from.join("manager").get("company"), company));
 
 				if (onlyActif) {
-					predicates.add(criteriaBuilder.equal(from.get("enabled"),
-							true));
+					predicates.add(
+							criteriaBuilder.equal(from.get("enabled"), true));
 				}
 
-				select.where(predicates.toArray(new Predicate[] {}));
+				select.where(predicates.toArray(new Predicate[]{}));
 
 				TypedQuery<JJProject> result = entityManager
 						.createQuery(select);

@@ -43,7 +43,8 @@ public class JJRightServiceImpl implements JJRightService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJRight> result = entityManager.createQuery(select);
 		return result.getResultList();

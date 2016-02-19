@@ -7,7 +7,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJProject.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJProject.class})
 public interface JJProjectService {
 
 	// New Generic

@@ -42,12 +42,13 @@
 								<p:selectCheckboxMenu id="sprintcts"
 									disabled="#{jjsprint.neditabale}"
 									validator="listCategoriesValidator"
-									label="#{jjsprint.contactsLabel}" value="#{jjsprint.contacts}"
+									label="#{jjsprint.contactsLabel}" value="#{jjsprint.sprint.contacts}"
 									scrollHeight="150"
 									converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
 									<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
 										itemLabel="#{ctc.firstname} #{ctc.name}" itemValue="#{ctc}" />
-									<p:ajax event="change" update="@this" immediate="true" />
+									<p:ajax event="change" update="@this" />
+									<p:ajax event="toggleSelect" update="@this"  />
 								</p:selectCheckboxMenu>
 								<!-- 								<p:selectManyMenu id="sprintcts" scrollHeight="150" -->
 								<!-- 									value="#{jjsprint.sprint.contacts}" -->
@@ -61,6 +62,7 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
+					<h:panelGroup  styleClass="EmptyBox1" />
 
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="Container40">

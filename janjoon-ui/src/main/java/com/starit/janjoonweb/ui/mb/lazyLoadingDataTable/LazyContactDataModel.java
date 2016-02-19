@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJContact;
@@ -18,11 +17,12 @@ public class LazyContactDataModel extends LazyDataModel<JJContact> {
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
-	private JJContactService	contactService;
-	private JJCompany			company;
+	private static final long serialVersionUID = 1L;
+	private JJContactService contactService;
+	private JJCompany company;
 
-	public LazyContactDataModel(JJContactService contactService, JJCompany company) {
+	public LazyContactDataModel(JJContactService contactService,
+			JJCompany company) {
 
 		this.company = company;
 		this.contactService = contactService;
@@ -56,11 +56,13 @@ public class LazyContactDataModel extends LazyDataModel<JJContact> {
 	}
 
 	@Override
-	public List<JJContact> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+	public List<JJContact> load(int first, int pageSize,
+			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 
 		List<JJContact> data = new ArrayList<JJContact>();
 		MutableInt size = new MutableInt(0);
-		data = contactService.load(company, size, first, pageSize, multiSortMeta, filters);
+		data = contactService.load(company, size, first, pageSize,
+				multiSortMeta, filters);
 		setRowCount(size.getValue());
 		System.err.println("SIZE :" + data.size());
 

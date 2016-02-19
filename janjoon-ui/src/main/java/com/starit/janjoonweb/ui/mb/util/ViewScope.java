@@ -9,8 +9,10 @@ import org.springframework.beans.factory.config.Scope;
 
 public class ViewScope implements Scope {
 
-	public Object get(String name, ObjectFactory objectFactory) {
-		Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
+	public Object get(String name,
+			@SuppressWarnings("rawtypes") ObjectFactory objectFactory) {
+		Map<String, Object> viewMap = FacesContext.getCurrentInstance()
+				.getViewRoot().getViewMap();
 
 		if (viewMap.containsKey(name)) {
 			return viewMap.get(name);
@@ -23,7 +25,8 @@ public class ViewScope implements Scope {
 	}
 
 	public Object remove(String name) {
-		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove(name);
+		return FacesContext.getCurrentInstance().getViewRoot().getViewMap()
+				.remove(name);
 	}
 
 	public String getConversationId() {

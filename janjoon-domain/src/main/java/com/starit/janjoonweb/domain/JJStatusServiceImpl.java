@@ -5,16 +5,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
@@ -43,8 +41,8 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		Root<JJStatus> from = criteriaQuery.from(JJStatus.class);
 
-		CriteriaQuery<String> select = criteriaQuery.select(from
-				.<String> get("objet"));
+		CriteriaQuery<String> select = criteriaQuery
+				.select(from.<String> get("objet"));
 
 		TypedQuery<String> result = entityManager.createQuery(select);
 		return new HashSet<String>(result.getResultList());
@@ -72,27 +70,30 @@ public class JJStatusServiceImpl implements JJStatusService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				} else if (pairs.getKey().toString().contains("objet")) {
 
-					predicates
-							.add(criteriaBuilder.equal(from
-									.<String> get("objet"), pairs.getValue()
-									.toString()));
+					predicates.add(
+							criteriaBuilder.equal(from.<String> get("objet"),
+									pairs.getValue().toString()));
 
 				} else
-					predicates.add(criteriaBuilder.like(
-							from.<String> get("name"), "%" + pairs.getValue()
-									+ "%"));
+					predicates
+							.add(criteriaBuilder.like(from.<String> get("name"),
+									"%" + pairs.getValue() + "%"));
 
 			}
 		}
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -114,9 +115,9 @@ public class JJStatusServiceImpl implements JJStatusService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJStatus.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
-		size.setValue(Math.round(entityManager.createQuery(cq)
-				.getSingleResult()));
+		cq.where(predicates.toArray(new Predicate[]{}));
+		size.setValue(
+				Math.round(entityManager.createQuery(cq).getSingleResult()));
 
 		return result.getResultList();
 	}
@@ -124,7 +125,8 @@ public class JJStatusServiceImpl implements JJStatusService {
 	// New Generic
 
 	@Override
-	public JJStatus getOneStatus(String name, String object, boolean onlyActif) {
+	public JJStatus getOneStatus(String name, String object,
+			boolean onlyActif) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
 				.createQuery(JJStatus.class);
@@ -150,11 +152,11 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 			if (!object.contains("*"))
 				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(from.<String> get("objet")), "JJ"
-								+ object.toLowerCase()));
+						criteriaBuilder.lower(from.<String> get("objet")),
+						"JJ" + object.toLowerCase()));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+			Predicate orPredicate = criteriaBuilder
+					.or(orPredicates.toArray(new Predicate[]{}));
 			predicates.add(orPredicate);
 		}
 
@@ -162,7 +164,8 @@ public class JJStatusServiceImpl implements JJStatusService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJStatus> result = entityManager.createQuery(select);
 
@@ -193,11 +196,11 @@ public class JJStatusServiceImpl implements JJStatusService {
 					object.toLowerCase()));
 			if (!object.contains("*"))
 				orPredicates.add(criteriaBuilder.equal(
-						criteriaBuilder.lower(from.<String> get("objet")), "JJ"
-								+ object.toLowerCase()));
+						criteriaBuilder.lower(from.<String> get("objet")),
+						"JJ" + object.toLowerCase()));
 
-			Predicate orPredicate = criteriaBuilder.or(orPredicates
-					.toArray(new Predicate[] {}));
+			Predicate orPredicate = criteriaBuilder
+					.or(orPredicates.toArray(new Predicate[]{}));
 			predicates.add(orPredicate);
 		}
 
@@ -208,25 +211,26 @@ public class JJStatusServiceImpl implements JJStatusService {
 		if (names != null) {
 			if (names.isEmpty()) {
 
-				select.where(criteriaBuilder.and(predicates
-						.toArray(new Predicate[] {})));
+				select.where(criteriaBuilder
+						.and(predicates.toArray(new Predicate[]{})));
 			} else {
 
 				List<Predicate> namePredicates = new ArrayList<Predicate>();
 				for (String name : names) {
 
-					namePredicates.add(criteriaBuilder.or(criteriaBuilder
-							.notEqual(from.get("name"), name)));
+					namePredicates.add(criteriaBuilder.or(
+							criteriaBuilder.notEqual(from.get("name"), name)));
 
 				}
 
-				Predicate namePredicate = criteriaBuilder.and(namePredicates
-						.toArray(new Predicate[] {}));
+				Predicate namePredicate = criteriaBuilder
+						.and(namePredicates.toArray(new Predicate[]{}));
 				predicates.add(namePredicate);
 
 			}
 		}
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (sortedByName) {
 			select.orderBy(criteriaBuilder.asc(from.get("name")));

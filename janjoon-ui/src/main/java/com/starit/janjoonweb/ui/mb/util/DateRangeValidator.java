@@ -11,12 +11,10 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import org.primefaces.component.calendar.Calendar;
-import org.primefaces.component.spinner.Spinner;
 
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.ui.mb.JJSprintBean;
-import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import com.starit.janjoonweb.ui.mb.JJTaskBean.TaskData;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
@@ -25,24 +23,29 @@ public class DateRangeValidator implements Validator {
 
 	private void validateSprintStartDate(Date testedDate) {
 
-		if (LoginBean.getProject().getStartDate() != null && LoginBean.getProject().getStartDate().after(testedDate)) {
+		if (LoginBean.getProject().getStartDate() != null
+				&& LoginBean.getProject().getStartDate().after(testedDate)) {
 
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart", "Sprint",
-			        MessageFactory.getMessage("label_project", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startBeforeStart", "Sprint",
+					MessageFactory.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		} else if (LoginBean.getProject().getEndDate() != null
-		        && CalendarUtil.getAfterDay(LoginBean.getProject().getEndDate()).before(testedDate)) {
+				&& CalendarUtil.getAfterDay(LoginBean.getProject().getEndDate())
+						.before(testedDate)) {
 
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEnd", "Sprint",
-			        MessageFactory.getMessage("label_project", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_endAfterEnd", "Sprint",
+					MessageFactory.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
 
 	}
 
-	private void validateSprintEndDate(UIInput startDateComponent, String sprintMode, Date testedDate) {
+	private void validateSprintEndDate(UIInput startDateComponent,
+			String sprintMode, Date testedDate) {
 
 		// sprintEndDate&&ProjectEndDate
 		if (!startDateComponent.isValid()) {
@@ -57,58 +60,72 @@ public class DateRangeValidator implements Validator {
 
 		// sprintEndDate
 		if (sprintMode != null) {
-			if (LoginBean.getProject().getEndDate() != null
-			        && CalendarUtil.getAfterDay(LoginBean.getProject().getEndDate()).before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEnd", "Sprint",
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (LoginBean.getProject().getEndDate() != null && CalendarUtil
+					.getAfterDay(LoginBean.getProject().getEndDate())
+					.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_endAfterEnd", "Sprint", MessageFactory
+								.getMessage("label_project", "").getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (LoginBean.getProject().getStartDate() != null
-			        && LoginBean.getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart", "Sprint",
-				        MessageFactory.getMessage("label_project", "").getDetail());
+					&& LoginBean.getProject().getStartDate()
+							.after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_endBeforeStart", "Sprint",
+						MessageFactory.getMessage("label_project", "")
+								.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			} else if (startDate.after(testedDate)) {
 				startDateComponent.setValid(false);
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd", "Sprint",
-				        "Sprint");
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						"validator_date_startAfterEnd", "Sprint", "Sprint");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
 			// ProjectEndDate
 		} else if (startDate.after(testedDate)) {
 			startDateComponent.setValid(false);
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-			        MessageFactory.getMessage("label_project", "").getDetail(),
-			        MessageFactory.getMessage("label_project", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_project", "").getDetail(),
+					MessageFactory.getMessage("label_project", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
 
 	}
 
-	private void validateTaskDates_Sprint(UIComponent component, Date testedDate) {
+	private void validateTaskDates_Sprint(UIComponent component,
+			Date testedDate) {
 
 		String mode = (String) component.getAttributes().get("mode");
 		if (mode.equalsIgnoreCase("scrum")) {
-			JJSprintBean sprintBean = (JJSprintBean) LoginBean.findBean("jJSprintBean");
+			JJSprintBean sprintBean = (JJSprintBean) LoginBean
+					.findBean("jJSprintBean");
 			if (sprintBean.getSprintUtil().getSprint() != null) {
-				if (testedDate.before(sprintBean.getSprintUtil().getSprint().getStartDate())) {
-					FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart",
-					        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
+				if (testedDate.before(sprintBean.getSprintUtil().getSprint()
+						.getStartDate())) {
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_date_startBeforeStart", MessageFactory
+									.getMessage("label_task", "").getDetail(),
+							"Sprint");
 					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 					throw new ValidatorException(facesMessage);
 				}
 			}
 
 		} else {
-			JJSprint sprint = (JJSprint) component.getAttributes().get("sprint");
+			JJSprint sprint = (JJSprint) component.getAttributes()
+					.get("sprint");
 
 			if (sprint != null) {
 				if (testedDate.before(sprint.getStartDate())) {
-					FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart",
-					        MessageFactory.getMessage("label_task", "").getDetail(), "Sprint");
+					FacesMessage facesMessage = MessageFactory.getMessage(
+							"validator_date_startBeforeStart", MessageFactory
+									.getMessage("label_task", "").getDetail(),
+							"Sprint");
 					facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 					throw new ValidatorException(facesMessage);
 				}
@@ -118,13 +135,15 @@ public class DateRangeValidator implements Validator {
 
 	}
 
-	private void validateTaskData_startDate(TaskData taskData, Date testedDate) {
+	private void validateTaskData_startDate(TaskData taskData,
+			Date testedDate) {
 		Date end = taskData.getEndDate();
 
 		if (end != null && testedDate.after(end)) {
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -143,18 +162,28 @@ public class DateRangeValidator implements Validator {
 			// throw new ValidatorException(facesMessage);
 			// }
 		} else {
-			if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getStartDate() != null
-			        && taskData.getTask().getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getStartDate() != null
+					&& taskData.getTask().getProject().getStartDate()
+							.after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
-			} else if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getEndDate() != null
-			        && taskData.getTask().getProject().getEndDate().before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			} else if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getEndDate() != null
+					&& taskData.getTask().getProject().getEndDate()
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -162,13 +191,15 @@ public class DateRangeValidator implements Validator {
 
 	}
 
-	private void validateTaskData_startDateReal(TaskData taskData, Date testedDate) {
+	private void validateTaskData_startDateReal(TaskData taskData,
+			Date testedDate) {
 		Date end = taskData.getTask().getEndDateReal();
 
 		if (end != null && end.before(testedDate)) {
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -186,18 +217,28 @@ public class DateRangeValidator implements Validator {
 			// throw new ValidatorException(facesMessage);
 			// }
 		} else {
-			if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getStartDate() != null
-			        && taskData.getTask().getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getStartDate() != null
+					&& taskData.getTask().getProject().getStartDate()
+							.after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
-			} else if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getEndDate() != null
-			        && taskData.getTask().getProject().getEndDate().before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			} else if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getEndDate() != null
+					&& taskData.getTask().getProject().getEndDate()
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -209,9 +250,10 @@ public class DateRangeValidator implements Validator {
 		Date start = taskData.getStartDate();
 
 		if (start != null && start.after(testedDate)) {
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_endBeforeStart",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -230,18 +272,28 @@ public class DateRangeValidator implements Validator {
 			// throw new ValidatorException(facesMessage);
 			// }
 		} else {
-			if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getEndDate() != null
-			        && taskData.getTask().getProject().getEndDate().before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getEndDate() != null
+					&& taskData.getTask().getProject().getEndDate()
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
-			} else if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getStartDate() != null
-			        && taskData.getTask().getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			} else if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getStartDate() != null
+					&& taskData.getTask().getProject().getStartDate()
+							.after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -249,7 +301,8 @@ public class DateRangeValidator implements Validator {
 
 	}
 
-	private void validateTaskData_endDateReal(TaskData taskData, Date testedDate) {
+	private void validateTaskData_endDateReal(TaskData taskData,
+			Date testedDate) {
 		Date starDate = taskData.getTask().getStartDateReal();
 
 		if (starDate == null) {
@@ -257,9 +310,10 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (starDate != null && starDate.after(testedDate)) {
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -278,19 +332,29 @@ public class DateRangeValidator implements Validator {
 			// throw new ValidatorException(facesMessage);
 			// }
 		} else {
-			if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getEndDate() != null
-			        && taskData.getTask().getProject().getEndDate().before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getEndDate() != null
+					&& taskData.getTask().getProject().getEndDate()
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
-			} else if (taskData.getTask().getProject() != null && taskData.getTask().getProject().getStartDate() != null
-			        && taskData.getTask().getProject().getStartDate().after(testedDate)) {
+			} else if (taskData.getTask().getProject() != null
+					&& taskData.getTask().getProject().getStartDate() != null
+					&& taskData.getTask().getProject().getStartDate()
+							.after(testedDate)) {
 
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
@@ -299,9 +363,11 @@ public class DateRangeValidator implements Validator {
 
 	}
 
-	private void validateTask_startDatePlanned(UIComponent component, Date testedDate, JJSprint sprint, JJTask task) {
+	private void validateTask_startDatePlanned(UIComponent component,
+			Date testedDate, JJSprint sprint, JJTask task) {
 
-		Calendar taskEndDatePlanned = (Calendar) component.getAttributes().get("taskEndDatePlanned");
+		Calendar taskEndDatePlanned = (Calendar) component.getAttributes()
+				.get("taskEndDatePlanned");
 		Date end = (Date) taskEndDatePlanned.getValue();
 
 		if (testedDate == null) {
@@ -310,9 +376,10 @@ public class DateRangeValidator implements Validator {
 
 		if (testedDate.after(end)) {
 
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_startAfterEnd",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -334,19 +401,28 @@ public class DateRangeValidator implements Validator {
 			// task.setStartDatePlanned(testedDate);
 			// }
 		} else {
-			if (task.getProject() != null && task.getProject().getStartDate() != null
-			        && task.getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (task.getProject() != null
+					&& task.getProject().getStartDate() != null
+					&& task.getProject().getStartDate().after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
-			} else if (task.getProject() != null && task.getProject().getEndDate() != null
-			        && CalendarUtil.getAfterDay(task.getProject().getEndDate()).before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_startAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			} else if (task.getProject() != null
+					&& task.getProject().getEndDate() != null
+					&& CalendarUtil.getAfterDay(task.getProject().getEndDate())
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_startAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 
@@ -355,10 +431,13 @@ public class DateRangeValidator implements Validator {
 
 	}
 
-	private void validateTask_endDatePlanned(UIComponent component, Date testedDate, JJSprint sprint, JJTask task) {
+	private void validateTask_endDatePlanned(UIComponent component,
+			Date testedDate, JJSprint sprint, JJTask task) {
 
-		Calendar taskStartDatePlanned = (Calendar) component.getAttributes().get("taskStartDatePlanned");
-		Spinner workload = (Spinner) component.getAttributes().get("workload");
+		Calendar taskStartDatePlanned = (Calendar) component.getAttributes()
+				.get("taskStartDatePlanned");
+		// Spinner workload = (Spinner)
+		// component.getAttributes().get("workload");
 
 		Date start = (Date) taskStartDatePlanned.getValue();
 
@@ -367,9 +446,10 @@ public class DateRangeValidator implements Validator {
 		}
 
 		if (testedDate.before(start)) {
-			FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart",
-			        MessageFactory.getMessage("label_task", "").getDetail(),
-			        MessageFactory.getMessage("label_task", "").getDetail());
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"validator_date_endBeforeStart",
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					MessageFactory.getMessage("label_task", "").getDetail());
 			facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 			throw new ValidatorException(facesMessage);
 		}
@@ -406,18 +486,27 @@ public class DateRangeValidator implements Validator {
 			//
 			// }
 		} else {
-			if (task.getProject() != null && task.getProject().getEndDate() != null
-			        && CalendarUtil.getAfterDay(task.getProject().getEndDate()).before(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endAfterEnd",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			if (task.getProject() != null
+					&& task.getProject().getEndDate() != null
+					&& CalendarUtil.getAfterDay(task.getProject().getEndDate())
+							.before(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endAfterEnd",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
-			} else if (task.getProject() != null && task.getProject().getStartDate() != null
-			        && task.getProject().getStartDate().after(testedDate)) {
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_date_endBeforeStart",
-				        MessageFactory.getMessage("label_task", "").getDetail(),
-				        MessageFactory.getMessage("label_project", "").getDetail());
+			} else if (task.getProject() != null
+					&& task.getProject().getStartDate() != null
+					&& task.getProject().getStartDate().after(testedDate)) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_date_endBeforeStart",
+								MessageFactory.getMessage("label_task", "")
+										.getDetail(),
+								MessageFactory.getMessage("label_project", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
@@ -427,20 +516,26 @@ public class DateRangeValidator implements Validator {
 	}
 
 	@Override
-	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+	public void validate(FacesContext context, UIComponent component,
+			Object value) throws ValidatorException {
 		if (value == null) {
 			return; // Let required="true" handle.
 		}
 
 		Date testedDate = (Date) value;
-		TaskData taskData = (TaskData) component.getAttributes().get("taskData");
+		TaskData taskData = (TaskData) component.getAttributes()
+				.get("taskData");
 		JJTask task = (JJTask) component.getAttributes().get("task");
 		String edition = (String) component.getAttributes().get("edition");
-		String sprintMode = (String) component.getAttributes().get("sprintMode");
-		UIInput startDateComponent = (UIInput) component.getAttributes().get("startDateComponent");
-		UIInput sprintComponent = (UIInput) component.getAttributes().get("sprintComponent");
+		String sprintMode = (String) component.getAttributes()
+				.get("sprintMode");
+		UIInput startDateComponent = (UIInput) component.getAttributes()
+				.get("startDateComponent");
+		UIInput sprintComponent = (UIInput) component.getAttributes()
+				.get("sprintComponent");
 
-		if (taskData == null && startDateComponent == null && sprintComponent == null) {
+		if (taskData == null && startDateComponent == null
+				&& sprintComponent == null) {
 			if (sprintMode != null)
 				validateSprintStartDate(testedDate);
 		} else if (taskData == null && startDateComponent != null) {
@@ -465,10 +560,12 @@ public class DateRangeValidator implements Validator {
 					// View Task ValidatOr
 					JJSprint sprint = (JJSprint) sprintComponent.getValue();
 					if (edition.equalsIgnoreCase("startDatePlanned")) {
-						validateTask_startDatePlanned(component, testedDate, sprint, task);
+						validateTask_startDatePlanned(component, testedDate,
+								sprint, task);
 					}
 					if (edition.equalsIgnoreCase("endDatePlanned")) {
-						validateTask_endDatePlanned(component, testedDate, sprint, task);
+						validateTask_endDatePlanned(component, testedDate,
+								sprint, task);
 					}
 				}
 

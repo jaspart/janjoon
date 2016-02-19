@@ -28,7 +28,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBuildSEQ")
-@Table(indexes = { @Index(unique = true, columnList = "name,version") })
+@Table(indexes = {@Index(unique = true, columnList = "name,version")})
 @XmlRootElement
 public class JJBuild {
 
@@ -69,7 +69,9 @@ public class JJBuild {
 	private Set<JJTestcase> testcases = new HashSet<JJTestcase>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "JJbuildLinkJJTask", joinColumns = { @javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "Task_ID", referencedColumnName = "id") })
+	@JoinTable(name = "JJbuildLinkJJTask", joinColumns = {
+			@javax.persistence.JoinColumn(name = "Build_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+					@javax.persistence.JoinColumn(name = "Task_ID", referencedColumnName = "id")})
 	private Set<JJTask> tasks = new HashSet<JJTask>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "build")
@@ -97,8 +99,9 @@ public class JJBuild {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJBuild) && (getId() != null) ? getId()
-				.equals(((JJBuild) object).getId()) : (object == this);
+		return (object instanceof JJBuild) && (getId() != null)
+				? getId().equals(((JJBuild) object).getId())
+				: (object == this);
 	}
 
 	@Override

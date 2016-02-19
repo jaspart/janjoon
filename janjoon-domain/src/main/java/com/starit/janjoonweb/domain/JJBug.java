@@ -28,7 +28,7 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 @RooJavaBean
 @RooToString
 @RooJpaEntity(sequenceName = "JJBugSEQ")
-@Table(indexes = { @Index(unique = false, columnList = "project,category") })
+@Table(indexes = {@Index(unique = false, columnList = "project,category")})
 public class JJBug {
 
 	@NotNull
@@ -122,8 +122,9 @@ public class JJBug {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJBug) && (getId() != null) ? getId().equals(
-				((JJBug) object).getId()) : (object == this);
+		return (object instanceof JJBug) && (getId() != null)
+				? getId().equals(((JJBug) object).getId())
+				: (object == this);
 	}
 
 	@Override

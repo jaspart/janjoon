@@ -139,21 +139,23 @@ public class JJTask {
 	private Set<JJBuild> builds = new HashSet<JJBuild>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "JJTaskLink", joinColumns = { @javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id") }, inverseJoinColumns = { @javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id") })
+	@JoinTable(name = "JJTaskLink", joinColumns = {
+			@javax.persistence.JoinColumn(name = "AfterTask_ID", referencedColumnName = "id")}, inverseJoinColumns = {
+					@javax.persistence.JoinColumn(name = "BeforeTask_ID", referencedColumnName = "id")})
 	private Set<JJTask> beforeTasks = new HashSet<JJTask>();
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJTask) && (getId() != null) ? getId()
-				.equals(((JJTask) object).getId()) : (object == this);
+		return (object instanceof JJTask) && (getId() != null)
+				? getId().equals(((JJTask) object).getId())
+				: (object == this);
 	}
 
 	public JJChapter getChapter() {
 		if (this.getRequirement() != null
 				&& this.getRequirement().getChapter() != null)
 			return this.getRequirement().getChapter();
-		else if (this.getBug() != null
-				&& this.getBug().getRequirement() != null
+		else if (this.getBug() != null && this.getBug().getRequirement() != null
 				&& this.getBug().getRequirement().getChapter() != null)
 			return this.getBug().getRequirement().getChapter();
 		else if (this.getTestcase() != null

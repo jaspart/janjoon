@@ -23,55 +23,55 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 public class AuthorisationService implements Serializable {
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
-	private HttpSession			session;
-	private JJCategory			category;
+	private HttpSession session;
+	private JJCategory category;
 
-	private JJContact			contact;
+	private JJContact contact;
 
-	private boolean				adminContact;
-	private String				adminContactMSG;
-	private boolean				adminProfil;
-	private String				adminProfilMSG;
-	private boolean				adminCompany;
-	private String				adminCompanyMSG;
-	private boolean				adminProject;
-	private String				adminProjectMSG;
-	private boolean				adminProduct;
-	private String				adminProductMSG;
-	private boolean				adminWorkflow;
-	private String				adminWorkflowMSG;
-	private boolean				adminCategory;
-	private String				adminCategoryMSG;
-	private boolean				adminConfiguration;
-	private String				adminConfigurationMSG;
-	private boolean				adminStatus;
-	private String				adminStatusMSG;
-	private boolean				rRequiement;
-	private String				rRequiementMSG;
-	private boolean				rTest;
-	private String				rTestMSG;
-	private boolean				wTest;
-	private boolean				xTest;
-	private boolean				rwDev;
-	private String				rwDevMSG;
-	private boolean				rProject;
-	private String				rProjectMSG;
-	private boolean				wProject;
-	private boolean				rBuild;
-	private String				rBuildMSG;
-	private boolean				wRequiement;
-	private String				wRequiementMSG;
-	private boolean				rBug;
-	private String				rBugMSG;
-	private boolean				rContact;
-	private String				rContactMSG;
-	private boolean				rCompany;
-	private String				rCompanyMSG;
-	private boolean				renderAdmin;
-	private boolean				viewTeamImputation;
-	private boolean				superAdmin;
+	private boolean adminContact;
+	private String adminContactMSG;
+	private boolean adminProfil;
+	private String adminProfilMSG;
+	private boolean adminCompany;
+	private String adminCompanyMSG;
+	private boolean adminProject;
+	private String adminProjectMSG;
+	private boolean adminProduct;
+	private String adminProductMSG;
+	private boolean adminWorkflow;
+	private String adminWorkflowMSG;
+	private boolean adminCategory;
+	private String adminCategoryMSG;
+	private boolean adminConfiguration;
+	private String adminConfigurationMSG;
+	private boolean adminStatus;
+	private String adminStatusMSG;
+	private boolean rRequiement;
+	private String rRequiementMSG;
+	private boolean rTest;
+	private String rTestMSG;
+	private boolean wTest;
+	private boolean xTest;
+	private boolean rwDev;
+	private String rwDevMSG;
+	private boolean rProject;
+	private String rProjectMSG;
+	private boolean wProject;
+	private boolean rBuild;
+	private String rBuildMSG;
+	private boolean wRequiement;
+	private String wRequiementMSG;
+	private boolean rBug;
+	private String rBugMSG;
+	private boolean rContact;
+	private String rContactMSG;
+	private boolean rCompany;
+	private String rCompanyMSG;
+	private boolean renderAdmin;
+	private boolean viewTeamImputation;
+	private boolean superAdmin;
 
 	public AuthorisationService(final HttpSession session, final JJContact c) {
 		this.session = session;
@@ -165,21 +165,25 @@ public class AuthorisationService implements Serializable {
 
 	public void initFields() {
 
-		JJProjectBean projectBean = (JJProjectBean) session.getAttribute("jJProjectBean");
-		JJProductBean productBean = (JJProductBean) session.getAttribute("jJProductBean");
-		JJPermissionBean permissionBean = (JJPermissionBean) session.getAttribute("jJPermissionBean");
+		JJProjectBean projectBean = (JJProjectBean) session
+				.getAttribute("jJProjectBean");
+		JJProductBean productBean = (JJProductBean) session
+				.getAttribute("jJProductBean");
+		JJPermissionBean permissionBean = (JJPermissionBean) session
+				.getAttribute("jJPermissionBean");
 
 		if (permissionBean == null) {
 			permissionBean = new JJPermissionBean();
 		}
 
-		final JJPermissionService jJPermissionService = permissionBean.getJJPermissionService();
+		final JJPermissionService jJPermissionService = permissionBean
+				.getJJPermissionService();
 
 		superAdmin = jJPermissionService.isSuperAdmin(contact);
 
 		if (category == null) {
-			category = jJPermissionService
-			        .getDefaultCategory(((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			category = jJPermissionService.getDefaultCategory(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		}
 		if (projectBean == null) {
 			projectBean = new JJProjectBean();
@@ -193,146 +197,199 @@ public class AuthorisationService implements Serializable {
 
 		adminContact = jJPermissionService.isAdmin(contact);
 		if (!adminContact) {
-			adminContactMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminContactMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 			adminProfil = false;
-			adminProfilMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminProfilMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminContactMSG = "";
-			adminProfil = jJPermissionService.isAuthorized(contact, null, null, "Profile", null, null, null, true);
+			adminProfil = jJPermissionService.isAuthorized(contact, null, null,
+					"Profile", null, null, null, true);
 
 			if (!adminProfil) {
-				adminProfilMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+				adminProfilMSG = MessageFactory
+						.getMessage("header_noPermission_menuitem", "")
+						.getDetail();
 			} else {
 				adminProfilMSG = "";
 			}
 		}
 
-		adminCompany = jJPermissionService.isAuthorized(contact, null, null, "Company", null, true, true, true);
+		adminCompany = jJPermissionService.isAuthorized(contact, null, null,
+				"Company", null, true, true, true);
 		renderAdmin = adminCompany || adminContact
-		        || jJPermissionService.isAuthorized(contact, null, null, "Company", null, true, null, null);
+				|| jJPermissionService.isAuthorized(contact, null, null,
+						"Company", null, true, null, null);
 		if (!adminCompany) {
-			adminCompanyMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminCompanyMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminCompanyMSG = "";
 		}
 
-		adminProduct = jJPermissionService.isAuthorized(contact, null, null, "Product", null, null, null, true);
+		adminProduct = jJPermissionService.isAuthorized(contact, null, null,
+				"Product", null, null, null, true);
 		if (!adminProduct) {
-			adminProductMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminProductMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminProductMSG = "";
 		}
 
-		adminProject = jJPermissionService.isAuthorized(contact, null, null, "Project", null, null, null, true);
+		adminProject = jJPermissionService.isAuthorized(contact, null, null,
+				"Project", null, null, null, true);
 		if (!adminProject) {
-			adminProjectMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminProjectMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminProjectMSG = "";
 		}
 
-		adminWorkflow = jJPermissionService.isAuthorized(contact, null, null, "Workflow", null, null, null, true);
+		adminWorkflow = jJPermissionService.isAuthorized(contact, null, null,
+				"Workflow", null, null, null, true);
 		if (!adminWorkflow) {
-			adminWorkflowMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminWorkflowMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminWorkflowMSG = "";
 		}
 
-		adminCategory = jJPermissionService.isAuthorized(contact, null, null, "Category", null, null, null, true);
+		adminCategory = jJPermissionService.isAuthorized(contact, null, null,
+				"Category", null, null, null, true);
 		if (!adminCategory) {
-			adminCategoryMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminCategoryMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminCategoryMSG = "";
 		}
 
-		adminConfiguration = jJPermissionService.isAuthorized(contact, null, null, "Configuration", null, null, null,
-		        true);
+		adminConfiguration = jJPermissionService.isAuthorized(contact, null,
+				null, "Configuration", null, null, null, true);
 		if (!adminConfiguration) {
-			adminConfigurationMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminConfigurationMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminConfigurationMSG = "";
 		}
-		adminStatus = jJPermissionService.isAuthorized(contact, null, null, "Status", null, null, null, true);
+		adminStatus = jJPermissionService.isAuthorized(contact, null, null,
+				"Status", null, null, null, true);
 		if (!adminStatus) {
-			adminStatusMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			adminStatusMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
 			adminStatusMSG = "";
 		}
 
-		rRequiement = jJPermissionService.isAuthorized(contact, project, product, "Requirement", null, true, null,
-		        null);
+		rRequiement = jJPermissionService.isAuthorized(contact, project,
+				product, "Requirement", null, true, null, null);
 		if (!rRequiement) {
-			rRequiementMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rRequiementMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rRequiementMSG = MessageFactory.getMessage("header_spec_menuitemhelp", "").getDetail();
+			rRequiementMSG = MessageFactory
+					.getMessage("header_spec_menuitemhelp", "").getDetail();
 		}
 
-		rTest = jJPermissionService.isAuthorized(contact, project, product, "Testcase", null, true, null, null);
-		wTest = jJPermissionService.isAuthorized(contact, project, product, "Testcase", null, null, true, null);
-		xTest = jJPermissionService.isAuthorized(contact, project, product, "Testcase", null, null, null, true);
+		rTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, true, null, null);
+		wTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, null, true, null);
+		xTest = jJPermissionService.isAuthorized(contact, project, product,
+				"Testcase", null, null, null, true);
 		if (!rTest) {
-			rTestMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rTestMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rTestMSG = MessageFactory.getMessage("header_test_menuitemhelp", "").getDetail();
+			rTestMSG = MessageFactory.getMessage("header_test_menuitemhelp", "")
+					.getDetail();
 		}
 
-		rwDev = jJPermissionService.isAuthorized(contact, project, product, "Version", null, true, true, null);
+		rwDev = jJPermissionService.isAuthorized(contact, project, product,
+				"Version", null, true, true, null);
 		if (!rwDev) {
-			rwDevMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rwDevMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rwDevMSG = MessageFactory.getMessage("header_dev_menuitemhelp", "").getDetail();
+			rwDevMSG = MessageFactory.getMessage("header_dev_menuitemhelp", "")
+					.getDetail();
 
 		}
 
-		rProject = jJPermissionService.isAuthorized(contact, project, product, "Project", null, true, null, null);
-		wProject = jJPermissionService.isAuthorized(contact, project, product, "Project", null, null, true, null);
+		rProject = jJPermissionService.isAuthorized(contact, project, product,
+				"Project", null, true, null, null);
+		wProject = jJPermissionService.isAuthorized(contact, project, product,
+				"Project", null, null, true, null);
 		if (!rProject) {
-			rProjectMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rProjectMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rProjectMSG = MessageFactory.getMessage("header_project_menuitemhelp", "").getDetail();
+			rProjectMSG = MessageFactory
+					.getMessage("header_project_menuitemhelp", "").getDetail();
 		}
 
-		rBuild = jJPermissionService.isAuthorized(contact, project, product, "Build", null, true, null, null);
+		rBuild = jJPermissionService.isAuthorized(contact, project, product,
+				"Build", null, true, null, null);
 		if (!rBuild) {
-			rBuildMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rBuildMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rBuildMSG = MessageFactory.getMessage("header_delivery_menuitemhelp", "").getDetail();
+			rBuildMSG = MessageFactory
+					.getMessage("header_delivery_menuitemhelp", "").getDetail();
 		}
 
-		rBug = jJPermissionService.isAuthorized(contact, project, product, "Bug", null, true, null, null);
+		rBug = jJPermissionService.isAuthorized(contact, project, product,
+				"Bug", null, true, null, null);
 		if (!rBug) {
-			rBugMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rBugMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rBugMSG = MessageFactory.getMessage("header_bug_menuitemhelp", "").getDetail();
+			rBugMSG = MessageFactory.getMessage("header_bug_menuitemhelp", "")
+					.getDetail();
 		}
 
-		rContact = jJPermissionService.isAuthorized(contact, null, null, "Contact", null, true, null, null);
+		rContact = jJPermissionService.isAuthorized(contact, null, null,
+				"Contact", null, true, null, null);
 		if (!rContact) {
-			rContactMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rContactMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rContactMSG = MessageFactory.getMessage("header_team_menuitemhelp", "").getDetail();
+			rContactMSG = MessageFactory
+					.getMessage("header_team_menuitemhelp", "").getDetail();
 		}
 
-		rCompany = jJPermissionService.isAuthorized(contact, null, null, "Company", null, true, null, null);
+		rCompany = jJPermissionService.isAuthorized(contact, null, null,
+				"Company", null, true, null, null);
 		if (!rCompany) {
-			rCompanyMSG = MessageFactory.getMessage("header_noPermission_menuitem", "").getDetail();
+			rCompanyMSG = MessageFactory
+					.getMessage("header_noPermission_menuitem", "").getDetail();
 		} else {
-			rCompanyMSG = MessageFactory.getMessage("header_admin_menuitemhelp", "").getDetail();
+			rCompanyMSG = MessageFactory
+					.getMessage("header_admin_menuitemhelp", "").getDetail();
 		}
 
-		viewTeamImputation = jJPermissionService.isAuthorized(contact, null, product, "Contact", null, null, null, true)
-		        || jJPermissionService.isAuthorized(contact, project, null, "Contact", null, null, null, true);
+		viewTeamImputation = jJPermissionService.isAuthorized(contact, null,
+				product, "Contact", null, null, null, true)
+				|| jJPermissionService.isAuthorized(contact, project, null,
+						"Contact", null, null, null, true);
 
 		if (project != null) {
-			wRequiement = jJPermissionService.isAuthorized(contact, project, product, "Requirement", null, null, true,
-			        null);
+			wRequiement = jJPermissionService.isAuthorized(contact, project,
+					product, "Requirement", null, null, true, null);
 			if (!wRequiement) {
-				wRequiementMSG = MessageFactory.getMessage("header_noAction_Permission_menuitem", "").getDetail();
+				wRequiementMSG = MessageFactory
+						.getMessage("header_noAction_Permission_menuitem", "")
+						.getDetail();
 			} else {
-				wRequiementMSG = MessageFactory.getMessage("specification_table_requirement_new", "").getDetail();
+				wRequiementMSG = MessageFactory
+						.getMessage("specification_table_requirement_new", "")
+						.getDetail();
 			}
 		} else {
 			wRequiement = false;
-			wRequiementMSG = MessageFactory.getMessage("specification_warning_lackProject", "").getDetail();
+			wRequiementMSG = MessageFactory
+					.getMessage("specification_warning_lackProject", "")
+					.getDetail();
 		}
 	}
 
@@ -394,21 +451,25 @@ public class AuthorisationService implements Serializable {
 
 	public boolean isRenderCategoryConfig() {
 
-		JJPermissionBean permissionBean = (JJPermissionBean) session.getAttribute("jJPermissionBean");
+		JJPermissionBean permissionBean = (JJPermissionBean) session
+				.getAttribute("jJPermissionBean");
 
 		if (permissionBean == null) {
 			permissionBean = new JJPermissionBean();
 		}
 
-		final JJPermissionService jJPermissionService = permissionBean.getJJPermissionService();
+		final JJPermissionService jJPermissionService = permissionBean
+				.getJJPermissionService();
 
-		final JJContactBean jjContactBean = (JJContactBean) session.getAttribute("jJContactBean");
+		final JJContactBean jjContactBean = (JJContactBean) session
+				.getAttribute("jJContactBean");
 		final Contact con = jjContactBean.getContactUtil();
 
-		return jJPermissionService.isAuthorized(contact, con.getLastProject(), con.getLastProduct(), "category", null,
-		        true, null, null)
-		        && jJPermissionService.isAuthorized(contact, con.getLastProject(), con.getLastProduct(), "requirement",
-		                null, true, null, null);
+		return jJPermissionService.isAuthorized(contact, con.getLastProject(),
+				con.getLastProduct(), "category", null, true, null, null)
+				&& jJPermissionService.isAuthorized(contact,
+						con.getLastProject(), con.getLastProduct(),
+						"requirement", null, true, null, null);
 
 	}
 
@@ -605,12 +666,18 @@ public class AuthorisationService implements Serializable {
 		this.session = session;
 		initFields();
 
-		final JJSprintBean jJSprintBean = (JJSprintBean) this.session.getAttribute("jJSprintBean");
-		final JJProjectBean jjProjectBean = (JJProjectBean) this.session.getAttribute("jJProjectBean");
-		final JJProductBean jjProductBean = (JJProductBean) this.session.getAttribute("jJProductBean");
-		final JJContactBean jjContactBean = (JJContactBean) this.session.getAttribute("jJContactBean");
-		final JJCompanyBean jjCompanyBean = (JJCompanyBean) this.session.getAttribute("jJCompanyBean");
-		final LoginBean loginBean = (LoginBean) this.session.getAttribute("loginBean");
+		final JJSprintBean jJSprintBean = (JJSprintBean) this.session
+				.getAttribute("jJSprintBean");
+		final JJProjectBean jjProjectBean = (JJProjectBean) this.session
+				.getAttribute("jJProjectBean");
+		final JJProductBean jjProductBean = (JJProductBean) this.session
+				.getAttribute("jJProductBean");
+		final JJContactBean jjContactBean = (JJContactBean) this.session
+				.getAttribute("jJContactBean");
+		final JJCompanyBean jjCompanyBean = (JJCompanyBean) this.session
+				.getAttribute("jJCompanyBean");
+		final LoginBean loginBean = (LoginBean) this.session
+				.getAttribute("loginBean");
 		loginBean.setContact(null);
 		loginBean.setMessageCount(null);
 		jjContactBean.setCalendarUtil(null);

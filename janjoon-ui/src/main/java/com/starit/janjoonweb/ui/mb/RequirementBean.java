@@ -2,7 +2,6 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -37,7 +35,6 @@ import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
-import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.util.CategorieRequirement;
@@ -48,59 +45,57 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 @Component("requirementBean")
 public class RequirementBean {
 
-	public static final String			REQUIREMENT_SUBSCRIPTION_RATE			= "requirement_subscription_rate";
-	public static final String			REQUIREMENT_SUBSCRIPTION_CANCEL_RATE	= "requirement_subscription_cancel_rate";
+	public static final String REQUIREMENT_SUBSCRIPTION_RATE = "requirement_subscription_rate";
+	public static final String REQUIREMENT_SUBSCRIPTION_CANCEL_RATE = "requirement_subscription_cancel_rate";
 
 	@Autowired
-	private JJRequirementService		jJRequirementService;
+	private JJRequirementService jJRequirementService;
 
 	@Autowired
-	private JJVersionService			jJVersionService;
+	private JJVersionService jJVersionService;
 
 	@Autowired
-	private JJChapterService			jJChapterService;
+	private JJChapterService jJChapterService;
 
 	@Autowired
-	private JJCategoryService			jJCategoryService;
+	private JJCategoryService jJCategoryService;
 
 	@Autowired
-	private JJTaskService				jJTaskService;
+	private JJTaskService jJTaskService;
 
 	@Autowired
-	private JJTestcaseService			jJTestcaseService;
+	private JJTestcaseService jJTestcaseService;
 
 	@Autowired
-	private JJTestcaseexecutionService	jJTestcaseexecutionService;
+	private JJPermissionService jJPermissionService;
 
 	@Autowired
-	private JJPermissionService			jJPermissionService;
-
-	@Autowired
-	private JJMessageService			jJMessageService;
+	private JJMessageService jJMessageService;
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
 	}
 
 	// private Integer rated;
-	private TreeNode					rootNode;
-	private TreeNode					selectedNode;
-	private Integer						rowCount;
-	private JJCategory					category;
-	private List<JJTask>				requirementTasks;
-	private List<JJCategory>			categories;
-	private List<JJTestcase>			reqtestCases;
-	private List<JJTestcase>			reqSelectedtestCases;
-	private String						testCaseName;
-	private List<CategorieRequirement>	categorieRequirements;
-	private List<JJRequirement>			linkReqList;
-	private List<JJRequirement>			linkReq;
-	private JJRequirement				requirement;
-	private boolean						reqDialogReqListrender;
-	private String						categoryName;
-	private List<JJMessage>				communicationMessages;
+	private TreeNode rootNode;
+	private TreeNode selectedNode;
+	private Integer rowCount;
+	private JJCategory category;
+	private List<JJTask> requirementTasks;
+	private List<JJCategory> categories;
+	private List<JJTestcase> reqtestCases;
+	private List<JJTestcase> reqSelectedtestCases;
+	private String testCaseName;
+	private List<CategorieRequirement> categorieRequirements;
+	private List<JJRequirement> linkReqList;
+	private List<JJRequirement> linkReq;
+	private JJRequirement requirement;
+	private boolean reqDialogReqListrender;
+	private String categoryName;
+	private List<JJMessage> communicationMessages;
 
-	public void setjJRequirementService(JJRequirementService jJRequirementService) {
+	public void setjJRequirementService(
+			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
 	}
 
@@ -128,16 +123,14 @@ public class RequirementBean {
 		this.jJTestcaseService = jJTestcaseService;
 	}
 
-	public void setjJTestcaseexecutionService(JJTestcaseexecutionService jJTestcaseexecutionService) {
-		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
-	}
-
-	public void setjJPermissionService(JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
 	public boolean isRated() {
-		return (((LoginBean) LoginBean.findBean("loginBean")).getContact().getRequirements().contains(requirement));
+		return (((LoginBean) LoginBean.findBean("loginBean")).getContact()
+				.getRequirements().contains(requirement));
 	}
 
 	public TreeNode getRootNode() {
@@ -179,8 +172,8 @@ public class RequirementBean {
 	public JJCategory getCategory() {
 
 		if (category == null)
-			category = jJPermissionService
-			        .getDefaultCategory(((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			category = jJPermissionService.getDefaultCategory(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
 		return category;
 	}
 
@@ -216,7 +209,8 @@ public class RequirementBean {
 		return categorieRequirements;
 	}
 
-	public void setCategorieRequirements(List<CategorieRequirement> categorieRequirements) {
+	public void setCategorieRequirements(
+			List<CategorieRequirement> categorieRequirements) {
 		this.categorieRequirements = categorieRequirements;
 	}
 
@@ -231,7 +225,8 @@ public class RequirementBean {
 	public List<JJCategory> getCategories() {
 
 		if (categories == null)
-			categories = jJCategoryService.getCategories(null, false, true, true, LoginBean.getCompany());
+			categories = jJCategoryService.getCategories(null, false, true,
+					true, LoginBean.getCompany());
 
 		return categories;
 	}
@@ -259,13 +254,15 @@ public class RequirementBean {
 	public List<JJMessage> getCommunicationMessages() {
 
 		if (requirement != null) {
-			communicationMessages = jJMessageService.getCommMessages(requirement);
+			communicationMessages = jJMessageService
+					.getCommMessages(requirement);
 			return communicationMessages;
 		} else
 			return new ArrayList<JJMessage>();
 	}
 
-	public void setCommunicationMessages(List<JJMessage> communicationMessages) {
+	public void setCommunicationMessages(
+			List<JJMessage> communicationMessages) {
 		this.communicationMessages = communicationMessages;
 	}
 
@@ -273,17 +270,17 @@ public class RequirementBean {
 
 		switch (categorieRequirements.size()) {
 
-			case 1:
+			case 1 :
 				return "Container100";
-			case 2:
+			case 2 :
 				return "Container55";
-			case 3:
+			case 3 :
 				return "Container33";
-			case 4:
+			case 4 :
 				return "Container25";
-			case 5:
+			case 5 :
 				return "Container20";
-			default:
+			default :
 				return "Container20";
 		}
 
@@ -293,7 +290,9 @@ public class RequirementBean {
 
 	public String getActiveIndex() {
 
-		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile() ? "-1" : "0";
+		return ((LoginBean) LoginBean.findBean("loginBean")).isMobile()
+				? "-1"
+				: "0";
 
 	}
 
@@ -303,7 +302,8 @@ public class RequirementBean {
 
 	public boolean isReqDialogReqListrender() {
 
-		if (FacesContext.getCurrentInstance().getViewRoot().getViewId().contains("specifications"))
+		if (FacesContext.getCurrentInstance().getViewRoot().getViewId()
+				.contains("specifications"))
 			reqDialogReqListrender = true;
 		else
 			reqDialogReqListrender = false;
@@ -334,8 +334,10 @@ public class RequirementBean {
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
 		testCaseName = null;
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
-		        MessageFactory.getMessage("label_requirement", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
@@ -345,8 +347,10 @@ public class RequirementBean {
 			JJTestcase b = new JJTestcase();
 			b.setName(testCaseName);
 			b.setEnabled(true);
-			b.setRequirement(jJRequirementService.findJJRequirement(requirement.getId()));
-			b.setDescription("TestCase for Requirement " + requirement.getName());
+			b.setRequirement(jJRequirementService
+					.findJJRequirement(requirement.getId()));
+			b.setDescription(
+					"TestCase for Requirement " + requirement.getName());
 			b.setOrdering(jJTestcaseService.getMaxOrdering(requirement));
 			b.setAutomatic(false);
 			jjTestcaseBean.saveJJTestcase(b);
@@ -355,27 +359,32 @@ public class RequirementBean {
 			reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 			reqSelectedtestCases = reqtestCases;
 
-			FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_created", "TestCase");
+			FacesMessage facesMessage = MessageFactory
+					.getMessage("message_successfully_created", "TestCase");
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null,
-			        new FacesMessage(FacesMessage.SEVERITY_ERROR, "TestCase Name is required", ""));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"TestCase Name is required", ""));
 		}
 
 	}
 
 	public void checkRequirement(ComponentSystemEvent e) throws IOException {
 
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-		        .getRequest();
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
 		String value = request.getParameter("requirement");
 		try {
 			long id = Long.parseLong(value);
 			categoryName = null;
 			requirementTasks = new ArrayList<JJTask>();
-			JJProductBean jJProductBean = ((JJProductBean) LoginBean.findBean("jJProductBean"));
-			JJVersionBean jJVersionBean = ((JJVersionBean) LoginBean.findBean("jJVersionBean"));
-			JJProjectBean jJProjectBean = ((JJProjectBean) LoginBean.findBean("jJProjectBean"));
+			JJProductBean jJProductBean = ((JJProductBean) LoginBean
+					.findBean("jJProductBean"));
+			JJVersionBean jJVersionBean = ((JJVersionBean) LoginBean
+					.findBean("jJVersionBean"));
+			JJProjectBean jJProjectBean = ((JJProjectBean) LoginBean
+					.findBean("jJProjectBean"));
 
 			requirement = jJRequirementService.findJJRequirement(id);
 			boolean show = requirement != null;
@@ -383,16 +392,21 @@ public class RequirementBean {
 				show = requirement.getEnabled();
 
 			if (show)
-				show = jJPermissionService.isAuthorized(((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-				        requirement.getProject(), requirement.getProduct(), "Requirement");
+				show = jJPermissionService.isAuthorized(
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact(),
+						requirement.getProject(), requirement.getProduct(),
+						"Requirement");
 
-			if (show && !jJProjectBean.getProjectList().contains(requirement.getProject()))
+			if (show && !jJProjectBean.getProjectList()
+					.contains(requirement.getProject()))
 				show = false;
 
 			if (show) {
 				boolean change = false;
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-				        .getSession(false);
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext()
+						.getSession(false);
 
 				if (jJProjectBean.getProject() == null) {
 					change = true;
@@ -404,7 +418,8 @@ public class RequirementBean {
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
-				} else if (!jJProjectBean.getProject().equals(requirement.getProject())) {
+				} else if (!jJProjectBean.getProject()
+						.equals(requirement.getProject())) {
 					change = true;
 					jJProjectBean.setProject(requirement.getProject());
 					jJProductBean.setProduct(requirement.getProduct());
@@ -414,24 +429,33 @@ public class RequirementBean {
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
-				} else if (requirement.getProduct() != null && jJProductBean.getProduct() != null) {
-					if (!requirement.getProduct().equals(jJProductBean.getProduct())) {
+				} else if (requirement.getProduct() != null
+						&& jJProductBean.getProduct() != null) {
+					if (!requirement.getProduct()
+							.equals(jJProductBean.getProduct())) {
 						change = true;
 						jJProductBean.setProduct(requirement.getProduct());
 						jJVersionBean.getVersionList();
 						jJVersionBean.setVersion(requirement.getVersioning());
 						session.setAttribute("jJTaskBean", new JJTaskBean());
-						session.setAttribute("jJStatusBean", new JJStatusBean());
-						session.setAttribute("jJSprintBean", new JJSprintBean());
-					} else if (requirement.getVersioning() != null && jJVersionBean.getVersion() != null) {
-						if (!requirement.getVersioning().equals(jJVersionBean.getVersion())) {
+						session.setAttribute("jJStatusBean",
+								new JJStatusBean());
+						session.setAttribute("jJSprintBean",
+								new JJSprintBean());
+					} else if (requirement.getVersioning() != null
+							&& jJVersionBean.getVersion() != null) {
+						if (!requirement.getVersioning()
+								.equals(jJVersionBean.getVersion())) {
 							change = true;
 							jJVersionBean.getVersionList();
-							jJVersionBean.setVersion(requirement.getVersioning());
-							session.setAttribute("jJStatusBean", new JJStatusBean());
+							jJVersionBean
+									.setVersion(requirement.getVersioning());
+							session.setAttribute("jJStatusBean",
+									new JJStatusBean());
 						}
 					}
-				} else if (jJProductBean.getProduct() != null && requirement.getProduct() == null) {
+				} else if (jJProductBean.getProduct() != null
+						&& requirement.getProduct() == null) {
 					change = true;
 					jJProductBean.setProduct(null);
 					jJVersionBean.getVersionList();
@@ -442,12 +466,17 @@ public class RequirementBean {
 				}
 
 				if (change) {
-					((LoginBean) LoginBean.findBean("loginBean")).changeEvent(null);
 					((LoginBean) LoginBean.findBean("loginBean"))
-					        .setAuthorisationService(new AuthorisationService(
-					                (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-					                        .getSession(false),
-					                ((LoginBean) LoginBean.findBean("loginBean")).getContact()));
+							.changeEvent(null);
+					((LoginBean) LoginBean.findBean("loginBean"))
+							.setAuthorisationService(new AuthorisationService(
+									(HttpSession) FacesContext
+											.getCurrentInstance()
+											.getExternalContext()
+											.getSession(false),
+									((LoginBean) LoginBean
+											.findBean("loginBean"))
+													.getContact()));
 					rootNode = null;
 				}
 
@@ -463,16 +492,23 @@ public class RequirementBean {
 				// .getContact().getRequirements().contains(requirement)) ? 1
 				// : 0;
 
-				requirementTasks = jJTaskService.getImportTasks(null, requirement, null, true);
-				categorieRequirements = CategorieRequirement.initCategorieRequirement(requirement,
-				        jJCategoryService.getCategories(null, false, true, true, LoginBean.getCompany()));
+				requirementTasks = jJTaskService.getImportTasks(null,
+						requirement, null, true);
+				categorieRequirements = CategorieRequirement
+						.initCategorieRequirement(requirement,
+								jJCategoryService.getCategories(null, false,
+										true, true, LoginBean.getCompany()));
 
 			} else {
 				requirement = null;
-				FacesMessage facesMessage = MessageFactory.getMessage("validator_page_access",
-				        MessageFactory.getMessage("label_requirement", "").getDetail());
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("validator_page_access",
+								MessageFactory
+										.getMessage("label_requirement", "")
+										.getDetail());
 				facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
-				((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+				((LoginBean) LoginBean.findBean("loginBean"))
+						.setFacesMessage(facesMessage);
 			}
 
 		} catch (NumberFormatException ex) {
@@ -497,43 +533,53 @@ public class RequirementBean {
 		if (category == null)
 			getCategory();
 
-		TreeNode categoryNode = new DefaultTreeNode("category", category, projectNode);
+		TreeNode categoryNode = new DefaultTreeNode("category", category,
+				projectNode);
 
 		categoryNode.setExpanded(true);
 
-		List<JJChapter> chapters = jJChapterService.getParentsChapter(LoginBean.getCompany(), project, category, true,
-		        true);
+		List<JJChapter> chapters = jJChapterService.getParentsChapter(
+				LoginBean.getCompany(), project, category, true, true);
 
 		for (JJChapter ch : chapters) {
-			createTreeNode(ch, categoryNode, category, project, product, version);
+			createTreeNode(ch, categoryNode, category, project, product,
+					version);
 		}
 
-		List<JJRequirement> requirements = jJRequirementService.getRequirementsWithOutChapter(LoginBean.getCompany(),
-		        category, loginBean.getAuthorizedMap("Requirement", project, product), version, null, true, true);
+		List<JJRequirement> requirements = jJRequirementService
+				.getRequirementsWithOutChapter(LoginBean.getCompany(), category,
+						loginBean.getAuthorizedMap("Requirement", project,
+								product),
+						version, null, true, true);
 
 		for (JJRequirement requirement : requirements) {
 			rowCount++;
-			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(requirement, jJRequirementService),
-			        categoryNode);
+			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(
+					requirement, jJRequirementService), categoryNode);
 		}
 
 	}
 
-	public TreeNode createTreeNode(JJChapter chapter, TreeNode categoryNode, JJCategory cat, JJProject project,
-	        JJProduct product, JJVersion version) {
+	public TreeNode createTreeNode(JJChapter chapter, TreeNode categoryNode,
+			JJCategory cat, JJProject project, JJProduct product,
+			JJVersion version) {
 
-		TreeNode newNode = new DefaultTreeNode("chapter", chapter, categoryNode);
+		TreeNode newNode = new DefaultTreeNode("chapter", chapter,
+				categoryNode);
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		List<JJRequirement> requirements = jJRequirementService.getRequirements(LoginBean.getCompany(), cat,
-		        loginBean.getAuthorizedMap("Requirement", project, product), version, null, chapter, true, true, true,
-		        false, null);
+		List<JJRequirement> requirements = jJRequirementService
+				.getRequirements(LoginBean.getCompany(), cat,
+						loginBean.getAuthorizedMap("Requirement", project,
+								product),
+						version, null, chapter, true, true, true, false, null);
 
 		for (JJRequirement requirement : requirements) {
 			rowCount++;
-			new DefaultTreeNode("Requirement", JJRequirementBean.getRowState(requirement, jJRequirementService),
-			        newNode);
+			new DefaultTreeNode("Requirement", JJRequirementBean
+					.getRowState(requirement, jJRequirementService), newNode);
 		}
-		if (requirement != null && requirement.getChapter() != null && requirement.getChapter().equals(chapter))
+		if (requirement != null && requirement.getChapter() != null
+				&& requirement.getChapter().equals(chapter))
 			newNode.setExpanded(true);
 		return newNode;
 	}
@@ -544,21 +590,27 @@ public class RequirementBean {
 
 			long id = ((JJRequirement) event.getTreeNode().getData()).getId();
 			FacesContext.getCurrentInstance().getExternalContext()
-			        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
-			                + "/pages/requirement.jsf?requirement=" + id + "&faces-redirect=true");
+					.redirect(FacesContext.getCurrentInstance()
+							.getExternalContext().getRequestContextPath()
+							+ "/pages/requirement.jsf?requirement=" + id
+							+ "&faces-redirect=true");
 		}
 
 	}
 
-	public void updateRequirementLinks(JJRequirementBean jJRequirementBean) throws IOException {
+	public void updateRequirementLinks(JJRequirementBean jJRequirementBean)
+			throws IOException {
 
-		JJCategory linkCategory = jJCategoryService.getCategory(categoryName, LoginBean.getCompany(), true);
-		requirement = jJRequirementService.findJJRequirement(requirement.getId());
+		JJCategory linkCategory = jJCategoryService.getCategory(categoryName,
+				LoginBean.getCompany(), true);
+		requirement = jJRequirementService
+				.findJJRequirement(requirement.getId());
 
 		List<JJRequirement> linkUpToUpdate = new ArrayList<JJRequirement>();
 
 		if (requirement.getCategory().getStage() < linkCategory.getStage()) {
-			List<JJRequirement> listReq = new ArrayList<JJRequirement>(requirement.getRequirementLinkUp());
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkUp());
 			for (JJRequirement req : listReq) {
 				if (req.getCategory().equals(linkCategory)) {
 					requirement.getRequirementLinkUp().remove(req);
@@ -566,18 +618,24 @@ public class RequirementBean {
 						linkUpToUpdate.add(req);
 				}
 			}
-			requirement.getRequirementLinkUp().addAll(new HashSet<JJRequirement>(linkReq));
+			requirement.getRequirementLinkUp()
+					.addAll(new HashSet<JJRequirement>(linkReq));
 		} else {
-			List<JJRequirement> listReq = new ArrayList<JJRequirement>(requirement.getRequirementLinkDown());
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkDown());
 			for (JJRequirement req : listReq) {
 				if (req.getCategory().equals(linkCategory)) {
 
 					if (!linkReq.contains(req)) {
-						req = jJRequirementService.findJJRequirement(req.getId());
+						req = jJRequirementService
+								.findJJRequirement(req.getId());
 						req.getRequirementLinkUp().remove(requirement);
 						// jJRequirementBean.updateJJRequirement(req);
-						JJRequirementBean.updateRowState(req, jJRequirementService, requirement);
-						jJRequirementBean.updateDataTable(req, req.getCategory(), JJRequirementBean.UPDATE_OPERATION);
+						JJRequirementBean.updateRowState(req,
+								jJRequirementService, requirement);
+						jJRequirementBean.updateDataTable(req,
+								req.getCategory(),
+								JJRequirementBean.UPDATE_OPERATION);
 					}
 
 				}
@@ -587,32 +645,43 @@ public class RequirementBean {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().add(requirement);
 					// jJRequirementBean.updateJJRequirement(req);
-					JJRequirementBean.updateRowState(req, jJRequirementService, requirement);
-					jJRequirementBean.updateDataTable(req, req.getCategory(), JJRequirementBean.UPDATE_OPERATION);
+					JJRequirementBean.updateRowState(req, jJRequirementService,
+							requirement);
+					jJRequirementBean.updateDataTable(req, req.getCategory(),
+							JJRequirementBean.UPDATE_OPERATION);
 				}
 			}
 		}
 
 		rootNode = null;
 		selectedNode = null;
-		JJRequirementBean.updateRowState(requirement, jJRequirementService, requirement);
-		jJRequirementBean.updateDataTable(requirement, requirement.getCategory(), JJRequirementBean.UPDATE_OPERATION);
+		JJRequirementBean.updateRowState(requirement, jJRequirementService,
+				requirement);
+		jJRequirementBean.updateDataTable(requirement,
+				requirement.getCategory(), JJRequirementBean.UPDATE_OPERATION);
 
 		for (JJRequirement req : linkUpToUpdate) {
-			JJRequirementBean.updateRowState(req, jJRequirementService, requirement);
-			jJRequirementBean.updateDataTable(req, req.getCategory(), JJRequirementBean.UPDATE_OPERATION);
+			JJRequirementBean.updateRowState(req, jJRequirementService,
+					requirement);
+			jJRequirementBean.updateDataTable(req, req.getCategory(),
+					JJRequirementBean.UPDATE_OPERATION);
 		}
 
 		long id = requirement.getId();
 
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
-		        MessageFactory.getMessage("label_requirement", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
-		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+		((LoginBean) LoginBean.findBean("loginBean"))
+				.setFacesMessage(facesMessage);
 		FacesContext.getCurrentInstance().getExternalContext()
-		        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
-		                + "/pages/requirement.jsf?requirement=" + id + "&faces-redirect=true");
+				.redirect(FacesContext.getCurrentInstance().getExternalContext()
+						.getRequestContextPath()
+						+ "/pages/requirement.jsf?requirement=" + id
+						+ "&faces-redirect=true");
 
 	}
 
@@ -621,10 +690,14 @@ public class RequirementBean {
 		this.categoryName = cateRequirement.getCategory().getName();
 		linkReqList = new ArrayList<JJRequirement>();
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		JJCategory selectedCategory = jJCategoryService.getCategory(categoryName, LoginBean.getCompany(), true);
-		linkReqList = jJRequirementService.getRequirements(LoginBean.getCompany(), selectedCategory,
-		        loginBean.getAuthorizedMap("Requirement", requirement.getProject(), requirement.getProduct()),
-		        requirement.getVersioning(), null, null, false, true, true, false, null);
+		JJCategory selectedCategory = jJCategoryService
+				.getCategory(categoryName, LoginBean.getCompany(), true);
+		linkReqList = jJRequirementService.getRequirements(
+				LoginBean.getCompany(), selectedCategory,
+				loginBean.getAuthorizedMap("Requirement",
+						requirement.getProject(), requirement.getProduct()),
+				requirement.getVersioning(), null, null, false, true, true,
+				false, null);
 		linkReq = cateRequirement.getRequirements();
 
 	}
@@ -668,7 +741,8 @@ public class RequirementBean {
 	public String underligne(Object node) {
 
 		if (node instanceof JJRequirement) {
-			if (requirement != null && ((JJRequirement) node).equals(requirement))
+			if (requirement != null
+					&& ((JJRequirement) node).equals(requirement))
 				return "opacity: 0.7;filter: alpha(opacity=70);";
 			else
 				return "";
@@ -679,8 +753,9 @@ public class RequirementBean {
 	public List<JJChapter> completeChapterRequirement(String query) {
 		List<JJChapter> suggestions = new ArrayList<JJChapter>();
 		suggestions.add(null);
-		for (JJChapter chapter : jJChapterService.getChapters(null, requirement.getProject(), requirement.getCategory(),
-		        true, null)) {
+		for (JJChapter chapter : jJChapterService.getChapters(null,
+				requirement.getProject(), requirement.getCategory(), true,
+				null)) {
 			String jJChapterStr = String.valueOf(chapter.getName());
 			if (jJChapterStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(chapter);
@@ -693,8 +768,10 @@ public class RequirementBean {
 
 		List<JJProject> projectList = new ArrayList<JJProject>();
 		projectList.add(null);
-		projectList.addAll(((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProjectList());
-		for (JJProject proj : ((JJProjectBean) LoginBean.findBean("jJProjectBean")).getProjectList()) {
+		projectList.addAll(((JJProjectBean) LoginBean.findBean("jJProjectBean"))
+				.getProjectList());
+		for (JJProject proj : ((JJProjectBean) LoginBean
+				.findBean("jJProjectBean")).getProjectList()) {
 			String name = String.valueOf(proj.getName());
 			if (name.toLowerCase().startsWith(query.toLowerCase())) {
 				projectList.add(proj);
@@ -721,7 +798,8 @@ public class RequirementBean {
 
 		List<JJProduct> productList = new ArrayList<JJProduct>();
 		productList.add(null);
-		for (JJProduct prod : ((JJProductBean) LoginBean.findBean("jJProductBean")).getProductList()) {
+		for (JJProduct prod : ((JJProductBean) LoginBean
+				.findBean("jJProductBean")).getProductList()) {
 			String name = String.valueOf(prod.getName());
 			if (name.toLowerCase().startsWith(query.toLowerCase())) {
 				productList.add(prod);
@@ -737,8 +815,8 @@ public class RequirementBean {
 		versionList.add(null);
 
 		if (requirement.getProduct() != null)
-			for (JJVersion ver : jJVersionService.getVersions(true, true, requirement.getProduct(),
-			        LoginBean.getCompany(), true)) {
+			for (JJVersion ver : jJVersionService.getVersions(true, true,
+					requirement.getProduct(), LoginBean.getCompany(), true)) {
 				String name = String.valueOf(ver.getName());
 				if (name.toLowerCase().startsWith(query.toLowerCase())) {
 					versionList.add(ver);
@@ -750,23 +828,30 @@ public class RequirementBean {
 
 	public void onrate() {
 
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		if (!contact.getRequirements().contains(requirement)) {
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
-			contact.getRequirements().add(jJRequirementService.findJJRequirement(requirement.getId()));
+			contact.getRequirements().add(jJRequirementService
+					.findJJRequirement(requirement.getId()));
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
-				session.setAttribute("jJProjectBean", new JJProjectBean());
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJContactBean", new JJContactBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -774,18 +859,24 @@ public class RequirementBean {
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
-			contact.getRequirements().remove(jJRequirementService.findJJRequirement(requirement.getId()));
+			contact.getRequirements().remove(jJRequirementService
+					.findJJRequirement(requirement.getId()));
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
-				session.setAttribute("jJProjectBean", new JJProjectBean());
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJContactBean", new JJContactBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -793,23 +884,30 @@ public class RequirementBean {
 	}
 
 	public void oncancel() {
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		if (contact.getRequirements().contains(requirement)) {
 
 			((LoginBean) LoginBean.findBean("loginBean")).setMessageCount(null);
 			if (((JJMessageBean) LoginBean.findBean("jJMessageBean")) != null) {
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setAlertMessages(null);
-				((JJMessageBean) LoginBean.findBean("jJMessageBean")).setMainMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setAlertMessages(null);
+				((JJMessageBean) LoginBean.findBean("jJMessageBean"))
+						.setMainMessages(null);
 			}
-			contact.getRequirements().remove(jJRequirementService.findJJRequirement(requirement.getId()));
+			contact.getRequirements().remove(jJRequirementService
+					.findJJRequirement(requirement.getId()));
 			if (LoginBean.findBean("jJContactBean") == null) {
 				FacesContext fContext = FacesContext.getCurrentInstance();
-				HttpSession session = (HttpSession) fContext.getExternalContext().getSession(false);
-				session.setAttribute("jJProjectBean", new JJProjectBean());
+				HttpSession session = (HttpSession) fContext
+						.getExternalContext().getSession(false);
+				session.setAttribute("jJContactBean", new JJContactBean());
 			}
-			((JJContactBean) LoginBean.findBean("jJContactBean")).updateJJContact(contact);
+			((JJContactBean) LoginBean.findBean("jJContactBean"))
+					.updateJJContact(contact);
 
-			FacesMessage facesMessage = MessageFactory.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
+			FacesMessage facesMessage = MessageFactory
+					.getMessage(REQUIREMENT_SUBSCRIPTION_CANCEL_RATE);
 			facesMessage.setSeverity(FacesMessage.SEVERITY_WARN);
 
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
@@ -819,17 +917,21 @@ public class RequirementBean {
 	public void save(JJRequirementBean jJRequirementBean) throws IOException {
 
 		// updateDataTable pour le requirementBean
-		JJCategory oldCategory = jJRequirementService.findJJRequirement(requirement.getId()).getCategory();
-		boolean changeCategorie = !requirement.getCategory().getStage().equals(oldCategory.getStage());
+		JJCategory oldCategory = jJRequirementService
+				.findJJRequirement(requirement.getId()).getCategory();
+		boolean changeCategorie = !requirement.getCategory().getStage()
+				.equals(oldCategory.getStage());
 
-		boolean change = !requirement.getProject().equals(LoginBean.getProject());
+		boolean change = !requirement.getProject()
+				.equals(LoginBean.getProject());
 
 		if (!change && LoginBean.getProduct() != null) {
 			change = !LoginBean.getProduct().equals(requirement.getProduct());
 		}
 
 		if (!change && LoginBean.getVersion() != null) {
-			change = !LoginBean.getVersion().equals(requirement.getVersioning());
+			change = !LoginBean.getVersion()
+					.equals(requirement.getVersioning());
 		}
 
 		if (change)
@@ -838,19 +940,23 @@ public class RequirementBean {
 		List<JJRequirement> reqToUpdate = new ArrayList<JJRequirement>();
 
 		if (changeCategorie) {
-			List<JJRequirement> listReq = new ArrayList<JJRequirement>(requirement.getRequirementLinkUp());
+			List<JJRequirement> listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkUp());
 
 			for (JJRequirement req : listReq) {
-				if (requirement.getCategory().getStage() >= req.getCategory().getStage()) {
+				if (requirement.getCategory().getStage() >= req.getCategory()
+						.getStage()) {
 					requirement.getRequirementLinkUp().remove(req);
 					reqToUpdate.add(req);
 				}
 			}
 
-			listReq = new ArrayList<JJRequirement>(requirement.getRequirementLinkDown());
+			listReq = new ArrayList<JJRequirement>(
+					requirement.getRequirementLinkDown());
 
 			for (JJRequirement req : listReq) {
-				if (requirement.getCategory().getStage() <= req.getCategory().getStage()) {
+				if (requirement.getCategory().getStage() <= req.getCategory()
+						.getStage()) {
 					req = jJRequirementService.findJJRequirement(req.getId());
 					req.getRequirementLinkUp().remove(requirement);
 					req = jJRequirementBean.updateJJRequirement(req);
@@ -862,9 +968,11 @@ public class RequirementBean {
 		jJRequirementBean.setRequirementStatus(requirement.getStatus());
 		jJRequirementBean.getRequirementOrder(requirement);
 
-		jJRequirementBean.updateDataTable(requirement, oldCategory, JJRequirementBean.DELETE_OPERATION);
+		jJRequirementBean.updateDataTable(requirement, oldCategory,
+				JJRequirementBean.DELETE_OPERATION);
 
-		jJRequirementBean.updateDataTable(requirement, requirement.getCategory(), JJRequirementBean.ADD_OPERATION);
+		jJRequirementBean.updateDataTable(requirement,
+				requirement.getCategory(), JJRequirementBean.ADD_OPERATION);
 
 		long id = requirement.getId();
 
@@ -872,15 +980,20 @@ public class RequirementBean {
 			jJRequirementBean.updateJJRequirement(req);
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_updated",
-		        MessageFactory.getMessage("label_requirement", "").getDetail(), "e");
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated",
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
-		((LoginBean) LoginBean.findBean("loginBean")).setFacesMessage(facesMessage);
+		((LoginBean) LoginBean.findBean("loginBean"))
+				.setFacesMessage(facesMessage);
 
 		FacesContext.getCurrentInstance().getExternalContext()
-		        .redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath()
-		                + "/pages/requirement.jsf?requirement=" + id + "&faces-redirect=true");
+				.redirect(FacesContext.getCurrentInstance().getExternalContext()
+						.getRequestContextPath()
+						+ "/pages/requirement.jsf?requirement=" + id
+						+ "&faces-redirect=true");
 	}
 
 }

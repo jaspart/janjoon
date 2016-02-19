@@ -7,7 +7,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJCategory.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJCategory.class})
 public interface JJCategoryService {
 
 	public JJCategory getCategory(String name, JJCompany company,

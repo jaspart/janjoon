@@ -8,7 +8,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJAuditLog.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJAuditLog.class})
 public interface JJAuditLogService {
 
 	public List<JJAuditLog> getAuditLogByObject(String object,

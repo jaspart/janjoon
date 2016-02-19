@@ -1,7 +1,6 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +15,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-public class JJTestcaseexecutionServiceImpl implements
-		JJTestcaseexecutionService {
+public class JJTestcaseexecutionServiceImpl
+		implements
+			JJTestcaseexecutionService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -35,8 +35,8 @@ public class JJTestcaseexecutionServiceImpl implements
 		Root<JJTestcaseexecution> from = criteriaQuery
 				.from(JJTestcaseexecution.class);
 
-		CriteriaQuery<Boolean> select = criteriaQuery.select(from
-				.<Boolean> get("passed"));
+		CriteriaQuery<Boolean> select = criteriaQuery
+				.select(from.<Boolean> get("passed"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -47,7 +47,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
 
@@ -56,8 +56,9 @@ public class JJTestcaseexecutionServiceImpl implements
 		if (result.getResultList() == null || result.getResultList().isEmpty())
 			return false;
 		else
-			return result.getResultList().get(0) != null ? result
-					.getResultList().get(0) : false;
+			return result.getResultList().get(0) != null
+					? result.getResultList().get(0)
+					: false;
 
 	}
 
@@ -70,8 +71,8 @@ public class JJTestcaseexecutionServiceImpl implements
 		Root<JJTestcaseexecution> from = criteriaQuery
 				.from(JJTestcaseexecution.class);
 
-		CriteriaQuery<Boolean> select = criteriaQuery.select(from
-				.<Boolean> get("passed"));
+		CriteriaQuery<Boolean> select = criteriaQuery
+				.select(from.<Boolean> get("passed"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -81,10 +82,10 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
-		predicates.add(criteriaBuilder.equal(from.get("testcase")
-				.get("enabled"), true));
+		predicates.add(criteriaBuilder
+				.equal(from.get("testcase").get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
 
@@ -93,8 +94,9 @@ public class JJTestcaseexecutionServiceImpl implements
 		if (result.getResultList() == null || result.getResultList().isEmpty())
 			return false;
 		else
-			return result.getResultList().get(0) != null ? result
-					.getResultList().get(0) : false;
+			return result.getResultList().get(0) != null
+					? result.getResultList().get(0)
+					: false;
 
 	}
 
@@ -108,8 +110,8 @@ public class JJTestcaseexecutionServiceImpl implements
 		Root<JJTestcaseexecution> from = criteriaQuery
 				.from(JJTestcaseexecution.class);
 
-		CriteriaQuery<Boolean> select = criteriaQuery.select(from
-				.<Boolean> get("passed"));
+		CriteriaQuery<Boolean> select = criteriaQuery
+				.select(from.<Boolean> get("passed"));
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -123,7 +125,7 @@ public class JJTestcaseexecutionServiceImpl implements
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
 
@@ -154,14 +156,14 @@ public class JJTestcaseexecutionServiceImpl implements
 		if (build != null) {
 			predicates.add(criteriaBuilder.equal(from.get("build"), build));
 		} else if (version != null)
-			predicates.add(criteriaBuilder.equal(
-					from.get("build").get("version"), version));
+			predicates.add(criteriaBuilder
+					.equal(from.get("build").get("version"), version));
 
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJTestcaseexecution.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = entityManager.createQuery(cq).getSingleResult() > 0;
 		return have;
 	}
@@ -194,7 +196,7 @@ public class JJTestcaseexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (sortedByUpdatedDate) {
 			select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
@@ -236,16 +238,16 @@ public class JJTestcaseexecutionServiceImpl implements
 			Root<JJRequirement> fromJJRequirement = subquery
 					.from(JJRequirement.class);
 			subquery.select(fromJJRequirement);
-			subquery.where(criteriaBuilder.equal(
-					fromJJRequirement.get("chapter"), chapter));
+			subquery.where(criteriaBuilder
+					.equal(fromJJRequirement.get("chapter"), chapter));
 
-			subquery.where(criteriaBuilder.equal(
-					fromJJRequirement.get("enabled"), true));
+			subquery.where(criteriaBuilder
+					.equal(fromJJRequirement.get("enabled"), true));
 			predicates.add(criteriaBuilder.in(path).value(subquery));
 
 		}
-		predicates.add(criteriaBuilder.equal(from.get("testcase")
-				.get("enabled"), true));
+		predicates.add(criteriaBuilder
+				.equal(from.get("testcase").get("enabled"), true));
 
 		if (project != null) {
 			predicates.add(criteriaBuilder.equal(
@@ -254,9 +256,9 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		if (version != null) {
-			predicates.add(criteriaBuilder
-					.equal(from.join("testcase").join("requirement")
-							.get("versioning"), version));
+			predicates.add(criteriaBuilder.equal(
+					from.join("testcase").join("requirement").get("versioning"),
+					version));
 
 		} else if (product != null) {
 			predicates.add(criteriaBuilder.equal(
@@ -265,14 +267,14 @@ public class JJTestcaseexecutionServiceImpl implements
 		}
 
 		if (withOutChapter) {
-			predicates.add(criteriaBuilder.isNull(from.join("testcase")
-					.join("requirement").get("chapter")));
+			predicates.add(criteriaBuilder.isNull(
+					from.join("testcase").join("requirement").get("chapter")));
 
 		}
 
 		if (category != null) {
-			predicates.add(criteriaBuilder.isNotNull(from.join("testcase")
-					.join("requirement").get("category")));
+			predicates.add(criteriaBuilder.isNotNull(
+					from.join("testcase").join("requirement").get("category")));
 			predicates.add(criteriaBuilder.equal(
 					from.join("testcase").join("requirement").get("category"),
 					category));
@@ -291,7 +293,7 @@ public class JJTestcaseexecutionServiceImpl implements
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (sortedByUpdatedDate) {
 			select.orderBy(criteriaBuilder.desc(from.get("updatedDate")));
@@ -303,7 +305,8 @@ public class JJTestcaseexecutionServiceImpl implements
 
 	}
 
-	public void saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_) {
+	public void saveJJTestcaseexecution(
+			JJTestcaseexecution JJTestcaseexecution_) {
 
 		jJTestcaseexecutionRepository.save(JJTestcaseexecution_);
 		JJTestcaseexecution_ = jJTestcaseexecutionRepository

@@ -36,8 +36,9 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 	}
 
 	public Long getMaxId() {
-		Long r = (Long) entityManager.createQuery(
-				"select max(e.id) from JJCompany e").getSingleResult();
+		Long r = (Long) entityManager
+				.createQuery("select max(e.id) from JJCompany e")
+				.getSingleResult();
 		return r + 1;
 	}
 
@@ -63,17 +64,21 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				}
 			}
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -96,7 +101,7 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJCompany.class)));
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
@@ -128,7 +133,7 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 				criteriaBuilder.lower(from.<String> get("name")),
 				name.toLowerCase()));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJCompany> result = entityManager.createQuery(select);
 
@@ -152,7 +157,7 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJCompany> result = entityManager.createQuery(select);
 		return result.getResultList();

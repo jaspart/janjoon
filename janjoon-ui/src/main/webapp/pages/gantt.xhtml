@@ -24,7 +24,8 @@
 								itemLabel="#{messages.project_gantt_select_label}" />
 							<f:selectItems value="#{jJTaskBean.sprints}" var="spr"
 								itemLabel="#{spr.name}" itemValue="#{spr}" />
-							<p:ajax event="change" listener="#{jJTaskBean.sprintSelectionChanged}"
+							<p:ajax event="change"
+								listener="#{jJTaskBean.sprintSelectionChanged}"
 								update=":projecttabview:planningForm "
 								oncomplete="updateTabViewWidth();" />
 						</p:selectOneMenu>
@@ -48,49 +49,49 @@
 								itemLabel="#{messages.project_gantt_table_startreal_title}" />
 							<f:selectItem itemValue="StartDatePlanned"
 								itemLabel="#{messages.project_gantt_table_startplanned_title}" />
-							<p:ajax event="change" listener="#{jJTaskBean.SortBySelectionChanged}"
+							<p:ajax event="change"
+								listener="#{jJTaskBean.SortBySelectionChanged}"
 								update=":projecttabview:planningForm :projecttabview:sprintForm"
 								oncomplete="updateTabViewWidth();" />
 						</p:selectOneMenu>
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container15 Responsive">				
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton id="commandButton" icon="fa fa-plus-square Fs16"
-							value="#{messages.project_gantt_import_button}"
-							style="float: right;" resetValues="true"
-							actionListener="#{jJTaskBean.loadImportFormat}"
-							update=":importTaskDialogPanel"
-							oncomplete="PF('taskImportDialogWidget').show()">
-							<f:attribute name="mode" value="planning" />
-						</p:commandButton>
-					</h:panelGroup>		
+			<h:panelGroup layout="block" styleClass="Container15 Responsive">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="commandButton" icon="fa fa-plus-square Fs16"
+						value="#{messages.project_gantt_import_button}"
+						style="float: right;" resetValues="true"
+						actionListener="#{jJTaskBean.loadImportFormat}"
+						update=":importTaskDialogPanel"
+						oncomplete="PF('taskImportDialogWidget').show()">
+						<f:attribute name="mode" value="planning" />
+					</p:commandButton>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container15 Responsive">				
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton ajax="false" id="xml"
-							onclick="PrimeFaces.monitorDownload(start, stop);"
-							icon="fa fa-arrow-down Fs16" value="Export XML">
-							<p:fileDownload value="#{jJTaskBean.file}" />
-						</p:commandButton>
-					</h:panelGroup>				
+			<h:panelGroup layout="block" styleClass="Container15 Responsive">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton ajax="false" id="xml"
+						onclick="PrimeFaces.monitorDownload(start, stop);"
+						icon="fa fa-arrow-down Fs16" value="Export XML">
+						<p:fileDownload value="#{jJTaskBean.file}" />
+					</p:commandButton>
+				</h:panelGroup>
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container10 Responsive">				
-					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:commandButton
-							value="#{messages.specification_video_help_title}"
-							id="videoHelpBtn" icon="fa fa-video-camera Fs16"
-							onclick="PF('videoHelpWidget').show()"
-							style="float:none;position:relative;" type="button" />
-					</h:panelGroup>				
+			<h:panelGroup layout="block" styleClass="Container10 Responsive">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton value="#{messages.specification_video_help_title}"
+						id="videoHelpBtn" icon="fa fa-video-camera Fs16"
+						onclick="PF('videoHelpWidget').show()"
+						style="float:none;position:relative;" type="button" />
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
 
 	<h:form id="planningForm" style="width:100%">
 		<h:outputScript library="js" name="scrollTab.js" />
-		<f:event type="preRenderComponent"			
+		<f:event type="preRenderComponent"
 			listener="#{jJTaskBean.loadingData()}" />
 		<p:remoteCommand name="onCellEditTableComplete"
 			update=":projecttabview" onstart="saveScrollPos();"
@@ -102,23 +103,23 @@
 
 				<pe:layoutPane position="west" id="westLayout">
 					<f:facet name="header">#{messages.project_gantt_table_header}</f:facet>
-<!-- 					<p:panelGrid id="stickyHeader" styleClass="stickyHeader"> -->
-<!-- 						<f:facet name="header"> -->
-<!-- 							<p:row style="height: 40px;"> -->
-<!-- 								<p:column styleClass="planning-action-column">Actions</p:column> -->
-<!-- 								<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column> -->
-<!-- 								<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column> -->
-<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column> -->
-<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endplanned_title}</p:column> -->
-<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlplanned_title}</p:column> -->
-<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startreal_title}</p:column> -->
-<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endreal_title}</p:column> -->
-<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlreal_title}</p:column> -->
-<!-- 								<p:column style="width: 160px;">#{messages.project_gantt_table_previous_title}</p:column> -->
-<!-- 								<p:column style="width: 160px;">Sprint</p:column> -->
-<!-- 							</p:row> -->
-<!-- 						</f:facet> -->
-<!-- 					</p:panelGrid> -->
+					<!-- 					<p:panelGrid id="stickyHeader" styleClass="stickyHeader"> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<p:row style="height: 40px;"> -->
+					<!-- 								<p:column styleClass="planning-action-column">Actions</p:column> -->
+					<!-- 								<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column> -->
+					<!-- 								<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column> -->
+					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column> -->
+					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endplanned_title}</p:column> -->
+					<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlplanned_title}</p:column> -->
+					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startreal_title}</p:column> -->
+					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endreal_title}</p:column> -->
+					<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlreal_title}</p:column> -->
+					<!-- 								<p:column style="width: 160px;">#{messages.project_gantt_table_previous_title}</p:column> -->
+					<!-- 								<p:column style="width: 160px;">Sprint</p:column> -->
+					<!-- 							</p:row> -->
+					<!-- 						</f:facet> -->
+					<!-- 					</p:panelGrid> -->
 					<p:dataTable id="taskDataTable" var="taskData" widgetVar="tdtWV"
 						emptyMessage="#{messages.label_notRecordFound}"
 						style="width: 1700px;" sortFunction="#{jJTaskBean.sortFunction}"
@@ -127,7 +128,7 @@
 						editable="true" editMode="cell">
 
 						<p:ajax event="cellEdit" listener="#{jJTaskBean.onCellEdit}"
-							process="@widgetVar(nameWidget)"							
+							process="@widgetVar(nameWidget)"
 							onsuccess="onCellEditTableComplete();updateTabViewWidth();"
 							update="taskDataTable :projecttabview:planningForm:timeline :growlForm" />
 
@@ -243,8 +244,8 @@
 								<f:facet name="input">
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
 										filter="#{!loginBean.mobile}" filterMatchMode="contains"
-										rendered="#{taskData.task.sprint == null}" 
-										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+										rendered="#{taskData.task.sprint == null}">
 
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.project_gantt_select_label}" />
@@ -253,9 +254,9 @@
 											itemValue="#{contact}" />
 									</h:selectOneMenu>
 									<h:selectOneMenu value="#{taskData.task.assignedTo}"
+										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
 										filter="#{!loginBean.mobile}" filterMatchMode="contains"
-										rendered="#{taskData.task.sprint != null}" 
-										converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+										rendered="#{taskData.task.sprint != null}">
 
 										<f:selectItem itemValue="#{null}"
 											itemLabel="#{messages.project_gantt_select_label}" />
@@ -281,8 +282,9 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" value="#{taskData.startDate}" readonlyInput="true"
-										navigator="true" pattern="yyyy/MM/dd HH:mm" styleClass="Fs14">
+									<p:calendar style="width:90px" value="#{taskData.startDate}"
+										readonlyInput="true" navigator="true"
+										pattern="yyyy/MM/dd HH:mm" styleClass="Fs14">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="taskData" value="#{taskData}" />
 										<f:attribute name="edition" value="startDate" />
@@ -301,9 +303,9 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14" readonlyInput="true"
-										value="#{taskData.endDate}" navigator="true"
-										pattern="yyyy/MM/dd HH:mm">
+									<p:calendar style="width:90px" styleClass="Fs14"
+										readonlyInput="true" value="#{taskData.endDate}"
+										navigator="true" pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="taskData" value="#{taskData}" />
 										<f:attribute name="edition" value="endDate" />
@@ -336,9 +338,9 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14" 
-										value="#{taskData.task.startDateReal}" readonlyInput="true" navigator="true"
-										pattern="yyyy/MM/dd HH:mm">
+									<p:calendar style="width:90px" styleClass="Fs14"
+										value="#{taskData.task.startDateReal}" readonlyInput="true"
+										navigator="true" pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="taskData" value="#{taskData}" />
 										<f:attribute name="edition" value="startDateReal" />
@@ -358,9 +360,9 @@
 									</h:outputText>
 								</f:facet>
 								<f:facet name="input">
-									<p:calendar style="width:90px" styleClass="Fs14" readonlyInput="true"
-										value="#{taskData.task.endDateReal}" navigator="true"
-										pattern="yyyy/MM/dd HH:mm">
+									<p:calendar style="width:90px" styleClass="Fs14"
+										readonlyInput="true" value="#{taskData.task.endDateReal}"
+										navigator="true" pattern="yyyy/MM/dd HH:mm">
 										<f:validator validatorId="dateRangeValidator" />
 										<f:attribute name="edition" value="endDateReal" />
 										<f:attribute name="taskData" value="#{taskData}" />
@@ -465,7 +467,7 @@
 	<p:confirmDialog id="duplicateTaskDialog"
 		widgetVar="duplicateTaskDialogWidget"
 		message="#{messages.project_gantt_dialog_duplicte_message}"
-		showEffect="fade" 
+		showEffect="fade"
 		header="#{messages.project_gantt_dialog_duplicte_header}"
 		severity="alarm">
 		<p:outputPanel id="duplicateTaskPanel">

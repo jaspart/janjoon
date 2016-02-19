@@ -32,12 +32,11 @@
 								value="Task :" /> <p:selectOneMenu id="taskSelectOneMenu"
 								value="#{jJDevelopment.task}" panelStyle="width:150px"
 								effect="fold" editable="false" style="width:160px"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter"
 								required="true" requiredMessage="Select task to commit">
 								<f:selectItem itemValue="#{null}" itemLabel="-- select one --" />
 								<f:selectItems value="#{jJDevelopment.tasks}" var="t"
 									itemLabel="#{t.name}" itemValue="#{t}" />
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJTaskConverter" />
 
 							</p:selectOneMenu> <p:message for="taskSelectOneMenu" id="taskmessage"
 								closable="true" /> <p:growl id="messages" showDetail="true" />

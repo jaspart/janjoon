@@ -45,17 +45,17 @@ public class UsageChecker {
 	 * The Constant Field <code>JAXP_SCHEMA_LANGUAGE</code> is used to specify
 	 * the jaxp schema language test.
 	 */
-	static final String		JAXP_SCHEMA_LANGUAGE	= "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
-	public static Logger	logger					= Logger.getLogger("UsageChecker");
+	static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+	public static Logger logger = Logger.getLogger("UsageChecker");
 
 	/**
 	 * The Constant Field <code>W3C_XML_SCHEMA</code> is used to specify the w3
 	 * c_ xm l_ schema test.
 	 */
-	static final String		W3C_XML_SCHEMA			= "http://www.w3.org/2001/XMLSchema";
+	static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
-	static String			workingdirectory		= "";
-	static Document			license					= null;
+	static String workingdirectory = "";
+	static Document license = null;
 
 	static {
 		org.apache.xml.security.Init.init();
@@ -84,12 +84,15 @@ public class UsageChecker {
 
 			try {
 				final KeyStore keyStore = KeyStore.getInstance("JKS");
-				iStream = new FileInputStream(workingdirectory + File.separator + keystorePath);
+				iStream = new FileInputStream(
+						workingdirectory + File.separator + keystorePath);
 				keyStore.load(iStream, keystorpass.toCharArray());
 
 				usedCert = (X509Certificate) keyStore.getCertificate(alias);
-			} catch (final IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
-				throw new IOException("Could not find certificate with alias: " + alias);
+			} catch (final IOException | KeyStoreException
+					| NoSuchAlgorithmException | CertificateException e) {
+				throw new IOException(
+						"Could not find certificate with alias: " + alias);
 			} finally {
 				if (iStream != null)
 					closeFile(iStream);
@@ -99,14 +102,17 @@ public class UsageChecker {
 			org.apache.xml.security.Init.init();
 
 			final NodeList nodeList = document.getDocumentElement()
-			        .getElementsByTagNameNS(javax.xml.crypto.dsig.XMLSignature.XMLNS, "Signature");
+					.getElementsByTagNameNS(
+							javax.xml.crypto.dsig.XMLSignature.XMLNS,
+							"Signature");
 
 			final Element signatureElement = (Element) nodeList.item(0);
 			if (signatureElement != null) {
 				final org.apache.xml.security.signature.XMLSignature signer = new org.apache.xml.security.signature.XMLSignature(
-				        signatureElement, "");
+						signatureElement, "");
 
-				final org.apache.xml.security.keys.KeyInfo keyInfo = signer.getKeyInfo();
+				final org.apache.xml.security.keys.KeyInfo keyInfo = signer
+						.getKeyInfo();
 
 				if (usedCert != null) {
 					try {
@@ -116,9 +122,11 @@ public class UsageChecker {
 					}
 				} else {
 					if (keyInfo.containsKeyValue()) {
-						result = signer.checkSignatureValue(keyInfo.getPublicKey());
+						result = signer
+								.checkSignatureValue(keyInfo.getPublicKey());
 					} else if (keyInfo.containsX509Data()) {
-						result = signer.checkSignatureValue(keyInfo.getX509Certificate());
+						result = signer.checkSignatureValue(
+								keyInfo.getX509Certificate());
 					} else {
 						throw new Exception("Verification key is not found");
 					}
@@ -158,14 +166,17 @@ public class UsageChecker {
 		return result;
 	}
 
-	public static Document readFile(String input) throws IOException, SAXException, ParserConfigurationException {
+	public static Document readFile(String input)
+			throws IOException, SAXException, ParserConfigurationException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
-		Document doc = dbf.newDocumentBuilder().parse(new FileInputStream(input));
+		Document doc = dbf.newDocumentBuilder()
+				.parse(new FileInputStream(input));
 		return doc;
 	}
 
-	public static void writeFile(String output, Document doc) throws IOException, TransformerException {
+	public static void writeFile(String output, Document doc)
+			throws IOException, TransformerException {
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer trans = tf.newTransformer();
 		OutputStream os;
@@ -176,9 +187,11 @@ public class UsageChecker {
 	public static Date getExpiryDate() {
 		Date date = null;
 		Element root = license.getDocumentElement();
-		String expiryDate = root.getElementsByTagName("expires").item(0).getTextContent();
+		String expiryDate = root.getElementsByTagName("expires").item(0)
+				.getTextContent();
 		try {
-			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(expiryDate);
+			date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+					.parse(expiryDate);
 		} catch (ParseException e) {
 			logger.error("Exception : " + e);
 		}
@@ -197,7 +210,8 @@ public class UsageChecker {
 
 	public static String getStringData(String data) {
 		Element root = license.getDocumentElement();
-		String result = root.getElementsByTagName(data).item(0).getTextContent();
+		String result = root.getElementsByTagName(data).item(0)
+				.getTextContent();
 		return result;
 	}
 
@@ -212,8 +226,10 @@ public class UsageChecker {
 	public static boolean check(String file) {
 		boolean result = false;
 		initWorkingDirectory();
-		if (!verifyFile(workingdirectory + File.separator + "janjoon-base.jar")) {
-			workingdirectory = workingdirectory + File.separator + "src" + File.separator + "run-distrib";
+		if (!verifyFile(
+				workingdirectory + File.separator + "janjoon-base.jar")) {
+			workingdirectory = workingdirectory + File.separator + "src"
+					+ File.separator + "run-distrib";
 		}
 		try {
 			license = readFile(workingdirectory + File.separator + file);
@@ -230,8 +246,8 @@ public class UsageChecker {
 	}
 
 	public static void initWorkingDirectory() {
-		ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
-		        .getContext();
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
 		workingdirectory = servletContext.getRealPath("run-distrib");
 	}
 

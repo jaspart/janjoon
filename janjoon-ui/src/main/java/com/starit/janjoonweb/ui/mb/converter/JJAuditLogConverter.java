@@ -10,9 +10,12 @@ import com.starit.janjoonweb.domain.JJAuditLog;
 @RooJsfConverter(entity = JJAuditLog.class)
 public class JJAuditLogConverter {
 
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		return (value instanceof JJAuditLog && ((JJAuditLog) value).getId() != null)
-		        ? ((JJAuditLog) value).getId().toString() : "";
+	public String getAsString(FacesContext context, UIComponent component,
+			Object value) {
+		return (value instanceof JJAuditLog
+				&& ((JJAuditLog) value).getId() != null)
+						? ((JJAuditLog) value).getId().toString()
+						: "";
 	}
 
 }

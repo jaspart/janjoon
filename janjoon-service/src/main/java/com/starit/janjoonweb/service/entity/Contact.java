@@ -82,11 +82,13 @@ public class Contact {
 	}
 
 	public boolean equals(Object object) {
-		return (object instanceof JJContact) && (getId() != null) ? getId()
-				.equals(((Contact) object).getId()) : (object == this);
+		return (object instanceof JJContact) && (getId() != null)
+				? getId().equals(((Contact) object).getId())
+				: (object == this);
 	}
 
-	public static Response getListContactFromJJContact(List<JJContact> jJContact) {
+	public static Response getListContactFromJJContact(
+			List<JJContact> jJContact) {
 		List<Contact> contacts = new ArrayList<Contact>();
 		GenericEntity<List<Contact>> entity = new GenericEntity<List<Contact>>(
 				contacts) {

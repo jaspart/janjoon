@@ -13,9 +13,9 @@ import org.primefaces.model.TreeNode;
  */
 public class CustomTreeNode extends DefaultTreeNode {
 
-	private static final long	serialVersionUID	= 5333810777428638968L;
+	private static final long serialVersionUID = 5333810777428638968L;
 
-	private String				styleClass;
+	private String styleClass;
 
 	public String getStyleClass() {
 		return this.styleClass;

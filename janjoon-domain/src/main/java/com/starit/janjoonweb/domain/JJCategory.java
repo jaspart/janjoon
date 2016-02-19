@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -64,7 +63,8 @@ public class JJCategory {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJCategory) && (getId() != null) ? getId()
-				.equals(((JJCategory) object).getId()) : (object == this);
+		return (object instanceof JJCategory) && (getId() != null)
+				? getId().equals(((JJCategory) object).getId())
+				: (object == this);
 	}
 }

@@ -6,9 +6,9 @@ import com.starit.janjoonweb.domain.JJBug;
 
 public class LazySorter implements Comparator<JJBug> {
 
-	private String		sortField;
+	private String sortField;
 
-	private SortOrder	sortOrder;
+	private SortOrder sortOrder;
 
 	public LazySorter(String sortField, SortOrder sortOrder) {
 		this.sortField = sortField;
@@ -20,6 +20,7 @@ public class LazySorter implements Comparator<JJBug> {
 			Object value1 = JJBug.class.getField(this.sortField).get(bug1);
 			Object value2 = JJBug.class.getField(this.sortField).get(bug2);
 
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			int value = ((Comparable) value1).compareTo(value2);
 
 			return SortOrder.ASCENDING.equals(sortOrder) ? value : -1 * value;

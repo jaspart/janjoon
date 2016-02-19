@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
@@ -59,17 +58,21 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("name")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(new StrFunction<Long>(criteriaBuilder, from
-									.<Long> get("id")), "%" + pairs.getValue()
-									+ "%")));
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.like(
+									criteriaBuilder
+											.upper(from.<String> get("name")),
+									"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
+									"%" + pairs.getValue() + "%")));
 				}
 			}
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -78,9 +81,11 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 				if (!sortField.contains("company")) {
 					if (sortOrder.equals(SortOrder.DESCENDING))
-						select.orderBy(criteriaBuilder.desc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.desc(from.get(sortField)));
 					else if (sortOrder.equals(SortOrder.ASCENDING)) {
-						select.orderBy(criteriaBuilder.asc(from.get(sortField)));
+						select.orderBy(
+								criteriaBuilder.asc(from.get(sortField)));
 					}
 				} else {
 					Join<JJCategory, JJCompany> owner = from.join("company");
@@ -102,7 +107,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJCategory.class)));
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
@@ -136,7 +141,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			Predicate condition2 = criteriaBuilder.isNull(from.get("company"));
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		return entityManager.createQuery(select).getSingleResult() > 0;
 
@@ -170,7 +176,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		TypedQuery<JJCategory> result = entityManager.createQuery(select);
 		if (result.getResultList().size() == 0)
@@ -208,7 +215,8 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 			predicates.add(criteriaBuilder.or(condition1, condition2));
 		}
 
-		select.where(criteriaBuilder.and(predicates.toArray(new Predicate[] {})));
+		select.where(
+				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 		if (sortedByStage) {
 			select.orderBy(criteriaBuilder.asc(from.get("stage")));
@@ -240,7 +248,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJCategory.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = !(entityManager.createQuery(cq).getSingleResult() > 0);
 		return have;
 
@@ -268,7 +276,7 @@ public class JJCategoryServiceImpl implements JJCategoryService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJCategory.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		boolean have = !(entityManager.createQuery(cq).getSingleResult() > 0);
 		return have;
 

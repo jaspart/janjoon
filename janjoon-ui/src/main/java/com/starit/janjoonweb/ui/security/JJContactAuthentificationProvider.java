@@ -2,35 +2,34 @@ package com.starit.janjoonweb.ui.security;
 
 import java.io.Serializable;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionBindingListener;
-
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.*;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.ui.mb.JJContactBean;
 
 @Component("contactAuthentificationProvider")
-public class JJContactAuthentificationProvider implements AuthenticationProvider, Serializable {
+public class JJContactAuthentificationProvider
+		implements
+			AuthenticationProvider,
+			Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	JJContactService			jJContactService;
+	JJContactService jJContactService;
 
 	@Autowired
-	BCryptPasswordEncoder		encoder;
+	BCryptPasswordEncoder encoder;
 
 	public void setEncoder(BCryptPasswordEncoder encoder) {
 		this.encoder = encoder;
@@ -41,7 +40,8 @@ public class JJContactAuthentificationProvider implements AuthenticationProvider
 	}
 
 	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+	public Authentication authenticate(Authentication authentication)
+			throws AuthenticationException {
 
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
@@ -56,7 +56,8 @@ public class JJContactAuthentificationProvider implements AuthenticationProvider
 			throw new BadCredentialsException("Wrong password.");
 		}
 
-		return new UsernamePasswordAuthenticationToken(username, password, null);
+		return new UsernamePasswordAuthenticationToken(username, password,
+				null);
 
 	}
 

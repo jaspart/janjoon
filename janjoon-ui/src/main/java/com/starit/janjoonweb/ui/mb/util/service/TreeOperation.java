@@ -67,10 +67,11 @@ public class TreeOperation {
 			return configManager.addFile(version, name, false);
 	}
 
-	public static boolean uploadFile(File parent, InputStream in, String name, AbstractConfigManager configManager)
-	        throws IOException {
+	public static boolean uploadFile(File parent, InputStream in, String name,
+			AbstractConfigManager configManager) throws IOException {
 
-		OutputStream out = new FileOutputStream(new File(parent.getPath() + File.separator + name));
+		OutputStream out = new FileOutputStream(
+				new File(parent.getPath() + File.separator + name));
 		int read = 0;
 		byte[] bytes = new byte[1024];
 
@@ -88,7 +89,8 @@ public class TreeOperation {
 
 		if (configManager instanceof SvnConfigManager) {
 			try {
-				SvnConfigManager.addEntry(new File(parent.getPath() + File.separator + name));
+				SvnConfigManager.addEntry(
+						new File(parent.getPath() + File.separator + name));
 				return true;
 			} catch (SVNException e) {
 				return false;
@@ -99,14 +101,17 @@ public class TreeOperation {
 
 	}
 
-	public boolean uploadFile(String version, File parent, String uploadedFile, InputStream in) {
+	public boolean uploadFile(String version, File parent, String uploadedFile,
+			InputStream in) {
 		OutputStream out;
 		try {
 			if (parent != null)
-				out = new FileOutputStream(new File(parent.getPath() + File.separator + uploadedFile));
+				out = new FileOutputStream(new File(
+						parent.getPath() + File.separator + uploadedFile));
 			else
-				out = new FileOutputStream(new File(File.separator + configManager.getPath() + File.separator + version
-				        + File.separator + uploadedFile));
+				out = new FileOutputStream(new File(File.separator
+						+ configManager.getPath() + File.separator + version
+						+ File.separator + uploadedFile));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			try {

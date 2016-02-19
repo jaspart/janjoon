@@ -1,22 +1,21 @@
 package com.starit.janjoonweb.ui.mb.util;
 
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
-public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrapper {
+public class ViewExpiredExceptionExceptionHandler
+		extends
+			ExceptionHandlerWrapper {
 	private ExceptionHandler wrapped;
 
 	public ViewExpiredExceptionExceptionHandler(ExceptionHandler wrapped) {
@@ -30,17 +29,21 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
 
 	@Override
 	public void handle() throws FacesException {
-		for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext();) {
+		for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents()
+				.iterator(); i.hasNext();) {
 			ExceptionQueuedEvent event = i.next();
-			ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
+			ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event
+					.getSource();
 
 			Throwable t = context.getException();
 			if (t instanceof ViewExpiredException) {
-				ViewExpiredException vee = (ViewExpiredException) t;
+				// ViewExpiredException vee = (ViewExpiredException) t;
 				FacesContext facesContext = FacesContext.getCurrentInstance();
-				ExternalContext ec = facesContext.getExternalContext();
-				Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
-				NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler();
+				// ExternalContext ec = facesContext.getExternalContext();
+				// Map<String, Object> requestMap =
+				// facesContext.getExternalContext().getRequestMap();
+				// NavigationHandler navigationHandler =
+				// facesContext.getApplication().getNavigationHandler();
 
 				try {
 					if (facesContext.getPartialViewContext().isAjaxRequest()) {
@@ -50,12 +53,15 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
 				} finally {
 					i.remove();
 				}
-			} else if (FacesContext.getCurrentInstance().getExternalContext() != null
-			        && LoginBean.findBean("loginBean") != null) {
+			} else if (FacesContext.getCurrentInstance()
+					.getExternalContext() != null
+					&& LoginBean.findBean("loginBean") != null) {
 
 				if (FacesContext.getCurrentInstance().getViewRoot() != null) {
-					String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-					String path = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+					String viewId = FacesContext.getCurrentInstance()
+							.getViewRoot().getViewId();
+					String path = FacesContext.getCurrentInstance()
+							.getExternalContext().getRequestContextPath();
 					String view = viewId.replace(path, "");
 					view = view.replace("/pages/", "");
 					if (view.indexOf(".jsf") != -1)
@@ -64,9 +70,11 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
 						view = view.replace(".xhtml", "");
 
 				} else {
-					LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+					LoginBean loginBean = (LoginBean) LoginBean
+							.findBean("loginBean");
 					loginBean.setFacesMessage(
-					        MessageFactory.getMessage("label_exceptionHandler", FacesMessage.SEVERITY_ERROR));
+							MessageFactory.getMessage("label_exceptionHandler",
+									FacesMessage.SEVERITY_ERROR));
 				}
 
 			}

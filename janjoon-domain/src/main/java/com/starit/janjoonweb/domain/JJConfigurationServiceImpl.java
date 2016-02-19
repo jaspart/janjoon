@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -68,19 +67,24 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(criteriaBuilder.like(
-							criteriaBuilder.upper(from.<String> get("param")),
-							"%" + pairs.getValue() + "%"), criteriaBuilder
-							.like(criteriaBuilder.upper(from
-									.<String> get("name")),
-									"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(new StrFunction<Long>(
-									criteriaBuilder, from.<Long> get("id")),
+					predicates
+							.add(criteriaBuilder.or(
+									criteriaBuilder.like(
+											criteriaBuilder.upper(
+													from.<String> get("param")),
+											"%" + pairs.getValue() + "%"),
+									criteriaBuilder.like(
+											criteriaBuilder.upper(
+													from.<String> get("name")),
+											"%" + pairs.getValue() + "%"),
+							criteriaBuilder.like(
+									new StrFunction<Long>(criteriaBuilder,
+											from.<Long> get("id")),
 									"%" + pairs.getValue() + "%")));
 				}
 			}
 		}
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		if (multiSortMeta != null) {
 			for (SortMeta sortMeta : multiSortMeta) {
@@ -104,7 +108,7 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
 		cq.select(criteriaBuilder.count(cq.from(JJConfiguration.class)));
 		entityManager.createQuery(cq);
-		cq.where(predicates.toArray(new Predicate[] {}));
+		cq.where(predicates.toArray(new Predicate[]{}));
 		size.setValue(entityManager.createQuery(cq).getSingleResult());
 
 		return result.getResultList();
@@ -140,7 +144,7 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 
 		TypedQuery<JJConfiguration> result = entityManager.createQuery(select);
 		return result.getResultList();
@@ -172,15 +176,15 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 	public void saveJJConfiguration(JJConfiguration JJConfiguration_) {
 
 		jJConfigurationRepository.save(JJConfiguration_);
-		JJConfiguration_ = jJConfigurationRepository.findOne(JJConfiguration_
-				.getId());
+		JJConfiguration_ = jJConfigurationRepository
+				.findOne(JJConfiguration_.getId());
 	}
 
 	public JJConfiguration updateJJConfiguration(
 			JJConfiguration JJConfiguration_) {
 		jJConfigurationRepository.save(JJConfiguration_);
-		JJConfiguration_ = jJConfigurationRepository.findOne(JJConfiguration_
-				.getId());
+		JJConfiguration_ = jJConfigurationRepository
+				.findOne(JJConfiguration_.getId());
 		return JJConfiguration_;
 	}
 

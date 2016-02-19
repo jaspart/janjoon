@@ -94,7 +94,8 @@
 														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
 															itemLabel="#{ctc.firstname} #{ctc.name}"
 															itemValue="#{ctc}" />
-														<p:ajax event="change" update="@this" immediate="true" />
+														<p:ajax event="change" update="@this" />
+														<p:ajax event="toggleSelect" update="@this"  />
 													</p:selectCheckboxMenu>
 													<!-- 													<p:selectManyMenu id="sprintcts" -->
 													<!-- 														value="#{jjsprint.contacts}" scrollHeight="150" -->
@@ -297,9 +298,13 @@
 
 					<h:form id="taskListForm" rendered="#{!jjsprint.render}">
 						<h:panelGroup layout="block" styleClass="Container">
-							<p:panel header="#{messages.project_scrum_sprint_tasks}"
+							<p:panel 
 								rendered="#{jjsprint.chartModel != null}"
 								styleClass="Container100">
+								<f:facet name="header">
+								<h:outputText value="#{messages.project_scrum_sprint_tasks}"/>
+								<h:outputText rendered="#{jjsprint.disableDragDrop}" value="#{messages.project_scrum_sprint_task_notPermitted}"/>
+								</f:facet>
 								<h:panelGroup layout="block"
 									styleClass="Container33 Responsive100">
 									<h:panelGroup layout="block" styleClass="EmptyBox5" />

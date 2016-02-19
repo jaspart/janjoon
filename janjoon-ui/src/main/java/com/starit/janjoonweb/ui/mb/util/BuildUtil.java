@@ -3,15 +3,14 @@ package com.starit.janjoonweb.ui.mb.util;
 import java.util.List;
 
 import com.starit.janjoonweb.domain.JJBuild;
-import com.starit.janjoonweb.domain.JJBuildService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.JJBuildBean;
 
 public class BuildUtil {
 
-	private JJVersion		version;
-	private List<JJBuild>	versionBuilds;
-	private List<JJBuild>	versionSelectedBuilds;
+	private JJVersion version;
+	private List<JJBuild> versionBuilds;
+	private List<JJBuild> versionSelectedBuilds;
 
 	public BuildUtil(JJVersion version, List<JJBuild> versionBuilds) {
 
@@ -56,7 +55,7 @@ public class BuildUtil {
 
 	}
 
-	public static int BuildUtil(JJVersion version, List<BuildUtil> list) {
+	public static int BuildUtilFinder(JJVersion version, List<BuildUtil> list) {
 		int i = -1;
 		int j = 0;
 		while (j < list.size()) {

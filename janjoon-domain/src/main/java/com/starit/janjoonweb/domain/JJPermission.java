@@ -30,8 +30,9 @@ public class JJPermission {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJPermission) && (getId() != null) ? getId()
-				.equals(((JJPermission) object).getId()) : (object == this);
+		return (object instanceof JJPermission) && (getId() != null)
+				? getId().equals(((JJPermission) object).getId())
+				: (object == this);
 	}
 
 }

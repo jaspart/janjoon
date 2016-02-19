@@ -59,9 +59,11 @@ public class CommitEventHandler implements ISVNEventHandler {
 				/*
 				 * If the item is a binary file
 				 */
-				System.out.println("Adding  (bin)  " + event.getChangelistName());
+				System.out
+						.println("Adding  (bin)  " + event.getChangelistName());
 			} else {
-				System.out.println("Adding         " + event.getChangelistName());
+				System.out
+						.println("Adding         " + event.getChangelistName());
 			}
 		}
 

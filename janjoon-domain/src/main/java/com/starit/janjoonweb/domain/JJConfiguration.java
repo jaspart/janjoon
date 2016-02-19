@@ -54,8 +54,9 @@ public class JJConfiguration {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJConfiguration) && (getId() != null) ? getId()
-				.equals(((JJConfiguration) object).getId()) : (object == this);
+		return (object instanceof JJConfiguration) && (getId() != null)
+				? getId().equals(((JJConfiguration) object).getId())
+				: (object == this);
 	}
 
 }

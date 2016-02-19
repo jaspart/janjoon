@@ -1,12 +1,8 @@
 package com.starit.janjoonweb.domain.reference;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Selection;
 
 import org.hibernate.jpa.criteria.CriteriaBuilderImpl;
@@ -16,9 +12,12 @@ import org.hibernate.jpa.criteria.compile.RenderingContext;
 import org.hibernate.jpa.criteria.expression.function.BasicFunctionExpression;
 import org.hibernate.jpa.criteria.expression.function.FunctionExpression;
 
-public class StrFunction<Y extends Number> extends
-		BasicFunctionExpression<String> implements FunctionExpression<String>,
-		Serializable {
+public class StrFunction<Y extends Number>
+		extends
+			BasicFunctionExpression<String>
+		implements
+			FunctionExpression<String>,
+			Serializable {
 	/**
 	 * 
 	 */
@@ -28,7 +27,8 @@ public class StrFunction<Y extends Number> extends
 
 	private final Selection<Y> selection;
 
-	public StrFunction(CriteriaBuilder criteriaBuilder, Selection<Y> selection) {
+	public StrFunction(CriteriaBuilder criteriaBuilder,
+			Selection<Y> selection) {
 		super((CriteriaBuilderImpl) criteriaBuilder, String.class, FCT_NAME);
 		this.selection = selection;
 	}

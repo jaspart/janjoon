@@ -17,14 +17,16 @@ public class JJHardwareBean {
 
 	public void saveJJHardware(final JJHardware b) {
 		b.setCreationDate(new Date());
-		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJHardwareService.saveJJHardware(b);
 	}
 
 	public void updateJJHardware(final JJHardware b) {
-		final JJContact contact = (JJContact) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-		        .getSession(false)).getAttribute("JJContact");
+		final JJContact contact = (JJContact) ((HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false))
+						.getAttribute("JJContact");
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJHardwareService.updateJJHardware(b);

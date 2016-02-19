@@ -72,8 +72,9 @@ public class JJProject {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJProject) && (getId() != null) ? getId()
-				.equals(((JJProject) object).getId()) : (object == this);
+		return (object instanceof JJProject) && (getId() != null)
+				? getId().equals(((JJProject) object).getId())
+				: (object == this);
 	}
 
 	public JJCompany getCompany() {

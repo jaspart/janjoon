@@ -68,8 +68,9 @@ public class JJProduct {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJProduct) && (getId() != null) ? getId()
-				.equals(((JJProduct) object).getId()) : (object == this);
+		return (object instanceof JJProduct) && (getId() != null)
+				? getId().equals(((JJProduct) object).getId())
+				: (object == this);
 	}
 
 	public JJCompany getCompany() {

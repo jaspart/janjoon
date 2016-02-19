@@ -1,11 +1,10 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.roo.addon.layers.service.RooService;
 
-@RooService(domainTypes = { com.starit.janjoonweb.domain.JJPermission.class })
+@RooService(domainTypes = {com.starit.janjoonweb.domain.JJPermission.class})
 public interface JJPermissionService {
 
 	public List<JJPermission> getPermissions(JJContact contact,

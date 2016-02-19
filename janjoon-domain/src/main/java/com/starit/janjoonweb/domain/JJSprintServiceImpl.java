@@ -11,20 +11,18 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class JJSprintServiceImpl implements JJSprintService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@Autowired
-	private JJRequirementService jJRequirementService;
-
-	public void setjJRequirementService(
-			JJRequirementService jJRequirementService) {
-		this.jJRequirementService = jJRequirementService;
-	}
+	// @Autowired
+	// private JJRequirementService jJRequirementService;
+	//
+	// public void setjJRequirementService(
+	// JJRequirementService jJRequirementService) {
+	// this.jJRequirementService = jJRequirementService;
+	// }
 
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
@@ -51,7 +49,7 @@ public class JJSprintServiceImpl implements JJSprintService {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
 		}
 
-		select.where(predicates.toArray(new Predicate[] {}));
+		select.where(predicates.toArray(new Predicate[]{}));
 		select.orderBy(criteriaBuilder.asc(from.get("startDate")));
 
 		TypedQuery<JJSprint> result = entityManager.createQuery(select);

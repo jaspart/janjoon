@@ -30,7 +30,7 @@
 					</f:facet>
 					<p:column style="text-align: center;">
 						<p:graphicImage styleClass="avatar" cache="false"
-							value="#{imageStreamer.image}" 
+							value="#{imageStreamer.image}"
 							rendered="#{contact.picture != null}">
 							<f:param name="contactId" value="#{contact.id}" />
 						</p:graphicImage>
@@ -48,7 +48,7 @@
 								style="padding-right: 35px !important;"
 								panelStyleClass="specSelectOneMenuPanel"
 								styleClass="specSelectOneMenu Fs14"
-								onchange="PF('contactDataTableWV').filter()">								
+								onchange="PF('contactDataTableWV').filter()">
 								<f:selectItems value="#{jJCompanyBean.companyOptions}" />
 								<p:column>
 									<h:outputText value="#{type}" />
@@ -369,10 +369,9 @@
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:selectOneMenu id="profile" value="#{jJPermissionBean.profile}"
 								effect="fade" filter="true" filterMatchMode="contains"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter"
 								required="true" widgetVar="profileWidget" label="Profile"
 								disabled="#{jJContactBean.disabledPermissionMode}">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJProfileConverter" />
 								<f:selectItems value="#{jJPermissionBean.profiles}" var="p"
 									itemLabel="#{p.name}" itemValue="#{p}" />
 							</p:selectOneMenu>
@@ -392,9 +391,8 @@
 							<p:selectOneMenu id="project" value="#{jJPermissionBean.project}"
 								effect="fade" filter="true" filterMatchMode="contains"
 								widgetVar="projectWidget"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
 								disabled="#{jJContactBean.disabledPermissionMode}">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter" />
 								<f:selectItem itemValue="#{null}"
 									itemLabel="#{messages.contact_anyProject}" />
 								<f:selectItems value="#{jJPermissionBean.projects}" var="p"
@@ -415,9 +413,8 @@
 							<p:selectOneMenu id="product" value="#{jJPermissionBean.product}"
 								effect="fade" filter="true" filterMatchMode="contains"
 								widgetVar="productWidget"
+								converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter"
 								disabled="#{jJContactBean.disabledPermissionMode}">
-								<f:converter
-									converterId="com.starit.janjoonweb.ui.mb.converter.JJProductConverter" />
 								<f:selectItem itemValue="#{null}"
 									itemLabel="#{messages.contact_anyProduct}" />
 								<f:selectItems value="#{jJPermissionBean.products}" var="p"

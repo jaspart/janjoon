@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -74,7 +73,8 @@ public class JJCompany {
 
 	@Override
 	public boolean equals(Object object) {
-		return (object instanceof JJCompany) && (getId() != null) ? getId()
-				.equals(((JJCompany) object).getId()) : (object == this);
+		return (object instanceof JJCompany) && (getId() != null)
+				? getId().equals(((JJCompany) object).getId())
+				: (object == this);
 	}
 }

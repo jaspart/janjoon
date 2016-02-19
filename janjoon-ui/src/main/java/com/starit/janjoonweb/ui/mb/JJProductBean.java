@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -32,35 +33,38 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 public class JJProductBean {
 
 	@Autowired
-	public JJConfigurationService	jJConfigurationService;
+	public JJConfigurationService jJConfigurationService;
 
 	@Autowired
-	JJVersionService				jJVersionService;
+	JJVersionService jJVersionService;
 
 	@Autowired
-	JJTaskService					jJTaskService;
+	JJTaskService jJTaskService;
 
 	@Autowired
-	JJPermissionService				jJPermissionService;
+	JJPermissionService jJPermissionService;
 
-	private JJProduct				product;
+	private JJProduct product;
 
-	private JJProduct				productAdmin;
+	private JJProduct productAdmin;
 
-	private LazyProductDataModel	productListTable;
+	private LazyProductDataModel productListTable;
 
-	private JJContact				productManager;
+	private JJContact productManager;
 
-	private List<JJContact>			productManagerList;
-	private String					message;
-	private boolean					disabledProductMode;
-	private boolean					disabledVersionMode;
-	private boolean					productState;
+	private List<JJContact> productManagerList;
+	private String message;
+	private boolean disabledProductMode;
+	private boolean disabledVersionMode;
+	private boolean productState;
 
 	public void addMessage() {
-		final String summary = productAdmin.getEnabled() ? "Enabled Product" : "Disabled Product";
+		final String summary = productAdmin.getEnabled()
+				? "Enabled Product"
+				: "Disabled Product";
 
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(summary));
 	}
 
 	public void addProduct(final JJVersionBean jJVersionBean) {
@@ -72,14 +76,19 @@ public class JJProductBean {
 			disabledProductMode = true;
 			disabledVersionMode = false;
 
-			jJVersionBean.setVersionDataModel(new ArrayList<VersionDataModel>());
+			jJVersionBean
+					.setVersionDataModel(new ArrayList<VersionDataModel>());
 
-			FacesContext.getCurrentInstance().addMessage(null, MessageFactory.getMessage("message_successfully_created",
-			        MessageFactory.getMessage("label_product", "").getDetail(), ""));
+			FacesContext.getCurrentInstance().addMessage(null,
+					MessageFactory.getMessage("message_successfully_created",
+							MessageFactory.getMessage("label_product", "")
+									.getDetail(),
+							""));
 		}
 	}
 
-	public void closeDialog(final JJVersionBean jJVersionBean, final JJBuildBean jJBuildBean) {
+	public void closeDialog(final JJVersionBean jJVersionBean,
+			final JJBuildBean jJBuildBean) {
 
 		productAdmin = null;
 		productManager = null;
@@ -146,14 +155,16 @@ public class JJProductBean {
 
 	private boolean getProductDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("ProductDialog", "product.create.saveandclose");
+		return jJConfigurationService.getDialogConfig("ProductDialog",
+				"product.create.saveandclose");
 	}
 
 	public List<JJProduct> getProductList() {
 
 		if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
 			return jJProductService.getProducts(LoginBean.getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), true, false);
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					true, false);
 		} else {
 			return new ArrayList<JJProduct>();
 		}
@@ -168,7 +179,8 @@ public class JJProductBean {
 		}
 
 		if (productListTable == null) {
-			productListTable = new LazyProductDataModel(jJProductService, company);
+			productListTable = new LazyProductDataModel(jJProductService,
+					company);
 		}
 		return productListTable;
 	}
@@ -180,17 +192,22 @@ public class JJProductBean {
 	public List<JJContact> getProductManagerList() {
 
 		if (productAdmin.getId() == null) {
-			productManagerList = jJPermissionService.getManagers(LoginBean.getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), "Product");
+			productManagerList = jJPermissionService.getManagers(
+					LoginBean.getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Product");
 		} else {
-			productManagerList = jJPermissionService.getManagers(productAdmin.getManager().getCompany(),
-			        ((LoginBean) LoginBean.findBean("loginBean")).getContact(), "Product");
+			productManagerList = jJPermissionService.getManagers(
+					productAdmin.getManager().getCompany(),
+					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+					"Product");
 		}
 
 		return productManagerList;
 	}
 
-	public List<JJTask> getTasksByProduct(final JJProduct product, final JJProject project) {
+	public List<JJTask> getTasksByProduct(final JJProduct product,
+			final JJProject project) {
 		return jJTaskService.getTasksByProduct(product, project);
 	}
 
@@ -214,9 +231,10 @@ public class JJProductBean {
 	public void resetVersionProductList() {
 
 		productListTable = null;
-		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-		        .getSession(false);
-		final JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
+		final HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false);
+		final JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
 		jJVersionBean.setVersionList(null);
 
 	}
@@ -229,10 +247,11 @@ public class JJProductBean {
 		updateJJProduct(productAdmin);
 		resetVersionProductList();
 
-		final List<JJVersion> versions = jJVersionService.getVersions(true, true, productAdmin, LoginBean.getCompany(),
-		        true);
+		final List<JJVersion> versions = jJVersionService.getVersions(true,
+				true, productAdmin, LoginBean.getCompany(), true);
 
-		final List<VersionDataModel> versionDataModels = jJVersionBean.getVersionDataModel();
+		final List<VersionDataModel> versionDataModels = jJVersionBean
+				.getVersionDataModel();
 		final List<JJVersion> selectedVersions = new ArrayList<JJVersion>();
 		for (final VersionDataModel versionDataModel : versionDataModels) {
 			if (versionDataModel.getCheckVersion()) {
@@ -269,8 +288,11 @@ public class JJProductBean {
 			}
 		}
 
-		FacesContext.getCurrentInstance().addMessage(null, MessageFactory.getMessage("message_successfully_updated",
-		        MessageFactory.getMessage("label_product", "").getDetail(), ""));
+		FacesContext.getCurrentInstance().addMessage(null,
+				MessageFactory.getMessage(
+						"message_successfully_updated", MessageFactory
+								.getMessage("label_product", "").getDetail(),
+						""));
 
 		final RequestContext context = RequestContext.getCurrentInstance();
 
@@ -290,7 +312,8 @@ public class JJProductBean {
 	public void saveJJProduct(final JJProduct b) {
 
 		b.setCreationDate(new Date());
-		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setCreatedBy(contact);
 		jJProductService.saveJJProduct(b);
 	}
@@ -303,11 +326,13 @@ public class JJProductBean {
 		this.disabledVersionMode = disabledVersionMode;
 	}
 
-	public void setjJConfigurationService(final JJConfigurationService jJConfigurationService) {
+	public void setjJConfigurationService(
+			final JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
 	}
 
-	public void setjJPermissionService(final JJPermissionService jJPermissionService) {
+	public void setjJPermissionService(
+			final JJPermissionService jJPermissionService) {
 		this.jJPermissionService = jJPermissionService;
 	}
 
@@ -327,9 +352,10 @@ public class JJProductBean {
 
 		this.product = product;
 
-		final HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-		        .getSession(false);
-		final JJVersionBean jJVersionBean = (JJVersionBean) session.getAttribute("jJVersionBean");
+		final HttpSession session = (HttpSession) FacesContext
+				.getCurrentInstance().getExternalContext().getSession(false);
+		final JJVersionBean jJVersionBean = (JJVersionBean) session
+				.getAttribute("jJVersionBean");
 		jJVersionBean.setVersion(null);
 		jJVersionBean.setVersionList(null);
 		jJVersionBean.setVersionDataModelList(null);
@@ -344,7 +370,8 @@ public class JJProductBean {
 		this.productAdmin = productAdmin;
 	}
 
-	public void setProductListTable(final LazyProductDataModel productListTable) {
+	public void setProductListTable(
+			final LazyProductDataModel productListTable) {
 		this.productListTable = productListTable;
 	}
 
@@ -352,15 +379,29 @@ public class JJProductBean {
 		this.productManager = productManager;
 	}
 
-	public void setProductManagerList(final List<JJContact> productManagerList) {
+	public void setProductManagerList(
+			final List<JJContact> productManagerList) {
 		this.productManagerList = productManagerList;
 	}
 
 	public void updateJJProduct(final JJProduct b) {
-		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean")).getContact();
+		final JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
 		jJProductService.updateJJProduct(b);
+	}
+
+	public HtmlPanelGrid populateCreatePanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateEditPanel() {
+		return null;
+	}
+
+	public HtmlPanelGrid populateViewPanel() {
+		return null;
 	}
 
 }
