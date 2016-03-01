@@ -7,5 +7,5 @@ import org.springframework.roo.addon.layers.service.RooService;
 @RooService(domainTypes = {com.starit.janjoonweb.domain.JJImportance.class})
 public interface JJImportanceService {
 
-	public List<JJImportance> getBugImportance();
+	public List<JJImportance> getImportances(String object);
 }

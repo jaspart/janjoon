@@ -920,7 +920,7 @@ public class JJBugBean {
 		List<JJImportance> suggestions = new ArrayList<JJImportance>();
 		suggestions.add(null);
 		for (JJImportance jJImportance : jJImportanceService
-				.getBugImportance()) {
+				.getImportances("Bug")) {
 			String jJImportanceStr = String.valueOf(jJImportance.getName());
 			if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJImportance);

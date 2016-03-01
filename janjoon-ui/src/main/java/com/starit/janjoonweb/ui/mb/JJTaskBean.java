@@ -1542,7 +1542,7 @@ public class JJTaskBean {
 					.execute("setRowIndex(" + keys[keys.length - 2] + ")");
 
 			saveJJTask(task, true, new MutableInt(0));
-			// task = jJTaskService.findJJTask(task.getId());
+			task = jJTaskService.findJJTask(task.getId());
 			updateView(task, UPDATE_OPERATION);
 			HttpSession session = (HttpSession) FacesContext
 					.getCurrentInstance().getExternalContext()
@@ -3781,6 +3781,9 @@ public class JJTaskBean {
 		task = (JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
 		scheduleInitialDate = task.getStartDateReal();
 		task = jJTaskService.findJJTask(task.getId());
+		taskTreeNode = null;
+		selectedReq = null;
+		selectedTree = null;
 		initiateReqTreeNode();
 	}
 
@@ -3966,6 +3969,9 @@ public class JJTaskBean {
 		task = (JJTask) ((ScheduleEvent) selectEvent.getObject()).getData();
 		scheduleInitialDateAll = task.getStartDateReal();
 		task = jJTaskService.findJJTask(task.getId());
+		taskTreeNode = null;
+		selectedReq = null;
+		selectedTree = null;
 		initiateReqTreeNode();
 	}
 
@@ -4020,7 +4026,7 @@ public class JJTaskBean {
 		panes.addOption("size", "50%");
 		panes.addOption("maxSize", 1200);
 		panes.addOption("minsize", 300);
-		layoutOptionsOne.setWestOptions(panes);
+		layoutOptionsOne.setEastOptions(panes);
 		panes = new LayoutOptions();
 		panes.addOption("size", "50%");
 		panes.addOption("closable", true);

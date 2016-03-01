@@ -101,7 +101,7 @@
 				styleClass="Container100" options="#{jJTaskBean.layoutOptionsOne}"
 				state="#{jJTaskBean.stateOne}">
 
-				<pe:layoutPane position="west" id="westLayout">
+				<pe:layoutPane position="center" id="centerLayout">
 					<f:facet name="header">#{messages.project_gantt_table_header}</f:facet>
 					<!-- 					<p:panelGrid id="stickyHeader" styleClass="stickyHeader"> -->
 					<!-- 						<f:facet name="header"> -->
@@ -423,9 +423,9 @@
 					</p:dataTable>
 				</pe:layoutPane>
 
-				<pe:layoutPane position="center"
+				<pe:layoutPane position="east"
 					styleContent="overflow-y: hidden;padding: 0px;background: white !important;"
-					id="centerLayout">
+					id="eastLayout">
 
 					<f:facet name="header">#{messages.project_gantt_timeline_header}</f:facet>
 

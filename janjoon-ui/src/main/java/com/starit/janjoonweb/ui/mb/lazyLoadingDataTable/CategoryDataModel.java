@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.JJStatusBean;
@@ -571,6 +575,15 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 				data.add(req);
 			}
 		}
+
+		// sort
+		Collections.sort(data, new Comparator<JJRequirement>() {
+
+			@Override
+			public int compare(JJRequirement o1, JJRequirement o2) {
+				return o2.getCreationDate().compareTo(o1.getCreationDate());
+			}
+		});
 
 		// rowCount
 		int dataSize = data.size();

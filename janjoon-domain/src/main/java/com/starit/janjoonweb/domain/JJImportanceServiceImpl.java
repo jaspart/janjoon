@@ -29,7 +29,7 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 	}
 
 	@Override
-	public List<JJImportance> getBugImportance() {
+	public List<JJImportance> getImportances(String object) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJImportance> criteriaQuery = criteriaBuilder
@@ -41,15 +41,24 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
+		
+		if (object != null) {
 
-		List<Predicate> orPredicates = new ArrayList<Predicate>();
-		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "JJBug"));
-		orPredicates.add(criteriaBuilder.equal(from.get("objet"), "Bug"));
-		Predicate orPredicate = criteriaBuilder
-				.or(orPredicates.toArray(new Predicate[]{}));
+			List<Predicate> orPredicates = new ArrayList<Predicate>();
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("objet")),
+					object.toLowerCase()));
+			orPredicates.add(
+					criteriaBuilder.equal(
+							criteriaBuilder.lower(from.<String> get("objet")),
+							"jj"+object.toLowerCase()));			
+			Predicate orPredicate = criteriaBuilder
+					.or(orPredicates.toArray(new Predicate[]{}));
 
-		predicates.add(orPredicate);
+			predicates.add(orPredicate);
+
+		}
 
 		select.where(
 				criteriaBuilder.and(predicates.toArray(new Predicate[]{})));

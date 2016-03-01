@@ -222,10 +222,18 @@
 											</h:panelGroup>
 										</h:panelGroup>
 									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="Container100">
+									<h:panelGroup layout="block" styleClass="Container50">
+											<h:panelGroup layout="block" styleClass="ContainerIndent">
+												<p:commandButton update=":changePassword" resetValues="true"
+													onclick="PF('passwordDialogWidget').show()"
+													value="Change Password" icon="fa fa-plus-square Fs20" />
+
+											</h:panelGroup>
+										</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container50">
 										<h:panelGroup layout="block" styleClass="ContainerIndent">
 											<p:commandButton id="submit" icon="fa fa-save Fs16"
-												update=":vacationForm configForm :workdaysCalendar :growlForm "												
+												update=":vacationForm configForm :workdaysCalendar :growlForm "
 												value="#{messages.contact_submit}"
 												action="#{jJContactBean.updateUserConfiguration(loginBean,jJRequirementBean)}" />
 										</h:panelGroup>
@@ -363,7 +371,7 @@
 										locale="#{localeBean.locale}">
 										<p:ajax event="timeSelect"
 											update=":workdaysCalendar :vacationForm :configForm :growlForm"
-											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}"/>
+											listener="#{jJContactBean.timeSelectListener(day,2,loginBean,loginBean.contact)}" />
 									</pe:timePicker>
 								</p:column>
 							</p:dataTable>
@@ -468,6 +476,87 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
+
+		<p:dialog id="passwordDialog" draggable="false" responsive="true"
+			modal="true" widgetVar="passwordDialogWidget" dynamic="true"
+			showEffect="fade" resizable="false"
+			header="#{messages.contact_passwordDialog_header}">
+			<p:ajax event="close" listener="#{jJContactBean.closePasswordDialog}" />
+			<h:panelGroup layout="block"
+				styleClass="Container ui-fluid BorderAll" style="max-width:400px;">
+
+				<h:form id="changePassword">
+					<h:panelGroup layout="block" styleClass="Container100">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</h:panelGroup>
+					<input style="display: none"> </input>
+					<input type="password" style="display: none"></input>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="password"
+									value="#{messages.contact_passwordDialog_currentpassword_label}:" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:password id="password" required="true" validator="passwordValidator" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="newpassword"
+									value="#{messages.contact_passwordDialog_newpassword_label}:" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:password id="newpassword" match="confirmpassword" 
+									feedback="true" value="#{jJContactBean.contactUtil.password}"
+									redisplay="true" required="true">
+								</p:password>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="Container40">
+							<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+								<p:outputLabel for="confirmpassword"
+									value="#{messages.contact_passwordDialog_confirmpassword_label}:" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container60">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:password id="confirmpassword" required="true"
+									value="#{jJContactBean.contactUtil.password}" />
+
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Separator" />
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="saveButton"
+								value="#{messages.admin_contact_new_save_button}"
+								icon="fa fa-save Fs16" update="@form"
+								action="#{jJContactBean.changePassword(loginBean)}"
+								title="#{messages.admin_contact_new_save_button}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50"
+						style="float: right;">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+								value="#{messages.label_cancel}"
+								onclick="PF('passwordDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</h:panelGroup>
+		</p:dialog>
+
 		<p:dialog id="changePhotoDialog" draggable="false" modal="true"
 			header="Photo" widgetVar="changePhotoDialogWidget" dynamic="true"
 			resizable="false" responsive="true">

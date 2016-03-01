@@ -135,6 +135,7 @@ public class GitConfigManager extends AbstractConfigManager {
 		}
 	}
 
+
 	public GitConfigManager(String url, String path) {
 
 		super("GIT", url, path, null, null);

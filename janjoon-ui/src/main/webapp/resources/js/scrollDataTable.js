@@ -62,7 +62,7 @@ $(document).ready(
 		});
 
 function saveScrollPos() {
-	var area = $("#projecttabview\\:planningForm\\:westLayout").children()
+	var area = $("#projecttabview\\:planningForm\\:centerLayout").children()
 			.eq(1);
 	scrollTop = area.prop("scrollTop");
 	scrollLeft = area.prop("scrollLeft");
@@ -71,7 +71,7 @@ function saveScrollPos() {
 
 function autoScroll() {
 	// var scrollPos = $("#formId\\:scrollPos").value;
-	var area = $("#projecttabview\\:planningForm\\:westLayout").children()
+	var area = $("#projecttabview\\:planningForm\\:centerLayout").children()
 			.eq(1);
 	area.animate({
 		scrollTop : scrollTop

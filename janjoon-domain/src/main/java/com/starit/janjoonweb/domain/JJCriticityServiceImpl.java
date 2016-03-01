@@ -40,9 +40,13 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 		if (object != null) {
 
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
-			orPredicates.add(criteriaBuilder.equal(from.get("objet"), object));
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("objet")),
+					object.toLowerCase()));
 			orPredicates.add(
-					criteriaBuilder.equal(from.get("objet"), "JJ" + object));
+					criteriaBuilder.equal(
+							criteriaBuilder.lower(from.<String> get("objet")),
+							"jj"+object.toLowerCase()));			
 			Predicate orPredicate = criteriaBuilder
 					.or(orPredicates.toArray(new Predicate[]{}));
 
@@ -74,7 +78,9 @@ public class JJCriticityServiceImpl implements JJCriticityService {
 		}
 
 		if (name != null) {
-			predicates.add(criteriaBuilder.equal(from.get("name"), name));
+			predicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("name")),
+					name.toLowerCase()));			
 		}
 
 		select.where(

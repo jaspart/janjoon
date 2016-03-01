@@ -293,7 +293,7 @@ public class ConfigListener implements ServletContextListener {
 		// }
 		//
 
-		if (jJImportanceService.findAllJJImportances().isEmpty()) {
+		if (jJImportanceService.getImportances("Bug").isEmpty()) {
 			String[] names = {"High", "Medium", "Low"};
 			Integer i = 3;
 

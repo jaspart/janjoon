@@ -77,7 +77,7 @@
 							<p:commandButton id="submitButton" icon="fa fa-save"
 								disabled="#{!loginBean.authorisationService.adminProject}"
 								value="#{messages.admin_project_new_save_button}"
-								update=":projectForm :headerForm :growlForm"
+								update=":projectForm :headerForm:projectSelectOneMenu :growlForm"
 								action="#{jJProjectBean.savePlanning}" />
 						</h:panelGroup>
 					</h:panelGroup>

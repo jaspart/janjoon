@@ -432,18 +432,9 @@ public class JJTestcaseBean {
 	public List<TestCaseRecap> getTestCaseRecaps() {
 
 		List<TestCaseRecap> testCaseRecaps = new ArrayList<TestCaseRecap>();
-		// List<JJTestcase> testcases = new ArrayList<>();
+		
 		if (rendredTestCaseRecaps) {
-
-			// if (testcases == null && chapter != null) {
-			// testcases = jJTestcaseService.getTestcases(null, chapter,
-			// LoginBean.getVersion(), null, true, true, false);
-			//
-			// } else if (testcases == null) {
-			// testcases = jJTestcaseService.getImportTestcases(category,
-			// LoginBean.getProject(), LoginBean.getProduct(),
-			// LoginBean.getVersion(), null, true, true);
-			// }
+			
 
 			for (JJTestcase testcase : getTestcases()) {
 				TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -1188,19 +1179,16 @@ public class JJTestcaseBean {
 			colNames = null;
 			value = null;
 			testcase = jJTestcaseService.findJJTestcase(testcase.getId());
-			requirement.getTestcases().add(testcase);
+			//requirement.getTestcases().add(testcase);
 
 			FacesContext.getCurrentInstance().addMessage(null, MessageFactory
 					.getMessage("message_successfully_updated", "Test", ""));
 
 			context.execute("PF('testcaseDialogWidget').hide()");
 			RequestContext.getCurrentInstance().update("growlForm");
-
 		}
-		createTestcaseTree();
-		// colNames = null;
-		// rowNames = null;
-
+		
+		createTestcaseTree();		
 	}
 
 	public void closeDialog() {
@@ -1340,11 +1328,8 @@ public class JJTestcaseBean {
 			rendredEmptySelection = false;
 
 		} else if (selectedNode.getData() instanceof JJChapter) {
-
-			// LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
-			selectedNode.setExpanded(true);
-			// long id = Long.parseLong(getSubString(selectedNode.toString(), 1,
-			// "-"));
+			
+			selectedNode.setExpanded(true);			
 			chapter = (JJChapter) selectedNode.getData();
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					LoginBean.getCompany(), null,
@@ -1383,8 +1368,7 @@ public class JJTestcaseBean {
 			rendredTestCaseHistorical = false;
 			rendredEmptySelection = false;
 		} else if (selectedNode.getType().equalsIgnoreCase("withOutChapter")) {
-
-			// LoginBean loginBean=(LoginBean) LoginBean.findBean("loginBean");
+			
 			chapter = null;
 			selectedNode.setExpanded(true);
 			List<JJRequirement> withOutChapter = jJRequirementService
@@ -1424,9 +1408,7 @@ public class JJTestcaseBean {
 			rendredEmptySelection = false;
 
 		} else if (selectedNode.getData() instanceof JJTestcase) {
-
-			// long id = Long.parseLong(getSubString(selectedNode.toString(), 1,
-			// "-"));
+			
 			rendredTestCaseRecaps = false;
 
 			testcase = (JJTestcase) selectedNode.getData();
@@ -1456,12 +1438,7 @@ public class JJTestcaseBean {
 					.execute("PF('testcaseDialogWidget').show()");
 		}
 	}
-
-	// private String getSubString(String s, int index, String c) {
-	// String[] temp = s.split(c);
-	// return temp[index];
-	// }
-
+	
 	// Recursive function to create tree
 	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
 			JJCategory category, JJBuild build) {
@@ -2061,7 +2038,7 @@ public class JJTestcaseBean {
 				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
-		jJTestcaseService.updateJJTestcase(b);
+		b=jJTestcaseService.updateJJTestcase(b);
 		JJRequirementBean.updateRowState(b.getRequirement(),
 				jJRequirementService, b);
 	}

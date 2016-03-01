@@ -641,6 +641,43 @@ public class JJContactBean {
 
 	}
 
+	public void changePassword(LoginBean loginBean) {
+
+		String password = contactUtil.getPassword();
+		JJContact cont = loginBean.getContact();
+		cont.setPassword(encoder.encode(password.trim()));
+
+		cont.setUpdatedDate(new Date());
+		jJContactService.updateJJContact(cont);
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+
+		session.putValue("password", password);
+
+		loginBean.getAuthorisationService().setSession(session);
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_updated", FacesMessage.SEVERITY_INFO,
+				"Contact " + loginBean.getContact().getName(), "");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		RequestContext.getCurrentInstance()
+				.execute("PF('passwordDialogWidget').hide()");
+		String[] names = {"vacationForm", "configForm", "workdaysCalendar",
+				"growlForm"};		
+
+		for (String name : names) {
+			RequestContext.getCurrentInstance().update(name);
+		}
+
+	}
+
+	public void closePasswordDialog() {
+		if (contactUtil != null)
+			contactUtil.setPassword("");
+	}
+
 	public void removeVacation(LoginBean loginBean, JJContact jJContact,
 			Date start, Date end) {
 		calendarUtil = new ContactCalendarUtil(jJContact);

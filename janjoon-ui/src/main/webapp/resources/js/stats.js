@@ -9,23 +9,22 @@ function updateTabViewWidth() {
 				- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 	$("#statsTabView\\:SprintTabView").css("maxWidth", width + "px");
-	$("#statsTabView\\:SprintTabView").css("display","block");
-	
-	var chart = $(".barChart:visible").last();
+	$("#statsTabView\\:SprintTabView").css("display", "block");
 
-	if (chart.length != 0) {
-//		var value = chart.attr("id");
-//		
-//		if (PrimeFaces.widgets['' + value + '_Widget']) {
-//
-//			PF('' + value + '_Widget').plot.replot();
-//		}
+	if ($(".barChart:visible").last().length != 0) {
 		updateBarChart();
 	}
-	
+
+	if ($(".bugTab:visible").last().length != 0) {
+		updateBugTab();
+	}
 
 }
 
-$(window).resize(function() {updateTabViewWidth();});
+$(window).resize(function() {
+	updateTabViewWidth();
+});
 
-$(document).ready(function() {updateTabViewWidth();});
+$(document).ready(function() {
+	updateTabViewWidth();
+});
