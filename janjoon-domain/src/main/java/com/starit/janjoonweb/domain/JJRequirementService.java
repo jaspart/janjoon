@@ -42,8 +42,11 @@ public interface JJRequirementService {
 	// company,Map<JJProject, JJProduct> map,JJVersion version);
 
 	public Long getReqCount(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,JJCategory category,
+			JJProduct product, JJVersion version, JJStatus status,JJCategory category,JJStatus state,JJContact createdBy,
 			boolean onlyActif);
+	
+	public List<JJContact> getReqContacts(JJCompany company,
+			Map<JJProject, JJProduct> map, JJVersion version);
 
 	public void refreshRequirement(JJRequirement requirement);
 

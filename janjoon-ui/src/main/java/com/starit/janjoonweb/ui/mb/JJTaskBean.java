@@ -698,8 +698,11 @@ public class JJTaskBean {
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment")).setTasks(
 					jJTaskService.getTasksByProduct(LoginBean.getProduct(),
 							LoginBean.getProject()));
+		}else if(!validation_error && operation.equalsIgnoreCase("planning"))
+		{
+			RequestContext.getCurrentInstance().update("projecttabview");
 		}
-
+		
 		if (!validation_error) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated",
@@ -1763,22 +1766,12 @@ public class JJTaskBean {
 						format.setStartDate(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
 										.getSprint().getStartDate());
-						// validationFailed = true;
-						// message = MessageFactory.getMessage(
-						// "validator_date_startBeforeStart",
-						// MessageFactory.getMessage("label_task", "")
-						// .getDetail(), "Sprint");
-						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+						
 					} else if (startDate.after(
 							((JJSprintBean) LoginBean.findBean("jJSprintBean"))
 									.getSprintUtil().getSprint()
 									.getEndDate())) {
-						// validationFailed = true;
-						// message = MessageFactory.getMessage(
-						// "validator_date_startAfterEnd",
-						// MessageFactory.getMessage("label_task", "")
-						// .getDetail(), "Sprint");
-						// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+						
 						format.setStartDate(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
 										.getSprint().getStartDate());
@@ -1786,21 +1779,10 @@ public class JJTaskBean {
 				} else {
 					if (sprint != null) {
 						if (startDate.before(sprint.getStartDate())) {
-							// validationFailed = true;
-							//
-							// message = MessageFactory.getMessage(
-							// "validator_date_startBeforeStart",
-							// MessageFactory.getMessage("label_task",
-							// "").getDetail(), "Sprint");
-							// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+							
 							format.setStartDate(sprint.getStartDate());
 						} else if (startDate.after(sprint.getEndDate())) {
-							// validationFailed = true;
-							// message = MessageFactory.getMessage(
-							// "validator_date_startAfterEnd",
-							// MessageFactory.getMessage("label_task",
-							// "").getDetail(), "Sprint");
-							// message.setSeverity(FacesMessage.SEVERITY_ERROR);
+							
 							format.setStartDate(sprint.getStartDate());
 						}
 
@@ -2111,6 +2093,7 @@ public class JJTaskBean {
 			}
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
+			
 			if (sprint != null)
 				Hibernate.initialize(sprint.getContacts());
 

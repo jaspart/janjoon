@@ -227,7 +227,8 @@
 					</h:panelGroup>
 				</p:tab>
 				<p:tab id="kpiTab" title="KPI">
-					<p:overlayPanel id="infoPanelKpi" for="infoBtnKpi" style="max-width: 700px;">
+					<p:overlayPanel id="infoPanelKpi" for="infoBtnKpi"
+						style="max-width: 700px;">
 						<p:panelGrid style="width: 100%;" columns="1">
 							<ul>
 								<li>#{messages.statistique_kpi_Kpi_help}</li>
@@ -315,6 +316,34 @@
 									rendered="#{jJStatusBean.productPieChart != null}"
 									model="#{jJStatusBean.productPieChart}" style="height:300px"
 									type="pie" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container100 ShowOnSmallDesktop">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:dataTable var="contact" value="#{jJStatusBean.contacts}"
+									rowIndexVar="colIdx" scrollable="true" scrollHeight="300"
+									emptyMessage="#{messages.label_notRecordFound}"
+									rendered="#{jJStatusBean.contacts != null}"
+									style="table-layout: fixed;">
+									<f:facet name="header">
+									<h:outputText value="#{messages.statistique_kpi_ContactSpectable_header}" />	
+									</f:facet>
+
+									<p:column styleClass="TexAlCenter" width="150">
+										<h:outputText value="#{contact.firstname} #{contact.name}" />
+									</p:column>
+									<p:columns var="state" value="#{jJStatusBean.states}"
+										width="70" columnIndexVar="rowIdx" styleClass="TexAlCenter">
+										<f:facet name="header">											
+											<h:outputText rendered="#{state != null}"
+												value="#{messages['specification_'.concat(state.name)]}"
+												styleClass="#{state.name} Fs14" />
+											<h:outputText rendered="#{state == null}"
+												value="Total" styleClass="Fs14" />	
+										</f:facet>
+										<h:outputText value="#{jJStatusBean.value[colIdx][rowIdx]}" />
+									</p:columns>
+								</p:dataTable>
+								</h:panelGroup>
 							</h:panelGroup>
 						</h:form>
 					</h:panelGroup>

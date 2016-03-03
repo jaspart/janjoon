@@ -24,6 +24,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -36,6 +37,7 @@ import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
@@ -62,6 +64,9 @@ public class JJStatusBean {
 	private List<String> tableNames;
 
 	private List<JJStatus> statusList;
+	private List<JJContact> contacts = new ArrayList<JJContact>();
+	private List<JJStatus> states = new ArrayList<JJStatus>();
+	private ArrayList<ArrayList<Integer>> value = new ArrayList<ArrayList<Integer>>();
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel statusPieChart;
@@ -91,6 +96,75 @@ public class JJStatusBean {
 	public void setLazyStatusList(LazyStatusDataModel lazyStatusList) {
 		this.lazyStatusList = lazyStatusList;
 		this.objectOptions = null;
+	}
+
+	public List<JJContact> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<JJContact> contacts) {
+		this.contacts = contacts;
+	}
+
+	public List<JJStatus> getStates() {
+
+		if (activeTabIndex == 3) {
+			if (states == null || states.isEmpty()) {
+
+				contacts = jJRequirementService.getReqContacts(
+						LoginBean.getCompany(),
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getAuthorizedMap("Requirement",
+										LoginBean.getProject(),
+										LoginBean.getProduct()),
+						LoginBean.getVersion());
+
+				if (contacts != null && !contacts.isEmpty()) {
+
+					states = jJStatusService.getStatus("RequirementState", true,
+							null, true);
+					if (!states.isEmpty()) {
+						value = new ArrayList<ArrayList<Integer>>();
+						states.add(null);
+						for (int i = 0; i < contacts.size(); i++) {
+							value.add(new ArrayList<Integer>());
+
+							for (int j = 0; j < states.size(); j++) {
+
+								value.get(i).add(Integer.parseInt(
+										"" + jJRequirementService.getReqCount(
+												LoginBean.getCompany(),
+												LoginBean.getProject(),
+												LoginBean.getProduct(),
+												LoginBean.getVersion(), null,
+												null, states.get(j),
+												contacts.get(i), true)));
+							}
+						}
+					} else {
+						states = null;
+						contacts = null;
+					}
+
+				}
+
+			}
+
+			return states;
+		} else
+			return null;
+	}
+
+	public void setStates(List<JJStatus> states) {
+		this.states = states;
+	}
+
+	public ArrayList<ArrayList<Integer>> getValue() {
+		return value;
+	}
+
+	public void setValue(ArrayList<ArrayList<Integer>> value) {
+		this.value = value;
 	}
 
 	public String onEdit() {
@@ -209,7 +283,8 @@ public class JJStatusBean {
 														.getContact()
 														.getCompany(),
 										project, LoginBean.getProduct(),
-										LoginBean.getVersion(), s, null, true));
+										LoginBean.getVersion(), s, null, null,
+										null, true));
 				render = render || i > 0;
 				if (i > 0)
 					statusPieChart.set(MessageFactory
@@ -245,12 +320,13 @@ public class JJStatusBean {
 				boolean render = false;
 				for (JJProduct s : prodReq) {
 
-					int i = Integer
-							.parseInt("" + jJRequirementService.getReqCount(
+					int i = Integer.parseInt(""
+							+ jJRequirementService.getReqCount(
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
-									project, s, null, null, null, true));
+									project, s, null, null, null, null, null,
+									true));
 					render = render || i > 0;
 					if (i > 0)
 						projectPieChart.set(
@@ -301,7 +377,7 @@ public class JJStatusBean {
 											.findBean("loginBean")).getContact()
 													.getCompany(),
 									s, LoginBean.getProduct(), null, null, null,
-									true));
+									null, null, true));
 					render = render || i > 0;
 					if (i > 0)
 						productPieChart.set(
@@ -345,13 +421,14 @@ public class JJStatusBean {
 				boolean render = false;
 				for (JJCategory s : catReq) {
 
-					int i = Integer.parseInt(""
-							+ jJRequirementService.getReqCount(
+					int i = Integer
+							.parseInt("" + jJRequirementService.getReqCount(
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
 									project, LoginBean.getProduct(),
-									LoginBean.getVersion(), null, s, true));
+									LoginBean.getVersion(), null, s, null, null,
+									true));
 					render = render || i > 0;
 					if (i > 0) {
 						String label = MessageFactory.checkMessage(
@@ -362,7 +439,7 @@ public class JJStatusBean {
 														.replace(" ", "_"),
 												"")
 										: s.getName();
-												
+
 						categoryPieChart.set(
 								MessageFactory.getMessage("label_category", "")
 										.getDetail() + ":" + label,
@@ -649,13 +726,14 @@ public class JJStatusBean {
 				boolean render = false;
 				for (JJStatus s : statReq) {
 
-					int i = Integer.parseInt(""
-							+ jJRequirementService.getReqCount(
+					int i = Integer
+							.parseInt("" + jJRequirementService.getReqCount(
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
 									project, LoginBean.getProduct(),
-									LoginBean.getVersion(), s, null, true));
+									LoginBean.getVersion(), s, null, null, null,
+									true));
 					render = render || i > 0;
 					if (i > 0)
 						statusPieChart.set(MessageFactory
@@ -756,7 +834,7 @@ public class JJStatusBean {
 				.getMessage("message_successfully_deleted", "Status", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
-		statusPieChart = null;		
+		statusPieChart = null;
 		lazyStatusList = null;
 		objectOptions = null;
 

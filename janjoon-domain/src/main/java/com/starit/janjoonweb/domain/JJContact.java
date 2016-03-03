@@ -146,8 +146,8 @@ public class JJContact {
 	private Set<JJPermission> permissions = new HashSet<JJPermission>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
-	private Set<JJMessage> messages = new HashSet<JJMessage>();
-
+	private Set<JJMessage> messages = new HashSet<JJMessage>();	
+	
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJContact) && (getId() != null)

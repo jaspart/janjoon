@@ -2,6 +2,7 @@ package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -441,9 +442,86 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				true, false, false, null);
 	}
 
+	public List<JJContact> getReqContacts(JJCompany company,
+			Map<JJProject, JJProduct> map, JJVersion version) {
+
+		if (map != null) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+		
+			CriteriaQuery<JJContact> select = criteriaBuilder
+					.createQuery(JJContact.class);
+
+			Root<JJRequirement> from = select.from(JJRequirement.class);		
+			select.select(from.<JJContact> get("createdBy"));
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (map != null && !map.isEmpty()) {
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+
+				for (Map.Entry<JJProject, JJProduct> entry : map.entrySet()) {
+
+					if (entry.getKey() != null) {
+						if (entry.getValue() != null) {
+							List<Predicate> andPredicates = new ArrayList<Predicate>();
+
+							andPredicates.add(criteriaBuilder.equal(
+									from.get("project"), entry.getKey()));
+
+							andPredicates.add(criteriaBuilder.equal(
+									from.get("product"), entry.getValue()));
+
+							orPredicates.add(criteriaBuilder.and(
+									andPredicates.toArray(new Predicate[]{})));
+						} else
+							orPredicates.add(criteriaBuilder.equal(
+									from.get("project"), entry.getKey()));
+					} else {
+						if (entry.getValue() != null) {
+							orPredicates.add(criteriaBuilder.equal(
+									from.get("product"), entry.getValue()));
+						} else {
+							predicates.add(criteriaBuilder
+									.equal(from.join("project").join("manager")
+											.get("company"), company));
+						}
+					}
+
+				}
+				if (!orPredicates.isEmpty())
+					predicates.add(criteriaBuilder
+							.or(orPredicates.toArray(new Predicate[]{})));
+				else
+					predicates.add(criteriaBuilder.equal(
+							from.join("project").join("manager").get("company"),
+							company));
+			} else {
+				predicates.add(criteriaBuilder.equal(
+						from.join("project").join("manager").get("company"),
+						company));
+			}
+
+			if (version != null) {
+				predicates.add(
+						criteriaBuilder.equal(from.get("versioning"), version));
+			}
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));			
+			
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
+
+			TypedQuery<JJContact> result = entityManager.createQuery(select);
+			return new ArrayList<JJContact>(
+					new HashSet<JJContact>(result.getResultList()));	
+		} else
+			return new ArrayList<JJContact>();
+	}
+
 	@Override
 	public Long getReqCount(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,JJCategory category,
+			JJProduct product, JJVersion version, JJStatus status,
+			JJCategory category, JJStatus state, JJContact createdBy,
 			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -455,10 +533,19 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
 		}
-		
-		if (category != null) {
+
+		if (createdBy != null) {
 			predicates.add(
-					criteriaBuilder.equal(from.get("category"), category));
+					criteriaBuilder.equal(from.get("createdBy"), createdBy));
+		}
+
+		if (state != null) {
+			predicates.add(criteriaBuilder.equal(from.get("state"), state));
+		}
+
+		if (category != null) {
+			predicates
+					.add(criteriaBuilder.equal(from.get("category"), category));
 		}
 
 		if (project != null) {

@@ -298,7 +298,7 @@ public class GitConfigManager extends AbstractConfigManager {
 
 		File[] files = workTree.listFiles();
 		int i = 0;
-		while (i < files.length) {
+		while (files != null && i < files.length) {
 			if (!files[i].getName().equalsIgnoreCase(".git")) {
 
 				if (files[i].isDirectory()) {
