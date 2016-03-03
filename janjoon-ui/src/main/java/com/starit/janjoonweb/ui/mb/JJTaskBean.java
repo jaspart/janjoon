@@ -2264,7 +2264,7 @@ public class JJTaskBean {
 		JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
 				.findBean("jJStatusBean");
 		if (jJStatusBean != null) {
-			jJStatusBean.setBugLineModel(null);
+			jJStatusBean.setKpiLineModel(null);
 		}
 
 	}

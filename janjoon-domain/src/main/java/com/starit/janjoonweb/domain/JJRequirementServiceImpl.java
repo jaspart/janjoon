@@ -442,8 +442,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	}
 
 	@Override
-	public Long getReqCountByStaus(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,
+	public Long getReqCount(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,JJCategory category,
 			boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -454,6 +454,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+		
+		if (category != null) {
+			predicates.add(
+					criteriaBuilder.equal(from.get("category"), category));
 		}
 
 		if (project != null) {

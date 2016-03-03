@@ -3353,8 +3353,12 @@ public class JJRequirementBean {
 
 		if (jJTestcaseBean != null)
 			jJTestcaseBean.setProject(null);
-		if (jJStatusBean != null)
-			jJStatusBean.setPieChart(null);
+		if (jJStatusBean != null){
+			jJStatusBean.setStatusPieChart(null);
+			jJStatusBean.setCategoryPieChart(null);
+			jJStatusBean.setProductPieChart(null);
+			jJStatusBean.setProjectPieChart(null);
+			}
 
 		setJJRequirement_(null);
 		setSelectedTasks(null);

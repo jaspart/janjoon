@@ -18,6 +18,10 @@ function updateTabViewWidth() {
 	if ($(".bugTab:visible").last().length != 0) {
 		updateBugTab();
 	}
+	
+	if ($(".kpiTab:visible").last().length != 0) {
+		updateKpiTab();
+	}
 
 }
 

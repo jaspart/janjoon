@@ -21,10 +21,6 @@
 				actionListener="#{jJStatusBean.onTabStatChange}"
 				oncomplete="updateTabViewWidth();" />
 		</h:form>
-		<!-- 		<p:commandButton value="#{messages.specification_video_help_title}" -->
-		<!-- 			id="videoHelpBtn" icon="ui-icon-video" -->
-		<!-- 			onclick="PF('videoHelpWidget').show()" type="button" -->
-		<!-- 			style="float: right;" /> -->
 		<f:event type="preRenderComponent" oncomplete="updateTabViewWidth();"
 			listener="#{jJStatusBean.loadData()}" />
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
@@ -79,8 +75,8 @@
 							<h:panelGroup layout="block"
 								styleClass="Container45 Responsive100">
 								<p:chart id="custom" responsive="true"
-									rendered="#{jJStatusBean.pieChart != null}"
-									model="#{jJStatusBean.pieChart}" style="height:300px"
+									rendered="#{jJStatusBean.statusPieChart != null}"
+									model="#{jJStatusBean.statusPieChart}" style="height:300px"
 									type="pie" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
@@ -133,50 +129,11 @@
 								<li>#{messages.statistique_bug_bugKpi_help}</li>
 								<li>#{messages.statistique_bug_bugpieChart_help}</li>
 							</ul>
-							<p:panelGrid style="width: 100%;">
-								<f:facet name="header">
-									<p:row>
-										<p:column colspan="6">Code des Couleurs</p:column>
-									</p:row>
-								</f:facet>
-								<p:row>
-									<p:column colspan="2" styleClass="DELAY"
-										style="background-color : #0288D1 !important;">
-										<p:outputLabel style="color: #fff;"
-											value="#{messages.statistique_help_bug_blue}" />
-									</p:column>
-
-									<p:column colspan="2" styleClass="DELAY"
-										style="background-color : #05C6BC0 !important;">
-										<p:outputLabel style="color: #fff;"
-											value="#{messages.statistique_help_bug_purple}" />
-									</p:column>
-									<p:column colspan="2" styleClass="DELAY"
-										style="background-color : #59A45D !important;">
-										<p:outputLabel style="color: #fff;"
-											value="#{messages.statistique_help_bug_green}" />
-									</p:column>
-								</p:row>
-								<p:row>
-									<p:column colspan="2">
-										<p:outputLabel
-											value="#{messages.statistique_help_bug_blue_text}" />
-									</p:column>
-									<p:column colspan="2">
-										<p:outputLabel
-											value="#{messages.statistique_help_bug_purple_text}" />
-									</p:column>
-									<p:column colspan="2">
-										<p:outputLabel
-											value="#{messages.statistique_help_bug_green_text}" />
-									</p:column>
-								</p:row>
-							</p:panelGrid>
 						</p:panelGrid>
 					</p:overlayPanel>
 					<h:form id="bugForm">
 						<p:remoteCommand name="updateBugTab"
-							update="#{jJStatusBean.bugPieChart != null ? 'bugPieChart':''} #{jJStatusBean.bugMetergauge != null ? 'bugMetergauge':''} #{jJStatusBean.bugLineModel != null ? 'bugLineModel':''}" />
+							update="#{jJStatusBean.bugPieChart != null ? 'bugPieChart':''} #{jJStatusBean.bugMetergauge != null ? 'bugMetergauge':''}" />
 						<h:panelGroup layout="block" styleClass="Container">
 							<div class="EmptyBox1 bugTab" />
 							<h:panelGroup layout="block" style="float: right !important;"
@@ -203,14 +160,6 @@
 									model="#{jJStatusBean.bugMetergauge}" style="height:300px"
 									rendered="#{jJStatusBean.bugMetergauge != null}"
 									responsive="true" />
-							</h:panelGroup>
-
-							<h:panelGroup layout="block" styleClass="Container100"
-								rendered="#{jJStatusBean.bugLineModel != null}">
-								<p:chart id="bugLineModel" type="line"
-									model="#{jJStatusBean.bugLineModel}"
-									rendered="#{jJStatusBean.bugLineModel != null}"
-									responsive="true" style="height:500px;" />
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:form>
@@ -275,6 +224,99 @@
 								</p:tab>
 							</p:tabView>
 						</h:panelGroup>
+					</h:panelGroup>
+				</p:tab>
+				<p:tab id="kpiTab" title="KPI">
+					<p:overlayPanel id="infoPanelKpi" for="infoBtnKpi" style="max-width: 700px;">
+						<p:panelGrid style="width: 100%;" columns="1">
+							<ul>
+								<li>#{messages.statistique_kpi_Kpi_help}</li>
+							</ul>
+							<p:panelGrid style="width: 100%;">
+								<f:facet name="header">
+									<p:row>
+										<p:column colspan="6">Code des Couleurs</p:column>
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #0288D1 !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_kpi_blue}" />
+									</p:column>
+
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #5C6BC0 !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_kpi_purple}" />
+									</p:column>
+									<p:column colspan="2" styleClass="DELAY"
+										style="background-color : #59A45D !important;">
+										<p:outputLabel style="color: #fff;"
+											value="#{messages.statistique_help_kpi_green}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_kpi_blue_text}" />
+									</p:column>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_kpi_purple_text}" />
+									</p:column>
+									<p:column colspan="2">
+										<p:outputLabel
+											value="#{messages.statistique_help_kpi_green_text}" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+					</p:overlayPanel>
+					<h:panelGroup layout="block" styleClass="Container">
+						<div class="EmptyBox1 kpiTab" />
+						<h:panelGroup layout="block" style="float: right !important;"
+							styleClass="Container10 Responsive100 Fright">
+							<p:commandButton id="infoBtnKpi"
+								icon="fa fa-info-circle  Gray Fs20"
+								styleClass="Fright GrayButton" type="button"
+								title="#{messages.specification_video_help_title}" />
+						</h:panelGroup>
+						<h:form id="kpiForm">
+							<p:remoteCommand name="updateKpiTab" update="@form" />
+							<h:panelGroup layout="block" styleClass="Container90"
+								rendered="#{jJStatusBean.kpiLineModel != null}">
+								<p:chart id="kpiLineModel" type="line"
+									model="#{jJStatusBean.kpiLineModel}"
+									rendered="#{jJStatusBean.kpiLineModel != null}"
+									responsive="true" style="height:500px;" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="EmptyBox20" />
+							<h:panelGroup layout="block"
+								rendered="#{jJStatusBean.categoryPieChart != null}"
+								styleClass="Container33 Responsive50">
+								<p:chart id="categoryPieChart" responsive="true"
+									rendered="#{jJStatusBean.categoryPieChart != null}"
+									model="#{jJStatusBean.categoryPieChart}" style="height:300px"
+									type="pie" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								rendered="#{jJStatusBean.projectPieChart != null}"
+								styleClass="Container33 Responsive50">
+								<p:chart id="projectPieChart" responsive="true"
+									rendered="#{jJStatusBean.projectPieChart != null}"
+									model="#{jJStatusBean.projectPieChart}" style="height:300px"
+									type="pie" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								rendered="#{jJStatusBean.productPieChart != null}"
+								styleClass="Container33 Responsive50">
+								<p:chart id="productPieChart" responsive="true"
+									rendered="#{jJStatusBean.productPieChart != null}"
+									model="#{jJStatusBean.productPieChart}" style="height:300px"
+									type="pie" />
+							</h:panelGroup>
+						</h:form>
 					</h:panelGroup>
 				</p:tab>
 			</p:tabView>

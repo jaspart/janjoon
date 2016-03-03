@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:panelGroup layout="block" styleClass="Container BorderAll"
+		style="max-width:500px;">
+		<h:form id="projectDialogForm" enctype="multipart/form-data">
+			<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="name" value="#{jJProjectBean.projectAdmin.name}"
+						label="Name" required="true"
+						placeholder="#{messages.admin_project_new_name_watermark}"
+						widgetVar="nameWidget">
+						<f:validateLength maximum="100" />
+						<p:ajax event="blur" update="projLogo" />
+					</p:inputText>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+				<h:panelGroup layout="block" styleClass="Container35">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel for="projectManagerSelect"
+							value="#{messages.admin_project_new_manager_label}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container65">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="projectManagerSelect"
+							value="#{jJProjectBean.projectManager}" effect="fade"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
+							required="true"
+							label="#{messages.admin_project_new_manager_label}"
+							requiredMessage="#{messages.admin_project_new_manager_alert}"
+							widgetVar="projectManagerWidget">
+							<f:selectItem itemLabel="#{messages.label_select}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{jJProjectBean.projectManagerList}"
+								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container50 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="projectSD" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true" readonlyInput="true"
+						binding="#{startDateEdition}"
+						title="#{messages.admin_project_new_startDate_label}"
+						requiredMessage="#{messages.admin_project_new_startDate_alert}"
+						placeholder="#{messages.admin_project_new_startDate_label}"
+						value="#{jJProjectBean.projectAdmin.startDate}" />
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container50 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="projectED" navigator="true" effect="slideDown"
+						pattern="dd/MM/yyyy" required="true"
+						title="#{messages.admin_project_new_endDate_label}"
+						placeholder="#{messages.admin_project_new_endDate_label}"
+						readonlyInput="true"
+						requiredMessage="#{messages.admin_project_new_endDate_alert}"
+						value="#{jJProjectBean.projectAdmin.endDate}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="startDateComponent" value="#{startDateEdition}" />
+					</p:calendar>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" style="height:100px;"
+					styleClass="Container20 TexAlCenter BorderAll">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:graphicImage id="img" styleClass="avatar" cache="false"
+							value="#{imageStreamer.imageProj}" style="margin-top: 15%;">
+							<f:param name="ProjId" value="#{jJProjectBean.projectAdmin.id}" />
+							<f:param name="Edit" value="true" />
+						</p:graphicImage>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container75 TexAlCenter"
+					style="height:100px;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:fileUpload id="projLogo" fileLimit="1"
+							styleClass="customFileUpload"
+							disabled="#{empty jJProjectBean.projectAdmin.name}"
+							fileUploadListener="#{licenseBean.handleProjLogoUpload}"
+							mode="advanced" dragDropSupport="false" update="msg img"
+							sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Separator" />
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container50 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="submitButton" icon="fa fa-save Fs16"
+						value="#{messages.admin_project_new_save_button}"
+						update="projectDialogForm :headerForm"
+						process="@this,name,projectManagerSelect,projectSD,projectED"
+						action="#{jJProjectBean.save}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container50 Responsive50" style="float: right;">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+						value="#{messages.label_cancel}"
+						onclick="PF('projectDialogWidget').hide()" type="button" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+	</h:panelGroup>
+</ui:composition>
+</html>

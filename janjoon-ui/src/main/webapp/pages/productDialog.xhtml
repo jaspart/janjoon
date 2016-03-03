@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<pe:blockUI widgetVar="versionBlockUIWidget"
+		target="productDialogPanel">
+		<h:panelGrid columns="2" layout="grid">
+			<p:graphicImage name="images/preloader.gif" library="rioLayout"
+				style="vertical-align: middle;" />
+			<h:outputText value="#{messages.label_refresh}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+	</pe:blockUI>
+	<h:panelGroup id="productDialogPanel" layout="block"
+		styleClass="Container BorderAll" style="max-width:700px;">
+		<h:form id="productDialogForm" enctype="multipart/form-data">
+			<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="ui-fluid Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="name"
+						placeholder="#{messages.admin_product_new_name_watermark}"
+						disabled="#{jJProductBean.disabledProductMode}"
+						value="#{jJProductBean.productAdmin.name}"
+						label="#{messages.admin_product_new_name_title}" required="true"
+						widgetVar="nameWidget">
+						<f:validateLength maximum="100" />
+						<p:ajax event="blur" update="prodLogo" />
+					</p:inputText>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container40 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="extname"
+						placeholder="#{messages.admin_product_new_extname_waternmark}"
+						disabled="#{jJProductBean.disabledProductMode}"
+						value="#{jJProductBean.productAdmin.extname}"
+						label="#{messages.admin_product_new_extname_label}"
+						required="true" widgetVar="extnameWidget">
+						<f:validateLength maximum="100" />
+					</p:inputText>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container60 Responsive100">
+				<h:panelGroup layout="block" styleClass="Container35">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel for="productManagerSelect"
+							value="#{messages.admin_product_new_manager_title}" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container65">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="productManagerSelect"
+							disabled="#{jJProductBean.disabledProductMode}"
+							value="#{jJProductBean.productManager}" effect="fade"
+							filter="#{!loginBean.mobile}" filterMatchMode="contains"
+							required="true"
+							requiredMessage="#{messages.admin_product_new_manager_alert}"
+							widgetVar="productManagerWidget"
+							converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter"
+							label="#{messages.admin_product_new_manager_label}">
+
+							<f:selectItem itemLabel="#{messages.label_select}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{jJProductBean.productManagerList}"
+								var="p" itemLabel="#{p.firstname} #{p.name}" itemValue="#{p}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="#{jJProductBean.disabledVersionMode ?'Container70':'Container100'} Responsive100">
+				<h:panelGroup layout="block"
+					styleClass="Container20 TexAlCenter BorderAll"
+					style="height:100px;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:graphicImage id="img" styleClass="avatar" cache="false"
+							style="margin-top: 7%;" value="#{imageStreamer.imageProd}">
+							<f:param name="ProdId" value="#{jJProductBean.productAdmin.id}" />
+							<f:param name="Edit" value="true" />
+						</p:graphicImage>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container75 TexAlCenter"
+					style="height:100px;">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:fileUpload id="prodLogo" fileLimit="1"
+							styleClass="customFileUpload"
+							disabled="#{empty jJProductBean.productAdmin.name}"
+							fileUploadListener="#{licenseBean.handleProdLogoUpload}"
+							mode="advanced" dragDropSupport="false" update="msg img"
+							sizeLimit="1000000" allowTypes="/(gif|png|ico|jpeg)$/" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				rendered="#{jJProductBean.disabledVersionMode}"
+				styleClass="ui-fluid Container30 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="addProduct"
+						value="#{messages.admin_product_new_title}"
+						update="productDialogForm" icon="fa fa-plus Fs16"
+						disabled="#{not jJProductBean.disabledVersionMode}"
+						process="@this,name,extname,productManagerSelect"
+						action="#{jJProductBean.addProduct(jJVersionBean)}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Separator" />
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container70 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="version"
+						placeholder="#{messages.admin_product_new_version_watermark}"
+						disabled="#{jJProductBean.disabledVersionMode}"
+						value="#{jJVersionBean.versionAdmin.name}" label="Version Name"
+						required="true"
+						requiredMessage="#{messages.label_name_required_alert}"
+						widgetVar="versionWidget">
+						<f:validateLength maximum="100" />
+						<f:validator validatorId="unicityNameValidator" />
+						<f:attribute name="product" value="#{jJProductBean.productAdmin}" />
+						<f:attribute name="versionBean" value="#{jJVersionBean}" />
+					</p:inputText>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container30 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="addVersion"
+						onstart="PF('versionBlockUIWidget').block()"
+						oncomplete="PF('versionBlockUIWidget').unblock()"
+						disabled="#{jJProductBean.disabledVersionMode}"
+						update="version versionDataTable msg"
+						actionListener="#{jJVersionBean.addVersion}"
+						icon="fa fa-plus Fs16"
+						value="#{messages.admin_product_new_version_button}"
+						process="@this,version" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Separator" />
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container90 Responsive100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:dataTable id="versionDataTable" var="versionModel"
+						scrollable="true" scrollHeight="200"
+						value="#{jJVersionBean.versionDataModel}"
+						emptyMessage="#{messages.label_notRecordFound}"
+						rowStyleClass="#{versionModel.old ? 'old' : null}">
+
+						<p:ajax event="rowToggle" listener="#{jJBuildBean.rowToggle}"
+							update="versionDataTable" onstart="updateRowExapansion();" />
+
+						<!-- 							<f:facet name="header"> -->
+						<!-- 								<h:outputText -->
+						<!-- 									value="#{messages.admin_product_new_version_title}" /> -->
+						<!-- 							</f:facet> -->
+
+						<p:column style="width:10%" styleClass="TexAlCenter">
+							<p:rowToggler />
+						</p:column>
+						<p:column style="width:10%" styleClass="TexAlCenter">
+							<f:facet name="header">
+								<p:selectBooleanCheckbox
+									disabled="#{jJVersionBean.disabledCheckVersion}"
+									value="#{jJVersionBean.checkVersions}">
+									<p:ajax update="versionDataTable"
+										listener="#{jJVersionBean.checkVersions}" />
+								</p:selectBooleanCheckbox>
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{versionModel.checkVersion}"
+								disabled="#{jJVersionBean.disabledCheckVersion}">
+								<p:ajax update="versionDataTable"
+									listener="#{jJVersionBean.checkVersion}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="width:80%">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{messages.admin_product_new_version_header}" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<h:outputText value="#{versionModel.version.name}" />
+						</p:column>
+
+						<p:rowExpansion styleClass="rowExpansion">
+							<f:event type="preRenderComponent" update="versionDataTable"
+								onstart="PF('versionBlockUIWidget').block()"
+								oncomplete="PF('versionBlockUIWidget').unblock()"
+								listener="#{jJBuildBean.loadingRowExpansion(versionModel.version)}" />
+							<h:panelGroup layout="block" styleClass="Container">
+								<h:panelGroup layout="block" styleClass="Container80 BorderAll">
+									<h:panelGroup layout="block" styleClass="Container100">
+										<p:dataTable id="buildDataTable" var="build"
+											selection="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionSelectedBuilds}"
+											rowKey="#{build.id}"
+											emptyMessage="#{messages.label_notRecordFound}"
+											value="#{jJBuildBean.buildUtils.get(jJBuildBean.index).versionBuilds}">
+
+											<p:column selectionMode="multiple"
+												style="width:30%;text-align:center" />
+											<p:column style="width:70%">
+												<f:facet name="header">
+													<p:row>
+														<p:column>
+															<h:outputText value="Build" />
+														</p:column>
+													</p:row>
+												</f:facet>
+												<h:outputText value="#{build.name}" />
+											</p:column>
+											<f:facet name="footer">
+												<h:panelGroup layout="block" styleClass="Container">
+													<h:panelGroup layout="block" style="float:right;"
+														styleClass="Container50 Responsive50">
+														<h:panelGroup layout="block" styleClass="ContainerIndent">
+															<p:commandButton styleClass="Fs12"
+																onstart="PF('versionBlockUIWidget').block()"
+																oncomplete="PF('versionBlockUIWidget').unblock()"
+																icon="fa fa-refresh Fs14"
+																update="buildDataTable :tabview:productDialogForm:msg"
+																process="buildDataTable"
+																value="#{messages.label_update}"
+																action="#{jJBuildBean.updateVersionBuilds(versionModel.version.id)}" />
+														</h:panelGroup>
+													</h:panelGroup>
+												</h:panelGroup>
+											</f:facet>
+										</p:dataTable>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container80">
+										<p:inputText id="build"
+											placeholder="#{messages.admin_product_new_build_text}"
+											value="#{jJBuildBean.buildName}"
+											label="#{messages.admin_product_new_build_text}"
+											required="true"
+											requiredMessage="#{messages.label_name_required_alert}">
+											<f:validateLength maximum="100" />
+											<f:validator validatorId="unicityNameValidator" />
+											<f:attribute name="version" value="#{versionModel.version}" />
+											<f:attribute name="buildBean" value="#{jJBuildBean}" />
+										</p:inputText>
+									</h:panelGroup>
+									<h:panelGroup layout="block"
+										styleClass="Container20 TexAlCenter">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton id="addBuild" icon="fa fa-plus Fs16"
+												onstart="PF('versionBlockUIWidget').block()"
+												styleClass="littleButton"
+												oncomplete="PF('versionBlockUIWidget').unblock()"
+												update="build buildDataTable :tabview:productDialogForm:msg"
+												action="#{jJBuildBean.addBuild(versionModel.version.id)}"
+												title="#{messages.admin_product_new_build_button}"
+												process="@this,build">
+											</p:commandButton>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+						</p:rowExpansion>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Separator" />
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container33 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="saveButton" icon="fa fa-save Fs16"
+						onstart="PF('versionBlockUIWidget').block()"
+						oncomplete="PF('versionBlockUIWidget').unblock()"
+						disabled="#{jJProductBean.disabledVersionMode}"
+						value="#{messages.admin_product_new_save_button}"
+						update="productDialogForm :headerForm"
+						process="@this,name,extname,productManagerSelect"
+						action="#{jJProductBean.save(jJVersionBean)}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="ui-fluid Container33 Responsive50" style="float: right;">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+						value="#{messages.label_cancel}"
+						onclick="PF('productDialogWidget').hide()" type="button" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+	</h:panelGroup>
+</ui:composition>
+</html>

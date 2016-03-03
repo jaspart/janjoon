@@ -7,40 +7,45 @@
 	<title>#{messages.label_appName}</title>
 	<h:outputStylesheet library="css" name="standard.css" />
 	<h:outputScript library="js" name="calendar.js" />
-<!-- 	<h:outputScript library="js" name="ckEditor.js" /> -->
 	<f:event listener="#{loginBean.loadingMain}" type="preRenderView" />
+	<div class="Animated05" id="layout-menu-cover">
+		<h:form id="headerForm">
+			<p:remoteCommand name="updateCommunicationButton"
+				update=":messageCreationForm communicationButton :communicationButton" />
 
-	<h:form id="headerForm">
-		<p:remoteCommand name="updateCommunicationButton"
-			update=":messageCreationForm communicationButton :communicationButton" />
-
-		<p:commandButton id="communicationButton" icon="ui-icon-comment"
-			value="#{loginBean.messageCount}" style="display:none;"
-			oncomplete="PF('communicationPanel').show();"
-			title="#{message.header_communication_label}"
-			rendered="#{loginBean.enable}" />
-
-		<div class="Animated05" id="layout-menu-cover">
-			<!--div id="panelMenu"-->
+			<p:commandButton id="communicationButton" icon="ui-icon-comment"
+				value="#{loginBean.messageCount}" style="display:none;"
+				oncomplete="PF('communicationPanel').show();"
+				title="#{message.header_communication_label}"
+				rendered="#{loginBean.enable}" />
 			<div style="height: 100px"></div>
+
 			<p:selectOneMenu id="projectSelectOneMenu"
 				panelStyleClass="headerSelectOneMenuClass"
-				value="#{jJProjectBean.project}" effect="fade" style="width:160px"
-				filter="#{!loginBean.mobile}" valueChangeListener="#{loginBean.changeEvent}"
+				value="#{jJProjectBean.project}" effect="fade" style="width:130px"
+				filter="#{!loginBean.mobile}"
+				valueChangeListener="#{loginBean.changeEvent}"
 				filterMatchMode="contains"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
-
 				<f:selectItem itemValue="#{null}"
 					itemLabel="#{messages.header_any_project}" />
 				<f:selectItems value="#{jJProjectBean.projectList}" var="p"
 					itemLabel="#{p.name}" itemValue="#{p}" />
-				<p:ajax update=":contentPanel tabMenu :scrollRight communicationButton :growlForm" />
+				<p:ajax
+					update=":contentPanel tabMenu :scrollRight communicationButton :growlForm" />
 			</p:selectOneMenu>
+
+			<p:commandButton styleClass="GrayButton"
+				disabled="#{!loginBean.authorisationService.adminProject}"
+				actionListener="#{jJProjectBean.newProject}"
+				update=":projectDialogHeader :projectDialogForm"
+				icon="fa fa-plus Fs20" resetValues="true"
+				oncomplete="PF('projectDialogWidget').show()" />
 
 			<p:selectOneMenu id="productSelectOneMenu"
 				value="#{jJProductBean.product}"
 				panelStyleClass="headerSelectOneMenuClass" effect="fade"
-				style="width:160px" filter="#{!loginBean.mobile}"
+				style="width:130px" filter="#{!loginBean.mobile}"
 				valueChangeListener="#{loginBean.changeEvent}"
 				filterMatchMode="contains"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
@@ -49,13 +54,20 @@
 					itemLabel="#{messages.header_any_product}" />
 				<f:selectItems value="#{jJProductBean.productList}" var="p"
 					itemLabel="#{p.name}" itemValue="#{p}" />
-				<p:ajax update="versionSelectOneMenu :contentPanel tabMenu :scrollRight communicationButton :growlForm" />
+				<p:ajax
+					update="versionSelectOneMenu :contentPanel tabMenu :scrollRight communicationButton :growlForm" />
 			</p:selectOneMenu>
+			<p:commandButton styleClass="GrayButton" resetValues="true"
+				disabled="#{!loginBean.authorisationService.adminProduct}"
+				actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
+				update=":productDialogHeader :productDialogForm"
+				oncomplete="PF('productDialogWidget').show()" icon="fa fa-plus Fs20" />
 
 			<p:selectOneMenu id="versionSelectOneMenu"
-				value="#{jJVersionBean.version}" style="width:160px;"
+				value="#{jJVersionBean.version}" style="width:130px;"
 				panelStyleClass="headerSelectOneMenuClass" effect="fade"
-				filter="#{!loginBean.mobile}" valueChangeListener="#{loginBean.changeEvent}"
+				filter="#{!loginBean.mobile}"
+				valueChangeListener="#{loginBean.changeEvent}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 				filterMatchMode="contains" disabled="#{jJVersionBean.disabled}">
 
@@ -67,6 +79,15 @@
 
 				<p:ajax update=":contentPanel :growlForm" />
 			</p:selectOneMenu>
+			<p:commandButton icon="fa fa-pencil Fs16" styleClass="GrayButton"
+				oncomplete="PF('productDialogWidget').show()" resetValues="true"
+				title="#{messages.label_edit}"
+				action="#{jJProductBean.editProduct(jJVersionBean)}"
+				update=":productDialogHeader :productDialogForm">
+				<f:setPropertyActionListener value="#{jJProductBean.product}"
+					target="#{jJProductBean.productAdmin}" />
+			</p:commandButton>
+
 
 			<div class="Separator"></div>
 			<pr:menu id="tabMenu" name="content" style="float: none;"
@@ -77,7 +98,7 @@
 
 				<p:menuitem id="proAction"
 					value="#{messages.header_project_menuitem}"
-					title="#{loginBean.authorisationService.rProjectMSG}"					
+					title="#{loginBean.authorisationService.rProjectMSG}"
 					actionListener="#{loginBean.redirection}" update=":growlForm"
 					icon="icon-connection21 Purple" style="min-width: 80px;"
 					rendered="#{loginBean.authorisationService.rProject}" />
@@ -93,7 +114,7 @@
 					title="#{loginBean.authorisationService.rBugMSG}"
 					url="/pages/bugs.jsf?faces-redirect=true" icon="icon-bug18 Red" />
 
-				<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"					
+				<p:menuitem id="devAction" value="#{messages.header_dev_menuitem}"
 					title="#{loginBean.authorisationService.rwDevMSG}"
 					actionListener="#{loginBean.redirectToDev}" update=":growlForm"
 					icon="icon-browser"
@@ -138,7 +159,8 @@
 					icon="icon-https Marron" update=":contentPanel" />
 			</pr:menu>
 			<div class="ContainerIndent Fs12 BoldGray FontRobotoRegular">
-				<h:panelGrid columns="2" cellspacing="0" cellpadding="0" width="100%">
+				<h:panelGrid columns="2" cellspacing="0" cellpadding="0"
+					width="100%">
 					<p:row>
 						<p:column width="50%">
 							<h:outputText value=" Version 3.0-BUILD_NUMBER Lithium" />
@@ -152,6 +174,6 @@
 					</p:row>
 				</h:panelGrid>
 			</div>
-		</div>
-	</h:form>
+		</h:form>
+	</div>
 </ui:composition>

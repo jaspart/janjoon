@@ -27,6 +27,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
@@ -63,11 +64,14 @@ public class JJStatusBean {
 	private List<JJStatus> statusList;
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
-	private PieChartModel pieChart;
+	private PieChartModel statusPieChart;
+	private PieChartModel categoryPieChart;
 	private PieChartModel bugPieChart;
+	private PieChartModel projectPieChart;
+	private PieChartModel productPieChart;
 	private SelectItem[] objectOptions;
 	private MeterGaugeChartModel bugMetergauge;
-	private LineChartModel bugLineModel;
+	private LineChartModel kpiLineModel;
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
@@ -148,7 +152,7 @@ public class JJStatusBean {
 			prjMetergauge = null;
 			bugPieChart = null;
 			bugMetergauge = null;
-			bugLineModel = null;
+			kpiLineModel = null;
 
 		}
 
@@ -188,43 +192,205 @@ public class JJStatusBean {
 		this.objectOptions = objectOptions;
 	}
 
-	public PieChartModel getPieChart() {
+	public PieChartModel getStatusPieChart() {
 
-		if (pieChart == null) {
-			pieChart = new PieChartModel();
+		if (statusPieChart == null) {
+			statusPieChart = new PieChartModel();
 			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
 					true, null, false);
 			boolean render = false;
 			for (JJStatus s : statReq) {
 
 				int i = Integer
-						.parseInt(
-								"" + jJRequirementService.getReqCountByStaus(
+						.parseInt(""
+								+ jJRequirementService.getReqCount(
 										((LoginBean) LoginBean
 												.findBean("loginBean"))
 														.getContact()
 														.getCompany(),
 										project, LoginBean.getProduct(),
-										LoginBean.getVersion(), s, true));
+										LoginBean.getVersion(), s, null, true));
 				render = render || i > 0;
 				if (i > 0)
-					pieChart.set(MessageFactory
+					statusPieChart.set(MessageFactory
 							.getMessage("status_" + s.getName(), "")
 							.getDetail(), i);
 			}
 
 			if (render) {
-				pieChart.setLegendPosition("e");
-				pieChart.setTitle("% " + MessageFactory
+				statusPieChart.setLegendPosition("e");
+				statusPieChart.setTitle("% " + MessageFactory
 						.getMessage("label_requirement", "").getDetail());
-				pieChart.setFill(false);
-				pieChart.setShowDataLabels(true);
-				pieChart.setDiameter(150);
-				pieChart.setSliceMargin(5);
+				statusPieChart.setFill(false);
+				statusPieChart.setShowDataLabels(true);
+				statusPieChart.setDiameter(150);
+				statusPieChart.setSliceMargin(5);
 			} else
-				pieChart = null;
+				statusPieChart = null;
 		}
-		return pieChart;
+		return statusPieChart;
+	}
+
+	public void setStatusPieChart(PieChartModel statusPieChart) {
+		this.statusPieChart = statusPieChart;
+	}
+
+	public PieChartModel getProjectPieChart() {
+
+		if (activeTabIndex == 3) {
+			if (projectPieChart == null) {
+				projectPieChart = new PieChartModel();
+				List<JJProduct> prodReq = ((JJProductBean) LoginBean
+						.findBean("jJProductBean")).getProductList();
+				boolean render = false;
+				for (JJProduct s : prodReq) {
+
+					int i = Integer
+							.parseInt("" + jJRequirementService.getReqCount(
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany(),
+									project, s, null, null, null, true));
+					render = render || i > 0;
+					if (i > 0)
+						projectPieChart.set(
+								MessageFactory.getMessage("label_product", "")
+										.getDetail() + " :" + s.getName(),
+								i);
+				}
+
+				if (render) {
+					projectPieChart.setLegendPosition("e");
+					projectPieChart
+							.setTitle(
+									MessageFactory
+											.getMessage(
+													"statistique_kpi_projectPiechart_header",
+													LoginBean.getProject()
+															.getName())
+											.getDetail());
+					projectPieChart.setFill(false);
+					projectPieChart.setShowDataLabels(true);
+					projectPieChart.setDiameter(150);
+					projectPieChart.setSliceMargin(5);
+				} else
+					projectPieChart = null;
+			}
+			return projectPieChart;
+		} else
+			return null;
+	}
+
+	public void setProjectPieChart(PieChartModel projectPieChart) {
+		this.projectPieChart = projectPieChart;
+	}
+
+	public PieChartModel getProductPieChart() {
+
+		if (activeTabIndex == 3 && LoginBean.getProduct() != null) {
+			if (productPieChart == null) {
+				productPieChart = new PieChartModel();
+				List<JJProject> projReq = ((JJProjectBean) LoginBean
+						.findBean("jJProjectBean")).getProjectList();
+				boolean render = false;
+				for (JJProject s : projReq) {
+
+					int i = Integer
+							.parseInt("" + jJRequirementService.getReqCount(
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany(),
+									s, LoginBean.getProduct(), null, null, null,
+									true));
+					render = render || i > 0;
+					if (i > 0)
+						productPieChart.set(
+								MessageFactory.getMessage("label_project", "")
+										.getDetail() + " :" + s.getName(),
+								i);
+				}
+
+				if (render) {
+					productPieChart.setLegendPosition("e");
+					productPieChart
+							.setTitle(
+									MessageFactory
+											.getMessage(
+													"statistique_kpi_productPiechart_header",
+													LoginBean.getProduct()
+															.getName())
+											.getDetail());
+					productPieChart.setFill(false);
+					productPieChart.setShowDataLabels(true);
+					productPieChart.setDiameter(150);
+					productPieChart.setSliceMargin(5);
+				} else
+					productPieChart = null;
+			}
+			return productPieChart;
+		} else
+			return null;
+	}
+
+	public void setProductPieChart(PieChartModel productPieChart) {
+		this.productPieChart = productPieChart;
+	}
+
+	public PieChartModel getCategoryPieChart() {
+		if (activeTabIndex == 3) {
+			if (categoryPieChart == null) {
+				categoryPieChart = new PieChartModel();
+				List<JJCategory> catReq = jJCategoryService.getCategories(null,
+						false, true, true, LoginBean.getCompany());
+				boolean render = false;
+				for (JJCategory s : catReq) {
+
+					int i = Integer.parseInt(""
+							+ jJRequirementService.getReqCount(
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany(),
+									project, LoginBean.getProduct(),
+									LoginBean.getVersion(), null, s, true));
+					render = render || i > 0;
+					if (i > 0) {
+						String label = MessageFactory.checkMessage(
+								"category_" + s.getName().replace(" ", "_"),
+								"") != null
+										? MessageFactory.checkMessage(
+												"category_" + s.getName()
+														.replace(" ", "_"),
+												"")
+										: s.getName();
+												
+						categoryPieChart.set(
+								MessageFactory.getMessage("label_category", "")
+										.getDetail() + ":" + label,
+								i);
+					}
+
+				}
+
+				if (render) {
+					categoryPieChart.setLegendPosition("e");
+					categoryPieChart.setTitle(MessageFactory.getMessage(
+							"statistique_kpi_categoryPiechart_header", "")
+							.getDetail());
+					categoryPieChart.setFill(false);
+					categoryPieChart.setShowDataLabels(true);
+					categoryPieChart.setDiameter(150);
+					categoryPieChart.setSliceMargin(5);
+				} else
+					categoryPieChart = null;
+			}
+			return categoryPieChart;
+		} else
+			return null;
+
+	}
+
+	public void setCategoryPieChart(PieChartModel categoryPieChart) {
+		this.categoryPieChart = categoryPieChart;
 	}
 
 	public PieChartModel getBugPieChart() {
@@ -330,21 +496,21 @@ public class JJStatusBean {
 		this.bugMetergauge = bugMetergauge;
 	}
 
-	public LineChartModel getBugLineModel() {
+	public LineChartModel getKpiLineModel() {
 
-		if (activeTabIndex == 1) {
-			if (bugLineModel == null) {
+		if (activeTabIndex == 3) {
+			if (kpiLineModel == null) {
 
-				bugLineModel = initLinearModel();
+				kpiLineModel = initLinearModel();
 			}
-			return bugLineModel;
+			return kpiLineModel;
 		} else
 			return null;
 
 	}
 
-	public void setBugLineModel(LineChartModel bugLineModel) {
-		this.bugLineModel = bugLineModel;
+	public void setKpiLineModel(LineChartModel kpiLineModel) {
+		this.kpiLineModel = kpiLineModel;
 	}
 
 	public MeterGaugeChartModel getPrjMetergauge() {
@@ -459,15 +625,6 @@ public class JJStatusBean {
 		this.renderCreate = renderCreate;
 	}
 
-	// public void beforeDialogShow(ActionEvent event) {
-	//
-	// setJJStatus__(new JJStatus());
-	// renderCreate = true;
-	// RequestContext context = RequestContext.getCurrentInstance();
-	// context.execute("PF('statusDialogWidget').show()");
-	//
-	// }
-
 	@SuppressWarnings("serial")
 	public void loadData() {
 
@@ -486,36 +643,36 @@ public class JJStatusBean {
 					categoryDataModel.add(new CategoryDataModel(category));
 				}
 
-				pieChart = new PieChartModel();
+				statusPieChart = new PieChartModel();
 				List<JJStatus> statReq = jJStatusService
 						.getStatus("Requirement", true, null, false);
 				boolean render = false;
 				for (JJStatus s : statReq) {
 
-					int i = Integer.parseInt(
-							"" + jJRequirementService.getReqCountByStaus(
+					int i = Integer.parseInt(""
+							+ jJRequirementService.getReqCount(
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
 									project, LoginBean.getProduct(),
-									LoginBean.getVersion(), s, true));
+									LoginBean.getVersion(), s, null, true));
 					render = render || i > 0;
 					if (i > 0)
-						pieChart.set(MessageFactory
+						statusPieChart.set(MessageFactory
 								.getMessage("status_" + s.getName(), "")
 								.getDetail(), i);
 				}
 
 				if (render) {
-					pieChart.setLegendPosition("e");
-					pieChart.setTitle("% " + MessageFactory
+					statusPieChart.setLegendPosition("e");
+					statusPieChart.setTitle("% " + MessageFactory
 							.getMessage("label_requirement", "").getDetail());
-					pieChart.setFill(false);
-					pieChart.setShowDataLabels(true);
-					pieChart.setDiameter(150);
-					pieChart.setSliceMargin(5);
+					statusPieChart.setFill(false);
+					statusPieChart.setShowDataLabels(true);
+					statusPieChart.setDiameter(150);
+					statusPieChart.setSliceMargin(5);
 				} else
-					pieChart = null;
+					statusPieChart = null;
 
 				// float bugKPI = 0L;
 				float projKPI = 0;
@@ -536,9 +693,6 @@ public class JJStatusBean {
 
 				for (JJRequirement req : requirements) {
 
-					// bugKPI = bugKPI
-					// + (1 / (1 + jJBugService.requirementBugCount(req)));
-
 					if (project.getStartDate() != null
 							&& project.getEndDate() != null
 							&& jJRequirementBean.checkIfFinished(req))
@@ -557,20 +711,8 @@ public class JJStatusBean {
 							- (tmpsProj / (1 + tmps));
 				}
 
-				// if (requirements != null && !requirements.isEmpty())
-				// bugKPI = bugKPI / requirements.size();
-
 				List<Number> prjIntervalls = new ArrayList<Number>() {
-					// {
-					// add(-1);
-					// add(-0.50);
-					// add(-0.30);
-					// add(-0.15);
-					// add(0.15);
-					// add(0.30);
-					// add(0.50);
-					// add(1);
-					// }
+
 					{
 						add(-1);
 						add(-0.25);
@@ -589,25 +731,6 @@ public class JJStatusBean {
 				prjMetergauge.setMax(1);
 				prjMetergauge.setSeriesColors("FF0000,FF0000,008000,0000FF");
 
-				// List<Number> bugIntervalls = new ArrayList<Number>() {
-				// {
-				// add(0.5);
-				// add(0.75);
-				// add(0.85);
-				// add(0.925);
-				// add(1);
-				// }
-				// };
-				// bugMetergauge = new MeterGaugeChartModel(bugKPI,
-				// bugIntervalls);
-				// bugMetergauge.setTitle("Bug KPI");
-				// bugMetergauge.setGaugeLabel("KPI");
-				// bugMetergauge.setMin(0.5);
-				// bugMetergauge.setMax(1);
-				// bugMetergauge.setShowTickLabels(true);
-				// bugMetergauge
-				// .setSeriesColors("FF0000,FF0000,FF7700,FFD000,008000");
-
 			}
 
 		} else if (categoryDataModel == null) {
@@ -625,10 +748,6 @@ public class JJStatusBean {
 		}
 	}
 
-	public void setPieChart(PieChartModel pieChart) {
-		this.pieChart = pieChart;
-	}
-
 	public void deleteStatus() {
 
 		selectedStatus.setEnabled(false);
@@ -637,7 +756,7 @@ public class JJStatusBean {
 				.getMessage("message_successfully_deleted", "Status", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
-		pieChart = null;
+		statusPieChart = null;		
 		lazyStatusList = null;
 		objectOptions = null;
 
@@ -648,7 +767,10 @@ public class JJStatusBean {
 		lazyStatusList = null;
 		objectOptions = null;
 		statusList = null;
-		pieChart = null;
+		statusPieChart = null;
+		categoryPieChart = null;
+		productPieChart = null;
+		projectPieChart = null;
 		setCreateDialogVisible(false);
 	}
 
@@ -705,15 +827,15 @@ public class JJStatusBean {
 
 		ChartSeries blueSeries = new ChartSeries();
 		blueSeries.setLabel(MessageFactory
-				.getMessage("statistique_help_bug_blue", "").getDetail());
+				.getMessage("statistique_help_kpi_blue", "").getDetail());
 
 		ChartSeries purpleSerie = new ChartSeries();
 		purpleSerie.setLabel(MessageFactory
-				.getMessage("statistique_help_bug_purple", "").getDetail());
+				.getMessage("statistique_help_kpi_purple", "").getDetail());
 
 		ChartSeries greenSerie = new ChartSeries();
 		greenSerie.setLabel(MessageFactory
-				.getMessage("statistique_help_bug_green", "").getDetail());
+				.getMessage("statistique_help_kpi_green", "").getDetail());
 
 		for (JJSprint sp : sprints) {
 			List<JJTask> tasks = jJTaskService.getTasksByObject(sp,

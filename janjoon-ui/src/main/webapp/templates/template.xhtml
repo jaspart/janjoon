@@ -61,9 +61,9 @@
 						<p:panel styleClass="content">
 							<p:dialog id="viewDialog1" responsive="true"
 								header="#{messages.label_view} Message" modal="true"
-								widgetVar="viewMessageDialogWidget" dynamic="true" resizable="false"
-								maximizable="false" draggable="false" showEffect="fade"
-								hideEffect="fade">
+								widgetVar="viewMessageDialogWidget" dynamic="true"
+								resizable="false" maximizable="false" draggable="false"
+								showEffect="fade" hideEffect="fade">
 								<p:outputPanel id="viewMessagePanel">
 									<ui:include src="/pages/messageDialog.xhtml">
 										<ui:param name="JJMessage"
@@ -71,6 +71,34 @@
 									</ui:include>
 								</p:outputPanel>
 							</p:dialog>
+
+							<p:dialog id="projectDialog" responsive="true" modal="true"
+								widgetVar="projectDialogWidget" dynamic="true" showEffect="fade"
+								resizable="false" rendered="#{loginBean.authorisationService.adminProject}" >
+								<p:ajax event="close"
+									update="#{view.viewId.contains('administration') ? ':tabview:projectForm':''}  :headerForm"
+									listener="#{jJProjectBean.closeDialog}" />
+								<f:facet name="header">
+									<p:outputLabel id="projectDialogHeader"
+										value="#{messages[jJProjectBean.message]}" />
+								</f:facet>
+								<ui:include src="/pages/projectDialog.xhtml" />
+							</p:dialog>
+
+							<p:dialog id="productDialog" draggable="false" responsive="true"
+								modal="true" widgetVar="productDialogWidget" dynamic="true"
+								rendered="#{loginBean.authorisationService.adminProduct}"
+								showEffect="fade" resizable="false">
+								<p:ajax event="close"
+									update="#{view.viewId.contains('administration') ? ':tabview:productForm':''} :headerForm"
+									listener="#{jJProductBean.closeDialog(jJVersionBean,jJBuildBean)}" />
+								<f:facet name="header">
+									<p:outputLabel id="productDialogHeader"
+										value="#{messages[jJProductBean.message]}" />
+								</f:facet>
+								<ui:include src="/pages/productDialog.xhtml" />
+							</p:dialog>
+
 							<p:imageSwitch id="scrollRight" effect="scrollRight"
 								style="width:100%;height:25px;" speed="10000"
 								slideshowSpeed="250" rendered="#{loginBean.showMarquee }">
@@ -88,7 +116,7 @@
 									<f:facet name="header">
 										<f:event listener="#{loginBean.updateGrowl}"
 											type="preRenderComponent" />
-										<p:remoteCommand name="updateGrowl" update=":growlForm"/>
+										<p:remoteCommand name="updateGrowl" update=":growlForm" />
 										<p:messages id="auth" showDetail="false" closable="true" />
 									</f:facet>
 								</p:panel>
@@ -96,35 +124,22 @@
 
 							<p:panel id="contentPanel" styleClass="content">
 								<f:event listener="#{loginBean.initMenuIndex(tab)}"
-									type="preRenderComponent" />
+									type="preRenderView" />
 								<ui:insert name="content" />
 							</p:panel>
-						</p:panel>
-						<!-- 						<ui:insert name="footer"> -->
-						<!-- 							<ui:include src="footer.xhtml" /> -->
-						<!-- 						</ui:insert> -->
+						</p:panel>			
 						<ui:insert name="footer" />
-
-					</h:panelGrid>
-
-<!-- 					<pe:blockUI widgetVar="blockUIWidget"> -->
-<!-- 						<h:panelGrid columns="2"> -->
-<!-- 							<p:graphicImage name="images/preloader.gif" library="rioLayout" -->
-<!-- 								style="vertical-align: middle;" /> -->
-<!-- 							<h:outputText value="#{messages.label_refresh}" -->
-<!-- 								style="white-space: nowrap;" /> -->
-<!-- 						</h:panelGrid> -->
-<!-- 					</pe:blockUI>		 -->
+					</h:panelGrid>					
 				</h:panelGroup>
-				
+
 				<p:dialog modal="true" widgetVar="progressDialog" header="Status"
 					draggable="false" closable="false" responsive="true"
 					resizable="false">
 					<p:graphicImage library="images" name="ajaxloadingbar.gif"
 						style="vertical-align: middle;" />
 				</p:dialog>
-				
-				<p:ajaxStatus 
+
+				<p:ajaxStatus
 					style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
 					<f:facet name="start">
 						<p:graphicImage name="images/preloader.gif" library="rioLayout" />
@@ -133,7 +148,7 @@
 						<h:outputText value="" />
 					</f:facet>
 				</p:ajaxStatus>
-				
+
 			</h:panelGroup>
 		</h:panelGroup>
 

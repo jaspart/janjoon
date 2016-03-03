@@ -41,8 +41,8 @@ public interface JJRequirementService {
 	// public List<JJRequirement> getInfinishedRequirement(JJCompany
 	// company,Map<JJProject, JJProduct> map,JJVersion version);
 
-	public Long getReqCountByStaus(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,
+	public Long getReqCount(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version, JJStatus status,JJCategory category,
 			boolean onlyActif);
 
 	public void refreshRequirement(JJRequirement requirement);
