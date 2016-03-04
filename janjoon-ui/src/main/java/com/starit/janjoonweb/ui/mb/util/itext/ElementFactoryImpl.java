@@ -23,7 +23,7 @@ public class ElementFactoryImpl extends ElementFactory {
 			final ChainedProperties chain, final DocListener document,
 			final ImageProvider img_provider,
 			final HashMap<String, Image> img_store, final String img_baseurl)
-					throws DocumentException, IOException {
+			throws DocumentException, IOException {
 		Image img = null;
 		// getting the image using an image provider
 		if (img_provider != null)

@@ -17,9 +17,18 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30  Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_product_table_title}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton styleClass="GrayButton"
+									title="#{messages.admin_product_table_new_label}"
+									id="newProduct" resetValues="true"
+									actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
+									update=":productDialogHeader :productDialogForm"
+									oncomplete="PF('productDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -98,27 +107,27 @@
 							</p:menuitem>
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton
-										value="#{messages.admin_product_table_new_label}"
-										id="newProduct" resetValues="true"
-										actionListener="#{jJProductBean.newProduct(jJVersionBean)}"
-										update=":productDialogHeader :productDialogForm"
-										oncomplete="PF('productDialogWidget').show()"
-										icon="fa fa-plus Fs20" />
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton -->
+					<!-- 										value="#{messages.admin_product_table_new_label}" -->
+					<!-- 										id="newProduct" resetValues="true" -->
+					<!-- 										actionListener="#{jJProductBean.newProduct(jJVersionBean)}" -->
+					<!-- 										update=":productDialogHeader :productDialogForm" -->
+					<!-- 										oncomplete="PF('productDialogWidget').show()" -->
+					<!-- 										icon="fa fa-plus Fs20" /> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
-		
+
 	<p:confirmDialog id="productDeleteDialog"
 		widgetVar="productDeleteDialogWidget"
 		message="#{messages.admin_product_delete_label}" showEffect="fade"

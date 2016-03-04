@@ -11,21 +11,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJVersionConverter_Roo_Converter {
-    
-    declare parents: JJVersionConverter implements Converter;
-    
-    declare @type: JJVersionConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJVersionConverter");
-    
-    @Autowired
-    JJVersionService JJVersionConverter.jJVersionService;
-    
-    public Object JJVersionConverter.getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        Long id = Long.parseLong(value);
-        return jJVersionService.findJJVersion(id);
-    }
-    
+privileged aspect JJVersionConverter_Roo_Converter{
+
+declare parents:JJVersionConverter implements Converter;
+
+declare @type:JJVersionConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJVersionConverter");
+
+@Autowired JJVersionService JJVersionConverter.jJVersionService;
+
+public Object JJVersionConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJVersionService.findJJVersion(id);}
+
 }

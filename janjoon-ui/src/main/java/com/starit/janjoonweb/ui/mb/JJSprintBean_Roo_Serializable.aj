@@ -6,10 +6,10 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJSprintBean;
 import java.io.Serializable;
 
-privileged aspect JJSprintBean_Roo_Serializable {
-    
-    declare parents: JJSprintBean implements Serializable;
-    
-    private static final long JJSprintBean.serialVersionUID = 1L;
-    
+privileged aspect JJSprintBean_Roo_Serializable{
+
+declare parents:JJSprintBean implements Serializable;
+
+private static final long JJSprintBean.serialVersionUID=1L;
+
 }

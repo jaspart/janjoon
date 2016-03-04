@@ -428,8 +428,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,
-			Map<JJProject, JJProduct> map, JJVersion version) {
-		return getRequirements(company, null, map, version, null, null, false,
+			Map<JJProject, JJProduct> map, JJVersion version,JJCategory category) {
+		return getRequirements(company, category, map, version, null, null, false,
 				true, true, false, null);
 	}
 

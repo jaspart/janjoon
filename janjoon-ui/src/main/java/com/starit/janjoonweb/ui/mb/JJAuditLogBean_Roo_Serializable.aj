@@ -6,10 +6,10 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJAuditLogBean;
 import java.io.Serializable;
 
-privileged aspect JJAuditLogBean_Roo_Serializable {
-    
-    declare parents: JJAuditLogBean implements Serializable;
-    
-    private static final long JJAuditLogBean.serialVersionUID = 1L;
-    
+privileged aspect JJAuditLogBean_Roo_Serializable{
+
+declare parents:JJAuditLogBean implements Serializable;
+
+private static final long JJAuditLogBean.serialVersionUID=1L;
+
 }

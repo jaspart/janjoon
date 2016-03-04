@@ -20,7 +20,7 @@ public class DataTableRendererImpl extends DataTableRenderer {
 	@Override
 	protected void encodeCell(FacesContext context, DataTable table,
 			UIColumn column, String clientId, boolean selected)
-					throws IOException {
+			throws IOException {
 		if (!column.isRendered()) {
 			return;
 		}

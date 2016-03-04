@@ -675,7 +675,7 @@ public class JJChapterBean {
 	private void createTreeDocument(JJChapter chapterParent,
 			JJCategory category, Paragraph paragraph, Font fontNote,
 			Font fontChapter, Font fontRequirement, StyleSheet style)
-					throws IOException {
+			throws IOException {
 
 		paragraph.add(new Chunk("\n Chapter:" + chapterParent.getName() + "\n",
 				fontChapter));

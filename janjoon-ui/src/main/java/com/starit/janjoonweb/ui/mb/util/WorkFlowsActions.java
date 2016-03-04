@@ -48,8 +48,8 @@ public class WorkFlowsActions {
 	@Autowired
 	private JJBugService jJBugService;
 
-	@Autowired
-	private JJBuildService jJBuildService;
+	// @Autowired
+	// private JJBuildService jJBuildService;
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
@@ -60,8 +60,8 @@ public class WorkFlowsActions {
 	@Autowired
 	private JJMessageService jJMessageService;
 
-	@Autowired
-	private JJTaskService jJTaskService;
+	// @Autowired
+	// private JJTaskService jJTaskService;
 
 	@Autowired
 	private JJTestcaseService jJTestcaseService;
@@ -94,9 +94,9 @@ public class WorkFlowsActions {
 		this.jJRequirementService = jJRequirementService;
 	}
 
-	public void setjJBuildService(JJBuildService jJBuildService) {
-		this.jJBuildService = jJBuildService;
-	}
+	// public void setjJBuildService(JJBuildService jJBuildService) {
+	// this.jJBuildService = jJBuildService;
+	// }
 
 	public void setjJMessageService(JJMessageService jJMessageService) {
 		this.jJMessageService = jJMessageService;
@@ -106,9 +106,9 @@ public class WorkFlowsActions {
 		this.jJCriticityService = jJCriticityService;
 	}
 
-	public void setjJTaskService(JJTaskService jJTaskService) {
-		this.jJTaskService = jJTaskService;
-	}
+	// public void setjJTaskService(JJTaskService jJTaskService) {
+	// this.jJTaskService = jJTaskService;
+	// }
 
 	// public void setjJProjectService(JJProjectService jJProjectService) {
 	// this.jJProjectService = jJProjectService;
@@ -198,7 +198,7 @@ public class WorkFlowsActions {
 											Math.min(70,
 													requirement.getName()
 															.length()))
-							+ " status changed");
+									+ " status changed");
 					mes.setCreatedBy(contact);
 					mes.setCriticity(criticity);
 					mes.setStatus(status);
@@ -317,7 +317,7 @@ public class WorkFlowsActions {
 									+ build.getName().substring(0,
 											Math.min(70,
 													build.getName().length()))
-							+ "status changed");
+									+ "status changed");
 					mes.setCreatedBy(contact);
 					mes.setStatus(status);
 					mes.setCriticity(criticity);

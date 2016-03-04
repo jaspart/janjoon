@@ -19,12 +19,29 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30 Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_project_table_header}" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
-								styleClass="Container60 Responsive100">
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton title="#{messages.admin_project_new_button}"
+									actionListener="#{jJProjectBean.newProject}" id="newProject"
+									update=":projectDialogHeader :projectDialogForm"
+									resetValues="true" styleClass="GrayButton"
+									oncomplete="PF('projectDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton id="restoreProject"
+									icon="fa fa-rotate-right Fs20" styleClass="GrayButton"
+									title="#{messages.admin_project_restore_dialog}"
+									oncomplete="PF('restoreProjectDialogWidget').show()"
+									resetValues="true" update=":tabview:restoreProjectForm" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
 								<p:inputText id="globalFilter"
 									onkeyup="PF('projectDataTableWV').filter()"
 									placeholder="#{messages.bug_table_search_watermark}" />
@@ -32,7 +49,7 @@
 						</h:panelGroup>
 					</f:facet>
 					<p:column style="width: 70px !important;text-align: center;">
-						<p:graphicImage  styleClass="avatar" cache="false"
+						<p:graphicImage styleClass="avatar" cache="false"
 							rendered="#{project.logo != null}"
 							value="#{imageStreamer.imageProj}">
 							<f:param name="ProjId" value="#{project.id}" />
@@ -95,31 +112,31 @@
 
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton value="#{messages.admin_project_new_button}"
-										actionListener="#{jJProjectBean.newProject}" id="newProject"
-										update=":projectDialogHeader :projectDialogForm"
-										resetValues="true"
-										oncomplete="PF('projectDialogWidget').show()"
-										icon="fa fa-plus Fs20" />
-								</h:panelGroup>
-							</h:panelGroup>
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton id="restoreProject"
-										icon="fa fa-rotate-right Fs20"
-										value="#{messages.admin_project_restore_dialog}"
-										oncomplete="PF('restoreProjectDialogWidget').show()"
-										resetValues="true" update=":tabview:restoreProjectForm" />
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton value="#{messages.admin_project_new_button}" -->
+					<!-- 										actionListener="#{jJProjectBean.newProject}" id="newProject" -->
+					<!-- 										update=":projectDialogHeader :projectDialogForm" -->
+					<!-- 										resetValues="true" -->
+					<!-- 										oncomplete="PF('projectDialogWidget').show()" -->
+					<!-- 										icon="fa fa-plus Fs20" /> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton id="restoreProject" -->
+					<!-- 										icon="fa fa-rotate-right Fs20" -->
+					<!-- 										value="#{messages.admin_project_restore_dialog}" -->
+					<!-- 										oncomplete="PF('restoreProjectDialogWidget').show()" -->
+					<!-- 										resetValues="true" update=":tabview:restoreProjectForm" /> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>
@@ -190,7 +207,7 @@
 					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:commandButton id="viewCloseButton" styleClass="GrayButton"
-								value="#{messages.label_cancel}"								
+								value="#{messages.label_cancel}"
 								onclick="PF('restoreProjectDialogWidget').hide()" type="button" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -198,7 +215,7 @@
 			</h:form>
 		</p:outputPanel>
 	</p:dialog>
-	
+
 	<p:confirmDialog id="projectDeleteDialog"
 		widgetVar="projectDeleteDialogWidget"
 		message="#{messages.admin_project_delete_label}" showEffect="fade"

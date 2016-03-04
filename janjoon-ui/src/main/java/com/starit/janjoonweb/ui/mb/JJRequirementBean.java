@@ -288,7 +288,7 @@ public class JJRequirementBean {
 					.getCategoryList(
 							jJCategoryService.getCategories(null, false, true,
 									true, LoginBean.getCompany()),
-					tableDataModelList);
+							tableDataModelList);
 		return categoryList;
 	}
 
@@ -3328,7 +3328,7 @@ public class JJRequirementBean {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		return jJRequirementService.getRequirements(LoginBean.getCompany(),
 				loginBean.getAuthorizedMap("Requirement", project, product),
-				version);
+				version, null);
 	}
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
@@ -3353,12 +3353,14 @@ public class JJRequirementBean {
 
 		if (jJTestcaseBean != null)
 			jJTestcaseBean.setProject(null);
-		if (jJStatusBean != null){
+		if (jJStatusBean != null) {
 			jJStatusBean.setStatusPieChart(null);
+			jJStatusBean.setStates(null);
+			jJStatusBean.setContacts(null);
 			jJStatusBean.setCategoryPieChart(null);
 			jJStatusBean.setProductPieChart(null);
 			jJStatusBean.setProjectPieChart(null);
-			}
+		}
 
 		setJJRequirement_(null);
 		setSelectedTasks(null);
@@ -3866,7 +3868,7 @@ public class JJRequirementBean {
 			FacesContext.getCurrentInstance()
 					.addMessage(MessageFactory
 							.getMessage("label_requirement", "").getDetail(),
-					facesMessage);
+							facesMessage);
 		}
 
 		if (!warn) {
@@ -3878,7 +3880,7 @@ public class JJRequirementBean {
 			FacesContext.getCurrentInstance()
 					.addMessage(MessageFactory
 							.getMessage("label_requirement", "").getDetail(),
-					facesMessage);
+							facesMessage);
 		}
 
 	}
@@ -3889,7 +3891,7 @@ public class JJRequirementBean {
 		for (JJRequirement req : jJRequirementService.getRequirements(null,
 				loginBean.getAuthorizedMap("Requirement",
 						LoginBean.getProject(), LoginBean.getProduct()),
-				jJversion)) {
+				jJversion, null)) {
 			// if (!jJTaskService.haveTask(req, true, true, true)
 			// && jJversion == req.getVersioning())
 			// infinshedRequirement.add(req);

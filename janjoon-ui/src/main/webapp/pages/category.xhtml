@@ -16,9 +16,17 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30 Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_category_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton title="#{messages.admin_category_new_button}"
+									id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
+									update=":tabview:categoryDialogForm :tabview:categoryDialogHeader"
+									resetValues="true" styleClass="GrayButton"
+									oncomplete="PF('categoryDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -51,7 +59,8 @@
 						</f:facet>
 						<h:outputText value="#{category.stage}" />
 					</p:column>
-					<p:column styleClass="action-column" style="text-align: center;width: 15%;" >
+					<p:column styleClass="action-column"
+						style="text-align: center;width: 15%;">
 						<f:facet name="header">
 							<h:outputText styleClass="ShowOnDesktop"
 								value="#{messages.admin_category_table_action_title}" />
@@ -63,8 +72,7 @@
 							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
 								oncomplete="PF('categoryDialogWidget').show()"
 								disabled="#{category.company == null and !loginBean.authorisationService.superAdmin}"
-								value="#{messages.label_edit}"
-								title="#{messages.label_edit}"
+								value="#{messages.label_edit}" title="#{messages.label_edit}"
 								action="#{jJCategoryBean.editCategory}" resetValues="true"
 								update=":tabview:categoryDialogForm :tabview:categoryDialogHeader">
 								<f:setPropertyActionListener value="#{category}"
@@ -80,21 +88,21 @@
 
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:commandButton value="#{messages.admin_category_new_button}"
-									id="newCategory" actionListener="#{jJCategoryBean.newCategory}"
-									update=":tabview:categoryDialogForm :tabview:categoryDialogHeader"
-									resetValues="true"
-									oncomplete="PF('categoryDialogWidget').show()"
-									icon="fa fa-plus Fs20" />
-									</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 								<p:commandButton value="#{messages.admin_category_new_button}" -->
+					<!-- 									id="newCategory" actionListener="#{jJCategoryBean.newCategory}" -->
+					<!-- 									update=":tabview:categoryDialogForm :tabview:categoryDialogHeader" -->
+					<!-- 									resetValues="true" -->
+					<!-- 									oncomplete="PF('categoryDialogWidget').show()" -->
+					<!-- 									icon="fa fa-plus Fs20" /> -->
+					<!-- 									</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>
@@ -129,7 +137,7 @@
 				<h:panelGroup layout="block" styleClass="Container100">
 					<h:panelGroup layout="block" styleClass="Container40">
 						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-							<p:outputLabel for="stage" 
+							<p:outputLabel for="stage"
 								value="#{messages.admin_category_new_stage_label}" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -159,11 +167,9 @@
 				<h:panelGroup layout="block" styleClass="Container100">
 					<h:panelGroup layout="block" styleClass="Container50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:commandButton id="submitButton"
-								icon="fa fa-save Fs16"
+							<p:commandButton id="submitButton" icon="fa fa-save Fs16"
 								value="#{messages.admin_category_new_save_button}"
-								update="categoryDialogForm"
-								action="#{jJCategoryBean.save}" />
+								update="categoryDialogForm" action="#{jJCategoryBean.save}" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50">

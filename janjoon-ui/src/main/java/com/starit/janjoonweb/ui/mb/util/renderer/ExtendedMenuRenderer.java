@@ -66,7 +66,7 @@ public class ExtendedMenuRenderer extends SelectOneMenuRenderer {
 
 	protected void encodeOptionsAsTable(FacesContext context,
 			SelectOneMenu menu, List<SelectItem> selectItems)
-					throws IOException {
+			throws IOException {
 
 		ResponseWriter writer = context.getResponseWriter();
 		String var = menu.getVar();

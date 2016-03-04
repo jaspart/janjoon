@@ -24,7 +24,6 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
-import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -37,7 +36,6 @@ import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
-import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
@@ -532,7 +530,7 @@ public class JJStatusBean {
 										.getAuthorizedMap("Requirement",
 												LoginBean.getProject(),
 												LoginBean.getProduct()),
-								LoginBean.getVersion());
+								LoginBean.getVersion(), null);
 
 				for (JJRequirement req : requirements) {
 
@@ -767,7 +765,7 @@ public class JJStatusBean {
 								loginBean.getAuthorizedMap("Requirement",
 										LoginBean.getProject(),
 										LoginBean.getProduct()),
-								LoginBean.getVersion());
+								LoginBean.getVersion(), null);
 
 				for (JJRequirement req : requirements) {
 
@@ -835,6 +833,9 @@ public class JJStatusBean {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		statusList = null;
 		statusPieChart = null;
+		states = null;
+		contacts = null;
+		value = null;
 		lazyStatusList = null;
 		objectOptions = null;
 
@@ -846,6 +847,9 @@ public class JJStatusBean {
 		objectOptions = null;
 		statusList = null;
 		statusPieChart = null;
+		states = null;
+		contacts = null;
+		value = null;
 		categoryPieChart = null;
 		productPieChart = null;
 		projectPieChart = null;

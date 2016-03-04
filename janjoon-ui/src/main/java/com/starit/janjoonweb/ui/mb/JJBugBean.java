@@ -98,9 +98,8 @@ public class JJBugBean {
 	private JJBug JJBug_;
 
 	private JJProject bugProjectSelected;
-	// private boolean rated;
-	// private JJRequirement bugRequirementSelected;
 	private JJProject project;
+	private JJCategory category;
 	private LazyBugDataModel bugList;
 	private List<JJBug> selectedBugList;
 	private SelectItem[] criticityOptions;
@@ -143,6 +142,7 @@ public class JJBugBean {
 	public JJBug getJJBug_() {
 		if (JJBug_ == null) {
 			JJBug_ = new JJBug();
+			category = null;
 			bugProjectSelected = project;
 			JJBug_.setVersioning(LoginBean.getVersion());
 			JJBug_.setStatus(jJStatusService.getOneStatus("NEW", "BUG", true));
@@ -173,6 +173,14 @@ public class JJBugBean {
 
 	public void setProject(JJProject project) {
 		this.project = project;
+	}
+
+	public JJCategory getCategory() {
+		return category;
+	}
+
+	public void setCategory(JJCategory category) {
+		this.category = category;
 	}
 
 	public LazyBugDataModel getBugList() {
@@ -655,6 +663,7 @@ public class JJBugBean {
 					.findBean("jJProjectBean"));
 
 			viewBug = jJBugService.findJJBug(id);
+			category = null;
 
 			JJProduct prod = null;
 
@@ -767,8 +776,9 @@ public class JJBugBean {
 
 				viewBugTasks = jJTaskService.getImportTasks(viewBug, null, null,
 						true);
-				// rated = (((LoginBean) LoginBean.findBean("loginBean"))
-				// .getContact().getBugs().contains(viewBug));
+				if(viewBug.getRequirement() != null)
+					category = viewBug.getRequirement().getCategory();
+				
 			} else {
 				viewBug = null;
 				FacesMessage facesMessage = MessageFactory
@@ -796,6 +806,7 @@ public class JJBugBean {
 
 		JJBug_ = null;
 		bugProjectSelected = null;
+		category = null;
 	}
 
 	public void onRowDblClckSelect(SelectEvent event) {
@@ -873,12 +884,13 @@ public class JJBugBean {
 
 	public void changeEvent(String field, JJBug b) {
 
-		if (field.equalsIgnoreCase("project"))
+		if (field.equalsIgnoreCase("project")
+				|| field.equalsIgnoreCase("category")) {
 			// bugRequirementSelected = null;
 			b.setRequirement(null);
-		else {
-			if (field.equalsIgnoreCase("version"))
-				b.setBuild(null);
+			b.setTeststep(null);
+		} else if (field.equalsIgnoreCase("version")) {
+			b.setBuild(null);
 		}
 	}
 
@@ -895,6 +907,23 @@ public class JJBugBean {
 		return infinshedBugs;
 	}
 
+	public List<JJCategory> completeCategoryBug(String query) {
+		List<JJCategory> suggestions = new ArrayList<JJCategory>();
+
+		suggestions.add(null);
+
+		for (JJCategory category : jJCategoryService.getCategories(null, false,
+				true, true, LoginBean.getCompany())) {
+
+			if (String.valueOf(category.getName()).toLowerCase()
+					.startsWith(query.toLowerCase())) {
+				suggestions.add(category);
+			}
+		}
+
+		return suggestions;
+	}
+
 	public List<JJRequirement> completeReqBug(String query) {
 
 		List<JJRequirement> suggestions = new ArrayList<JJRequirement>();
@@ -903,11 +932,13 @@ public class JJBugBean {
 		JJProject proj = (JJProject) UIComponent
 				.getCurrentComponent(FacesContext.getCurrentInstance())
 				.getAttributes().get("project");
+
 		suggestions.add(null);
 
 		for (JJRequirement req : jJRequirementService.getRequirements(
 				(JJCompany) LoginBean.findBean("JJCompany"),
-				loginBean.getAuthorizedMap("Requirement", proj, prod), null)) {
+				loginBean.getAuthorizedMap("Requirement", proj, prod), null,
+				category)) {
 			String jJCriticityStr = String.valueOf(req.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(req);
@@ -942,7 +973,7 @@ public class JJBugBean {
 
 		suggestions.add(null);
 		for (JJTeststep testStep : jJTeststepService.getJJtestSteps(requirement,
-				proj)) {
+				proj, category)) {
 			String jJCriticityStr = String.valueOf(testStep.getName());
 			if (jJCriticityStr.toLowerCase().contains(query.toLowerCase())) {
 				suggestions.add(testStep);

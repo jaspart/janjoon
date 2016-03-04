@@ -16,12 +16,30 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30  Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_contact_table_title}" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
-								styleClass="Container60 Responsive100">
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton id="newContact"
+									title="#{messages.admin_contact_new_button}"
+									actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
+									update=":tabview:contactDialogHeader :tabview:contactDialogForm"
+									resetValues="true" styleClass="GrayButton"
+									oncomplete="PF('contactDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton id="restoreContact"
+									icon="fa fa-rotate-right Fs20" styleClass="GrayButton"
+									title="#{messages.admin_contact_restore_dialog}"
+									oncomplete="PF('restoreContactDialogWidget').show()"
+									resetValues="true" update=":tabview:restoreContactForm" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
 								<p:inputText id="globalFilter"
 									onkeyup="PF('contactDataTableWV').filter()"
 									placeholder="#{messages.bug_table_search_watermark}" />
@@ -106,33 +124,32 @@
 
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton value="#{messages.admin_contact_new_button}"
-										id="newContact" title="#{messages.admin_contact_new_button}"
-										actionListener="#{jJContactBean.newContact(jJPermissionBean)}"
-										update=":tabview:contactDialogHeader :tabview:contactDialogForm"
-										resetValues="true"
-										oncomplete="PF('contactDialogWidget').show()"
-										icon="fa fa-plus Fs20" />
-								</h:panelGroup>
-							</h:panelGroup>
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton id="restoreContact"
-										icon="fa fa-rotate-right Fs20"
-										value="#{messages.admin_contact_restore_dialog}"
-										oncomplete="PF('restoreContactDialogWidget').show()"
-										resetValues="true" update=":tabview:restoreContactForm" />
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton value="#{messages.admin_contact_new_button}" -->
+					<!-- 										id="newContact" title="#{messages.admin_contact_new_button}" -->
+					<!-- 										actionListener="#{jJContactBean.newContact(jJPermissionBean)}" -->
+					<!-- 										update=":tabview:contactDialogHeader :tabview:contactDialogForm" -->
+					<!-- 										resetValues="true" -->
+					<!-- 										oncomplete="PF('contactDialogWidget').show()" -->
+					<!-- 										icon="fa fa-plus Fs20" /> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton id="restoreContact" -->
+					<!-- 										icon="fa fa-rotate-right Fs20" -->
+					<!-- 										value="#{messages.admin_contact_restore_dialog}" -->
+					<!-- 										oncomplete="PF('restoreContactDialogWidget').show()" -->
+					<!-- 										resetValues="true" update=":tabview:restoreContactForm" /> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>

@@ -6,10 +6,10 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJContactBean;
 import java.io.Serializable;
 
-privileged aspect JJContactBean_Roo_Serializable {
-    
-    declare parents: JJContactBean implements Serializable;
-    
-    private static final long JJContactBean.serialVersionUID = 1L;
-    
+privileged aspect JJContactBean_Roo_Serializable{
+
+declare parents:JJContactBean implements Serializable;
+
+private static final long JJContactBean.serialVersionUID=1L;
+
 }

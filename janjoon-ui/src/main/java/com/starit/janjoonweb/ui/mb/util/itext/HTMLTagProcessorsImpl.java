@@ -453,7 +453,7 @@ public class HTMLTagProcessorsImpl
 		 */
 		public void startElement(HTMLWorkerImpl worker, String tag,
 				Map<String, String> attrs)
-						throws DocumentException, IOException {
+				throws DocumentException, IOException {
 			worker.updateChain(tag, attrs);
 			worker.processImage(worker.createImage(attrs), attrs);
 			worker.updateChain(tag);

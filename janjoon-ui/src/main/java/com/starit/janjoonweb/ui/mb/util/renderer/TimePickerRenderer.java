@@ -16,7 +16,7 @@ public class TimePickerRenderer
 
 	protected void encodeMarkup(final FacesContext fc,
 			final TimePicker timepicker, final String value)
-					throws IOException {
+			throws IOException {
 		ResponseWriter writer = fc.getResponseWriter();
 		String clientId = timepicker.getClientId(fc);
 		String inputId = clientId + "_input";

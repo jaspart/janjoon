@@ -698,11 +698,11 @@ public class JJTaskBean {
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment")).setTasks(
 					jJTaskService.getTasksByProduct(LoginBean.getProduct(),
 							LoginBean.getProject()));
-		}else if(!validation_error && operation.equalsIgnoreCase("planning"))
-		{
+		} else if (!validation_error
+				&& operation.equalsIgnoreCase("planning")) {
 			RequestContext.getCurrentInstance().update("projecttabview");
 		}
-		
+
 		if (!validation_error) {
 			FacesMessage facesMessage = MessageFactory.getMessage(
 					"message_successfully_updated",
@@ -1766,12 +1766,12 @@ public class JJTaskBean {
 						format.setStartDate(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
 										.getSprint().getStartDate());
-						
+
 					} else if (startDate.after(
 							((JJSprintBean) LoginBean.findBean("jJSprintBean"))
 									.getSprintUtil().getSprint()
 									.getEndDate())) {
-						
+
 						format.setStartDate(((JJSprintBean) LoginBean
 								.findBean("jJSprintBean")).getSprintUtil()
 										.getSprint().getStartDate());
@@ -1779,10 +1779,10 @@ public class JJTaskBean {
 				} else {
 					if (sprint != null) {
 						if (startDate.before(sprint.getStartDate())) {
-							
+
 							format.setStartDate(sprint.getStartDate());
 						} else if (startDate.after(sprint.getEndDate())) {
-							
+
 							format.setStartDate(sprint.getStartDate());
 						}
 
@@ -2093,7 +2093,7 @@ public class JJTaskBean {
 			}
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('taskImportDialogWidget').hide()");
-			
+
 			if (sprint != null)
 				Hibernate.initialize(sprint.getContacts());
 
@@ -3440,16 +3440,15 @@ public class JJTaskBean {
 				char c = (char) k;
 				group = "<span style=display:none>" + c + "</span>";
 				new GregorianCalendar(2010, 1, 1).getTime();
-				events.add(
-						new TimelineEvent(tt,
-								new GregorianCalendar(
-										Calendar.getInstance()
-												.get(Calendar.YEAR) - 5,
-										1, 1).getTime(),
-								new GregorianCalendar(Calendar.getInstance()
-										.get(Calendar.YEAR) + 5, 1, 1)
-												.getTime(),
-								false, group, "invisible"));
+				events.add(new TimelineEvent(tt,
+						new GregorianCalendar(
+								Calendar.getInstance().get(Calendar.YEAR) - 5,
+								1, 1)
+										.getTime(),
+						new GregorianCalendar(
+								Calendar.getInstance().get(Calendar.YEAR) + 5,
+								1, 1).getTime(),
+						false, group, "invisible"));
 
 				if (tt.getStartDateReal() != null) {
 
@@ -3579,16 +3578,15 @@ public class JJTaskBean {
 				char c = (char) k;
 				group = "<span style=display:none>" + c + "</span>";
 
-				events.add(
-						new TimelineEvent(tt,
-								new GregorianCalendar(
-										Calendar.getInstance()
-												.get(Calendar.YEAR) - 5,
-										1, 1).getTime(),
-								new GregorianCalendar(Calendar.getInstance()
-										.get(Calendar.YEAR) + 5, 1, 1)
-												.getTime(),
-								false, group, "invisible"));
+				events.add(new TimelineEvent(tt,
+						new GregorianCalendar(
+								Calendar.getInstance().get(Calendar.YEAR) - 5,
+								1, 1)
+										.getTime(),
+						new GregorianCalendar(
+								Calendar.getInstance().get(Calendar.YEAR) + 5,
+								1, 1).getTime(),
+						false, group, "invisible"));
 
 				if (tt.getStartDateReal() != null) {
 

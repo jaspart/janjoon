@@ -11,21 +11,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJBuildConverter_Roo_Converter {
-    
-    declare parents: JJBuildConverter implements Converter;
-    
-    declare @type: JJBuildConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJBuildConverter");
-    
-    @Autowired
-    JJBuildService JJBuildConverter.jJBuildService;
-    
-    public Object JJBuildConverter.getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        Long id = Long.parseLong(value);
-        return jJBuildService.findJJBuild(id);
-    }
-    
+privileged aspect JJBuildConverter_Roo_Converter{
+
+declare parents:JJBuildConverter implements Converter;
+
+declare @type:JJBuildConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJBuildConverter");
+
+@Autowired JJBuildService JJBuildConverter.jJBuildService;
+
+public Object JJBuildConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJBuildService.findJJBuild(id);}
+
 }

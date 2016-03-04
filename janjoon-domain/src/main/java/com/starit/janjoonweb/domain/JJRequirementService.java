@@ -24,7 +24,7 @@ public interface JJRequirementService {
 	public boolean haveTestcase(JJRequirement requirement);
 
 	public List<JJRequirement> getRequirements(JJCompany company,
-			Map<JJProject, JJProduct> map, JJVersion version);
+			Map<JJProject, JJProduct> map, JJVersion version,JJCategory category);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJCompany company, JJChapter chapter, JJProduct product,

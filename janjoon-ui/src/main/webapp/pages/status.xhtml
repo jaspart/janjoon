@@ -21,9 +21,20 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30 Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_status_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton id="createButton" icon="fa fa-plus Fs20"
+									resetValues="true"
+									update=":tabview:statusDialogForm :tabview:statusDialogHeader"
+									oncomplete="PF('statusDialogWidget').show()"
+									styleClass="GrayButton"
+									title="#{messages.admin_status_new_button}">
+									<f:setPropertyActionListener
+										target="#{jJStatusBean.renderCreate}" value="true" />
+								</p:commandButton>
 							</h:panelGroup>
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -69,19 +80,11 @@
 								pattern="dd/MM/yyyy HH:mm" />
 						</h:outputText>
 					</p:column>
-
-					<!-- 				<p:column> -->
-					<!-- 					<f:facet name="header"> -->
-					<!-- 						<h:outputText value="#{messages.admin_status_table_creator_title}" /> -->
-					<!-- 					</f:facet> -->
-					<!-- 					<h:outputText value="#{status.createdBy.name}" /> -->
-					<!-- 				</p:column> -->
 					<p:column styleClass="action-column" style="width:10%;">
 						<f:facet name="header">
 							<h:outputText styleClass="ShowOnDesktop"
 								value="#{messages.admin_status_table_action_title}" />
 						</f:facet>
-
 						<p:commandButton id="viewButton" type="button"
 							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
 						<p:menu overlay="true" trigger="viewButton" my="right top"
@@ -93,7 +96,7 @@
 								title="#{messages.label_edit}" value="#{messages.label_edit}">
 								<f:setPropertyActionListener value="#{status}"
 									target="#{jJStatusBean.JJStatus_}" />
-									<f:setPropertyActionListener
+								<f:setPropertyActionListener
 									target="#{jJStatusBean.renderCreate}" value="false" />
 							</p:menuitem>
 							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
@@ -104,36 +107,35 @@
 								<f:setPropertyActionListener value="#{status}"
 									target="#{jJStatusBean.selectedStatus}" />
 							</p:menuitem>
-
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton value="#{messages.admin_status_new_button}"
-										id="createButton" icon="fa fa-plus Fs20" resetValues="true"
-										update=":tabview:statusDialogForm :tabview:statusDialogHeader"
-										oncomplete="PF('statusDialogWidget').show()"
-										title="#{messages.admin_status_new_button}" >
-										<f:setPropertyActionListener
-									target="#{jJStatusBean.renderCreate}" value="true" />
-									</p:commandButton>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton value="#{messages.admin_status_new_button}" -->
+					<!-- 										id="createButton" icon="fa fa-plus Fs20" resetValues="true" -->
+					<!-- 										update=":tabview:statusDialogForm :tabview:statusDialogHeader" -->
+					<!-- 										oncomplete="PF('statusDialogWidget').show()" -->
+					<!-- 										title="#{messages.admin_status_new_button}" > -->
+					<!-- 										<f:setPropertyActionListener -->
+					<!-- 									target="#{jJStatusBean.renderCreate}" value="true" /> -->
+					<!-- 									</p:commandButton> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
 	<p:dialog id="statusDialog" modal="true" responsive="true"
-		widgetVar="statusDialogWidget" dynamic="true" resizable="false" 
+		widgetVar="statusDialogWidget" dynamic="true" resizable="false"
 		maximizable="false" showEffect="fade">
 		<p:ajax event="close" update=":tabview:statusForm"
 			listener="#{jJStatusBean.handleDialogClose}" />
-			<f:facet name="header">
+		<f:facet name="header">
 			<p:outputLabel id="statusDialogHeader"
 				value="#{jJStatusBean.renderCreate ? messages.admin_status_new_title:messages.admin_status_edit_title}" />
 		</f:facet>
@@ -207,45 +209,45 @@
 		</h:panelGroup>
 	</p:dialog>
 
-<!-- 	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}" -->
-<!-- 		modal="true" widgetVar="editSatDialogWidget" dynamic="true" -->
-<!-- 		resizable="true" responsive="true" maximizable="true" -->
-<!-- 		showEffect="fade"> -->
-<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
-<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
-<!-- 		<p:outputPanel id="SeditPanel"> -->
-<!-- 			<h:form id="seditForm" enctype="multipart/form-data"> -->
-<!-- 				<h:panelGrid id="editPanelGrid" columns="3" -->
-<!-- 					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog" -->
-<!-- 					columnClasses="col1,col2,col3" /> -->
-<!-- 				<p:commandButton id="editSaveButton" -->
-<!-- 					value="#{messages.admin_status_edit_save_button}" -->
-<!-- 					action="#{jJStatusBean.persistStatus}" -->
-<!-- 					update="editPanelGrid,:growlForm" /> -->
-<!-- 				<p:commandButton id="editCloseButton" -->
-<!-- 					value="#{messages.label_cancel}" -->
-<!-- 					onclick="PF('editSatDialogWidget').hide()" type="button" /> -->
-<!-- 			</h:form> -->
-<!-- 		</p:outputPanel> -->
-<!-- 	</p:dialog> -->
+	<!-- 	<p:dialog id="SeditDialog" header="#{messages.admin_status_edit_title}" -->
+	<!-- 		modal="true" widgetVar="editSatDialogWidget" dynamic="true" -->
+	<!-- 		resizable="true" responsive="true" maximizable="true" -->
+	<!-- 		showEffect="fade"> -->
+	<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
+	<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
+	<!-- 		<p:outputPanel id="SeditPanel"> -->
+	<!-- 			<h:form id="seditForm" enctype="multipart/form-data"> -->
+	<!-- 				<h:panelGrid id="editPanelGrid" columns="3" -->
+	<!-- 					binding="#{jJStatusBean.editPanelGrid}" styleClass="dialog" -->
+	<!-- 					columnClasses="col1,col2,col3" /> -->
+	<!-- 				<p:commandButton id="editSaveButton" -->
+	<!-- 					value="#{messages.admin_status_edit_save_button}" -->
+	<!-- 					action="#{jJStatusBean.persistStatus}" -->
+	<!-- 					update="editPanelGrid,:growlForm" /> -->
+	<!-- 				<p:commandButton id="editCloseButton" -->
+	<!-- 					value="#{messages.label_cancel}" -->
+	<!-- 					onclick="PF('editSatDialogWidget').hide()" type="button" /> -->
+	<!-- 			</h:form> -->
+	<!-- 		</p:outputPanel> -->
+	<!-- 	</p:dialog> -->
 
-<!-- 	<p:dialog id="SviewDialog" responsive="true" -->
-<!-- 		header="#{messages.admin_status_view_title} Status" modal="true" -->
-<!-- 		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true" -->
-<!-- 		maximizable="true" showEffect="fade"> -->
-<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
-<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
-<!-- 		<p:outputPanel id="SviewPanel"> -->
-<!-- 			<h:form id="sviewForm" enctype="multipart/form-data"> -->
-<!-- 				<h:panelGrid id="viewPanelGrid" columns="2" -->
-<!-- 					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog" -->
-<!-- 					columnClasses="col1,col2" /> -->
-<!-- 				<p:commandButton id="viewCloseButton" -->
-<!-- 					value="#{messages.admin_status_view_close_button}" -->
-<!-- 					onclick="PF('viewSatDialogWidget').hide()" type="button" /> -->
-<!-- 			</h:form> -->
-<!-- 		</p:outputPanel> -->
-<!-- 	</p:dialog> -->
+	<!-- 	<p:dialog id="SviewDialog" responsive="true" -->
+	<!-- 		header="#{messages.admin_status_view_title} Status" modal="true" -->
+	<!-- 		widgetVar="viewSatDialogWidget" dynamic="true" resizable="true" -->
+	<!-- 		maximizable="true" showEffect="fade"> -->
+	<!-- 		<p:ajax event="close" update=":tabview:statusForm" -->
+	<!-- 			listener="#{jJStatusBean.handleDialogClose}" /> -->
+	<!-- 		<p:outputPanel id="SviewPanel"> -->
+	<!-- 			<h:form id="sviewForm" enctype="multipart/form-data"> -->
+	<!-- 				<h:panelGrid id="viewPanelGrid" columns="2" -->
+	<!-- 					binding="#{jJStatusBean.viewPanelGrid}" styleClass="dialog" -->
+	<!-- 					columnClasses="col1,col2" /> -->
+	<!-- 				<p:commandButton id="viewCloseButton" -->
+	<!-- 					value="#{messages.admin_status_view_close_button}" -->
+	<!-- 					onclick="PF('viewSatDialogWidget').hide()" type="button" /> -->
+	<!-- 			</h:form> -->
+	<!-- 		</p:outputPanel> -->
+	<!-- 	</p:dialog> -->
 
 	<p:confirmDialog id="SdeleteDialog" widgetVar="deleteSatDialogWidget"
 		message="#{messages.admin_status_delete_label}" showEffect="fade"

@@ -381,9 +381,10 @@ public class JJTeststepexecutionBean {
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
-							LoginBean.getProject(), LoginBean.getProduct(),
-							teststepexecution.getTeststep(),
-							jJBuildBean.getBuild(), true, true);
+									LoginBean.getProject(),
+									LoginBean.getProduct(),
+									teststepexecution.getTeststep(),
+									jJBuildBean.getBuild(), true, true);
 
 					if (bugs.isEmpty()) {
 						newBug();

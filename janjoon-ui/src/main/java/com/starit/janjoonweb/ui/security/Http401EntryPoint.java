@@ -23,7 +23,7 @@ public class Http401EntryPoint
 	@Override
 	public void commence(HttpServletRequest request,
 			HttpServletResponse response, AuthenticationException authException)
-					throws IOException, ServletException {
+			throws IOException, ServletException {
 
 		logger.info("Session is invalid! redirecting to timeoutpage : "
 				+ timeoutPage);

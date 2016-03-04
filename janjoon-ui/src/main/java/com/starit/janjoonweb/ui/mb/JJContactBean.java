@@ -641,6 +641,7 @@ public class JJContactBean {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void changePassword(LoginBean loginBean) {
 
 		String password = contactUtil.getPassword();
@@ -665,7 +666,7 @@ public class JJContactBean {
 		RequestContext.getCurrentInstance()
 				.execute("PF('passwordDialogWidget').hide()");
 		String[] names = {"vacationForm", "configForm", "workdaysCalendar",
-				"growlForm"};		
+				"growlForm"};
 
 		for (String name : names) {
 			RequestContext.getCurrentInstance().update(name);

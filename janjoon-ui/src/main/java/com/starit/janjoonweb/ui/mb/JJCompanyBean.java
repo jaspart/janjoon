@@ -273,10 +273,10 @@ public class JJCompanyBean {
 				up = false;
 
 			if (up && type == 2 && day.getStartDate2() != null
-					&& ((day.getStartDate1() != null && day.getStartDate2()
-							.before(day.getStartDate1()))
-					|| (day.getEndDate1() != null
-							&& day.getStartDate2().before(day.getEndDate1()))))
+					&& ((day.getStartDate1() != null
+							&& day.getStartDate2().before(day.getStartDate1()))
+							|| (day.getEndDate1() != null && day.getStartDate2()
+									.before(day.getEndDate1()))))
 				up = false;
 
 			if (up) {

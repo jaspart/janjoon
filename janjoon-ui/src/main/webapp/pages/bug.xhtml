@@ -240,6 +240,31 @@
 							<h:panelGroup layout="block" styleClass="Container100">
 								<h:panelGroup layout="block" styleClass="Container40">
 									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+										<p:outputLabel for="bugCat"
+											value="#{messages.label_category} :" />
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="Container60">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:autoComplete id="bugCat" scrollHeight="200"
+											itemValue="#{category}"
+											itemLabel="#{category.name}" value="#{jJBugBean.category}"
+											disabled="#{jJBugBean.viewBug.project == null}"
+											converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
+											dropdown="true" var="category"
+											placeholder="#{messages.label_category}"
+											completeMethod="#{jJBugBean.completeCategoryBug}">
+											<p:ajax event="itemSelect" update="bugReq bugTest"
+												listener="#{jJBugBean.changeEvent('category',jJBugBean.viewBug)}" />
+										</p:autoComplete>
+
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" styleClass="Container100">
+								<h:panelGroup layout="block" styleClass="Container40">
+									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 										<p:outputLabel for="bugReq"
 											value="#{messages.label_requirement} :" />
 									</h:panelGroup>

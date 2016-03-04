@@ -11,21 +11,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJRequirementConverter_Roo_Converter {
-    
-    declare parents: JJRequirementConverter implements Converter;
-    
-    declare @type: JJRequirementConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter");
-    
-    @Autowired
-    JJRequirementService JJRequirementConverter.jJRequirementService;
-    
-    public Object JJRequirementConverter.getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        Long id = Long.parseLong(value);
-        return jJRequirementService.findJJRequirement(id);
-    }
-    
+privileged aspect JJRequirementConverter_Roo_Converter{
+
+declare parents:JJRequirementConverter implements Converter;
+
+declare @type:JJRequirementConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter");
+
+@Autowired JJRequirementService JJRequirementConverter.jJRequirementService;
+
+public Object JJRequirementConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJRequirementService.findJJRequirement(id);}
+
 }

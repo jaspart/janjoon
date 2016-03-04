@@ -18,9 +18,19 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30 Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_config_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton id="configDialogButton" icon="fa fa-plus Fs20"
+									styleClass="GrayButton"
+									update=":tabview:configDialogForm :tabview:configDialogHeader"
+									actionListener="#{jJConfigurationBean.beforeDialogShow}"
+									title="#{messages.admin_config_new_title}" resetValues="true">
+									<f:setPropertyActionListener
+										target="#{jJConfigurationBean.renderCreate}" value="true" />
+								</p:commandButton>
 							</h:panelGroup>
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -83,23 +93,23 @@
 
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton value="#{messages.admin_config_new_button}"
-										id="configDialogButton" icon="fa fa-plus Fs20"
-										update=":tabview:configDialogForm :tabview:configDialogHeader"
-										actionListener="#{jJConfigurationBean.beforeDialogShow}"
-										title="#{messages.admin_config_new_title}" resetValues="true">
-										<f:setPropertyActionListener
-											target="#{jJConfigurationBean.renderCreate}" value="true" />
-									</p:commandButton>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton value="#{messages.admin_config_new_button}" -->
+					<!-- 										id="configDialogButton" icon="fa fa-plus Fs20" -->
+					<!-- 										update=":tabview:configDialogForm :tabview:configDialogHeader" -->
+					<!-- 										actionListener="#{jJConfigurationBean.beforeDialogShow}" -->
+					<!-- 										title="#{messages.admin_config_new_title}" resetValues="true"> -->
+					<!-- 										<f:setPropertyActionListener -->
+					<!-- 											target="#{jJConfigurationBean.renderCreate}" value="true" /> -->
+					<!-- 									</p:commandButton> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>

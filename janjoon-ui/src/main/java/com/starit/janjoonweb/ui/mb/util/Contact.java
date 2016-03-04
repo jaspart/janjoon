@@ -16,7 +16,7 @@ public class Contact {
 	private String name;
 	private String email;
 	private String firstname;
-	private String password;	
+	private String password;
 	private JJProject lastProject;
 	private JJProduct lastProduct;
 	private JJVersion lastVersion;
@@ -92,7 +92,7 @@ public class Contact {
 		this.firstname = contact.getFirstname();
 		this.name = contact.getName();
 		this.email = contact.getEmail();
-		this.password= "";	
+		this.password = "";
 		this.lastProduct = contact.getLastProduct();
 		this.lastVersion = contact.getLastVersion();
 		this.lastProject = contact.getLastProject();
@@ -117,7 +117,6 @@ public class Contact {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	@Override
 	public boolean equals(Object object) {

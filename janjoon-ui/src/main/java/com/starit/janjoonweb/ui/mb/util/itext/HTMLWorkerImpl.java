@@ -908,7 +908,7 @@ public class HTMLWorkerImpl implements SimpleXMLDocHandler, DocListener {
 	 */
 	public static List<Element> parseToList(final Reader reader,
 			final StyleSheet style, final HashMap<String, Object> providers)
-					throws IOException {
+			throws IOException {
 		return parseToList(reader, style, null, providers);
 	}
 

@@ -357,8 +357,8 @@ public class ContactCalendarUtil {
 											- CalendarUtil
 													.getZeroDate(startChunk
 															.getEndDate1())
-											.getTime()) / (60 * 60 * 1000)
-									% 24);
+													.getTime())
+											/ (60 * 60 * 1000) % 24);
 					}
 
 					workload = workload + diff;

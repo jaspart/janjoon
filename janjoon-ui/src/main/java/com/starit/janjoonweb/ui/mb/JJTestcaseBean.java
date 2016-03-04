@@ -279,8 +279,8 @@ public class JJTestcaseBean {
 								// if (!vall)
 								// vall = colNames.get(i).getBuilds()
 								// .contains(rowNames.get(j));
-								value.get(i)
-										.add(val || (rowNames.get(j)
+								value.get(i).add(val
+										|| (rowNames.get(j)
 												.getAllTestcases() != null
 												&& rowNames.get(j)
 														.getAllTestcases())
@@ -432,9 +432,8 @@ public class JJTestcaseBean {
 	public List<TestCaseRecap> getTestCaseRecaps() {
 
 		List<TestCaseRecap> testCaseRecaps = new ArrayList<TestCaseRecap>();
-		
+
 		if (rendredTestCaseRecaps) {
-			
 
 			for (JJTestcase testcase : getTestcases()) {
 				TestCaseRecap testCaseRecap = new TestCaseRecap(testcase);
@@ -1179,7 +1178,7 @@ public class JJTestcaseBean {
 			colNames = null;
 			value = null;
 			testcase = jJTestcaseService.findJJTestcase(testcase.getId());
-			//requirement.getTestcases().add(testcase);
+			// requirement.getTestcases().add(testcase);
 
 			FacesContext.getCurrentInstance().addMessage(null, MessageFactory
 					.getMessage("message_successfully_updated", "Test", ""));
@@ -1187,8 +1186,8 @@ public class JJTestcaseBean {
 			context.execute("PF('testcaseDialogWidget').hide()");
 			RequestContext.getCurrentInstance().update("growlForm");
 		}
-		
-		createTestcaseTree();		
+
+		createTestcaseTree();
 	}
 
 	public void closeDialog() {
@@ -1328,8 +1327,8 @@ public class JJTestcaseBean {
 			rendredEmptySelection = false;
 
 		} else if (selectedNode.getData() instanceof JJChapter) {
-			
-			selectedNode.setExpanded(true);			
+
+			selectedNode.setExpanded(true);
 			chapter = (JJChapter) selectedNode.getData();
 			List<JJRequirement> rqs = jJRequirementService.getRequirements(
 					LoginBean.getCompany(), null,
@@ -1368,7 +1367,7 @@ public class JJTestcaseBean {
 			rendredTestCaseHistorical = false;
 			rendredEmptySelection = false;
 		} else if (selectedNode.getType().equalsIgnoreCase("withOutChapter")) {
-			
+
 			chapter = null;
 			selectedNode.setExpanded(true);
 			List<JJRequirement> withOutChapter = jJRequirementService
@@ -1408,7 +1407,7 @@ public class JJTestcaseBean {
 			rendredEmptySelection = false;
 
 		} else if (selectedNode.getData() instanceof JJTestcase) {
-			
+
 			rendredTestCaseRecaps = false;
 
 			testcase = (JJTestcase) selectedNode.getData();
@@ -1438,7 +1437,7 @@ public class JJTestcaseBean {
 					.execute("PF('testcaseDialogWidget').show()");
 		}
 	}
-	
+
 	// Recursive function to create tree
 	private TreeNode createTree(JJChapter chapterParent, TreeNode rootNode,
 			JJCategory category, JJBuild build) {
@@ -1779,7 +1778,7 @@ public class JJTestcaseBean {
 	private void createTreeDocument(JJChapter chapterParent, JJBuild build,
 			JJCategory category, Paragraph paragraph, Font fontTeststep,
 			Font fontChapter, Font fontTestcase, StyleSheet style)
-					throws IOException {
+			throws IOException {
 
 		paragraph.add(
 				new Chunk("\n" + chapterParent.getName() + "\n", fontChapter));
@@ -2038,7 +2037,7 @@ public class JJTestcaseBean {
 				.getContact();
 		b.setUpdatedBy(contact);
 		b.setUpdatedDate(new Date());
-		b=jJTestcaseService.updateJJTestcase(b);
+		b = jJTestcaseService.updateJJTestcase(b);
 		JJRequirementBean.updateRowState(b.getRequirement(),
 				jJRequirementService, b);
 	}

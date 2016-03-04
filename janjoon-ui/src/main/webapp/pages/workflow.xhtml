@@ -19,9 +19,19 @@
 					<f:facet name="header">
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup layout="block" style="float: right !important;"
-								styleClass="Container40 Responsive100 Fs20">
+								styleClass="Container30 Fs20">
 								<h:outputText style="font-family: 'roboto_condensedlight';"
 									value="#{messages.admin_workflow_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton styleClass="GrayButton"
+									id="createWorkFlowButton" icon="fa fa-plus Fs20"
+									update=":tabview:workFlowDialogForm :tabview:workFlowDialogHeader"
+									actionListener="#{jJWorkflowBean.beforeDialogShow}"
+									title="#{messages.admin_workflow_new_title}" resetValues="true">
+									<f:setPropertyActionListener
+										target="#{jJWorkflowBean.renderCreate}" value="true" />
+								</p:commandButton>
 							</h:panelGroup>
 							<h:panelGroup layout="block"
 								styleClass="Container60 Responsive100">
@@ -31,14 +41,12 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</f:facet>
-
 					<p:column sortBy="#{workflow.name}">
 						<f:facet name="header">
 							<h:outputText value="#{messages.admin_workflow_table_name_title}" />
 						</f:facet>
 						<h:outputText value="#{workflow.name}" />
 					</p:column>
-
 					<p:column sortBy="#{workflow.objet}" id="objet"
 						filterMatchMode="exact" filterBy="#{workflow.objet}">
 						<f:facet name="header">
@@ -59,15 +67,6 @@
 						</f:facet>
 						<h:outputText value="#{workflow.objet}" />
 					</p:column>
-
-					<!-- 					<p:column> -->
-					<!-- 						<f:facet name="header"> -->
-					<!-- 							<h:outputText -->
-					<!-- 								value="#{messages.admin_workflow_table_action_title}" /> -->
-					<!-- 						</f:facet> -->
-					<!-- 						<h:outputText value="#{workflow.actionWorkflow}" /> -->
-					<!-- 					</p:column> -->
-
 					<p:column sortBy="#{workflow.source.name}" priority="6">
 						<f:facet name="header">
 							<h:outputText
@@ -75,23 +74,18 @@
 						</f:facet>
 						<h:outputText value="#{loginBean.checkMessage(workflow.source)}" />
 					</p:column>
-
 					<p:column sortBy="#{workflow.target.name}" priority="6">
 						<f:facet name="header">
 							<h:outputText
 								value="#{messages.admin_workflow_table_target_title}" />
 						</f:facet>
 						<h:outputText value="#{loginBean.checkMessage(workflow.target)}" />
-
 					</p:column>
-
-
 					<p:column styleClass="action-column" style="width: 10%;">
 						<f:facet name="header">
 							<h:outputText styleClass="ShowOnDesktop"
 								value="#{messages.admin_workflow_table_action_title}" />
 						</f:facet>
-
 						<p:commandButton id="viewButton" type="button"
 							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
 						<p:menu overlay="true" trigger="viewButton" my="right top"
@@ -106,7 +100,6 @@
 								<f:setPropertyActionListener
 									target="#{jJWorkflowBean.renderCreate}" value="false" />
 							</p:menuitem>
-
 							<p:menuitem id="deleteWorkFlowButton" icon="fa fa-trash Fs16"
 								resetValues="true" title="#{messages.label_delete}"
 								oncomplete="PF('deleteWorkFlowDialogWidget').show()"
@@ -114,27 +107,26 @@
 								<f:setPropertyActionListener value="#{workflow}"
 									target="#{jJWorkflowBean.selectedWorkFlow}" />
 							</p:menuitem>
-
 						</p:menu>
 					</p:column>
-					<f:facet name="footer">
-						<h:panelGroup layout="block" styleClass="Container">
-							<h:panelGroup layout="block"
-								styleClass="Container50 Responsive50">
-								<h:panelGroup layout="block" styleClass="ContainerIndent">
-									<p:commandButton value="#{messages.admin_workflow_new_button}"
-										id="createWorkFlowButton" icon="fa fa-plus Fs20"
-										update=":tabview:workFlowDialogForm :tabview:workFlowDialogHeader"
-										actionListener="#{jJWorkflowBean.beforeDialogShow}"
-										title="#{messages.admin_workflow_new_title}"
-										resetValues="true">
-										<f:setPropertyActionListener
-											target="#{jJWorkflowBean.renderCreate}" value="true" />
-									</p:commandButton>
-								</h:panelGroup>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
+					<!-- 					<f:facet name="footer"> -->
+					<!-- 						<h:panelGroup layout="block" styleClass="Container"> -->
+					<!-- 							<h:panelGroup layout="block" -->
+					<!-- 								styleClass="Container50 Responsive50"> -->
+					<!-- 								<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+					<!-- 									<p:commandButton value="#{messages.admin_workflow_new_button}" -->
+					<!-- 										id="createWorkFlowButton" icon="fa fa-plus Fs20" -->
+					<!-- 										update=":tabview:workFlowDialogForm :tabview:workFlowDialogHeader" -->
+					<!-- 										actionListener="#{jJWorkflowBean.beforeDialogShow}" -->
+					<!-- 										title="#{messages.admin_workflow_new_title}" -->
+					<!-- 										resetValues="true"> -->
+					<!-- 										<f:setPropertyActionListener -->
+					<!-- 											target="#{jJWorkflowBean.renderCreate}" value="true" /> -->
+					<!-- 									</p:commandButton> -->
+					<!-- 								</h:panelGroup> -->
+					<!-- 							</h:panelGroup> -->
+					<!-- 						</h:panelGroup> -->
+					<!-- 					</f:facet> -->
 				</p:dataTable>
 			</h:panelGroup>
 		</h:panelGroup>
@@ -207,7 +199,8 @@
 								widgetVar="workFlowAction"
 								value="#{jJWorkflowBean.JJWorkflow_.actionWorkflow}"
 								itemValue="#{action}" required="true" dropdown="true"
-								var="action" itemLabel="#{action != null ? messages['workFlow_action_'.concat(action)] : messages.label_select}"
+								var="action"
+								itemLabel="#{action != null ? messages['workFlow_action_'.concat(action)] : messages.label_select}"
 								completeMethod="#{jJWorkflowBean.completeAction}" />
 						</h:panelGroup>
 					</h:panelGroup>
@@ -294,7 +287,7 @@
 			</h:panelGroup>
 		</h:form>
 	</p:dialog>
-	
+
 	<p:confirmDialog id="deleteWorkFlowDialog"
 		widgetVar="deleteWorkFlowDialogWidget"
 		message="#{messages.admin_workflow_delete_label}" showEffect="fade"
