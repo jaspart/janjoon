@@ -776,9 +776,9 @@ public class JJBugBean {
 
 				viewBugTasks = jJTaskService.getImportTasks(viewBug, null, null,
 						true);
-				if(viewBug.getRequirement() != null)
+				if (viewBug.getRequirement() != null)
 					category = viewBug.getRequirement().getCategory();
-				
+
 			} else {
 				viewBug = null;
 				FacesMessage facesMessage = MessageFactory
@@ -853,6 +853,7 @@ public class JJBugBean {
 			jJStatusBean.setBugPieChart(null);
 			jJStatusBean.setKpiLineModel(null);
 			jJStatusBean.setBugMetergauge(null);
+			jJStatusBean.setKpiBarModel(null);
 		}
 	}
 
@@ -878,6 +879,7 @@ public class JJBugBean {
 		if (jJStatusBean != null) {
 			jJStatusBean.setBugPieChart(null);
 			jJStatusBean.setKpiLineModel(null);
+			jJStatusBean.setKpiBarModel(null);
 			jJStatusBean.setBugMetergauge(null);
 		}
 	}

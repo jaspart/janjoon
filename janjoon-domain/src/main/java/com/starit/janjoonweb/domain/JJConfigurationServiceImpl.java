@@ -67,20 +67,20 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates
-							.add(criteriaBuilder.or(
-									criteriaBuilder.like(
-											criteriaBuilder.upper(
-													from.<String> get("param")),
+					predicates.add(
+							criteriaBuilder.or(
+									criteriaBuilder.like(criteriaBuilder.upper(
+											from.<String> get("param")),
 											"%" + pairs.getValue() + "%"),
 									criteriaBuilder.like(
 											criteriaBuilder.upper(
 													from.<String> get("name")),
 											"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(
-									new StrFunction<Long>(criteriaBuilder,
-											from.<Long> get("id")),
-									"%" + pairs.getValue() + "%")));
+									criteriaBuilder.like(
+											new StrFunction<Long>(
+													criteriaBuilder,
+													from.<Long> get("id")),
+											"%" + pairs.getValue() + "%")));
 				}
 			}
 		}

@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
 import java.util.List;
 
-privileged aspect JJCompanyService_Roo_Service {
-    
-    public abstract long JJCompanyService.countAllJJCompanys();    
-    public abstract void JJCompanyService.deleteJJCompany(JJCompany JJCompany_);    
-    public abstract JJCompany JJCompanyService.findJJCompany(Long id);    
-    public abstract List<JJCompany> JJCompanyService.findAllJJCompanys();    
-    public abstract List<JJCompany> JJCompanyService.findJJCompanyEntries(int firstResult, int maxResults);    
-    public abstract void JJCompanyService.saveJJCompany(JJCompany JJCompany_);    
-    public abstract JJCompany JJCompanyService.updateJJCompany(JJCompany JJCompany_);    
-}
+privileged aspect JJCompanyService_Roo_Service{
+
+public abstract long JJCompanyService.countAllJJCompanys();public abstract void JJCompanyService.deleteJJCompany(JJCompany JJCompany_);public abstract JJCompany JJCompanyService.findJJCompany(Long id);public abstract List<JJCompany>JJCompanyService.findAllJJCompanys();public abstract List<JJCompany>JJCompanyService.findJJCompanyEntries(int firstResult,int maxResults);public abstract void JJCompanyService.saveJJCompany(JJCompany JJCompany_);public abstract JJCompany JJCompanyService.updateJJCompany(JJCompany JJCompany_);}

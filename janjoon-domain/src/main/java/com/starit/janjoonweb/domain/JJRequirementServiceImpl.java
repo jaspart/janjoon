@@ -428,9 +428,10 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,
-			Map<JJProject, JJProduct> map, JJVersion version,JJCategory category) {
-		return getRequirements(company, category, map, version, null, null, false,
-				true, true, false, null);
+			Map<JJProject, JJProduct> map, JJVersion version,
+			JJCategory category) {
+		return getRequirements(company, category, map, version, null, null,
+				false, true, true, false, null);
 	}
 
 	@Override
@@ -448,11 +449,11 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		if (map != null) {
 			CriteriaBuilder criteriaBuilder = entityManager
 					.getCriteriaBuilder();
-		
+
 			CriteriaQuery<JJContact> select = criteriaBuilder
 					.createQuery(JJContact.class);
 
-			Root<JJRequirement> from = select.from(JJRequirement.class);		
+			Root<JJRequirement> from = select.from(JJRequirement.class);
 			select.select(from.<JJContact> get("createdBy"));
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -506,14 +507,14 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						criteriaBuilder.equal(from.get("versioning"), version));
 			}
 
-			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));			
-			
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
 			select.where(
 					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
 
 			TypedQuery<JJContact> result = entityManager.createQuery(select);
 			return new ArrayList<JJContact>(
-					new HashSet<JJContact>(result.getResultList()));	
+					new HashSet<JJContact>(result.getResultList()));
 		} else
 			return new ArrayList<JJContact>();
 	}

@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJWorkflow;
 import com.starit.janjoonweb.domain.JJWorkflowService;
 import java.util.List;
 
-privileged aspect JJWorkflowService_Roo_Service {
-    
-    public abstract long JJWorkflowService.countAllJJWorkflows();    
-    public abstract void JJWorkflowService.deleteJJWorkflow(JJWorkflow JJWorkflow_);    
-    public abstract JJWorkflow JJWorkflowService.findJJWorkflow(Long id);    
-    public abstract List<JJWorkflow> JJWorkflowService.findAllJJWorkflows();    
-    public abstract List<JJWorkflow> JJWorkflowService.findJJWorkflowEntries(int firstResult, int maxResults);    
-    public abstract void JJWorkflowService.saveJJWorkflow(JJWorkflow JJWorkflow_);    
-    public abstract JJWorkflow JJWorkflowService.updateJJWorkflow(JJWorkflow JJWorkflow_);    
-}
+privileged aspect JJWorkflowService_Roo_Service{
+
+public abstract long JJWorkflowService.countAllJJWorkflows();public abstract void JJWorkflowService.deleteJJWorkflow(JJWorkflow JJWorkflow_);public abstract JJWorkflow JJWorkflowService.findJJWorkflow(Long id);public abstract List<JJWorkflow>JJWorkflowService.findAllJJWorkflows();public abstract List<JJWorkflow>JJWorkflowService.findJJWorkflowEntries(int firstResult,int maxResults);public abstract void JJWorkflowService.saveJJWorkflow(JJWorkflow JJWorkflow_);public abstract JJWorkflow JJWorkflowService.updateJJWorkflow(JJWorkflow JJWorkflow_);}

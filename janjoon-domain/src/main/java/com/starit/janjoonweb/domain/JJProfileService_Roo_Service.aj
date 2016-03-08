@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJProfileService;
 import java.util.List;
 
-privileged aspect JJProfileService_Roo_Service {
-    
-    public abstract long JJProfileService.countAllJJProfiles();    
-    public abstract void JJProfileService.deleteJJProfile(JJProfile JJProfile_);    
-    public abstract JJProfile JJProfileService.findJJProfile(Long id);    
-    public abstract List<JJProfile> JJProfileService.findAllJJProfiles();    
-    public abstract List<JJProfile> JJProfileService.findJJProfileEntries(int firstResult, int maxResults);    
-    public abstract void JJProfileService.saveJJProfile(JJProfile JJProfile_);    
-    public abstract JJProfile JJProfileService.updateJJProfile(JJProfile JJProfile_);    
-}
+privileged aspect JJProfileService_Roo_Service{
+
+public abstract long JJProfileService.countAllJJProfiles();public abstract void JJProfileService.deleteJJProfile(JJProfile JJProfile_);public abstract JJProfile JJProfileService.findJJProfile(Long id);public abstract List<JJProfile>JJProfileService.findAllJJProfiles();public abstract List<JJProfile>JJProfileService.findJJProfileEntries(int firstResult,int maxResults);public abstract void JJProfileService.saveJJProfile(JJProfile JJProfile_);public abstract JJProfile JJProfileService.updateJJProfile(JJProfile JJProfile_);}

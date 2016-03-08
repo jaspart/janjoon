@@ -9,86 +9,46 @@ import com.starit.janjoonweb.domain.JJStatus;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJStatus_Roo_JavaBean {
-    
-    public String JJStatus.getName() {
-        return this.name;
-    }
-    
-    public void JJStatus.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJStatus.getDescription() {
-        return this.description;
-    }
-    
-    public void JJStatus.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJStatus.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJStatus.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJStatus.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJStatus.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJStatus.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJStatus.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJStatus.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJStatus.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJStatus.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJStatus.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public String JJStatus.getObjet() {
-        return this.objet;
-    }
-    
-    public void JJStatus.setObjet(String objet) {
-        this.objet = objet;
-    }
-    
-    public Integer JJStatus.getLevelStatus() {
-        return this.levelStatus;
-    }
-    
-    public void JJStatus.setLevelStatus(Integer levelStatus) {
-        this.levelStatus = levelStatus;
-    }
-    
-    public Set<JJMessage> JJStatus.getMessages() {
-        return this.messages;
-    }
-    
-    public void JJStatus.setMessages(Set<JJMessage> messages) {
-        this.messages = messages;
-    }
-    
+privileged aspect JJStatus_Roo_JavaBean{
+
+public String JJStatus.getName(){return this.name;}
+
+public void JJStatus.setName(String name){this.name=name;}
+
+public String JJStatus.getDescription(){return this.description;}
+
+public void JJStatus.setDescription(String description){this.description=description;}
+
+public Date JJStatus.getCreationDate(){return this.creationDate;}
+
+public void JJStatus.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJStatus.getCreatedBy(){return this.createdBy;}
+
+public void JJStatus.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJStatus.getUpdatedDate(){return this.updatedDate;}
+
+public void JJStatus.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJStatus.getUpdatedBy(){return this.updatedBy;}
+
+public void JJStatus.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJStatus.getEnabled(){return this.enabled;}
+
+public void JJStatus.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public String JJStatus.getObjet(){return this.objet;}
+
+public void JJStatus.setObjet(String objet){this.objet=objet;}
+
+public Integer JJStatus.getLevelStatus(){return this.levelStatus;}
+
+public void JJStatus.setLevelStatus(Integer levelStatus){this.levelStatus=levelStatus;}
+
+public Set<JJMessage>JJStatus.getMessages(){return this.messages;}
+
+public void JJStatus.setMessages(Set<JJMessage>messages){this.messages=messages;}
+
 }

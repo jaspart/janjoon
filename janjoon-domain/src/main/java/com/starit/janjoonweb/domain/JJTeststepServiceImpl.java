@@ -125,12 +125,13 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 	}
 
 	@Override
-	public List<JJTeststep> getJJtestSteps(JJProject project,JJCategory category) {
+	public List<JJTeststep> getJJtestSteps(JJProject project,
+			JJCategory category) {
 
 		Map<JJProject, JJProduct> map = new HashMap<JJProject, JJProduct>();
 		map.put(project, null);
 		List<JJRequirement> requirements = jJRequirementService
-				.getRequirements(null, map, null,category);
+				.getRequirements(null, map, null, category);
 		List<JJTeststep> jjTeststeps = new ArrayList<JJTeststep>();
 		if (requirements != null) {
 			for (JJRequirement jjRequirement : requirements) {
@@ -157,10 +158,10 @@ public class JJTeststepServiceImpl implements JJTeststepService {
 
 	@Override
 	public List<JJTeststep> getJJtestSteps(JJRequirement requirement,
-			JJProject project,JJCategory category) {
+			JJProject project, JJCategory category) {
 
 		if (requirement == null)
-			return getJJtestSteps(project,category);
+			return getJJtestSteps(project, category);
 		else {
 			return getJJtestSteps(requirement);
 

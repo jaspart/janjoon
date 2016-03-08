@@ -17,6 +17,5 @@ public interface JJAuditLogService {
 			Map<String, Object> filters);
 
 	public JJAuditLog getLogoutAuditLog(JJContact contact, Date loginDate);
-	
-	
+
 }

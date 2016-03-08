@@ -19,8 +19,6 @@ import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
@@ -204,11 +202,6 @@ public class JJProductBean {
 		}
 
 		return productManagerList;
-	}
-
-	public List<JJTask> getTasksByProduct(final JJProduct product,
-			final JJProject project) {
-		return jJTaskService.getTasksByProduct(product, project);
 	}
 
 	public void newProduct(final JJVersionBean jJVersionBean) {

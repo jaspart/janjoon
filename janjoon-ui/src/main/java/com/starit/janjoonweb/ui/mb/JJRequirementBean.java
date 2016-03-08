@@ -148,9 +148,9 @@ public class JJRequirementBean {
 	private boolean disabledProject;
 	private boolean mine;
 
-	private boolean changeLow;
-	private boolean changeMedium;
-	private boolean changeHigh;
+	// private boolean changeLow;
+	// private boolean changeMedium;
+	// private boolean changeHigh;
 
 	private boolean initiateTask;
 	private boolean disabledInitTask;
@@ -956,9 +956,9 @@ public class JJRequirementBean {
 		initiateTask = false;
 		disabledTask = true;
 		requirement.setNumero(0);
-		changeLow = false;
-		changeMedium = false;
-		changeHigh = false;
+		// changeLow = false;
+		// changeMedium = false;
+		// changeHigh = false;
 
 		requirementState = true;
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -1054,9 +1054,9 @@ public class JJRequirementBean {
 		requirement.setNumero(numero);
 		reqtestCases = jJTestcaseService.getJJtestCases(requirement);
 		reqSelectedtestCases = reqtestCases;
-		changeLow = false;
-		changeMedium = false;
-		changeHigh = false;
+		// changeLow = false;
+		// changeMedium = false;
+		// changeHigh = false;
 
 		requirementState = false;
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
@@ -2105,17 +2105,17 @@ public class JJRequirementBean {
 
 	}
 
-	public void handleChangeLow() {
-		changeLow = true;
-	}
-
-	public void handleChangeMedium() {
-		changeMedium = true;
-	}
-
-	public void handleChangeHigh() {
-		changeHigh = true;
-	}
+	// public void handleChangeLow() {
+	// changeLow = true;
+	// }
+	//
+	// public void handleChangeMedium() {
+	// changeMedium = true;
+	// }
+	//
+	// public void handleChangeHigh() {
+	// changeHigh = true;
+	// }
 
 	public void updateTemplate(long id, boolean rendered, boolean add) {
 
@@ -3356,6 +3356,7 @@ public class JJRequirementBean {
 		if (jJStatusBean != null) {
 			jJStatusBean.setStatusPieChart(null);
 			jJStatusBean.setStates(null);
+			jJStatusBean.setTaskStatues(null);
 			jJStatusBean.setContacts(null);
 			jJStatusBean.setCategoryPieChart(null);
 			jJStatusBean.setProductPieChart(null);
@@ -3593,8 +3594,8 @@ public class JJRequirementBean {
 
 		if (FINIS) {
 			List<JJTask> tasks = jJTaskService.getTasks(null, null, null, null,
-					null, false, req, null, null, null, true, false, false,
-					null);
+					null, null, null, false, req, null, null, null, true, false,
+					false, null);
 			FINIS = !tasks.isEmpty();
 
 			for (JJTask task : tasks) {

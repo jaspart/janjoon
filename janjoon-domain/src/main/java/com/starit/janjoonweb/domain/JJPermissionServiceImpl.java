@@ -122,16 +122,16 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 					.add(criteriaBuilder.isNull(fromRight.get("category")));
 
 		if (objet != null) {
-			predicatesRight
-					.add(criteriaBuilder.or(
-							criteriaBuilder.equal(
-									criteriaBuilder.lower(
-											fromRight.<String> get("objet")),
+			predicatesRight.add(
+					criteriaBuilder.or(
+							criteriaBuilder.equal(criteriaBuilder
+									.lower(fromRight.<String> get("objet")),
 									objet.toLowerCase()),
 							criteriaBuilder.equal(fromRight.get("objet"), "*"),
 							criteriaBuilder.equal(
-									criteriaBuilder.lower(
-											fromRight.<String> get("objet")),
+									criteriaBuilder
+											.lower(fromRight
+													.<String> get("objet")),
 									"JJ" + objet.toLowerCase())));
 
 		} else
@@ -382,16 +382,16 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 		if (objet != null) {
 			if (objet.equalsIgnoreCase("sprintContact"))
 				objet = "Task";
-			predicatesRight
-					.add(criteriaBuilder.or(
-							criteriaBuilder.equal(
-									criteriaBuilder.lower(
-											fromRight.<String> get("objet")),
+			predicatesRight.add(
+					criteriaBuilder.or(
+							criteriaBuilder.equal(criteriaBuilder
+									.lower(fromRight.<String> get("objet")),
 									objet.toLowerCase()),
 							criteriaBuilder.equal(fromRight.get("objet"), "*"),
 							criteriaBuilder.equal(
-									criteriaBuilder.lower(
-											fromRight.<String> get("objet")),
+									criteriaBuilder
+											.lower(fromRight
+													.<String> get("objet")),
 									"JJ" + objet.toLowerCase())));
 
 		} else

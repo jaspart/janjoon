@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
@@ -27,6 +28,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
@@ -44,11 +46,19 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
 public class JJStatusBean {
 
+	private static int kpi_Tab = 0;
+	private static int spec_Tab = 1;
+	private static int bug_Tab = 2;
+	private static int sprint_Tab = 3;
+
 	@Autowired
 	private JJCategoryService jJCategoryService;
 
 	@Autowired
 	private JJRequirementService jJRequirementService;
+
+	@Autowired
+	private JJPermissionService jJPermissionService;
 
 	@Autowired
 	private JJBugService jJBugService;
@@ -62,9 +72,15 @@ public class JJStatusBean {
 	private List<String> tableNames;
 
 	private List<JJStatus> statusList;
+
 	private List<JJContact> contacts = new ArrayList<JJContact>();
 	private List<JJStatus> states = new ArrayList<JJStatus>();
 	private ArrayList<ArrayList<Integer>> value = new ArrayList<ArrayList<Integer>>();
+
+	private List<JJContact> taskContacts = new ArrayList<JJContact>();
+	private List<JJStatus> taskStatues = new ArrayList<JJStatus>();
+	private ArrayList<ArrayList<Integer>> taskValues = new ArrayList<ArrayList<Integer>>();
+
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
 	private PieChartModel statusPieChart;
@@ -75,6 +91,7 @@ public class JJStatusBean {
 	private SelectItem[] objectOptions;
 	private MeterGaugeChartModel bugMetergauge;
 	private LineChartModel kpiLineModel;
+	private BarChartModel kpiBarModel;
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
 	private List<CategoryDataModel> categoryDataModel;
@@ -106,7 +123,7 @@ public class JJStatusBean {
 
 	public List<JJStatus> getStates() {
 
-		if (activeTabIndex == 3) {
+		if (activeTabIndex == kpi_Tab) {
 			if (states == null || states.isEmpty()) {
 
 				contacts = jJRequirementService.getReqContacts(
@@ -165,6 +182,72 @@ public class JJStatusBean {
 		this.value = value;
 	}
 
+	public List<JJContact> getTaskContacts() {
+		return taskContacts;
+	}
+
+	public void setTaskContacts(List<JJContact> taskContacts) {
+		this.taskContacts = taskContacts;
+	}
+
+	public List<JJStatus> getTaskStatues() {
+
+		if (activeTabIndex == kpi_Tab) {
+			if (taskStatues == null || taskStatues.isEmpty()) {
+
+				taskContacts = jJPermissionService.areAuthorized(
+						LoginBean.getCompany(), null, LoginBean.getProject(),
+						LoginBean.getProduct(), "project");
+
+				if (taskContacts != null && !taskContacts.isEmpty()) {
+
+					taskStatues = jJStatusService.getStatus("Task", true, null,
+							true);
+					if (!taskStatues.isEmpty()) {
+						taskValues = new ArrayList<ArrayList<Integer>>();
+						taskStatues.add(null);
+						for (int i = 0; i < taskContacts.size(); i++) {
+							taskValues.add(new ArrayList<Integer>());
+
+							for (int j = 0; j < taskStatues.size(); j++) {
+								List<JJTask> tasks = jJTaskService
+										.getExecutedTaks(null,
+												LoginBean.getProject(),
+												LoginBean.getProduct(),
+												taskContacts.get(i),
+												taskStatues.get(j), null);
+								int number = 0;
+								if (tasks != null && !tasks.isEmpty())
+									number = tasks.size();
+								taskValues.get(i).add(number);
+							}
+						}
+					} else {
+						taskStatues = null;
+						taskContacts = null;
+					}
+
+				}
+
+			}
+
+			return taskStatues;
+		} else
+			return null;
+	}
+
+	public void setTaskStatues(List<JJStatus> taskStatues) {
+		this.taskStatues = taskStatues;
+	}
+
+	public ArrayList<ArrayList<Integer>> getTaskValues() {
+		return taskValues;
+	}
+
+	public void setTaskValues(ArrayList<ArrayList<Integer>> taskValues) {
+		this.taskValues = taskValues;
+	}
+
 	public String onEdit() {
 		return null;
 	}
@@ -172,6 +255,11 @@ public class JJStatusBean {
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
 		this.jJRequirementService = jJRequirementService;
+	}
+
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
 	}
 
 	public void setjJCategoryService(JJCategoryService jJCategoryService) {
@@ -211,7 +299,8 @@ public class JJStatusBean {
 
 	public JJProject getProject() {
 
-		this.project = LoginBean.getProject();
+		if (this.project == null)
+			this.project = LoginBean.getProject();
 		return project;
 	}
 
@@ -225,13 +314,45 @@ public class JJStatusBean {
 			bugPieChart = null;
 			bugMetergauge = null;
 			kpiLineModel = null;
+			kpiBarModel = null;
 
 		}
 
 	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
-		return categoryDataModel;
+		if (activeTabIndex == spec_Tab) {
+			if (categoryDataModel == null) {
+				if (getProject() == null) {
+					categoryDataModel = new ArrayList<CategoryDataModel>();
+
+					List<JJCategory> categoryList = jJCategoryService
+							.getCategories(null, false, true, true,
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany());
+
+					for (JJCategory category : categoryList) {
+						categoryDataModel.add(new CategoryDataModel(category));
+					}
+				} else {
+					categoryDataModel = new ArrayList<CategoryDataModel>();
+
+					List<JJCategory> categoryList = jJCategoryService
+							.getCategories(null, false, true, true,
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany());
+
+					for (JJCategory category : categoryList) {
+						categoryDataModel.add(new CategoryDataModel(category));
+					}
+				}
+
+			}
+			return categoryDataModel;
+		} else
+			return null;
 	}
 
 	public void setCategoryDataModel(
@@ -266,42 +387,43 @@ public class JJStatusBean {
 
 	public PieChartModel getStatusPieChart() {
 
-		if (statusPieChart == null) {
-			statusPieChart = new PieChartModel();
-			List<JJStatus> statReq = jJStatusService.getStatus("Requirement",
-					true, null, false);
-			boolean render = false;
-			for (JJStatus s : statReq) {
+		if (activeTabIndex == spec_Tab) {
+			if (statusPieChart == null) {
+				statusPieChart = new PieChartModel();
+				List<JJStatus> statReq = jJStatusService
+						.getStatus("Requirement", true, null, false);
+				boolean render = false;
+				for (JJStatus s : statReq) {
 
-				int i = Integer
-						.parseInt(""
-								+ jJRequirementService.getReqCount(
-										((LoginBean) LoginBean
-												.findBean("loginBean"))
-														.getContact()
-														.getCompany(),
-										project, LoginBean.getProduct(),
-										LoginBean.getVersion(), s, null, null,
-										null, true));
-				render = render || i > 0;
-				if (i > 0)
-					statusPieChart.set(MessageFactory
-							.getMessage("status_" + s.getName(), "")
-							.getDetail(), i);
+					int i = Integer
+							.parseInt("" + jJRequirementService.getReqCount(
+									((LoginBean) LoginBean
+											.findBean("loginBean")).getContact()
+													.getCompany(),
+									project, LoginBean.getProduct(),
+									LoginBean.getVersion(), s, null, null, null,
+									true));
+					render = render || i > 0;
+					if (i > 0)
+						statusPieChart.set(MessageFactory
+								.getMessage("status_" + s.getName(), "")
+								.getDetail(), i);
+				}
+
+				if (render) {
+					statusPieChart.setLegendPosition("e");
+					statusPieChart.setTitle("% " + MessageFactory
+							.getMessage("label_requirement", "").getDetail());
+					statusPieChart.setFill(false);
+					statusPieChart.setShowDataLabels(true);
+					statusPieChart.setDiameter(150);
+					statusPieChart.setSliceMargin(5);
+				} else
+					statusPieChart = null;
 			}
-
-			if (render) {
-				statusPieChart.setLegendPosition("e");
-				statusPieChart.setTitle("% " + MessageFactory
-						.getMessage("label_requirement", "").getDetail());
-				statusPieChart.setFill(false);
-				statusPieChart.setShowDataLabels(true);
-				statusPieChart.setDiameter(150);
-				statusPieChart.setSliceMargin(5);
-			} else
-				statusPieChart = null;
-		}
-		return statusPieChart;
+			return statusPieChart;
+		} else
+			return null;
 	}
 
 	public void setStatusPieChart(PieChartModel statusPieChart) {
@@ -310,7 +432,7 @@ public class JJStatusBean {
 
 	public PieChartModel getProjectPieChart() {
 
-		if (activeTabIndex == 3) {
+		if (activeTabIndex == kpi_Tab) {
 			if (projectPieChart == null) {
 				projectPieChart = new PieChartModel();
 				List<JJProduct> prodReq = ((JJProductBean) LoginBean
@@ -361,7 +483,7 @@ public class JJStatusBean {
 
 	public PieChartModel getProductPieChart() {
 
-		if (activeTabIndex == 3 && LoginBean.getProduct() != null) {
+		if (activeTabIndex == kpi_Tab && LoginBean.getProduct() != null) {
 			if (productPieChart == null) {
 				productPieChart = new PieChartModel();
 				List<JJProject> projReq = ((JJProjectBean) LoginBean
@@ -411,7 +533,7 @@ public class JJStatusBean {
 	}
 
 	public PieChartModel getCategoryPieChart() {
-		if (activeTabIndex == 3) {
+		if (activeTabIndex == kpi_Tab) {
 			if (categoryPieChart == null) {
 				categoryPieChart = new PieChartModel();
 				List<JJCategory> catReq = jJCategoryService.getCategories(null,
@@ -470,7 +592,7 @@ public class JJStatusBean {
 
 	public PieChartModel getBugPieChart() {
 
-		if (activeTabIndex == 1) {
+		if (activeTabIndex == bug_Tab) {
 			if (bugPieChart == null) {
 				bugPieChart = new PieChartModel();
 				List<JJStatus> statBug = jJStatusService.getStatus("Bug", true,
@@ -513,7 +635,7 @@ public class JJStatusBean {
 	}
 
 	public MeterGaugeChartModel getBugMetergauge() {
-		if (activeTabIndex == 1) {
+		if (activeTabIndex == bug_Tab) {
 			if (bugMetergauge == null) {
 
 				float bugKPI = 0L;
@@ -573,7 +695,7 @@ public class JJStatusBean {
 
 	public LineChartModel getKpiLineModel() {
 
-		if (activeTabIndex == 3) {
+		if (activeTabIndex == kpi_Tab) {
 			if (kpiLineModel == null) {
 
 				kpiLineModel = initLinearModel();
@@ -588,8 +710,90 @@ public class JJStatusBean {
 		this.kpiLineModel = kpiLineModel;
 	}
 
+	public BarChartModel getKpiBarModel() {
+
+		if (activeTabIndex == kpi_Tab) {
+			if (kpiBarModel == null) {
+
+				kpiBarModel = initBarModel();
+			}
+			return kpiBarModel;
+		} else
+			return null;
+
+	}
+
+	public void setKpiBarModel(BarChartModel kpiBarModel) {
+		this.kpiBarModel = kpiBarModel;
+	}
+
 	public MeterGaugeChartModel getPrjMetergauge() {
-		return prjMetergauge;
+		if (activeTabIndex == spec_Tab) {
+			if (prjMetergauge == null) {
+				float projKPI = 0;
+				LoginBean loginBean = (LoginBean) LoginBean
+						.findBean("loginBean");
+				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
+						.findBean("jJRequirementBean");
+
+				if (jJRequirementBean == null)
+					jJRequirementBean = new JJRequirementBean();
+
+				List<JJRequirement> requirements = jJRequirementService
+						.getRequirements(null,
+								loginBean.getAuthorizedMap("Requirement",
+										LoginBean.getProject(),
+										LoginBean.getProduct()),
+								LoginBean.getVersion(), null);
+
+				for (JJRequirement req : requirements) {
+
+					if (project.getStartDate() != null
+							&& project.getEndDate() != null
+							&& jJRequirementBean.checkIfFinished(req))
+						projKPI++;
+
+				}
+
+				if (project.getStartDate() != null
+						&& project.getEndDate() != null) {
+					float tmpsProj = (new Date().getTime()
+							- project.getStartDate().getTime());
+					float tmps = (project.getEndDate().getTime()
+							- project.getStartDate().getTime());
+
+					projKPI = (projKPI / (1 + requirements.size()))
+							- (tmpsProj / (1 + tmps));
+				}
+
+				List<Number> prjIntervalls = new ArrayList<Number>() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					{
+						add(-1);
+						add(-0.25);
+						add(0.25);
+						add(1);
+					}
+				};
+
+				prjMetergauge = new MeterGaugeChartModel(projKPI,
+						prjIntervalls);
+				prjMetergauge.setTitle(MessageFactory
+						.getMessage("label_project", "").getDetail() + " KPI");
+				prjMetergauge.setGaugeLabel("KPI");
+				prjMetergauge.setShowTickLabels(true);
+				prjMetergauge.setMin(-1);
+				prjMetergauge.setMax(1);
+				prjMetergauge.setSeriesColors("FF0000,FF0000,008000,0000FF");
+			}
+			return prjMetergauge;
+		} else
+			return null;
 	}
 
 	public void setPrjMetergauge(MeterGaugeChartModel prjMetergauge) {
@@ -618,7 +822,7 @@ public class JJStatusBean {
 
 	public List<SprintUtil> getSprintList() {
 
-		if (activeTabIndex == 2) {
+		if (activeTabIndex == sprint_Tab) {
 			JJSprintBean jJSprintBean = ((JJSprintBean) LoginBean
 					.findBean("jJSprintBean"));
 			if (jJSprintBean == null)
@@ -648,7 +852,7 @@ public class JJStatusBean {
 			setActiveTabIndex(Integer.valueOf(paramIndex));
 			System.out.println("###### ACtive tab: " + activeTabIndex);
 
-			if (activeTabIndex == 2 && activeTabSprintIndex == -1) {
+			if (activeTabIndex == sprint_Tab && activeTabSprintIndex == -1) {
 				Date now = new Date();
 				int i = 0;
 				while (i < getSprintList().size()) {
@@ -700,128 +904,15 @@ public class JJStatusBean {
 		this.renderCreate = renderCreate;
 	}
 
-	@SuppressWarnings("serial")
 	public void loadData() {
 
 		if (project == null) {
 			getProject();
 
-			if (project != null) {
-				categoryDataModel = new ArrayList<CategoryDataModel>();
+			// if (project != null) {}
 
-				List<JJCategory> categoryList = jJCategoryService.getCategories(
-						null, false, true, true,
-						((LoginBean) LoginBean.findBean("loginBean"))
-								.getContact().getCompany());
-
-				for (JJCategory category : categoryList) {
-					categoryDataModel.add(new CategoryDataModel(category));
-				}
-
-				statusPieChart = new PieChartModel();
-				List<JJStatus> statReq = jJStatusService
-						.getStatus("Requirement", true, null, false);
-				boolean render = false;
-				for (JJStatus s : statReq) {
-
-					int i = Integer
-							.parseInt("" + jJRequirementService.getReqCount(
-									((LoginBean) LoginBean
-											.findBean("loginBean")).getContact()
-													.getCompany(),
-									project, LoginBean.getProduct(),
-									LoginBean.getVersion(), s, null, null, null,
-									true));
-					render = render || i > 0;
-					if (i > 0)
-						statusPieChart.set(MessageFactory
-								.getMessage("status_" + s.getName(), "")
-								.getDetail(), i);
-				}
-
-				if (render) {
-					statusPieChart.setLegendPosition("e");
-					statusPieChart.setTitle("% " + MessageFactory
-							.getMessage("label_requirement", "").getDetail());
-					statusPieChart.setFill(false);
-					statusPieChart.setShowDataLabels(true);
-					statusPieChart.setDiameter(150);
-					statusPieChart.setSliceMargin(5);
-				} else
-					statusPieChart = null;
-
-				// float bugKPI = 0L;
-				float projKPI = 0;
-				LoginBean loginBean = (LoginBean) LoginBean
-						.findBean("loginBean");
-				JJRequirementBean jJRequirementBean = (JJRequirementBean) LoginBean
-						.findBean("jJRequirementBean");
-
-				if (jJRequirementBean == null)
-					jJRequirementBean = new JJRequirementBean();
-
-				List<JJRequirement> requirements = jJRequirementService
-						.getRequirements(null,
-								loginBean.getAuthorizedMap("Requirement",
-										LoginBean.getProject(),
-										LoginBean.getProduct()),
-								LoginBean.getVersion(), null);
-
-				for (JJRequirement req : requirements) {
-
-					if (project.getStartDate() != null
-							&& project.getEndDate() != null
-							&& jJRequirementBean.checkIfFinished(req))
-						projKPI++;
-
-				}
-
-				if (project.getStartDate() != null
-						&& project.getEndDate() != null) {
-					float tmpsProj = (new Date().getTime()
-							- project.getStartDate().getTime());
-					float tmps = (project.getEndDate().getTime()
-							- project.getStartDate().getTime());
-
-					projKPI = (projKPI / (1 + requirements.size()))
-							- (tmpsProj / (1 + tmps));
-				}
-
-				List<Number> prjIntervalls = new ArrayList<Number>() {
-
-					{
-						add(-1);
-						add(-0.25);
-						add(0.25);
-						add(1);
-					}
-				};
-
-				prjMetergauge = new MeterGaugeChartModel(projKPI,
-						prjIntervalls);
-				prjMetergauge.setTitle(MessageFactory
-						.getMessage("label_project", "").getDetail() + " KPI");
-				prjMetergauge.setGaugeLabel("KPI");
-				prjMetergauge.setShowTickLabels(true);
-				prjMetergauge.setMin(-1);
-				prjMetergauge.setMax(1);
-				prjMetergauge.setSeriesColors("FF0000,FF0000,008000,0000FF");
-
-			}
-
-		} else if (categoryDataModel == null) {
-
-			categoryDataModel = new ArrayList<CategoryDataModel>();
-
-			List<JJCategory> categoryList = jJCategoryService.getCategories(
-					null, false, true, true,
-					((LoginBean) LoginBean.findBean("loginBean")).getContact()
-							.getCompany());
-
-			for (JJCategory category : categoryList) {
-				categoryDataModel.add(new CategoryDataModel(category));
-			}
 		}
+		// else if (categoryDataModel == null) {}
 	}
 
 	public void deleteStatus() {
@@ -899,6 +990,92 @@ public class JJStatusBean {
 		reset();
 
 	}
+	private BarChartModel initBarModel() {
+		BarChartModel model = new BarChartModel();
+
+		List<JJContact> contacts = jJPermissionService.areAuthorized(
+				LoginBean.getCompany(), null, LoginBean.getProject(),
+				LoginBean.getProduct(), "project");
+		JJStatus doneStatus = jJStatusService.getOneStatus("DONE", "task",
+				true);
+		ChartSeries planned = new ChartSeries();
+		planned.setLabel(MessageFactory
+				.getMessage("statistique_kpi_taskBarchart_planned", "")
+				.getDetail());
+		ChartSeries executed = new ChartSeries();
+		executed.setLabel(MessageFactory
+				.getMessage("statistique_kpi_taskBarchart_executed", "")
+				.getDetail());
+		ChartSeries defined = new ChartSeries();
+		defined.setLabel(MessageFactory
+				.getMessage("statistique_kpi_taskBarchart_defined", "")
+				.getDetail());
+
+		for (JJContact contact : contacts) {
+			int plannedDeviation = 0, executeDeviation = 0,
+					definedDeviation = 0;
+			boolean add = false;
+			List<JJTask> tasks = jJTaskService.getExecutedTaks(null,
+					LoginBean.getProject(), LoginBean.getProduct(), contact,
+					doneStatus, null);
+
+			for (JJTask tt : tasks) {
+				add = true;
+				if (tt.getWorkloadReal() != null)
+					executeDeviation = executeDeviation + Math.abs(
+							tt.getWorkloadPlanned() - tt.getWorkloadReal());
+			}
+
+			tasks = jJTaskService.getPlannedTaks(null, LoginBean.getProject(),
+					LoginBean.getProduct(), contact, null);
+
+			for (JJTask tt : tasks) {
+				add = true;
+				if (tt.getWorkloadReal() != null)
+					plannedDeviation = plannedDeviation + Math.abs(
+							tt.getWorkloadPlanned() - tt.getWorkloadReal());
+			}
+			tasks = jJTaskService.getDefinedTaks(null, LoginBean.getProject(),
+					LoginBean.getProduct(), contact, null);
+
+			for (JJTask tt : tasks) {
+				add = true;
+				if (tt.getWorkloadReal() != null)
+					definedDeviation = definedDeviation + Math.abs(
+							tt.getWorkloadPlanned() - tt.getWorkloadReal());
+			}
+			if (add) {
+				executed.set(contact.getFirstname() + " " + contact.getName(),
+						executeDeviation);
+
+				planned.set(contact.getFirstname() + " " + contact.getName(),
+						plannedDeviation);
+
+				defined.set(contact.getFirstname() + " " + contact.getName(),
+						definedDeviation);
+			}
+
+		}
+
+		model.addSeries(executed);
+		model.addSeries(planned);
+		model.addSeries(defined);
+
+		model.setTitle(MessageFactory
+				.getMessage("statistique_kpi_taskBarchart_header", "")
+				.getDetail());
+		model.setLegendPosition("e");
+		model.setSeriesColors("109618,FF9900,3366CC");
+		model.setStacked(true);
+
+		Axis xAxis = model.getAxis(AxisType.X);
+		xAxis.setLabel("Contact");
+
+		// Axis yAxis = model.getAxis(AxisType.Y);
+		// yAxis.setLabel("Gender");
+
+		return model;
+	}
 
 	private LineChartModel initLinearModel() {
 
@@ -928,7 +1105,8 @@ public class JJStatusBean {
 			float moyPurple = 0;
 
 			for (JJTask ta : tasks) {
-				moyBlue = moyBlue + ta.getWorkloadReal();
+				if (ta.getWorkloadReal() != null)
+					moyBlue = moyBlue + ta.getWorkloadReal();
 				Date endDate = ta.getEndDateReal();
 				if (endDate == null)
 					endDate = new Date();

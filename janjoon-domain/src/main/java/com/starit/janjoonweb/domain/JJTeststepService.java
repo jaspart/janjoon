@@ -17,9 +17,10 @@ public interface JJTeststepService {
 
 	public List<JJTeststep> getJJtestSteps(JJRequirement requirement);
 
-	public List<JJTeststep> getJJtestSteps(JJProject project,JJCategory category);
+	public List<JJTeststep> getJJtestSteps(JJProject project,
+			JJCategory category);
 
 	public List<JJTeststep> getJJtestSteps(JJRequirement requirement,
-			JJProject project,JJCategory category);
+			JJProject project, JJCategory category);
 
 }

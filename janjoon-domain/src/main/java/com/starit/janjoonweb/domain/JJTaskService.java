@@ -10,10 +10,21 @@ import org.springframework.roo.addon.layers.service.RooService;
 public interface JJTaskService {
 
 	public List<JJTask> getTasks(JJSprint sprint, JJProject project,
-			JJProduct product, JJContact contact, JJChapter chapter,
-			boolean nullChapter, JJRequirement requirement, JJStatus status,
-			JJTestcase testcase, JJBuild build, boolean onlyActif,
-			boolean sortedByCreationDate, boolean withBuild, String objet);
+			JJProduct product, JJContact assignedTo, JJContact createdBy,
+			JJContact objectCreatedBy, JJChapter chapter, boolean nullChapter,
+			JJRequirement requirement, JJStatus status, JJTestcase testcase,
+			JJBuild build, boolean onlyActif, boolean sortedByCreationDate,
+			boolean withBuild, String objet);
+
+	public List<JJTask> getExecutedTaks(JJSprint sprint, JJProject project,
+			JJProduct product, JJContact contact, JJStatus status,
+			JJCompany company);
+
+	public List<JJTask> getPlannedTaks(JJSprint sprint, JJProject project,
+			JJProduct product, JJContact contact, JJCompany company);
+
+	public List<JJTask> getDefinedTaks(JJSprint sprint, JJProject project,
+			JJProduct product, JJContact contact, JJCompany company);
 
 	public List<JJTask> getSuperimposeTasks(JJContact assignedTo,
 			Date startDate, Date endDate, JJTask task);
@@ -36,7 +47,8 @@ public interface JJTaskService {
 
 	public List<JJTask> getSprintTasks(JJSprint sprint, JJProduct product);
 
-	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project);
+	public List<JJTask> getTasksByProduct(JJProduct product, JJProject project,
+			boolean notDone);
 
 	public List<JJTask> getToDoTasks(JJContact contact);
 

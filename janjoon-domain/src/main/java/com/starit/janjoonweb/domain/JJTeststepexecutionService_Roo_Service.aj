@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJTeststepexecution;
 import com.starit.janjoonweb.domain.JJTeststepexecutionService;
 import java.util.List;
 
-privileged aspect JJTeststepexecutionService_Roo_Service {
-    
-    public abstract long JJTeststepexecutionService.countAllJJTeststepexecutions();    
-    public abstract void JJTeststepexecutionService.deleteJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);    
-    public abstract JJTeststepexecution JJTeststepexecutionService.findJJTeststepexecution(Long id);    
-    public abstract List<JJTeststepexecution> JJTeststepexecutionService.findAllJJTeststepexecutions();    
-    public abstract List<JJTeststepexecution> JJTeststepexecutionService.findJJTeststepexecutionEntries(int firstResult, int maxResults);    
-    public abstract void JJTeststepexecutionService.saveJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);    
-    public abstract JJTeststepexecution JJTeststepexecutionService.updateJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);    
-}
+privileged aspect JJTeststepexecutionService_Roo_Service{
+
+public abstract long JJTeststepexecutionService.countAllJJTeststepexecutions();public abstract void JJTeststepexecutionService.deleteJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);public abstract JJTeststepexecution JJTeststepexecutionService.findJJTeststepexecution(Long id);public abstract List<JJTeststepexecution>JJTeststepexecutionService.findAllJJTeststepexecutions();public abstract List<JJTeststepexecution>JJTeststepexecutionService.findJJTeststepexecutionEntries(int firstResult,int maxResults);public abstract void JJTeststepexecutionService.saveJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);public abstract JJTeststepexecution JJTeststepexecutionService.updateJJTeststepexecution(JJTeststepexecution JJTeststepexecution_);}

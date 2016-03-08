@@ -103,10 +103,7 @@
 							scrollable="true" scrollHeight="180" style="table-layout: fixed;"
 							emptyMessage="#{messages.label_notRecordFound}">
 
-							<p:column headerText="#{messages.label_task}">
-								<!-- 	<p:graphicImage -->
-								<!-- 		rendered="#{task.specification != null and task.specification}" -->
-								<!-- 		library="images" name="doc.ico" width="16" height="16" /> -->
+							<p:column headerText="#{messages.label_task}">								
 								<p:graphicImage rendered="#{task.taskType.name == 'specifier'}"
 									library="images" name="doc.ico" width="16" height="16" />
 								<p:graphicImage rendered="#{task.bug != null}" library="images"
@@ -143,7 +140,6 @@
 										pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</p:column>
-
 
 							<p:column
 								headerText="#{messages.specification_create_workload_label}"

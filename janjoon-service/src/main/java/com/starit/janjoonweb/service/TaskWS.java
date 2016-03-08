@@ -108,7 +108,7 @@ public class TaskWS {
 		if (project != null && product != null)
 
 			return Task.getListTaskFrommJJTask(
-					jJTaskService.getTasksByProduct(product, project));
+					jJTaskService.getTasksByProduct(product, project, false));
 		else
 			return null;
 	}

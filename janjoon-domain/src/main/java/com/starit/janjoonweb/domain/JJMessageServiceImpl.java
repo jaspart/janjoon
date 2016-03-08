@@ -272,15 +272,17 @@ public class JJMessageServiceImpl implements JJMessageService {
 				@SuppressWarnings("rawtypes")
 				Map.Entry pairs = (Map.Entry) it.next();
 				if (pairs.getKey().toString().contains("globalFilter")) {
-					predicates.add(criteriaBuilder.or(
-							criteriaBuilder.like(
-									criteriaBuilder
-											.upper(from.<String> get("name")),
-									"%" + pairs.getValue() + "%"),
-							criteriaBuilder.like(
-									new StrFunction<Long>(criteriaBuilder,
-											from.<Long> get("id")),
-									"%" + pairs.getValue() + "%")));
+					predicates
+							.add(criteriaBuilder.or(
+									criteriaBuilder.like(
+											criteriaBuilder.upper(
+													from.<String> get("name")),
+											"%" + pairs.getValue() + "%"),
+									criteriaBuilder.like(
+											new StrFunction<Long>(
+													criteriaBuilder,
+													from.<Long> get("id")),
+											"%" + pairs.getValue() + "%")));
 				}
 
 				else if (pairs.getKey().toString().contains("product")) {

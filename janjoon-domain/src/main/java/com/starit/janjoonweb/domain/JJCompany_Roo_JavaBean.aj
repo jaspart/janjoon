@@ -8,126 +8,66 @@ import com.starit.janjoonweb.domain.JJContact;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJCompany_Roo_JavaBean {
-    
-    public String JJCompany.getName() {
-        return this.name;
-    }
-    
-    public void JJCompany.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJCompany.getDescription() {
-        return this.description;
-    }
-    
-    public void JJCompany.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJCompany.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJCompany.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJCompany.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJCompany.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJCompany.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJCompany.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJCompany.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJCompany.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJCompany.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJCompany.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public byte[] JJCompany.getLogo() {
-        return this.logo;
-    }
-    
-    public void JJCompany.setLogo(byte[] logo) {
-        this.logo = logo;
-    }
-    
-    public String JJCompany.getBanner() {
-        return this.banner;
-    }
-    
-    public void JJCompany.setBanner(String banner) {
-        this.banner = banner;
-    }
-    
-    public String JJCompany.getCalendar() {
-        return this.calendar;
-    }
-    
-    public void JJCompany.setCalendar(String calendar) {
-        this.calendar = calendar;
-    }
-    
-    public String JJCompany.getPreference() {
-        return this.preference;
-    }
-    
-    public void JJCompany.setPreference(String preference) {
-        this.preference = preference;
-    }
-    
-    public Integer JJCompany.getPriceload() {
-        return this.priceload;
-    }
-    
-    public void JJCompany.setPriceload(Integer priceload) {
-        this.priceload = priceload;
-    }
-    
-    public Integer JJCompany.getPricepoint() {
-        return this.pricepoint;
-    }
-    
-    public void JJCompany.setPricepoint(Integer pricepoint) {
-        this.pricepoint = pricepoint;
-    }
-    
-    public String JJCompany.getCurrency() {
-        return this.currency;
-    }
-    
-    public void JJCompany.setCurrency(String currency) {
-        this.currency = currency;
-    }
-    
-    public Set<JJContact> JJCompany.getContacts() {
-        return this.contacts;
-    }
-    
-    public void JJCompany.setContacts(Set<JJContact> contacts) {
-        this.contacts = contacts;
-    }
-    
+privileged aspect JJCompany_Roo_JavaBean{
+
+public String JJCompany.getName(){return this.name;}
+
+public void JJCompany.setName(String name){this.name=name;}
+
+public String JJCompany.getDescription(){return this.description;}
+
+public void JJCompany.setDescription(String description){this.description=description;}
+
+public Date JJCompany.getCreationDate(){return this.creationDate;}
+
+public void JJCompany.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJCompany.getCreatedBy(){return this.createdBy;}
+
+public void JJCompany.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJCompany.getUpdatedDate(){return this.updatedDate;}
+
+public void JJCompany.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJCompany.getUpdatedBy(){return this.updatedBy;}
+
+public void JJCompany.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJCompany.getEnabled(){return this.enabled;}
+
+public void JJCompany.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public byte[]JJCompany.getLogo(){return this.logo;}
+
+public void JJCompany.setLogo(byte[]logo){this.logo=logo;}
+
+public String JJCompany.getBanner(){return this.banner;}
+
+public void JJCompany.setBanner(String banner){this.banner=banner;}
+
+public String JJCompany.getCalendar(){return this.calendar;}
+
+public void JJCompany.setCalendar(String calendar){this.calendar=calendar;}
+
+public String JJCompany.getPreference(){return this.preference;}
+
+public void JJCompany.setPreference(String preference){this.preference=preference;}
+
+public Integer JJCompany.getPriceload(){return this.priceload;}
+
+public void JJCompany.setPriceload(Integer priceload){this.priceload=priceload;}
+
+public Integer JJCompany.getPricepoint(){return this.pricepoint;}
+
+public void JJCompany.setPricepoint(Integer pricepoint){this.pricepoint=pricepoint;}
+
+public String JJCompany.getCurrency(){return this.currency;}
+
+public void JJCompany.setCurrency(String currency){this.currency=currency;}
+
+public Set<JJContact>JJCompany.getContacts(){return this.contacts;}
+
+public void JJCompany.setContacts(Set<JJContact>contacts){this.contacts=contacts;}
+
 }

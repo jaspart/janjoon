@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import java.util.List;
 
-privileged aspect JJContactService_Roo_Service {
-    
-    public abstract long JJContactService.countAllJJContacts();    
-    public abstract void JJContactService.deleteJJContact(JJContact JJContact_);    
-    public abstract JJContact JJContactService.findJJContact(Long id);    
-    public abstract List<JJContact> JJContactService.findAllJJContacts();    
-    public abstract List<JJContact> JJContactService.findJJContactEntries(int firstResult, int maxResults);    
-    public abstract void JJContactService.saveJJContact(JJContact JJContact_);    
-    public abstract JJContact JJContactService.updateJJContact(JJContact JJContact_);    
-}
+privileged aspect JJContactService_Roo_Service{
+
+public abstract long JJContactService.countAllJJContacts();public abstract void JJContactService.deleteJJContact(JJContact JJContact_);public abstract JJContact JJContactService.findJJContact(Long id);public abstract List<JJContact>JJContactService.findAllJJContacts();public abstract List<JJContact>JJContactService.findJJContactEntries(int firstResult,int maxResults);public abstract void JJContactService.saveJJContact(JJContact JJContact_);public abstract JJContact JJContactService.updateJJContact(JJContact JJContact_);}

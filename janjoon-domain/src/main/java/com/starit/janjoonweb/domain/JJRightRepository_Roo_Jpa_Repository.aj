@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJRightRepository_Roo_Jpa_Repository {
-    
-    declare parents: JJRightRepository extends JpaRepository<JJRight, Long>;
-    
-    declare parents: JJRightRepository extends JpaSpecificationExecutor<JJRight>;
-    
-    declare @type: JJRightRepository: @Repository;
-    
+privileged aspect JJRightRepository_Roo_Jpa_Repository{
+
+declare parents:JJRightRepository extends JpaRepository<JJRight,Long>;
+
+declare parents:JJRightRepository extends JpaSpecificationExecutor<JJRight>;
+
+declare @type:JJRightRepository:@Repository;
+
 }

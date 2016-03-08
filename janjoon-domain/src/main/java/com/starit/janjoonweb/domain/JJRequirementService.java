@@ -24,7 +24,8 @@ public interface JJRequirementService {
 	public boolean haveTestcase(JJRequirement requirement);
 
 	public List<JJRequirement> getRequirements(JJCompany company,
-			Map<JJProject, JJProduct> map, JJVersion version,JJCategory category);
+			Map<JJProject, JJProduct> map, JJVersion version,
+			JJCategory category);
 
 	public List<JJRequirement> getRequirementChildrenWithChapterSortedByOrder(
 			JJCompany company, JJChapter chapter, JJProduct product,
@@ -42,9 +43,10 @@ public interface JJRequirementService {
 	// company,Map<JJProject, JJProduct> map,JJVersion version);
 
 	public Long getReqCount(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,JJCategory category,JJStatus state,JJContact createdBy,
+			JJProduct product, JJVersion version, JJStatus status,
+			JJCategory category, JJStatus state, JJContact createdBy,
 			boolean onlyActif);
-	
+
 	public List<JJContact> getReqContacts(JJCompany company,
 			Map<JJProject, JJProduct> map, JJVersion version);
 

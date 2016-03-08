@@ -118,8 +118,8 @@ public class JJProfileServiceImpl implements JJProfileService {
 			predicates
 					.add(criteriaBuilder.or(
 							criteriaBuilder.like(
-									criteriaBuilder
-											.upper(from.<String> get("name")),
+									criteriaBuilder.upper(from.<String> get(
+											"name")),
 									"%" + filters.get("globalFilter") + "%"),
 							criteriaBuilder.like(
 									new StrFunction<Long>(criteriaBuilder,
@@ -136,11 +136,10 @@ public class JJProfileServiceImpl implements JJProfileService {
 								criteriaBuilder.equal(
 										criteriaBuilder.lower(fromRight
 												.<String> get("objet")),
-								objectComponent.toLowerCase()),
-						criteriaBuilder.equal(
-								criteriaBuilder
+										objectComponent.toLowerCase()),
+								criteriaBuilder.equal(criteriaBuilder
 										.lower(fromRight.<String> get("objet")),
-								"*".toLowerCase())));
+										"*".toLowerCase())));
 
 			if (rComponent != null)
 				allpredicates.add(

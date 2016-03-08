@@ -41,18 +41,17 @@ public class JJImportanceServiceImpl implements JJImportanceService {
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));		
-		
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
 		if (object != null) {
 
 			List<Predicate> orPredicates = new ArrayList<Predicate>();
 			orPredicates.add(criteriaBuilder.equal(
 					criteriaBuilder.lower(from.<String> get("objet")),
 					object.toLowerCase()));
-			orPredicates.add(
-					criteriaBuilder.equal(
-							criteriaBuilder.lower(from.<String> get("objet")),
-							"jj"+object.toLowerCase()));			
+			orPredicates.add(criteriaBuilder.equal(
+					criteriaBuilder.lower(from.<String> get("objet")),
+					"jj" + object.toLowerCase()));
 			Predicate orPredicate = criteriaBuilder
 					.or(orPredicates.toArray(new Predicate[]{}));
 

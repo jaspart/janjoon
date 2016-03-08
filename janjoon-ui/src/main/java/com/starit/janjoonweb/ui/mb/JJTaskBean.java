@@ -131,7 +131,6 @@ public class JJTaskBean {
 	private long zoomMin;
 	private long zoomMax;
 	private String sortMode;
-	// private List<JJContact> contacts;
 
 	private JJProject project;
 	private JJProduct product;
@@ -160,8 +159,8 @@ public class JJTaskBean {
 	private List<ImportFormat> importFormats;
 	private List<ImportFormat> selectedImportFormat;
 
-	// private boolean copyObjets;
-	// private boolean oldCopyObjects;
+	private List<JJStatus> taskStatus;
+	private List<JJStatus> taskTypeStatus;
 
 	public String getSortMode() {
 		return sortMode;
@@ -341,6 +340,27 @@ public class JJTaskBean {
 
 	public void setSprints(List<JJSprint> sprints) {
 		this.sprints = sprints;
+	}
+
+	public List<JJStatus> getTaskTypeStatus() {
+		if (taskTypeStatus == null)
+			taskTypeStatus = jJStatusService.getStatus("TaskType", true, null,
+					true);
+		return taskTypeStatus;
+	}
+
+	public void setTaskTypeStatus(List<JJStatus> taskTypeStatus) {
+		this.taskTypeStatus = taskTypeStatus;
+	}
+
+	public List<JJStatus> getTaskStatus() {
+		if (taskStatus == null)
+			taskStatus = jJStatusService.getStatus("Task", true, null, true);
+		return taskStatus;
+	}
+
+	public void setTaskStatus(List<JJStatus> taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 
 	public boolean getDisabledImportButton() {
@@ -697,7 +717,7 @@ public class JJTaskBean {
 					.setTask(task);
 			((DevelopmentBean) LoginBean.findBean("jJDevelopment")).setTasks(
 					jJTaskService.getTasksByProduct(LoginBean.getProduct(),
-							LoginBean.getProject()));
+							LoginBean.getProject(), true));
 		} else if (!validation_error
 				&& operation.equalsIgnoreCase("planning")) {
 			RequestContext.getCurrentInstance().update("projecttabview");
@@ -858,43 +878,15 @@ public class JJTaskBean {
 	}
 
 	public void closeEvent(String operation) {
-		// System.err.println("dfgdfgdfg");
-		// //Long id = null;
-		// if (task.getSprint() != null)
-		// id = task.getSprint().getId();
-		//
-		// task = null;
-
-		// if (mode != null && mode.equalsIgnoreCase("scrum")
-		// && operation.equalsIgnoreCase("planning")) {
-		// HttpSession session = (HttpSession) FacesContext
-		// .getCurrentInstance().getExternalContext()
-		// .getSession(false);
-		// JJSprintBean jJSprintBean = (JJSprintBean) session
-		// .getAttribute("jJSprintBean");
-		// RequestContext context = RequestContext.getCurrentInstance();
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
-		//
-		// context.execute("PF('projectTabView').select(" + i + ")");
-		// jJSprintBean.setUpdate(false);
-		// if (id != null)
-		// context.execute("PF('SprintTab').select("
-		// + jJSprintBean.contains(id) + ")");
-		// } else {
 		if (operation.equalsIgnoreCase("main"))
 			toDoTasks = null;
-		// }
+
 	}
 
 	public List<JJStatus> completeStatusTask(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("Task", true, null,
-				true)) {
+		for (JJStatus jJStatus : getTaskStatus()) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJStatus);
@@ -906,8 +898,7 @@ public class JJTaskBean {
 	public List<JJStatus> completeTaskType(String query) {
 		List<JJStatus> suggestions = new ArrayList<JJStatus>();
 		suggestions.add(null);
-		for (JJStatus jJStatus : jJStatusService.getStatus("TaskType", true,
-				null, true)) {
+		for (JJStatus jJStatus : getTaskTypeStatus()) {
 			String jJCriticityStr = String.valueOf(jJStatus.getName());
 			if (jJCriticityStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJStatus);
@@ -1039,16 +1030,17 @@ public class JJTaskBean {
 
 				List<JJTask> tasks = new ArrayList<JJTask>();
 				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null, null,
-						null, null, true, true, false, "Requirement"));
+						LoginBean.getProduct(), null, null, null, chapter, true,
+						null, null, null, null, true, true, false,
+						"Requirement"));
 
 				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null, null,
-						null, null, true, true, false, "Testcase"));
+						LoginBean.getProduct(), null, null, null, chapter, true,
+						null, null, null, null, true, true, false, "Testcase"));
 
 				tasks.addAll(jJTaskService.getTasks(sprint, null,
-						LoginBean.getProduct(), null, chapter, true, null, null,
-						null, null, true, true, false, "Bug"));
+						LoginBean.getProduct(), null, null, null, chapter, true,
+						null, null, null, null, true, true, false, "Bug"));
 
 				TreeMap<String, JJTask> Tasks = new TreeMap<String, JJTask>();
 
@@ -1256,14 +1248,14 @@ public class JJTaskBean {
 	public void loadSortedData(List<JJTask> allTasks, int k) {
 
 		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				null, true, false, false, "requirement"));
+				LoginBean.getProduct(), null, null, null, null, true, null,
+				null, null, null, true, false, false, "requirement"));
 		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				null, true, false, false, "bug"));
+				LoginBean.getProduct(), null, null, null, null, true, null,
+				null, null, null, true, false, false, "bug"));
 		allTasks.addAll(jJTaskService.getTasks(sprint, project,
-				LoginBean.getProduct(), null, null, true, null, null, null,
-				null, true, false, false, "Testcase"));
+				LoginBean.getProduct(), null, null, null, null, true, null,
+				null, null, null, true, false, false, "Testcase"));
 
 		Collections.sort(allTasks, new Comparator<JJTask>() {
 
@@ -2248,6 +2240,7 @@ public class JJTaskBean {
 				.findBean("jJStatusBean");
 		if (jJStatusBean != null) {
 			jJStatusBean.setKpiLineModel(null);
+			jJStatusBean.setKpiBarModel(null);
 		}
 
 	}
@@ -2395,16 +2388,16 @@ public class JJTaskBean {
 			}
 			List<JJTask> list = new ArrayList<JJTask>();
 			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, null, true, false, false, "Requirement"));
+					LoginBean.getProduct(), null, null, null, chapter, true,
+					null, null, null, null, true, false, false, "Requirement"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, null, true, false, false, "Testcase"));
+					LoginBean.getProduct(), null, null, null, chapter, true,
+					null, null, null, null, true, false, false, "Testcase"));
 
 			list.addAll(jJTaskService.getTasks(sprint, null,
-					LoginBean.getProduct(), null, chapter, true, null, null,
-					null, null, true, false, false, "Bug"));
+					LoginBean.getProduct(), null, null, null, chapter, true,
+					null, null, null, null, true, false, false, "Bug"));
 
 			list.remove(task);
 

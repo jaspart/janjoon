@@ -271,7 +271,7 @@ public class DevelopmentBean implements Serializable {
 				DevelopmentBean jJDevelopment = (DevelopmentBean) session
 						.getAttribute("jJDevelopment");
 				jJDevelopment.setTasks(jJTaskService.getTasksByProduct(
-						LoginBean.getProduct(), LoginBean.getProject()));
+						LoginBean.getProduct(), LoginBean.getProject(), true));
 				jJDevelopment.setTask(null);
 			}
 			if (!render) {
@@ -455,7 +455,7 @@ public class DevelopmentBean implements Serializable {
 	public List<JJTask> getTasks() {
 
 		if (task == null) {
-			tasks = jJTaskService.getTasksByProduct(product, project);
+			tasks = jJTaskService.getTasksByProduct(product, project, true);
 			task = null;
 		}
 

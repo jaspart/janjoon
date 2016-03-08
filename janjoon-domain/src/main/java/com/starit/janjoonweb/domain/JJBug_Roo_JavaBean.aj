@@ -21,198 +21,102 @@ import com.starit.janjoonweb.domain.reference.JJRelationship;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJBug_Roo_JavaBean {
-    
-    public String JJBug.getName() {
-        return this.name;
-    }
-    
-    public void JJBug.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJBug.getDescription() {
-        return this.description;
-    }
-    
-    public void JJBug.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJBug.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJBug.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJBug.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJBug.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJBug.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJBug.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJBug.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJBug.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJBug.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJBug.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJProject JJBug.getProject() {
-        return this.project;
-    }
-    
-    public void JJBug.setProject(JJProject project) {
-        this.project = project;
-    }
-    
-    public JJVersion JJBug.getVersioning() {
-        return this.versioning;
-    }
-    
-    public void JJBug.setVersioning(JJVersion versioning) {
-        this.versioning = versioning;
-    }
-    
-    public JJCategory JJBug.getCategory() {
-        return this.category;
-    }
-    
-    public void JJBug.setCategory(JJCategory category) {
-        this.category = category;
-    }
-    
-    public JJCriticity JJBug.getCriticity() {
-        return this.criticity;
-    }
-    
-    public void JJBug.setCriticity(JJCriticity criticity) {
-        this.criticity = criticity;
-    }
-    
-    public JJImportance JJBug.getImportance() {
-        return this.importance;
-    }
-    
-    public void JJBug.setImportance(JJImportance importance) {
-        this.importance = importance;
-    }
-    
-    public JJStatus JJBug.getStatus() {
-        return this.status;
-    }
-    
-    public void JJBug.setStatus(JJStatus status) {
-        this.status = status;
-    }
-    
-    public JJRequirement JJBug.getRequirement() {
-        return this.requirement;
-    }
-    
-    public void JJBug.setRequirement(JJRequirement requirement) {
-        this.requirement = requirement;
-    }
-    
-    public JJTeststep JJBug.getTeststep() {
-        return this.teststep;
-    }
-    
-    public void JJBug.setTeststep(JJTeststep teststep) {
-        this.teststep = teststep;
-    }
-    
-    public JJRelationship JJBug.getRelation() {
-        return this.relation;
-    }
-    
-    public void JJBug.setRelation(JJRelationship relation) {
-        this.relation = relation;
-    }
-    
-    public JJSprint JJBug.getSprint() {
-        return this.sprint;
-    }
-    
-    public void JJBug.setSprint(JJSprint sprint) {
-        this.sprint = sprint;
-    }
-    
-    public JJBuild JJBug.getBuild() {
-        return this.build;
-    }
-    
-    public void JJBug.setBuild(JJBuild build) {
-        this.build = build;
-    }
-    
-    public Set<JJBug> JJBug.getBugs() {
-        return this.bugs;
-    }
-    
-    public void JJBug.setBugs(Set<JJBug> bugs) {
-        this.bugs = bugs;
-    }
-    
-    public JJBug JJBug.getBugUp() {
-        return this.bugUp;
-    }
-    
-    public void JJBug.setBugUp(JJBug bugUp) {
-        this.bugUp = bugUp;
-    }
-    
-    public Set<JJTask> JJBug.getTasks() {
-        return this.tasks;
-    }
-    
-    public void JJBug.setTasks(Set<JJTask> tasks) {
-        this.tasks = tasks;
-    }
-    
-    public Set<JJContact> JJBug.getContacts() {
-        return this.contacts;
-    }
-    
-    public void JJBug.setContacts(Set<JJContact> contacts) {
-        this.contacts = contacts;
-    }
-    
-    public JJContact JJBug.getAssignedTos() {
-        return this.assignedTos;
-    }
-    
-    public void JJBug.setAssignedTos(JJContact assignedTos) {
-        this.assignedTos = assignedTos;
-    }
-    
-    public Set<JJMessage> JJBug.getMessages() {
-        return this.messages;
-    }
-    
-    public void JJBug.setMessages(Set<JJMessage> messages) {
-        this.messages = messages;
-    }
-    
+privileged aspect JJBug_Roo_JavaBean{
+
+public String JJBug.getName(){return this.name;}
+
+public void JJBug.setName(String name){this.name=name;}
+
+public String JJBug.getDescription(){return this.description;}
+
+public void JJBug.setDescription(String description){this.description=description;}
+
+public Date JJBug.getCreationDate(){return this.creationDate;}
+
+public void JJBug.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJBug.getCreatedBy(){return this.createdBy;}
+
+public void JJBug.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJBug.getUpdatedDate(){return this.updatedDate;}
+
+public void JJBug.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJBug.getUpdatedBy(){return this.updatedBy;}
+
+public void JJBug.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJBug.getEnabled(){return this.enabled;}
+
+public void JJBug.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJProject JJBug.getProject(){return this.project;}
+
+public void JJBug.setProject(JJProject project){this.project=project;}
+
+public JJVersion JJBug.getVersioning(){return this.versioning;}
+
+public void JJBug.setVersioning(JJVersion versioning){this.versioning=versioning;}
+
+public JJCategory JJBug.getCategory(){return this.category;}
+
+public void JJBug.setCategory(JJCategory category){this.category=category;}
+
+public JJCriticity JJBug.getCriticity(){return this.criticity;}
+
+public void JJBug.setCriticity(JJCriticity criticity){this.criticity=criticity;}
+
+public JJImportance JJBug.getImportance(){return this.importance;}
+
+public void JJBug.setImportance(JJImportance importance){this.importance=importance;}
+
+public JJStatus JJBug.getStatus(){return this.status;}
+
+public void JJBug.setStatus(JJStatus status){this.status=status;}
+
+public JJRequirement JJBug.getRequirement(){return this.requirement;}
+
+public void JJBug.setRequirement(JJRequirement requirement){this.requirement=requirement;}
+
+public JJTeststep JJBug.getTeststep(){return this.teststep;}
+
+public void JJBug.setTeststep(JJTeststep teststep){this.teststep=teststep;}
+
+public JJRelationship JJBug.getRelation(){return this.relation;}
+
+public void JJBug.setRelation(JJRelationship relation){this.relation=relation;}
+
+public JJSprint JJBug.getSprint(){return this.sprint;}
+
+public void JJBug.setSprint(JJSprint sprint){this.sprint=sprint;}
+
+public JJBuild JJBug.getBuild(){return this.build;}
+
+public void JJBug.setBuild(JJBuild build){this.build=build;}
+
+public Set<JJBug>JJBug.getBugs(){return this.bugs;}
+
+public void JJBug.setBugs(Set<JJBug>bugs){this.bugs=bugs;}
+
+public JJBug JJBug.getBugUp(){return this.bugUp;}
+
+public void JJBug.setBugUp(JJBug bugUp){this.bugUp=bugUp;}
+
+public Set<JJTask>JJBug.getTasks(){return this.tasks;}
+
+public void JJBug.setTasks(Set<JJTask>tasks){this.tasks=tasks;}
+
+public Set<JJContact>JJBug.getContacts(){return this.contacts;}
+
+public void JJBug.setContacts(Set<JJContact>contacts){this.contacts=contacts;}
+
+public JJContact JJBug.getAssignedTos(){return this.assignedTos;}
+
+public void JJBug.setAssignedTos(JJContact assignedTos){this.assignedTos=assignedTos;}
+
+public Set<JJMessage>JJBug.getMessages(){return this.messages;}
+
+public void JJBug.setMessages(Set<JJMessage>messages){this.messages=messages;}
+
 }

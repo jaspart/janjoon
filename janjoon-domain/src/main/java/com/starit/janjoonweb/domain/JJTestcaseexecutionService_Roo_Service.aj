@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJTestcaseexecution;
 import com.starit.janjoonweb.domain.JJTestcaseexecutionService;
 import java.util.List;
 
-privileged aspect JJTestcaseexecutionService_Roo_Service {
-    
-    public abstract long JJTestcaseexecutionService.countAllJJTestcaseexecutions();    
-    public abstract void JJTestcaseexecutionService.deleteJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);    
-    public abstract JJTestcaseexecution JJTestcaseexecutionService.findJJTestcaseexecution(Long id);    
-    public abstract List<JJTestcaseexecution> JJTestcaseexecutionService.findAllJJTestcaseexecutions();    
-    public abstract List<JJTestcaseexecution> JJTestcaseexecutionService.findJJTestcaseexecutionEntries(int firstResult, int maxResults);    
-    public abstract void JJTestcaseexecutionService.saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);    
-    public abstract JJTestcaseexecution JJTestcaseexecutionService.updateJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);    
-}
+privileged aspect JJTestcaseexecutionService_Roo_Service{
+
+public abstract long JJTestcaseexecutionService.countAllJJTestcaseexecutions();public abstract void JJTestcaseexecutionService.deleteJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);public abstract JJTestcaseexecution JJTestcaseexecutionService.findJJTestcaseexecution(Long id);public abstract List<JJTestcaseexecution>JJTestcaseexecutionService.findAllJJTestcaseexecutions();public abstract List<JJTestcaseexecution>JJTestcaseexecutionService.findJJTestcaseexecutionEntries(int firstResult,int maxResults);public abstract void JJTestcaseexecutionService.saveJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);public abstract JJTestcaseexecution JJTestcaseexecutionService.updateJJTestcaseexecution(JJTestcaseexecution JJTestcaseexecution_);}
