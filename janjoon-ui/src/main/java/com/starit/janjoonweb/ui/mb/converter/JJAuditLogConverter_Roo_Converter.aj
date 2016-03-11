@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJAuditLogConverter_Roo_Converter{
-
-declare parents:JJAuditLogConverter implements Converter;
-
-declare @type:JJAuditLogConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJAuditLogConverter");
-
-@Autowired JJAuditLogService JJAuditLogConverter.jJAuditLogService;
-
-public Object JJAuditLogConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJAuditLogService.findJJAuditLog(id);}
-
+privileged aspect JJAuditLogConverter_Roo_Converter {
+    
+    declare parents: JJAuditLogConverter implements Converter;
+    
+    declare @type: JJAuditLogConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJAuditLogConverter");
+    
+    @Autowired
+    JJAuditLogService JJAuditLogConverter.jJAuditLogService;
+    
+    public Object JJAuditLogConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJAuditLogService.findJJAuditLog(id);
+    }
+    
 }

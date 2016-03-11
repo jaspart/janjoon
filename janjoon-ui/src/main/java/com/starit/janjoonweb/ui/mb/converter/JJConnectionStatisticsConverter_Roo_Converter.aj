@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJConnectionStatisticsConverter_Roo_Converter{
-
-declare parents:JJConnectionStatisticsConverter implements Converter;
-
-declare @type:JJConnectionStatisticsConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJConnectionStatisticsConverter");
-
-@Autowired JJConnectionStatisticsService JJConnectionStatisticsConverter.jJConnectionStatisticsService;
-
-public Object JJConnectionStatisticsConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJConnectionStatisticsService.findJJConnectionStatistics(id);}
-
+privileged aspect JJConnectionStatisticsConverter_Roo_Converter {
+    
+    declare parents: JJConnectionStatisticsConverter implements Converter;
+    
+    declare @type: JJConnectionStatisticsConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJConnectionStatisticsConverter");
+    
+    @Autowired
+    JJConnectionStatisticsService JJConnectionStatisticsConverter.jJConnectionStatisticsService;
+    
+    public Object JJConnectionStatisticsConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJConnectionStatisticsService.findJJConnectionStatistics(id);
+    }
+    
 }

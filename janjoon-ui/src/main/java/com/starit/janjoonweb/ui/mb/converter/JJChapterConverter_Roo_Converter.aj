@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJChapterConverter_Roo_Converter{
-
-declare parents:JJChapterConverter implements Converter;
-
-declare @type:JJChapterConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJChapterConverter");
-
-@Autowired JJChapterService JJChapterConverter.jJChapterService;
-
-public Object JJChapterConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJChapterService.findJJChapter(id);}
-
+privileged aspect JJChapterConverter_Roo_Converter {
+    
+    declare parents: JJChapterConverter implements Converter;
+    
+    declare @type: JJChapterConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJChapterConverter");
+    
+    @Autowired
+    JJChapterService JJChapterConverter.jJChapterService;
+    
+    public Object JJChapterConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJChapterService.findJJChapter(id);
+    }
+    
 }

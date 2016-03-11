@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJVersion;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJVersion_Roo_ToString{
-
-public String JJVersion.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJVersion_Roo_ToString {
+    
+    public String JJVersion.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

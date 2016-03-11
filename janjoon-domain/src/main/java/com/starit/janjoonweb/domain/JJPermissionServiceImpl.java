@@ -39,18 +39,22 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 
 		if (!onlyContact) {
 
-			predicates.add(criteriaBuilder.equal(from.get("profile"), profile));
+			if (profile != null)
+				predicates.add(
+						criteriaBuilder.equal(from.get("profile"), profile));
 
 			if (project != null) {
-				predicates.add(
-						criteriaBuilder.equal(from.get("project"), project));
+				predicates.add(criteriaBuilder.or(
+						criteriaBuilder.equal(from.get("project"), project),
+						criteriaBuilder.isNull(from.get("project"))));
 			} else {
 				predicates.add(criteriaBuilder.isNull(from.get("project")));
 			}
 
 			if (product != null) {
-				predicates.add(
-						criteriaBuilder.equal(from.get("product"), product));
+				predicates.add(criteriaBuilder.or(
+						criteriaBuilder.equal(from.get("product"), product),
+						criteriaBuilder.isNull(from.get("product"))));
 			} else {
 				predicates.add(criteriaBuilder.isNull(from.get("product")));
 			}

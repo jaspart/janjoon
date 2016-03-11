@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJCategoryConverter_Roo_Converter{
-
-declare parents:JJCategoryConverter implements Converter;
-
-declare @type:JJCategoryConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter");
-
-@Autowired JJCategoryService JJCategoryConverter.jJCategoryService;
-
-public Object JJCategoryConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJCategoryService.findJJCategory(id);}
-
+privileged aspect JJCategoryConverter_Roo_Converter {
+    
+    declare parents: JJCategoryConverter implements Converter;
+    
+    declare @type: JJCategoryConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter");
+    
+    @Autowired
+    JJCategoryService JJCategoryConverter.jJCategoryService;
+    
+    public Object JJCategoryConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJCategoryService.findJJCategory(id);
+    }
+    
 }

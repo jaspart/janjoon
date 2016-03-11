@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJConnectionStatistics;
 import com.starit.janjoonweb.domain.JJConnectionStatisticsService;
 import java.util.List;
 
-privileged aspect JJConnectionStatisticsService_Roo_Service{
-
-public abstract long JJConnectionStatisticsService.countAllJJConnectionStatisticses();public abstract void JJConnectionStatisticsService.deleteJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);public abstract JJConnectionStatistics JJConnectionStatisticsService.findJJConnectionStatistics(Long id);public abstract List<JJConnectionStatistics>JJConnectionStatisticsService.findAllJJConnectionStatisticses();public abstract List<JJConnectionStatistics>JJConnectionStatisticsService.findJJConnectionStatisticsEntries(int firstResult,int maxResults);public abstract void JJConnectionStatisticsService.saveJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);public abstract JJConnectionStatistics JJConnectionStatisticsService.updateJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);}
+privileged aspect JJConnectionStatisticsService_Roo_Service {
+    
+    public abstract long JJConnectionStatisticsService.countAllJJConnectionStatisticses();    
+    public abstract void JJConnectionStatisticsService.deleteJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);    
+    public abstract JJConnectionStatistics JJConnectionStatisticsService.findJJConnectionStatistics(Long id);    
+    public abstract List<JJConnectionStatistics> JJConnectionStatisticsService.findAllJJConnectionStatisticses();    
+    public abstract List<JJConnectionStatistics> JJConnectionStatisticsService.findJJConnectionStatisticsEntries(int firstResult, int maxResults);    
+    public abstract void JJConnectionStatisticsService.saveJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);    
+    public abstract JJConnectionStatistics JJConnectionStatisticsService.updateJJConnectionStatistics(JJConnectionStatistics JJConnectionStatistics_);    
+}

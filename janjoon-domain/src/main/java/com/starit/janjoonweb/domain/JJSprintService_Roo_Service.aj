@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import java.util.List;
 
-privileged aspect JJSprintService_Roo_Service{
-
-public abstract long JJSprintService.countAllJJSprints();public abstract void JJSprintService.deleteJJSprint(JJSprint JJSprint_);public abstract JJSprint JJSprintService.findJJSprint(Long id);public abstract List<JJSprint>JJSprintService.findAllJJSprints();public abstract List<JJSprint>JJSprintService.findJJSprintEntries(int firstResult,int maxResults);public abstract void JJSprintService.saveJJSprint(JJSprint JJSprint_);public abstract JJSprint JJSprintService.updateJJSprint(JJSprint JJSprint_);}
+privileged aspect JJSprintService_Roo_Service {
+    
+    public abstract long JJSprintService.countAllJJSprints();    
+    public abstract void JJSprintService.deleteJJSprint(JJSprint JJSprint_);    
+    public abstract JJSprint JJSprintService.findJJSprint(Long id);    
+    public abstract List<JJSprint> JJSprintService.findAllJJSprints();    
+    public abstract List<JJSprint> JJSprintService.findJJSprintEntries(int firstResult, int maxResults);    
+    public abstract void JJSprintService.saveJJSprint(JJSprint JJSprint_);    
+    public abstract JJSprint JJSprintService.updateJJSprint(JJSprint JJSprint_);    
+}

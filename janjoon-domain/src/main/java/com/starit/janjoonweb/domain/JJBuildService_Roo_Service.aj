@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJBuildService;
 import java.util.List;
 
-privileged aspect JJBuildService_Roo_Service{
-
-public abstract long JJBuildService.countAllJJBuilds();public abstract void JJBuildService.deleteJJBuild(JJBuild JJBuild_);public abstract JJBuild JJBuildService.findJJBuild(Long id);public abstract List<JJBuild>JJBuildService.findAllJJBuilds();public abstract List<JJBuild>JJBuildService.findJJBuildEntries(int firstResult,int maxResults);public abstract void JJBuildService.saveJJBuild(JJBuild JJBuild_);public abstract JJBuild JJBuildService.updateJJBuild(JJBuild JJBuild_);}
+privileged aspect JJBuildService_Roo_Service {
+    
+    public abstract long JJBuildService.countAllJJBuilds();    
+    public abstract void JJBuildService.deleteJJBuild(JJBuild JJBuild_);    
+    public abstract JJBuild JJBuildService.findJJBuild(Long id);    
+    public abstract List<JJBuild> JJBuildService.findAllJJBuilds();    
+    public abstract List<JJBuild> JJBuildService.findJJBuildEntries(int firstResult, int maxResults);    
+    public abstract void JJBuildService.saveJJBuild(JJBuild JJBuild_);    
+    public abstract JJBuild JJBuildService.updateJJBuild(JJBuild JJBuild_);    
+}

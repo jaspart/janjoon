@@ -7,26 +7,46 @@ import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJContact;
 import java.util.Date;
 
-privileged aspect JJAuditLog_Roo_JavaBean{
-
-public Date JJAuditLog.getAuditLogDate(){return this.auditLogDate;}
-
-public void JJAuditLog.setAuditLogDate(Date auditLogDate){this.auditLogDate=auditLogDate;}
-
-public JJContact JJAuditLog.getContact(){return this.contact;}
-
-public void JJAuditLog.setContact(JJContact contact){this.contact=contact;}
-
-public String JJAuditLog.getObjet(){return this.objet;}
-
-public void JJAuditLog.setObjet(String objet){this.objet=objet;}
-
-public String JJAuditLog.getKeyName(){return this.keyName;}
-
-public void JJAuditLog.setKeyName(String keyName){this.keyName=keyName;}
-
-public String JJAuditLog.getKeyValue(){return this.keyValue;}
-
-public void JJAuditLog.setKeyValue(String keyValue){this.keyValue=keyValue;}
-
+privileged aspect JJAuditLog_Roo_JavaBean {
+    
+    public Date JJAuditLog.getAuditLogDate() {
+        return this.auditLogDate;
+    }
+    
+    public void JJAuditLog.setAuditLogDate(Date auditLogDate) {
+        this.auditLogDate = auditLogDate;
+    }
+    
+    public JJContact JJAuditLog.getContact() {
+        return this.contact;
+    }
+    
+    public void JJAuditLog.setContact(JJContact contact) {
+        this.contact = contact;
+    }
+    
+    public String JJAuditLog.getObjet() {
+        return this.objet;
+    }
+    
+    public void JJAuditLog.setObjet(String objet) {
+        this.objet = objet;
+    }
+    
+    public String JJAuditLog.getKeyName() {
+        return this.keyName;
+    }
+    
+    public void JJAuditLog.setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
+    
+    public String JJAuditLog.getKeyValue() {
+        return this.keyValue;
+    }
+    
+    public void JJAuditLog.setKeyValue(String keyValue) {
+        this.keyValue = keyValue;
+    }
+    
 }

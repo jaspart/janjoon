@@ -6,10 +6,10 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJTaskBean;
 import java.io.Serializable;
 
-privileged aspect JJTaskBean_Roo_Serializable{
-
-declare parents:JJTaskBean implements Serializable;
-
-private static final long JJTaskBean.serialVersionUID=1L;
-
+privileged aspect JJTaskBean_Roo_Serializable {
+    
+    declare parents: JJTaskBean implements Serializable;
+    
+    private static final long JJTaskBean.serialVersionUID = 1L;
+    
 }

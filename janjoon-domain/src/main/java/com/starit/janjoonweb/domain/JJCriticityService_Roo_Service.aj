@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
 import java.util.List;
 
-privileged aspect JJCriticityService_Roo_Service{
-
-public abstract long JJCriticityService.countAllJJCriticitys();public abstract void JJCriticityService.deleteJJCriticity(JJCriticity JJCriticity_);public abstract JJCriticity JJCriticityService.findJJCriticity(Long id);public abstract List<JJCriticity>JJCriticityService.findAllJJCriticitys();public abstract List<JJCriticity>JJCriticityService.findJJCriticityEntries(int firstResult,int maxResults);public abstract void JJCriticityService.saveJJCriticity(JJCriticity JJCriticity_);public abstract JJCriticity JJCriticityService.updateJJCriticity(JJCriticity JJCriticity_);}
+privileged aspect JJCriticityService_Roo_Service {
+    
+    public abstract long JJCriticityService.countAllJJCriticitys();    
+    public abstract void JJCriticityService.deleteJJCriticity(JJCriticity JJCriticity_);    
+    public abstract JJCriticity JJCriticityService.findJJCriticity(Long id);    
+    public abstract List<JJCriticity> JJCriticityService.findAllJJCriticitys();    
+    public abstract List<JJCriticity> JJCriticityService.findJJCriticityEntries(int firstResult, int maxResults);    
+    public abstract void JJCriticityService.saveJJCriticity(JJCriticity JJCriticity_);    
+    public abstract JJCriticity JJCriticityService.updateJJCriticity(JJCriticity JJCriticity_);    
+}

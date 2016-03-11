@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJTestcase_Roo_ToString{
-
-public String JJTestcase.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJTestcase_Roo_ToString {
+    
+    public String JJTestcase.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

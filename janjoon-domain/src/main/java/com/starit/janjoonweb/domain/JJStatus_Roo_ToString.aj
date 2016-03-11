@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJStatus;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJStatus_Roo_ToString{
-
-public String JJStatus.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJStatus_Roo_ToString {
+    
+    public String JJStatus.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

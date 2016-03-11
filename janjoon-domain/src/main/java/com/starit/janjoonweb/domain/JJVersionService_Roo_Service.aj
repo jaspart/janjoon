@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.domain.JJVersionService;
 import java.util.List;
 
-privileged aspect JJVersionService_Roo_Service{
-
-public abstract long JJVersionService.countAllJJVersions();public abstract void JJVersionService.deleteJJVersion(JJVersion JJVersion_);public abstract JJVersion JJVersionService.findJJVersion(Long id);public abstract List<JJVersion>JJVersionService.findAllJJVersions();public abstract List<JJVersion>JJVersionService.findJJVersionEntries(int firstResult,int maxResults);public abstract void JJVersionService.saveJJVersion(JJVersion JJVersion_);public abstract JJVersion JJVersionService.updateJJVersion(JJVersion JJVersion_);}
+privileged aspect JJVersionService_Roo_Service {
+    
+    public abstract long JJVersionService.countAllJJVersions();    
+    public abstract void JJVersionService.deleteJJVersion(JJVersion JJVersion_);    
+    public abstract JJVersion JJVersionService.findJJVersion(Long id);    
+    public abstract List<JJVersion> JJVersionService.findAllJJVersions();    
+    public abstract List<JJVersion> JJVersionService.findJJVersionEntries(int firstResult, int maxResults);    
+    public abstract void JJVersionService.saveJJVersion(JJVersion JJVersion_);    
+    public abstract JJVersion JJVersionService.updateJJVersion(JJVersion JJVersion_);    
+}

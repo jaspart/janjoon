@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJImputation;
 import com.starit.janjoonweb.domain.JJImputationService;
 import java.util.List;
 
-privileged aspect JJImputationService_Roo_Service{
-
-public abstract long JJImputationService.countAllJJImputations();public abstract void JJImputationService.deleteJJImputation(JJImputation JJImputation_);public abstract JJImputation JJImputationService.findJJImputation(Long id);public abstract List<JJImputation>JJImputationService.findAllJJImputations();public abstract List<JJImputation>JJImputationService.findJJImputationEntries(int firstResult,int maxResults);public abstract void JJImputationService.saveJJImputation(JJImputation JJImputation_);public abstract JJImputation JJImputationService.updateJJImputation(JJImputation JJImputation_);}
+privileged aspect JJImputationService_Roo_Service {
+    
+    public abstract long JJImputationService.countAllJJImputations();    
+    public abstract void JJImputationService.deleteJJImputation(JJImputation JJImputation_);    
+    public abstract JJImputation JJImputationService.findJJImputation(Long id);    
+    public abstract List<JJImputation> JJImputationService.findAllJJImputations();    
+    public abstract List<JJImputation> JJImputationService.findJJImputationEntries(int firstResult, int maxResults);    
+    public abstract void JJImputationService.saveJJImputation(JJImputation JJImputation_);    
+    public abstract JJImputation JJImputationService.updateJJImputation(JJImputation JJImputation_);    
+}

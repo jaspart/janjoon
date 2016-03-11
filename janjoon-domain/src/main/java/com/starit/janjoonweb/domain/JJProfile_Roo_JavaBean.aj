@@ -7,18 +7,30 @@ import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
 import java.util.Set;
 
-privileged aspect JJProfile_Roo_JavaBean{
-
-public String JJProfile.getName(){return this.name;}
-
-public void JJProfile.setName(String name){this.name=name;}
-
-public Boolean JJProfile.getEnabled(){return this.enabled;}
-
-public void JJProfile.setEnabled(Boolean enabled){this.enabled=enabled;}
-
-public Set<JJRight>JJProfile.getRights(){return this.rights;}
-
-public void JJProfile.setRights(Set<JJRight>rights){this.rights=rights;}
-
+privileged aspect JJProfile_Roo_JavaBean {
+    
+    public String JJProfile.getName() {
+        return this.name;
+    }
+    
+    public void JJProfile.setName(String name) {
+        this.name = name;
+    }
+    
+    public Boolean JJProfile.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJProfile.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public Set<JJRight> JJProfile.getRights() {
+        return this.rights;
+    }
+    
+    public void JJProfile.setRights(Set<JJRight> rights) {
+        this.rights = rights;
+    }
+    
 }

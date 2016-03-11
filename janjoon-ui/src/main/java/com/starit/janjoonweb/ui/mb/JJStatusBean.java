@@ -908,11 +908,8 @@ public class JJStatusBean {
 
 		if (project == null) {
 			getProject();
-
-			// if (project != null) {}
-
 		}
-		// else if (categoryDataModel == null) {}
+		
 	}
 
 	public void deleteStatus() {
@@ -1071,8 +1068,8 @@ public class JJStatusBean {
 		Axis xAxis = model.getAxis(AxisType.X);
 		xAxis.setLabel("Contact");
 
-		// Axis yAxis = model.getAxis(AxisType.Y);
-		// yAxis.setLabel("Gender");
+		 Axis yAxis = model.getAxis(AxisType.Y);
+		 yAxis.setLabel("Temps (h)");
 
 		return model;
 	}
@@ -1135,7 +1132,8 @@ public class JJStatusBean {
 		model.addSeries(purpleSerie);
 		model.addSeries(greenSerie);
 
-		model.setTitle("Statistique d'exécution");
+		model.setTitle(MessageFactory
+				.getMessage("statistique_kpi_kpiLineModel_header", "").getDetail());
 		model.setLegendPosition("e");
 		model.setShowPointLabels(true);
 		model.setSeriesColors("0288D1,5C6BC0,59A45D");

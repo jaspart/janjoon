@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJWorkflowRepository_Roo_Jpa_Repository{
-
-declare parents:JJWorkflowRepository extends JpaRepository<JJWorkflow,Long>;
-
-declare parents:JJWorkflowRepository extends JpaSpecificationExecutor<JJWorkflow>;
-
-declare @type:JJWorkflowRepository:@Repository;
-
+privileged aspect JJWorkflowRepository_Roo_Jpa_Repository {
+    
+    declare parents: JJWorkflowRepository extends JpaRepository<JJWorkflow, Long>;
+    
+    declare parents: JJWorkflowRepository extends JpaSpecificationExecutor<JJWorkflow>;
+    
+    declare @type: JJWorkflowRepository: @Repository;
+    
 }

@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJCriticityRepository_Roo_Jpa_Repository{
-
-declare parents:JJCriticityRepository extends JpaRepository<JJCriticity,Long>;
-
-declare parents:JJCriticityRepository extends JpaSpecificationExecutor<JJCriticity>;
-
-declare @type:JJCriticityRepository:@Repository;
-
+privileged aspect JJCriticityRepository_Roo_Jpa_Repository {
+    
+    declare parents: JJCriticityRepository extends JpaRepository<JJCriticity, Long>;
+    
+    declare parents: JJCriticityRepository extends JpaSpecificationExecutor<JJCriticity>;
+    
+    declare @type: JJCriticityRepository: @Repository;
+    
 }

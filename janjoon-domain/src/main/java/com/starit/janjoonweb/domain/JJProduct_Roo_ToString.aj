@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJProduct;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJProduct_Roo_ToString{
-
-public String JJProduct.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJProduct_Roo_ToString {
+    
+    public String JJProduct.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

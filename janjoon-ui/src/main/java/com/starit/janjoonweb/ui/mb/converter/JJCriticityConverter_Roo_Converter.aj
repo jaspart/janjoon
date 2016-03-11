@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJCriticityConverter_Roo_Converter{
-
-declare parents:JJCriticityConverter implements Converter;
-
-declare @type:JJCriticityConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter");
-
-@Autowired JJCriticityService JJCriticityConverter.jJCriticityService;
-
-public Object JJCriticityConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJCriticityService.findJJCriticity(id);}
-
+privileged aspect JJCriticityConverter_Roo_Converter {
+    
+    declare parents: JJCriticityConverter implements Converter;
+    
+    declare @type: JJCriticityConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter");
+    
+    @Autowired
+    JJCriticityService JJCriticityConverter.jJCriticityService;
+    
+    public Object JJCriticityConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJCriticityService.findJJCriticity(id);
+    }
+    
 }

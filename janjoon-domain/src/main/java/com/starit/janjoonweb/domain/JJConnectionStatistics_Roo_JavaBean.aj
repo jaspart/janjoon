@@ -7,26 +7,46 @@ import com.starit.janjoonweb.domain.JJConnectionStatistics;
 import com.starit.janjoonweb.domain.JJContact;
 import java.util.Date;
 
-privileged aspect JJConnectionStatistics_Roo_JavaBean{
-
-public JJContact JJConnectionStatistics.getContact(){return this.contact;}
-
-public void JJConnectionStatistics.setContact(JJContact contact){this.contact=contact;}
-
-public Date JJConnectionStatistics.getCreationDate(){return this.creationDate;}
-
-public void JJConnectionStatistics.setCreationDate(Date creationDate){this.creationDate=creationDate;}
-
-public Date JJConnectionStatistics.getLoginDate(){return this.loginDate;}
-
-public void JJConnectionStatistics.setLoginDate(Date loginDate){this.loginDate=loginDate;}
-
-public Date JJConnectionStatistics.getLogoutDate(){return this.logoutDate;}
-
-public void JJConnectionStatistics.setLogoutDate(Date logoutDate){this.logoutDate=logoutDate;}
-
-public long JJConnectionStatistics.getDuration(){return this.duration;}
-
-public void JJConnectionStatistics.setDuration(long duration){this.duration=duration;}
-
+privileged aspect JJConnectionStatistics_Roo_JavaBean {
+    
+    public JJContact JJConnectionStatistics.getContact() {
+        return this.contact;
+    }
+    
+    public void JJConnectionStatistics.setContact(JJContact contact) {
+        this.contact = contact;
+    }
+    
+    public Date JJConnectionStatistics.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJConnectionStatistics.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public Date JJConnectionStatistics.getLoginDate() {
+        return this.loginDate;
+    }
+    
+    public void JJConnectionStatistics.setLoginDate(Date loginDate) {
+        this.loginDate = loginDate;
+    }
+    
+    public Date JJConnectionStatistics.getLogoutDate() {
+        return this.logoutDate;
+    }
+    
+    public void JJConnectionStatistics.setLogoutDate(Date logoutDate) {
+        this.logoutDate = logoutDate;
+    }
+    
+    public long JJConnectionStatistics.getDuration() {
+        return this.duration;
+    }
+    
+    public void JJConnectionStatistics.setDuration(long duration) {
+        this.duration = duration;
+    }
+    
 }

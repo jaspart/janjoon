@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJImputationRepository_Roo_Jpa_Repository{
-
-declare parents:JJImputationRepository extends JpaRepository<JJImputation,Long>;
-
-declare parents:JJImputationRepository extends JpaSpecificationExecutor<JJImputation>;
-
-declare @type:JJImputationRepository:@Repository;
-
+privileged aspect JJImputationRepository_Roo_Jpa_Repository {
+    
+    declare parents: JJImputationRepository extends JpaRepository<JJImputation, Long>;
+    
+    declare parents: JJImputationRepository extends JpaSpecificationExecutor<JJImputation>;
+    
+    declare @type: JJImputationRepository: @Repository;
+    
 }

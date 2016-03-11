@@ -7,6 +7,13 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import java.util.List;
 
-privileged aspect JJBugService_Roo_Service{
-
-public abstract long JJBugService.countAllJJBugs();public abstract void JJBugService.deleteJJBug(JJBug JJBug_);public abstract JJBug JJBugService.findJJBug(Long id);public abstract List<JJBug>JJBugService.findAllJJBugs();public abstract List<JJBug>JJBugService.findJJBugEntries(int firstResult,int maxResults);public abstract void JJBugService.saveJJBug(JJBug JJBug_);public abstract JJBug JJBugService.updateJJBug(JJBug JJBug_);}
+privileged aspect JJBugService_Roo_Service {
+    
+    public abstract long JJBugService.countAllJJBugs();    
+    public abstract void JJBugService.deleteJJBug(JJBug JJBug_);    
+    public abstract JJBug JJBugService.findJJBug(Long id);    
+    public abstract List<JJBug> JJBugService.findAllJJBugs();    
+    public abstract List<JJBug> JJBugService.findJJBugEntries(int firstResult, int maxResults);    
+    public abstract void JJBugService.saveJJBug(JJBug JJBug_);    
+    public abstract JJBug JJBugService.updateJJBug(JJBug JJBug_);    
+}

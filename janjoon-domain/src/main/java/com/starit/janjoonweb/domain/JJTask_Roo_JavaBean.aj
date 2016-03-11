@@ -16,154 +16,302 @@ import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJTask_Roo_JavaBean{
-
-public String JJTask.getName(){return this.name;}
-
-public void JJTask.setName(String name){this.name=name;}
-
-public String JJTask.getDescription(){return this.description;}
-
-public void JJTask.setDescription(String description){this.description=description;}
-
-public Date JJTask.getCreationDate(){return this.creationDate;}
-
-public void JJTask.setCreationDate(Date creationDate){this.creationDate=creationDate;}
-
-public JJContact JJTask.getCreatedBy(){return this.createdBy;}
-
-public void JJTask.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
-
-public Date JJTask.getUpdatedDate(){return this.updatedDate;}
-
-public void JJTask.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
-
-public JJContact JJTask.getUpdatedBy(){return this.updatedBy;}
-
-public void JJTask.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
-
-public Boolean JJTask.getEnabled(){return this.enabled;}
-
-public void JJTask.setEnabled(Boolean enabled){this.enabled=enabled;}
-
-public Date JJTask.getStartDatePlanned(){return this.startDatePlanned;}
-
-public void JJTask.setStartDatePlanned(Date startDatePlanned){this.startDatePlanned=startDatePlanned;}
-
-public Date JJTask.getEndDatePlanned(){return this.endDatePlanned;}
-
-public void JJTask.setEndDatePlanned(Date endDatePlanned){this.endDatePlanned=endDatePlanned;}
-
-public Integer JJTask.getWorkloadPlanned(){return this.workloadPlanned;}
-
-public void JJTask.setWorkloadPlanned(Integer workloadPlanned){this.workloadPlanned=workloadPlanned;}
-
-public Date JJTask.getStartDateRevised(){return this.startDateRevised;}
-
-public void JJTask.setStartDateRevised(Date startDateRevised){this.startDateRevised=startDateRevised;}
-
-public Date JJTask.getEndDateRevised(){return this.endDateRevised;}
-
-public void JJTask.setEndDateRevised(Date endDateRevised){this.endDateRevised=endDateRevised;}
-
-public Integer JJTask.getWorkloadRevised(){return this.workloadRevised;}
-
-public void JJTask.setWorkloadRevised(Integer workloadRevised){this.workloadRevised=workloadRevised;}
-
-public Date JJTask.getStartDateReal(){return this.startDateReal;}
-
-public void JJTask.setStartDateReal(Date startDateReal){this.startDateReal=startDateReal;}
-
-public Date JJTask.getEndDateReal(){return this.endDateReal;}
-
-public void JJTask.setEndDateReal(Date endDateReal){this.endDateReal=endDateReal;}
-
-public Integer JJTask.getWorkloadReal(){return this.workloadReal;}
-
-public void JJTask.setWorkloadReal(Integer workloadReal){this.workloadReal=workloadReal;}
-
-public Date JJTask.getSoldDate(){return this.soldDate;}
-
-public void JJTask.setSoldDate(Date soldDate){this.soldDate=soldDate;}
-
-public Date JJTask.getWarrantyDate(){return this.warrantyDate;}
-
-public void JJTask.setWarrantyDate(Date warrantyDate){this.warrantyDate=warrantyDate;}
-
-public Integer JJTask.getWorkloadSold(){return this.workloadSold;}
-
-public void JJTask.setWorkloadSold(Integer workloadSold){this.workloadSold=workloadSold;}
-
-public Integer JJTask.getWorkloadRisk(){return this.workloadRisk;}
-
-public void JJTask.setWorkloadRisk(Integer workloadRisk){this.workloadRisk=workloadRisk;}
-
-public Integer JJTask.getWorkloadWarranty(){return this.workloadWarranty;}
-
-public void JJTask.setWorkloadWarranty(Integer workloadWarranty){this.workloadWarranty=workloadWarranty;}
-
-public Integer JJTask.getConsumed(){return this.consumed;}
-
-public void JJTask.setConsumed(Integer consumed){this.consumed=consumed;}
-
-public JJVersion JJTask.getVersioning(){return this.versioning;}
-
-public void JJTask.setVersioning(JJVersion versioning){this.versioning=versioning;}
-
-public JJBug JJTask.getBug(){return this.bug;}
-
-public void JJTask.setBug(JJBug bug){this.bug=bug;}
-
-public JJRequirement JJTask.getRequirement(){return this.requirement;}
-
-public void JJTask.setRequirement(JJRequirement requirement){this.requirement=requirement;}
-
-public JJTestcase JJTask.getTestcase(){return this.testcase;}
-
-public void JJTask.setTestcase(JJTestcase testcase){this.testcase=testcase;}
-
-public JJSprint JJTask.getSprint(){return this.sprint;}
-
-public void JJTask.setSprint(JJSprint sprint){this.sprint=sprint;}
-
-public JJContact JJTask.getAssignedTo(){return this.assignedTo;}
-
-public void JJTask.setAssignedTo(JJContact assignedTo){this.assignedTo=assignedTo;}
-
-public JJStatus JJTask.getStatus(){return this.status;}
-
-public void JJTask.setStatus(JJStatus status){this.status=status;}
-
-public JJStatus JJTask.getTaskType(){return this.taskType;}
-
-public void JJTask.setTaskType(JJStatus taskType){this.taskType=taskType;}
-
-public Set<JJMessage>JJTask.getMessages(){return this.messages;}
-
-public void JJTask.setMessages(Set<JJMessage>messages){this.messages=messages;}
-
-public Boolean JJTask.getCompleted(){return this.completed;}
-
-public void JJTask.setCompleted(Boolean completed){this.completed=completed;}
-
-public JJTask JJTask.getParent(){return this.parent;}
-
-public void JJTask.setParent(JJTask parent){this.parent=parent;}
-
-public Set<JJTask>JJTask.getTasks(){return this.tasks;}
-
-public void JJTask.setTasks(Set<JJTask>tasks){this.tasks=tasks;}
-
-public Set<JJTask>JJTask.getAfterTasks(){return this.afterTasks;}
-
-public void JJTask.setAfterTasks(Set<JJTask>afterTasks){this.afterTasks=afterTasks;}
-
-public Set<JJBuild>JJTask.getBuilds(){return this.builds;}
-
-public void JJTask.setBuilds(Set<JJBuild>builds){this.builds=builds;}
-
-public Set<JJTask>JJTask.getBeforeTasks(){return this.beforeTasks;}
-
-public void JJTask.setBeforeTasks(Set<JJTask>beforeTasks){this.beforeTasks=beforeTasks;}
-
+privileged aspect JJTask_Roo_JavaBean {
+    
+    public String JJTask.getName() {
+        return this.name;
+    }
+    
+    public void JJTask.setName(String name) {
+        this.name = name;
+    }
+    
+    public String JJTask.getDescription() {
+        return this.description;
+    }
+    
+    public void JJTask.setDescription(String description) {
+        this.description = description;
+    }
+    
+    public Date JJTask.getCreationDate() {
+        return this.creationDate;
+    }
+    
+    public void JJTask.setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    public JJContact JJTask.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void JJTask.setCreatedBy(JJContact createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Date JJTask.getUpdatedDate() {
+        return this.updatedDate;
+    }
+    
+    public void JJTask.setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+    
+    public JJContact JJTask.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void JJTask.setUpdatedBy(JJContact updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Boolean JJTask.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void JJTask.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public Date JJTask.getStartDatePlanned() {
+        return this.startDatePlanned;
+    }
+    
+    public void JJTask.setStartDatePlanned(Date startDatePlanned) {
+        this.startDatePlanned = startDatePlanned;
+    }
+    
+    public Date JJTask.getEndDatePlanned() {
+        return this.endDatePlanned;
+    }
+    
+    public void JJTask.setEndDatePlanned(Date endDatePlanned) {
+        this.endDatePlanned = endDatePlanned;
+    }
+    
+    public Integer JJTask.getWorkloadPlanned() {
+        return this.workloadPlanned;
+    }
+    
+    public void JJTask.setWorkloadPlanned(Integer workloadPlanned) {
+        this.workloadPlanned = workloadPlanned;
+    }
+    
+    public Date JJTask.getStartDateRevised() {
+        return this.startDateRevised;
+    }
+    
+    public void JJTask.setStartDateRevised(Date startDateRevised) {
+        this.startDateRevised = startDateRevised;
+    }
+    
+    public Date JJTask.getEndDateRevised() {
+        return this.endDateRevised;
+    }
+    
+    public void JJTask.setEndDateRevised(Date endDateRevised) {
+        this.endDateRevised = endDateRevised;
+    }
+    
+    public Integer JJTask.getWorkloadRevised() {
+        return this.workloadRevised;
+    }
+    
+    public void JJTask.setWorkloadRevised(Integer workloadRevised) {
+        this.workloadRevised = workloadRevised;
+    }
+    
+    public Date JJTask.getStartDateReal() {
+        return this.startDateReal;
+    }
+    
+    public void JJTask.setStartDateReal(Date startDateReal) {
+        this.startDateReal = startDateReal;
+    }
+    
+    public Date JJTask.getEndDateReal() {
+        return this.endDateReal;
+    }
+    
+    public void JJTask.setEndDateReal(Date endDateReal) {
+        this.endDateReal = endDateReal;
+    }
+    
+    public Integer JJTask.getWorkloadReal() {
+        return this.workloadReal;
+    }
+    
+    public void JJTask.setWorkloadReal(Integer workloadReal) {
+        this.workloadReal = workloadReal;
+    }
+    
+    public Date JJTask.getSoldDate() {
+        return this.soldDate;
+    }
+    
+    public void JJTask.setSoldDate(Date soldDate) {
+        this.soldDate = soldDate;
+    }
+    
+    public Date JJTask.getWarrantyDate() {
+        return this.warrantyDate;
+    }
+    
+    public void JJTask.setWarrantyDate(Date warrantyDate) {
+        this.warrantyDate = warrantyDate;
+    }
+    
+    public Integer JJTask.getWorkloadSold() {
+        return this.workloadSold;
+    }
+    
+    public void JJTask.setWorkloadSold(Integer workloadSold) {
+        this.workloadSold = workloadSold;
+    }
+    
+    public Integer JJTask.getWorkloadRisk() {
+        return this.workloadRisk;
+    }
+    
+    public void JJTask.setWorkloadRisk(Integer workloadRisk) {
+        this.workloadRisk = workloadRisk;
+    }
+    
+    public Integer JJTask.getWorkloadWarranty() {
+        return this.workloadWarranty;
+    }
+    
+    public void JJTask.setWorkloadWarranty(Integer workloadWarranty) {
+        this.workloadWarranty = workloadWarranty;
+    }
+    
+    public Integer JJTask.getConsumed() {
+        return this.consumed;
+    }
+    
+    public void JJTask.setConsumed(Integer consumed) {
+        this.consumed = consumed;
+    }
+    
+    public JJVersion JJTask.getVersioning() {
+        return this.versioning;
+    }
+    
+    public void JJTask.setVersioning(JJVersion versioning) {
+        this.versioning = versioning;
+    }
+    
+    public JJBug JJTask.getBug() {
+        return this.bug;
+    }
+    
+    public void JJTask.setBug(JJBug bug) {
+        this.bug = bug;
+    }
+    
+    public JJRequirement JJTask.getRequirement() {
+        return this.requirement;
+    }
+    
+    public void JJTask.setRequirement(JJRequirement requirement) {
+        this.requirement = requirement;
+    }
+    
+    public JJTestcase JJTask.getTestcase() {
+        return this.testcase;
+    }
+    
+    public void JJTask.setTestcase(JJTestcase testcase) {
+        this.testcase = testcase;
+    }
+    
+    public JJSprint JJTask.getSprint() {
+        return this.sprint;
+    }
+    
+    public void JJTask.setSprint(JJSprint sprint) {
+        this.sprint = sprint;
+    }
+    
+    public JJContact JJTask.getAssignedTo() {
+        return this.assignedTo;
+    }
+    
+    public void JJTask.setAssignedTo(JJContact assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+    
+    public JJStatus JJTask.getStatus() {
+        return this.status;
+    }
+    
+    public void JJTask.setStatus(JJStatus status) {
+        this.status = status;
+    }
+    
+    public JJStatus JJTask.getTaskType() {
+        return this.taskType;
+    }
+    
+    public void JJTask.setTaskType(JJStatus taskType) {
+        this.taskType = taskType;
+    }
+    
+    public Set<JJMessage> JJTask.getMessages() {
+        return this.messages;
+    }
+    
+    public void JJTask.setMessages(Set<JJMessage> messages) {
+        this.messages = messages;
+    }
+    
+    public Boolean JJTask.getCompleted() {
+        return this.completed;
+    }
+    
+    public void JJTask.setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+    
+    public JJTask JJTask.getParent() {
+        return this.parent;
+    }
+    
+    public void JJTask.setParent(JJTask parent) {
+        this.parent = parent;
+    }
+    
+    public Set<JJTask> JJTask.getTasks() {
+        return this.tasks;
+    }
+    
+    public void JJTask.setTasks(Set<JJTask> tasks) {
+        this.tasks = tasks;
+    }
+    
+    public Set<JJTask> JJTask.getAfterTasks() {
+        return this.afterTasks;
+    }
+    
+    public void JJTask.setAfterTasks(Set<JJTask> afterTasks) {
+        this.afterTasks = afterTasks;
+    }
+    
+    public Set<JJBuild> JJTask.getBuilds() {
+        return this.builds;
+    }
+    
+    public void JJTask.setBuilds(Set<JJBuild> builds) {
+        this.builds = builds;
+    }
+    
+    public Set<JJTask> JJTask.getBeforeTasks() {
+        return this.beforeTasks;
+    }
+    
+    public void JJTask.setBeforeTasks(Set<JJTask> beforeTasks) {
+        this.beforeTasks = beforeTasks;
+    }
+    
 }

@@ -6,8 +6,8 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJMessageBean;
 import java.io.Serializable;
 
-privileged aspect JJMessageBean_Roo_Serializable{
-
-declare parents:JJMessageBean implements Serializable;
-
+privileged aspect JJMessageBean_Roo_Serializable {
+    
+    declare parents: JJMessageBean implements Serializable;
+    
 }

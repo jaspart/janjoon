@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJBugConverter_Roo_Converter{
-
-declare parents:JJBugConverter implements Converter;
-
-declare @type:JJBugConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJBugConverter");
-
-@Autowired JJBugService JJBugConverter.jJBugService;
-
-public Object JJBugConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJBugService.findJJBug(id);}
-
+privileged aspect JJBugConverter_Roo_Converter {
+    
+    declare parents: JJBugConverter implements Converter;
+    
+    declare @type: JJBugConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJBugConverter");
+    
+    @Autowired
+    JJBugService JJBugConverter.jJBugService;
+    
+    public Object JJBugConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJBugService.findJJBug(id);
+    }
+    
 }

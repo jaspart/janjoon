@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJConnectionStatistics;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJConnectionStatistics_Roo_ToString{
-
-public String JJConnectionStatistics.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJConnectionStatistics_Roo_ToString {
+    
+    public String JJConnectionStatistics.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

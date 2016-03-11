@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJMessageRepository_Roo_Jpa_Repository{
-
-declare parents:JJMessageRepository extends JpaRepository<JJMessage,Long>;
-
-declare parents:JJMessageRepository extends JpaSpecificationExecutor<JJMessage>;
-
-declare @type:JJMessageRepository:@Repository;
-
+privileged aspect JJMessageRepository_Roo_Jpa_Repository {
+    
+    declare parents: JJMessageRepository extends JpaRepository<JJMessage, Long>;
+    
+    declare parents: JJMessageRepository extends JpaSpecificationExecutor<JJMessage>;
+    
+    declare @type: JJMessageRepository: @Repository;
+    
 }

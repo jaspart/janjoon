@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJTestcaseConverter_Roo_Converter{
-
-declare parents:JJTestcaseConverter implements Converter;
-
-declare @type:JJTestcaseConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter");
-
-@Autowired JJTestcaseService JJTestcaseConverter.jJTestcaseService;
-
-public Object JJTestcaseConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJTestcaseService.findJJTestcase(id);}
-
+privileged aspect JJTestcaseConverter_Roo_Converter {
+    
+    declare parents: JJTestcaseConverter implements Converter;
+    
+    declare @type: JJTestcaseConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter");
+    
+    @Autowired
+    JJTestcaseService JJTestcaseConverter.jJTestcaseService;
+    
+    public Object JJTestcaseConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJTestcaseService.findJJTestcase(id);
+    }
+    
 }

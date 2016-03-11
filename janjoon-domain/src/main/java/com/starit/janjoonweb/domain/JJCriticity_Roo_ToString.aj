@@ -7,8 +7,10 @@ import com.starit.janjoonweb.domain.JJCriticity;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJCriticity_Roo_ToString{
-
-public String JJCriticity.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
-
+privileged aspect JJCriticity_Roo_ToString {
+    
+    public String JJCriticity.toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
 }

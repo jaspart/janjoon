@@ -6,10 +6,10 @@ package com.starit.janjoonweb.ui.mb;
 import com.starit.janjoonweb.ui.mb.JJTeststepexecutionBean;
 import java.io.Serializable;
 
-privileged aspect JJTeststepexecutionBean_Roo_Serializable{
-
-declare parents:JJTeststepexecutionBean implements Serializable;
-
-private static final long JJTeststepexecutionBean.serialVersionUID=1L;
-
+privileged aspect JJTeststepexecutionBean_Roo_Serializable {
+    
+    declare parents: JJTeststepexecutionBean implements Serializable;
+    
+    private static final long JJTeststepexecutionBean.serialVersionUID = 1L;
+    
 }

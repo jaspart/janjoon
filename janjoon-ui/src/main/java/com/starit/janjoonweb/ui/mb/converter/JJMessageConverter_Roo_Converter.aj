@@ -11,14 +11,21 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJMessageConverter_Roo_Converter{
-
-declare parents:JJMessageConverter implements Converter;
-
-declare @type:JJMessageConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJMessageConverter");
-
-@Autowired JJMessageService JJMessageConverter.jJMessageService;
-
-public Object JJMessageConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJMessageService.findJJMessage(id);}
-
+privileged aspect JJMessageConverter_Roo_Converter {
+    
+    declare parents: JJMessageConverter implements Converter;
+    
+    declare @type: JJMessageConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJMessageConverter");
+    
+    @Autowired
+    JJMessageService JJMessageConverter.jJMessageService;
+    
+    public Object JJMessageConverter.getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        Long id = Long.parseLong(value);
+        return jJMessageService.findJJMessage(id);
+    }
+    
 }
