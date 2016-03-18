@@ -46,10 +46,10 @@ import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
 public class JJStatusBean {
 
-	private static int kpi_Tab = 0;
-	private static int spec_Tab = 1;
-	private static int bug_Tab = 2;
-	private static int sprint_Tab = 3;
+	private static int KPI_TAB = 0;
+	private static int SPEC_TAB = 1;
+	private static int BUG_TAB = 2;
+	private static int SPRINT_TAB = 3;
 
 	@Autowired
 	private JJCategoryService jJCategoryService;
@@ -68,11 +68,10 @@ public class JJStatusBean {
 
 	@Autowired
 	private JJSprintService jJSprintService;
+	
 
 	private List<String> tableNames;
-
 	private List<JJStatus> statusList;
-
 	private List<JJContact> contacts = new ArrayList<JJContact>();
 	private List<JJStatus> states = new ArrayList<JJStatus>();
 	private ArrayList<ArrayList<Integer>> value = new ArrayList<ArrayList<Integer>>();
@@ -98,9 +97,7 @@ public class JJStatusBean {
 	private int activeTabIndex;
 	private int activeTabSprintIndex = -1;
 	private boolean renderCreate;
-
-	// private Boolean first;
-
+	
 	public LazyStatusDataModel getLazyStatusList() {
 		if (lazyStatusList == null) {
 			lazyStatusList = new LazyStatusDataModel(jJStatusService);
@@ -123,7 +120,7 @@ public class JJStatusBean {
 
 	public List<JJStatus> getStates() {
 
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (states == null || states.isEmpty()) {
 
 				contacts = jJRequirementService.getReqContacts(
@@ -192,7 +189,7 @@ public class JJStatusBean {
 
 	public List<JJStatus> getTaskStatues() {
 
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (taskStatues == null || taskStatues.isEmpty()) {
 
 				taskContacts = jJPermissionService.areAuthorized(
@@ -321,7 +318,7 @@ public class JJStatusBean {
 	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
-		if (activeTabIndex == spec_Tab) {
+		if (activeTabIndex == SPEC_TAB) {
 			if (categoryDataModel == null) {
 				if (getProject() == null) {
 					categoryDataModel = new ArrayList<CategoryDataModel>();
@@ -387,7 +384,7 @@ public class JJStatusBean {
 
 	public PieChartModel getStatusPieChart() {
 
-		if (activeTabIndex == spec_Tab) {
+		if (activeTabIndex == SPEC_TAB) {
 			if (statusPieChart == null) {
 				statusPieChart = new PieChartModel();
 				List<JJStatus> statReq = jJStatusService
@@ -432,7 +429,7 @@ public class JJStatusBean {
 
 	public PieChartModel getProjectPieChart() {
 
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (projectPieChart == null) {
 				projectPieChart = new PieChartModel();
 				List<JJProduct> prodReq = ((JJProductBean) LoginBean
@@ -483,7 +480,7 @@ public class JJStatusBean {
 
 	public PieChartModel getProductPieChart() {
 
-		if (activeTabIndex == kpi_Tab && LoginBean.getProduct() != null) {
+		if (activeTabIndex == KPI_TAB && LoginBean.getProduct() != null) {
 			if (productPieChart == null) {
 				productPieChart = new PieChartModel();
 				List<JJProject> projReq = ((JJProjectBean) LoginBean
@@ -533,7 +530,7 @@ public class JJStatusBean {
 	}
 
 	public PieChartModel getCategoryPieChart() {
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (categoryPieChart == null) {
 				categoryPieChart = new PieChartModel();
 				List<JJCategory> catReq = jJCategoryService.getCategories(null,
@@ -592,7 +589,7 @@ public class JJStatusBean {
 
 	public PieChartModel getBugPieChart() {
 
-		if (activeTabIndex == bug_Tab) {
+		if (activeTabIndex == BUG_TAB) {
 			if (bugPieChart == null) {
 				bugPieChart = new PieChartModel();
 				List<JJStatus> statBug = jJStatusService.getStatus("Bug", true,
@@ -635,7 +632,7 @@ public class JJStatusBean {
 	}
 
 	public MeterGaugeChartModel getBugMetergauge() {
-		if (activeTabIndex == bug_Tab) {
+		if (activeTabIndex == BUG_TAB) {
 			if (bugMetergauge == null) {
 
 				float bugKPI = 0L;
@@ -695,7 +692,7 @@ public class JJStatusBean {
 
 	public LineChartModel getKpiLineModel() {
 
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (kpiLineModel == null) {
 
 				kpiLineModel = initLinearModel();
@@ -712,7 +709,7 @@ public class JJStatusBean {
 
 	public BarChartModel getKpiBarModel() {
 
-		if (activeTabIndex == kpi_Tab) {
+		if (activeTabIndex == KPI_TAB) {
 			if (kpiBarModel == null) {
 
 				kpiBarModel = initBarModel();
@@ -728,7 +725,7 @@ public class JJStatusBean {
 	}
 
 	public MeterGaugeChartModel getPrjMetergauge() {
-		if (activeTabIndex == spec_Tab) {
+		if (activeTabIndex == SPEC_TAB) {
 			if (prjMetergauge == null) {
 				float projKPI = 0;
 				LoginBean loginBean = (LoginBean) LoginBean
@@ -822,7 +819,7 @@ public class JJStatusBean {
 
 	public List<SprintUtil> getSprintList() {
 
-		if (activeTabIndex == sprint_Tab) {
+		if (activeTabIndex == SPRINT_TAB) {
 			JJSprintBean jJSprintBean = ((JJSprintBean) LoginBean
 					.findBean("jJSprintBean"));
 			if (jJSprintBean == null)
@@ -852,7 +849,7 @@ public class JJStatusBean {
 			setActiveTabIndex(Integer.valueOf(paramIndex));
 			System.out.println("###### ACtive tab: " + activeTabIndex);
 
-			if (activeTabIndex == sprint_Tab && activeTabSprintIndex == -1) {
+			if (activeTabIndex == SPRINT_TAB && activeTabSprintIndex == -1) {
 				Date now = new Date();
 				int i = 0;
 				while (i < getSprintList().size()) {

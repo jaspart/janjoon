@@ -106,6 +106,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- csv reader -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>3.7</version>
+		</dependency>
 		<!--Git&&SVN dependencies -->
 		<dependency>
 			<groupId>org.tmatesoft.svnkit</groupId>

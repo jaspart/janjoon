@@ -1,7 +1,10 @@
 package com.starit.janjoonweb.ui.mb.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
@@ -17,6 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.opencsv.CSVReader;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -36,6 +40,79 @@ import com.starit.janjoonweb.ui.mb.JJTestcaseBean;
 
 public class ReadXMLFile {
 
+	public static List<JJRequirement> getRequirementsFromCSV(InputStream file,
+			JJProject project, JJProduct product, JJVersion version,
+			JJStatus status, JJCategory category) {
+		List<JJRequirement> requirements = new ArrayList<JJRequirement>();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+		try {
+
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = file.read(buffer)) > -1) {
+				baos.write(buffer, 0, len);
+			}
+			baos.flush();
+			CSVReader reader = new CSVReader(
+					new InputStreamReader(
+							new ByteArrayInputStream(baos.toByteArray())),
+					',', '\"', 1);
+			String[] nextLine;
+
+			while ((nextLine = reader.readNext()) != null) {
+
+				if (nextLine.length > 6 && nextLine[6] != null) {
+					System.out.println(
+							nextLine[6] + " " + nextLine[22] + " etc...");
+					JJRequirement requirement = new JJRequirement();
+
+					requirement.setName(nextLine[6]);
+					requirement.setDescription(
+							nextLine.length > 22 && nextLine[22] != null
+									? nextLine[22]
+									: nextLine[6]);
+					requirement.setEnabled(true);
+					requirement.setProject(project);
+					requirement.setCategory(category);
+					requirement.setProduct(product);
+					requirement.setVersioning(version);
+					requirement.setStatus(status);
+					requirements.add(requirement);
+				}
+
+			}
+			if (requirements.isEmpty()) {
+				reader = new CSVReader(
+						new InputStreamReader(
+								new ByteArrayInputStream(baos.toByteArray())),
+						';', '\"', 1);
+
+				while ((nextLine = reader.readNext()) != null) {
+
+					if (nextLine.length > 6 && nextLine[6] != null) {
+						System.out.println(
+								nextLine[6] + " " + nextLine[nextLine.length-1] + " etc...");
+						JJRequirement requirement = new JJRequirement();
+
+						requirement.setName(nextLine[6]);
+						requirement.setDescription(nextLine[nextLine.length-1]);
+						requirement.setEnabled(true);
+						requirement.setProject(project);
+						requirement.setCategory(category);
+						requirement.setProduct(product);
+						requirement.setVersioning(version);
+						requirement.setStatus(status);
+						requirements.add(requirement);
+					}
+
+				}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return requirements;
+	}
 	public static List<JJRequirement> getRequirementsFromXml(InputStream file,
 			JJCategoryService jJCategoryService,
 			JJRequirementService jJRequirementService,
@@ -88,12 +165,12 @@ public class ReadXMLFile {
 					requirement.setCategory(category);
 					requirement.setProduct(product);
 					requirement.setVersioning(version);
-					requirements.add(requirement);
 					requirement.setStatus(status);
 					SortedMap<Integer, Object> elements = JJRequirementBean
 							.getSortedElements(chapter, project, category, true,
 									jJChapterService, jJRequirementService);
 					requirement.setOrdering(elements.lastKey() + 1);
+					requirements.add(requirement);
 
 					System.out
 							.println("name : " + eElement.getAttribute("name"));
@@ -218,13 +295,9 @@ public class ReadXMLFile {
 			}
 
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -233,6 +306,4 @@ public class ReadXMLFile {
 		objects.add(teststeps);
 		return objects;
 	}
-
-	// ordering a completr
 }

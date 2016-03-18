@@ -74,7 +74,8 @@
 				<h:panelGroup layout="block"
 					styleClass="Container10 Responsive ui-fluid">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:inputText id="globalFilter" style="min-width: 150px;padding: 5px !important;"
+						<p:inputText id="globalFilter"
+							style="min-width: 150px;padding: 5px !important;"
 							placeholder="#{messages.specification_table_requirement_filter}"
 							value="#{jJRequirementBean.filterValue}">
 							<p:ajax event="keyup" listener="#{jJRequirementBean.filterTable}"
@@ -83,7 +84,7 @@
 					</h:panelGroup>
 				</h:panelGroup>
 
-				<h:panelGrid columns="6" style="float: right;"
+				<h:panelGrid columns="7" style="float: right;"
 					styleClass="Container30 Responsive ui-fluid">
 					<p:commandButton icon="fa fa-bars Fs20" id="show-category-menu"
 						title="Category" styleClass="ShowOnMobile" />
@@ -106,6 +107,13 @@
 						rendered="#{loginBean.authorisationService.wRequiement}"
 						oncomplete="PF('requirementImportXMLDialogWidget').show()"
 						title="#{messages.specification_importxml_button}" />
+
+					<p:commandButton icon="fa fa-arrow-up Fs20"
+						disabled="#{jJProjectBean.project == null}"
+						update=":importCSVForm"
+						rendered="#{loginBean.authorisationService.wRequiement}"
+						oncomplete="PF('requirementImportCSVDialogWidget').show()"
+						title="#{messages.specification_importcsv_button}" />
 
 					<p:commandButton id="reloadBtn" icon="fa fa-refresh Fs20"
 						actionListener="#{jJRequirementBean.reloadPage}"
@@ -582,6 +590,21 @@
 						mode="advanced" dragDropSupport="false"
 						oncomplete="updateDataTable();" update=":growlForm :categoryForm"
 						sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(xml)$/" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="requirementImportCSVDialog" draggable="false"
+			responsive="true" modal="true"
+			header="#{messages.specification_import_title} CSV"
+			widgetVar="requirementImportCSVDialogWidget" dynamic="true"
+			resizable="false">
+			<p:outputPanel id="importCSVPanel">
+				<h:form id="importCSVForm">
+					<p:fileUpload
+						fileUploadListener="#{jJRequirementBean.handleImportCSV}"
+						mode="advanced" dragDropSupport="false"
+						oncomplete="updateDataTable();" update=":growlForm :categoryForm"
+						sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(csv)$/" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

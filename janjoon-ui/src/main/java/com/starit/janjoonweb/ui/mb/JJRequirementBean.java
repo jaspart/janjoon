@@ -1147,8 +1147,9 @@ public class JJRequirementBean {
 				.findJJRequirement(requirement.getId());
 		requirement.setEnabled(false);
 
-		int numero = requirement.getNumero() + 1;
-		requirement.setNumero(numero);
+		requirement.setNumero(requirement.getNumero() != null
+				? requirement.getNumero() + 1
+				: 1);
 		requirementStatus = jJStatusService.getOneStatus("DELETED",
 				"Requirement", true);
 		requirement.setStatus(requirementStatus);
@@ -3188,6 +3189,50 @@ public class JJRequirementBean {
 				&& event.getObject() instanceof JJRequirement) {
 			requirement = ((JJRequirement) event.getObject());
 			editRequirement();
+		}
+
+	}
+	public void handleImportCSV(FileUploadEvent event) {
+
+		try {
+			List<JJRequirement> requirements = ReadXMLFile
+					.getRequirementsFromCSV(event.getFile().getInputstream(),
+							LoginBean.getProject(), LoginBean.getProduct(),
+							LoginBean.getVersion(),
+							jJStatusService.getOneStatus("NEW", "Requirement",
+									true),
+							jJCategoryService.getCategory("FUNCTIONAL",
+									LoginBean.getCompany(), true));
+
+			if (requirements.isEmpty()) {
+				FacesMessage facesMessage = MessageFactory
+						.getMessage("Pas d'Exigence trouvé dans ce Fichier",
+								FacesMessage.SEVERITY_WARN,
+								MessageFactory
+										.getMessage("label_requirement", "")
+										.getDetail());
+				FacesContext.getCurrentInstance().addMessage(null,
+						facesMessage);
+			} else {
+				for (JJRequirement r : requirements) {
+					saveJJRequirement(r);
+					updateDataTable(r, r.getCategory(), ADD_OPERATION);
+				}
+
+				FacesMessage facesMessage = MessageFactory.getMessage(
+						requirements.size() + " Exigences Ajoutées avec succés",
+						FacesMessage.SEVERITY_INFO,
+						MessageFactory.getMessage("label_requirement", "")
+								.getDetail());
+				FacesContext.getCurrentInstance().addMessage(null,
+						facesMessage);
+
+			}
+		} catch (IOException e) {
+			FacesMessage facesMessage = MessageFactory.getMessage(
+					"Erreur Fichier", FacesMessage.SEVERITY_WARN, MessageFactory
+							.getMessage("label_requirement", "").getDetail());
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
 	}
