@@ -13,6 +13,8 @@ import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRisk;
 import com.starit.janjoonweb.domain.JJRiskService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.JJRiskBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
@@ -20,6 +22,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
@@ -71,9 +74,11 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
     @Autowired
     JJProductService JJRiskBean.jJProductService;
     
-    private String JJRiskBean.name = "JJRisks";
+    @Autowired
+    JJStatusService JJRiskBean.jJStatusService;
     
-    private JJRisk JJRiskBean.JJRisk_;
+    private String JJRiskBean.name = "JJRisks";   
+   
     
     private List<JJRisk> JJRiskBean.allJJRisks;
     
@@ -367,6 +372,30 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
         productCreateInputMessage.setFor("productCreateInput");
         productCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productCreateInputMessage);
+        
+        OutputLabel statusCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusCreateOutput.setFor("statusCreateInput");
+        statusCreateOutput.setId("statusCreateOutput");
+        statusCreateOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusCreateOutput);
+        
+        AutoComplete statusCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusCreateInput.setId("statusCreateInput");
+        statusCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRiskBean.JJRisk_.status}", JJStatus.class));
+        statusCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRiskBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusCreateInput.setDropdown(true);
+        statusCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusCreateInput.setConverter(new JJStatusConverter());
+        statusCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusCreateInput);
+        
+        Message statusCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusCreateInputMessage.setId("statusCreateInputMessage");
+        statusCreateInputMessage.setFor("statusCreateInput");
+        statusCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusCreateInputMessage);
         
         OutputLabel probabilityCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         probabilityCreateOutput.setFor("probabilityCreateInput");
@@ -674,6 +703,30 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
         productEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productEditInputMessage);
         
+        OutputLabel statusEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        statusEditOutput.setFor("statusEditInput");
+        statusEditOutput.setId("statusEditOutput");
+        statusEditOutput.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusEditOutput);
+        
+        AutoComplete statusEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        statusEditInput.setId("statusEditInput");
+        statusEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRiskBean.JJRisk_.status}", JJStatus.class));
+        statusEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRiskBean.completeStatus}", List.class, new Class[] { String.class }));
+        statusEditInput.setDropdown(true);
+        statusEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "status", String.class));
+        statusEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{status.name} #{status.description} #{status.creationDate} #{status.updatedDate}", String.class));
+        statusEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{status}", JJStatus.class));
+        statusEditInput.setConverter(new JJStatusConverter());
+        statusEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(statusEditInput);
+        
+        Message statusEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        statusEditInputMessage.setId("statusEditInputMessage");
+        statusEditInputMessage.setFor("statusEditInput");
+        statusEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(statusEditInputMessage);
+        
         OutputLabel probabilityEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         probabilityEditOutput.setFor("probabilityEditInput");
         probabilityEditOutput.setId("probabilityEditOutput");
@@ -882,6 +935,16 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
         productValue.setConverter(new JJProductConverter());
         htmlPanelGrid.getChildren().add(productValue);
         
+        HtmlOutputText statusLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusLabel.setId("statusLabel");
+        statusLabel.setValue("Status:");
+        htmlPanelGrid.getChildren().add(statusLabel);
+        
+        HtmlOutputText statusValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        statusValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRiskBean.JJRisk_.status}", JJStatus.class));
+        statusValue.setConverter(new JJStatusConverter());
+        htmlPanelGrid.getChildren().add(statusValue);
+        
         HtmlOutputText probabilityLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         probabilityLabel.setId("probabilityLabel");
         probabilityLabel.setValue("Probability:");
@@ -949,18 +1012,8 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(testcasesValue);
         
         return htmlPanelGrid;
-    }
-    
-    public JJRisk JJRiskBean.getJJRisk_() {
-        if (JJRisk_ == null) {
-            JJRisk_ = new JJRisk();
-        }
-        return JJRisk_;
-    }
-    
-    public void JJRiskBean.setJJRisk_(JJRisk JJRisk_) {
-        this.JJRisk_ = JJRisk_;
-    }
+    } 
+   
     
     public List<JJContact> JJRiskBean.completeCreatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
@@ -982,29 +1035,8 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }
+    }   
     
-    public List<JJProject> JJRiskBean.completeProject(String query) {
-        List<JJProject> suggestions = new ArrayList<JJProject>();
-        for (JJProject jJProject : jJProjectService.findAllJJProjects()) {
-            String jJProjectStr = String.valueOf(jJProject.getName() +  " "  + jJProject.getDescription() +  " "  + jJProject.getCreationDate() +  " "  + jJProject.getUpdatedDate());
-            if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJProject);
-            }
-        }
-        return suggestions;
-    }
-    
-    public List<JJProduct> JJRiskBean.completeProduct(String query) {
-        List<JJProduct> suggestions = new ArrayList<JJProduct>();
-        for (JJProduct jJProduct : jJProductService.findAllJJProducts()) {
-            String jJProductStr = String.valueOf(jJProduct.getName() +  " "  + jJProduct.getDescription() +  " "  + jJProduct.getCreationDate() +  " "  + jJProduct.getUpdatedDate());
-            if (jJProductStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJProduct);
-            }
-        }
-        return suggestions;
-    }
     
     public List<JJRequirement> JJRiskBean.getSelectedRequirements() {
         return selectedRequirements;

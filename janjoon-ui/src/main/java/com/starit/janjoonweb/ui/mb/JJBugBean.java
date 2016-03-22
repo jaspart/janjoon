@@ -706,6 +706,7 @@ public class JJBugBean {
 					jJVersionBean.setVersion(viewBug.getVersioning());
 
 					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (!jJProjectBean.getProject()
@@ -717,6 +718,7 @@ public class JJBugBean {
 					jJVersionBean.setVersion(viewBug.getVersioning());
 
 					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (prod != null && jJProductBean.getProduct() != null) {
@@ -730,6 +732,7 @@ public class JJBugBean {
 								new JJStatusBean());
 						session.setAttribute("jJSprintBean",
 								new JJSprintBean());
+						session.setAttribute("jJRiskBean", new JJRiskBean());
 					} else if (viewBug.getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
 						if (!viewBug.getVersioning()
@@ -957,6 +960,23 @@ public class JJBugBean {
 			String jJImportanceStr = String.valueOf(jJImportance.getName());
 			if (jJImportanceStr.toLowerCase().startsWith(query.toLowerCase())) {
 				suggestions.add(jJImportance);
+			}
+		}
+		return suggestions;
+	}
+
+	public List<JJProject> completeProject(String query) {
+		List<JJProject> suggestions = new ArrayList<JJProject>();
+		for (JJProject jJProject : jJProjectService.getProjects(
+				LoginBean.getCompany(),
+				((LoginBean) LoginBean.findBean("loginBean")).getContact(),
+				true, false)) {
+			String jJProjectStr = String.valueOf(
+					jJProject.getName() + " " + jJProject.getDescription() + " "
+							+ jJProject.getCreationDate() + " "
+							+ jJProject.getUpdatedDate());
+			if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(jJProject);
 			}
 		}
 		return suggestions;

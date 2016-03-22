@@ -38,8 +38,6 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 @RooSerializable
 @Scope("session")
 @Component("jJMessageBean")
-// @SessionScoped
-// @ManagedBean(name = "jJMessageBean")
 public class JJMessageBean {
 
 	/**

@@ -9,6 +9,7 @@ import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRisk;
+import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTestcase;
 import java.util.Date;
 import java.util.Set;
@@ -85,6 +86,14 @@ privileged aspect JJRisk_Roo_JavaBean {
     
     public void JJRisk.setProduct(JJProduct product) {
         this.product = product;
+    }
+    
+    public JJStatus JJRisk.getStatus() {
+        return this.status;
+    }
+    
+    public void JJRisk.setStatus(JJStatus status) {
+        this.status = status;
     }
     
     public Integer JJRisk.getProbability() {

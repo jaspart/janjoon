@@ -124,7 +124,7 @@
 		rendered="#{jJProjectBean.project == null}">
 		<h:panelGroup layout="block" styleClass="ContainerIndent">
 			<p:autoComplete id="jJbugProject"
-				placeholder="#{messages.lable_project}"
+				placeholder="#{messages.label_project}"
 				onchange="jJbugRequirementWV.val('');"
 				value="#{jJBugBean.bugProjectSelected}" itemLabel="#{project.name}"
 				itemValue="#{project}" rendered="#{jJProjectBean.project == null}"
@@ -151,7 +151,7 @@
 				<f:selectItem itemValue="#{jJProjectBean.project}"
 					itemLabel="#{jJProjectBean.project.name}" itemDisabled="true" />
 			</p:selectOneMenu>
-			<p:watermark for="jJbugProject2" value="Project : "
+			<p:watermark for="jJbugProject2" value="#{messages.label_project} : "
 				rendered="#{jJProjectBean.project != null}" />
 		</h:panelGroup>
 	</h:panelGroup>

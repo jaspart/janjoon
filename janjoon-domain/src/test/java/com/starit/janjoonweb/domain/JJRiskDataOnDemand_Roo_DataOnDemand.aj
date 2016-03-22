@@ -10,6 +10,7 @@ import com.starit.janjoonweb.domain.JJRisk;
 import com.starit.janjoonweb.domain.JJRiskDataOnDemand;
 import com.starit.janjoonweb.domain.JJRiskRepository;
 import com.starit.janjoonweb.domain.JJRiskService;
+import com.starit.janjoonweb.domain.JJStatusDataOnDemand;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +40,9 @@ privileged aspect JJRiskDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJProjectDataOnDemand JJRiskDataOnDemand.jJProjectDataOnDemand;
+    
+    @Autowired
+    JJStatusDataOnDemand JJRiskDataOnDemand.jJStatusDataOnDemand;
     
     @Autowired
     JJRiskService JJRiskDataOnDemand.jJRiskService;

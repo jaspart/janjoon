@@ -742,20 +742,23 @@ public class LoginBean implements Serializable {
 			case "test" :
 				menuIndex = 5;
 				break;
-			case "exploitation" :
+			case "risk" :
 				menuIndex = 6;
 				break;
-			case "delivery" :
+			case "exploitation" :
 				menuIndex = 7;
 				break;
-			case "teams" :
+			case "delivery" :
 				menuIndex = 8;
 				break;
-			case "stats" :
+			case "teams" :
 				menuIndex = 9;
 				break;
-			case "administration" :
+			case "stats" :
 				menuIndex = 10;
+				break;
+			case "administration" :
+				menuIndex = 11;
 				break;
 
 			default :
@@ -947,6 +950,7 @@ public class LoginBean implements Serializable {
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 
 				} else if (event.getComponent().getClientId()
 						.contains("productSelectOneMenu")) {
@@ -956,6 +960,7 @@ public class LoginBean implements Serializable {
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 					session.setAttribute("jJBuildBean", new JJBuildBean());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 					if (session.getAttribute("jJStatusBean") != null)
 						((JJStatusBean) session.getAttribute("jJStatusBean"))
 								.setProject(null);

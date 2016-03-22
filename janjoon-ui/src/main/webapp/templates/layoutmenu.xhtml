@@ -18,7 +18,7 @@
 				oncomplete="PF('communicationPanel').show();"
 				title="#{message.header_communication_label}"
 				rendered="#{loginBean.enable}" />
-			<div style="height: 100px"></div>
+			<div style="height: 80px"></div>
 
 			<p:selectOneMenu id="projectSelectOneMenu"
 				panelStyleClass="headerSelectOneMenuClass"
@@ -126,6 +126,11 @@
 					actionListener="#{loginBean.redirection}" update=":growlForm"
 					icon="icon-tick7 Green"
 					rendered="#{loginBean.authorisationService.rTest}" />
+					
+				<p:menuitem value="#{messages.header_risk_menuitem}"
+					title="#{messages.header_risk_menuitemhelp}"
+					url="/pages/risk.jsf?faces-redirect=true"
+					icon="icon-warning37 Red" />
 
 				<p:menuitem value="#{messages.header_exploitation_menuitem}"
 					title="#{messages.header_exploitation_menuitemhelp}"

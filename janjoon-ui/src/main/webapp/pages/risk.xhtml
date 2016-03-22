@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/template.xhtml">
+	<ui:define name="head">
+		<style type="text/css">
+.ui-datatable-tablewrapper {
+	margin: auto;
+}
+</style>
+	</ui:define>
+	<ui:define name="content">
+
+		<h:form id="riskForm">
+			<h:panelGroup layout="block" styleClass="Container ui-fluid">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:dataTable id="riskTable" sortMode="multiple"
+						style="table-layout: fixed;" value="#{jJRiskBean.riskDataModel}"
+						rowKey="#{risk.id}" var="risk" widgetVar="riskTable" lazy="true"
+						binding="#{dataTable}" selection="#{jJRiskBean.selectedRiskList}"
+						emptyMessage="#{messages.label_notRecordFound}" paginator="true"
+						rows="25" paginatorPosition="bottom"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="25,50,100">
+
+						<p:ajax event="rowSelectCheckbox" update="riskTable:deleteMButton" />
+						<p:ajax event="rowUnselectCheckbox"
+							update="riskTable:deleteMButton" />
+						<p:ajax event="rowSelect" update="riskTable:deleteMButton" />
+						<p:ajax event="toggleSelect" update="riskTable:deleteMButton" />
+
+						<!-- 						<p:ajax event="rowDblselect"							 -->
+						<!-- 							update=":createPanel :riskDialogHeader" resetValues="true" -->
+						<!-- 							listener="#{jJRiskBean.onRowDblClckSelect}" -->
+						<!-- 							oncomplete="PF('createDialogWidget').show()" -->
+						<!-- 							title="#{messages.label_edit}" /> -->
+						<f:facet name="header">
+							<h:panelGroup layout="block" styleClass="Container ui-fluid">
+								<h:panelGroup layout="block" style="float: right !important;"
+									styleClass="Container15 Responsive">
+
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<h:outputText style="font-family: 'roboto_condensedlight';"
+											styleClass="Fs20" value="Risque" />
+									</h:panelGroup>
+								</h:panelGroup>
+
+								<h:panelGroup layout="block" styleClass="Container35 Responsive">
+
+
+									<h:panelGroup layout="block" styleClass="Container20">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton title="#{messages.label_delete}"
+												id="deleteMButton" icon="fa fa-trash Gray Fs20"
+												styleClass="GrayButton"
+												oncomplete="PF('deleteMDialogWidget').show()"
+												disabled="#{empty jJRiskBean.selectedRiskList}" />
+										</h:panelGroup>
+									</h:panelGroup>
+
+									<h:panelGroup layout="block" styleClass="Container20">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:commandButton id="createButton"
+												icon="fa fa-plus-square  Gray Fs20" styleClass="GrayButton"
+												title="#{messages.bug_table_add_label}"
+												update=":createPanel :riskDialogHeader" resetValues="true"
+												oncomplete="PF('createDialogWidget').show()" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+
+								<h:panelGroup layout="block"
+									styleClass="Container50 Responsive100">
+									<h:panelGroup layout="block" styleClass="ContainerIndent">
+										<p:inputText id="globalFilter" binding="#{glbFilter}"
+											onkeyup="PF('riskTable').filter()"
+											placeholder="#{messages.bug_table_search_watermark}" />
+									</h:panelGroup>
+								</h:panelGroup>
+
+							</h:panelGroup>
+						</f:facet>
+						<p:column selectionMode="multiple"
+							style="width:8%;text-align: center;" priority="1" />
+
+						<p:column headerText="#{messages.label_name}" priority="1"
+							filterMatchMode="contains" sortBy="#{risk.name}"
+							style="width: 25% !important;">
+							<h:outputText value=" ID:#{risk.id} #{risk.name}" />
+						</p:column>
+
+						<p:column headerText="#{messages.label_creationDate}"
+							sortBy="#{risk.creationDate}" priority="6"
+							style="width: 10% !important;height: 5px !important;text-align:center;">
+							<h:outputText value="#{risk.creationDate}">
+								<f:convertDateTime type="date" locale="#{localeBean.locale}"
+									pattern="dd/MM/yyyy HH:mm" />
+							</h:outputText>
+						</p:column>
+						<p:column sortBy="#{risk.probability}"
+							style="width: 10% !important;height: 5px !important;text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="#{messages.risk_table_probability_title}" />
+							</f:facet>
+							<h:outputText value="#{risk.probability}" />
+						</p:column>
+						<p:column headerText="#{messages.label_product}"
+							filterable="#{jJProductBean.product == null}"
+							sortBy="#{risk.product.name}" id="product" priority="6"
+							style="width: 10% !important;height: 5px !important;text-align:center;"
+							filterMatchMode="exact" filterBy="#{risk.product.name}">
+							<f:facet name="filter">
+								<p:selectOneMenu id="productSelect" binding="#{productSelect}"
+									var="type" style="padding-right: 35px !important;"
+									panelStyleClass="specSelectOneMenuPanel"
+									styleClass="specSelectOneMenu Fs14"
+									onchange="PF('riskTable').filter()">
+									<f:attribute name="fontSize" value="true" />
+									<f:selectItems value="#{jJRiskBean.productOptions}" />
+									<p:column>
+										<h:outputText value="#{type}" />
+									</p:column>
+								</p:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{risk.product.name}" />
+						</p:column>
+						<p:column headerText="Status" sortBy="#{risk.status.name}"
+							id="status" priority="6"
+							style="width: 10% !important;height: 5px !important;text-align:center;"
+							filterMatchMode="exact" filterBy="#{risk.status.name}">
+							<f:facet name="filter">
+								<p:selectOneMenu id="statusSelect" binding="#{statusSelect}"
+									var="type" style="padding-right: 35px !important;"
+									panelStyleClass="specSelectOneMenuPanel"
+									styleClass="specSelectOneMenu Fs14"
+									onchange="PF('riskTable').filter()">
+									<f:attribute name="fontSize" value="true" />
+									<f:selectItems value="#{jJRiskBean.statusOptions}" />
+									<p:column>
+										<h:outputText value="#{type}" />
+									</p:column>
+								</p:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{risk.status.name}" />
+						</p:column>
+
+						<p:column style="text-align: center;width:8%;">
+							<f:facet name="header">
+								<h:outputText value="#{messages.bug_table_action_title}" />
+							</f:facet>
+							<p:commandButton id="optionButton" type="button"
+								icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+							<p:menu overlay="true" trigger="optionButton" my="right top"
+								at="right bottom">
+								<p:menuitem id="editButton" icon="ui-icon-disk fa fa-pencil"
+									value="#{messages.label_edit}"
+									update=":createPanel :riskDialogHeader"
+									oncomplete="PF('createDialogWidget').show()"
+									title="#{messages.label_edit}" resetValues="true">
+									<f:setPropertyActionListener value="#{risk}"
+										target="#{jJRiskBean.JJRisk_}" />
+								</p:menuitem>
+								<p:menuitem id="deleteButton" icon="ui-icon-disk fa fa-trash"
+									oncomplete="PF('deleteDialogWidget').show()"
+									value="#{messages.label_delete}"
+									title="#{messages.label_delete}">
+									<f:setPropertyActionListener value="#{risk}"
+										target="" />
+								</p:menuitem>
+							</p:menu>
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+
+		<p:dialog id="createDialog" draggable="false" modal="true"
+			widgetVar="createDialogWidget" dynamic="true" responsive="true"
+			resizable="false" maximizable="false" showEffect="fade">
+			<p:ajax event="close" listener="#{jJRiskBean.handleDialogClose}" />
+			<f:facet name="header">
+				<p:outputLabel id="riskDialogHeader"
+					value="#{messages[jJRiskBean.message]}" />
+			</f:facet>
+			<p:outputPanel id="createPanel">
+				<h:form id="createForm" enctype="multipart/form-data">
+					<h:panelGroup id="createPanelGrid" layout="block"
+						styleClass="Container ui-fluid BorderAll"
+						style="max-width: 750px;">
+						<ui:include src="riskDialog.xhtml">
+							<ui:param name="JJRisk_" value="#{jJRiskBean.JJRisk_}" />
+						</ui:include>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="createSaveButton" icon="fa fa-save Fs16"
+									value="#{messages.label_save}"
+									action="#{jJRiskBean.persistRisk}"
+									update=":createPanel :riskForm" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block"
+							styleClass="Container50 Responsive50 ">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="createCloseButton"
+									value="#{messages.label_cancel}" styleClass="GrayButton"
+									onclick="PF('createDialogWidget').hide()" type="button" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.risk_delete_title}" showEffect="fade"
+			header="#{messages.risk_delete_confirm_label}" severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJRiskBean.deleteRisk}" update=":riskForm :growlForm"
+						onsuccess="PF('deleteDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						onclick="PF('deleteDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+		<p:confirmDialog id="deleteMDialog" widgetVar="deleteMDialogWidget"
+			message="#{messages.risk_mdelete_title}" showEffect="fade"
+			header="#{messages.risk_mdelete_confirm_label}" severity="alarm">
+			<p:outputPanel id="deleteMPanel">
+				<h:form id="deleteMForm">
+					<p:commandButton id="deleteYesButton"
+						value="#{messages.bug_delete_yes_button}"
+						action="#{jJRiskBean.deleteRisks}" update=":riskForm :growlForm"
+						onsuccess="PF('deleteMDialogWidget').hide()" />
+					<p:commandButton id="deleteNoButton"
+						value="#{messages.bug_delete_no_button}"
+						onclick="PF('deleteMDialogWidget').hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>
+</html>

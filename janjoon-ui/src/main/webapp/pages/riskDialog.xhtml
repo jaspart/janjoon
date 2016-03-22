@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:panelGroup layout="block" styleClass="Container100">
+		<p:messages id="msg" showDetail="false" closable="true" />
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:inputTextarea id="jJRiskName" value="#{JJRisk_.name}" rows="2"
+				requiredMessage="#{messages.label_name_required_alert}"
+				required="true" placeholder="#{messages.label_name} :">
+				<f:validateLength maximum="100" />
+			</p:inputTextarea>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<h:outputText id="output"
+				value="#{messages.risk_table_probability_title} : #{JJRisk_.probability}" />
+			<h:inputHidden id="txt2" value="#{JJRisk_.probability}" />
+			<p:slider for="txt2" display="output"
+				displayTemplate="#{messages.risk_table_probability_title} : {value}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="EmptyBox1 ShowOnDesktop" />
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJriskStatus" value="#{JJRisk_.status}"
+				placeholder="Status"
+				itemLabel="#{status != null ? loginBean.checkMessage(status):''}"
+				itemValue="#{status}" scrollHeight="200"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJStatusConverter"
+				dropdown="true" var="status" readonly="#{JJRisk_.id == null}"
+				completeMethod="#{jJRiskBean.completeStatus}" />
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProjectBean.project != null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectOneMenu id="jJriskProject2" value="#{JJRisk_.project}"
+				rendered="#{jJProjectBean.project != null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
+				<f:selectItem itemValue="#{jJProjectBean.project}"
+					itemLabel="#{jJProjectBean.project.name}" itemDisabled="true" />
+			</p:selectOneMenu>
+			<p:watermark for="jJriskProject2"
+				value="#{messages.label_project} : "
+				rendered="#{jJProjectBean.project != null}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProjectBean.project == null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJriskProject"
+				placeholder="#{messages.label_project}" value="#{JJRisk_.project}"
+				itemLabel="#{project.name}" itemValue="#{project}"
+				rendered="#{jJProjectBean.project == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter"
+				dropdown="true" var="project" scrollHeight="200"
+				completeMethod="#{jJRiskBean.completeProject}">
+				<p:ajax event="itemSelect" listener="#{jJRiskBean.changeEvent}"
+					update="requirements testcases bugs" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProductBean.product == null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:autoComplete id="jJriskProduct" scrollHeight="200"
+				value="#{JJRisk_.product}" placeholder="#{messages.label_product}"
+				itemValue="#{product}" rendered="#{jJProductBean.product == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter"
+				dropdown="true" var="product" itemLabel="#{product.name}"
+				completeMethod="#{jJRiskBean.completeProduct}">
+				<p:ajax event="itemSelect" listener="#{jJRiskBean.changeEvent}"
+					update="requirements testcases bugs" />
+			</p:autoComplete>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container33 Responsive50"
+		rendered="#{jJProductBean.product != null}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectOneMenu id="jJriskProduct2" value="#{JJRisk_.product}"
+				rendered="#{jJProductBean.product != null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
+				<f:selectItem itemValue="#{jJProductBean.product}"
+					itemDisabled="true" itemLabel="#{jJProductBean.product.name}" />
+			</p:selectOneMenu>
+			<p:watermark for="jJriskProduct2"
+				value="#{messages.label_product} : "
+				rendered="#{jJProductBean.product != null}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectCheckboxMenu id="requirements"
+				value="#{JJRisk_.requirements}"
+				label="#{messages.label_requirement}s" filter="#{!loginBean.mobile}"
+				filterText="Filter" filterMatchMode="contains"
+				disabled="#{JJRisk_.project == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter">
+				<f:attribute name="collectionType" value="java.util.HashSet" />
+				<f:selectItems value="#{jJRiskBean.allRequirements}"
+					var="requirement" itemLabel="#{requirement.name}"
+					itemValue="#{requirement}" />
+			</p:selectCheckboxMenu>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectCheckboxMenu id="bugs" value="#{JJRisk_.bugs}" label="Bugs"
+				filter="#{!loginBean.mobile}" filterText="Filter"
+				filterMatchMode="contains" disabled="#{JJRisk_.project == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJBugConverter">
+				<f:attribute name="collectionType" value="java.util.HashSet" />
+				<f:selectItems value="#{jJRiskBean.allBugs}" var="bug"
+					itemLabel="#{bug.name}" itemValue="#{bug}" />
+			</p:selectCheckboxMenu>
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container33 Responsive100">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:selectCheckboxMenu id="testcases" value="#{JJRisk_.testcases}"
+				label="#{messages.label_testcase}s" filter="#{!loginBean.mobile}"
+				filterText="Filter" filterMatchMode="contains"
+				disabled="#{JJRisk_.project == null}"
+				converter="com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter">
+				<f:attribute name="collectionType" value="java.util.HashSet" />
+				<f:selectItems value="#{jJRiskBean.allTestCases}" var="testcase"
+					itemLabel="#{testcase.name}" itemValue="#{testcase}" />
+			</p:selectCheckboxMenu>
+		</h:panelGroup>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="Container100"
+		style="min-height: 220px;" rendered="#{!loginBean.mobile}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:outputLabel value="Description" for="jJRiskDescription"
+				rendered="#{!loginBean.mobile}" />
+			<pe:ckEditor id="jJRiskDescription"
+				toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
+				rendered="#{!loginBean.mobile}" height="150px"
+				customConfig="#{request.contextPath}/resources/js/ckEditor.js"
+				value="#{JJRisk_.description}" required="true"
+				requiredMessage="#{messages.label_desc_required_alert}" />
+		</h:panelGroup>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="Container100"
+		rendered="#{loginBean.mobile}">
+		<h:panelGroup layout="block" styleClass="ContainerIndent">
+			<p:inputTextarea id="jJRiskMobileDescription"
+				rendered="#{loginBean.mobile}" value="#{JJRisk_.description}"
+				placeholder="Description" rows="4" required="true"
+				requiredMessage="#{messages.label_desc_required_alert}" />
+		</h:panelGroup>
+	</h:panelGroup>
+</ui:composition>
+</html>

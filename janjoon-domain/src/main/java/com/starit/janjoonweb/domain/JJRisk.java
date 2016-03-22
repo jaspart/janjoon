@@ -57,6 +57,9 @@ public class JJRisk {
 	@ManyToOne
 	private JJProduct product;
 	
+	@ManyToOne
+	private JJStatus status;
+	
 	@Max(100)
 	@Min(0)
 	private Integer probability;

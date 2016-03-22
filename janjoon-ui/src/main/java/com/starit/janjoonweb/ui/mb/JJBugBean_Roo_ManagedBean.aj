@@ -193,17 +193,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         }
         return suggestions;
     }
-    
-    public List<JJProject> JJBugBean.completeProject(String query) {
-        List<JJProject> suggestions = new ArrayList<JJProject>();
-        for (JJProject jJProject : jJProjectService.findAllJJProjects()) {
-            String jJProjectStr = String.valueOf(jJProject.getName() +  " "  + jJProject.getDescription() +  " "  + jJProject.getCreationDate() +  " "  + jJProject.getUpdatedDate());
-            if (jJProjectStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(jJProject);
-            }
-        }
-        return suggestions;
-    }
+   
     
     public List<JJVersion> JJBugBean.completeVersioning(String query) {
         List<JJVersion> suggestions = new ArrayList<JJVersion>();

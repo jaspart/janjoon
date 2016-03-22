@@ -774,6 +774,7 @@ public class JJTestcaseBean {
 							testcase.getRequirement().getVersioning());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (!jJProjectBean.getProject()
 						.equals(testcase.getRequirement().getProject())) {
@@ -788,6 +789,7 @@ public class JJTestcaseBean {
 
 					session.setAttribute("jJSprintBean", new JJSprintBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 				} else if (testcase.getRequirement().getProduct() != null
 						&& jJProductBean.getProduct() != null) {
@@ -804,6 +806,7 @@ public class JJTestcaseBean {
 								new JJStatusBean());
 						session.setAttribute("jJSprintBean",
 								new JJSprintBean());
+						session.setAttribute("jJRiskBean", new JJRiskBean());
 					} else if (testcase.getRequirement().getVersioning() != null
 							&& jJVersionBean.getVersion() != null) {
 						if (!testcase.getRequirement().getVersioning()
@@ -826,6 +829,7 @@ public class JJTestcaseBean {
 					session.setAttribute("jJTaskBean", new JJTaskBean());
 					session.setAttribute("jJStatusBean", new JJStatusBean());
 					session.setAttribute("jJSprintBean", new JJSprintBean());
+					session.setAttribute("jJRiskBean", new JJRiskBean());
 				}
 
 				if (change) {
