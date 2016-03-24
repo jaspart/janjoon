@@ -7,14 +7,11 @@ import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRisk;
 import com.starit.janjoonweb.domain.JJRiskService;
 import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.JJRiskBean;
 import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
@@ -68,17 +65,7 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
     @Autowired
     JJContactService JJRiskBean.jJContactService;
     
-    @Autowired
-    JJProjectService JJRiskBean.jJProjectService;
-    
-    @Autowired
-    JJProductService JJRiskBean.jJProductService;
-    
-    @Autowired
-    JJStatusService JJRiskBean.jJStatusService;
-    
-    private String JJRiskBean.name = "JJRisks";   
-   
+    private String JJRiskBean.name = "JJRisks";
     
     private List<JJRisk> JJRiskBean.allJJRisks;
     
@@ -1012,8 +999,7 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(testcasesValue);
         
         return htmlPanelGrid;
-    } 
-   
+    }
     
     public List<JJContact> JJRiskBean.completeCreatedBy(String query) {
         List<JJContact> suggestions = new ArrayList<JJContact>();
@@ -1035,8 +1021,7 @@ privileged aspect JJRiskBean_Roo_ManagedBean {
             }
         }
         return suggestions;
-    }   
-    
+    }
     
     public List<JJRequirement> JJRiskBean.getSelectedRequirements() {
         return selectedRequirements;

@@ -236,7 +236,7 @@
 									<p:commandButton id="addTestStep"
 										value="#{messages.test_new_addteststep_label}"
 										disabled="#{jJTestcaseBean.disabledTeststepMode}"
-										actionListener="#{jJTeststepBean.save()}"
+										actionListener="#{jJTeststepBean.save(jJTestcaseBean.testcase)}"
 										onstart="PF('testBlockUIWidget').block()"
 										oncomplete="PF('testBlockUIWidget').unblock()"
 										icon="fa fa-plus-square Fs18"

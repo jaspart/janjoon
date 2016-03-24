@@ -35,6 +35,7 @@ import com.starit.janjoonweb.domain.JJMessageService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJStatus;
@@ -68,6 +69,9 @@ public class JJBugBean {
 	@Autowired
 	private JJConfigurationService jJConfigurationService;
 
+	@Autowired
+	private JJProjectService jJProjectService;
+
 	public void setjJConfigurationService(
 			JJConfigurationService jJConfigurationService) {
 		this.jJConfigurationService = jJConfigurationService;
@@ -89,6 +93,10 @@ public class JJBugBean {
 
 	public void setJJTaskService(JJTaskService jjTaskService) {
 		this.jJTaskService = jjTaskService;
+	}
+
+	public void setjJProjectService(JJProjectService jJProjectService) {
+		this.jJProjectService = jJProjectService;
 	}
 
 	// Bug_page attributes

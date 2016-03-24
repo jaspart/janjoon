@@ -17,6 +17,13 @@ public interface JJTestcaseService {
 			JJProject project, JJProduct product, JJVersion version,
 			JJBuild build, boolean onlyActif, boolean withOutChapter);
 
+	public Long getTestCaseCountByLastResult(JJProject project,
+			JJProduct product, JJVersion version, JJBuild build,
+			boolean onlyActif, Boolean passed,JJContact executor);
+	
+	public List<JJContact> getTestCaseContacts(JJProject project, JJProduct product,
+			JJVersion version,boolean onlyActif);
+
 	public void saveTestcases(Set<JJTestcase> testcases);
 
 	public void updateTestcases(Set<JJTestcase> testcases);

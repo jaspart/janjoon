@@ -75,6 +75,14 @@ privileged aspect JJStatus_Roo_JavaBean {
         this.objet = objet;
     }
     
+    public String JJStatus.getIcon() {
+        return this.icon;
+    }
+    
+    public void JJStatus.setIcon(String icon) {
+        this.icon = icon;
+    }
+    
     public Integer JJStatus.getLevelStatus() {
         return this.levelStatus;
     }

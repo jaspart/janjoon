@@ -453,7 +453,7 @@ public class ConfigListener implements ServletContextListener {
 		// }
 
 		String[] objects = {"Requirement", "Bug", "Message", "Task", "Build",
-				"TaskType", "RequirementState", "TestCase"};
+				"TaskType", "RequirementState", "TestCase", "Risk"};
 
 		for (String object : objects) {
 
@@ -462,8 +462,11 @@ public class ConfigListener implements ServletContextListener {
 			if (jJStatusService
 					.getStatus(object, true, new ArrayList<String>(), false)
 					.isEmpty()) {
-
-				if (object.equalsIgnoreCase("TestCase")) {
+				if (object.equalsIgnoreCase("Risk")) {
+					names.add("Majeur");
+					names.add("Danger");
+					names.add("Mineur");
+				} else if (object.equalsIgnoreCase("TestCase")) {
 					names.add("NEW");
 					names.add("PLANNED");
 					names.add("Finished");

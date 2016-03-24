@@ -56,6 +56,9 @@ public class JJStatus {
 	@Size(max = 25)
 	private String objet;
 
+	@Lob
+	private String icon;
+
 	private Integer levelStatus;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "status")

@@ -19,11 +19,15 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProductService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRisk;
+import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyRiskDataModel;
@@ -41,6 +45,15 @@ public class JJRiskBean {
 
 	@Autowired
 	private JJTestcaseService jJTestcaseService;
+	
+	@Autowired
+	private JJProductService jJProductService;
+	
+	@Autowired
+	private JJStatusService jJStatusService;
+	
+	@Autowired
+	private JJProjectService jJProjectService;
 
 	public void setjJRequirementService(
 			JJRequirementService jJRequirementService) {
@@ -53,6 +66,18 @@ public class JJRiskBean {
 
 	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
 		this.jJTestcaseService = jJTestcaseService;
+	}
+
+	public void setjJProductService(JJProductService jJProductService) {
+		this.jJProductService = jJProductService;
+	}
+
+	public void setjJStatusService(JJStatusService jJStatusService) {
+		this.jJStatusService = jJStatusService;
+	}
+
+	public void setjJProjectService(JJProjectService jJProjectService) {
+		this.jJProjectService = jJProjectService;
 	}
 
 	private JJRisk JJRisk_;

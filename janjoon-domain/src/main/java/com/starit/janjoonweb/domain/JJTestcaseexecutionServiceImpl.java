@@ -211,7 +211,7 @@ public class JJTestcaseexecutionServiceImpl
 
 		return result.getResultList();
 
-	}
+	}	
 
 	@Override
 	public Set<JJTestcaseexecution> getTestcaseexecutions(JJProject project,

@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
@@ -25,6 +26,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
+import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJContact;
@@ -38,6 +40,7 @@ import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcaseService;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
@@ -55,6 +58,9 @@ public class JJStatusBean {
 	private JJCategoryService jJCategoryService;
 
 	@Autowired
+	private JJTestcaseService jJTestcaseService;
+
+	@Autowired
 	private JJRequirementService jJRequirementService;
 
 	@Autowired
@@ -68,10 +74,10 @@ public class JJStatusBean {
 
 	@Autowired
 	private JJSprintService jJSprintService;
-	
 
 	private List<String> tableNames;
 	private List<JJStatus> statusList;
+
 	private List<JJContact> contacts = new ArrayList<JJContact>();
 	private List<JJStatus> states = new ArrayList<JJStatus>();
 	private ArrayList<ArrayList<Integer>> value = new ArrayList<ArrayList<Integer>>();
@@ -79,6 +85,10 @@ public class JJStatusBean {
 	private List<JJContact> taskContacts = new ArrayList<JJContact>();
 	private List<JJStatus> taskStatues = new ArrayList<JJStatus>();
 	private ArrayList<ArrayList<Integer>> taskValues = new ArrayList<ArrayList<Integer>>();
+
+	private List<JJContact> testContacts = new ArrayList<JJContact>();
+	private List<Boolean> testStates = new ArrayList<Boolean>();
+	private ArrayList<ArrayList<Integer>> testValues = new ArrayList<ArrayList<Integer>>();
 
 	private LazyStatusDataModel lazyStatusList;
 	private JJStatus selectedStatus;
@@ -93,11 +103,12 @@ public class JJStatusBean {
 	private BarChartModel kpiBarModel;
 	private MeterGaugeChartModel prjMetergauge;
 	private JJProject project;
+	private JJBuild build;
 	private List<CategoryDataModel> categoryDataModel;
 	private int activeTabIndex;
 	private int activeTabSprintIndex = -1;
 	private boolean renderCreate;
-	
+
 	public LazyStatusDataModel getLazyStatusList() {
 		if (lazyStatusList == null) {
 			lazyStatusList = new LazyStatusDataModel(jJStatusService);
@@ -143,14 +154,15 @@ public class JJStatusBean {
 
 							for (int j = 0; j < states.size(); j++) {
 
-								value.get(i).add(Integer.parseInt(
+								int k = Integer.parseInt(
 										"" + jJRequirementService.getReqCount(
 												LoginBean.getCompany(),
 												LoginBean.getProject(),
 												LoginBean.getProduct(),
 												LoginBean.getVersion(), null,
 												null, states.get(j),
-												contacts.get(i), true)));
+												contacts.get(i), true));
+								value.get(i).add(k);
 							}
 						}
 					} else {
@@ -177,6 +189,66 @@ public class JJStatusBean {
 
 	public void setValue(ArrayList<ArrayList<Integer>> value) {
 		this.value = value;
+	}
+
+	public List<JJContact> getTestContacts() {
+		return testContacts;
+	}
+
+	public void setTestContacts(List<JJContact> testContacts) {
+		this.testContacts = testContacts;
+	}
+
+	public List<Boolean> getTestStates() {
+
+		if (activeTabIndex == KPI_TAB) {
+			if (testStates == null || testStates.isEmpty()) {
+				
+				testContacts = jJTestcaseService.getTestCaseContacts(project,
+						LoginBean.getProduct(), LoginBean.getVersion(), true);
+
+				if (testContacts != null && !testContacts.isEmpty()) {
+
+					testStates = new ArrayList<Boolean>();
+
+					testStates.add(true);
+					testStates.add(false);
+					testStates.add(null);
+
+					testValues = new ArrayList<ArrayList<Integer>>();
+					// states.add(null);
+					for (int i = 0; i < testContacts.size(); i++) {
+						testValues.add(new ArrayList<Integer>());
+
+						for (int j = 0; j < testStates.size(); j++) {
+							Long number = jJTestcaseService
+									.getTestCaseCountByLastResult(
+											LoginBean.getProject(),
+											LoginBean.getProduct(),
+											LoginBean.getVersion(), build, true,
+											testStates.get(j),
+											testContacts.get(i));
+							testValues.get(i).add(Integer.parseInt("" + number));
+						}
+					}
+
+				}
+
+			}
+		}
+		return testStates;
+	}
+
+	public void setTestStates(List<Boolean> testStates) {
+		this.testStates = testStates;
+	}
+
+	public ArrayList<ArrayList<Integer>> getTestValues() {
+		return testValues;
+	}
+
+	public void setTestValues(ArrayList<ArrayList<Integer>> testValues) {
+		this.testValues = testValues;
 	}
 
 	public List<JJContact> getTaskContacts() {
@@ -275,6 +347,10 @@ public class JJStatusBean {
 		this.jJSprintService = jJSprintService;
 	}
 
+	public void setjJTestcaseService(JJTestcaseService jJTestcaseService) {
+		this.jJTestcaseService = jJTestcaseService;
+	}
+
 	public List<JJStatus> getStatusList() {
 
 		if (statusList == null)
@@ -315,6 +391,14 @@ public class JJStatusBean {
 
 		}
 
+	}
+
+	public JJBuild getBuild() {
+		return build;
+	}
+
+	public void setBuild(JJBuild build) {
+		this.build = build;
 	}
 
 	public List<CategoryDataModel> getCategoryDataModel() {
@@ -906,7 +990,7 @@ public class JJStatusBean {
 		if (project == null) {
 			getProject();
 		}
-		
+
 	}
 
 	public void deleteStatus() {
@@ -1065,8 +1149,8 @@ public class JJStatusBean {
 		Axis xAxis = model.getAxis(AxisType.X);
 		xAxis.setLabel("Contact");
 
-		 Axis yAxis = model.getAxis(AxisType.Y);
-		 yAxis.setLabel("Temps (h)");
+		Axis yAxis = model.getAxis(AxisType.Y);
+		yAxis.setLabel("Temps (h)");
 
 		return model;
 	}
@@ -1130,7 +1214,8 @@ public class JJStatusBean {
 		model.addSeries(greenSerie);
 
 		model.setTitle(MessageFactory
-				.getMessage("statistique_kpi_kpiLineModel_header", "").getDetail());
+				.getMessage("statistique_kpi_kpiLineModel_header", "")
+				.getDetail());
 		model.setLegendPosition("e");
 		model.setShowPointLabels(true);
 		model.setSeriesColors("0288D1,5C6BC0,59A45D");
@@ -1141,6 +1226,13 @@ public class JJStatusBean {
 		yAxis.setMax(700);
 
 		return model;
+	}
+
+	public void handleTestStatChange(AjaxBehaviorEvent e) {
+
+		testContacts = null;
+		testStates = null;
+		testValues = null;
 	}
 
 	public class CategoryDataModel {

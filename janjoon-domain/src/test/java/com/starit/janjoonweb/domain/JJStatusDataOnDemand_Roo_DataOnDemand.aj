@@ -43,6 +43,7 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
         setCreationDate(obj, index);
         setDescription(obj, index);
         setEnabled(obj, index);
+        setIcon(obj, index);
         setLevelStatus(obj, index);
         setName(obj, index);
         setObjet(obj, index);
@@ -63,6 +64,11 @@ privileged aspect JJStatusDataOnDemand_Roo_DataOnDemand {
     public void JJStatusDataOnDemand.setEnabled(JJStatus obj, int index) {
         Boolean enabled = Boolean.TRUE;
         obj.setEnabled(enabled);
+    }
+    
+    public void JJStatusDataOnDemand.setIcon(JJStatus obj, int index) {
+        String icon = "icon_" + index;
+        obj.setIcon(icon);
     }
     
     public void JJStatusDataOnDemand.setLevelStatus(JJStatus obj, int index) {

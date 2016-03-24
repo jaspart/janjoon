@@ -13,8 +13,6 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJSprint;
@@ -53,9 +51,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
     
     @Autowired
     JJContactService JJBugBean.jJContactService;
-    
-    @Autowired
-    JJProjectService JJBugBean.jJProjectService;
     
     @Autowired
     JJVersionService JJBugBean.jJVersionService;
@@ -193,7 +188,6 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         }
         return suggestions;
     }
-   
     
     public List<JJVersion> JJBugBean.completeVersioning(String query) {
         List<JJVersion> suggestions = new ArrayList<JJVersion>();

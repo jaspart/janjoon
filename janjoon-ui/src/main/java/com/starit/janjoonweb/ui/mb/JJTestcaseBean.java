@@ -1196,6 +1196,10 @@ public class JJTestcaseBean {
 	}
 
 	public void closeDialog() {
+
+		if (LoginBean.findBean("jJStatusBean") != null)
+			((JJStatusBean) LoginBean.findBean("jJStatusBean"))
+					.handleTestStatChange(null);
 		task = null;
 		builds = null;
 		pieChart = null;

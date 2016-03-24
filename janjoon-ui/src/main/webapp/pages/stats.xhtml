@@ -86,6 +86,8 @@
 								title="#{messages.specification_video_help_title}" />
 						</h:panelGroup>
 						<h:form id="kpiForm">
+							<p:remoteCommand name="onBuildChange"
+								update=":statsTabView:kpiForm:testStatTable" />
 							<p:remoteCommand name="updateKpiTab" update="@form" />
 							<h:panelGroup layout="block" styleClass="Container90"
 								rendered="#{jJStatusBean.kpiLineModel != null}">
@@ -154,6 +156,67 @@
 													styleClass="Fs14" />
 											</f:facet>
 											<h:outputText value="#{jJStatusBean.value[colIdx][rowIdx]}" />
+										</p:columns>
+									</p:dataTable>
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container100 ShowOnSmallDesktop">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:dataTable id="testStatTable" var="contact"
+										value="#{jJStatusBean.testContacts}" rowIndexVar="colIdx"
+										scrollable="true" scrollHeight="200"
+										emptyMessage="#{messages.label_notRecordFound}"
+										rendered="#{jJStatusBean.testContacts != null}"
+										style="table-layout: fixed;">
+										<f:facet name="header">
+											<h:panelGroup layout="block" styleClass="Container">
+												<h:panelGroup layout="block"
+													style="float: right !important;"
+													styleClass="Container50 Responsive50 Fs20">
+													<h:outputText style="font-family: 'roboto_condensedlight';"
+														value="#{messages.statistique_kpi_ContactTestTable_header}" />
+												</h:panelGroup>
+												<h:panelGroup layout="block"
+													styleClass="Container50 Responsive50">
+													<h:panelGroup layout="block" styleClass="Container30">
+														<h:panelGroup layout="block"
+															styleClass="ContainerIndentLabel">
+															<p:outputLabel for="build" styleClass="White"
+																value="Build:" />
+														</h:panelGroup>
+													</h:panelGroup>
+													<h:panelGroup layout="block" styleClass="Container70">
+														<h:panelGroup layout="block" styleClass="ContainerIndent">
+															<p:selectOneMenu id="build" value="#{jJStatusBean.build}"
+																effect="fade" filter="#{!loginBean.mobile}"
+																filterMatchMode="contains"
+																converter="com.starit.janjoonweb.ui.mb.converter.JJBuildConverter">
+																<f:selectItems value="#{jJBuildBean.builds}" var="bld"
+																	itemLabel="#{bld.name}" itemValue="#{bld}" />
+																<p:ajax listener="#{jJStatusBean.handleTestStatChange}"
+																	process="@this" oncomplete="onBuildChange()" />
+															</p:selectOneMenu>
+														</h:panelGroup>
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+										</f:facet>
+										<p:column styleClass="TexAlCenter" width="100">
+											<h:outputText value="#{contact.firstname} #{contact.name}" />
+										</p:column>
+										<p:columns var="state" value="#{jJStatusBean.testStates}"
+											width="50" columnIndexVar="rowIdx" styleClass="TexAlCenter">
+											<f:facet name="header">
+												<h:outputText rendered="#{state != null}"
+													value="#{state ? messages.test_status_SUCCESS_label : messages.test_status_FAILED_label}"
+													styleClass="#{state ? 'TestcaseSuccess':'TestcaseFailed'} Fs14" />
+												<h:outputText rendered="#{state == null}"
+													value="#{messages.test_status_nonRUNED_label}"
+													styleClass="TestcaseNotExecuted Fs14" />
+											</f:facet>
+											<h:outputText
+												value="#{jJStatusBean.testValues[colIdx][rowIdx]}" />
 										</p:columns>
 									</p:dataTable>
 								</h:panelGroup>
