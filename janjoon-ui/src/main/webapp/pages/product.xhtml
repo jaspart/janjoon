@@ -31,7 +31,15 @@
 									icon="fa fa-plus Fs20" />
 							</h:panelGroup>
 							<h:panelGroup layout="block"
-								styleClass="Container60 Responsive100">
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton id="restoreProduct"
+									icon="fa fa-rotate-right Fs20" styleClass="GrayButton"
+									title="#{messages.admin_product_restore_dialog}"
+									oncomplete="PF('restoreProductDialogWidget').show()"
+									resetValues="true" update=":tabview:restoreProductForm" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
 								<p:inputText id="globalFilter"
 									onkeyup="PF('productDataTableWV').filter()"
 									placeholder="#{messages.bug_table_search_watermark}" />
@@ -127,6 +135,80 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
+	
+	<p:dialog id="restoreProductDialog" responsive="true"
+		header="#{messages.admin_product_restore_dialog}" resizable="false"
+		modal="true" widgetVar="restoreProductDialogWidget" dynamic="true"
+		showEffect="fade" draggable="true">
+		<p:ajax event="close" update=":tabview:productForm :headerForm"
+			listener="#{jJProductBean.closeDialog}" />
+
+		<p:outputPanel id="restoreProductPanel">
+			<h:form id="restoreProductForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block"
+					styleClass="Container ui-fluid BorderAll" style="max-width:600px;">
+					<h:panelGroup layout="block" styleClass="Container100">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+
+							<p:dataTable id="restoreProductTable" var="product"
+								scrollable="true" value="#{jJProductBean.deletedProduct}"
+								rowKey="#{product.id}"
+								emptyMessage="#{messages.label_notRecordFound}"
+								selection="#{jJProductBean.restoredProduct}" scrollHeight="400">
+
+								<p:ajax event="rowSelectCheckbox"
+									update="tabview:restoreProductForm:restoreButton" />
+								<p:ajax event="rowUnselectCheckbox"
+									update="tabview:restoreProductForm:restoreButton" />
+								<p:ajax event="toggleSelect"
+									update="tabview:restoreProductForm:restoreButton" />
+
+								<f:facet name="header">#{messages.admin_product_restore_table_title}</f:facet>
+								<p:column selectionMode="multiple"
+									style="width: 20px;text-align:center" />
+								<p:column>
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_product_table_name_label}" />
+									</f:facet>
+									<h:outputText value="#{product.name}" />
+								</p:column>
+								<p:column headerText="Manager" priority="6">
+									<h:outputText value="#{product.manager}"
+										converter="JJContactConverter" />
+								</p:column>
+								<p:column headerText="#{messages.label_company}">
+									<h:outputText value="#{product.manager.company}"
+										converter="JJCompanyConverter" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Separator" />
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="restoreButton"
+								value="#{messages.admin_product_restore_button}"
+								update="restoreProductForm" icon="fa fa-rotate-right Fs20"
+								disabled="#{empty jJProductBean.restoredProduct}"
+								title="#{messages.admin_product_restore_button}"
+								action="#{jJProductBean.restoreProducts}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+								value="#{messages.label_cancel}"
+								onclick="PF('restoreProductDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
 
 	<p:confirmDialog id="productDeleteDialog"
 		widgetVar="productDeleteDialogWidget"

@@ -25,7 +25,6 @@ import com.starit.janjoonweb.domain.JJProjectService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
 import com.starit.janjoonweb.domain.JJRisk;
-import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTestcase;
@@ -45,13 +44,13 @@ public class JJRiskBean {
 
 	@Autowired
 	private JJTestcaseService jJTestcaseService;
-	
+
 	@Autowired
 	private JJProductService jJProductService;
-	
+
 	@Autowired
 	private JJStatusService jJStatusService;
-	
+
 	@Autowired
 	private JJProjectService jJProjectService;
 

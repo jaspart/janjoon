@@ -20,8 +20,6 @@ public class JJRiskConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component,
 			Object value) {
-		return value instanceof JJRisk
-				? ((JJRisk) value).getName()
-				: "";		
+		return value instanceof JJRisk ? ((JJRisk) value).getName() : "";
 	}
 }

@@ -4,16 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.primefaces.component.inputswitch.InputSwitch;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
 import com.starit.janjoonweb.domain.JJProject;
 import com.starit.janjoonweb.domain.JJRisk;
@@ -36,31 +30,22 @@ public class LazyRiskDataModel extends LazyDataModel<JJRisk> {
 		this.project = project;
 		this.product = product;
 	}
-	
 
 	public JJProject getProject() {
 		return project;
 	}
 
-
-
 	public void setProject(JJProject project) {
 		this.project = project;
 	}
-
-
 
 	public JJProduct getProduct() {
 		return product;
 	}
 
-
-
 	public void setProduct(JJProduct product) {
 		this.product = product;
 	}
-
-
 
 	@Override
 	public JJRisk getRowData(String rowKey) {

@@ -68,7 +68,7 @@ public class DevelopmentBean implements Serializable {
 
 	private JJConfigurationService jJConfigurationService;
 
-	private JJTaskBean jJTaskBean;
+	// private JJTaskBean jJTaskBean;
 
 	@Autowired
 	private JJTaskService jJTaskService;
@@ -117,9 +117,9 @@ public class DevelopmentBean implements Serializable {
 		this.jJStatusService = jJStatusService;
 	}
 
-	public void setjJTaskBean(JJTaskBean jJTaskBean) {
-		this.jJTaskBean = jJTaskBean;
-	}
+	// public void setjJTaskBean(JJTaskBean jJTaskBean) {
+	// this.jJTaskBean = jJTaskBean;
+	// }
 
 	public void setjJTaskService(JJTaskService jJTaskService) {
 		this.jJTaskService = jJTaskService;
@@ -148,14 +148,14 @@ public class DevelopmentBean implements Serializable {
 
 	public DevelopmentBean(DevelopmentBean devBean) {
 
-		if (jJTaskBean == null) {
-			HttpSession session = (HttpSession) FacesContext
-					.getCurrentInstance().getExternalContext()
-					.getSession(false);
-			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-			if (jJTaskBean == null)
-				jJTaskBean = new JJTaskBean();
-		}
+		// if (jJTaskBean == null) {
+		// HttpSession session = (HttpSession) FacesContext
+		// .getCurrentInstance().getExternalContext()
+		// .getSession(false);
+		// jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		// if (jJTaskBean == null)
+		// jJTaskBean = new JJTaskBean();
+		// }
 
 		init = false;
 		this.jJConfigurationService = devBean.jJConfigurationService;
@@ -170,10 +170,10 @@ public class DevelopmentBean implements Serializable {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 
-		if (jJTaskBean == null)
-			jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
-		if (jJTaskBean == null)
-			jJTaskBean = new JJTaskBean();
+		// if (jJTaskBean == null)
+		// jJTaskBean = (JJTaskBean) session.getAttribute("jJTaskBean");
+		// if (jJTaskBean == null)
+		// jJTaskBean = new JJTaskBean();
 
 		contact = ((LoginBean) session.getAttribute("loginBean")).getContact();
 
@@ -604,6 +604,9 @@ public class DevelopmentBean implements Serializable {
 			status = jJStatusService.getOneStatus("IN PROGRESS", "Task", true);
 			task.setStatus(status);
 		}
+		JJTaskBean jJTaskBean = (JJTaskBean) LoginBean.findBean("jJTaskBean");
+		if (jJTaskBean == null)
+			jJTaskBean = new JJTaskBean();
 
 		jJTaskBean.saveJJTask(task, false, new MutableInt(0));
 		if (task.getSprint() != null
@@ -665,6 +668,9 @@ public class DevelopmentBean implements Serializable {
 	}
 
 	public void startTask() {
+		JJTaskBean jJTaskBean = (JJTaskBean) LoginBean.findBean("jJTaskBean");
+		if (jJTaskBean == null)
+			jJTaskBean = new JJTaskBean();
 		task.setStartDateReal(new Date());
 		jJTaskBean.setTask(task);
 		jJTaskBean.updateTask("dev");

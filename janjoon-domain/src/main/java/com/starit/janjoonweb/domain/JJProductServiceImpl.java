@@ -19,6 +19,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.starit.janjoonweb.domain.reference.StrFunction;
 
@@ -27,8 +28,48 @@ public class JJProductServiceImpl implements JJProductService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	private JJPermissionService jJPermissionService;
+
+	public void setjJPermissionService(
+			JJPermissionService jJPermissionService) {
+		this.jJPermissionService = jJPermissionService;
+	}
+
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	public List<JJProduct> getProductList(boolean enabled, JJCompany company,
+			JJContact contact) {
+
+		if (company != null || jJPermissionService.isSuperAdmin(contact)) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<JJProduct> criteriaQuery = criteriaBuilder
+					.createQuery(JJProduct.class);
+
+			Root<JJProduct> from = criteriaQuery.from(JJProduct.class);
+
+			CriteriaQuery<JJProduct> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (company != null)
+				predicates.add(criteriaBuilder
+						.equal(from.get("manager").get("company"), company));
+
+			predicates.add(criteriaBuilder.equal(from.get("enabled"), enabled));
+
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
+
+			TypedQuery<JJProduct> result = entityManager.createQuery(select);
+
+			return result.getResultList();
+		} else
+			return new ArrayList<JJProduct>();
+
 	}
 
 	// New Generic

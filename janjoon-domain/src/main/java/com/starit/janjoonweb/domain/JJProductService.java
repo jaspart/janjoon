@@ -17,6 +17,9 @@ public interface JJProductService {
 			int pageSize, List<SortMeta> multiSortMeta,
 			Map<String, Object> filters);
 
+	public List<JJProduct> getProductList(boolean enabled, JJCompany company,
+			JJContact contact);
+
 	public JJProduct getJJProductWithName(String name);
 
 	public List<JJProduct> getAdminListProducts();

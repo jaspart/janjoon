@@ -11,12 +11,12 @@ public class Contacts {
 
 	private JJContact contact1;
 	private JJContact contact2;
-	
+
 	private JJContact contact3;
 	private JJContact contact4;
 
 	public Contacts() {
-	}	
+	}
 
 	public Contacts(JJContact contact1, JJContact contact2, JJContact contact3,
 			JJContact contact4) {
@@ -39,7 +39,6 @@ public class Contacts {
 	public void setContact2(JJContact contact2) {
 		this.contact2 = contact2;
 	}
-	
 
 	public JJContact getContact3() {
 		return contact3;

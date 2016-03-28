@@ -1033,7 +1033,7 @@ public class ConfigListener implements ServletContextListener {
 			contact.setEnabled(true);
 			contact.setEmail("janjoon.mailer@gmail.com");
 			contact.setCreationDate(new Date());
-			contact.setCompany(jJCompanyService.getActifCompanies().get(0));
+			contact.setCompany(jJCompanyService.getCompanies(true).get(0));
 
 			jJContactService.saveJJContact(contact);
 

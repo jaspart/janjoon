@@ -91,12 +91,13 @@ public class ReadXMLFile {
 				while ((nextLine = reader.readNext()) != null) {
 
 					if (nextLine.length > 6 && nextLine[6] != null) {
-						System.out.println(
-								nextLine[6] + " " + nextLine[nextLine.length-1] + " etc...");
+						System.out.println(nextLine[6] + " "
+								+ nextLine[nextLine.length - 1] + " etc...");
 						JJRequirement requirement = new JJRequirement();
 
 						requirement.setName(nextLine[6]);
-						requirement.setDescription(nextLine[nextLine.length-1]);
+						requirement
+								.setDescription(nextLine[nextLine.length - 1]);
 						requirement.setEnabled(true);
 						requirement.setProject(project);
 						requirement.setCategory(category);

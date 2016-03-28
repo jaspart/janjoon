@@ -36,7 +36,16 @@
 								</p:commandButton>
 							</h:panelGroup>
 							<h:panelGroup layout="block"
-								styleClass="Container60 Responsive100">
+								styleClass="Container10  TexAlCenter">
+								<p:commandButton id="restoreCompany"
+									rendered="#{loginBean.authorisationService.adminCompany}"
+									icon="fa fa-rotate-right Fs20" styleClass="GrayButton"
+									title="#{messages.admin_company_restore_dialog}"
+									oncomplete="PF('restoreCompanyDialogWidget').show()"
+									resetValues="true" update=":tabview:restoreCompanyForm" />
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container50 Responsive100">
 								<p:inputText id="globalFilter"
 									rendered="#{loginBean.authorisationService.adminCompany}"
 									onkeyup="PF('companyDataTableWV').filter()"
@@ -113,6 +122,80 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
+	
+	<p:dialog id="restoreCompanyDialog" responsive="true"
+		header="#{messages.admin_company_restore_dialog}" resizable="false"
+		modal="true" widgetVar="restoreCompanyDialogWidget" dynamic="true"
+		showEffect="fade" draggable="true">
+		<p:ajax event="close" update=":tabview:companyForm"
+			listener="#{jJCompanyBean.closeDialog}" />
+
+		<p:outputPanel id="restoreCompanyPanel">
+			<h:form id="restoreCompanyForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block"
+					styleClass="Container ui-fluid BorderAll" style="max-width:600px;">
+					<h:panelGroup layout="block" styleClass="Container100">
+						<p:messages id="msg" showDetail="false" closable="true" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container100">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+
+							<p:dataTable id="restoreCompanyTable" var="company"
+								scrollable="true" value="#{jJCompanyBean.deletedCompany}"
+								rowKey="#{company.id}"
+								emptyMessage="#{messages.label_notRecordFound}"
+								selection="#{jJCompanyBean.restoredCompany}" scrollHeight="400">
+
+								<p:ajax event="rowSelectCheckbox"
+									update="tabview:restoreCompanyForm:restoreButton" />
+								<p:ajax event="rowUnselectCheckbox"
+									update="tabview:restoreCompanyForm:restoreButton" />
+								<p:ajax event="toggleSelect"
+									update="tabview:restoreCompanyForm:restoreButton" />
+
+								<f:facet name="header">#{messages.admin_company_restore_table_title}</f:facet>
+								<p:column selectionMode="multiple"
+									style="width: 20px;text-align:center" />
+								<p:column>
+									<f:facet name="header">
+										<h:outputText
+											value="#{messages.admin_company_table_name_title}" />
+									</f:facet>
+									<h:outputText value="#{company.name}" />
+								</p:column>
+<!-- 								<p:column headerText="Manager" priority="6"> -->
+<!-- 									<h:outputText value="#{project.manager}" -->
+<!-- 										converter="JJContactConverter" /> -->
+<!-- 								</p:column> -->
+<!-- 								<p:column headerText="#{messages.label_company}"> -->
+<!-- 									<h:outputText value="#{project.manager.company}" -->
+<!-- 										converter="JJCompanyConverter" /> -->
+<!-- 								</p:column> -->
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Separator" />
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="restoreButton"
+								value="#{messages.admin_company_restore_button}"
+								update="restoreCompanyForm" icon="fa fa-rotate-right Fs20"
+								disabled="#{empty jJCompanyBean.restoredCompany}"
+								title="#{messages.admin_company_restore_button}"								
+								action="#{jJCompanyBean.restoreCompanys}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+								value="#{messages.label_cancel}"
+								onclick="PF('restoreCompanyDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
 
 	<p:confirmDialog id="companyDeleteDialog"
 		widgetVar="companyDeleteDialogWidget"

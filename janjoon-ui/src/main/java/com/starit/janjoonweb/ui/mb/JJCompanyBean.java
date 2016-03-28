@@ -43,6 +43,9 @@ public class JJCompanyBean {
 	private Date day;
 	private List<ChunkTime> workDays;
 
+	private List<JJCompany> deletedCompany;
+	private List<JJCompany> restoredCompany;
+
 	public String getCalendar() {
 		return calendar;
 	}
@@ -131,12 +134,12 @@ public class JJCompanyBean {
 			if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()
 					&& ((LoginBean) LoginBean.findBean("loginBean"))
 							.getAuthorisationService().isAdminCompany())
-				companies = jJCompanyService.getActifCompanies();
+				companies = jJCompanyService.getCompanies(true);
 			else if (((LoginBean) LoginBean.findBean("loginBean")).isEnable()) {
 				companies = new ArrayList<JJCompany>();
 				companies.add(LoginBean.getCompany());
 			} else {
-				companies = jJCompanyService.getActifCompanies();
+				companies = jJCompanyService.getCompanies(true);
 			}
 
 			companyOptions = null;
@@ -237,6 +240,43 @@ public class JJCompanyBean {
 
 	}
 
+	public List<JJCompany> getDeletedCompany() {
+		if (deletedCompany == null) {
+			deletedCompany = jJCompanyService.getCompanies(false);
+		}
+
+		return deletedCompany;
+	}
+
+	public void setDeletedCompany(List<JJCompany> deletedCompany) {
+		this.deletedCompany = deletedCompany;
+	}
+
+	public List<JJCompany> getRestoredCompany() {
+		if (restoredCompany == null)
+			restoredCompany = new ArrayList<JJCompany>();
+		return restoredCompany;
+	}
+
+	public void setRestoredCompany(List<JJCompany> restoredCompany) {
+		this.restoredCompany = restoredCompany;
+	}
+
+	public void restoreCompanys() {
+		for (JJCompany com : restoredCompany) {
+			com.setEnabled(true);
+			updateJJCompany(com);
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
+				MessageFactory.getMessage("label_company", "").getDetail(), "");
+
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		deletedCompany = null;
+		restoredCompany = null;
+	}
+
 	public void addHoliday() throws IOException {
 		updatedCompanyCalendar = CalendarUtil.addHoliday(day,
 				updatedCompanyCalendar, holidays.size());
@@ -329,6 +369,9 @@ public class JJCompanyBean {
 		companyOptions = null;
 		workDays = null;
 		holidays = null;
+
+		deletedCompany = null;
+		restoredCompany = null;
 	}
 
 	public void saveCalendar() {

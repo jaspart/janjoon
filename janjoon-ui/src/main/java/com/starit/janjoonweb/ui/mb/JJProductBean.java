@@ -56,80 +56,8 @@ public class JJProductBean {
 	private boolean disabledVersionMode;
 	private boolean productState;
 
-	public void addMessage() {
-		final String summary = productAdmin.getEnabled()
-				? "Enabled Product"
-				: "Disabled Product";
-
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(summary));
-	}
-
-	public void addProduct(final JJVersionBean jJVersionBean) {
-		productAdmin.setManager(productManager);
-		if (productAdmin.getId() == null) {
-
-			saveJJProduct(productAdmin);
-			resetVersionProductList();
-			disabledProductMode = true;
-			disabledVersionMode = false;
-
-			jJVersionBean
-					.setVersionDataModel(new ArrayList<VersionDataModel>());
-
-			FacesContext.getCurrentInstance().addMessage(null,
-					MessageFactory.getMessage("message_successfully_created",
-							MessageFactory.getMessage("label_product", "")
-									.getDetail(),
-							""));
-		}
-	}
-
-	public void closeDialog(final JJVersionBean jJVersionBean,
-			final JJBuildBean jJBuildBean) {
-
-		productAdmin = null;
-		productManager = null;
-		productManagerList = null;
-		jJBuildBean.setBuildUtils(null);
-		jJBuildBean.setIndex(-1);
-		jJVersionBean.setVersionAdmin(null);
-		jJVersionBean.setVersionDataModel(null);
-
-		productState = true;
-	}
-
-	public void deleteProduct() {
-		if (productAdmin != null) {
-			productAdmin.setEnabled(false);
-			updateJJProduct(productAdmin);
-			resetVersionProductList();
-		}
-	}
-
-	public void editProduct(final JJVersionBean jJVersionBean) {
-		message = "admin_product_edit_title";
-		getProductManagerList();
-		if (productManagerList.isEmpty()) {
-			productManager = null;
-
-		} else {
-			if (productManagerList.contains(productAdmin.getManager())) {
-				productManager = productAdmin.getManager();
-			} else {
-				productManager = null;
-			}
-		}
-
-		jJVersionBean.setDisabledCheckVersion(false);
-		jJVersionBean.newVersion();
-		jJVersionBean.fillVersionTable(productAdmin);
-
-		disabledProductMode = false;
-		disabledVersionMode = false;
-
-		productState = false;
-	}
+	private List<JJProduct> deletedProduct;
+	private List<JJProduct> restoredProduct;
 
 	public boolean getDisabledProductMode() {
 		return disabledProductMode;
@@ -151,10 +79,36 @@ public class JJProductBean {
 		return productAdmin;
 	}
 
-	private boolean getProductDialogConfiguration() {
+	public boolean isProductState() {
+		return productState;
+	}
 
-		return jJConfigurationService.getDialogConfig("ProductDialog",
-				"product.create.saveandclose");
+	public void setProductState(boolean productState) {
+		this.productState = productState;
+	}
+
+	public List<JJProduct> getRestoredProduct() {
+		if (restoredProduct == null)
+			restoredProduct = new ArrayList<JJProduct>();
+		return restoredProduct;
+	}
+
+	public void setRestoredProduct(List<JJProduct> restoredProduct) {
+		this.restoredProduct = restoredProduct;
+	}
+
+	public List<JJProduct> getDeletedProduct() {
+		if (deletedProduct == null) {
+			LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
+			deletedProduct = jJProductService.getProductList(false,
+					LoginBean.getCompany(), loginBean.getContact());
+		}
+
+		return deletedProduct;
+	}
+
+	public void setDeletedProduct(List<JJProduct> deletedProduct) {
+		this.deletedProduct = deletedProduct;
 	}
 
 	public List<JJProduct> getProductList() {
@@ -202,6 +156,110 @@ public class JJProductBean {
 		}
 
 		return productManagerList;
+	}
+
+	private boolean getProductDialogConfiguration() {
+
+		return jJConfigurationService.getDialogConfig("ProductDialog",
+				"product.create.saveandclose");
+	}
+
+	public void restoreProducts() {
+		for (JJProduct prod : restoredProduct) {
+			prod.setEnabled(true);
+			updateJJProduct(prod);
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_restored", FacesMessage.SEVERITY_INFO,
+				MessageFactory.getMessage("label_product", "").getDetail(), "");
+
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		deletedProduct = null;
+		restoredProduct = null;
+	}
+
+	public void addMessage() {
+		final String summary = productAdmin.getEnabled()
+				? "Enabled Product"
+				: "Disabled Product";
+
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(summary));
+	}
+
+	public void addProduct(final JJVersionBean jJVersionBean) {
+		productAdmin.setManager(productManager);
+		if (productAdmin.getId() == null) {
+
+			saveJJProduct(productAdmin);
+			resetVersionProductList();
+			disabledProductMode = true;
+			disabledVersionMode = false;
+
+			jJVersionBean
+					.setVersionDataModel(new ArrayList<VersionDataModel>());
+
+			FacesContext.getCurrentInstance().addMessage(null,
+					MessageFactory.getMessage("message_successfully_created",
+							MessageFactory.getMessage("label_product", "")
+									.getDetail(),
+							""));
+		}
+	}
+
+	public void closeDialog(final JJVersionBean jJVersionBean,
+			final JJBuildBean jJBuildBean) {
+
+		productAdmin = null;
+		productManager = null;
+		productManagerList = null;
+		jJBuildBean.setBuildUtils(null);
+		jJBuildBean.setIndex(-1);
+		jJVersionBean.setVersionAdmin(null);
+		jJVersionBean.setVersionDataModel(null);
+		productState = true;
+
+		deletedProduct = null;
+		restoredProduct = null;
+	}
+
+	public void closeDialog() {
+
+		deletedProduct = null;
+		restoredProduct = null;
+	}
+
+	public void deleteProduct() {
+		if (productAdmin != null) {
+			productAdmin.setEnabled(false);
+			updateJJProduct(productAdmin);
+			resetVersionProductList();
+		}
+	}
+
+	public void editProduct(final JJVersionBean jJVersionBean) {
+		message = "admin_product_edit_title";
+		getProductManagerList();
+		if (productManagerList.isEmpty()) {
+			productManager = null;
+
+		} else {
+			if (productManagerList.contains(productAdmin.getManager())) {
+				productManager = productAdmin.getManager();
+			} else {
+				productManager = null;
+			}
+		}
+
+		jJVersionBean.setDisabledCheckVersion(false);
+		jJVersionBean.newVersion();
+		jJVersionBean.fillVersionTable(productAdmin);
+
+		disabledProductMode = false;
+		disabledVersionMode = false;
+
+		productState = false;
 	}
 
 	public void newProduct(final JJVersionBean jJVersionBean) {

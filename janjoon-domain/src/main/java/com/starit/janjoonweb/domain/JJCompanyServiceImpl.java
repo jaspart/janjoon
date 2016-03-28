@@ -146,7 +146,7 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 
 	}
 
-	public List<JJCompany> getActifCompanies() {
+	public List<JJCompany> getCompanies(boolean actif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJCompany> criteriaQuery = criteriaBuilder
@@ -157,7 +157,8 @@ public class JJCompanyServiceImpl implements JJCompanyService {
 		CriteriaQuery<JJCompany> select = criteriaQuery.select(from);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), actif));
 
 		select.where(predicates.toArray(new Predicate[]{}));
 

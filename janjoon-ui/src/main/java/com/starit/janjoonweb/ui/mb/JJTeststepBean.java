@@ -278,12 +278,11 @@ public class JJTeststepBean {
 	}
 
 	public void save(JJTestcase tc) {
-//
-//		final HttpSession session = (HttpSession) FacesContext
-//				.getCurrentInstance().getExternalContext().getSession(false);
-//		final JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
-//				.getAttribute("jJTestcaseBean");
-		
+		//
+		// final HttpSession session = (HttpSession) FacesContext
+		// .getCurrentInstance().getExternalContext().getSession(false);
+		// final JJTestcaseBean jJTestcaseBean = (JJTestcaseBean) session
+		// .getAttribute("jJTestcaseBean");
 
 		if (teststep.getId() == null) {
 

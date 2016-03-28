@@ -203,7 +203,7 @@ public class JJStatusBean {
 
 		if (activeTabIndex == KPI_TAB) {
 			if (testStates == null || testStates.isEmpty()) {
-				
+
 				testContacts = jJTestcaseService.getTestCaseContacts(project,
 						LoginBean.getProduct(), LoginBean.getVersion(), true);
 
@@ -228,7 +228,8 @@ public class JJStatusBean {
 											LoginBean.getVersion(), build, true,
 											testStates.get(j),
 											testContacts.get(i));
-							testValues.get(i).add(Integer.parseInt("" + number));
+							testValues.get(i)
+									.add(Integer.parseInt("" + number));
 						}
 					}
 

@@ -21,7 +21,7 @@ public class TestClass {
 
 	}
 
-	public void run() {		
+	public void run() {
 		String csvFile = TestClass.class.getResource("/mcc-mnc-table.csv")
 				.getFile();
 		BufferedReader br = null;
