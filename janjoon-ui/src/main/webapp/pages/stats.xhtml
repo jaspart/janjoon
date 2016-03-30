@@ -389,6 +389,37 @@
 									rendered="#{jJStatusBean.bugMetergauge != null}"
 									responsive="true" />
 							</h:panelGroup>
+
+							<h:panelGroup layout="block"
+								styleClass="Container100 ShowOnSmallDesktop">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:dataTable var="contact" value="#{jJStatusBean.bugContacts}"
+										rowIndexVar="colIdx" scrollable="true" scrollHeight="200"
+										emptyMessage="#{messages.label_notRecordFound}"
+										rendered="#{jJStatusBean.bugContacts != null}"
+										style="table-layout: fixed;">
+										<f:facet name="header">
+											<h:outputText
+												value="#{messages.statistique_kpi_ContactSpectable_header}" />
+										</f:facet>
+
+										<p:column styleClass="TexAlCenter" width="100">
+											<h:outputText value="#{contact.firstname} #{contact.name}" />
+										</p:column>
+										<p:columns var="state" value="#{jJStatusBean.bugStatus}"
+											width="50" columnIndexVar="rowIdx" styleClass="TexAlCenter">
+											<f:facet name="header">
+												<h:outputText rendered="#{state != null}"
+													value="#{loginBean.checkMessage(state)}"
+													styleClass="#{state.name} Fs14" />
+												<h:outputText rendered="#{state == null}" value="Total"
+													styleClass="Fs14" />
+											</f:facet>
+											<h:outputText value="#{jJStatusBean.bugValue[colIdx][rowIdx]}" />
+										</p:columns>
+									</p:dataTable>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:form>
 				</p:tab>

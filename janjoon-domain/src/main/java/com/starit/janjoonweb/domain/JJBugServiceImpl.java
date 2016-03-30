@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,85 @@ public class JJBugServiceImpl implements JJBugService {
 		this.entityManager = entityManager;
 	}
 
-	public Long getBugsCountByStaus(JJCompany company, JJProject project,
-			JJProduct product, JJVersion version, JJStatus status,
-			boolean onlyActif) {
+	public List<JJStatus> getBugsStatus(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJStatus> criteriaQuery = criteriaBuilder
+				.createQuery(JJStatus.class);
+		Root<JJBug> from = criteriaQuery.from(JJBug.class);
+
+		CriteriaQuery<JJStatus> select = criteriaQuery
+				.select(from.<JJStatus> get("status"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (version != null) {
+			predicates.add(
+					criteriaBuilder.equal(from.get("versioning"), version));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder
+					.equal(from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(from.join("versioning")
+					.join("product").join("manager").get("company"), company));
+		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		select.where(predicates.toArray(new Predicate[]{}));
+		
+		TypedQuery<JJStatus> result = entityManager.createQuery(select);
+		return new ArrayList<JJStatus>(
+				new HashSet<JJStatus>(result.getResultList()));
+
+	}
+
+	public List<JJContact> getBugsContacts(JJCompany company, JJProject project,
+			JJProduct product, JJVersion version) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJContact> criteriaQuery = criteriaBuilder
+				.createQuery(JJContact.class);
+		Root<JJBug> from = criteriaQuery.from(JJBug.class);
+
+		CriteriaQuery<JJContact> select = criteriaQuery
+				.select(from.<JJContact> get("createdBy"));
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+
+		if (version != null) {
+			predicates.add(
+					criteriaBuilder.equal(from.get("versioning"), version));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder
+					.equal(from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(from.join("versioning")
+					.join("product").join("manager").get("company"), company));
+		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		select.where(predicates.toArray(new Predicate[]{}));
+
+		TypedQuery<JJContact> result = entityManager.createQuery(select);
+		return new ArrayList<JJContact>(
+				new HashSet<JJContact>(result.getResultList()));
+
+	}
+
+	public Long getBugsCountByStaus(JJCompany company, JJContact createdBy,
+			JJProject project, JJProduct product, JJVersion version,
+			JJStatus status, boolean onlyActif) {
 
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> select = criteriaBuilder.createQuery(Long.class);
@@ -38,6 +115,11 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
+		}
+
+		if (createdBy != null) {
+			predicates.add(
+					criteriaBuilder.equal(from.get("createdBy"), createdBy));
 		}
 
 		if (project != null) {

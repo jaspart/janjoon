@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.http.annotation.GuardedBy;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -81,6 +82,10 @@ public class JJStatusBean {
 	private List<JJContact> contacts = new ArrayList<JJContact>();
 	private List<JJStatus> states = new ArrayList<JJStatus>();
 	private ArrayList<ArrayList<Integer>> value = new ArrayList<ArrayList<Integer>>();
+
+	private List<JJContact> bugContacts = new ArrayList<JJContact>();
+	private List<JJStatus> bugStatus = new ArrayList<JJStatus>();
+	private ArrayList<ArrayList<Integer>> bugValue = new ArrayList<ArrayList<Integer>>();
 
 	private List<JJContact> taskContacts = new ArrayList<JJContact>();
 	private List<JJStatus> taskStatues = new ArrayList<JJStatus>();
@@ -189,6 +194,73 @@ public class JJStatusBean {
 
 	public void setValue(ArrayList<ArrayList<Integer>> value) {
 		this.value = value;
+	}
+
+	public List<JJContact> getBugContacts() {
+		return bugContacts;
+	}
+
+	public void setBugContacts(List<JJContact> bugContacts) {
+		this.bugContacts = bugContacts;
+	}
+
+	public List<JJStatus> getBugStatus() {
+
+		if (activeTabIndex == BUG_TAB) {
+			if (bugStatus == null || bugStatus.isEmpty()) {
+
+				bugContacts = jJBugService.getBugsContacts(
+						LoginBean.getCompany(), LoginBean.getProject(),
+						LoginBean.getProduct(), LoginBean.getVersion());
+
+				if (bugContacts != null && !bugContacts.isEmpty()) {
+
+					bugStatus = jJBugService.getBugsStatus(
+							LoginBean.getCompany(), LoginBean.getProject(),
+							LoginBean.getProduct(), LoginBean.getVersion());
+					if (!bugStatus.isEmpty()) {
+						bugValue = new ArrayList<ArrayList<Integer>>();
+						bugStatus.add(null);
+						for (int i = 0; i < bugContacts.size(); i++) {
+							bugValue.add(new ArrayList<Integer>());
+
+							for (int j = 0; j < bugStatus.size(); j++) {
+
+								int k = Integer.parseInt(
+										"" + jJBugService.getBugsCountByStaus(
+												LoginBean.getCompany(),
+												bugContacts.get(i),
+												LoginBean.getProject(),
+												LoginBean.getProduct(),
+												LoginBean.getVersion(),
+												bugStatus.get(j), true));
+								bugValue.get(i).add(k);
+							}
+						}
+					} else {
+						bugStatus = null;
+						bugContacts = null;
+					}
+
+				}
+
+			}
+
+			return bugStatus;
+		} else
+			return null;
+	}
+
+	public void setBugStatus(List<JJStatus> bugStatus) {
+		this.bugStatus = bugStatus;
+	}
+
+	public ArrayList<ArrayList<Integer>> getBugValue() {
+		return bugValue;
+	}
+
+	public void setBugValue(ArrayList<ArrayList<Integer>> bugValue) {
+		this.bugValue = bugValue;
 	}
 
 	public List<JJContact> getTestContacts() {
@@ -386,6 +458,9 @@ public class JJStatusBean {
 			activeTabSprintIndex = -1;
 			prjMetergauge = null;
 			bugPieChart = null;
+			bugContacts = null;
+			bugContacts = null;
+			bugValue = null;
 			bugMetergauge = null;
 			kpiLineModel = null;
 			kpiBarModel = null;
@@ -687,7 +762,7 @@ public class JJStatusBean {
 									((LoginBean) LoginBean
 											.findBean("loginBean")).getContact()
 													.getCompany(),
-									project, LoginBean.getProduct(),
+									null, project, LoginBean.getProduct(),
 									LoginBean.getVersion(), s, true));
 					render = render || i > 0;
 					if (i > 0)

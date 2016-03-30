@@ -862,6 +862,8 @@ public class JJBugBean {
 				.findBean("jJStatusBean");
 		if (jJStatusBean != null) {
 			jJStatusBean.setBugPieChart(null);
+			jJStatusBean.setBugContacts(null);
+			jJStatusBean.setBugStatus(null);
 			jJStatusBean.setKpiLineModel(null);
 			jJStatusBean.setBugMetergauge(null);
 			jJStatusBean.setKpiBarModel(null);
@@ -889,6 +891,8 @@ public class JJBugBean {
 				.findBean("jJStatusBean");
 		if (jJStatusBean != null) {
 			jJStatusBean.setBugPieChart(null);
+			jJStatusBean.setBugContacts(null);
+			jJStatusBean.setBugStatus(null);
 			jJStatusBean.setKpiLineModel(null);
 			jJStatusBean.setKpiBarModel(null);
 			jJStatusBean.setBugMetergauge(null);
