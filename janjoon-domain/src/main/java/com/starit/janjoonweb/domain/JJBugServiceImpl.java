@@ -197,7 +197,8 @@ public class JJBugServiceImpl implements JJBugService {
 	@Override
 	public List<JJBug> getImportBugs(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version, JJCategory category,
-			JJStatus status, boolean onlyActif) {
+			JJStatus status,boolean withoutTask,boolean onlyActif) {
+		
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
 				.createQuery(JJBug.class);
@@ -230,12 +231,24 @@ public class JJBugServiceImpl implements JJBugService {
 
 		if (status != null) {
 			predicates.add(criteriaBuilder.equal(from.get("status"), status));
-		}
-
-		// predicates.add(criteriaBuilder.isNotNull(from.get("requirement")));
+		}		
 
 		if (onlyActif) {
 			predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+		}
+		
+		if(withoutTask)
+		{
+			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+			Root<JJTask> fromTask = subquery.from(JJTask.class);
+			List<Predicate> predicatesTask = new ArrayList<Predicate>();
+			subquery.select(fromTask.get("bug").<Long> get("id"));
+			predicatesTask.add(criteriaBuilder.isNotNull(fromTask.get("bug")));
+			predicatesTask.add(criteriaBuilder.equal(fromTask.get("enabled"), true));
+	
+			subquery.where(criteriaBuilder.and(predicatesTask.toArray(new Predicate[]{})));
+			predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
+		
 		}
 
 		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));

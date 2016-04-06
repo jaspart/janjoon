@@ -526,6 +526,7 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 	@Override
 	public List<JJRequirement> load(int first, int pageSize,
 			List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+
 		List<JJRequirement> data = new ArrayList<JJRequirement>();
 		String filterValue = ((JJRequirementBean) LoginBean
 				.findBean("jJRequirementBean")).getFilterValue();
@@ -533,9 +534,9 @@ public class CategoryDataModel extends LazyDataModel<JJRequirement> {
 				.findBean("jJRequirementBean")).isMine();
 		JJRequirement viewLinkRequirement = ((JJRequirementBean) LoginBean
 				.findBean("jJRequirementBean")).getViewLinkRequirement();
-		// String filterButton = ((JJRequirementBean) LoginBean
-		// .findBean("jJRequirementBean")).getFilterButton();
+
 		JJContact mineContact = null;
+
 		if (mine)
 			mineContact = ((LoginBean) LoginBean.findBean("loginBean"))
 					.getContact();

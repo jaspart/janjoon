@@ -122,7 +122,7 @@
 					<!-- 					</p:panelGrid> -->
 					<p:dataTable id="taskDataTable" var="taskData" widgetVar="tdtWV"
 						emptyMessage="#{messages.label_notRecordFound}"
-						style="width: 1700px;" sortFunction="#{jJTaskBean.sortFunction}"
+						style="width: 1400px;" sortFunction="#{jJTaskBean.sortFunction}"
 						rowIndexVar="rowIndex" styleClass="planning-dataTable"
 						sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
 						editable="true" editMode="cell">
@@ -384,25 +384,22 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column style="width: 160px;" id="bt"
-							headerText="#{messages.project_gantt_table_previous_title}">
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:outputText
-										value="#{messages.project_gantt_table_click_button}" />
-								</f:facet>
-								<f:facet name="input">
-									<p:selectManyMenu value="#{taskData.selectedTasks}"
-										showCheckbox="true" scrollHeight="100">
-										<f:selectItems value="#{taskData.tasks}" var="p"
-											itemLabel="#{p}" itemValue="#{p}" />
-										<!-- 										<p:column> -->
-										<!-- 											<h:outputText value=" #{p} " /> -->
-										<!-- 										</p:column> -->
-									</p:selectManyMenu>
-								</f:facet>
-							</p:cellEditor>
-						</p:column>
+<!-- 						<p:column style="width: 160px;" id="bt" -->
+<!-- 							headerText="#{messages.project_gantt_table_previous_title}"> -->
+<!-- 							<p:cellEditor> -->
+<!-- 								<f:facet name="output"> -->
+<!-- 									<h:outputText -->
+<!-- 										value="#{messages.project_gantt_table_click_button}" /> -->
+<!-- 								</f:facet> -->
+<!-- 								<f:facet name="input"> -->
+<!-- 									<p:selectManyMenu value="#{taskData.selectedTasks}" -->
+<!-- 										showCheckbox="true" scrollHeight="100"> -->
+<!-- 										<f:selectItems value="#{taskData.tasks}" var="p" -->
+<!-- 											itemLabel="#{p}" itemValue="#{p}" />										 -->
+<!-- 									</p:selectManyMenu> -->
+<!-- 								</f:facet> -->
+<!-- 							</p:cellEditor> -->
+<!-- 						</p:column> -->
 
 						<p:column style="width: 160px;" id="ts" headerText="Sprint">
 							<p:cellEditor>

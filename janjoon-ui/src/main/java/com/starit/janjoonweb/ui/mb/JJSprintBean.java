@@ -389,31 +389,31 @@ public class JJSprintBean {
 		if (paramMap.get("activeScrumIndex") != null) {
 			String paramIndex = paramMap.get("activeScrumIndex");
 			setActiveTabSprintIndex(Integer.valueOf(paramIndex));
-			System.out.println("###### ACtive tab: " + activeTabSprintIndex);
-			SprintUtil su = sprintList.get(activeTabSprintIndex);
+			//System.out.println("###### ACtive tab: " + activeTabSprintIndex);
+			//SprintUtil su = sprintList.get(activeTabSprintIndex);
 
-			if (!su.isRender()) {
-				System.err.println("###### ACtive activeTabSprintIndex: "
-						+ activeTabSprintIndex);
-			}
+//			if (!su.isRender()) {
+//				System.err.println("###### ACtive activeTabSprintIndex: "
+//						+ activeTabSprintIndex);
+//			}
 		} else if (paramMap.get("activeGantIndex") != null) {
 			String paramIndex = paramMap.get("activeGantIndex");
 			setActiveTabGantIndex(Integer.valueOf(paramIndex));
 
 			if (activeTabGantIndex == PlanningConfiguration.getSrumIndex()) {
-				SprintUtil su = sprintList.get(activeTabSprintIndex);
+				//SprintUtil su = sprintList.get(activeTabSprintIndex);
 
-				if (!su.isRender()) {
-					System.err.println("###### ACtive activeTabSprintIndex: "
-							+ activeTabSprintIndex);
-				}
+//				if (!su.isRender()) {
+//					System.err.println("###### ACtive activeTabSprintIndex: "
+//							+ activeTabSprintIndex);
+//				}
 
 				getJJTaskBean().setMode("scrum");
 			} else
 				getJJTaskBean().setMode("planning");
 
-			System.err.println(
-					"###### ACtive activeTabGantIndex: " + activeTabGantIndex);
+//			System.err.println(
+//					"###### ACtive activeTabGantIndex: " + activeTabGantIndex);
 
 		}
 	}

@@ -15,7 +15,7 @@ public interface JJTestcaseService {
 
 	public List<JJTestcase> getImportTestcases(JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
-			JJBuild build, boolean onlyActif, boolean withOutChapter);
+			JJBuild build, boolean withoutTask,boolean onlyActif, boolean withOutChapter);
 
 	public Long getTestCaseCountByLastResult(JJProject project,
 			JJProduct product, JJVersion version, JJBuild build,

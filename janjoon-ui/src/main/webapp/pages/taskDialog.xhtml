@@ -236,8 +236,12 @@
 			rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
 				<p:panel styleClass="Container100"
-					header="#{messages.label_testcase} ID:#{JJTask_.testcase.id}"
 					rendered="#{JJTask_.testcase != null and jJTaskBean.taskTreeNode == null}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{messages.label_testcase} ID:#{JJTask_.testcase.id} #{messages.label_createdBy} #{JJTask_.testcase.createdBy.firstname} #{JJTask_.testcase.createdBy.name}"
+							styleClass="Fright" />
+					</f:facet>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
 							<p:outputLabel value="#{messages.label_name} :"
@@ -360,8 +364,8 @@
 		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
-				<p:commandButton id="updateTaskButton"
-					update=":viewTaskForm" icon="fa fa-save Fs16"
+				<p:commandButton id="updateTaskButton" update=":viewTaskForm"
+					icon="fa fa-save Fs16"
 					actionListener="#{jJTaskBean.updateTask(View)}"
 					value="#{messages.label_save}"
 					process="@this,taskSprint,taskStatus,taskStartDatePlanned,taskEndDatePlanned,taskWorkload,taskAssignedTo,taskType"
@@ -373,7 +377,8 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50 ">
 			<h:panelGroup layout="block" styleClass="ContainerIndent">
 				<p:commandButton id="viewCloseButton"
-					value="#{messages.label_cancel}" styleClass="GrayButton RaisedButton"					
+					value="#{messages.label_cancel}"
+					styleClass="GrayButton RaisedButton"
 					onclick="PF('viewTaskDialogWidget').hide()" type="button" />
 			</h:panelGroup>
 		</h:panelGroup>

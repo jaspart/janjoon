@@ -452,7 +452,7 @@ public class JJChapterBean {
 				.getRequirements(LoginBean.getCompany(), category,
 						loginBean.getAuthorizedMap("Requirement", project,
 								product),
-						version, null, null, true, true, false, false, null);
+						version, null, null,false,true, true, false, false, null);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode(

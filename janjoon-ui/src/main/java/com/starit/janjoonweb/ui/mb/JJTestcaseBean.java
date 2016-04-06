@@ -238,7 +238,7 @@ public class JJTestcaseBean {
 
 				colNames = jJTestcaseService.getImportTestcases(category,
 						LoginBean.getProject(), LoginBean.getProduct(), null,
-						null, true, false);
+						null,false, true, false);
 				// rowNames=new ArrayList<Object>();
 				if (colNames != null && !colNames.isEmpty()) {
 
@@ -501,7 +501,7 @@ public class JJTestcaseBean {
 							.getAuthorizedMap("testcase",
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
-					LoginBean.getVersion(), null, chapter, true, true, true,
+					LoginBean.getVersion(), null, chapter,false, true, true, true,
 					false, null);
 
 		} else {
@@ -1284,7 +1284,7 @@ public class JJTestcaseBean {
 			List<JJTestcase> testWithOutChapter = jJTestcaseService
 					.getImportTestcases(category, LoginBean.getProject(),
 							LoginBean.getProduct(), LoginBean.getVersion(),
-							build, true, true);
+							build, false,true, true);
 
 			if ((withOutChapter != null && !withOutChapter.isEmpty())
 					|| (testWithOutChapter != null
@@ -1345,7 +1345,7 @@ public class JJTestcaseBean {
 							.getAuthorizedMap("testcase",
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
-					LoginBean.getVersion(), null, chapter, true, true, true,
+					LoginBean.getVersion(), null, chapter, false,true, true, true,
 					false, null);
 
 			if (rqs.size() > 0) {
@@ -1694,7 +1694,7 @@ public class JJTestcaseBean {
 
 		List<JJTestcase> withOutChapter = jJTestcaseService.getImportTestcases(
 				category, project, LoginBean.getProduct(),
-				LoginBean.getVersion(), build, true, true);
+				LoginBean.getVersion(), build, false,true, true);
 
 		if (withOutChapter != null && !withOutChapter.isEmpty()) {
 			paragraph.add(new Chunk("\n " + MessageFactory
@@ -1897,7 +1897,7 @@ public class JJTestcaseBean {
 			else
 				testcases = jJTestcaseService.getImportTestcases(category,
 						LoginBean.getProject(), LoginBean.getProduct(),
-						LoginBean.getVersion(), build, true, true);
+						LoginBean.getVersion(), build,false, true, true);
 		}
 
 		return testcases;
@@ -2144,7 +2144,7 @@ public class JJTestcaseBean {
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
 					category, project, LoginBean.getProduct(),
-					LoginBean.getVersion(), null, true, false);
+					LoginBean.getVersion(), null,false, true, false);
 			for (JJTestcase ttt : tests) {
 				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());

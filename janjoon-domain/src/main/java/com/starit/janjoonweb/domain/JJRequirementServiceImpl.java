@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -278,7 +279,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, Map<JJProject, JJProduct> map,
-			JJVersion version, JJStatus status, JJChapter chapter,
+			JJVersion version, JJStatus status, JJChapter chapter,boolean withoutTask,
 			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,
 			boolean mine, JJContact contact) {
 
@@ -310,6 +311,20 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 				Predicate condition2 = criteriaBuilder
 						.equal(from.get("updatedBy"), contact);
 				predicates.add(criteriaBuilder.or(condition1, condition2));
+			}
+			
+			if(withoutTask)
+			{
+				Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+				Root<JJTask> fromTask = subquery.from(JJTask.class);
+				List<Predicate> predicatesTask = new ArrayList<Predicate>();
+				subquery.select(fromTask.get("requirement").<Long> get("id"));
+				predicatesTask.add(criteriaBuilder.isNotNull(fromTask.get("requirement")));
+				predicatesTask.add(criteriaBuilder.equal(fromTask.get("enabled"), true));
+		
+				subquery.where(criteriaBuilder.and(predicatesTask.toArray(new Predicate[]{})));
+				predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
+			
 			}
 
 			if (map != null && !map.isEmpty()) {
@@ -430,7 +445,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	public List<JJRequirement> getRequirements(JJCompany company,
 			Map<JJProject, JJProduct> map, JJVersion version,
 			JJCategory category) {
-		return getRequirements(company, category, map, version, null, null,
+		return getRequirements(company, category, map, version, null, null,false,
 				false, true, true, false, null);
 	}
 
@@ -439,7 +454,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			JJStatus status) {
 
 		return getRequirements(company, null,
-				new HashMap<JJProject, JJProduct>(), null, status, null, false,
+				new HashMap<JJProject, JJProduct>(), null, status, null,false, false,
 				true, false, false, null);
 	}
 

@@ -439,7 +439,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 	@Override
 	public List<JJTestcase> getImportTestcases(JJCategory category,
 			JJProject project, JJProduct product, JJVersion version,
-			JJBuild build, boolean onlyActif, boolean withOutChapter) {
+			JJBuild build, boolean withoutTask, boolean onlyActif,
+			boolean withOutChapter) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<JJTestcase> criteriaQuery = criteriaBuilder
 				.createQuery(JJTestcase.class);
@@ -455,11 +456,22 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			predicates.add(criteriaBuilder.equal(path, project));
 		}
 
-		// if (version != null) {
-		// Path<Object> path = from.join("requirement").get("versioning");
-		// predicates.add(criteriaBuilder.equal(path, version));
-		//
-		// } else
+		if (withoutTask) {
+			Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+			Root<JJTask> fromTask = subquery.from(JJTask.class);
+			List<Predicate> predicatesTask = new ArrayList<Predicate>();
+			subquery.select(fromTask.get("testcase").<Long> get("id"));
+			predicatesTask.add(criteriaBuilder.isNotNull(fromTask.get("testcase")));
+			predicatesTask
+					.add(criteriaBuilder.equal(fromTask.get("enabled"), true));
+
+			subquery.where(criteriaBuilder
+					.and(predicatesTask.toArray(new Predicate[]{})));
+			predicates.add(
+					criteriaBuilder.in(from.get("id")).value(subquery).not());
+
+		}
+		
 		if (product != null) {
 			Path<Object> path = from.join("requirement").get("product");
 			predicates.add(criteriaBuilder.equal(path, product));

@@ -12,7 +12,7 @@ public interface JJRequirementService {
 
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, Map<JJProject, JJProduct> map,
-			JJVersion version, JJStatus status, JJChapter chapter,
+			JJVersion version, JJStatus status, JJChapter chapter,boolean withoutTask,
 			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,
 			boolean mine, JJContact contact);
 

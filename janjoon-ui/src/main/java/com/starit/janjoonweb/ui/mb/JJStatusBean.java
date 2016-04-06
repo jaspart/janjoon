@@ -12,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
-import org.apache.http.annotation.GuardedBy;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -1412,7 +1411,7 @@ public class JJStatusBean {
 									category,
 									loginBean.getAuthorizedMap("Requirement",
 											project, LoginBean.getProduct()),
-									LoginBean.getVersion(), null, null, false,
+									LoginBean.getVersion(), null, null, false,false,
 									true, false, false, null);
 
 					boolean isLowCategory = jJCategoryService
@@ -1521,7 +1520,7 @@ public class JJStatusBean {
 									category,
 									loginBean.getAuthorizedMap("Requirement",
 											project, LoginBean.getProduct()),
-									LoginBean.getVersion(), null, null, false,
+									LoginBean.getVersion(), null, null, false,false,
 									true, false, false, null);
 
 					for (JJRequirement requirement : dataList) {

@@ -1767,8 +1767,8 @@ public class JJRequirementBean {
 				LoginBean.getCompany(), importCategory,
 				loginBean.getAuthorizedMap("Requirement", importProject,
 						importProduct),
-				importVersion, importStatus, null, false, false, true, false,
-				null)) {
+				importVersion, importStatus, null, false, false, false, true,
+				false, null)) {
 			importFormats.add(new ImportFormat(String.valueOf(i), requirement));
 			i++;
 		}
@@ -2637,7 +2637,7 @@ public class JJRequirementBean {
 			list = jJRequirementService.getRequirements(LoginBean.getCompany(),
 					category,
 					loginBean.getAuthorizedMap("Requirement", project, product),
-					version, null, null, false, true, true, false, null);
+					version, null, null, false, false, true, true, false, null);
 		}
 		logger.info("TaskTracker=" + (System.currentTimeMillis() - t));
 		return list;
@@ -3360,12 +3360,11 @@ public class JJRequirementBean {
 			JJStatus status, JJChapter chapter, boolean withChapter,
 			boolean onlyActif, boolean orderByCreationdate) {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
-		return jJRequirementService
-				.getRequirements(LoginBean.getCompany(), category,
-						loginBean.getAuthorizedMap("Requirement", project,
-								product),
-						version, status, chapter, withChapter, onlyActif,
-						orderByCreationdate, false, null);
+		return jJRequirementService.getRequirements(LoginBean.getCompany(),
+				category,
+				loginBean.getAuthorizedMap("Requirement", project, product),
+				version, status, chapter, false, withChapter, onlyActif,
+				orderByCreationdate, false, null);
 	}
 
 	public List<JJRequirement> getRequirements(JJProject project,

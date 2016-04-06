@@ -183,7 +183,7 @@ public class JJRiskBean {
 		if (allTestCases == null)
 			allTestCases = jJTestcaseService.getImportTestcases(null,
 					getJJRisk_().getProject(), getJJRisk_().getProduct(), null,
-					null, true, false);
+					null,false, true, false);
 		return allTestCases;
 	}
 

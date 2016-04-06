@@ -47,14 +47,15 @@ public class ViewExpiredExceptionExceptionHandler
 
 				try {
 					if (facesContext.getPartialViewContext().isAjaxRequest()) {
-
+						System.err.println("ajax request");
 					}
 
 				} finally {
 					i.remove();
 				}
-			} else if (FacesContext.getCurrentInstance()
-					.getExternalContext() != null
+			} else if (FacesContext.getCurrentInstance() != null
+					&& FacesContext.getCurrentInstance()
+							.getExternalContext() != null
 					&& LoginBean.findBean("loginBean") != null) {
 
 				if (FacesContext.getCurrentInstance().getViewRoot() != null) {

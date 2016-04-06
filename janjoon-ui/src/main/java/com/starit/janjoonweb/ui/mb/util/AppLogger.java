@@ -418,7 +418,7 @@ public class AppLogger {
 			calendarUtil = new ContactCalendarUtil(jJProjectService
 					.findJJProject(LoginBean.getProject().getId()).getManager()
 					.getCompany());
-			if (task.getId() != null)
+			if (oldJJTask != null)
 				assignedTo = oldJJTask.getAssignedTo() != null;
 		}
 

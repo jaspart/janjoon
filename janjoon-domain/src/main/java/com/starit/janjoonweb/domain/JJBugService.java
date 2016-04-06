@@ -23,7 +23,7 @@ public interface JJBugService {
 
 	public List<JJBug> getImportBugs(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version, JJCategory category,
-			JJStatus status, boolean onlyActif);
+			JJStatus status,boolean withoutTask,boolean onlyActif);
 
 	public List<JJBug> getBugs(JJCompany company, JJProject project,
 			JJProduct product, JJVersion version);
