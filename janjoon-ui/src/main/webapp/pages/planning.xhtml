@@ -17,16 +17,22 @@
 			<p:remoteCommand update=":projecttabview:SprintTabView:sprintForm"
 				name="updateTabSprint" />
 			<p:remoteCommand name="tabChangeHelper" update=":projecttabview"
-				actionListener="#{jJSprintBean.onTabSprintChange}" oncomplete="updateTabViewWidth();" />
+				actionListener="#{jJSprintBean.onTabSprintChange}"
+				oncomplete="updateTabViewWidth();" />
 
 			<p:remoteCommand name="sprintTabChangeHelper"
 				update="projecttabview:activeSprintIndexForm"
 				actionListener="#{jJSprintBean.onTabSprintChange}"
 				oncomplete="updateTabViewWidth();" />
+
+			<p:remoteCommand name="kanbanTabChangeHelper"
+				update="projecttabview:activeKanbanIndexForm"
+				actionListener="#{jJSprintBean.onTabSprintChange}"
+				oncomplete="updateTabViewWidth();" />
 		</h:form>
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">
-				<h:panelGroup layout="block" styleClass="Container70 Responsive100">
+				<h:panelGroup layout="block" styleClass="Container80 Responsive100">
 					<h:panelGroup layout="block" styleClass="Container15 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 							<p:outputLabel
@@ -98,6 +104,11 @@
 						rendered="#{loginBean.planningConfiguration.render}">
 						<ui:insert>
 							<ui:include src="#{loginBean.planningConfiguration.secondPage}" />
+						</ui:insert>
+					</p:tab>
+					<p:tab title="Kanban">
+						<ui:insert>
+							<ui:include src="kanban.xhtml" />
 						</ui:insert>
 					</p:tab>
 				</p:tabView>

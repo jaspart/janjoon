@@ -74,6 +74,7 @@ public class JJSprintBean {
 	// private boolean update = true;
 	private int activeTabSprintIndex;
 	private int activeTabGantIndex;
+	private int activeTabKanbanIndex;
 
 	public int getActiveTabSprintIndex() {
 		return activeTabSprintIndex;
@@ -89,6 +90,14 @@ public class JJSprintBean {
 
 	public void setActiveTabGantIndex(int activeTabGantIndex) {
 		this.activeTabGantIndex = activeTabGantIndex;
+	}
+
+	public int getActiveTabKanbanIndex() {
+		return activeTabKanbanIndex;
+	}
+
+	public void setActiveTabKanbanIndex(int activeTabKanbanIndex) {
+		this.activeTabKanbanIndex = activeTabKanbanIndex;
 	}
 
 	public JJTaskBean getJJTaskBean() {
@@ -350,6 +359,7 @@ public class JJSprintBean {
 					activeTabSprintIndex = 0;
 			}
 		}
+		activeTabKanbanIndex = activeTabSprintIndex;
 		JJSprint sp = new JJSprint();
 		sp.setProject(pr);
 		sprintList
@@ -389,32 +399,18 @@ public class JJSprintBean {
 		if (paramMap.get("activeScrumIndex") != null) {
 			String paramIndex = paramMap.get("activeScrumIndex");
 			setActiveTabSprintIndex(Integer.valueOf(paramIndex));
-			//System.out.println("###### ACtive tab: " + activeTabSprintIndex);
-			//SprintUtil su = sprintList.get(activeTabSprintIndex);
-
-//			if (!su.isRender()) {
-//				System.err.println("###### ACtive activeTabSprintIndex: "
-//						+ activeTabSprintIndex);
-//			}
 		} else if (paramMap.get("activeGantIndex") != null) {
 			String paramIndex = paramMap.get("activeGantIndex");
 			setActiveTabGantIndex(Integer.valueOf(paramIndex));
 
 			if (activeTabGantIndex == PlanningConfiguration.getSrumIndex()) {
-				//SprintUtil su = sprintList.get(activeTabSprintIndex);
-
-//				if (!su.isRender()) {
-//					System.err.println("###### ACtive activeTabSprintIndex: "
-//							+ activeTabSprintIndex);
-//				}
-
 				getJJTaskBean().setMode("scrum");
-			} else
+			} else if (activeTabGantIndex == PlanningConfiguration
+					.getGanttIndex())
 				getJJTaskBean().setMode("planning");
-
-//			System.err.println(
-//					"###### ACtive activeTabGantIndex: " + activeTabGantIndex);
-
+		} else if (paramMap.get("activeKanbanIndex") != null) {
+			String paramIndex = paramMap.get("activeKanbanIndex");
+			setActiveTabKanbanIndex(Integer.valueOf(paramIndex));
 		}
 	}
 
@@ -670,7 +666,7 @@ public class JJSprintBean {
 	// public void persistTask() {
 	// JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 	// .getContact();
-	// JJStatus status = jJStatusService.getOneStatus("TODO", "Task", true);
+	// JJStatus status = jJStatusService.getOneStatus("todo", "Task", true);
 	// if (status != null)
 	// task.setStatus(status);
 	// if (requirement != null) {

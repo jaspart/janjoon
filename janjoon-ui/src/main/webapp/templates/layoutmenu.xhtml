@@ -77,11 +77,11 @@
 				<f:selectItems value="#{jJVersionBean.versionList}" var="v"
 					itemLabel="#{v.name}" itemValue="#{v}" />
 
-				<p:ajax update=":contentPanel :growlForm" />
+				<p:ajax update=":contentPanel :growlForm addVersionButton" />
 			</p:selectOneMenu>
-			<p:commandButton icon="fa fa-pencil Fs16" styleClass="GrayButton"
+			<p:commandButton id="addVersionButton" icon="fa fa-pencil Fs16" styleClass="GrayButton"
 				oncomplete="PF('productDialogWidget').show()" resetValues="true"
-				title="#{messages.label_edit}"
+				title="#{messages.label_edit}" disabled="#{jJVersionBean.version == null}"
 				action="#{jJProductBean.editProduct(jJVersionBean)}"
 				update=":productDialogHeader :productDialogForm">
 				<f:setPropertyActionListener value="#{jJProductBean.product}"

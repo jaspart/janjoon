@@ -18,6 +18,9 @@ function updateTabViewWidth() {
 
 	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
 	$("#projecttabview\\:SprintTabView").css("display","block");
+	
+	$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
+	$("#projecttabview\\:kanbanTabView").css("display","block");	
 
 	var chart = $(".barChart:visible").last();
 
@@ -45,6 +48,9 @@ $(window).resize(
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
 			$("#projecttabview\\:SprintTabView").css("display","block");
+			
+			$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
+			$("#projecttabview\\:kanbanTabView").css("display","block");	
 		});
 
 $(document).ready(
@@ -59,6 +65,10 @@ $(document).ready(
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
 			$("#projecttabview\\:SprintTabView").css("display","block");
+			
+			$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
+			$("#projecttabview\\:kanbanTabView").css("display","block");		
+			
 		});
 
 function saveScrollPos() {

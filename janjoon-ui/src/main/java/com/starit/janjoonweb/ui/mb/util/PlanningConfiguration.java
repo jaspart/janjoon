@@ -171,7 +171,7 @@ public class PlanningConfiguration {
 				JJConfiguration configuration = new JJConfiguration();
 				configuration.setName("planning");
 				configuration
-						.setDescription("specify available tab in planing vue");
+						.setDescription("specify available tab in planning vue");
 				configuration.setCreatedBy(
 						((LoginBean) LoginBean.findBean("loginBean"))
 								.getContact());
