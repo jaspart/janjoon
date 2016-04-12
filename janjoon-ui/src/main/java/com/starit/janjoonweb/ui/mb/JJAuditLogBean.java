@@ -1,16 +1,20 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJAuditLog;
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiquesDataModel;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJAuditLog.class, beanName = "jJAuditLogBean")
-public class JJAuditLogBean {
+public class JJAuditLogBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private LazyConnectionStatistiquesDataModel connectionStatistiquesListTable;
 
 	public LazyConnectionStatistiquesDataModel getConnectionStatistiquesListTable() {

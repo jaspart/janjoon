@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBuild;
 import com.starit.janjoonweb.domain.JJContact;
@@ -23,10 +23,15 @@ import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 
-@RooSerializable
-@RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
-public class JJBuildBean {
 
+@RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
+public class JJBuildBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int index;
 	private String buildName;
 	private JJBuild build;

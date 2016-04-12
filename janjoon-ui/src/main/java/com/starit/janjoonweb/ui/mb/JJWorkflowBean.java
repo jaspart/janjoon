@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJStatus;
@@ -26,10 +26,14 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyWorkFlowDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.WorkFlowsActions;
 
-@RooSerializable
-@RooJsfManagedBean(entity = JJWorkflow.class, beanName = "jJWorkflowBean")
-public class JJWorkflowBean {
 
+@RooJsfManagedBean(entity = JJWorkflow.class, beanName = "jJWorkflowBean")
+public class JJWorkflowBean implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	private JJStatusService jJStatusService;
 

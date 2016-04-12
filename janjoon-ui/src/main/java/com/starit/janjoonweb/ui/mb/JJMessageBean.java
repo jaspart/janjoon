@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.roo.addon.serializable.RooSerializable;
 import org.springframework.stereotype.Component;
 
 import com.starit.janjoonweb.domain.JJBug;
@@ -35,10 +35,9 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyMessageDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@RooSerializable
 @Scope("session")
 @Component("jJMessageBean")
-public class JJMessageBean {
+public class JJMessageBean implements Serializable {
 
 	/**
 	 * 

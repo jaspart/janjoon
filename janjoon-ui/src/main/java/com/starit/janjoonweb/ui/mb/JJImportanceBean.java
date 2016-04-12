@@ -1,18 +1,22 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.faces.component.html.HtmlPanelGrid;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJImportance;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJImportance.class, beanName = "jJImportanceBean")
-public class JJImportanceBean {
+public class JJImportanceBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public void saveJJImportance(JJImportance b) {
 		b.setCreationDate(new Date());

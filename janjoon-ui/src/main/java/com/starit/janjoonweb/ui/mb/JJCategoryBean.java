@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.faces.application.FacesMessage;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJConfigurationService;
@@ -17,10 +17,13 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCategoryDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJCategory.class, beanName = "jJCategoryBean")
-public class JJCategoryBean {
+public class JJCategoryBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	public JJConfigurationService jJConfigurationService;
 

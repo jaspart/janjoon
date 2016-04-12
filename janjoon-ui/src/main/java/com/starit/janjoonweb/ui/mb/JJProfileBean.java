@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -20,9 +20,15 @@ import com.starit.janjoonweb.ui.mb.JJRightBean.RightDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProfileDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@RooSerializable
+
 @RooJsfManagedBean(entity = JJProfile.class, beanName = "jJProfileBean")
-public class JJProfileBean {
+public class JJProfileBean implements Serializable {
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	public JJConfigurationService jJConfigurationService;

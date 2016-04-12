@@ -12,6 +12,8 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJFlowStep;
+import com.starit.janjoonweb.domain.JJFlowStepService;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -34,6 +36,7 @@ import com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJChapterConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJCriticityConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJFlowStepConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJImportanceConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
 import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
@@ -106,6 +109,9 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
     
     @Autowired
     JJStatusService JJRequirementBean.jJStatusService;
+    
+    @Autowired
+    JJFlowStepService JJRequirementBean.jJFlowStepService;
     
     @Autowired
     JJSprintService JJRequirementBean.jJSprintService;
@@ -626,6 +632,30 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusCreateInputMessage.setFor("statusCreateInput");
         statusCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusCreateInputMessage);
+        
+        OutputLabel flowStepCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        flowStepCreateOutput.setFor("flowStepCreateInput");
+        flowStepCreateOutput.setId("flowStepCreateOutput");
+        flowStepCreateOutput.setValue("Flow Step:");
+        htmlPanelGrid.getChildren().add(flowStepCreateOutput);
+        
+        AutoComplete flowStepCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        flowStepCreateInput.setId("flowStepCreateInput");
+        flowStepCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.flowStep}", JJFlowStep.class));
+        flowStepCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeFlowStep}", List.class, new Class[] { String.class }));
+        flowStepCreateInput.setDropdown(true);
+        flowStepCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "flowStep", String.class));
+        flowStepCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{flowStep.name} #{flowStep.description} #{flowStep.creationDate} #{flowStep.updatedDate}", String.class));
+        flowStepCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{flowStep}", JJFlowStep.class));
+        flowStepCreateInput.setConverter(new JJFlowStepConverter());
+        flowStepCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(flowStepCreateInput);
+        
+        Message flowStepCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        flowStepCreateInputMessage.setId("flowStepCreateInputMessage");
+        flowStepCreateInputMessage.setFor("flowStepCreateInput");
+        flowStepCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(flowStepCreateInputMessage);
         
         OutputLabel stateCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         stateCreateOutput.setFor("stateCreateInput");
@@ -1365,6 +1395,30 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(statusEditInputMessage);
         
+        OutputLabel flowStepEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        flowStepEditOutput.setFor("flowStepEditInput");
+        flowStepEditOutput.setId("flowStepEditOutput");
+        flowStepEditOutput.setValue("Flow Step:");
+        htmlPanelGrid.getChildren().add(flowStepEditOutput);
+        
+        AutoComplete flowStepEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        flowStepEditInput.setId("flowStepEditInput");
+        flowStepEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.flowStep}", JJFlowStep.class));
+        flowStepEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{jJRequirementBean.completeFlowStep}", List.class, new Class[] { String.class }));
+        flowStepEditInput.setDropdown(true);
+        flowStepEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "flowStep", String.class));
+        flowStepEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{flowStep.name} #{flowStep.description} #{flowStep.creationDate} #{flowStep.updatedDate}", String.class));
+        flowStepEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{flowStep}", JJFlowStep.class));
+        flowStepEditInput.setConverter(new JJFlowStepConverter());
+        flowStepEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(flowStepEditInput);
+        
+        Message flowStepEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        flowStepEditInputMessage.setId("flowStepEditInputMessage");
+        flowStepEditInputMessage.setFor("flowStepEditInput");
+        flowStepEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(flowStepEditInputMessage);
+        
         OutputLabel stateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         stateEditOutput.setFor("stateEditInput");
         stateEditOutput.setId("stateEditOutput");
@@ -1883,6 +1937,16 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         statusValue.setConverter(new JJStatusConverter());
         htmlPanelGrid.getChildren().add(statusValue);
         
+        HtmlOutputText flowStepLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        flowStepLabel.setId("flowStepLabel");
+        flowStepLabel.setValue("Flow Step:");
+        htmlPanelGrid.getChildren().add(flowStepLabel);
+        
+        HtmlOutputText flowStepValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        flowStepValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.flowStep}", JJFlowStep.class));
+        flowStepValue.setConverter(new JJFlowStepConverter());
+        htmlPanelGrid.getChildren().add(flowStepValue);
+        
         HtmlOutputText stateLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         stateLabel.setId("stateLabel");
         stateLabel.setValue("State:");
@@ -2170,6 +2234,17 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
             String jJStatusStr = String.valueOf(jJStatus.getName() +  " "  + jJStatus.getDescription() +  " "  + jJStatus.getCreationDate() +  " "  + jJStatus.getUpdatedDate());
             if (jJStatusStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(jJStatus);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<JJFlowStep> JJRequirementBean.completeFlowStep(String query) {
+        List<JJFlowStep> suggestions = new ArrayList<JJFlowStep>();
+        for (JJFlowStep jJFlowStep : jJFlowStepService.findAllJJFlowSteps()) {
+            String jJFlowStepStr = String.valueOf(jJFlowStep.getName() +  " "  + jJFlowStep.getDescription() +  " "  + jJFlowStep.getCreationDate() +  " "  + jJFlowStep.getUpdatedDate());
+            if (jJFlowStepStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(jJFlowStep);
             }
         }
         return suggestions;

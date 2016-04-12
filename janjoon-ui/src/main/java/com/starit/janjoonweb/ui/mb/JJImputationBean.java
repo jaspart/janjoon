@@ -1,13 +1,18 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
+
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJImputation;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJImputation.class, beanName = "jJImputationBean")
-public class JJImputationBean {
+public class JJImputationBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public void saveJJImputation(JJImputation b) {
 		jJImputationService.saveJJImputation(b);

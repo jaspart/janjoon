@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<ui:composition>
+
+	<h:form id="flowStepForm">
+		<h:panelGroup layout="block" styleClass="Container ui-fluid">
+			<h:panelGroup layout="block" styleClass="Container60 Responsive100">
+				<p:dataTable id="flowStepTable" var="flowStep" lazy="true"
+					paginatorPosition="bottom"
+					value="#{jJFlowStepBean.lazyFlowStepList}" paginator="true"
+					rows="10" emptyMessage="#{messages.label_notRecordFound}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" sortMode="multiple"
+					widgetVar="flowStepTableWV">
+					<f:facet name="header">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup layout="block" style="float: right !important;"
+								styleClass="Container30 Fs20">
+								<h:outputText style="font-family: 'roboto_condensedlight';"
+									value="#{messages.admin_flowStep_table_header}" />
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container10 TexAlCenter">
+								<p:commandButton id="createButton" icon="fa fa-plus Fs20"
+									resetValues="true"
+									update=":tabview:flowStepDialogForm :tabview:flowStepDialogHeader"
+									oncomplete="PF('flowStepDialogWidget').show()"
+									styleClass="GrayButton"
+									title="#{messages.admin_flowStep_new_button}">
+									<f:setPropertyActionListener
+										target="#{jJFlowStepBean.renderCreate}" value="true" />
+								</p:commandButton>
+							</h:panelGroup>
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:inputText id="globalFilter"
+									onkeyup="PF('flowStepTableWV').filter()"
+									placeholder="#{messages.bug_table_search_watermark}" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</f:facet>
+					<p:column sortBy="#{flowStep.name}">
+						<f:facet name="header">
+							<h:outputText value="#{messages.admin_flowStep_table_name_title}" />
+						</f:facet>
+						<h:outputText value="#{flowStep.name}" />
+					</p:column>
+
+					<p:column sortBy="#{flowStep.objet}" id="objet"
+						filterMatchMode="exact" filterBy="#{flowStep.objet}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_flowStep_table_objet_title}" />
+						</f:facet>
+						<f:facet name="filter">
+							<p:selectOneMenu var="type"
+								style="padding-right: 35px !important;"
+								panelStyleClass="specSelectOneMenuPanel"
+								styleClass="specSelectOneMenu Fs14"
+								onchange="PF('flowStepTableWV').filter()">
+								<f:selectItems value="#{jJFlowStepBean.objectOptions}" />
+								<p:column>
+									<h:outputText value="#{type}" />
+								</p:column>
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{flowStep.objet}" />
+					</p:column>
+					<p:column sortBy="#{flowStep.level}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{messages.admin_flowStep_table_level_title}" />
+						</f:facet>
+						<h:outputText value="#{flowStep.level}" />
+					</p:column>
+
+					<p:column styleClass="action-column" style="width:10%;">
+						<f:facet name="header">
+							<h:outputText styleClass="ShowOnDesktop"
+								value="#{messages.admin_flowStep_table_action_title}" />
+						</f:facet>
+						<p:commandButton id="viewButton" type="button"
+							icon="fa fa-list Fs20" styleClass="BlueButton littleButton" />
+						<p:menu overlay="true" trigger="viewButton" my="right top"
+							at="right bottom">
+							<p:menuitem id="editButton" icon="fa fa-pencil Fs16"
+								update=":tabview:flowStepDialogForm :tabview:flowStepDialogHeader"
+								resetValues="true"
+								oncomplete="PF('flowStepDialogWidget').show()"
+								title="#{messages.label_edit}" value="#{messages.label_edit}">
+								<f:setPropertyActionListener value="#{flowStep}"
+									target="#{jJFlowStepBean.JJFlowStep_}" />
+								<f:setPropertyActionListener
+									target="#{jJFlowStepBean.renderCreate}" value="false" />
+							</p:menuitem>
+							<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+								resetValues="true" oncomplete="PF('deleteDialogWidget').show()"
+								value="#{messages.label_delete}"
+								title="#{messages.label_delete}">
+								<f:setPropertyActionListener value="#{flowStep}"
+									target="#{jJFlowStepBean.JJFlowStep_}" />
+							</p:menuitem>
+						</p:menu>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+	<p:dialog id="flowStepDialog" modal="true" responsive="true"
+		widgetVar="flowStepDialogWidget" dynamic="true" resizable="false"
+		maximizable="false" showEffect="fade">
+		<p:ajax event="close" update=":tabview:flowStepForm"
+			listener="#{jJFlowStepBean.handleDialogClose}" />
+		<f:facet name="header">
+			<p:outputLabel id="flowStepDialogHeader"
+				value="#{jJFlowStepBean.renderCreate ? messages.admin_flowStep_new_title : messages.admin_flowStep_edit_title}" />
+		</f:facet>
+		<h:panelGroup layout="block" styleClass="Container ui-fluid BorderAll"
+			style="max-width:400px;">
+			<h:form id="flowStepDialogForm" enctype="multipart/form-data">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<p:messages id="msg" showDetail="false" closable="true" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:inputText id="name"
+							placeholder="#{messages.admin_flowStep_table_name_title}"
+							value="#{jJFlowStepBean.JJFlowStep_.name}"
+							label="#{messages.admin_flowStep_table_name_title}"
+							required="true" widgetVar="nameWidget">
+							<f:validateLength maximum="100" />
+						</p:inputText>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="flowStepObject"
+								value="#{messages.admin_flowStep_table_objet_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:autoComplete id="flowStepObject" scrollHeight="200"
+								widgetVar="flowStepObjectWv"
+								value="#{jJFlowStepBean.JJFlowStep_.objet}" itemValue="#{obj}"
+								required="true" dropdown="true" var="obj" itemLabel="#{obj}"
+								completeMethod="#{jJFlowStepBean.completeObject}" >
+								<p:ajax event="itemSelect" update="level" />
+								</p:autoComplete>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container25">
+						<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+							<p:outputLabel for="level"
+								value="#{messages.admin_flowStep_table_level_title}:" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container75">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:spinner id="level" required="true"
+								value="#{jJFlowStepBean.JJFlowStep_.level}" min="0" max="100">
+								<f:validator validatorId="flowStepLevelValidator" />
+								<f:attribute name="flowStep"
+									value="#{jJFlowStepBean.JJFlowStep_}" />
+							</p:spinner>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Separator" />
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="createSaveButton"
+								value="#{messages.admin_flowStep_new_save_button}"
+								action="#{jJFlowStepBean.persistFlowStep}"
+								update=":tabview:flowStepDialogForm" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="Container50">
+						<h:panelGroup layout="block" styleClass="ContainerIndent">
+							<p:commandButton id="createCloseButton" styleClass="GrayButton"
+								value="#{messages.label_cancel}"
+								onclick="PF('flowStepDialogWidget').hide()" type="button" />
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</h:panelGroup>
+	</p:dialog>
+
+	<p:confirmDialog widgetVar="deleteDialogWidget"
+		message="#{messages.admin_flowStep_delete_label}" showEffect="fade"
+		header="#{messages.admin_flowStep_delete_title}" severity="alarm">
+		<p:outputPanel>
+			<h:form>
+				<p:commandButton id="deleteYesButton"
+					value="#{messages.admin_flowStep_delete_yes_label}"
+					action="#{jJFlowStepBean.deleteFlowStep}"
+					update=":tabview:flowStepForm :growlForm"
+					oncomplete="PF('deleteDialogWidget').hide()" />
+				<p:commandButton id="deleteNoButton"
+					value="#{messages.admin_flowStep_delete_no_label}"
+					onclick="PF('deleteDialogWidget').hide()" type="button" />
+			</h:form>
+		</p:outputPanel>
+	</p:confirmDialog>
+</ui:composition>
+</html>

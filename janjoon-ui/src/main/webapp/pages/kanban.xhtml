@@ -4,259 +4,105 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition>
-	<h:panelGroup layout="block" styleClass="Container">
-		<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
-			<h:form id="activeKanbanIndexForm">
-				<h:panelGroup layout="block" styleClass="Container30">
-					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="activeKanbanIndex" value="Sprint:" />
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="Container70">
+	<h:form id="kanbanForm">
+		<h:panelGroup layout="block" styleClass="Container">
+			<c:forEach items="#{jJRequirementBean.flowStepUtils}"
+				var="flowStepUtil" varStatus="loop">
+				<h:panelGroup layout="block" styleClass="Container25 Responsive50">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
-						<p:selectOneMenu id="activeKanbanIndex"
-							panelStyleClass="hideDisabled"
-							value="#{jJSprintBean.activeTabKanbanIndex}" effect="fade"
-							onchange="PF('KanbanTab').select(value);">
-							<f:selectItems value="#{jJSprintBean.sprintList}" var="jjsprint"
-								itemDisabled="#{jjsprint.sprint.name == null}"
-								itemLabel="#{jjsprint.sprint.name}"
-								itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />
-						</p:selectOneMenu>
+						<h:panelGroup layout="block"
+							styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
+							<h2 class="CardTopic" style="text-align: center;">
+								<i class="icon-fog Fs20 Fleft MarRight10"></i>
+								#{flowStepUtil.flowStep.name}
+							</h2>
+							<h:panelGroup layout="block" styleClass="SeparatorFull" />
+							<c:forEach items="#{flowStepUtil.requirements}" var="req"
+								varStatus="loop">
+								<h:panelGroup layout="block" styleClass="Wid100">
+									<h:panelGroup layout="block"
+										styleClass="ContainerIndent Fs16 BoldGray">
+                                            # #{req.id} - #{req.name} <br />
+										<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
+										<br />
+										<h:outputText
+											value="#{messages['specification_'.concat(req.state.name)]}"
+											styleClass="#{req.state.name} Fs14" />
+<!-- 										<p:commandButton icon="fa fa-eye Fs14" -->
+<!-- 											update=":projecttabview:kanbanLinkForm" -->
+<!-- 											oncomplete="PF('linkDialogWidget').show()" -->
+<!-- 											actionListener="#{jJRequirementBean.loadLinkedData(req)}" -->
+<!-- 											styleClass="Fright RaisedButton BlueTextButton" -->
+<!-- 											iconPos="right" style="margin-top:-15px" /> -->
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="SeparatorFull" />
+							</c:forEach>
+						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-			</h:form>
+			</c:forEach>
 		</h:panelGroup>
-		<h:panelGroup layout="block" styleClass="Container100">
-			<f:event type="preRenderComponent"
-				listener="#{loginBean.updateTabViewWidth()}" />
-			<p:tabView id="kanbanTabView" dynamic="true" cache="true"
-				scrollable="true" widgetVar="KanbanTab"
-				styleClass="responsiveTabView" value="#{jJSprintBean.sprintList}"
-				style="max-width: 300px;display: none;border: 0px;"
-				onTabChange="kanbanTabChangeHelper([{name: 'activeKanbanIndex', value: index}]);"
-				var="jjsprint" activeIndex="#{jJSprintBean.activeTabKanbanIndex}">
-				<p:tab title="#{jjsprint.sprint.name}"
-					titletip="#{!jjsprint.render and jjsprint.chartModel == null ? messages.statistique_disabled_sprint_titletip :''}"
-					disabled="#{jjsprint.render}">
-					<h:form id="kanbanForm" rendered="#{!jjsprint.render}">
-						<h:panelGroup layout="block" styleClass="Container ui-fluid">
-							<h:panelGroup layout="block" styleClass="Container100">
-								<p:panel header="#{messages.project_scrum_sprint_info}"
-									styleClass="Container99">
-									<h:panelGroup layout="block" styleClass="Container">
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintName" styleClass="Fs14"
-														value="#{messages.project_scrum_sprint_name}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:inputText id="sprintName"
-														value="#{jjsprint.sprint.name}" required="true"
-														requiredMessage="#{messages.project_scrum_sprint_name_required}">
-														<f:validateLength maximum="100" />
-													</p:inputText>
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintcts" styleClass="Fs14"
-														value="#{messages.project_scrum_sprint_contacts}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:selectCheckboxMenu id="sprintcts"
-														validator="listCategoriesValidator"
-														label="#{jjsprint.contactsLabel}"
-														value="#{jjsprint.contacts}" scrollHeight="150"
-														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
-														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
-															itemLabel="#{ctc.firstname} #{ctc.name}"
-															itemValue="#{ctc}" />
-														<p:ajax event="change" update="@this" />
-														<p:ajax event="toggleSelect" update="@this" />
-													</p:selectCheckboxMenu>
-													<!-- 													<p:selectManyMenu id="sprintcts" -->
-													<!-- 														value="#{jjsprint.contacts}" scrollHeight="150" -->
-													<!-- 														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter" -->
-													<!-- 														showCheckbox="true"> -->
-													<!-- 														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc" -->
-													<!-- 															itemLabel="#{ctc.firstname} #{ctc.name}" -->
-													<!-- 															itemValue="#{ctc}" /> -->
-													<!-- 														<f:validator validatorId="listCategoriesValidator" /> -->
-													<!-- 													</p:selectManyMenu> -->
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintSD" styleClass="Fs14"
-														value="#{messages.project_scrum_new_start_label}" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:calendar id="sprintSD" navigator="true"
-														effect="slideDown" pattern="dd/MM/yyyy" required="true"
-														binding="#{startDateEditionKanban}" readonlyInput="true"
-														value="#{jjsprint.sprint.startDate}">
-														<f:validator validatorId="dateRangeValidator" />
-														<f:attribute name="sprintMode" value="sprintSD" />
-													</p:calendar>
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintED" styleClass="Fs14"
-														value="#{messages.project_scrum_new_end_label}" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:calendar id="sprintED" navigator="true"
-														readonlyInput="true" effect="slideDown"
-														pattern="dd/MM/yyyy" required="true"
-														value="#{jjsprint.sprint.endDate}">
-														<f:validator validatorId="dateRangeValidator" />
-														<f:attribute name="startDateComponent"
-															value="#{startDateEditionKanban}" />
-														<f:attribute name="sprintMode" value="sprintED" />
-													</p:calendar>
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup styleClass="EmptyBox1" />
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintPS" styleClass="Fs14"
-														value="#{messages.project_scrum_price_sold}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:spinner id="sprintPS" value="#{jjsprint.priseSold}"
-														prefix="$" min="0" readonly="true" />
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintPR" styleClass="Fs14"
-														value="#{messages.project_scrum_price_real}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:spinner id="sprintPR" value="#{jjsprint.priseReal}"
-														prefix="$" min="0" readonly="true" />
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintW" styleClass="Fs14"
-														value="#{messages.project_scrum_total}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:inputText id="sprintW" readonly="true"
-														value="#{jjsprint.workload}" />
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block"
-											styleClass="Container25 Responsive50">
-											<h:panelGroup layout="block" styleClass="Container40">
-												<h:panelGroup layout="block"
-													styleClass="ContainerIndentLabel">
-													<p:outputLabel for="sprintC" styleClass="Fs14"
-														value="#{messages.project_scrum_consumed}:" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block" styleClass="Container60">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:inputText id="sprintC" readonly="true"
-														value="#{jjsprint.consumed}" />
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="EmptyBox1" />
-									</h:panelGroup>
-									<f:facet name="footer">
-										<h:panelGroup layout="block" styleClass="Container">
-											<h:panelGroup layout="block"
-												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:commandButton id="editSprintButton"
-														disabled="{!loginBean.authorisationService.wProject}"
-														value="#{messages.label_save}" icon="fa fa-check Fs16"
-														process="@this,sprintName,sprintED,sprintSD,sprintcts"
-														actionListener="#{jJSprintBean.attrListener}"
-														oncomplete="updateTabViewWidth();"
-														update=":projecttabview:kanbanTabView:kanbanForm :growlForm">
-														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-														<f:attribute name="create" value="edit" />
-													</p:commandButton>
-													<p:remoteCommand name="editSprint"
-														update=":projecttabview :growlForm"
-														action="#{jJSprintBean.editSprint}"
-														oncomplete="updateTabViewWidth();" />
-												</h:panelGroup>
-											</h:panelGroup>
-											<h:panelGroup layout="block"
-												rendered="#{jjsprint.enableDelete}"
-												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
-												<h:panelGroup layout="block" styleClass="ContainerIndent">
-													<p:commandButton id="deleteSprintButton"
-														rendered="#{jjsprint.enableDelete}"
-														disabled="{!loginBean.authorisationService.wProject}"
-														value="#{messages.label_delete}" icon="fa fa-trash Fs16"
-														action="#{jJSprintBean.deleteSprint(jjsprint)}"
-														oncomplete="updateTabViewWidth();"
-														update=":projecttabview :growlForm">
-														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
-													</p:commandButton>
-												</h:panelGroup>
-											</h:panelGroup>
-										</h:panelGroup>
-									</f:facet>
-								</p:panel>
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:form>
-				</p:tab>
-			</p:tabView>
-		</h:panelGroup>
-	</h:panelGroup>
+	</h:form>
+<!-- 	<p:dialog id="linkDialog" draggable="false" responsive="true" appendTo="@(body)" -->
+<!-- 		header="#{messages.requirement_dialog_linkHeader}" modal="true" -->
+<!-- 		widgetVar="linkDialogWidget" dynamic="true" resizable="false"> -->
+<!-- 		<p:ajax event="close" listener="#{jJRequirementBean.closeLinkDialog}" /> -->
+<!-- 		<f:facet name="header"> -->
+<!-- 			<h2 class="CardTopic"> -->
+<!-- 				<i class="icon-timelapse Fs20 Fleft MarRight10"></i> PROJECTS -->
+<!-- 				PROGRESS -->
+<!-- 			</h2> -->
+<!-- 		</f:facet> -->
+<!-- 		<h:form id="kanbanLinkForm"> -->
+<!-- 			<h:panelGroup layout="block" styleClass="Container BorderAll" -->
+<!-- 				style="max-width: 500px;"> -->
+<!-- 				<h:panelGroup layout="block" styleClass="Container100"> -->
+<!-- 					<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
+<!-- 						<h:panelGroup layout="block" -->
+<!-- 							styleClass="Card ShadowEffect HeiAutoOnMobile"> -->
+
+<!-- 							<c:forEach items="#{jJRequirementBean.linkedData}" var="object" -->
+<!-- 								varStatus="loop"> -->
+<!-- 								<h:panelGroup layout="block" styleClass="Wid100"> -->
+<!-- 									<h:panelGroup layout="block" -->
+<!-- 										styleClass="ContainerIndent Fs16 BoldGray"> -->
+<!-- 										<h:outputText value="REQ_#{object.id} #{object.name}" -->
+<!-- 											rendered="#{object['class'].simpleName == 'JJRequirement'}" /> -->
+<!-- 										<h:outputText value="BUG_#{object.id} #{object.name}" -->
+<!-- 											rendered="#{object['class'].simpleName == 'JJBug'}" /> -->
+<!-- 										<h:outputText value="TST_#{object.id} #{object.name} " -->
+<!-- 											rendered="#{object['class'].simpleName == 'JJTestcase'}" /> -->
+<!-- 										<h:outputText value="TASK_#{object.id} #{object.name}" -->
+<!-- 											rendered="#{object['class'].simpleName == 'JJTask'}" />								 -->
+<!-- 								<br /> -->
+<!-- 										<h:outputText -->
+<!-- 											rendered="#{object['class'].simpleName == 'JJRequirement'}" -->
+<!-- 											value="#{messages['specification_'.concat(object.state.name)]}" -->
+<!-- 											styleClass="#{object.state.name} Fs14" /> -->
+<!-- 										<h:outputText -->
+<!-- 											rendered="#{object['class'].simpleName != 'JJRequirement'}" -->
+<!-- 											value="#{loginBean.checkMessage(object.status.name)}" -->
+<!-- 											styleClass="#{object.status.name} Fs14" /> -->
+<!-- 									</h:panelGroup> -->
+<!-- 								</h:panelGroup> -->
+<!-- 								<h:panelGroup layout="block" styleClass="SeparatorFull" /> -->
+<!-- 							</c:forEach> -->
+<!-- 							<h:panelGroup layout="block" styleClass="CardFooter"> -->
+<!-- 								<p:commandButton styleClass="Fright BlueTextButton" -->
+<!-- 									value="#{messages.label_cancel}" -->
+<!-- 									onclick="PF('linkDialogWidget').hide()" type="button" /> -->
+<!-- 							</h:panelGroup> -->
+<!-- 						</h:panelGroup> -->
+<!-- 					</h:panelGroup> -->
+<!-- 				</h:panelGroup> -->
+<!-- 			</h:panelGroup> -->
+<!-- 		</h:form> -->
+<!-- 	</p:dialog> -->
+
 </ui:composition>
 </html>

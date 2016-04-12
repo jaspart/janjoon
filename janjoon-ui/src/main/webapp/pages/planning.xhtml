@@ -25,10 +25,6 @@
 				actionListener="#{jJSprintBean.onTabSprintChange}"
 				oncomplete="updateTabViewWidth();" />
 
-			<p:remoteCommand name="kanbanTabChangeHelper"
-				update="projecttabview:activeKanbanIndexForm"
-				actionListener="#{jJSprintBean.onTabSprintChange}"
-				oncomplete="updateTabViewWidth();" />
 		</h:form>
 		<h:panelGroup layout="block" styleClass="Container ui-fluid">
 			<h:form id="projectForm" rendered="#{jJProjectBean.project != null}">

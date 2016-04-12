@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBuild;
@@ -47,10 +47,15 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
-@RooSerializable
-@RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
-public class JJBugBean {
 
+@RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
+public class JJBugBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public static final String BUG_SUBSCRIPTION_RATE = "bug_subscription_rate";
 	public static final String BUG_SUBSCRIPTION_CANCEL_RATE = "bug_subscription_cancel_rate";
 

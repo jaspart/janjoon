@@ -1,16 +1,20 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSoftware;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJSoftware.class, beanName = "jJSoftwareBean")
-public class JJSoftwareBean {
+public class JJSoftwareBean  implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public void saveJJSoftware(final JJSoftware b) {
 		b.setCreationDate(new Date());

@@ -283,6 +283,46 @@ public class JJBugServiceImpl implements JJBugService {
 			return 0L;
 
 	}
+	
+	public List<JJBug> getRequirementBugs(JJRequirement requirement,JJCompany company, JJProject project,
+			JJProduct product, JJVersion version){
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<JJBug> criteriaQuery = criteriaBuilder
+				.createQuery(JJBug.class);
+		Root<JJBug> from = criteriaQuery.from(JJBug.class);
+
+		CriteriaQuery<JJBug> select = criteriaQuery.select(from);
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if (project != null) {
+			predicates.add(criteriaBuilder.equal(from.get("project"), project));
+		}
+		
+		if(requirement != null){
+			predicates.add(criteriaBuilder.equal(from.get("requirement"), requirement));
+		}
+
+		if (version != null) {
+			predicates.add(
+					criteriaBuilder.equal(from.get("versioning"), version));
+		} else if (product != null) {
+			predicates.add(criteriaBuilder
+					.equal(from.join("versioning").get("product"), product));
+		} else if (company != null) {
+			predicates.add(criteriaBuilder.equal(from.join("versioning")
+					.join("product").join("manager").get("company"), company));
+		}
+
+		predicates.add(criteriaBuilder.equal(from.get("enabled"), true));
+
+		select.orderBy(criteriaBuilder.desc(from.get("creationDate")));
+		select.where(predicates.toArray(new Predicate[]{}));
+
+		TypedQuery<JJBug> result = entityManager.createQuery(select);
+		return result.getResultList();
+
+	}
 
 	public List<JJBug> load(JJContact contact, JJCompany company,
 			MutableInt size, int first, int pageSize,

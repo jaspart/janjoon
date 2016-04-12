@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,7 +21,6 @@ import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
@@ -40,9 +40,13 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJSprint.class, beanName = "jJSprintBean")
-public class JJSprintBean {
+public class JJSprintBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	private JJTaskService jJTaskService;
@@ -74,7 +78,6 @@ public class JJSprintBean {
 	// private boolean update = true;
 	private int activeTabSprintIndex;
 	private int activeTabGantIndex;
-	private int activeTabKanbanIndex;
 
 	public int getActiveTabSprintIndex() {
 		return activeTabSprintIndex;
@@ -91,15 +94,7 @@ public class JJSprintBean {
 	public void setActiveTabGantIndex(int activeTabGantIndex) {
 		this.activeTabGantIndex = activeTabGantIndex;
 	}
-
-	public int getActiveTabKanbanIndex() {
-		return activeTabKanbanIndex;
-	}
-
-	public void setActiveTabKanbanIndex(int activeTabKanbanIndex) {
-		this.activeTabKanbanIndex = activeTabKanbanIndex;
-	}
-
+	
 	public JJTaskBean getJJTaskBean() {
 		JJTaskBean jJTaskBean = ((JJTaskBean) LoginBean.findBean("jJTaskBean"));
 		if (jJTaskBean == null)
@@ -359,7 +354,7 @@ public class JJSprintBean {
 					activeTabSprintIndex = 0;
 			}
 		}
-		activeTabKanbanIndex = activeTabSprintIndex;
+		
 		JJSprint sp = new JJSprint();
 		sp.setProject(pr);
 		sprintList
@@ -408,10 +403,7 @@ public class JJSprintBean {
 			} else if (activeTabGantIndex == PlanningConfiguration
 					.getGanttIndex())
 				getJJTaskBean().setMode("planning");
-		} else if (paramMap.get("activeKanbanIndex") != null) {
-			String paramIndex = paramMap.get("activeKanbanIndex");
-			setActiveTabKanbanIndex(Integer.valueOf(paramIndex));
-		}
+		} 		
 	}
 
 	public void deleteSprint(SprintUtil sp) {

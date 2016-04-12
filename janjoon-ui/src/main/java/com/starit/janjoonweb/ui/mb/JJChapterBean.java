@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -74,10 +75,14 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.CategoryDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJChapter.class, beanName = "jJChapterBean")
 @SuppressWarnings({"unused", "deprecation"})
-public class JJChapterBean {
+public class JJChapterBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	static Logger logger = Logger.getLogger(JJChapterBean.class);
 

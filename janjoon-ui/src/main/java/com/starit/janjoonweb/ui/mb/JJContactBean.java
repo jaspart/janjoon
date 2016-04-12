@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.starit.janjoonweb.domain.JJCategory;
@@ -36,9 +36,13 @@ import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJContact.class, beanName = "jJContactBean")
-public class JJContactBean {
+public class JJContactBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	private JJConfigurationService jJConfigurationService;

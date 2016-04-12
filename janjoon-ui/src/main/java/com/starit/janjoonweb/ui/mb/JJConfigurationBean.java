@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,6 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
@@ -19,10 +19,14 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConfDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJConfiguration.class, beanName = "jJConfigurationBean")
-public class JJConfigurationBean {
+public class JJConfigurationBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private LazyConfDataTable configList;
 	private JJConfiguration selectedConf;
 	private List<String> columns;

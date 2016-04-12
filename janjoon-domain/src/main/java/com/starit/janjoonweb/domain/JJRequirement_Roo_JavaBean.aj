@@ -8,6 +8,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
+import com.starit.janjoonweb.domain.JJFlowStep;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJMessage;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -174,6 +175,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
     
     public void JJRequirement.setStatus(JJStatus status) {
         this.status = status;
+    }
+    
+    public JJFlowStep JJRequirement.getFlowStep() {
+        return this.flowStep;
+    }
+    
+    public void JJRequirement.setFlowStep(JJFlowStep flowStep) {
+        this.flowStep = flowStep;
     }
     
     public JJStatus JJRequirement.getState() {

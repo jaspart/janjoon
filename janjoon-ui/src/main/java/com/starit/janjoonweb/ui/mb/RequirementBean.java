@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,8 +44,12 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @Scope("session")
 @Component("requirementBean")
-public class RequirementBean {
+public class RequirementBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String REQUIREMENT_SUBSCRIPTION_RATE = "requirement_subscription_rate";
 	public static final String REQUIREMENT_SUBSCRIPTION_CANCEL_RATE = "requirement_subscription_cancel_rate";
 

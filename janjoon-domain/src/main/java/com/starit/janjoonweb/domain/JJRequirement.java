@@ -92,6 +92,9 @@ public class JJRequirement {
 
 	@ManyToOne
 	private JJStatus status;
+	
+	@ManyToOne
+	private JJFlowStep flowStep;
 
 	@ManyToOne
 	private JJStatus state;

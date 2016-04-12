@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.domain.JJCompanyService;
@@ -25,10 +25,14 @@ import com.starit.janjoonweb.ui.mb.util.CalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.ChunkTime;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJCompany.class, beanName = "jJCompanyBean")
-public class JJCompanyBean {
+public class JJCompanyBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String calendar;
 	private LazyCompanyDataModel lazyCompanyList;
 	private String updatedCompanyCalendar;

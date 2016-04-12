@@ -1,6 +1,7 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,9 +29,9 @@ import org.primefaces.model.mindmap.DefaultMindmapNode;
 import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 import org.xml.sax.SAXParseException;
 
+import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
@@ -51,12 +52,17 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJVersion;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.CategoryDataModel;
 import com.starit.janjoonweb.ui.mb.util.CategoryUtil;
+import com.starit.janjoonweb.ui.mb.util.FlowStepUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.ReadXMLFile;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJRequirement.class, beanName = "jJRequirementBean")
-public class JJRequirementBean {
+public class JJRequirementBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	static Logger logger = Logger.getLogger(JJRequirementBean.class);
 	public static final String UPDATE_OPERATION = "update";
@@ -82,6 +88,8 @@ public class JJRequirementBean {
 	private JJTestcaseService jJTestcaseService;
 	@Autowired
 	private JJTestcaseexecutionService jJTestcaseexecutionService;
+	@Autowired
+	private JJBugService jJBugService;
 
 	private List<JJTestcase> reqtestCases;
 	private List<JJTestcase> reqSelectedtestCases;
@@ -215,6 +223,10 @@ public class JJRequirementBean {
 	public void setjJTestcaseexecutionService(
 			JJTestcaseexecutionService jJTestcaseexecutionService) {
 		this.jJTestcaseexecutionService = jJTestcaseexecutionService;
+	}
+
+	public void setjJBugService(JJBugService jJBugService) {
+		this.jJBugService = jJBugService;
 	}
 
 	public boolean isRated(JJRequirement req) {
@@ -3961,4 +3973,50 @@ public class JJRequirementBean {
 		}
 
 	}
+
+	// kanban View
+	private List<FlowStepUtil> flowStepUtils;
+	private List<Object> linkedData;
+
+	public List<FlowStepUtil> getFlowStepUtils() {
+		if (flowStepUtils == null)
+			flowStepUtils = FlowStepUtil.getFlowStepUtils(jJRequirementService,
+					jJFlowStepService);
+		return flowStepUtils;
+	}
+
+	public void setFlowStepUtils(List<FlowStepUtil> flowStepUtils) {
+		this.flowStepUtils = flowStepUtils;
+	}
+
+	public List<Object> getLinkedData() {
+		return linkedData;
+	}
+
+	public void setLinkedData(List<Object> linkedData) {
+		this.linkedData = linkedData;
+	}
+
+	public void loadLinkedData(JJRequirement req) {
+
+		linkedData = new ArrayList<Object>();
+		req = jJRequirementService.findJJRequirement(req.getId());
+		for (JJRequirement r : req.getRequirementLinkUp()) {
+			if (r.getEnabled())
+				linkedData.add(r);
+		}
+
+		linkedData.addAll(jJTestcaseService.getJJtestCases(req));
+		linkedData.addAll(jJBugService.getRequirementBugs(req,
+				LoginBean.getCompany(), LoginBean.getProject(),
+				LoginBean.getProduct(), LoginBean.getVersion()));
+		linkedData.addAll(jJTaskService.getImportTasks(null, req, null, true));	
+		linkedData.removeAll(Collections.singleton(null));
+
+	}
+
+	public void closeLinkDialog() {
+		linkedData = null;
+	}
+
 }

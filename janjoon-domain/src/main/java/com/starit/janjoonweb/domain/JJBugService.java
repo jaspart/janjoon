@@ -33,6 +33,9 @@ public interface JJBugService {
 			boolean onlyActif);
 
 	public Long requirementBugCount(JJRequirement requirement);
+	
+	public List<JJBug> getRequirementBugs(JJRequirement requirement,JJCompany company, JJProject project,
+			JJProduct product, JJVersion version);
 
 	public List<JJBug> load(JJContact contact, JJCompany company,
 			MutableInt size, int first, int pageSize,

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,7 +42,6 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 import org.xml.sax.SAXParseException;
 
 import com.itextpdf.text.BadElementException;
@@ -86,10 +86,13 @@ import com.starit.janjoonweb.ui.mb.util.itext.HTMLWorkerImpl;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @SuppressWarnings("deprecation")
-@RooSerializable
 @RooJsfManagedBean(entity = JJTestcase.class, beanName = "jJTestcaseBean")
-public class JJTestcaseBean {
+public class JJTestcaseBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String TEST_SUBSCRIPTION_RATE = "test_subscription_rate";
 	public static final String TEST_SUBSCRIPTION_CANCEL_RATE = "test_subscription_cancel_rate";
 

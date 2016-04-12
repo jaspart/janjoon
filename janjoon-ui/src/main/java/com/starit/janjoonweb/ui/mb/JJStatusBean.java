@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,6 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
-import org.springframework.roo.addon.serializable.RooSerializable;
 
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJBuild;
@@ -45,10 +45,14 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyStatusDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
-@RooSerializable
 @RooJsfManagedBean(entity = JJStatus.class, beanName = "jJStatusBean")
-public class JJStatusBean {
+public class JJStatusBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static int KPI_TAB = 0;
 	private static int SPEC_TAB = 1;
 	private static int BUG_TAB = 2;
@@ -1124,7 +1128,7 @@ public class JJStatusBean {
 			message = "message_successfully_updated";
 
 		} else {
-			getJJStatus_().setDescription("Satus : " + getJJStatus_().getName()
+			getJJStatus_().setDescription("Status : " + getJJStatus_().getName()
 					+ " for " + getJJStatus_().getObjet() + "object");
 			getJJStatus_().setEnabled(true);
 			saveJJStatus(getJJStatus_());

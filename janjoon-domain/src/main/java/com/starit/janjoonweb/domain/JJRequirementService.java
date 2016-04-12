@@ -20,6 +20,10 @@ public interface JJRequirementService {
 			JJCategory category, Map<JJProject, JJProduct> map,
 			JJVersion version, JJStatus status, boolean onlyActif,
 			boolean orderByCreationdate);
+	
+	public List<JJRequirement> getRequirementsByFlowStep(JJCompany company,
+			Map<JJProject, JJProduct> map, JJVersion version,
+			JJFlowStep flowStep,boolean firstStage ,boolean onlyActif);
 
 	public boolean haveTestcase(JJRequirement requirement);
 
@@ -48,9 +52,7 @@ public interface JJRequirementService {
 			boolean onlyActif);
 
 	public List<JJContact> getReqContacts(JJCompany company,
-			Map<JJProject, JJProduct> map, JJVersion version);
-
-	public void refreshRequirement(JJRequirement requirement);
+			Map<JJProject, JJProduct> map, JJVersion version);	
 
 	public JJStatus getRequirementState(JJRequirement requirement,
 			JJCompany company);

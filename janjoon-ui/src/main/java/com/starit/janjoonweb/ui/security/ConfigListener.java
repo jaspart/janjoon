@@ -28,6 +28,8 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJCriticity;
 import com.starit.janjoonweb.domain.JJCriticityService;
+import com.starit.janjoonweb.domain.JJFlowStep;
+import com.starit.janjoonweb.domain.JJFlowStepService;
 import com.starit.janjoonweb.domain.JJImportance;
 import com.starit.janjoonweb.domain.JJImportanceService;
 import com.starit.janjoonweb.domain.JJMessageService;
@@ -114,6 +116,14 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	private JJWorkflowService jJWorkflowService;
+	
+	@Autowired
+	private JJFlowStepService jJFlowStepService;	
+	
+
+	public void setjJFlowStepService(JJFlowStepService jJFlowStepService) {
+		this.jJFlowStepService = jJFlowStepService;
+	}
 
 	public void setjJPhaseService(JJPhaseService jJPhaseService) {
 		this.jJPhaseService = jJPhaseService;
@@ -451,6 +461,40 @@ public class ConfigListener implements ServletContextListener {
 		// jJSprintService.saveJJSprint(sprint);
 		// }
 		// }
+		
+		String[] objects_FlowStep = {"Requirement"};
+		
+		for (String object : objects_FlowStep) {
+
+			List<String> names = new ArrayList<String>();
+
+			if (jJStatusService
+					.getStatus(object, true, new ArrayList<String>(), false)
+					.isEmpty()) {
+				if (object.equalsIgnoreCase("Requirement")) {
+					names.add("Backlog");
+					names.add("Specification");
+					names.add("Developpement");
+					names.add("Testing");					
+
+				} 
+				int i = 0;
+				for (String name : names) {
+					JJFlowStep flow = new JJFlowStep();
+					flow.setObjet(object);
+					flow.setName(name);
+					flow.setLevel(i);
+					flow.setCreationDate(new Date());
+					flow.setDescription("A JJFlowStep defined as " + name);
+					flow.setEnabled(true);
+					jJFlowStepService.saveJJFlowStep(flow);
+					i++;
+
+				}
+			}
+		}
+		
+		
 
 		String[] objects = {"Requirement", "Bug", "Message", "Task", "Build",
 				"TaskType", "RequirementState", "TestCase", "Risk"};

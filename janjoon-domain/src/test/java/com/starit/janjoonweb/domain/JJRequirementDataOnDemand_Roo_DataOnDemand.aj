@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJCategoryDataOnDemand;
 import com.starit.janjoonweb.domain.JJChapterDataOnDemand;
 import com.starit.janjoonweb.domain.JJContactDataOnDemand;
 import com.starit.janjoonweb.domain.JJCriticityDataOnDemand;
+import com.starit.janjoonweb.domain.JJFlowStepDataOnDemand;
 import com.starit.janjoonweb.domain.JJImportanceDataOnDemand;
 import com.starit.janjoonweb.domain.JJProductDataOnDemand;
 import com.starit.janjoonweb.domain.JJProject;
@@ -51,6 +52,9 @@ privileged aspect JJRequirementDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     JJCriticityDataOnDemand JJRequirementDataOnDemand.jJCriticityDataOnDemand;
+    
+    @Autowired
+    JJFlowStepDataOnDemand JJRequirementDataOnDemand.jJFlowStepDataOnDemand;
     
     @Autowired
     JJImportanceDataOnDemand JJRequirementDataOnDemand.jJImportanceDataOnDemand;

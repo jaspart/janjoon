@@ -71,7 +71,9 @@
 									itemDisabled="#{!loginBean.authorisationService.adminWorkflow}" />
 								<f:selectItem itemLabel="#{messages.admin_license_menuitem}"
 									itemValue="9" />
-								<f:selectItem itemLabel="Statistiques" itemValue="10"
+									<f:selectItem itemLabel="#{messages.admin_flowStep_menuitem}"
+									itemValue="10" />									
+								<f:selectItem itemLabel="Statistiques" itemValue="11"
 									itemDisabled="#{!loginBean.authorisationService.adminContact}" />
 							</p:selectOneMenu>
 						</h:panelGroup>
@@ -183,6 +185,13 @@
 						<h:panelGrid columns="1" cellpadding="3">
 							<ui:insert name="license">
 								<ui:include src="license.xhtml" />
+							</ui:insert>
+						</h:panelGrid>
+					</p:tab>
+					<p:tab id="tabFlowStep" title="#{messages.admin_flowStep_menuitem}">
+						<h:panelGrid columns="1" cellpadding="3">
+							<ui:insert name="#{messages.admin_flowStep_menuitem}">
+								<ui:include src="flowStep.xhtml" />
 							</ui:insert>
 						</h:panelGrid>
 					</p:tab>

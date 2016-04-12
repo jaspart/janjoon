@@ -164,7 +164,7 @@
 			<c:forEach items="#{jJRequirementBean.tableDataModelList}"
 				var="tableDataModel" varStatus="loop">
 				<div id="#{tableDataModel.id}_#{tableDataModel.expanded}"
-					style="display: none;" class="treeWidth"></div>
+					style="display: none;" class="treeWidth" />
 				<h:panelGroup id="panelGroup_#{loop.index}" layout="block"
 					styleClass="#{jJRequirementBean.getTableDataModelSizePct(tableDataModel)}"
 					rendered="#{tableDataModel.rendered}"

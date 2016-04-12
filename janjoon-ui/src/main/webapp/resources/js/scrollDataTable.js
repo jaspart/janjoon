@@ -17,10 +17,8 @@ function updateTabViewWidth() {
 				- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-	$("#projecttabview\\:SprintTabView").css("display","block");
-	
-	$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
-	$("#projecttabview\\:kanbanTabView").css("display","block");	
+	$("#projecttabview\\:SprintTabView").css("display","block");	
+
 
 	var chart = $(".barChart:visible").last();
 
@@ -47,10 +45,8 @@ $(window).resize(
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:SprintTabView").css("display","block");
-			
-			$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:kanbanTabView").css("display","block");	
+			$("#projecttabview\\:SprintTabView").css("display","block");			
+		
 		});
 
 $(document).ready(
@@ -64,10 +60,7 @@ $(document).ready(
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:SprintTabView").css("display","block");
-			
-			$("#projecttabview\\:kanbanTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:kanbanTabView").css("display","block");		
+			$("#projecttabview\\:SprintTabView").css("display","block");	
 			
 		});
 

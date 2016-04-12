@@ -270,8 +270,106 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			TypedQuery<JJRequirement> result = entityManager
 					.createQuery(select);
+			return new ArrayList<JJRequirement>(
+					new HashSet<JJRequirement>(result.getResultList()));
+		} else
+			return new ArrayList<JJRequirement>();
+	}
 
-			return result.getResultList();
+	public List<JJRequirement> getRequirementsByFlowStep(JJCompany company,
+			Map<JJProject, JJProduct> map, JJVersion version,
+			JJFlowStep flowStep, boolean firstStage, boolean onlyActif) {
+
+		if (map != null) {
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<JJRequirement> criteriaQuery = criteriaBuilder
+					.createQuery(JJRequirement.class);
+
+			Root<JJRequirement> from = criteriaQuery.from(JJRequirement.class);
+
+			CriteriaQuery<JJRequirement> select = criteriaQuery.select(from);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+			if (firstStage)
+				predicates.add(criteriaBuilder
+						.equal(from.get("category").get("stage"), 1));
+
+			if (map != null && !map.isEmpty()) {
+				List<Predicate> orPredicates = new ArrayList<Predicate>();
+
+				for (Map.Entry<JJProject, JJProduct> entry : map.entrySet()) {
+
+					if (entry.getKey() != null) {
+						if (entry.getValue() != null) {
+							List<Predicate> andPredicates = new ArrayList<Predicate>();
+
+							andPredicates.add(criteriaBuilder.equal(
+									from.get("project"), entry.getKey()));
+
+							andPredicates.add(criteriaBuilder.equal(
+									from.get("product"), entry.getValue()));
+
+							orPredicates.add(criteriaBuilder.and(
+									andPredicates.toArray(new Predicate[]{})));
+						} else
+							orPredicates.add(criteriaBuilder.equal(
+									from.get("project"), entry.getKey()));
+					} else {
+						if (entry.getValue() != null) {
+							orPredicates.add(criteriaBuilder.equal(
+									from.get("product"), entry.getValue()));
+						} else {
+							predicates.add(criteriaBuilder
+									.equal(from.join("project").join("manager")
+											.get("company"), company));
+						}
+					}
+
+				}
+				if (!orPredicates.isEmpty())
+					predicates.add(criteriaBuilder
+							.or(orPredicates.toArray(new Predicate[]{})));
+				else
+					predicates.add(criteriaBuilder.equal(
+							from.join("project").join("manager").get("company"),
+							company));
+			} else {
+				predicates.add(criteriaBuilder.equal(
+						from.join("project").join("manager").get("company"),
+						company));
+			}
+
+			if (version != null) {
+				predicates.add(
+						criteriaBuilder.equal(from.get("versioning"), version));
+			}
+
+			if (flowStep != null) {
+				if (flowStep.getLevel() != 0)
+					predicates.add(criteriaBuilder.equal(from.get("flowStep"),
+							flowStep));
+				else {
+					predicates.add(criteriaBuilder.or(
+							criteriaBuilder.equal(from.get("flowStep"),
+									flowStep),
+							criteriaBuilder.isNull(from.get("flowStep"))));
+				}
+			}
+
+			if (onlyActif) {
+				predicates
+						.add(criteriaBuilder.equal(from.get("enabled"), true));
+			}
+
+			select.where(
+					criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
+
+			TypedQuery<JJRequirement> result = entityManager
+					.createQuery(select);
+			return new ArrayList<JJRequirement>(
+					new HashSet<JJRequirement>(result.getResultList()));
+			
 		} else
 			return new ArrayList<JJRequirement>();
 	}
@@ -279,9 +377,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,
 			JJCategory category, Map<JJProject, JJProduct> map,
-			JJVersion version, JJStatus status, JJChapter chapter,boolean withoutTask,
-			boolean withChapter, boolean onlyActif, boolean orderByCreationdate,
-			boolean mine, JJContact contact) {
+			JJVersion version, JJStatus status, JJChapter chapter,
+			boolean withoutTask, boolean withChapter, boolean onlyActif,
+			boolean orderByCreationdate, boolean mine, JJContact contact) {
 
 		if (map != null) {
 			CriteriaBuilder criteriaBuilder = entityManager
@@ -312,19 +410,22 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 						.equal(from.get("updatedBy"), contact);
 				predicates.add(criteriaBuilder.or(condition1, condition2));
 			}
-			
-			if(withoutTask)
-			{
+
+			if (withoutTask) {
 				Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
 				Root<JJTask> fromTask = subquery.from(JJTask.class);
 				List<Predicate> predicatesTask = new ArrayList<Predicate>();
 				subquery.select(fromTask.get("requirement").<Long> get("id"));
-				predicatesTask.add(criteriaBuilder.isNotNull(fromTask.get("requirement")));
-				predicatesTask.add(criteriaBuilder.equal(fromTask.get("enabled"), true));
-		
-				subquery.where(criteriaBuilder.and(predicatesTask.toArray(new Predicate[]{})));
-				predicates.add(criteriaBuilder.in(from.get("id")).value(subquery).not());
-			
+				predicatesTask.add(
+						criteriaBuilder.isNotNull(fromTask.get("requirement")));
+				predicatesTask.add(
+						criteriaBuilder.equal(fromTask.get("enabled"), true));
+
+				subquery.where(criteriaBuilder
+						.and(predicatesTask.toArray(new Predicate[]{})));
+				predicates.add(criteriaBuilder.in(from.get("id"))
+						.value(subquery).not());
+
 			}
 
 			if (map != null && !map.isEmpty()) {
@@ -402,7 +503,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			TypedQuery<JJRequirement> result = entityManager
 					.createQuery(select);
 
-			return result.getResultList();
+			return new ArrayList<JJRequirement>(
+					new HashSet<JJRequirement>(result.getResultList()));
 		} else
 			return new ArrayList<JJRequirement>();
 	}
@@ -438,15 +540,16 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 		select.orderBy(criteriaBuilder.asc(from.get("ordering")));
 
 		TypedQuery<JJRequirement> result = entityManager.createQuery(select);
-		return result.getResultList();
+		return new ArrayList<JJRequirement>(
+				new HashSet<JJRequirement>(result.getResultList()));
 	}
 
 	@Override
 	public List<JJRequirement> getRequirements(JJCompany company,
 			Map<JJProject, JJProduct> map, JJVersion version,
 			JJCategory category) {
-		return getRequirements(company, category, map, version, null, null,false,
-				false, true, true, false, null);
+		return getRequirements(company, category, map, version, null, null,
+				false, false, true, true, false, null);
 	}
 
 	@Override
@@ -454,8 +557,8 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 			JJStatus status) {
 
 		return getRequirements(company, null,
-				new HashMap<JJProject, JJProduct>(), null, status, null,false, false,
-				true, false, false, null);
+				new HashMap<JJProject, JJProduct>(), null, status, null, false,
+				false, true, false, false, null);
 	}
 
 	public List<JJContact> getReqContacts(JJCompany company,
@@ -682,7 +785,9 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 			TypedQuery<JJRequirement> result = entityManager
 					.createQuery(select);
-			return result.getResultList();
+			return new ArrayList<JJRequirement>(
+					new HashSet<JJRequirement>(result.getResultList()));
+
 		} else
 			return new ArrayList<JJRequirement>();
 
@@ -755,11 +860,6 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 		}
 
-	}
-
-	@Override
-	public void refreshRequirement(JJRequirement requirement) {
-		entityManager.refresh(requirement);
 	}
 
 	public JJStatus getRequirementState(JJRequirement requirement,
