@@ -932,8 +932,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 
 	public JJRequirement updateJJRequirement(JJRequirement JJRequirement_) {
 		jJRequirementRepository.save(JJRequirement_);
-		JJRequirement_ = jJRequirementRepository
-				.findOne(JJRequirement_.getId());
+		JJRequirement_ = findJJRequirement(JJRequirement_.getId());
 		return JJRequirement_;
 	}
 

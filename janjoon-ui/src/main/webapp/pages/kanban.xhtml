@@ -9,10 +9,12 @@
 
 <ui:composition>
 	<h:form id="kanbanForm">
+	<p:remoteCommand update="@form" name="updateKanbanForm"/>
 		<h:panelGroup layout="block" styleClass="Container">
 			<c:forEach items="#{jJRequirementBean.flowStepUtils}"
-				var="flowStepUtil" varStatus="loop">
-				<h:panelGroup layout="block" styleClass="Container25 Responsive50">
+				var="flowStepUtil" varStatus="varStatus">
+				<h:panelGroup id="#{flowStepUtil.flowStep.name}DropArea"
+					layout="block" styleClass="Container25 Responsive50">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<h:panelGroup layout="block"
 							styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
@@ -22,87 +24,101 @@
 							</h2>
 							<h:panelGroup layout="block" styleClass="SeparatorFull" />
 							<c:forEach items="#{flowStepUtil.requirements}" var="req"
-								varStatus="loop">
-								<h:panelGroup layout="block" styleClass="Wid100">
+								varStatus="loop">							
+									<p:draggable for="dragReq_#{varStatus.index}_#{loop.index}"
+										revert="true" scope="#{flowStepUtil.nextFlowStep.name}Req" />
+								
+								<h:panelGroup id="dragReq_#{varStatus.index}_#{loop.index}"
+									layout="block" styleClass="Wid100">
 									<h:panelGroup layout="block"
-										styleClass="ContainerIndent Fs16 BoldGray">
+										styleClass="ContainerIndent Fs16 BoldGray"> 
                                             # #{req.id} - #{req.name} <br />
 										<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
 										<br />
 										<h:outputText
 											value="#{messages['specification_'.concat(req.state.name)]}"
 											styleClass="#{req.state.name} Fs14" />
-<!-- 										<p:commandButton icon="fa fa-eye Fs14" -->
-<!-- 											update=":projecttabview:kanbanLinkForm" -->
-<!-- 											oncomplete="PF('linkDialogWidget').show()" -->
-<!-- 											actionListener="#{jJRequirementBean.loadLinkedData(req)}" -->
-<!-- 											styleClass="Fright RaisedButton BlueTextButton" -->
-<!-- 											iconPos="right" style="margin-top:-15px" /> -->
+										<p:commandButton icon="fa fa-eye Fs14"
+											update=":projecttabview:kanbanLinkForm"
+											oncomplete="PF('linkDialogWidget').show()"
+											actionListener="#{jJRequirementBean.loadLinkedData(req)}"
+											styleClass="Fright RaisedButton BlueTextButton"
+											iconPos="right" style="margin-top:-15px" />
 									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="SeparatorFull" />
 							</c:forEach>
 						</h:panelGroup>
 					</h:panelGroup>
+					<p:droppable tolerance="touch" 
+						scope="#{flowStepUtil.flowStep.name}Req"
+						activeStyleClass="highLightRow">
+						<p:ajax oncomplete="updateTabViewWidth();updateKanbanForm();"
+							listener="#{jJRequirementBean.addReqToNextFlowStep}"
+							update=":projecttabview: :growlForm">
+						</p:ajax>
+					</p:droppable>
 				</h:panelGroup>
 			</c:forEach>
 		</h:panelGroup>
 	</h:form>
-<!-- 	<p:dialog id="linkDialog" draggable="false" responsive="true" appendTo="@(body)" -->
-<!-- 		header="#{messages.requirement_dialog_linkHeader}" modal="true" -->
-<!-- 		widgetVar="linkDialogWidget" dynamic="true" resizable="false"> -->
-<!-- 		<p:ajax event="close" listener="#{jJRequirementBean.closeLinkDialog}" /> -->
-<!-- 		<f:facet name="header"> -->
-<!-- 			<h2 class="CardTopic"> -->
-<!-- 				<i class="icon-timelapse Fs20 Fleft MarRight10"></i> PROJECTS -->
-<!-- 				PROGRESS -->
-<!-- 			</h2> -->
-<!-- 		</f:facet> -->
-<!-- 		<h:form id="kanbanLinkForm"> -->
-<!-- 			<h:panelGroup layout="block" styleClass="Container BorderAll" -->
-<!-- 				style="max-width: 500px;"> -->
-<!-- 				<h:panelGroup layout="block" styleClass="Container100"> -->
-<!-- 					<h:panelGroup layout="block" styleClass="ContainerIndent"> -->
-<!-- 						<h:panelGroup layout="block" -->
-<!-- 							styleClass="Card ShadowEffect HeiAutoOnMobile"> -->
 
-<!-- 							<c:forEach items="#{jJRequirementBean.linkedData}" var="object" -->
-<!-- 								varStatus="loop"> -->
-<!-- 								<h:panelGroup layout="block" styleClass="Wid100"> -->
-<!-- 									<h:panelGroup layout="block" -->
-<!-- 										styleClass="ContainerIndent Fs16 BoldGray"> -->
-<!-- 										<h:outputText value="REQ_#{object.id} #{object.name}" -->
-<!-- 											rendered="#{object['class'].simpleName == 'JJRequirement'}" /> -->
-<!-- 										<h:outputText value="BUG_#{object.id} #{object.name}" -->
-<!-- 											rendered="#{object['class'].simpleName == 'JJBug'}" /> -->
-<!-- 										<h:outputText value="TST_#{object.id} #{object.name} " -->
-<!-- 											rendered="#{object['class'].simpleName == 'JJTestcase'}" /> -->
-<!-- 										<h:outputText value="TASK_#{object.id} #{object.name}" -->
-<!-- 											rendered="#{object['class'].simpleName == 'JJTask'}" />								 -->
-<!-- 								<br /> -->
-<!-- 										<h:outputText -->
-<!-- 											rendered="#{object['class'].simpleName == 'JJRequirement'}" -->
-<!-- 											value="#{messages['specification_'.concat(object.state.name)]}" -->
-<!-- 											styleClass="#{object.state.name} Fs14" /> -->
-<!-- 										<h:outputText -->
-<!-- 											rendered="#{object['class'].simpleName != 'JJRequirement'}" -->
-<!-- 											value="#{loginBean.checkMessage(object.status.name)}" -->
-<!-- 											styleClass="#{object.status.name} Fs14" /> -->
-<!-- 									</h:panelGroup> -->
-<!-- 								</h:panelGroup> -->
-<!-- 								<h:panelGroup layout="block" styleClass="SeparatorFull" /> -->
-<!-- 							</c:forEach> -->
-<!-- 							<h:panelGroup layout="block" styleClass="CardFooter"> -->
-<!-- 								<p:commandButton styleClass="Fright BlueTextButton" -->
-<!-- 									value="#{messages.label_cancel}" -->
-<!-- 									onclick="PF('linkDialogWidget').hide()" type="button" /> -->
-<!-- 							</h:panelGroup> -->
-<!-- 						</h:panelGroup> -->
-<!-- 					</h:panelGroup> -->
-<!-- 				</h:panelGroup> -->
-<!-- 			</h:panelGroup> -->
-<!-- 		</h:form> -->
-<!-- 	</p:dialog> -->
+	<p:dialog id="linkDialog" draggable="false" responsive="true"
+		appendTo="@(body)" header="#{messages.requirement_dialog_linkHeader}"
+		modal="true" widgetVar="linkDialogWidget" dynamic="true"
+		resizable="false">
+		<p:ajax event="close" listener="#{jJRequirementBean.closeLinkDialog}" />
+		<f:facet name="header">
+			<h2 class="CardTopic">
+				<i class="icon-timelapse Fs20 Fleft MarRight10"></i>
+				#{messages.project_kanban_linkDialog_header}
+			</h2>
+		</f:facet>
+		<h:form id="kanbanLinkForm">
+			<h:panelGroup layout="block" styleClass="Container BorderAll"
+				style="max-width: 500px;">
+				<h:panelGroup layout="block" styleClass="Container100">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:dataTable id="kanbanLinkObject" var="object"
+							emptyMessage="#{messages.label_notRecordFound}" scrollable="true"
+							style="width:350px;" scrollHeight="200"
+							value="#{jJRequirementBean.linkedData}">
+							<p:column headerText="#{messages.label_object}" style="width:70%">
+								<h:outputText value="#REQ_#{object.id} #{object.name}"
+									rendered="#{object['class'].simpleName == 'JJRequirement'}" />
+								<h:outputText value="#BUG_#{object.id} #{object.name}"
+									rendered="#{object['class'].simpleName == 'JJBug'}" />
+								<h:outputText value="#TST_#{object.id} #{object.name} "
+									rendered="#{object['class'].simpleName == 'JJTestcase'}" />
+								<h:outputText
+									value="##{messages.label_task}_#{object.id} #{object.name}"
+									rendered="#{object['class'].simpleName == 'JJTask'}" />
+							</p:column>
+							<p:column headerText="#{messages.label_status}" style="width:30%">
+								<h:outputText
+									rendered="#{object['class'].simpleName == 'JJRequirement'}"
+									value="#{messages['specification_'.concat(object.state.name)]}"
+									styleClass="#{object.state.name} Fs14" />
+								<h:outputText
+									rendered="#{object['class'].simpleName != 'JJRequirement'}"
+									value="#{loginBean.checkMessage(object.status)}"
+									styleClass="#{object.status.name} Fs14" />
+							</p:column>
+							<f:facet name="footer">
+								<h:panelGroup layout="block" styleClass="Container">
+									<h:panelGroup layout="block" styleClass="Container100">
+										<p:commandButton styleClass="Fright BlueTextButton"
+											value="#{messages.label_cancel}"
+											onclick="PF('linkDialogWidget').hide()" type="button" />
+									</h:panelGroup>
+								</h:panelGroup>
+							</f:facet>
+						</p:dataTable>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+	</p:dialog>
 
 </ui:composition>
 </html>

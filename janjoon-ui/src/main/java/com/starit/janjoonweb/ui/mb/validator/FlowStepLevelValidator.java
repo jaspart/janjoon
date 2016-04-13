@@ -30,7 +30,7 @@ public class FlowStepLevelValidator implements Validator {
 			if (!((JJFlowStepBean) LoginBean.findBean("jJFlowStepBean"))
 					.levelValid(Integer.parseInt(arg2.toString().trim()), flowStep)) {
 				FacesMessage facesMessage = MessageFactory
-						.getMessage("validator_email_emailExist", "Email");
+						.getMessage("validator_flowStep_levelExist", "Level");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}

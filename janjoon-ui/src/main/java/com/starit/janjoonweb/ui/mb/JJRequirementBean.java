@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
@@ -4010,8 +4011,57 @@ public class JJRequirementBean implements Serializable {
 		linkedData.addAll(jJBugService.getRequirementBugs(req,
 				LoginBean.getCompany(), LoginBean.getProject(),
 				LoginBean.getProduct(), LoginBean.getVersion()));
-		linkedData.addAll(jJTaskService.getImportTasks(null, req, null, true));	
+		linkedData.addAll(jJTaskService.getImportTasks(null, req, null, true));
 		linkedData.removeAll(Collections.singleton(null));
+
+	}
+
+	public void addReqToNextFlowStep(DragDropEvent ddevent) {
+
+		JJRequirement dropedReq = (JJRequirement) ddevent.getData();
+		
+
+		String id = ddevent.getDragId()
+				.split(":")[ddevent.getDragId().split(":").length - 1];
+
+		String flowStepsUtilIndex = id
+				.substring(id.indexOf("dragReq_") + "dragReq_".length(),
+						id.indexOf("_",
+								id.indexOf("dragReq_") + "dragReq_".length()));
+		
+		String reqIndex= id.replace("dragReq_"+flowStepsUtilIndex+"_", "");
+		
+		System.err.println(id+"  "+flowStepsUtilIndex + " "+ reqIndex);
+		
+		int i = Integer.parseInt(flowStepsUtilIndex);
+		int j = Integer.parseInt(reqIndex);
+		
+		dropedReq = flowStepUtils.get(i).getRequirements().get(j);
+		
+		System.err.println(dropedReq.getName());
+		
+		dropedReq.setFlowStep(flowStepUtils.get(i).getNextFlowStep());
+		
+		((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+		dropedReq.setUpdatedBy(contact);
+		dropedReq.setUpdatedDate(new Date());
+		
+		dropedReq = jJRequirementService.updateJJRequirement(dropedReq);
+		updateDataTable(dropedReq, dropedReq.getCategory(),UPDATE_OPERATION);
+		
+		flowStepUtils.get(Integer.parseInt(flowStepsUtilIndex)).getRequirements().remove(j);
+		i = i+1;
+		if(i >= flowStepUtils.size()) i = 0;
+		
+		flowStepUtils.get(i).getRequirements().add(dropedReq);	
+		
+		String message = "message_successfully_updated";
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				MessageFactory.getMessage("label_requirement", "").getDetail(),
+				"e");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 	}
 

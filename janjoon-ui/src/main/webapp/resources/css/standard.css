@@ -1049,7 +1049,7 @@ div.highLightRevised2 {
 }
 
 .highLightRow {
-	border: 1px solid #448dae !important;
+	border: 0px solid #448dae !important;
 	background: #79c9ec
 		url("#{resource['images/ui-bg_glass_75_79c9ec_1x400.png']}") 50% 50%
 		repeat-x !important;
