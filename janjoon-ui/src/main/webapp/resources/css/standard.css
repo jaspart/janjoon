@@ -1,4 +1,9 @@
-body,div,td {
+@font-face {
+	font-family: myFirstFont;
+	src: url("#{resource['rioLayout/fonts/ReenieBeanie.ttf']}")
+}
+
+body, div, td {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	word-wrap: break-word;
@@ -80,7 +85,7 @@ div#contentPanel_content {
 	width: 25%;
 }
 
-.ui-rating-star a,.ui-rating-cancel a {
+.ui-rating-star a, .ui-rating-cancel a {
 	width: 24px;
 	height: 23px;
 	display: block;
@@ -103,7 +108,7 @@ div#contentPanel_content {
 	background-position: 0 -24px;
 }
 
-.ui-widget-header .ui-inputfield,.ui-widget-content .ui-inputfield {
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
 	font-weight: normal;
 	background: white;
 }
@@ -159,12 +164,12 @@ div#contentPanel_content {
 	overflow: scroll;
 }
 
-.scheduleNotMine,.scheduleNotMine .fc-event-skin,.scheduleNotMine a {
+.scheduleNotMine, .scheduleNotMine .fc-event-skin, .scheduleNotMine a {
 	background-color: red;
 }
 
-.ui-messages-info,.ui-messages-warn,.ui-messages-error,.ui-messages-fatal
-	{
+.ui-messages-info, .ui-messages-warn, .ui-messages-error,
+	.ui-messages-fatal {
 	margin: 0 0 0 0;
 }
 
@@ -340,15 +345,14 @@ div#contentPanel_content {
 
 .banner {
 	float: left;
-    display: block;
-    max-width: 123px !important;
-    max-height: 70px;
-    width: auto;
-    height: auto !important;
-    margin: auto;
-    margin-left: 20% !important;
-    margin-top: 10px !important;
-	
+	display: block;
+	max-width: 123px !important;
+	max-height: 70px;
+	width: auto;
+	height: auto !important;
+	margin: auto;
+	margin-left: 20% !important;
+	margin-top: 10px !important;
 }
 
 .preformatted {
@@ -390,9 +394,9 @@ div#contentPanel_content {
 
 .avatar {
 	max-width: 60px;
-    max-height: 60px;
-    height: auto;
-    width: auto;
+	max-height: 60px;
+	height: auto;
+	width: auto;
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
 	border-radius: 30px;
@@ -405,9 +409,9 @@ div#contentPanel_content {
 
 .comAvatar {
 	max-width: 30px;
-	max-height: 30px;	
-    height: auto;
-    width: auto;
+	max-height: 30px;
+	height: auto;
+	width: auto;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -500,7 +504,7 @@ div#contentPanel_content {
 	font-weight: bold;
 }
 
-.requirement-table table thead tr th{
+.requirement-table table thead tr th {
 	padding: 5px !important;
 }
 
@@ -563,7 +567,7 @@ div#contentPanel_content {
 	text-align: left;
 	width: 75%;
 	height: 37px;
-/* 	min-width: 200px !important; */
+	/* 	min-width: 200px !important; */
 }
 
 .product-column {
@@ -1538,13 +1542,15 @@ div.highLightRevised2 {
 	padding: 0px;
 }
 
-.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a.ui-state-active,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a.ui-state-active
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a.ui-state-active,
+	.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a.ui-state-active
 	{
 	border: 1px solid #27aae1;
 	color: #27aae1;
 }
 
-.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a:hover,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a:hover
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a:hover,
+	.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a:hover
 	{
 	color: #27AAE1;
 	-webkit-transition: all 0.5s ease;
@@ -1554,7 +1560,8 @@ div.highLightRevised2 {
 	border: 1px solid #27aae1;
 }
 
-.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a,.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a
+.ui-timepicker-table tbody tr td.ui-timepicker-hours td.ui-timepicker-hour-cell a,
+	.ui-timepicker-table tbody tr td.ui-timepicker-minutes td.ui-timepicker-minute-cell a
 	{
 	border: 1px solid #e5ebf0;
 	border-radius: 3px;
@@ -1567,7 +1574,7 @@ div.highLightRevised2 {
 	color: #93a8b0;
 }
 
-.ui-timepicker-table .ui-timepicker-hours,.ui-timepicker-table .ui-timepicker-minutes
+.ui-timepicker-table .ui-timepicker-hours, .ui-timepicker-table .ui-timepicker-minutes
 	{
 	padding: 0.2em;
 }

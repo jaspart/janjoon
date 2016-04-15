@@ -13,14 +13,19 @@ public class FlowStepUtil {
 
 	private JJFlowStep flowStep;
 	private JJFlowStep nextFlowStep;
+	private JJFlowStep previousFlowStep;
 	private List<JJRequirement> requirements;
+	
+	
 
 	public FlowStepUtil(JJFlowStep flowStep, JJFlowStep nextFlowStep,
-			List<JJRequirement> requirements) {
+			JJFlowStep previousFlowStep, List<JJRequirement> requirements) {
 		super();
 		this.flowStep = flowStep;
 		this.nextFlowStep = nextFlowStep;
+		this.previousFlowStep = previousFlowStep;
 		this.requirements = requirements;
+		
 	}
 	public JJFlowStep getNextFlowStep() {
 		return nextFlowStep;
@@ -42,6 +47,12 @@ public class FlowStepUtil {
 		this.requirements = requirements;
 	}
 
+	public JJFlowStep getPreviousFlowStep() {
+		return previousFlowStep;
+	}
+	public void setPreviousFlowStep(JJFlowStep previousFlowStep) {
+		this.previousFlowStep = previousFlowStep;
+	}
 	public static List<FlowStepUtil> getFlowStepUtils(
 			JJRequirementService jjRequirementService,
 			JJFlowStepService jjFlowStepService) {
@@ -50,7 +61,8 @@ public class FlowStepUtil {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		List<JJFlowStep> flows = jjFlowStepService.getFlowStep("Requirement",
 				true, null, true);
-		int i = 1;
+		int i = 1;		
+		int j = flows.size() - 1;
 
 		for (JJFlowStep flow : flows) {
 			List<JJRequirement> l = jjRequirementService
@@ -59,18 +71,18 @@ public class FlowStepUtil {
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
 							LoginBean.getVersion(), flow, true, true);
+		
 
-			List<String> flowSteps = new ArrayList<String>();
-
-			for (JJFlowStep f : flows) {
-				if (!f.equals(flow))
-					flowSteps.add(f.getName());
-			}
-
-			list.add(new FlowStepUtil(flow, flows.get(i), l));
-			i++;
+			list.add(new FlowStepUtil(flow, flows.get(i),flows.get(j), l));
+			
+			System.err.println(flow.getName()+" i : "+i+" "+flows.get(i).getName()+" j : "+(j)+" "+flows.get(j).getName());
+			i++;j++;
+			
 			if (i == flows.size())
-				i = 0;
+				i = 0;		
+			
+			if (j == flows.size())
+				j = 0;		
 		}
 
 		return list;

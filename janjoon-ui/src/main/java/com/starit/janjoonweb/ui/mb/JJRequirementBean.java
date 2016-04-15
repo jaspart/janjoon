@@ -26,12 +26,15 @@ import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 import org.primefaces.model.mindmap.DefaultMindmapNode;
 import org.primefaces.model.mindmap.MindmapNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.xml.sax.SAXParseException;
 
+import com.starit.janjoonweb.domain.JJBug;
 import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
@@ -69,6 +72,7 @@ public class JJRequirementBean implements Serializable {
 	public static final String UPDATE_OPERATION = "update";
 	public static final String DELETE_OPERATION = "delete";
 	public static final String ADD_OPERATION = "add";
+	public static final Integer KANBAN_TAB = 2;
 	public static final String SPECIFICATION_WARNING_LINKUP = "specification_warning_linkUp";
 	public static final String SPECIFICATION_WARNING_LINKDOWN = "specification_warning_linkDown";
 	public static final String SPECIFICATION_WARNING_NOCHAPTER = "specification_warning_NoChapter";
@@ -3977,10 +3981,15 @@ public class JJRequirementBean implements Serializable {
 
 	// kanban View
 	private List<FlowStepUtil> flowStepUtils;
-	private List<Object> linkedData;
+	private TreeNode linkedData;
 
 	public List<FlowStepUtil> getFlowStepUtils() {
-		if (flowStepUtils == null)
+		JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
+				.findBean("jJSprintBean");
+		if (jJSprintBean == null)
+			jJSprintBean = new JJSprintBean();
+		if (flowStepUtils == null
+				&& KANBAN_TAB.equals(jJSprintBean.getActiveTabGantIndex()))
 			flowStepUtils = FlowStepUtil.getFlowStepUtils(jJRequirementService,
 					jJFlowStepService);
 		return flowStepUtils;
@@ -3990,78 +3999,185 @@ public class JJRequirementBean implements Serializable {
 		this.flowStepUtils = flowStepUtils;
 	}
 
-	public List<Object> getLinkedData() {
+	public TreeNode getLinkedData() {
 		return linkedData;
 	}
 
-	public void setLinkedData(List<Object> linkedData) {
+	public void setLinkedData(TreeNode linkedData) {
 		this.linkedData = linkedData;
 	}
+	
+	public void loadLinkedData(JJRequirement r,TreeNode principal) {
+		
+		r = jJRequirementService.findJJRequirement(r.getId());
+		TreeNode father = new DefaultTreeNode("JJRequirement", r,
+				principal);
+		
+		for (JJRequirement req : r.getRequirementLinkUp()) {
+			if (req.getEnabled())
+				loadLinkedData(req,father);
+		}
+
+		for (JJTestcase test : jJTestcaseService.getJJtestCases(r))
+			new DefaultTreeNode("JJTestcase", test, father);
+
+		for (JJBug bug : jJBugService.getRequirementBugs(r,
+				LoginBean.getCompany(), LoginBean.getProject(),
+				LoginBean.getProduct(), LoginBean.getVersion()))
+			new DefaultTreeNode("JJBug", bug, father);
+
+		for (JJTask task_ : jJTaskService.getImportTasks(null, r, null, true))
+			new DefaultTreeNode("JJTask", task_, father);
+		
+		
+	}
+	
 
 	public void loadLinkedData(JJRequirement req) {
 
-		linkedData = new ArrayList<Object>();
+		linkedData = new DefaultTreeNode("Root", null);
 		req = jJRequirementService.findJJRequirement(req.getId());
+		TreeNode principal = new DefaultTreeNode("JJRequirement", req,
+				linkedData);
 		for (JJRequirement r : req.getRequirementLinkUp()) {
 			if (r.getEnabled())
-				linkedData.add(r);
+				loadLinkedData(r,principal);
 		}
 
-		linkedData.addAll(jJTestcaseService.getJJtestCases(req));
-		linkedData.addAll(jJBugService.getRequirementBugs(req,
+		for (JJTestcase test : jJTestcaseService.getJJtestCases(req))
+			new DefaultTreeNode("JJTestcase", test, principal);
+
+		for (JJBug bug : jJBugService.getRequirementBugs(req,
 				LoginBean.getCompany(), LoginBean.getProject(),
-				LoginBean.getProduct(), LoginBean.getVersion()));
-		linkedData.addAll(jJTaskService.getImportTasks(null, req, null, true));
-		linkedData.removeAll(Collections.singleton(null));
+				LoginBean.getProduct(), LoginBean.getVersion()))
+			new DefaultTreeNode("JJBug", bug, principal);
+
+		for (JJTask task_ : jJTaskService.getImportTasks(null, req, null, true))
+			new DefaultTreeNode("JJTask", task_, principal);
+		
+		
+		principal.setExpanded(true);
+
+	}
+
+	public void addReqToPreviousFlowStep(DragDropEvent ddevent) {
+		try {
+			String id = ddevent.getDragId()
+					.split(":")[ddevent.getDragId().split(":").length - 1];
+
+			String flowStepsUtilIndex = id.substring(
+					id.indexOf("dragReq_") + "dragReq_".length(), id.indexOf(
+							"_", id.indexOf("dragReq_") + "dragReq_".length()));
+
+			String reqIndex = id.replace("dragReq_" + flowStepsUtilIndex + "_",
+					"");
+
+			System.err.println(id + "  " + flowStepsUtilIndex + " " + reqIndex);
+
+			int i = Integer.parseInt(flowStepsUtilIndex);
+			int j = Integer.parseInt(reqIndex);
+
+			JJRequirement dropedReq = flowStepUtils.get(i).getRequirements()
+					.get(j);
+
+			System.err.println(dropedReq.getName());
+
+			dropedReq.setFlowStep(flowStepUtils.get(i).getPreviousFlowStep());
+
+			((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			dropedReq.setUpdatedBy(contact);
+			dropedReq.setUpdatedDate(new Date());
+
+			dropedReq = jJRequirementService.updateJJRequirement(dropedReq);
+			updateDataTable(dropedReq, dropedReq.getCategory(),
+					UPDATE_OPERATION);
+
+			flowStepUtils.get(Integer.parseInt(flowStepsUtilIndex))
+					.getRequirements().remove(j);
+			i = i - 1;
+			if (i <= -1)
+				i = flowStepUtils.size() - 1;
+
+			flowStepUtils.get(i).getRequirements().add(dropedReq);
+
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} catch (Exception e) {
+
+			String message = "message_unsuccessfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					FacesMessage.SEVERITY_ERROR, MessageFactory
+							.getMessage("label_requirement", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 
 	}
 
 	public void addReqToNextFlowStep(DragDropEvent ddevent) {
 
-		JJRequirement dropedReq = (JJRequirement) ddevent.getData();
-		
+		try {
+			String id = ddevent.getDragId()
+					.split(":")[ddevent.getDragId().split(":").length - 1];
 
-		String id = ddevent.getDragId()
-				.split(":")[ddevent.getDragId().split(":").length - 1];
+			String flowStepsUtilIndex = id.substring(
+					id.indexOf("dragReq_") + "dragReq_".length(), id.indexOf(
+							"_", id.indexOf("dragReq_") + "dragReq_".length()));
 
-		String flowStepsUtilIndex = id
-				.substring(id.indexOf("dragReq_") + "dragReq_".length(),
-						id.indexOf("_",
-								id.indexOf("dragReq_") + "dragReq_".length()));
-		
-		String reqIndex= id.replace("dragReq_"+flowStepsUtilIndex+"_", "");
-		
-		System.err.println(id+"  "+flowStepsUtilIndex + " "+ reqIndex);
-		
-		int i = Integer.parseInt(flowStepsUtilIndex);
-		int j = Integer.parseInt(reqIndex);
-		
-		dropedReq = flowStepUtils.get(i).getRequirements().get(j);
-		
-		System.err.println(dropedReq.getName());
-		
-		dropedReq.setFlowStep(flowStepUtils.get(i).getNextFlowStep());
-		
-		((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
-		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-				.getContact();
-		dropedReq.setUpdatedBy(contact);
-		dropedReq.setUpdatedDate(new Date());
-		
-		dropedReq = jJRequirementService.updateJJRequirement(dropedReq);
-		updateDataTable(dropedReq, dropedReq.getCategory(),UPDATE_OPERATION);
-		
-		flowStepUtils.get(Integer.parseInt(flowStepsUtilIndex)).getRequirements().remove(j);
-		i = i+1;
-		if(i >= flowStepUtils.size()) i = 0;
-		
-		flowStepUtils.get(i).getRequirements().add(dropedReq);	
-		
-		String message = "message_successfully_updated";
-		FacesMessage facesMessage = MessageFactory.getMessage(message,
-				MessageFactory.getMessage("label_requirement", "").getDetail(),
-				"e");
-		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+			String reqIndex = id.replace("dragReq_" + flowStepsUtilIndex + "_",
+					"");
+
+			System.err.println(id + "  " + flowStepsUtilIndex + " " + reqIndex);
+
+			int i = Integer.parseInt(flowStepsUtilIndex);
+			int j = Integer.parseInt(reqIndex);
+
+			JJRequirement dropedReq = flowStepUtils.get(i).getRequirements()
+					.get(j);
+
+			System.err.println(dropedReq.getName());
+
+			dropedReq.setFlowStep(flowStepUtils.get(i).getNextFlowStep());
+
+			((LoginBean) LoginBean.findBean("loginBean")).setNoCouvretReq(null);
+			JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			dropedReq.setUpdatedBy(contact);
+			dropedReq.setUpdatedDate(new Date());
+
+			dropedReq = jJRequirementService.updateJJRequirement(dropedReq);
+			updateDataTable(dropedReq, dropedReq.getCategory(),
+					UPDATE_OPERATION);
+
+			flowStepUtils.get(Integer.parseInt(flowStepsUtilIndex))
+					.getRequirements().remove(j);
+			i = i + 1;
+			if (i >= flowStepUtils.size())
+				i = 0;
+
+			flowStepUtils.get(i).getRequirements().add(dropedReq);
+
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_requirement", "")
+							.getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} catch (Exception e) {
+
+			String message = "message_unsuccessfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					FacesMessage.SEVERITY_ERROR, MessageFactory
+							.getMessage("label_requirement", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
 
 	}
 
