@@ -6,29 +6,60 @@ var isReal = false;
 var isRevised1 = false;
 var timelineContentIndex = null;
 
+//function scrollKanban() {
+//
+//	$(".kanbanContainer").scroll(
+//			function() {
+//				var ii = $(window).width();
+//				if (ii > 1200) {
+//					var scroll = $(this).scrollTop();
+//					$(".kanbanHeader").css('transform',
+//							'translateY(' + scroll + 'px)');
+//				}
+//
+//			});
+//
+//}
+
 function updateTabViewWidth() {
 
 	var width = 0;
-	if ($(window).width() > 960)
+	if ($(window).width() > 960) {
 		width = $("#layout-topbar").width()
 				- (0.1 / 100 * $("#layout-topbar").width()) - 288;
-	else
+
+	}
+
+	else {
 		width = $("#layout-topbar").width()
 				- (2 / 100 * $("#layout-topbar").width()) - 38;
 
-	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-	$("#projecttabview\\:SprintTabView").css("display","block");	
+	}
 
+	if ($(window).width() > 1200) {
+
+		$(".kanbanContainerDIV").css("width",
+				$(".kanbanContainerDIV").children().length * 320 + "px");
+
+		$(".kanbanContainer").css("height", "550px");
+		$(".kanbanContainer").css("overflow-y", "auto");
+
+	} else {
+		$(".kanbanContainerDIV").css("width", "100%");
+		$(".kanbanContainer").css("height", "");
+		$(".kanbanContainer").css("overflow-y", "hidden");
+	}
+
+	$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
+	$("#projecttabview\\:SprintTabView").css("display", "block");
+
+	$(".kanbanContainer").css("width", width + 5 + "px");
+	$(".kanbanContainer").css("display", "block");
 
 	var chart = $(".barChart:visible").last();
 
 	if (chart.length != 0) {
-//		var value = chart.attr("id");
-//		
-//		if (PrimeFaces.widgets['' + value + '_Widget']) {
-//
-//			PF('' + value + '_Widget').plot.replot();
-//		}
+
 		updateBarChart();
 	}
 
@@ -36,32 +67,85 @@ function updateTabViewWidth() {
 
 $(window).resize(
 		function() {
+
 			var width = 0;
-			if ($(window).width() > 960)
+			if ($(window).width() > 960) {
 				width = $("#layout-topbar").width()
 						- (0.1 / 100 * $("#layout-topbar").width()) - 288;
-			else
+
+			}
+
+			else {
 				width = $("#layout-topbar").width()
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
+			}
+
+			if ($(window).width() > 1200) {
+
+				$(".kanbanContainerDIV")
+						.css(
+								"width",
+								$(".kanbanContainerDIV").children().length
+										* 320 + "px");
+
+				$(".kanbanContainer").css("height", "550px");
+				$(".kanbanContainer").css("overflow-y", "auto");
+
+			} else {
+				$(".kanbanContainerDIV").css("width", "100%");
+				$(".kanbanContainer").css("height", "");
+				$(".kanbanContainer").css("overflow-y", "hidden");
+			}
+
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:SprintTabView").css("display","block");			
-		
+			$("#projecttabview\\:SprintTabView").css("display", "block");
+
+			$(".kanbanContainer").css("width", width + 5 + "px");
+			$(".kanbanContainer").css("display", "block");
+
 		});
 
 $(document).ready(
 		function() {
 			var width = 0;
-			if ($(window).width() > 960)
+			if ($(window).width() > 960) {
 				width = $("#layout-topbar").width()
 						- (0.1 / 100 * $("#layout-topbar").width()) - 288;
-			else
+
+			}
+
+			else {
 				width = $("#layout-topbar").width()
 						- (2 / 100 * $("#layout-topbar").width()) - 38;
 
+			}
+
+			if ($(window).width() > 1200) {
+
+				$(".kanbanContainerDIV")
+						.css(
+								"width",
+								$(".kanbanContainerDIV").children().length
+										* 320 + "px");
+
+				$(".kanbanContainer").css("height", "550px");
+				$(".kanbanContainer").css("overflow-y", "auto");
+
+				//scrollKanban();
+
+			} else {
+				$(".kanbanContainerDIV").css("width", "100%");
+				$(".kanbanContainer").css("height", "");
+				$(".kanbanContainer").css("overflow-y", "hidden");
+			}
+
 			$("#projecttabview\\:SprintTabView").css("maxWidth", width + "px");
-			$("#projecttabview\\:SprintTabView").css("display","block");	
-			
+			$("#projecttabview\\:SprintTabView").css("display", "block");
+
+			$(".kanbanContainer").css("width", width + 5 + "px");
+			$(".kanbanContainer").css("display", "block");
+
 		});
 
 function saveScrollPos() {

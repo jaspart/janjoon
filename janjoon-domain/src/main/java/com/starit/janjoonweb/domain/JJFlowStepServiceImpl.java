@@ -77,8 +77,8 @@ public class JJFlowStepServiceImpl implements JJFlowStepService {
 		Root<JJFlowStep> from = criteriaQuery.from(JJFlowStep.class);
 
 		CriteriaQuery<String> select = criteriaQuery
-				.select(from.<String> get("objet"));	
-		
+				.select(from.<String> get("objet"));
+
 		select.where(criteriaBuilder.equal(from.get("enabled"), true));
 
 		TypedQuery<String> result = entityManager.createQuery(select);

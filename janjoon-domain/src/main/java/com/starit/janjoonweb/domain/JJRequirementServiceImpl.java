@@ -369,7 +369,7 @@ public class JJRequirementServiceImpl implements JJRequirementService {
 					.createQuery(select);
 			return new ArrayList<JJRequirement>(
 					new HashSet<JJRequirement>(result.getResultList()));
-			
+
 		} else
 			return new ArrayList<JJRequirement>();
 	}

@@ -25,7 +25,7 @@
 				value="#{jJProjectBean.project}" effect="fade" style="width:130px"
 				filter="#{!loginBean.mobile}"
 				valueChangeListener="#{loginBean.changeEvent}"
-				filterMatchMode="contains"
+				filterMatchMode="contains" title="#{messages.label_project}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProjectConverter">
 				<f:selectItem itemValue="#{null}"
 					itemLabel="#{messages.header_any_project}" />
@@ -47,7 +47,7 @@
 				panelStyleClass="headerSelectOneMenuClass" effect="fade"
 				style="width:130px" filter="#{!loginBean.mobile}"
 				valueChangeListener="#{loginBean.changeEvent}"
-				filterMatchMode="contains"
+				filterMatchMode="contains" title="#{messages.label_product}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJProductConverter">
 
 				<f:selectItem itemValue="#{null}"
@@ -66,7 +66,7 @@
 			<p:selectOneMenu id="versionSelectOneMenu"
 				value="#{jJVersionBean.version}" style="width:130px;"
 				panelStyleClass="headerSelectOneMenuClass" effect="fade"
-				filter="#{!loginBean.mobile}"
+				filter="#{!loginBean.mobile}" title="Version"
 				valueChangeListener="#{loginBean.changeEvent}"
 				converter="com.starit.janjoonweb.ui.mb.converter.JJVersionConverter"
 				filterMatchMode="contains" disabled="#{jJVersionBean.disabled}">

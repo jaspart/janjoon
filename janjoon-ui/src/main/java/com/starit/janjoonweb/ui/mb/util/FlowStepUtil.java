@@ -75,7 +75,6 @@ public class FlowStepUtil {
 
 			list.add(new FlowStepUtil(flow, flows.get(i),flows.get(j), l));
 			
-			System.err.println(flow.getName()+" i : "+i+" "+flows.get(i).getName()+" j : "+(j)+" "+flows.get(j).getName());
 			i++;j++;
 			
 			if (i == flows.size())

@@ -127,14 +127,10 @@ public class JJProjectBean implements Serializable {
 
 		if (projectAdmin.getId() == null)
 			projectManagerList = jJPermissionService.getManagers(
-					LoginBean.getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					"Project");
+					LoginBean.getCompany(),"Project");
 		else
 			projectManagerList = jJPermissionService.getManagers(
-					projectAdmin.getManager().getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					"Project");
+					projectAdmin.getManager().getCompany(),"Project");
 
 		return projectManagerList;
 	}

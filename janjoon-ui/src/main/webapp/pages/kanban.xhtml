@@ -9,73 +9,87 @@
 
 <ui:composition>
 	<h:form id="kanbanForm">
-		<p:remoteCommand update="@form" name="updateKanbanForm" />
-		<h:panelGroup layout="block" styleClass="Container">
-			<c:forEach items="#{jJRequirementBean.flowStepUtils}"
-				var="flowStepUtil" varStatus="varStatus">
-				<p:outputPanel styleClass="Container25 Responsive50"
-					id="#{flowStepUtil.flowStep.name}DropArea_outputPanel">
-					<h:panelGroup layout="block" styleClass="Container">
-						<h:panelGroup id="#{flowStepUtil.flowStep.name}DropArea"
-							layout="block">
-							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<h:panelGroup layout="block"
-									styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
+		<h:outputScript library="js" name="scrollTabKanban.js" />
+		<p:remoteCommand update="@form" name="updateKanbanForm"
+			oncomplete="updateTabViewWidth();" />
+		<h:panelGroup layout="block" styleClass="Container kanbanContainer"
+			style="display: none;overflow-x: auto;width: 550px;overflow-y: auto;">
 
-									<h2 class="CardTopic" style="text-align: center;">
-										<i class="icon-fog Fs20 Fleft MarRight10"></i>
-										#{flowStepUtil.flowStep.name}
-									</h2>
+			<h:panelGroup layout="block"
+				styleClass="Container kanbanContainerDIV"
+				style="/*width : #{jJRequirementBean.containerWidth}px;*/">
+				<c:forEach items="#{jJRequirementBean.flowStepUtils}"
+					var="flowStepUtil" varStatus="varStatus">
+					<p:outputPanel
+						styleClass="/*#{jJRequirementBean.kanbanStyleClass}*/ kanbanDivStyle Responsive50"
+						id="#{flowStepUtil.flowStep.name}DropArea_outputPanel">
+						<h:panelGroup layout="block" styleClass="Container">
+							<h:panelGroup id="#{flowStepUtil.flowStep.name}DropArea"
+								layout="block">
+								<h:panelGroup layout="block" styleClass="ContainerIndent" style="padding-top: 0px;">
+									<h:panelGroup layout="block" style="z-index: 3;position: relative;"
+										styleClass="kanbanHeader WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
 
-									<h:panelGroup layout="block" styleClass="SeparatorFull" />
-									<c:forEach items="#{flowStepUtil.requirements}" var="req"
-										varStatus="loop">
-										<p:draggable for="dragReq_#{varStatus.index}_#{loop.index}"
-											revert="true" scope="#{flowStepUtil.flowStep.name}Req" />
-										<h:panelGroup id="dragReq_#{varStatus.index}_#{loop.index}"
-											layout="block" styleClass="StickyNote Wid100">
-											<h:panelGroup layout="block"
-												styleClass="ContainerIndent Fs16 BoldGray"> 
-                                            # #{req.id} - #{req.name} <br />
-												<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
-												<br />
-												<h:outputText
-													value="#{messages['specification_'.concat(req.state.name)]}"
-													styleClass="#{req.state.name} Fs14" />
-												<p:commandButton icon="fa fa-eye Fs14"
-													update=":projecttabview:kanbanLinkForm"
-													oncomplete="PF('linkDialogWidget').show()"
-													actionListener="#{jJRequirementBean.loadLinkedData(req)}"
-													styleClass="Fright RaisedButton BlueTextButton"
-													iconPos="right" style="margin-top:-15px" />
-											</h:panelGroup>
-										</h:panelGroup>
+										<h2 class="CardTopic" style="text-align: center;">
+											<i class="icon-fog Fs20 Fleft MarRight10"></i>
+											#{flowStepUtil.flowStep.name}
+										</h2>
 										<h:panelGroup layout="block" styleClass="SeparatorFull" />
-									</c:forEach>
-								</h:panelGroup>
+									</h:panelGroup>
 
+									<h:panelGroup layout="block"
+										styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
+
+										<c:forEach items="#{flowStepUtil.requirements}" var="req"
+											varStatus="loop">
+											<p:draggable for="dragReq_#{varStatus.index}_#{loop.index}"
+												revert="true" scope="#{flowStepUtil.flowStep.name}Req" />
+											<h:panelGroup id="dragReq_#{varStatus.index}_#{loop.index}" style="z-index: 2;"
+												layout="block" styleClass="StickyNote Wid80">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndent Fs16 BoldGray"> 
+                                            # #{req.id} - #{req.name} <br />
+													<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
+													<br />
+													<h:outputText
+														value="#{messages['specification_'.concat(req.state.name)]}"
+														styleClass="#{req.state.name} Fs14" />
+													<p:commandButton icon="fa fa-eye Fs14"
+														update=":projecttabview:kanbanLinkForm"
+														oncomplete="PF('linkDialogWidget').show()"
+														actionListener="#{jJRequirementBean.loadLinkedData(req)}"
+														styleClass="Fright RaisedButton BlueTextButton"
+														iconPos="right" style="margin-top:-15px" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="SeparatorFull" />
+										</c:forEach>
+									</h:panelGroup>
+
+								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-					</h:panelGroup>
-				</p:outputPanel>
-				<p:droppable for="#{flowStepUtil.flowStep.name}DropArea"
-					tolerance="touch" scope="#{flowStepUtil.previousFlowStep.name}Req"
-					activeStyleClass="highLightRow">
-					<p:ajax oncomplete="updateKanbanForm();"
-						listener="#{jJRequirementBean.addReqToNextFlowStep}"
-						update=":growlForm">
+					</p:outputPanel>
+					<p:droppable for="#{flowStepUtil.flowStep.name}DropArea"
+						tolerance="touch" scope="#{flowStepUtil.previousFlowStep.name}Req"
+						activeStyleClass="highLightRow">
+						<p:ajax oncomplete="updateKanbanForm();"
+							listener="#{jJRequirementBean.addReqToNextFlowStep}"
+							update=":growlForm">
 
-					</p:ajax>
-				</p:droppable>
-				<p:droppable for="#{flowStepUtil.flowStep.name}DropArea_outputPanel"
-					tolerance="touch" scope="#{flowStepUtil.nextFlowStep.name}Req"
-					activeStyleClass="highLightRow">
-					<p:ajax oncomplete="updateKanbanForm();"
-						listener="#{jJRequirementBean.addReqToPreviousFlowStep}"
-						update=":growlForm">
-					</p:ajax>
-				</p:droppable>
-			</c:forEach>
+						</p:ajax>
+					</p:droppable>
+					<p:droppable
+						for="#{flowStepUtil.flowStep.name}DropArea_outputPanel"
+						tolerance="touch" scope="#{flowStepUtil.nextFlowStep.name}Req"
+						activeStyleClass="highLightRow">
+						<p:ajax oncomplete="updateKanbanForm();"
+							listener="#{jJRequirementBean.addReqToPreviousFlowStep}"
+							update=":growlForm">
+						</p:ajax>
+					</p:droppable>
+				</c:forEach>
+			</h:panelGroup>
 		</h:panelGroup>
 	</h:form>
 
@@ -96,7 +110,8 @@
 				<h:panelGroup layout="block" styleClass="Container100">
 					<h:panelGroup layout="block" styleClass="ContainerIndent">
 						<p:treeTable id="kanbanLinkObject"
-							value="#{jJRequirementBean.linkedData}" var="object" scrollable="true" scrollHeight="300">
+							value="#{jJRequirementBean.linkedData}" var="object"
+							scrollable="true" scrollHeight="300">
 							<p:column headerText="#{messages.label_object}" style="width:80%">
 								<h:outputText value="#REQ_#{object.id} #{object.name}"
 									rendered="#{object['class'].simpleName == 'JJRequirement'}" />
@@ -115,7 +130,7 @@
 									styleClass="#{object.state.name} Fs14" />
 								<h:outputText
 									rendered="#{object['class'].simpleName != 'JJRequirement'}"
-									value="#{loginBean.checkMessage(object.status)}"
+									value="#{object.status != null ? loginBean.checkMessage(object.status) : ''}"
 									styleClass="#{object.status.name} Fs14" />
 							</p:column>
 
@@ -133,42 +148,6 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</f:facet>
-		<!-- 						<p:dataTable id="kanbanLinkObject" var="object" -->
-		<!-- 							emptyMessage="#{messages.label_notRecordFound}" scrollable="true" -->
-		<!-- 							style="width:350px;" scrollHeight="200" -->
-		<!-- 							value="#{jJRequirementBean.linkedData}"> -->
-		<!-- 							<p:column headerText="#{messages.label_object}" style="width:70%"> -->
-		<!-- 								<h:outputText value="#REQ_#{object.id} #{object.name}" -->
-		<!-- 									rendered="#{object['class'].simpleName == 'JJRequirement'}" /> -->
-		<!-- 								<h:outputText value="#BUG_#{object.id} #{object.name}" -->
-		<!-- 									rendered="#{object['class'].simpleName == 'JJBug'}" /> -->
-		<!-- 								<h:outputText value="#TST_#{object.id} #{object.name} " -->
-		<!-- 									rendered="#{object['class'].simpleName == 'JJTestcase'}" /> -->
-		<!-- 								<h:outputText -->
-		<!-- 									value="##{messages.label_task}_#{object.id} #{object.name}" -->
-		<!-- 									rendered="#{object['class'].simpleName == 'JJTask'}" /> -->
-		<!-- 							</p:column> -->
-		<!-- 							<p:column headerText="#{messages.label_status}" style="width:30%"> -->
-		<!-- 								<h:outputText -->
-		<!-- 									rendered="#{object['class'].simpleName == 'JJRequirement'}" -->
-		<!-- 									value="#{messages['specification_'.concat(object.state.name)]}" -->
-		<!-- 									styleClass="#{object.state.name} Fs14" /> -->
-		<!-- 								<h:outputText -->
-		<!-- 									rendered="#{object['class'].simpleName != 'JJRequirement'}" -->
-		<!-- 									value="#{loginBean.checkMessage(object.status)}" -->
-		<!-- 									styleClass="#{object.status.name} Fs14" /> -->
-		<!-- 							</p:column> -->
-		<!-- 							<f:facet name="footer"> -->
-		<!-- 								<h:panelGroup layout="block" styleClass="Container"> -->
-		<!-- 									<h:panelGroup layout="block" styleClass="Container100"> -->
-		<!-- 										<p:commandButton styleClass="Fright BlueTextButton" -->
-		<!-- 											value="#{messages.label_cancel}" -->
-		<!-- 											onclick="PF('linkDialogWidget').hide()" type="button" /> -->
-		<!-- 									</h:panelGroup> -->
-		<!-- 								</h:panelGroup> -->
-		<!-- 							</f:facet> -->
-		<!-- 						</p:dataTable> -->
-
 	</p:dialog>
 
 </ui:composition>

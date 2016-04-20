@@ -1235,6 +1235,8 @@ public class JJRequirementBean implements Serializable {
 					tableDataModelList.get(i).setCoverageProgress(-1);
 					tableDataModelList.get(i).setActiveIndex(-1);
 
+					flowStepUtils = null;
+					
 					if (LoginBean.findBean("jJStatusBean") != null) {
 						JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
 								.findBean("jJStatusBean");
@@ -4006,16 +4008,15 @@ public class JJRequirementBean implements Serializable {
 	public void setLinkedData(TreeNode linkedData) {
 		this.linkedData = linkedData;
 	}
-	
-	public void loadLinkedData(JJRequirement r,TreeNode principal) {
-		
+
+	public void loadLinkedData(JJRequirement r, TreeNode principal) {
+
 		r = jJRequirementService.findJJRequirement(r.getId());
-		TreeNode father = new DefaultTreeNode("JJRequirement", r,
-				principal);
-		
+		TreeNode father = new DefaultTreeNode("JJRequirement", r, principal);
+
 		for (JJRequirement req : r.getRequirementLinkUp()) {
 			if (req.getEnabled())
-				loadLinkedData(req,father);
+				loadLinkedData(req, father);
 		}
 
 		for (JJTestcase test : jJTestcaseService.getJJtestCases(r))
@@ -4028,10 +4029,8 @@ public class JJRequirementBean implements Serializable {
 
 		for (JJTask task_ : jJTaskService.getImportTasks(null, r, null, true))
 			new DefaultTreeNode("JJTask", task_, father);
-		
-		
+
 	}
-	
 
 	public void loadLinkedData(JJRequirement req) {
 
@@ -4041,7 +4040,7 @@ public class JJRequirementBean implements Serializable {
 				linkedData);
 		for (JJRequirement r : req.getRequirementLinkUp()) {
 			if (r.getEnabled())
-				loadLinkedData(r,principal);
+				loadLinkedData(r, principal);
 		}
 
 		for (JJTestcase test : jJTestcaseService.getJJtestCases(req))
@@ -4054,8 +4053,7 @@ public class JJRequirementBean implements Serializable {
 
 		for (JJTask task_ : jJTaskService.getImportTasks(null, req, null, true))
 			new DefaultTreeNode("JJTask", task_, principal);
-		
-		
+
 		principal.setExpanded(true);
 
 	}
@@ -4118,6 +4116,24 @@ public class JJRequirementBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
+	}
+
+	public String getKanbanStyleClass() {
+
+		if (flowStepUtils != null) {
+			if (flowStepUtils.size() >= 4)
+				return "Container25";
+			else
+				return "Container20";
+		} else
+			return "";
+	}
+	
+	public String getContainerWidth(){
+		if (flowStepUtils != null) {
+			return flowStepUtils.size()*320+"" ;
+		} else
+			return "0";
 	}
 
 	public void addReqToNextFlowStep(DragDropEvent ddevent) {

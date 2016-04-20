@@ -44,12 +44,12 @@ public class JJFlowStep {
 
 	private Boolean enabled;;
 
-	private Integer level;	
-	
+	private Integer level;
+
 	@NotNull
 	@Size(max = 25)
 	private String objet;
-	
+
 	@Override
 	public boolean equals(Object object) {
 		return (object instanceof JJFlowStep) && (getId() != null)

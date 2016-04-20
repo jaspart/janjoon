@@ -43,7 +43,7 @@ public class JJStatusServiceImpl implements JJStatusService {
 
 		CriteriaQuery<String> select = criteriaQuery
 				.select(from.<String> get("objet"));
-		
+
 		select.where(criteriaBuilder.equal(from.get("enabled"), true));
 
 		TypedQuery<String> result = entityManager.createQuery(select);

@@ -468,9 +468,7 @@ public class ConfigListener implements ServletContextListener {
 
 			List<String> names = new ArrayList<String>();
 
-			if (jJStatusService
-					.getStatus(object, true, new ArrayList<String>(), false)
-					.isEmpty()) {
+			if (jJFlowStepService.getFlowStep(object, true, null, true).isEmpty()) {
 				if (object.equalsIgnoreCase("Requirement")) {
 					names.add("Backlog");
 					names.add("Specification");

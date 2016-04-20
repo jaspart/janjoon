@@ -461,7 +461,8 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 			Root<JJTask> fromTask = subquery.from(JJTask.class);
 			List<Predicate> predicatesTask = new ArrayList<Predicate>();
 			subquery.select(fromTask.get("testcase").<Long> get("id"));
-			predicatesTask.add(criteriaBuilder.isNotNull(fromTask.get("testcase")));
+			predicatesTask
+					.add(criteriaBuilder.isNotNull(fromTask.get("testcase")));
 			predicatesTask
 					.add(criteriaBuilder.equal(fromTask.get("enabled"), true));
 
@@ -471,7 +472,7 @@ public class JJTestcaseServiceImpl implements JJTestcaseService {
 					criteriaBuilder.in(from.get("id")).value(subquery).not());
 
 		}
-		
+
 		if (product != null) {
 			Path<Object> path = from.join("requirement").get("product");
 			predicates.add(criteriaBuilder.equal(path, product));

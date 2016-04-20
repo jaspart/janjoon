@@ -64,6 +64,11 @@
 }
 
 /* kanban notes */
+.kanbanDivStyle {
+	width: 300px;
+	float: left;
+}
+
 .StickyNote {
 	font-size: 140%;
 	font-weight: bold;
@@ -81,12 +86,10 @@
 	-webkit-box-shadow: 5px 5px 7px rgba(33, 33, 33, .7);
 	/* Opera */
 	box-shadow: 5px 5px 7px rgba(33, 33, 33, .7);
-	
-
 	-moz-transition: -moz-transform .15s linear;
 	-o-transition: -o-transform .15s linear;
 	-webkit-transition: -webkit-transform .15s linear;
-	font-family: "Reenie Beanie", arial, sans-serif;	
+	font-family: "Reenie Beanie", arial, sans-serif;
 	-webkit-transform: rotate(-6deg);
 	-o-transform: rotate(-6deg);
 	-moz-transform: rotate(-6deg);

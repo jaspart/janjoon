@@ -934,10 +934,9 @@ public class JJPermissionServiceImpl implements JJPermissionService {
 	}
 
 	@Override
-	public List<JJContact> getManagers(JJCompany company, JJContact contact,
-			String objet) {
-		return areAuthorized(company, contact, null, null, objet, null, null,
-				true, null);
+	public List<JJContact> getManagers(JJCompany company, String objet) {
+		return areAuthorized(company, null, null, null, objet, null, null, true,
+				null);
 	}
 
 	@Override

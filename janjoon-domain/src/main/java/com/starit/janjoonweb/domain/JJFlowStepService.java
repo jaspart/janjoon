@@ -13,11 +13,13 @@ public interface JJFlowStepService {
 
 	// New Generic
 
-	public JJFlowStep getOneFlowStep(String name, String object, boolean onlyActif);
+	public JJFlowStep getOneFlowStep(String name, String object,
+			boolean onlyActif);
 
-	public Set<String> getAllObject();	
-	
-	public JJFlowStep getFlowStepByLevel(Integer level,String object, boolean onlyActif) ;
+	public Set<String> getAllObject();
+
+	public JJFlowStep getFlowStepByLevel(Integer level, String object,
+			boolean onlyActif);
 
 	public List<JJFlowStep> getFlowStep(String object, boolean onlyActif,
 			List<String> names, boolean sortedByLevel);

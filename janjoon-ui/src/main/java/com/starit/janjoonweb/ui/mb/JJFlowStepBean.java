@@ -49,7 +49,7 @@ public class JJFlowStepBean implements Serializable {
 		this.lazyFlowStepList = lazyFlowStepList;
 		this.objectOptions = null;
 	}
-	
+
 	public SelectItem[] getObjectOptions() {
 
 		if (objectOptions == null) {
@@ -82,15 +82,23 @@ public class JJFlowStepBean implements Serializable {
 			message = "message_successfully_updated";
 
 		} else {
-			getJJFlowStep_().setDescription("Flow Step : " + getJJFlowStep_().getName()
-					+ " for " + getJJFlowStep_().getObjet() + "object");
+			getJJFlowStep_()
+					.setDescription("Flow Step : " + getJJFlowStep_().getName()
+							+ " for " + getJJFlowStep_().getObjet() + "object");
 			getJJFlowStep_().setEnabled(true);
 			saveJJFlowStep(getJJFlowStep_());
 			message = "message_successfully_created";
 		}
 
-		FacesMessage facesMessage = MessageFactory.getMessage(message, "FlowStep",
-				"");
+		if (getJJFlowStep_().getObjet().equalsIgnoreCase("Requirement")) {
+			if (LoginBean.findBean("jJRequirementBean") != null) {
+				((JJRequirementBean) LoginBean.findBean("jJRequirementBean"))
+						.setFlowStepUtils(null);;
+			}
+		}
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"FlowStep", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -101,20 +109,26 @@ public class JJFlowStepBean implements Serializable {
 		reset();
 
 	}
-	
-	public void deleteFlowStep(){
+
+	public void deleteFlowStep() {
 
 		getJJFlowStep_().setEnabled(false);
 		updateJJFlowStep(getJJFlowStep_());
+		if (getJJFlowStep_().getObjet().equalsIgnoreCase("Requirement")) {
+			if (LoginBean.findBean("jJRequirementBean") != null) {
+				((JJRequirementBean) LoginBean.findBean("jJRequirementBean"))
+						.setFlowStepUtils(null);;
+			}
+		}
 		FacesMessage facesMessage = MessageFactory
 				.getMessage("message_successfully_deleted", "FlowStep", "");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	
+
 		lazyFlowStepList = null;
 		objectOptions = null;
 
 	}
-	
+
 	public List<String> completeObject(String query) {
 
 		List<String> suggestions = new ArrayList<String>();
@@ -130,19 +144,20 @@ public class JJFlowStepBean implements Serializable {
 		}
 		return suggestions;
 	}
-	
+
 	public void reset() {
 		setJJFlowStep_(null);
 		lazyFlowStepList = null;
-		objectOptions = null;		
+		objectOptions = null;
 		setCreateDialogVisible(false);
 	}
-	
+
 	public boolean levelValid(Integer level, JJFlowStep c) {
 		boolean valid = true;
 
-		System.err.println("object: "+c.getObjet());
-		JJFlowStep flow = jJFlowStepService.getFlowStepByLevel(level,c.getObjet(), true);
+		System.err.println("object: " + c.getObjet());
+		JJFlowStep flow = jJFlowStepService.getFlowStepByLevel(level,
+				c.getObjet(), true);
 
 		if (flow != null) {
 			if (c.getId() == null)

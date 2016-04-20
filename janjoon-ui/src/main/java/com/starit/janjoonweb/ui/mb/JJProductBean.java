@@ -149,14 +149,10 @@ public class JJProductBean implements Serializable {
 
 		if (productAdmin.getId() == null) {
 			productManagerList = jJPermissionService.getManagers(
-					LoginBean.getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					"Product");
+					LoginBean.getCompany(),"Product");
 		} else {
 			productManagerList = jJPermissionService.getManagers(
-					productAdmin.getManager().getCompany(),
-					((LoginBean) LoginBean.findBean("loginBean")).getContact(),
-					"Product");
+					productAdmin.getManager().getCompany(),"Product");
 		}
 
 		return productManagerList;
