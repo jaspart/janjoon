@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -160,8 +161,27 @@ public class JJProductBean implements Serializable {
 
 	private boolean getProductDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("ProductDialog",
+		Boolean val = jJConfigurationService.getDialogConfig("ProductDialog",
 				"product.create.saveandclose");
+
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ProductDialog");
+			configuration.setDescription(
+					"specify action after submit in product dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("product.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("ProductDialog",
+					"product.create.saveandclose");
+		}
+
+		return val;			
 	}
 
 	public void restoreProducts() {

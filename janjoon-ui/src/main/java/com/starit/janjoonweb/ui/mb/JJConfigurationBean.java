@@ -26,7 +26,7 @@ public class JJConfigurationBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private LazyConfDataTable configList;
 	private JJConfiguration selectedConf;
 	private List<String> columns;
@@ -152,6 +152,71 @@ public class JJConfigurationBean implements Serializable {
 
 	}
 
+	// render workload and required workload
+	private Boolean renderWorkload;
+	private Boolean requiredWorkload;
+
+	public boolean getRenderWorkload() {
+		if (renderWorkload == null) {
+			renderWorkload = jJConfigurationService
+					.getDialogConfig("RenderWorkload", "RenderWorkload");
+			if (renderWorkload == null) {
+				JJConfiguration configuration = new JJConfiguration();
+				configuration.setName("RenderWorkload");
+				configuration.setDescription(
+						"specify if workload is rendered or not");
+				configuration.setCreatedBy(
+						((LoginBean) LoginBean.findBean("loginBean"))
+								.getContact());
+				configuration.setCreationDate(new Date());
+				configuration.setEnabled(true);
+				configuration.setParam("RenderWorkload");
+				configuration.setVal("false");
+				jJConfigurationService.saveJJConfiguration(configuration);
+
+				renderWorkload = jJConfigurationService
+						.getDialogConfig("RenderWorkload", "RenderWorkload");
+			}
+		}
+		return renderWorkload;
+	}
+
+	public void setRenderWorkload(Boolean renderWorkload) {
+		this.renderWorkload = renderWorkload;
+	}
+
+	public boolean getRequiredWorkload() {
+		if (getRenderWorkload()) {
+			if (requiredWorkload == null) {
+				requiredWorkload = jJConfigurationService.getDialogConfig(
+						"RequiredWorkload", "RequiredWorkload");
+				if (requiredWorkload == null) {
+					JJConfiguration configuration = new JJConfiguration();
+					configuration.setName("RequiredWorkload");
+					configuration.setDescription(
+							"specify if workload is requiered or not");
+					configuration.setCreatedBy(
+							((LoginBean) LoginBean.findBean("loginBean"))
+									.getContact());
+					configuration.setCreationDate(new Date());
+					configuration.setEnabled(true);
+					configuration.setParam("RequiredWorkload");
+					configuration.setVal("false");
+					jJConfigurationService.saveJJConfiguration(configuration);
+
+					requiredWorkload = jJConfigurationService.getDialogConfig(
+							"RequiredWorkload", "RequiredWorkload");
+				}
+			}
+			return requiredWorkload;
+		} else
+			return false;
+	}
+
+	public void setRequiredWorkload(Boolean requiredWorkload) {
+		this.requiredWorkload = requiredWorkload;
+	}
+
 	public void saveJJConfiguration(JJConfiguration b) {
 		b.setCreationDate(new Date());
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
@@ -167,6 +232,11 @@ public class JJConfigurationBean implements Serializable {
 						.getPlanningConfiguration().getPlaningTabsConf()))
 			((LoginBean) LoginBean.findBean("loginBean"))
 					.setPlanningConfiguration(null);
+		else if (b.getName().equalsIgnoreCase("RequiredWorkload")
+				|| b.getName().equalsIgnoreCase("RenderWorkload")) {
+			requiredWorkload = null;
+			renderWorkload = null;
+		}
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
 		b.setUpdatedBy(contact);

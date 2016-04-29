@@ -150,13 +150,13 @@ public class JJConfigurationServiceImpl implements JJConfigurationService {
 		return result.getResultList();
 	}
 
-	public boolean getDialogConfig(String name, String param) {
+	public Boolean getDialogConfig(String name, String param) {
 
 		List<JJConfiguration> configurations = getConfigurations(name, param,
 				true);
 
 		if (configurations.isEmpty())
-			return true;
+			return null;
 		else {
 			JJConfiguration configuration = configurations.get(0);
 			String val = configuration.getVal();

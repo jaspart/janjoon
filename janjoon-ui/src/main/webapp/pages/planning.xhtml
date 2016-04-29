@@ -102,7 +102,7 @@
 							<ui:include src="#{loginBean.planningConfiguration.secondPage}" />
 						</ui:insert>
 					</p:tab>
-					<p:tab title="Kanban">
+					<p:tab title="Kanban" rendered="#{loginBean.planningConfiguration.renderKanban}">
 						<ui:insert>
 							<ui:include src="kanban.xhtml" />
 						</ui:insert>

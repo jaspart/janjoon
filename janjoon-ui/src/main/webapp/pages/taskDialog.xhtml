@@ -36,7 +36,7 @@
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="Sprint :" for="taskSprint" />
+					<p:outputLabel styleClass="Fs16" value="Sprint :" for="taskSprint" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
@@ -58,7 +58,7 @@
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="#{messages.taskDialog_assignedTo} :"
+					<p:outputLabel styleClass="Fs16" value="#{messages.taskDialog_assignedTo} :"
 						for="taskAssignedTo" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -79,7 +79,7 @@
 		<h:panelGroup layout="block" styleClass="Container33 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="Status :" for="taskStatus" />
+					<p:outputLabel styleClass="Fs16" value="Status :" for="taskStatus" />
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container60">
@@ -97,7 +97,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="#{messages.project_scrum_new_start_label}"
+					<p:outputLabel styleClass="Fs16" value="#{messages.project_scrum_new_start_label}"
 						for="taskStartDatePlanned" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -122,7 +122,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="#{messages.project_scrum_new_end_label}"
+					<p:outputLabel styleClass="Fs16" value="#{messages.project_scrum_new_end_label}"
 						for="taskEndDatePlanned" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -148,7 +148,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel
+					<p:outputLabel styleClass="Fs16"
 						value="#{messages.specification_create_workload_label}:"
 						for="taskWorkload" />
 				</h:panelGroup>
@@ -167,7 +167,7 @@
 		<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 			<h:panelGroup layout="block" styleClass="Container40">
 				<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-					<p:outputLabel value="#{messages.label_requirement} :"
+					<p:outputLabel value="#{messages.label_requirement} :" styleClass="Fs16"
 						for="taskType" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -194,14 +194,14 @@
 					</f:facet>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="Bug :" for="taskBug" />
+							<p:outputLabel value="Bug :" styleClass="Fs16" for="taskBug" />
 							<p:inputText id="taskBug" readonly="true"
 								converter="JJBugConverter" value="#{JJTask_.bug}" />
 						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive50">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel for="jJbugStatus" value="Status : " />
+							<p:outputLabel styleClass="Fs16" for="jJbugStatus" value="Status : " />
 							<p:inputText id="jJbugStatus" readonly="true"
 								value="#{loginBean.checkMessage(JJTask_.bug.status)}" />
 						</h:panelGroup>
@@ -209,7 +209,7 @@
 					<h:panelGroup layout="block" styleClass="Container100"
 						style="min-height: 220px;" rendered="#{!loginBean.mobile}">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="Description :" for="Bugdescription" />
+							<p:outputLabel styleClass="Fs16" value="Description :" for="Bugdescription" />
 
 							<pe:ckEditor id="Bugdescription" width="100%"
 								toolbar="#{imageStreamer.ckEditorToolBar}"
@@ -220,7 +220,7 @@
 					<h:panelGroup layout="block" styleClass="Container100"
 						rendered="#{loginBean.mobile}">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="Description :" for="BugMobiledescription"
+							<p:outputLabel styleClass="Fs16" value="Description :" for="BugMobiledescription"
 								rendered="#{loginBean.mobile}" />
 							<br />
 							<h:outputText escape="false" id="BugMobiledescription"
@@ -244,7 +244,7 @@
 					</f:facet>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="#{messages.label_name} :"
+							<p:outputLabel styleClass="Fs16" value="#{messages.label_name} :"
 								for="taskTestCase" />
 							<p:inputText id="taskTestCase" readonly="true"
 								converter="JJTestcaseConverter" value="#{JJTask_.testcase}" />
@@ -252,7 +252,7 @@
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="#{messages.label_requirement}:"
+							<p:outputLabel styleClass="Fs16" value="#{messages.label_requirement}:"
 								for="taskTestCaseReq" />
 							<p:inputText id="taskTestCaseReq" readonly="true"
 								converter="JJRequirementConverter"
@@ -263,7 +263,7 @@
 						styleClass="Container100 Responsive100" style="min-height: 220px;"
 						rendered="#{!loginBean.mobile}">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="Description :" for="testCasedescription" />
+							<p:outputLabel styleClass="Fs16" value="Description :" for="testCasedescription" />
 							<pe:ckEditor id="testCasedescription" width="100%"
 								toolbar="#{imageStreamer.ckEditorToolBar}" height="150px"
 								value="#{JJTask_.testcase.description}" readOnly="true"
@@ -274,7 +274,7 @@
 						styleClass="Container100 Responsive100"
 						rendered="#{loginBean.mobile}">
 						<h:panelGroup layout="block" styleClass="ContainerIndent">
-							<p:outputLabel value="Description :"
+							<p:outputLabel value="Description :" styleClass="Fs16"
 								for="testcaseMobiledescription" />
 							<br />
 							<h:outputText escape="false" id="testcaseMobiledescription"
@@ -321,26 +321,26 @@
 						</f:facet>
 						<h:panelGroup layout="block" styleClass="Container33 Responsive">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:outputLabel
+								<p:outputLabel styleClass="Fs16"
 									value="#{messages.label_category}: #{loginBean.checkMessage(jJTaskBean.selectedReq.category)}" />
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container33 Responsive">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:outputLabel
+								<p:outputLabel styleClass="Fs16"
 									value="Status : #{loginBean.checkMessage(jJTaskBean.selectedReq.status)}" />
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container33 Responsive">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:outputLabel
+								<p:outputLabel styleClass="Fs16"
 									value="#{messages.label_chapter} : #{jJTaskBean.selectedReq.chapter.name}" />
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container100"
 							style="min-height: 220px;" rendered="#{!loginBean.mobile}">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:outputLabel value="Description :" for="description" />
+								<p:outputLabel styleClass="Fs16" value="Description :" for="description" />
 								<pe:ckEditor id="description"
 									toolbar="#{imageStreamer.ckEditorToolBar}" width="100%"
 									rendered="#{!loginBean.mobile}" height="150px"
@@ -350,7 +350,7 @@
 						<h:panelGroup layout="block" styleClass="Container100"
 							rendered="#{loginBean.mobile}">
 							<h:panelGroup layout="block" styleClass="ContainerIndent">
-								<p:outputLabel value="Description :" for="descriptionMobile" />
+								<p:outputLabel styleClass="Fs16" value="Description :" for="descriptionMobile" />
 								<br />
 								<h:outputText escape="false" id="descriptionMobile"
 									rendered="#{loginBean.mobile}" styleClass="Fs16"

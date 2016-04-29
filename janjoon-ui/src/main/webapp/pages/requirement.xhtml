@@ -244,7 +244,7 @@
 							</f:facet>
 							<h:panelGroup layout="block" styleClass="Container">
 								<h:panelGroup layout="block"
-									styleClass="Container50 Responsive100">
+									styleClass="#{jJConfigurationBean.renderWorkload ? 'Container100' : 'Container50'} Responsive100">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:inputText id="nameReq" label="#{messages.label_name}"
 											title="#{messages.label_name}"
@@ -252,6 +252,24 @@
 											requiredMessage="#{messages.specification_create_name_alert}">
 											<f:validateLength maximum="100" />
 										</p:inputText>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Container50 Responsive"
+									rendered="#{jJConfigurationBean.renderWorkload}">
+									<h:panelGroup layout="block" styleClass="Container40">
+										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+											<p:outputLabel styleClass="Fs16"
+												value="#{messages.label_workload}:" for="workload" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container60">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:spinner id="workload"
+												required="#{jJConfigurationBean.requiredWorkload}"
+												value="#{requirementBean.requirement.workload}"
+												stepFactor="1" min="0" size="3" />
+										</h:panelGroup>
 									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="Container50 Responsive">
@@ -269,6 +287,7 @@
 										</p:autoComplete>
 									</h:panelGroup>
 								</h:panelGroup>
+								<h:panelGroup layout="block" styleClass="EmptyBox1 ShowOnDesktop" rendered="#{jJConfigurationBean.renderWorkload}" />
 								<h:panelGroup layout="block" styleClass="Container50 Responsive">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:autoComplete id="category" scrollHeight="200"

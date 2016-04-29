@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermissionService;
@@ -24,7 +25,7 @@ import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 @RooJsfManagedBean(entity = JJProject.class, beanName = "jJProjectBean")
 public class JJProjectBean implements Serializable {
-	
+
 	/**
 	 * 
 	 */
@@ -126,11 +127,11 @@ public class JJProjectBean implements Serializable {
 	public List<JJContact> getProjectManagerList() {
 
 		if (projectAdmin.getId() == null)
-			projectManagerList = jJPermissionService.getManagers(
-					LoginBean.getCompany(),"Project");
+			projectManagerList = jJPermissionService
+					.getManagers(LoginBean.getCompany(), "Project");
 		else
 			projectManagerList = jJPermissionService.getManagers(
-					projectAdmin.getManager().getCompany(),"Project");
+					projectAdmin.getManager().getCompany(), "Project");
 
 		return projectManagerList;
 	}
@@ -320,8 +321,25 @@ public class JJProjectBean implements Serializable {
 
 	private boolean getProjectDialogConfiguration() {
 
-		return jJConfigurationService.getDialogConfig("ProjectDialog",
+		Boolean val = jJConfigurationService.getDialogConfig("ProjectDialog",
 				"project.create.saveandclose");
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ProjectDialog");
+			configuration.setDescription(
+					"specify action after submit in project dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("project.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("ProjectDialog",
+					"project.create.saveandclose");
+		}
+		return val;
 	}
 
 	public HtmlPanelGrid populateCreatePanel() {

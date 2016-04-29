@@ -103,26 +103,9 @@
 
 				<pe:layoutPane position="center" id="centerLayout">
 					<f:facet name="header">#{messages.project_gantt_table_header}</f:facet>
-					<!-- 					<p:panelGrid id="stickyHeader" styleClass="stickyHeader"> -->
-					<!-- 						<f:facet name="header"> -->
-					<!-- 							<p:row style="height: 40px;"> -->
-					<!-- 								<p:column styleClass="planning-action-column">Actions</p:column> -->
-					<!-- 								<p:column style="width:180px !important;">#{messages.project_gantt_table_name_title}</p:column> -->
-					<!-- 								<p:column style="width: 130px;">#{messages.project_gantt_table_assigned_title}</p:column> -->
-					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startplanned_title}</p:column> -->
-					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endplanned_title}</p:column> -->
-					<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlplanned_title}</p:column> -->
-					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_startreal_title}</p:column> -->
-					<!-- 								<p:column style="width: 120px;">#{messages.project_gantt_table_endreal_title}</p:column> -->
-					<!-- 								<p:column style="width: 100px;">#{messages.project_gantt_table_wlreal_title}</p:column> -->
-					<!-- 								<p:column style="width: 160px;">#{messages.project_gantt_table_previous_title}</p:column> -->
-					<!-- 								<p:column style="width: 160px;">Sprint</p:column> -->
-					<!-- 							</p:row> -->
-					<!-- 						</f:facet> -->
-					<!-- 					</p:panelGrid> -->
 					<p:dataTable id="taskDataTable" var="taskData" widgetVar="tdtWV"
 						emptyMessage="#{messages.label_notRecordFound}"
-						style="width: 1400px;" sortFunction="#{jJTaskBean.sortFunction}"
+						style="width: 1390px;" sortFunction="#{jJTaskBean.sortFunction}"
 						rowIndexVar="rowIndex" styleClass="planning-dataTable"
 						sortBy="#{taskData.chapter}" value="#{jJTaskBean.tasksData}"
 						editable="true" editMode="cell">

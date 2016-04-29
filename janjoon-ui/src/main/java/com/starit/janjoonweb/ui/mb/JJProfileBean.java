@@ -2,6 +2,7 @@ package com.starit.janjoonweb.ui.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -11,6 +12,7 @@ import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProfile;
@@ -130,9 +132,27 @@ public class JJProfileBean implements Serializable {
 	}
 
 	private boolean getProfileDialogConfiguration() {
-
-		return jJConfigurationService.getDialogConfig("ProfileDialog",
+		
+		Boolean val = jJConfigurationService.getDialogConfig("ProfileDialog",
 				"profile.create.saveandclose");
+		if(val == null)
+		{
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ProfileDialog");
+			configuration.setDescription(
+					"specify action after submit in profil dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("profile.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+			
+			val = jJConfigurationService.getDialogConfig("ProfileDialog",
+					"profile.create.saveandclose");
+		}
+		return val;		
 	}
 
 	public LazyProfileDataModel getProfileListTable() {

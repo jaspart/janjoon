@@ -79,6 +79,14 @@ privileged aspect JJBug_Roo_JavaBean {
         this.enabled = enabled;
     }
     
+    public Integer JJBug.getWorkload() {
+        return this.workload;
+    }
+    
+    public void JJBug.setWorkload(Integer workload) {
+        this.workload = workload;
+    }
+    
     public JJProject JJBug.getProject() {
         return this.project;
     }

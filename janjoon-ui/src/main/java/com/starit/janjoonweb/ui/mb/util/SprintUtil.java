@@ -262,6 +262,36 @@ public class SprintUtil {
 						else
 							j++;
 					}
+
+					// sort
+					Collections.sort(todoTask, new Comparator<JJTask>() {
+
+						@Override
+						public int compare(JJTask o1, JJTask o2) {
+							return o2.getCreationDate()
+									.compareTo(o1.getCreationDate());
+						}
+					});
+					
+					Collections.sort(progressTask, new Comparator<JJTask>() {
+
+						@Override
+						public int compare(JJTask o1, JJTask o2) {
+							return o2.getStartDateReal()
+									.compareTo(o1.getStartDateReal());
+						}
+					});
+					
+					Collections.sort(doneTask, new Comparator<JJTask>() {
+
+						@Override
+						public int compare(JJTask o1, JJTask o2) {
+							return o2.getEndDateReal()
+									.compareTo(o1.getEndDateReal());
+						}
+					});
+					
+					
 				}
 			}
 		}

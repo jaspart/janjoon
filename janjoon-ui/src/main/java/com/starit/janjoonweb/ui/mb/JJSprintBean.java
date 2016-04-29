@@ -632,6 +632,172 @@ public class JJSprintBean implements Serializable {
 		}
 
 	}
+	
+	public void addTaskToTodo_newScrum(DragDropEvent ddevent) {
+
+		JJTask dropedTask = (JJTask) ddevent.getData();
+		Long sprintId = dropedTask.getSprint().getId();
+
+		if (ddevent.getDragId().contains(":progIcon")
+				|| ddevent.getDragId().contains(":progPanel")
+				|| ddevent.getDragId().contains(":doneIcon")
+				|| ddevent.getDragId().contains(":donePanel")) {
+
+			JJStatus status = jJStatusService.getOneStatus("TODO", "Task",
+					true);
+
+			dropedTask.setStatus(status);
+			dropedTask.setStartDateReal(null);
+			dropedTask.setEndDateReal(null);
+			dropedTask.setWorkloadReal(null);
+			dropedTask.setAssignedTo(null);
+			dropedTask.setCompleted(false);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
+			// resetJJTaskBean();
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s,
+					jJTaskService.getSprintTasks(s, LoginBean.getProduct()),
+					jJContactService, jJTaskService);
+
+			sprintList.set(contains(sprintUtil.getSprint().getId()),
+					sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+
+		else {
+
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+	}
+
+	public void addTaskToProg_newScrum(DragDropEvent ddevent) {
+
+		JJTask dropedTask = (JJTask) ddevent.getData();
+		Long sprintId = dropedTask.getSprint().getId();
+
+		if (ddevent.getDragId().contains(":todoIcon")
+				|| ddevent.getDragId().contains(":todoPanel")) {
+			JJContact assignedTo = ((LoginBean) LoginBean.findBean("loginBean"))
+					.getContact();
+			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
+					"Task", true);
+
+			dropedTask.setStatus(status);
+			dropedTask.setStartDateReal(new Date());
+			dropedTask.setAssignedTo(assignedTo);
+			dropedTask.setCompleted(false);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
+			// resetJJTaskBean();
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s,
+					jJTaskService.getSprintTasks(s, LoginBean.getProduct()),
+					jJContactService, jJTaskService);
+
+			sprintList.set(contains(sprintUtil.getSprint().getId()),
+					sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else if (ddevent.getDragId().contains(":doneIcon")
+				|| ddevent.getDragId().contains(":donePanel")) {
+
+			JJStatus status = jJStatusService.getOneStatus("IN PROGRESS",
+					"Task", true);
+
+			dropedTask.setStatus(status);
+			dropedTask.setEndDateReal(null);
+			dropedTask.setCompleted(false);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
+			// resetJJTaskBean();
+
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s,
+					jJTaskService.getSprintTasks(s, LoginBean.getProduct()),
+					jJContactService, jJTaskService);
+
+			sprintList.set(contains(sprintUtil.getSprint().getId()),
+					sprintUtil);
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		} else {
+
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+	}
+
+	public void addTaskToDone_newScrum(DragDropEvent ddevent) {
+
+		Long id = null;
+		JJTask dropedTask = (JJTask) ddevent.getData();
+
+		Long sprintId = dropedTask.getSprint().getId();
+
+		if (ddevent.getDragId().contains(":progIcon")
+				|| ddevent.getDragId().contains(":progPanel")) {
+
+			id = dropedTask.getId();
+			JJStatus status = jJStatusService.getOneStatus("DONE", "Task",
+					true);
+
+			dropedTask.setEndDateReal(new Date());
+			dropedTask.setCompleted(true);
+			dropedTask.setStatus(status);
+			getJJTaskBean().saveJJTask(dropedTask, true, new MutableInt(0));
+			// resetJJTaskBean();
+			getJJTaskBean().updateView(dropedTask, JJTaskBean.UPDATE_OPERATION);
+
+			JJSprint s = jJSprintService.findJJSprint(sprintId);
+			sprintUtil = new SprintUtil(s,
+					jJTaskService.getSprintTasks(s, LoginBean.getProduct()),
+					jJContactService, jJTaskService);
+
+			sprintList.set(contains(sprintUtil.getSprint().getId()),
+					sprintUtil);
+
+			String message = "message_successfully_updated";
+			FacesMessage facesMessage = MessageFactory.getMessage(message,
+					MessageFactory.getMessage("label_task", "").getDetail(),
+					"e");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
+		} else {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "non autorisée", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		if (id != null) {
+			JJTask t = jJTaskService.findJJTask(id);
+			if (t.getBug() != null) {
+
+				bug = t.getBug();
+				// context.execute("PF('blockUIWidget').unblock()");
+				context.execute("PF('editBugDialogWidget').show()");
+			}
+
+		}
+
+	}
 
 	// public void handleAddButton(ActionEvent e) {
 	//

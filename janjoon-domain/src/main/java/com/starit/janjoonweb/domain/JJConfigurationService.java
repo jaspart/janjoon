@@ -13,7 +13,7 @@ public interface JJConfigurationService {
 	public List<JJConfiguration> getConfigurations(String name, String param,
 			boolean onlyactif);
 
-	public boolean getDialogConfig(String name, String param);
+	public Boolean getDialogConfig(String name, String param);
 
 	public List<JJConfiguration> load(MutableInt size, int first, int pageSize,
 			String name, String param, boolean onlyactif,

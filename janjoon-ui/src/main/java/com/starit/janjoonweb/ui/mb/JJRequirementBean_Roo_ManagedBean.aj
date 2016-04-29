@@ -399,6 +399,25 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         numeroCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(numeroCreateInputMessage);
         
+        OutputLabel workloadCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadCreateOutput.setFor("workloadCreateInput");
+        workloadCreateOutput.setId("workloadCreateOutput");
+        workloadCreateOutput.setValue("Workload:");
+        htmlPanelGrid.getChildren().add(workloadCreateOutput);
+        
+        Spinner workloadCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadCreateInput.setId("workloadCreateInput");
+        workloadCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.workload}", Integer.class));
+        workloadCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadCreateInput);
+        
+        Message workloadCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadCreateInputMessage.setId("workloadCreateInputMessage");
+        workloadCreateInputMessage.setFor("workloadCreateInput");
+        workloadCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadCreateInputMessage);
+        
         OutputLabel projectCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectCreateOutput.setFor("projectCreateInput");
         projectCreateOutput.setId("projectCreateOutput");
@@ -1161,6 +1180,25 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         numeroEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(numeroEditInputMessage);
         
+        OutputLabel workloadEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        workloadEditOutput.setFor("workloadEditInput");
+        workloadEditOutput.setId("workloadEditOutput");
+        workloadEditOutput.setValue("Workload:");
+        htmlPanelGrid.getChildren().add(workloadEditOutput);
+        
+        Spinner workloadEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        workloadEditInput.setId("workloadEditInput");
+        workloadEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.workload}", Integer.class));
+        workloadEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(workloadEditInput);
+        
+        Message workloadEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        workloadEditInputMessage.setId("workloadEditInputMessage");
+        workloadEditInputMessage.setFor("workloadEditInput");
+        workloadEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(workloadEditInputMessage);
+        
         OutputLabel projectEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         projectEditOutput.setFor("projectEditInput");
         projectEditOutput.setId("projectEditOutput");
@@ -1832,6 +1870,15 @@ privileged aspect JJRequirementBean_Roo_ManagedBean {
         HtmlOutputText numeroValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         numeroValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.numero}", String.class));
         htmlPanelGrid.getChildren().add(numeroValue);
+        
+        HtmlOutputText workloadLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadLabel.setId("workloadLabel");
+        workloadLabel.setValue("Workload:");
+        htmlPanelGrid.getChildren().add(workloadLabel);
+        
+        HtmlOutputText workloadValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        workloadValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{jJRequirementBean.JJRequirement_.workload}", String.class));
+        htmlPanelGrid.getChildren().add(workloadValue);
         
         HtmlOutputText projectLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         projectLabel.setId("projectLabel");

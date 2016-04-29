@@ -39,6 +39,7 @@ import com.starit.janjoonweb.domain.JJBugService;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJProduct;
@@ -72,7 +73,7 @@ public class JJRequirementBean implements Serializable {
 	public static final String UPDATE_OPERATION = "update";
 	public static final String DELETE_OPERATION = "delete";
 	public static final String ADD_OPERATION = "add";
-	public static final Integer KANBAN_TAB = 2;
+
 	public static final String SPECIFICATION_WARNING_LINKUP = "specification_warning_linkUp";
 	public static final String SPECIFICATION_WARNING_LINKDOWN = "specification_warning_linkDown";
 	public static final String SPECIFICATION_WARNING_NOCHAPTER = "specification_warning_NoChapter";
@@ -1236,7 +1237,7 @@ public class JJRequirementBean implements Serializable {
 					tableDataModelList.get(i).setActiveIndex(-1);
 
 					flowStepUtils = null;
-					
+
 					if (LoginBean.findBean("jJStatusBean") != null) {
 						JJStatusBean jJStatusBean = (JJStatusBean) LoginBean
 								.findBean("jJStatusBean");
@@ -3437,9 +3438,25 @@ public class JJRequirementBean implements Serializable {
 
 	private boolean getRequirementDialogConfiguration() {
 
-		boolean r = jJConfigurationService.getDialogConfig("RequirementDialog",
-				"specs.requirement.create.saveandclose");
-		return r;
+		Boolean val = jJConfigurationService.getDialogConfig(
+				"RequirementDialog", "specs.requirement.create.saveandclose");
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("RequirementDialog");
+			configuration.setDescription(
+					"specify action after submit in specs dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("specs.requirement.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("RequirementDialog",
+					"specs.requirement.create.saveandclose");
+		}
+		return val;
 	}
 
 	public void replaceInDataModelList(JJRequirement req) {
@@ -3988,10 +4005,11 @@ public class JJRequirementBean implements Serializable {
 	public List<FlowStepUtil> getFlowStepUtils() {
 		JJSprintBean jJSprintBean = (JJSprintBean) LoginBean
 				.findBean("jJSprintBean");
+		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		if (jJSprintBean == null)
 			jJSprintBean = new JJSprintBean();
-		if (flowStepUtils == null
-				&& KANBAN_TAB.equals(jJSprintBean.getActiveTabGantIndex()))
+		if (flowStepUtils == null && loginBean.getPlanningConfiguration()
+				.getKanban_Tab().equals(jJSprintBean.getActiveTabGantIndex()))
 			flowStepUtils = FlowStepUtil.getFlowStepUtils(jJRequirementService,
 					jJFlowStepService);
 		return flowStepUtils;
@@ -4128,10 +4146,10 @@ public class JJRequirementBean implements Serializable {
 		} else
 			return "";
 	}
-	
-	public String getContainerWidth(){
+
+	public String getContainerWidth() {
 		if (flowStepUtils != null) {
-			return flowStepUtils.size()*320+"" ;
+			return flowStepUtils.size() * 320 + "";
 		} else
 			return "0";
 	}

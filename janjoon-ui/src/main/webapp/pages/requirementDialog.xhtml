@@ -22,7 +22,7 @@
 			<h:panelGroup layout="block" styleClass="Container100">
 				<p:messages id="msg" showDetail="false" closable="true" />
 			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
+			<h:panelGroup layout="block" styleClass="#{jJConfigurationBean.renderWorkload ? 'Container100' : 'Container50'} Responsive100">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<p:inputText id="nameReq"
 						placeholder="#{messages.specification_create_name_watermark}"
@@ -33,10 +33,27 @@
 					</p:inputText>
 				</h:panelGroup>
 			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive100"
+				rendered="#{jJConfigurationBean.renderWorkload}">
+				<h:panelGroup layout="block" styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel styleClass="Fs16"
+							value="#{messages.label_workload}:" for="workload" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container70">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:spinner id="workload"
+							required="#{jJConfigurationBean.requiredWorkload}"
+							value="#{jJRequirementBean.requirement.workload}" stepFactor="1"
+							min="0" size="3" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
 			<h:panelGroup layout="block" styleClass="Container50 Responsive100">
 				<h:panelGroup layout="block" styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="status"
+						<p:outputLabel for="status" styleClass="Fs16"
 							value="#{messages.specification_create_status_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
@@ -64,7 +81,7 @@
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="project"
+						<p:outputLabel for="project" styleClass="Fs16"
 							value="#{messages.specification_create_project_label} *" />
 					</h:panelGroup>
 				</h:panelGroup>
@@ -93,7 +110,7 @@
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="chapter"
+						<p:outputLabel for="chapter" styleClass="Fs16"
 							value="#{messages.specification_create_chapter_label}:" />
 					</h:panelGroup>
 				</h:panelGroup>
@@ -120,7 +137,7 @@
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="product"
+						<p:outputLabel for="product" styleClass="Fs16"
 							value="#{messages.specification_create_product_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
@@ -149,7 +166,7 @@
 				<h:panelGroup layout="block" style="/*margin-top: 5%;*/"
 					styleClass="Container30">
 					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-						<p:outputLabel for="version"
+						<p:outputLabel for="version" styleClass="Fs16"
 							value="#{messages.specification_create_version_label}" />
 					</h:panelGroup>
 				</h:panelGroup>
@@ -224,7 +241,7 @@
 			<h:panelGroup layout="block" styleClass="Container100"
 				style="min-height: 220px;" rendered="#{!loginBean.mobile}">
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
-					<p:outputLabel
+					<p:outputLabel styleClass="Fs16"
 						value="#{messages.specification_create_description_label}" />
 					<pe:ckEditor id="description" width="100%" height="150px"
 						toolbar="#{imageStreamer.ckEditorToolBar}"
@@ -301,7 +318,7 @@
 						onstart="PF('requirementBlockUIWidget').block()"
 						oncomplete="PF('requirementBlockUIWidget').unblock()"
 						action="#{jJRequirementBean.save}" rendered="#{!loginBean.mobile}"
-						process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement,note"
+						process="@this,nameReq,status,project,product,version,chapter,description,lowRequirement,mediumRequirement,highRequirement,note,#{jJConfigurationBean.renderWorkload ? 'workload':''}"
 						widgetVar="requirementSaveWidget" update="@form :growlForm" />
 				</h:panelGroup>
 			</h:panelGroup>
@@ -314,7 +331,7 @@
 						onstart="PF('requirementBlockUIWidget').block()"
 						oncomplete="PF('requirementBlockUIWidget').unblock()"
 						action="#{jJRequirementBean.save}" rendered="#{loginBean.mobile}"
-						process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note"
+						process="@this,nameReq,status,project,product,version,chapter,descriptionMobile,lowRequirement,mediumRequirement,highRequirement,note,#{jJConfigurationBean.renderWorkload ? 'workload':''}"
 						widgetVar="requirementSaveWidget" update="@form" />
 				</h:panelGroup>
 			</h:panelGroup>

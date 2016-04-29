@@ -105,6 +105,7 @@ privileged aspect JJBugBean_Roo_ManagedBean {
         columns.add("description");
         columns.add("creationDate");
         columns.add("updatedDate");
+        columns.add("workload");
     }
     
     public String JJBugBean.getName() {

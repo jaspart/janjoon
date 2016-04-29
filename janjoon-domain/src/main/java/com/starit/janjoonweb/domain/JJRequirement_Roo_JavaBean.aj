@@ -97,6 +97,14 @@ privileged aspect JJRequirement_Roo_JavaBean {
         this.numero = numero;
     }
     
+    public Integer JJRequirement.getWorkload() {
+        return this.workload;
+    }
+    
+    public void JJRequirement.setWorkload(Integer workload) {
+        this.workload = workload;
+    }
+    
     public JJProject JJRequirement.getProject() {
         return this.project;
     }

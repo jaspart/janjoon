@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition>
+	<h:panelGroup layout="block" styleClass="Container">
+		<h:panelGroup layout="block" styleClass="Container100 ShowOnMobile">
+			<h:form id="activeSprintIndexForm">
+				<h:panelGroup layout="block" styleClass="Container30">
+					<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+						<p:outputLabel for="activeSprintIndex" value="Sprint:" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="Container70">
+					<h:panelGroup layout="block" styleClass="ContainerIndent">
+						<p:selectOneMenu id="activeSprintIndex"
+							value="#{jJSprintBean.activeTabSprintIndex}" effect="fade"
+							onchange="PF('SprintTab').select(value);">
+							<f:selectItems value="#{jJSprintBean.sprintList}" var="jjsprint"
+								itemLabel="#{jjsprint.sprint.name != null ? jjsprint.sprint.name : messages.project_scrum_new_title}"
+								itemValue="#{jJSprintBean.contains(jjsprint.sprint.id)}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="Container100">
+			<f:event type="preRenderComponent"
+				listener="#{loginBean.updateTabViewWidth()}" />
+			<p:tabView id="SprintTabView" dynamic="true" cache="true"
+				scrollable="true" widgetVar="SprintTab"
+				styleClass="responsiveTabView" value="#{jJSprintBean.sprintList}"
+				style="max-width: 300px;display: none;border: 0px;"
+				onTabChange="sprintTabChangeHelper([{name: 'activeScrumIndex', value: index}]);"
+				var="jjsprint" activeIndex="#{jJSprintBean.activeTabSprintIndex}">
+				<p:tab
+					disabled="#{jjsprint.render and !loginBean.authorisationService.wProject}">
+					<f:facet name="title">
+						<h:outputText id="tabHeader" rendered="#{!jjsprint.render}"
+							value="#{jjsprint.sprint.name}" />
+						<h:outputText rendered="#{jjsprint.render}" value=" "
+							title="#{messages.project_scrum_new_title}"
+							styleClass="fa fa-plus-square Fs16" />
+					</f:facet>
+					<ui:include src="sprint.xhtml" />
+					<h:form id="sprintForm" rendered="#{!jjsprint.render}">
+						<p:remoteCommand name="updateBarChart"
+							update="#{jjsprint.chartModel != null ? ':projecttabview:SprintTabView:sprintForm:barChart':''}" />
+						<h:panelGroup layout="block" styleClass="Container ui-fluid">
+							<h:panelGroup layout="block"
+								styleClass="Container60 Responsive100">
+								<p:panel header="#{messages.project_scrum_sprint_info}"
+									styleClass="Container99">
+									<h:panelGroup layout="block" styleClass="Container">
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintName"
+														value="#{messages.project_scrum_sprint_name}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintName"
+														value="#{jjsprint.sprint.name}" required="true"
+														requiredMessage="#{messages.project_scrum_sprint_name_required}">
+														<f:validateLength maximum="100" />
+													</p:inputText>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintcts"
+														value="#{messages.project_scrum_sprint_contacts}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:selectCheckboxMenu id="sprintcts"
+														validator="listCategoriesValidator"
+														label="#{jjsprint.contactsLabel}"
+														value="#{jjsprint.contacts}" scrollHeight="150"
+														converter="com.starit.janjoonweb.ui.mb.converter.JJContactConverter">
+														<f:selectItems value="#{jJSprintBean.contacts}" var="ctc"
+															itemLabel="#{ctc.firstname} #{ctc.name}"
+															itemValue="#{ctc}" />
+														<p:ajax event="change" update="@this" />
+														<p:ajax event="toggleSelect" update="@this" />
+													</p:selectCheckboxMenu>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<div class="EmptyBox1 barChart"
+											id="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintSD"
+														value="#{messages.project_scrum_new_start_label}" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:calendar id="sprintSD" navigator="true"
+														effect="slideDown" pattern="dd/MM/yyyy" required="true"
+														binding="#{startDateEdition}" readonlyInput="true"
+														value="#{jjsprint.sprint.startDate}">
+														<f:validator validatorId="dateRangeValidator" />
+														<f:attribute name="sprintMode" value="sprintSD" />
+													</p:calendar>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintED"
+														value="#{messages.project_scrum_new_end_label}" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:calendar id="sprintED" navigator="true"
+														readonlyInput="true" effect="slideDown"
+														pattern="dd/MM/yyyy" required="true"
+														value="#{jjsprint.sprint.endDate}">
+														<f:validator validatorId="dateRangeValidator" />
+														<f:attribute name="startDateComponent"
+															value="#{startDateEdition}" />
+														<f:attribute name="sprintMode" value="sprintED" />
+													</p:calendar>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintPS"
+														value="#{messages.project_scrum_price_sold}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:spinner id="sprintPS" value="#{jjsprint.priseSold}"
+														prefix="$" min="0" readonly="true" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintPR"
+														value="#{messages.project_scrum_price_real}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:spinner id="sprintPR" value="#{jjsprint.priseReal}"
+														prefix="$" min="0" readonly="true" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintW"
+														value="#{messages.project_scrum_total}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintW" readonly="true"
+														value="#{jjsprint.workload}" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											styleClass="Container50 Responsive50">
+											<h:panelGroup layout="block" styleClass="Container40">
+												<h:panelGroup layout="block"
+													styleClass="ContainerIndentLabel">
+													<p:outputLabel for="sprintC"
+														value="#{messages.project_scrum_consumed}:" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="Container60">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:inputText id="sprintC" readonly="true"
+														value="#{jjsprint.consumed}" />
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup layout="block" styleClass="EmptyBox1" />
+									</h:panelGroup>
+									<f:facet name="footer">
+										<h:panelGroup layout="block" styleClass="Container">
+											<h:panelGroup layout="block"
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton id="editSprintButton"
+														disabled="{!loginBean.authorisationService.wProject}"
+														value="#{messages.label_save}" icon="fa fa-check Fs16"
+														process="@this,sprintName,sprintED,sprintSD,sprintcts"
+														actionListener="#{jJSprintBean.attrListener}"
+														oncomplete="updateTabViewWidth();"
+														update=":projecttabview:SprintTabView:sprintForm :growlForm">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+														<f:attribute name="create" value="edit" />
+													</p:commandButton>
+													<p:remoteCommand name="editSprint"
+														update=":projecttabview :growlForm"
+														action="#{jJSprintBean.editSprint}"
+														oncomplete="updateTabViewWidth();" />
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block"
+												rendered="#{jjsprint.enableDelete}"
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton id="deleteSprintButton"
+														rendered="#{jjsprint.enableDelete}"
+														disabled="{!loginBean.authorisationService.wProject}"
+														value="#{messages.label_delete}" icon="fa fa-trash Fs16"
+														action="#{jJSprintBean.deleteSprint(jjsprint)}"
+														oncomplete="updateTabViewWidth();"
+														update=":projecttabview :growlForm">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+													</p:commandButton>
+												</h:panelGroup>
+											</h:panelGroup>
+											<h:panelGroup layout="block"
+												styleClass="#{jjsprint.enableDelete ? 'Container33 Responsive':'Container50 Responsive50'}">
+												<h:panelGroup layout="block" styleClass="ContainerIndent">
+													<p:commandButton
+														value="#{messages.project_gantt_import_button}"
+														id="createTaskttButton" icon="fa fa-plus-square Fs16"
+														update=":projecttabview:SprintTabView:sprintForm :projecttabview:SprintTabView:taskListForm :importTaskDialogPanel :growlForm"
+														immediate="true" resetValues="true"
+														actionListener="#{jJTaskBean.loadImportFormat}"
+														title="#{messages.project_gantt_import_button}">
+														<f:attribute name="sprintUtilValue" value="#{jjsprint}" />
+														<f:attribute name="mode" value="scrum" />
+													</p:commandButton>
+												</h:panelGroup>
+											</h:panelGroup>
+										</h:panelGroup>
+									</f:facet>
+								</p:panel>
+							</h:panelGroup>
+							<h:panelGroup id="sprintChartPanelGrid"
+								rendered="#{jjsprint.chartModel != null}"
+								styleClass="Container40 Responsive100" layout="block">
+								<p:panel header="#{messages.project_scrum_sprint_chart}"
+									styleClass="Container99">
+									<h:panelGroup layout="block" styleClass="Container100">
+										<p:chart id="barChart" type="bar" responsive="true"
+											model="#{jjsprint.chartModel}"
+											widgetVar="barChart_#{jjsprint.sprint.id}_#{jjsprint.chartModel != null}_Widget"
+											style="height:300px;" />
+									</h:panelGroup>
+								</p:panel>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:form>
+					<h:panelGroup layout="block" styleClass="EmptyBox5"
+						rendered="#{!jjsprint.render}" />
+
+					<h:form id="taskListForm" rendered="#{!jjsprint.render}">
+						<p:remoteCommand update=":projecttabview"
+							name="updateTaskListForm" oncomplete="updateTabViewWidth();" />
+						<h:panelGroup layout="block" styleClass="Container">
+							<p:panel rendered="#{jjsprint.chartModel != null}"
+								styleClass="Container100">
+								<f:facet name="header">
+									<h:outputText value="#{messages.project_scrum_sprint_tasks}" />
+									<h:outputText rendered="#{jjsprint.disableDragDrop}"
+										value="#{messages.project_scrum_sprint_task_notPermitted}" />
+								</f:facet>
+								<h:panelGroup layout="block"
+									styleClass="Container33 Responsive100">
+									<h:panelGroup layout="block" styleClass="EmptyBox5" />
+									<p:fieldset legend="#{messages.project_scrum_todo}"
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.todoTask ? 'border: 0px;':''}"
+										id="todoFieldset">
+										<p:outputPanel id="tododropArea"
+											style="#{empty jjsprint.todoTask ? 'text-align: center;':''}">
+											<h:outputText
+												value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+												rendered="#{empty jjsprint.todoTask and !jjsprint.disableDragDrop}"
+												styleClass="Fs24" />
+											<h:panelGroup layout="block" styleClass="Container"
+												rendered="#{not empty jjsprint.todoTask}">
+												<h:panelGroup layout="block" styleClass="Container100"
+													rendered="#{not empty jjsprint.todoTask}">
+													<h:panelGroup layout="block" styleClass="ContainerIndent"
+														style="padding-top: 0px;">
+														<!-- 														<h:panelGroup layout="block" -->
+														<!-- 															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"> -->
+														<!-- 															<c:forEach items="#{jjsprint.todoTask}" -->
+														<!-- 																varStatus="todoLoop" var="todo"> -->
+														<p:dataScroller id="todo" style="overflow-x: hidden;"
+															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"
+															value="#{jjsprint.todoTask}" var="todo" chunkSize="10"
+															mode="inline" scrollHeight="300">
+															<p:draggable for="todoPanel"
+																disabled="#{jjsprint.disableDragDrop}" revert="true"
+																scope="todoTask" />
+															<h:panelGroup layout="block" id="todoPanel"
+																styleClass="StickyNoteScrum Wid70">
+
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndent Fs12 BoldGray">
+																	<p:graphicImage
+																		rendered="#{todo.taskType.name == 'specifier'}"
+																		library="images" name="doc.ico" width="16" height="16" />
+																	<h:outputText
+																		value="##{jJTaskBean.getDialogHeader(todo,'scrum')}" />
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">#{messages.label_workload}:#{todo.workloadPlanned}</h:panelGroup>
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">#{todo.product.name}</h:panelGroup>
+																	
+																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+																		id="todoButton" type="button"
+																		icon="ui-icon-#{jJTaskBean.getTaskIcone(todo)}" />
+																	<p:menu overlay="true" trigger="todoButton"
+																		my="left top" at="left bottom">
+																		<p:menuitem id="viewTaskButton" icon="fa fa-eye Fs16"
+																			update=":viewTaskForm :viewTaskDialogHeader"
+																			immediate="true" resetValues="true"
+																			value="#{messages.project_gantt_table_actions_viewMenuItem}"
+																			action="#{jJTaskBean.initiateReqTreeNode}">
+																			<f:setPropertyActionListener value="#{todo}"
+																				target="#{jJTaskBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+
+																		<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+																			oncomplete="PF('deleteDialogWidget').show()"
+																			value="#{messages.label_delete}">
+																			<f:setPropertyActionListener value="#{todo}"
+																				target="#{jJSprintBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+																		<p:menuitem id="copyButton" icon="fa fa-copy Fs16"
+																			onclick="copyName('#{jJTaskBean.getDialogHeader(todo,null)}');"
+																			value="Copy" title="Copy" />
+																	</p:menu>
+																</h:panelGroup>
+															</h:panelGroup>
+															<!-- 																<h:panelGroup layout="block" styleClass="SeparatorFull" /> -->
+														</p:dataScroller>
+
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+										</p:outputPanel>
+									</p:fieldset>
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Container33 Responsive100">
+									<h:panelGroup layout="block" styleClass="EmptyBox5" />
+									<p:fieldset legend="#{messages.project_scrum_inProgress}"
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.progressTask ? 'border: 0px;':''}"
+										id="progFieldset">
+										<p:outputPanel id="progdropArea"
+											style="#{empty jjsprint.progressTask ? 'text-align: center;':''}">
+											<h:outputText
+												value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+												rendered="#{empty jjsprint.progressTask and !jjsprint.disableDragDrop}"
+												styleClass="Fs24" />
+											<h:panelGroup layout="block" styleClass="Container"
+												rendered="#{not empty jjsprint.progressTask}">
+												<h:panelGroup layout="block" styleClass="Container100"
+													rendered="#{not empty jjsprint.progressTask}">
+													<h:panelGroup layout="block" styleClass="ContainerIndent"
+														style="padding-top: 0px;">
+														<!-- 														<h:panelGroup layout="block" -->
+														<!-- 															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"> -->
+														<!-- 															<c:forEach items="#{jjsprint.progressTask}" -->
+														<!-- 																varStatus="progLoop" var="prog"> -->
+														<p:dataScroller id="prog"
+															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"
+															value="#{jjsprint.progressTask}" var="prog" style="overflow-x: hidden;"
+															chunkSize="10" mode="inline" scrollHeight="300">
+															<p:draggable for="progPanel"
+																disabled="#{jjsprint.disableDragDrop}" revert="true"
+																scope="progTask" />
+															<h:panelGroup layout="block" id="progPanel"
+																styleClass="StickyNoteScrum Wid70">
+
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndent Fs14 BoldGray">
+																	<p:graphicImage
+																		rendered="#{prog.taskType.name == 'specifier'}"
+																		library="images" name="doc.ico" width="16" height="16" />
+																	<h:outputText
+																		value="##{jJTaskBean.getDialogHeader(prog,'scrum')}" />
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">#{messages.project_gantt_table_assigned_title}:#{prog.assignedTo.name}</h:panelGroup>
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">#{prog.product.name}</h:panelGroup>
+																	
+																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+																		id="progButton" type="button"
+																		icon="ui-icon-#{jJTaskBean.getTaskIcone(prog)}" />
+																	<p:menu overlay="true" trigger="progButton"
+																		my="left top" at="left bottom">
+																		<p:menuitem id="viewTaskButton" icon="fa fa-eye Fs16"
+																			update=":viewTaskForm :viewTaskDialogHeader"
+																			immediate="true" resetValues="true"
+																			value="#{messages.project_gantt_table_actions_viewMenuItem}"
+																			action="#{jJTaskBean.initiateReqTreeNode}">
+																			<f:setPropertyActionListener value="#{prog}"
+																				target="#{jJTaskBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+
+																		<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+																			oncomplete="PF('deleteDialogWidget').show()"
+																			value="#{messages.label_delete}">
+																			<f:setPropertyActionListener value="#{prog}"
+																				target="#{jJSprintBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+																		<p:menuitem id="copyButton" icon="fa fa-copy Fs16"
+																			onclick="copyName('#{jJTaskBean.getDialogHeader(prog,null)}');"
+																			value="Copy" title="Copy" />
+																	</p:menu>
+																</h:panelGroup>
+															</h:panelGroup>
+															<!-- 																<h:panelGroup layout="block" styleClass="SeparatorFull" /> -->
+														</p:dataScroller>
+														<!-- 														</h:panelGroup> -->
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+										</p:outputPanel>
+									</p:fieldset>
+								</h:panelGroup>
+								<h:panelGroup layout="block"
+									styleClass="Responsive100 Container33">
+									<h:panelGroup layout="block" styleClass="EmptyBox5" />
+									<p:fieldset legend="#{messages.project_scrum_done}"
+										style="padding: 4px;padding-bottom: 0px;#{not empty jjsprint.doneTask ? 'border: 0px;':''}"
+										id="doneFieldset">
+										<p:outputPanel id="donedropArea"
+											style="#{empty jjsprint.doneTask ? 'text-align: center;':''}">
+											<h:outputText
+												value="!!!  #{messages.project_scrum_drop_panel}  !!!"
+												rendered="#{empty jjsprint.doneTask and !jjsprint.disableDragDrop}"
+												styleClass="Fs24" />
+											<h:panelGroup layout="block" styleClass="Container"
+												rendered="#{not empty jjsprint.doneTask}">
+												<h:panelGroup layout="block" styleClass="Container100"
+													rendered="#{not empty jjsprint.doneTask}">
+													<h:panelGroup layout="block" styleClass="ContainerIndent"
+														style="padding-top: 0px;">
+														<!-- 														<h:panelGroup layout="block" -->
+														<!-- 															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"> -->
+														<!-- 															<c:forEach items="#{jjsprint.doneTask}" -->
+														<!-- 																varStatus="doneLoop" var="done"> -->
+														<p:dataScroller id="done" style="overflow-x: hidden;"
+															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"
+															value="#{jjsprint.doneTask}" var="done" chunkSize="10"
+															mode="inline" scrollHeight="300">
+															<p:draggable for="donePanel"
+																disabled="#{jjsprint.disableDragDrop}" revert="true"
+																scope="doneTask" />
+															<h:panelGroup layout="block" id="donePanel"
+																styleClass="StickyNoteScrum Wid70">
+																<h:panelGroup layout="block"
+																	styleClass="ContainerIndent Fs12 BoldGray">
+																	<p:graphicImage
+																		rendered="#{done.taskType.name == 'specifier'}"
+																		library="images" name="doc.ico" width="16" height="16" />
+																	<h:outputText
+																		value="##{jJTaskBean.getDialogHeader(done,'scrum')}" />
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">Diff:#{done.workloadPlanned-done.workloadReal}</h:panelGroup>
+																	<br />
+																	<h:panelGroup styleClass="Gray Fs10">#{done.product.name}</h:panelGroup>																	
+
+																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+																		id="doneButton" type="button"
+																		icon="ui-icon-#{jJTaskBean.getTaskIcone(done)}" />
+																	<p:menu overlay="true" trigger="doneButton"
+																		my="left top" at="left bottom">
+																		<p:menuitem id="viewTaskButton" icon="fa fa-eye Fs16"
+																			update=":viewTaskForm :viewTaskDialogHeader"
+																			immediate="true" resetValues="true"
+																			value="#{messages.project_gantt_table_actions_viewMenuItem}"
+																			action="#{jJTaskBean.initiateReqTreeNode}">
+																			<f:setPropertyActionListener value="#{done}"
+																				target="#{jJTaskBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+
+																		<p:menuitem id="deleteButton" icon="fa fa-trash Fs16"
+																			oncomplete="PF('deleteDialogWidget').show()"
+																			value="#{messages.label_delete}">
+																			<f:setPropertyActionListener value="#{done}"
+																				target="#{jJSprintBean.task}" />
+																			<f:setPropertyActionListener
+																				target="#{jJTaskBean.mode}" value="scrum" />
+																		</p:menuitem>
+																		<p:menuitem id="copyButton" icon="fa fa-copy Fs16"
+																			onclick="copyName('#{jJTaskBean.getDialogHeader(done,null)}');"
+																			value="Copy" title="Copy" />
+																	</p:menu>
+																</h:panelGroup>
+															</h:panelGroup>
+															<!-- 																<h:panelGroup layout="block" styleClass="SeparatorFull" /> -->
+														</p:dataScroller>
+
+													</h:panelGroup>
+												</h:panelGroup>
+											</h:panelGroup>
+										</p:outputPanel>
+									</p:fieldset>
+								</h:panelGroup>
+							</p:panel>
+						</h:panelGroup>
+
+						<p:droppable id="addTaskToProg_FromTodo" for="progFieldset"
+							tolerance="touch" scope="todoTask" datasource="todo"
+							disabled="#{jjsprint.disableDragDrop}"
+							activeStyleClass="highLightRow">
+							<p:ajax listener="#{jJSprintBean.addTaskToProg_newScrum}"
+								oncomplete="updateTaskListForm();" update=":growlForm">
+							</p:ajax>
+						</p:droppable>
+
+						<p:droppable id="addTaskToDone_FromProg" for="doneFieldset"
+							tolerance="touch" scope="progTask" datasource="prog"
+							disabled="#{jjsprint.disableDragDrop}"
+							activeStyleClass="highLightRow">
+							<p:ajax listener="#{jJSprintBean.addTaskToDone_newScrum}"
+								oncomplete="updateTaskListForm();"
+								update=":editBugDialog :growlForm">
+							</p:ajax>
+						</p:droppable>
+
+						<p:droppable id="addTaskToTodo_FromProg" for="todoFieldset"
+							tolerance="touch" scope="progTask" datasource="prog"
+							disabled="#{jjsprint.disableDragDrop}"
+							activeStyleClass="highLightRow">
+							<p:ajax listener="#{jJSprintBean.addTaskToTodo_newScrum}"
+								oncomplete="updateTaskListForm();" update=":growlForm">
+							</p:ajax>
+						</p:droppable>
+
+						<p:droppable id="addTaskToTodo_FromDone" for="tododropArea"
+							tolerance="touch" scope="doneTask" datasource="done"
+							disabled="#{jjsprint.disableDragDrop}"
+							activeStyleClass="highLightRow">
+							<p:ajax listener="#{jJSprintBean.addTaskToTodo_newScrum}"
+								oncomplete="updateTaskListForm();" update=":growlForm">
+							</p:ajax>
+						</p:droppable>
+
+
+						<p:droppable id="addTaskToProg_FromDone" for="progdropArea"
+							tolerance="touch" scope="doneTask" datasource="done"
+							disabled="#{jjsprint.disableDragDrop}"
+							activeStyleClass="highLightRow">
+							<p:ajax listener="#{jJSprintBean.addTaskToProg_newScrum}"
+								oncomplete="updateTaskListForm();" update=":growlForm">
+							</p:ajax>
+						</p:droppable>
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		</h:panelGroup>
+	</h:panelGroup>
+</ui:composition>
+</html>

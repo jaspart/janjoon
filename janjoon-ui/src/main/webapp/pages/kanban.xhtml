@@ -50,9 +50,9 @@
 													styleClass="ContainerIndent Fs16 BoldGray"> 
                                             # #{req.id} - #{req.name} <br />
 													<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
-													<br />
+													<br /><br />
 													<h:outputText
-														value="#{messages['specification_'.concat(req.state.name)]}"
+														value="#{loginBean.checkMessage(req.state)}"
 														styleClass="#{req.state.name} Fs14" />
 													<p:commandButton icon="fa fa-eye Fs14"
 														update=":projecttabview:kanbanLinkForm"
@@ -126,7 +126,7 @@
 							<p:column headerText="#{messages.label_status}" style="width:20%">
 								<h:outputText
 									rendered="#{object['class'].simpleName == 'JJRequirement'}"
-									value="#{messages['specification_'.concat(object.state.name)]}"
+									value="#{object.state.name}"
 									styleClass="#{object.state.name} Fs14" />
 								<h:outputText
 									rendered="#{object['class'].simpleName != 'JJRequirement'}"

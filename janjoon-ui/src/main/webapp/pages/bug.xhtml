@@ -38,7 +38,7 @@
 							<h:panelGroup layout="block" styleClass="Container">
 
 								<h:panelGroup layout="block"
-									styleClass="Container100 Responsive100">
+									styleClass="#{jJConfigurationBean.renderWorkload ? 'Container60' : 'Container100'} Responsive100">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:inputTextarea id="jJbugName"
 											value="#{jJBugBean.viewBug.name}"
@@ -50,10 +50,31 @@
 									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup layout="block"
+									styleClass="Container40 Responsive50"
+									rendered="#{jJConfigurationBean.renderWorkload}">
+									<h:panelGroup layout="block" styleClass="Container40">
+										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+											<p:outputLabel styleClass="Fs16"
+												value="#{messages.label_workload}:" for="jJbugWorkload" />
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="Container60">
+										<h:panelGroup layout="block" styleClass="ContainerIndent">
+											<p:spinner id="jJbugWorkload"
+												required="#{jJConfigurationBean.requiredWorkload}"
+												value="#{jJBugBean.viewBug.workload}" stepFactor="1" min="0"
+												size="3" />
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+								<h:panelGroup layout="block" rendered="#{jJConfigurationBean.renderWorkload}"
+									styleClass="EmptyBox1 ShowOnDesktop" />
+								<h:panelGroup layout="block"
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugProject" value="Project : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugProject"
+												value="#{messages.label_project} : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -72,7 +93,8 @@
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugVersion" value="Version : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugVersion"
+												value="Version : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -96,7 +118,8 @@
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugBuild" value="Build : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugBuild"
+												value="Build : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -124,7 +147,8 @@
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugCriticity" value="Criticity : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugCriticity"
+												value="Criticity : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -144,7 +168,8 @@
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugImportance" value="Importance : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugImportance"
+												value="Importance : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -164,7 +189,8 @@
 									styleClass="Container33 Responsive50">
 									<h:panelGroup layout="block" styleClass="Container40">
 										<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-											<p:outputLabel for="jJbugStatus" value="Status : " />
+											<p:outputLabel styleClass="Fs16" for="jJbugStatus"
+												value="Status : " />
 										</h:panelGroup>
 									</h:panelGroup>
 									<h:panelGroup layout="block" styleClass="Container60">
@@ -183,7 +209,8 @@
 								<h:panelGroup layout="block" styleClass="Container100"
 									style="min-height: 220px;" rendered="#{!loginBean.mobile}">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
-										<p:outputLabel value="Description" for="jJBugDescription" />
+										<p:outputLabel styleClass="Fs16" value="Description"
+											for="jJBugDescription" />
 										<pe:ckEditor id="jJBugDescription" height="150px"
 											toolbar="#{imageStreamer.ckEditorToolBar}"
 											rendered="#{!loginBean.mobile}" width="100%;"
@@ -240,15 +267,15 @@
 							<h:panelGroup layout="block" styleClass="Container100">
 								<h:panelGroup layout="block" styleClass="Container40">
 									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-										<p:outputLabel for="bugCat"
+										<p:outputLabel styleClass="Fs16" for="bugCat"
 											value="#{messages.label_category} :" />
 									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup layout="block" styleClass="Container60">
 									<h:panelGroup layout="block" styleClass="ContainerIndent">
 										<p:autoComplete id="bugCat" scrollHeight="200"
-											itemValue="#{category}"
-											itemLabel="#{category.name}" value="#{jJBugBean.category}"
+											itemValue="#{category}" itemLabel="#{category.name}"
+											value="#{jJBugBean.category}"
 											disabled="#{jJBugBean.viewBug.project == null}"
 											converter="com.starit.janjoonweb.ui.mb.converter.JJCategoryConverter"
 											dropdown="true" var="category"
@@ -265,7 +292,7 @@
 							<h:panelGroup layout="block" styleClass="Container100">
 								<h:panelGroup layout="block" styleClass="Container40">
 									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-										<p:outputLabel for="bugReq"
+										<p:outputLabel for="bugReq" styleClass="Fs16"
 											value="#{messages.label_requirement} :" />
 									</h:panelGroup>
 								</h:panelGroup>
@@ -299,7 +326,7 @@
 							<h:panelGroup layout="block" styleClass="Container100">
 								<h:panelGroup layout="block" styleClass="Container40">
 									<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
-										<p:outputLabel for="bugTest"
+										<p:outputLabel for="bugTest" styleClass="Fs16"
 											value="#{messages.label_testcase} :" />
 									</h:panelGroup>
 								</h:panelGroup>

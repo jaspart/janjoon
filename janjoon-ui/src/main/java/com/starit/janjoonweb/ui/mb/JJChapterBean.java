@@ -457,7 +457,8 @@ public class JJChapterBean implements Serializable {
 				.getRequirements(LoginBean.getCompany(), category,
 						loginBean.getAuthorizedMap("Requirement", project,
 								product),
-						version, null, null,false,true, true, false, false, null);
+						version, null, null, false, true, true, false, false,
+						null);
 
 		for (JJRequirement requirement : jJRequirementList) {
 			TreeNode node = new DefaultTreeNode(
@@ -1545,8 +1546,27 @@ public class JJChapterBean implements Serializable {
 	}
 
 	private boolean getChapterDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("ChapterDialog",
+		Boolean val = jJConfigurationService.getDialogConfig("ChapterDialog",
 				"chapter.create.saveandclose");
+
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("ChapterDialog");
+			configuration.setDescription(
+					"specify action after submit in chapter dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("chapter.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("ChapterDialog",
+					"chapter.create.saveandclose");
+		}
+
+		return val;
 	}
 
 	public HtmlPanelGrid populateCreatePanel() {

@@ -3,12 +3,30 @@
 
 package com.starit.janjoonweb.ui.mb;
 
+import com.starit.janjoonweb.domain.JJBug;
+import com.starit.janjoonweb.domain.JJContact;
+import com.starit.janjoonweb.domain.JJContactService;
+import com.starit.janjoonweb.domain.JJProduct;
+import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
+import com.starit.janjoonweb.domain.JJRisk;
+import com.starit.janjoonweb.domain.JJRiskService;
+import com.starit.janjoonweb.domain.JJStatus;
+import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.ui.mb.JJRiskBean;
+import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
+import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
+import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -22,7 +40,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -34,25 +51,6 @@ import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.starit.janjoonweb.domain.JJBug;
-import com.starit.janjoonweb.domain.JJContact;
-import com.starit.janjoonweb.domain.JJContactService;
-import com.starit.janjoonweb.domain.JJProduct;
-import com.starit.janjoonweb.domain.JJProject;
-import com.starit.janjoonweb.domain.JJRequirement;
-import com.starit.janjoonweb.domain.JJRisk;
-import com.starit.janjoonweb.domain.JJRiskService;
-import com.starit.janjoonweb.domain.JJStatus;
-import com.starit.janjoonweb.domain.JJTestcase;
-import com.starit.janjoonweb.ui.mb.converter.JJBugConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJContactConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJProductConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJProjectConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJRequirementConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJStatusConverter;
-import com.starit.janjoonweb.ui.mb.converter.JJTestcaseConverter;
-import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
 privileged aspect JJRiskBean_Roo_ManagedBean {
     

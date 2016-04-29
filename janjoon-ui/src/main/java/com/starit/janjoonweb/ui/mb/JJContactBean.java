@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJCompany;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJPermission;
@@ -921,8 +922,28 @@ public class JJContactBean implements Serializable {
 	}
 
 	private boolean getContactDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("AdminUserDialog",
+		
+		Boolean val = jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");
+
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("AdminUserDialog");
+			configuration.setDescription(
+					"specify action after submit in admin dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("admin.user.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("AdminUserDialog",
+					"admin.user.create.saveandclose");
+		}
+
+		return val;		
 	}
 
 	// edit Calendar

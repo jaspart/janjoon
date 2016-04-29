@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 
 import com.starit.janjoonweb.domain.JJCategory;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyCategoryDataTable;
@@ -173,8 +174,26 @@ public class JJCategoryBean implements Serializable {
 	}
 
 	private boolean getCategoryDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("CategoryDialog",
+		Boolean val = jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
+		if(val == null)
+		{
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("CategoryDialog");
+			configuration.setDescription(
+					"specify action after submit in category dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("category.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+			
+			val = jJConfigurationService.getDialogConfig("CategoryDialog",
+					"category.create.saveandclose");
+		}
+		return val;
 	}
 
 	public void updateBeans(JJCategory category) {

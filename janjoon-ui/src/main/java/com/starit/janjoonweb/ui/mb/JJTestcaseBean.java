@@ -63,6 +63,7 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJCategoryService;
 import com.starit.janjoonweb.domain.JJChapter;
 import com.starit.janjoonweb.domain.JJChapterService;
+import com.starit.janjoonweb.domain.JJConfiguration;
 import com.starit.janjoonweb.domain.JJConfigurationService;
 import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJMessage;
@@ -241,7 +242,7 @@ public class JJTestcaseBean implements Serializable {
 
 				colNames = jJTestcaseService.getImportTestcases(category,
 						LoginBean.getProject(), LoginBean.getProduct(), null,
-						null,false, true, false);
+						null, false, true, false);
 				// rowNames=new ArrayList<Object>();
 				if (colNames != null && !colNames.isEmpty()) {
 
@@ -504,8 +505,8 @@ public class JJTestcaseBean implements Serializable {
 							.getAuthorizedMap("testcase",
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
-					LoginBean.getVersion(), null, chapter,false, true, true, true,
-					false, null);
+					LoginBean.getVersion(), null, chapter, false, true, true,
+					true, false, null);
 
 		} else {
 			return jJRequirementService.getRequirementsWithOutChapter(
@@ -1287,7 +1288,7 @@ public class JJTestcaseBean implements Serializable {
 			List<JJTestcase> testWithOutChapter = jJTestcaseService
 					.getImportTestcases(category, LoginBean.getProject(),
 							LoginBean.getProduct(), LoginBean.getVersion(),
-							build, false,true, true);
+							build, false, true, true);
 
 			if ((withOutChapter != null && !withOutChapter.isEmpty())
 					|| (testWithOutChapter != null
@@ -1348,8 +1349,8 @@ public class JJTestcaseBean implements Serializable {
 							.getAuthorizedMap("testcase",
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
-					LoginBean.getVersion(), null, chapter, false,true, true, true,
-					false, null);
+					LoginBean.getVersion(), null, chapter, false, true, true,
+					true, false, null);
 
 			if (rqs.size() > 0) {
 				int i = 0;
@@ -1697,7 +1698,7 @@ public class JJTestcaseBean implements Serializable {
 
 		List<JJTestcase> withOutChapter = jJTestcaseService.getImportTestcases(
 				category, project, LoginBean.getProduct(),
-				LoginBean.getVersion(), build, false,true, true);
+				LoginBean.getVersion(), build, false, true, true);
 
 		if (withOutChapter != null && !withOutChapter.isEmpty()) {
 			paragraph.add(new Chunk("\n " + MessageFactory
@@ -1900,7 +1901,7 @@ public class JJTestcaseBean implements Serializable {
 			else
 				testcases = jJTestcaseService.getImportTestcases(category,
 						LoginBean.getProject(), LoginBean.getProduct(),
-						LoginBean.getVersion(), build,false, true, true);
+						LoginBean.getVersion(), build, false, true, true);
 		}
 
 		return testcases;
@@ -2055,8 +2056,26 @@ public class JJTestcaseBean implements Serializable {
 	}
 
 	private boolean getTestcaseDialogConfiguration() {
-		return jJConfigurationService.getDialogConfig("TestcaseDialog",
+
+		Boolean val = jJConfigurationService.getDialogConfig("TestcaseDialog",
 				"testcases.create.saveandclose");
+		if (val == null) {
+			JJConfiguration configuration = new JJConfiguration();
+			configuration.setName("TestcaseDialog");
+			configuration.setDescription(
+					"specify action after submit in testcase dialog");
+			configuration.setCreatedBy(
+					((LoginBean) LoginBean.findBean("loginBean")).getContact());
+			configuration.setCreationDate(new Date());
+			configuration.setEnabled(true);
+			configuration.setParam("testcases.create.saveandclose");
+			configuration.setVal("true");
+			jJConfigurationService.saveJJConfiguration(configuration);
+
+			val = jJConfigurationService.getDialogConfig("TestcaseDialog",
+					"testcases.create.saveandclose");
+		}
+		return val;
 	}
 
 	public void closeXMLDialog() {
@@ -2147,7 +2166,7 @@ public class JJTestcaseBean implements Serializable {
 					+ category.getName().toUpperCase() + "\">";
 			List<JJTestcase> tests = jJTestcaseService.getImportTestcases(
 					category, project, LoginBean.getProduct(),
-					LoginBean.getVersion(), null,false, true, false);
+					LoginBean.getVersion(), null, false, true, false);
 			for (JJTestcase ttt : tests) {
 				String description = "";
 				StringReader strReader = new StringReader(ttt.getDescription());

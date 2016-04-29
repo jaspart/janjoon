@@ -88,6 +88,7 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
         setName(obj, index);
         setRelation(obj, index);
         setUpdatedDate(obj, index);
+        setWorkload(obj, index);
         return obj;
     }
     
@@ -127,6 +128,11 @@ privileged aspect JJBugDataOnDemand_Roo_DataOnDemand {
     public void JJBugDataOnDemand.setUpdatedDate(JJBug obj, int index) {
         Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdatedDate(updatedDate);
+    }
+    
+    public void JJBugDataOnDemand.setWorkload(JJBug obj, int index) {
+        Integer workload = new Integer(index);
+        obj.setWorkload(workload);
     }
     
     public JJBug JJBugDataOnDemand.getSpecificJJBug(int index) {
