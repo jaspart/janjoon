@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition>
+	<h:form id="simulatorForm">
+		<h:panelGroup layout="block" styleClass="Container">
+			<h:panelGroup layout="block" style="margin:auto"
+				styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:panelGroup layout="block"
+						styleClass="Card ShadowEffect WhiteBlueBack Gray TexAlCenter HoverEffect">
+						<h:panelGroup layout="block"
+							styleClass="Fs24 TexAlCenter Container100">
+							<h:outputText styleClass="BoldGray"
+								value="#{messages.project_simulator_headerTitle}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+							<h:panelGroup layout="block" styleClass="Container40">
+								<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
+									<p:outputLabel for="sprintW"
+										value="#{messages.project_simulator_workload}:" />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container60">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:inputText id="sprintW" readonly="true"
+										value="#{jJSprintBean.simulator.workloadAccumulated} (h)" />
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+							<h:panelGroup layout="block" styleClass="TexAlCenter ContainerIndent">
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="EmptyBox1" />
+						<h:panelGroup layout="block"
+							styleClass="Container33 Responsive100">
+							<p:outputLabel styleClass="Fs18"
+								value="#{messages.project_simulator_displayProgress}: " />
+							<p:selectBooleanCheckbox
+								value="#{jJSprintBean.simulator.displayProgress}">
+								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+						<h:panelGroup layout="block"
+							styleClass="Container33 Responsive100">
+							<p:outputLabel styleClass="Fs18"
+								value="#{messages.project_simulator_displayDone}: " />
+							<p:selectBooleanCheckbox
+								value="#{jJSprintBean.simulator.displayDone}">
+								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+						<h:panelGroup layout="block"
+							styleClass="Container33 Responsive100">
+							<p:outputLabel styleClass="Fs18"
+								value="#{messages.project_simulator_finishedBug}: " />
+							<p:selectBooleanCheckbox
+								value="#{jJSprintBean.simulator.displayFinishedBug}">
+								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:treeTable id="simulatorObject"
+						rendered="#{jJSprintBean.simulator != null}"
+						value="#{jJSprintBean.simulator.treeObject}" var="object"
+						scrollable="true" scrollHeight="300" selectionMode="checkbox"
+						selection="#{jJSprintBean.simulator.selectedObjects}">
+						<p:ajax event="select"
+							listener="#{jJSprintBean.calclutateSimulatorWorkload}"
+							update=":projecttabview:simulatorForm:sprintW" />
+						<p:ajax event="unselect"
+							listener="#{jJSprintBean.calclutateSimulatorWorkload}"
+							update=":projecttabview:simulatorForm:sprintW" />
+						<p:column headerText="#{messages.label_object}" style="width:80%">
+							<h:outputText value="#REQ_#{object.id} #{object.name}"
+								rendered="#{object['class'].simpleName == 'JJRequirement'}" />
+							<h:outputText value="#BUG_#{object.id} #{object.name}"
+								rendered="#{object['class'].simpleName == 'JJBug'}" />
+							<h:outputText value="#TST_#{object.id} #{object.name} "
+								rendered="#{object['class'].simpleName == 'JJTestcase'}" />
+						</p:column>
+						<p:column headerText="#{messages.label_status}" priority="6"
+							style="width:20%">
+							<h:outputText
+								rendered="#{object['class'].simpleName == 'JJRequirement'}"
+								value="#{loginBean.checkMessage(object.state)}"
+								styleClass="#{object.state.name} Fs14" />
+							<h:outputText
+								rendered="#{object['class'].simpleName != 'JJRequirement'}"
+								value="#{object.status != null ? loginBean.checkMessage(object.status) : ''}"
+								styleClass="#{object.status.name} Fs14" />
+						</p:column>
+
+					</p:treeTable>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>
+</html>

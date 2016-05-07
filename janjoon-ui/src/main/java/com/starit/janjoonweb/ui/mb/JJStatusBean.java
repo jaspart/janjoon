@@ -1282,6 +1282,7 @@ public class JJStatusBean implements Serializable {
 					LoginBean.getProduct(), "requirement", true);
 			float moyGreen = 0;
 			for (JJTask ta : tasks) {
+				if(ta.getWorkloadReal() != null)
 				moyGreen = moyGreen + ta.getWorkloadReal();
 			}
 			moyGreen = moyGreen / tasks.size();

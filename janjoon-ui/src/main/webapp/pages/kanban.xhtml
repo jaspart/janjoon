@@ -26,8 +26,10 @@
 						<h:panelGroup layout="block" styleClass="Container">
 							<h:panelGroup id="#{flowStepUtil.flowStep.name}DropArea"
 								layout="block">
-								<h:panelGroup layout="block" styleClass="ContainerIndent" style="padding-top: 0px;">
-									<h:panelGroup layout="block" style="z-index: 3;position: relative;"
+								<h:panelGroup layout="block" styleClass="ContainerIndent"
+									style="padding-top: 0px;">
+									<h:panelGroup layout="block"
+										style="z-index: 3;position: relative;"
 										styleClass="kanbanHeader WhiteBlueBack Card ShadowEffect HeiAutoOnMobile">
 
 										<h2 class="CardTopic" style="text-align: center;">
@@ -44,15 +46,16 @@
 											varStatus="loop">
 											<p:draggable for="dragReq_#{varStatus.index}_#{loop.index}"
 												revert="true" scope="#{flowStepUtil.flowStep.name}Req" />
-											<h:panelGroup id="dragReq_#{varStatus.index}_#{loop.index}" style="z-index: 2;"
-												layout="block" styleClass="StickyNote Wid80">
+											<h:panelGroup id="dragReq_#{varStatus.index}_#{loop.index}"
+												style="z-index: 2;" layout="block"
+												styleClass="StickyNote Wid80">
 												<h:panelGroup layout="block"
 													styleClass="ContainerIndent Fs16 BoldGray"> 
                                             # #{req.id} - #{req.name} <br />
 													<h:panelGroup styleClass="Gray Fs14">#{req.product.name}</h:panelGroup>
-													<br /><br />
-													<h:outputText
-														value="#{loginBean.checkMessage(req.state)}"
+													<br />
+													<br />
+													<h:outputText value="#{loginBean.checkMessage(req.state)}"
 														styleClass="#{req.state.name} Fs14" />
 													<p:commandButton icon="fa fa-eye Fs14"
 														update=":projecttabview:kanbanLinkForm"
@@ -113,20 +116,41 @@
 							value="#{jJRequirementBean.linkedData}" var="object"
 							scrollable="true" scrollHeight="300">
 							<p:column headerText="#{messages.label_object}" style="width:80%">
-								<h:outputText value="#REQ_#{object.id} #{object.name}"
-									rendered="#{object['class'].simpleName == 'JJRequirement'}" />
-								<h:outputText value="#BUG_#{object.id} #{object.name}"
-									rendered="#{object['class'].simpleName == 'JJBug'}" />
-								<h:outputText value="#TST_#{object.id} #{object.name} "
-									rendered="#{object['class'].simpleName == 'JJTestcase'}" />
-								<h:outputText
+								<p:commandLink target="_blank"
+									value="#REQ_#{object.id} #{object.name}"
+									rendered="#{object['class'].simpleName == 'JJRequirement'}"
+									action="#{jJRequirementBean.requirementInfo}" ajax="false">
+									<f:setPropertyActionListener value="#{object}"
+										target="#{jJRequirementBean.requirement}" />
+								</p:commandLink>
+
+								<p:commandLink target="_blank"
+									value="#BUG_#{object.id} #{object.name}"
+									rendered="#{object['class'].simpleName == 'JJBug'}"
+									action="#{jJBugBean.bugInfo}" ajax="false">
+									<f:setPropertyActionListener value="#{object}"
+										target="#{jJBugBean.viewBug}" />
+								</p:commandLink>
+								<p:commandLink 
+									rendered="#{object['class'].simpleName == 'JJTestcase'}"
+									value="#TST_#{object.id} #{object.name} "
+									action="#{jJTestcaseBean.testCaseInfo(object.id)}" ajax="false">
+								</p:commandLink>
+								<p:commandLink
 									value="##{messages.label_task}_#{object.id} #{object.name}"
-									rendered="#{object['class'].simpleName == 'JJTask'}" />
+									rendered="#{object['class'].simpleName == 'JJTask'}"
+									oncomplete="PF('linkDialogWidget').hide()"
+									action="#{jJTaskBean.initiateReqTreeNode}"
+									update=":viewTaskForm :viewTaskDialogHeader" immediate="true"
+									resetValues="true">
+									<f:setPropertyActionListener value="#{object}"
+										target="#{jJTaskBean.task}" />
+								</p:commandLink>							
 							</p:column>
 							<p:column headerText="#{messages.label_status}" style="width:20%">
 								<h:outputText
 									rendered="#{object['class'].simpleName == 'JJRequirement'}"
-									value="#{object.state.name}"
+									value="#{loginBean.checkMessage(object.state)}"
 									styleClass="#{object.state.name} Fs14" />
 								<h:outputText
 									rendered="#{object['class'].simpleName != 'JJRequirement'}"

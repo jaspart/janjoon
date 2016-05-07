@@ -3252,7 +3252,7 @@ public class JJTaskBean implements Serializable {
 							startDate, endDate, workLoad,
 							tt.getStartDateRevised() != null);
 					tasksData.add(tskst);
-					allTasks.add(tt);
+					//allTasks.add(tt);
 					chapter = tt.getChapter();
 				}
 			} else if (this.sprint == null
@@ -3283,9 +3283,9 @@ public class JJTaskBean implements Serializable {
 				TaskData tskst = new TaskData(tt, tt.getChapter(), startDate,
 						endDate, workLoad, tt.getStartDateRevised() != null);
 				tasksData.add(tskst);
-				allTasks.add(tt);
+				
 			}
-
+			allTasks.add(tt);
 		}
 		return chapter;
 

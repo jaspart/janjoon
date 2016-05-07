@@ -106,6 +106,10 @@
 						<ui:insert>
 							<ui:include src="kanban.xhtml" />
 						</ui:insert>
+					</p:tab><p:tab title="#{messages.project_simulator_menuitem}" rendered="#{loginBean.planningConfiguration.renderSimulator}">
+						<ui:insert>
+							<ui:include src="simulator.xhtml" />
+						</ui:insert>
 					</p:tab>
 				</p:tabView>
 			</h:panelGroup>

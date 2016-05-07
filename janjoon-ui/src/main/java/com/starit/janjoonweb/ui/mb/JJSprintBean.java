@@ -19,6 +19,9 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.NodeUnselectEvent;
+import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 
@@ -30,14 +33,17 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJContactService;
 import com.starit.janjoonweb.domain.JJPermissionService;
 import com.starit.janjoonweb.domain.JJProject;
+import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJSprint;
 import com.starit.janjoonweb.domain.JJSprintService;
 import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
+import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
+import com.starit.janjoonweb.ui.mb.util.SimulatorUtil;
 import com.starit.janjoonweb.ui.mb.util.SprintUtil;
 
 @RooJsfManagedBean(entity = JJSprint.class, beanName = "jJSprintBean")
@@ -69,6 +75,7 @@ public class JJSprintBean implements Serializable {
 
 	private List<JJCategory> categoryList;
 	private List<JJContact> contacts;
+	private SimulatorUtil simulator;
 	private JJCategory category;
 	private JJBug bug;
 	private JJProject project;
@@ -94,7 +101,7 @@ public class JJSprintBean implements Serializable {
 	public void setActiveTabGantIndex(int activeTabGantIndex) {
 		this.activeTabGantIndex = activeTabGantIndex;
 	}
-	
+
 	public JJTaskBean getJJTaskBean() {
 		JJTaskBean jJTaskBean = ((JJTaskBean) LoginBean.findBean("jJTaskBean"));
 		if (jJTaskBean == null)
@@ -255,6 +262,35 @@ public class JJSprintBean implements Serializable {
 	// this.update = update;
 	// }
 
+	public SimulatorUtil getSimulator() {
+
+		LoginBean loginBean = ((LoginBean) LoginBean.findBean("loginBean"));
+		if (simulator == null && loginBean.getPlanningConfiguration()
+				.getSimultor_Tab().equals(getActiveTabGantIndex()))
+		// if (simulator == null)
+		{
+			JJRequirementBean jjRequirementBean = (JJRequirementBean) LoginBean
+					.findBean("jJRequirementBean");
+			JJTestcaseBean jjTestcaseBean = (JJTestcaseBean) LoginBean
+					.findBean("jJTestcaseBean");
+			if (jjTestcaseBean == null)
+				jjTestcaseBean = new JJTestcaseBean();
+			if (jjRequirementBean == null)
+				jjRequirementBean = new JJRequirementBean();
+			JJCategory cat = jJCategoryService.getCategory("BUSINESS",
+					LoginBean.getCompany(), true);
+			simulator = new SimulatorUtil(
+					jjRequirementBean.jJRequirementService,
+					jjTestcaseBean.jJTestcaseService, jJBugService, cat);
+		}
+
+		return simulator;
+	}
+
+	public void setSimulator(SimulatorUtil simulator) {
+		this.simulator = simulator;
+	}
+
 	public void attrListener(ActionEvent event) {
 
 		sprintUtil = (SprintUtil) event.getComponent().getAttributes()
@@ -269,29 +305,122 @@ public class JJSprintBean implements Serializable {
 				RequestContext.getCurrentInstance().execute("editSprint()");
 	}
 
-	// public void updatereqPanel() {
-	//
-	// if (category != null) {
-	// reqList = jJRequirementService.getRequirements(
-	// ((LoginBean) LoginBean.findBean("loginBean")).getContact()
-	// .getCompany(), category, project, null, null, null,
-	// null, false, true, true);
-	// bugs = null;
-	// bug = null;
-	// requirement = null;
-	// if (!reqList.isEmpty())
-	// requirement = reqList.get(0);
-	// } else {
-	// bugs = jJBugService.getBugs(((LoginBean) LoginBean
-	// .findBean("loginBean")).getContact().getCompany(), project,
-	// null, null);
-	// bug = null;
-	// reqList = null;
-	// requirement = null;
-	//
-	// }
-	//
-	// }
+	public void calclutateSimulatorWorkload(NodeSelectEvent select) {
+
+		TreeNode node = select.getTreeNode();
+		if (node.getChildren().isEmpty()) {
+			if (node.getData() instanceof JJRequirement
+					&& ((JJRequirement) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(simulator
+						.getWorkloadAccumulated()
+						+ ((JJRequirement) node.getData()).getWorkload());
+			else if (node.getData() instanceof JJBug
+					&& ((JJBug) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(
+						simulator.getWorkloadAccumulated()
+								+ ((JJBug) node.getData()).getWorkload());
+			else if (node.getData() instanceof JJTestcase
+					&& ((JJTestcase) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(
+						simulator.getWorkloadAccumulated()
+								+ ((JJTestcase) node.getData()).getWorkload());
+		} else {
+			for (TreeNode child : node.getChildren()) {
+				calclutateSimulatorWorkload(child, true);
+			}
+		}
+	}
+
+	private void calclutateSimulatorWorkload(TreeNode node, boolean b) {
+
+		if (node.getChildren().isEmpty()) {
+			if (b) {
+				if (node.getData() instanceof JJRequirement
+						&& ((JJRequirement) node.getData())
+								.getWorkload() != null)
+					simulator.setWorkloadAccumulated(simulator
+							.getWorkloadAccumulated()
+							+ ((JJRequirement) node.getData()).getWorkload());
+				else if (node.getData() instanceof JJBug
+						&& ((JJBug) node.getData()).getWorkload() != null)
+					simulator.setWorkloadAccumulated(
+							simulator.getWorkloadAccumulated()
+									+ ((JJBug) node.getData()).getWorkload());
+				else if (node.getData() instanceof JJTestcase
+						&& ((JJTestcase) node.getData()).getWorkload() != null)
+					simulator.setWorkloadAccumulated(simulator
+							.getWorkloadAccumulated()
+							+ ((JJTestcase) node.getData()).getWorkload());
+			} else {
+				if (node.getData() instanceof JJRequirement
+						&& ((JJRequirement) node.getData())
+								.getWorkload() != null)
+					simulator.setWorkloadAccumulated(simulator
+							.getWorkloadAccumulated()
+							- ((JJRequirement) node.getData()).getWorkload());
+				else if (node.getData() instanceof JJBug
+						&& ((JJBug) node.getData()).getWorkload() != null)
+					simulator.setWorkloadAccumulated(
+							simulator.getWorkloadAccumulated()
+									- ((JJBug) node.getData()).getWorkload());
+				else if (node.getData() instanceof JJTestcase
+						&& ((JJTestcase) node.getData()).getWorkload() != null)
+					simulator.setWorkloadAccumulated(simulator
+							.getWorkloadAccumulated()
+							- ((JJTestcase) node.getData()).getWorkload());
+			}
+
+		} else {
+			for (TreeNode child : node.getChildren()) {
+				calclutateSimulatorWorkload(child, b);
+			}
+		}
+
+	}
+
+	public void calclutateSimulatorWorkload(NodeUnselectEvent unselect) {
+
+		TreeNode node = unselect.getTreeNode();
+		if (node.getChildren().isEmpty()) {
+			if (node.getData() instanceof JJRequirement
+					&& ((JJRequirement) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(simulator
+						.getWorkloadAccumulated()
+						- ((JJRequirement) node.getData()).getWorkload());
+			else if (node.getData() instanceof JJBug
+					&& ((JJBug) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(
+						simulator.getWorkloadAccumulated()
+								- ((JJBug) node.getData()).getWorkload());
+			else if (node.getData() instanceof JJTestcase
+					&& ((JJTestcase) node.getData()).getWorkload() != null)
+				simulator.setWorkloadAccumulated(
+						simulator.getWorkloadAccumulated()
+								- ((JJTestcase) node.getData()).getWorkload());
+		} else {
+			for (TreeNode child : node.getChildren()) {
+				calclutateSimulatorWorkload(child, false);
+			}
+		}
+	}
+
+	public void updateView() {
+		JJRequirementBean jjRequirementBean = (JJRequirementBean) LoginBean
+				.findBean("jJRequirementBean");
+		JJTestcaseBean jjTestcaseBean = (JJTestcaseBean) LoginBean
+				.findBean("jJTestcaseBean");
+		if (jjTestcaseBean == null)
+			jjTestcaseBean = new JJTestcaseBean();
+		if (jjRequirementBean == null)
+			jjRequirementBean = new JJRequirementBean();
+		JJCategory cat = jJCategoryService.getCategory("BUSINESS",
+				LoginBean.getCompany(), true);
+
+		simulator = new SimulatorUtil(jjRequirementBean.jJRequirementService,
+				jjTestcaseBean.jJTestcaseService, jJBugService, cat,
+				simulator.isDisplayProgress(), simulator.isDisplayDone(),
+				simulator.isDisplayFinishedBug());
+	}
 
 	public void onCellEditTask(CellEditEvent event) {
 
@@ -354,7 +483,7 @@ public class JJSprintBean implements Serializable {
 					activeTabSprintIndex = 0;
 			}
 		}
-		
+
 		JJSprint sp = new JJSprint();
 		sp.setProject(pr);
 		sprintList
@@ -403,7 +532,7 @@ public class JJSprintBean implements Serializable {
 			} else if (activeTabGantIndex == PlanningConfiguration
 					.getGanttIndex())
 				getJJTaskBean().setMode("planning");
-		} 		
+		}
 	}
 
 	public void deleteSprint(SprintUtil sp) {
@@ -632,7 +761,7 @@ public class JJSprintBean implements Serializable {
 		}
 
 	}
-	
+
 	public void addTaskToTodo_newScrum(DragDropEvent ddevent) {
 
 		JJTask dropedTask = (JJTask) ddevent.getData();

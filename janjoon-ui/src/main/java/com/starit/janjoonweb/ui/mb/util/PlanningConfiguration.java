@@ -18,8 +18,10 @@ public class PlanningConfiguration {
 	private boolean renderScrum;
 	private boolean renderGantt;
 	private boolean renderKanban;
+	private boolean renderSimulator;
 	private boolean render;
 	private Integer kanban_Tab;
+	private Integer simultor_Tab;
 	private String firstPage;
 	private String secondPage;
 	private String firstPageHeader;
@@ -39,7 +41,21 @@ public class PlanningConfiguration {
 		renderKanban = getPlaningTabsConf().getVal().toLowerCase()
 				.contains("kanban".toLowerCase());
 
-		kanban_Tab = 1;
+		renderSimulator = getPlaningTabsConf().getVal().toLowerCase()
+				.contains("simulator".toLowerCase());
+
+		if (!renderSimulator)
+			renderSimulator = getPlaningTabsConf().getVal().toLowerCase()
+					.contains("simulateur".toLowerCase());
+		kanban_Tab = -1;
+		
+		if (renderKanban)
+			kanban_Tab = 1;
+		if(renderSimulator)
+			if(renderKanban)
+				simultor_Tab = 2;
+			else
+				simultor_Tab = 1;
 
 		if (!renderScrum) {
 			render = false;
@@ -61,6 +77,7 @@ public class PlanningConfiguration {
 		} else {
 			render = true;
 			kanban_Tab = 2;
+			simultor_Tab ++;
 			int scrumIndex = getPlaningTabsConf().getVal().toLowerCase()
 					.indexOf("scrum".toLowerCase());
 			int ganttIndex = getPlaningTabsConf().getVal().toLowerCase()
@@ -136,6 +153,14 @@ public class PlanningConfiguration {
 		this.renderKanban = renderKanban;
 	}
 
+	public boolean isRenderSimulator() {
+		return renderSimulator;
+	}
+
+	public void setRenderSimulator(boolean renderSimulator) {
+		this.renderSimulator = renderSimulator;
+	}
+
 	public boolean isRender() {
 		return render;
 	}
@@ -150,6 +175,14 @@ public class PlanningConfiguration {
 
 	public void setKanban_Tab(Integer kanban_Tab) {
 		this.kanban_Tab = kanban_Tab;
+	}
+
+	public Integer getSimultor_Tab() {
+		return simultor_Tab;
+	}
+
+	public void setSimultor_Tab(Integer simultor_Tab) {
+		this.simultor_Tab = simultor_Tab;
 	}
 
 	public String getFirstPage() {
@@ -205,7 +238,7 @@ public class PlanningConfiguration {
 				configuration.setCreationDate(new Date());
 				configuration.setEnabled(true);
 				configuration.setParam("project.type");
-				configuration.setVal("gantt,scrum");
+				configuration.setVal("gantt,scrum,kanban,simulator");
 				jJConfigurationService.saveJJConfiguration(configuration);
 				planingTabsConf = jJConfigurationService
 						.getConfigurations("planning", "project.type", true)

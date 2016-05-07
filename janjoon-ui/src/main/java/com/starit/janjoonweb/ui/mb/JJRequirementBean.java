@@ -4030,7 +4030,7 @@ public class JJRequirementBean implements Serializable {
 	public void loadLinkedData(JJRequirement r, TreeNode principal) {
 
 		r = jJRequirementService.findJJRequirement(r.getId());
-		TreeNode father = new DefaultTreeNode("JJRequirement", r, principal);
+		TreeNode father = new DefaultTreeNode("JJRequirement", getRowState(r, jJRequirementService), principal);
 
 		for (JJRequirement req : r.getRequirementLinkUp()) {
 			if (req.getEnabled())
@@ -4054,7 +4054,7 @@ public class JJRequirementBean implements Serializable {
 
 		linkedData = new DefaultTreeNode("Root", null);
 		req = jJRequirementService.findJJRequirement(req.getId());
-		TreeNode principal = new DefaultTreeNode("JJRequirement", req,
+		TreeNode principal = new DefaultTreeNode("JJRequirement", getRowState(req, jJRequirementService),
 				linkedData);
 		for (JJRequirement r : req.getRequirementLinkUp()) {
 			if (r.getEnabled())

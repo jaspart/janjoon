@@ -385,10 +385,6 @@ public class AppLogger {
 		JJTask task = (JJTask) args[0];
 
 		MutableInt updateReq = (MutableInt) args[2];
-
-		if (task.getId() == null)
-			task.setCreationDate(new Date());
-
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		JJVersionBean jJVersionBean = (JJVersionBean) session
@@ -397,20 +393,19 @@ public class AppLogger {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
 				.getContact();
-		if (task.getId() == null) {
-			task.setCreatedBy(contact);
-		} else {
-			task.setUpdatedBy(contact);
-			task.setUpdatedDate(new Date());
-		}
-
 		ContactCalendarUtil calendarUtil;
 		boolean assignedTo = false;
 		JJTask oldJJTask = null;
-		if (task.getId() != null)
+		if (task.getId() == null) {
+			task.setCreatedBy(contact);
+			task.setCreationDate(new Date());
+		} else {
+			task.setUpdatedBy(contact);
+			task.setUpdatedDate(new Date());
 			oldJJTask = jJTaskService.findJJTask(task.getId());
+		}
 
-		if (task.getAssignedTo() != null && task.getId() != null) {
+		if (task.getAssignedTo() != null && oldJJTask != null) {
 			calendarUtil = new ContactCalendarUtil(task.getAssignedTo());
 			assignedTo = !task.getAssignedTo()
 					.equals(oldJJTask.getAssignedTo());
@@ -428,7 +423,7 @@ public class AppLogger {
 
 		if (task.getStartDatePlanned() != null) {
 
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getStartDatePlanned()
 						.equals(oldJJTask.getStartDatePlanned()))
 						|| assignedTo) {
@@ -446,7 +441,7 @@ public class AppLogger {
 
 		if (task.getEndDatePlanned() != null) {
 
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getEndDatePlanned()
 						.equals(oldJJTask.getEndDatePlanned())) || assignedTo) {
 					task.setEndDatePlanned(calendarUtil
@@ -468,7 +463,7 @@ public class AppLogger {
 							task.getEndDatePlanned(), null, null)));
 
 		if (task.getStartDateReal() != null) {
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getStartDateReal()
 						.equals(oldJJTask.getStartDateReal())) || assignedTo) {
 					task.setStartDateReal(calendarUtil
@@ -483,7 +478,7 @@ public class AppLogger {
 		}
 
 		if (task.getEndDateReal() != null) {
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getEndDateReal().equals(oldJJTask.getEndDateReal()))
 						|| assignedTo) {
 					task.setEndDateReal(calendarUtil
@@ -504,7 +499,7 @@ public class AppLogger {
 							task.getEndDateReal(), jJTaskService, task)));
 
 		if (task.getStartDateRevised() != null) {
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getStartDateRevised()
 						.equals(oldJJTask.getStartDateRevised()))
 						|| assignedTo) {
@@ -523,7 +518,7 @@ public class AppLogger {
 
 		if (task.getEndDateRevised() != null) {
 
-			if (task.getId() != null) {
+			if (oldJJTask != null) {
 				if ((!task.getEndDateRevised()
 						.equals(oldJJTask.getEndDateRevised())) || assignedTo) {
 					task.setEndDateRevised(calendarUtil
@@ -580,7 +575,7 @@ public class AppLogger {
 		// callingJJTaskWorkFlows
 		List<JJWorkflow> workFlows = new ArrayList<JJWorkflow>();
 
-		if (task.getId() != null && (boolean) args[1]) {
+		if (oldJJTask != null && (boolean) args[1]) {
 			// JJTask oldtask = jJTaskService.findJJTask(task.getId());
 			workFlows = jJWorkflowService.getObjectWorkFlows("task",
 					oldJJTask.getStatus(), task.getStatus(), null, true);

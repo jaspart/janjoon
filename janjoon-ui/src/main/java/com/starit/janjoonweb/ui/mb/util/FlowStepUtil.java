@@ -7,6 +7,7 @@ import com.starit.janjoonweb.domain.JJFlowStep;
 import com.starit.janjoonweb.domain.JJFlowStepService;
 import com.starit.janjoonweb.domain.JJRequirement;
 import com.starit.janjoonweb.domain.JJRequirementService;
+import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class FlowStepUtil {
@@ -72,6 +73,12 @@ public class FlowStepUtil {
 									LoginBean.getProduct()),
 							LoginBean.getVersion(), flow, true, true);
 		
+			int k= 0;
+			for(JJRequirement r:l)
+			{
+				l.set(k, JJRequirementBean.getRowState(r, jjRequirementService));
+				k++;
+			}
 
 			list.add(new FlowStepUtil(flow, flows.get(i),flows.get(j), l));
 			
