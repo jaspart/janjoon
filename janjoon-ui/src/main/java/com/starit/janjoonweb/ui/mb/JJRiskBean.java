@@ -187,7 +187,7 @@ public class JJRiskBean implements Serializable {
 		if (allTestCases == null)
 			allTestCases = jJTestcaseService.getImportTestcases(null,
 					getJJRisk_().getProject(), getJJRisk_().getProduct(), null,
-					null,false, true, false);
+					null, false, true, false);
 		return allTestCases;
 	}
 

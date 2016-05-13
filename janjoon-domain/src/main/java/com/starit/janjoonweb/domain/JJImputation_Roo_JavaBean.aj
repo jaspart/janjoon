@@ -8,54 +8,30 @@ import com.starit.janjoonweb.domain.JJImputation;
 import com.starit.janjoonweb.domain.JJTask;
 import java.util.Date;
 
-privileged aspect JJImputation_Roo_JavaBean {
-    
-    public Date JJImputation.getImputationDate() {
-        return this.imputationDate;
-    }
-    
-    public void JJImputation.setImputationDate(Date imputationDate) {
-        this.imputationDate = imputationDate;
-    }
-    
-    public JJContact JJImputation.getContact() {
-        return this.contact;
-    }
-    
-    public void JJImputation.setContact(JJContact contact) {
-        this.contact = contact;
-    }
-    
-    public JJTask JJImputation.getTask() {
-        return this.task;
-    }
-    
-    public void JJImputation.setTask(JJTask task) {
-        this.task = task;
-    }
-    
-    public Date JJImputation.getStartAction() {
-        return this.startAction;
-    }
-    
-    public void JJImputation.setStartAction(Date startAction) {
-        this.startAction = startAction;
-    }
-    
-    public Date JJImputation.getEndAction() {
-        return this.endAction;
-    }
-    
-    public void JJImputation.setEndAction(Date endAction) {
-        this.endAction = endAction;
-    }
-    
-    public Integer JJImputation.getWorkloadRemaining() {
-        return this.workloadRemaining;
-    }
-    
-    public void JJImputation.setWorkloadRemaining(Integer workloadRemaining) {
-        this.workloadRemaining = workloadRemaining;
-    }
-    
+privileged aspect JJImputation_Roo_JavaBean{
+
+public Date JJImputation.getImputationDate(){return this.imputationDate;}
+
+public void JJImputation.setImputationDate(Date imputationDate){this.imputationDate=imputationDate;}
+
+public JJContact JJImputation.getContact(){return this.contact;}
+
+public void JJImputation.setContact(JJContact contact){this.contact=contact;}
+
+public JJTask JJImputation.getTask(){return this.task;}
+
+public void JJImputation.setTask(JJTask task){this.task=task;}
+
+public Date JJImputation.getStartAction(){return this.startAction;}
+
+public void JJImputation.setStartAction(Date startAction){this.startAction=startAction;}
+
+public Date JJImputation.getEndAction(){return this.endAction;}
+
+public void JJImputation.setEndAction(Date endAction){this.endAction=endAction;}
+
+public Integer JJImputation.getWorkloadRemaining(){return this.workloadRemaining;}
+
+public void JJImputation.setWorkloadRemaining(Integer workloadRemaining){this.workloadRemaining=workloadRemaining;}
+
 }

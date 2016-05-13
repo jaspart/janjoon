@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+	<h:panelGroup layout="block" styleClass="ui-fluid Container BorderAll"
+		style="max-width:500px;">
+		<h:form id="sprintDialogForm" enctype="multipart/form-data">
+
+			<p:remoteCommand name="hideSimulationDialog"
+				actionListener="#{jJSprintBean.resetSimulation}"
+				update=":projecttabview :growlForm"
+				oncomplete="updateTabViewWidth();" />
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<p:messages id="msg" showDetail="false" closable="true" />
+			</h:panelGroup>
+			<h:panelGroup layout="block"
+				styleClass="Fs24 TexAlCenter Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<h:outputText styleClass="BoldGray"
+						value="#{messages.project_simulatorDialog_headerMessage}" />
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:inputText id="name" value="#{jJSprintBean.simulator.name}"
+						label="#{messages.project_scrum_sprint_name}" required="true"
+						requiredMessage="#{messages.project_scrum_sprint_name_required}"
+						placeholder="#{messages.project_scrum_sprint_name}">
+						<f:validateLength maximum="100" />
+					</p:inputText>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="startDate" navigator="true"
+						placeholder="#{messages.project_scrum_new_start_label}"
+						effect="slideDown" pattern="dd/MM/yyyy" required="true"
+						binding="#{startDateSimulator}" readonlyInput="true"
+						value="#{jJSprintBean.simulator.startDate}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="sprintMode" value="sprintSD" />
+					</p:calendar>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" styleClass="Container100">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:calendar id="endDate" navigator="true"
+						placeholder="#{messages.project_scrum_new_end_label}"
+						readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy"
+						required="true" value="#{jJSprintBean.simulator.endDate}">
+						<f:validator validatorId="dateRangeValidator" />
+						<f:attribute name="startDateComponent"
+							value="#{startDateSimulator}" />
+						<f:attribute name="sprintMode" value="sprintED" />
+					</p:calendar>
+				</h:panelGroup>
+			</h:panelGroup>
+
+
+			<h:panelGroup layout="block" styleClass="Separator" />
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="submitButton" value="#{messages.label_save}"
+						icon="fa fa-check Fs16" update="@form"						
+						action="#{jJSprintBean.saveSimulator}" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup layout="block" styleClass="Container50 Responsive50"
+				style="float: right;">
+				<h:panelGroup layout="block" styleClass="ContainerIndent">
+					<p:commandButton id="viewCloseButton" styleClass="GrayButton"
+						value="#{messages.label_cancel}"
+						onclick="PF('sprintDialogWidget').hide()" type="button" />
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+	</h:panelGroup>
+</ui:composition>
+</html>

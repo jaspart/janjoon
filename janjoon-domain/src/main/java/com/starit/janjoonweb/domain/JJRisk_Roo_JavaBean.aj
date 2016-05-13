@@ -14,118 +14,62 @@ import com.starit.janjoonweb.domain.JJTestcase;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJRisk_Roo_JavaBean {
-    
-    public String JJRisk.getName() {
-        return this.name;
-    }
-    
-    public void JJRisk.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJRisk.getDescription() {
-        return this.description;
-    }
-    
-    public void JJRisk.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJRisk.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJRisk.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJRisk.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJRisk.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJRisk.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJRisk.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJRisk.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJRisk.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJRisk.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJRisk.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJProject JJRisk.getProject() {
-        return this.project;
-    }
-    
-    public void JJRisk.setProject(JJProject project) {
-        this.project = project;
-    }
-    
-    public JJProduct JJRisk.getProduct() {
-        return this.product;
-    }
-    
-    public void JJRisk.setProduct(JJProduct product) {
-        this.product = product;
-    }
-    
-    public JJStatus JJRisk.getStatus() {
-        return this.status;
-    }
-    
-    public void JJRisk.setStatus(JJStatus status) {
-        this.status = status;
-    }
-    
-    public Integer JJRisk.getProbability() {
-        return this.probability;
-    }
-    
-    public void JJRisk.setProbability(Integer probability) {
-        this.probability = probability;
-    }
-    
-    public Set<JJRequirement> JJRisk.getRequirements() {
-        return this.requirements;
-    }
-    
-    public void JJRisk.setRequirements(Set<JJRequirement> requirements) {
-        this.requirements = requirements;
-    }
-    
-    public Set<JJBug> JJRisk.getBugs() {
-        return this.bugs;
-    }
-    
-    public void JJRisk.setBugs(Set<JJBug> bugs) {
-        this.bugs = bugs;
-    }
-    
-    public Set<JJTestcase> JJRisk.getTestcases() {
-        return this.testcases;
-    }
-    
-    public void JJRisk.setTestcases(Set<JJTestcase> testcases) {
-        this.testcases = testcases;
-    }
-    
+privileged aspect JJRisk_Roo_JavaBean{
+
+public String JJRisk.getName(){return this.name;}
+
+public void JJRisk.setName(String name){this.name=name;}
+
+public String JJRisk.getDescription(){return this.description;}
+
+public void JJRisk.setDescription(String description){this.description=description;}
+
+public Date JJRisk.getCreationDate(){return this.creationDate;}
+
+public void JJRisk.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJRisk.getCreatedBy(){return this.createdBy;}
+
+public void JJRisk.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJRisk.getUpdatedDate(){return this.updatedDate;}
+
+public void JJRisk.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJRisk.getUpdatedBy(){return this.updatedBy;}
+
+public void JJRisk.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJRisk.getEnabled(){return this.enabled;}
+
+public void JJRisk.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJProject JJRisk.getProject(){return this.project;}
+
+public void JJRisk.setProject(JJProject project){this.project=project;}
+
+public JJProduct JJRisk.getProduct(){return this.product;}
+
+public void JJRisk.setProduct(JJProduct product){this.product=product;}
+
+public JJStatus JJRisk.getStatus(){return this.status;}
+
+public void JJRisk.setStatus(JJStatus status){this.status=status;}
+
+public Integer JJRisk.getProbability(){return this.probability;}
+
+public void JJRisk.setProbability(Integer probability){this.probability=probability;}
+
+public Set<JJRequirement>JJRisk.getRequirements(){return this.requirements;}
+
+public void JJRisk.setRequirements(Set<JJRequirement>requirements){this.requirements=requirements;}
+
+public Set<JJBug>JJRisk.getBugs(){return this.bugs;}
+
+public void JJRisk.setBugs(Set<JJBug>bugs){this.bugs=bugs;}
+
+public Set<JJTestcase>JJRisk.getTestcases(){return this.testcases;}
+
+public void JJRisk.setTestcases(Set<JJTestcase>testcases){this.testcases=testcases;}
+
 }

@@ -20,8 +20,7 @@ public class JJRightBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private JJRight rightAdmin;
 	private List<RightDataModel> rightDataModel;
 

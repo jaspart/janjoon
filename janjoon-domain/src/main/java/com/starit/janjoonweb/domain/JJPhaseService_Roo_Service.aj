@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJPhase;
 import com.starit.janjoonweb.domain.JJPhaseService;
 import java.util.List;
 
-privileged aspect JJPhaseService_Roo_Service {
-    
-    public abstract long JJPhaseService.countAllJJPhases();    
-    public abstract void JJPhaseService.deleteJJPhase(JJPhase JJPhase_);    
-    public abstract JJPhase JJPhaseService.findJJPhase(Long id);    
-    public abstract List<JJPhase> JJPhaseService.findAllJJPhases();    
-    public abstract List<JJPhase> JJPhaseService.findJJPhaseEntries(int firstResult, int maxResults);    
-    public abstract void JJPhaseService.saveJJPhase(JJPhase JJPhase_);    
-    public abstract JJPhase JJPhaseService.updateJJPhase(JJPhase JJPhase_);    
-}
+privileged aspect JJPhaseService_Roo_Service{
+
+public abstract long JJPhaseService.countAllJJPhases();public abstract void JJPhaseService.deleteJJPhase(JJPhase JJPhase_);public abstract JJPhase JJPhaseService.findJJPhase(Long id);public abstract List<JJPhase>JJPhaseService.findAllJJPhases();public abstract List<JJPhase>JJPhaseService.findJJPhaseEntries(int firstResult,int maxResults);public abstract void JJPhaseService.saveJJPhase(JJPhase JJPhase_);public abstract JJPhase JJPhaseService.updateJJPhase(JJPhase JJPhase_);}

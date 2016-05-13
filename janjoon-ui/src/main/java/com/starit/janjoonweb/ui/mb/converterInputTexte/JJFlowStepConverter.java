@@ -6,9 +6,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import com.starit.janjoonweb.domain.JJFlowStep;
 
-
 @FacesConverter("JJFlowStepConverter")
-public class JJFlowStepConverter  implements Converter {
+public class JJFlowStepConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1,
@@ -20,6 +19,8 @@ public class JJFlowStepConverter  implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component,
 			Object value) {
-		return value instanceof JJFlowStep ? ((JJFlowStep) value).getName() : "";
+		return value instanceof JJFlowStep
+				? ((JJFlowStep) value).getName()
+				: "";
 	}
 }

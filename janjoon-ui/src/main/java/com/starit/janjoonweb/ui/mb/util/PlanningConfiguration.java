@@ -48,11 +48,11 @@ public class PlanningConfiguration {
 			renderSimulator = getPlaningTabsConf().getVal().toLowerCase()
 					.contains("simulateur".toLowerCase());
 		kanban_Tab = -1;
-		
+
 		if (renderKanban)
 			kanban_Tab = 1;
-		if(renderSimulator)
-			if(renderKanban)
+		if (renderSimulator)
+			if (renderKanban)
 				simultor_Tab = 2;
 			else
 				simultor_Tab = 1;
@@ -77,7 +77,7 @@ public class PlanningConfiguration {
 		} else {
 			render = true;
 			kanban_Tab = 2;
-			simultor_Tab ++;
+			simultor_Tab++;
 			int scrumIndex = getPlaningTabsConf().getVal().toLowerCase()
 					.indexOf("scrum".toLowerCase());
 			int ganttIndex = getPlaningTabsConf().getVal().toLowerCase()
@@ -114,7 +114,7 @@ public class PlanningConfiguration {
 	public static int getSrumIndex() {
 		PlanningConfiguration configuration = ((LoginBean) LoginBean
 				.findBean("loginBean")).getPlanningConfiguration();
-		if (configuration.getFirstPage().contains("scrum"))
+		if (configuration.getFirstPage().contains(SCRUM))
 			return 0;
 		else
 			return 1;
@@ -123,7 +123,7 @@ public class PlanningConfiguration {
 	public static int getGanttIndex() {
 		PlanningConfiguration configuration = ((LoginBean) LoginBean
 				.findBean("loginBean")).getPlanningConfiguration();
-		if (configuration.getFirstPage().contains("gantt"))
+		if (configuration.getFirstPage().contains(GANTT))
 			return 0;
 		else
 			return 1;

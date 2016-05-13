@@ -11,7 +11,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJCriticity;
 
 @RooJsfManagedBean(entity = JJCriticity.class, beanName = "jJCriticityBean")
-public class JJCriticityBean  implements Serializable {
+public class JJCriticityBean implements Serializable {
 
 	/**
 	 * 

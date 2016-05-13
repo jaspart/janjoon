@@ -23,7 +23,6 @@ import com.starit.janjoonweb.ui.mb.util.BuildUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 
-
 @RooJsfManagedBean(entity = JJBuild.class, beanName = "jJBuildBean")
 public class JJBuildBean implements Serializable {
 
@@ -31,7 +30,7 @@ public class JJBuildBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private int index;
 	private String buildName;
 	private JJBuild build;

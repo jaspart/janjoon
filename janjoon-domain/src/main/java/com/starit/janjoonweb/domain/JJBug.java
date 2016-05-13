@@ -55,7 +55,7 @@ public class JJBug {
 	private JJContact updatedBy;
 
 	private Boolean enabled;
-	
+
 	private Integer workload;
 
 	@ManyToOne

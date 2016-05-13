@@ -8,110 +8,58 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJWorkflow;
 import java.util.Date;
 
-privileged aspect JJWorkflow_Roo_JavaBean {
-    
-    public String JJWorkflow.getName() {
-        return this.name;
-    }
-    
-    public void JJWorkflow.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJWorkflow.getDescription() {
-        return this.description;
-    }
-    
-    public void JJWorkflow.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJWorkflow.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJWorkflow.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJWorkflow.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJWorkflow.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJWorkflow.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJWorkflow.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJWorkflow.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJWorkflow.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJWorkflow.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJWorkflow.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJStatus JJWorkflow.getSource() {
-        return this.source;
-    }
-    
-    public void JJWorkflow.setSource(JJStatus source) {
-        this.source = source;
-    }
-    
-    public JJStatus JJWorkflow.getTarget() {
-        return this.target;
-    }
-    
-    public void JJWorkflow.setTarget(JJStatus target) {
-        this.target = target;
-    }
-    
-    public String JJWorkflow.getActionWorkflow() {
-        return this.actionWorkflow;
-    }
-    
-    public void JJWorkflow.setActionWorkflow(String actionWorkflow) {
-        this.actionWorkflow = actionWorkflow;
-    }
-    
-    public JJContact JJWorkflow.getActor() {
-        return this.actor;
-    }
-    
-    public void JJWorkflow.setActor(JJContact actor) {
-        this.actor = actor;
-    }
-    
-    public String JJWorkflow.getObjet() {
-        return this.objet;
-    }
-    
-    public void JJWorkflow.setObjet(String objet) {
-        this.objet = objet;
-    }
-    
-    public String JJWorkflow.getEvent() {
-        return this.event;
-    }
-    
-    public void JJWorkflow.setEvent(String event) {
-        this.event = event;
-    }
-    
+privileged aspect JJWorkflow_Roo_JavaBean{
+
+public String JJWorkflow.getName(){return this.name;}
+
+public void JJWorkflow.setName(String name){this.name=name;}
+
+public String JJWorkflow.getDescription(){return this.description;}
+
+public void JJWorkflow.setDescription(String description){this.description=description;}
+
+public Date JJWorkflow.getCreationDate(){return this.creationDate;}
+
+public void JJWorkflow.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJWorkflow.getCreatedBy(){return this.createdBy;}
+
+public void JJWorkflow.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJWorkflow.getUpdatedDate(){return this.updatedDate;}
+
+public void JJWorkflow.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJWorkflow.getUpdatedBy(){return this.updatedBy;}
+
+public void JJWorkflow.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJWorkflow.getEnabled(){return this.enabled;}
+
+public void JJWorkflow.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJStatus JJWorkflow.getSource(){return this.source;}
+
+public void JJWorkflow.setSource(JJStatus source){this.source=source;}
+
+public JJStatus JJWorkflow.getTarget(){return this.target;}
+
+public void JJWorkflow.setTarget(JJStatus target){this.target=target;}
+
+public String JJWorkflow.getActionWorkflow(){return this.actionWorkflow;}
+
+public void JJWorkflow.setActionWorkflow(String actionWorkflow){this.actionWorkflow=actionWorkflow;}
+
+public JJContact JJWorkflow.getActor(){return this.actor;}
+
+public void JJWorkflow.setActor(JJContact actor){this.actor=actor;}
+
+public String JJWorkflow.getObjet(){return this.objet;}
+
+public void JJWorkflow.setObjet(String objet){this.objet=objet;}
+
+public String JJWorkflow.getEvent(){return this.event;}
+
+public void JJWorkflow.setEvent(String event){this.event=event;}
+
 }

@@ -8,70 +8,38 @@ import com.starit.janjoonweb.domain.JJHardware;
 import com.starit.janjoonweb.domain.JJTestcase;
 import java.util.Date;
 
-privileged aspect JJHardware_Roo_JavaBean {
-    
-    public String JJHardware.getName() {
-        return this.name;
-    }
-    
-    public void JJHardware.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJHardware.getDescription() {
-        return this.description;
-    }
-    
-    public void JJHardware.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJHardware.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJHardware.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJHardware.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJHardware.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJHardware.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJHardware.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJHardware.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJHardware.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJHardware.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJHardware.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJTestcase JJHardware.getTestcase() {
-        return this.testcase;
-    }
-    
-    public void JJHardware.setTestcase(JJTestcase testcase) {
-        this.testcase = testcase;
-    }
-    
+privileged aspect JJHardware_Roo_JavaBean{
+
+public String JJHardware.getName(){return this.name;}
+
+public void JJHardware.setName(String name){this.name=name;}
+
+public String JJHardware.getDescription(){return this.description;}
+
+public void JJHardware.setDescription(String description){this.description=description;}
+
+public Date JJHardware.getCreationDate(){return this.creationDate;}
+
+public void JJHardware.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJHardware.getCreatedBy(){return this.createdBy;}
+
+public void JJHardware.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJHardware.getUpdatedDate(){return this.updatedDate;}
+
+public void JJHardware.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJHardware.getUpdatedBy(){return this.updatedBy;}
+
+public void JJHardware.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJHardware.getEnabled(){return this.enabled;}
+
+public void JJHardware.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJTestcase JJHardware.getTestcase(){return this.testcase;}
+
+public void JJHardware.setTestcase(JJTestcase testcase){this.testcase=testcase;}
+
 }

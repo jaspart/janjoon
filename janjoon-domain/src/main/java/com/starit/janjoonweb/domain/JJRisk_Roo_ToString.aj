@@ -7,10 +7,8 @@ import com.starit.janjoonweb.domain.JJRisk;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJRisk_Roo_ToString {
-    
-    public String JJRisk.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
+privileged aspect JJRisk_Roo_ToString{
+
+public String JJRisk.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
+
 }

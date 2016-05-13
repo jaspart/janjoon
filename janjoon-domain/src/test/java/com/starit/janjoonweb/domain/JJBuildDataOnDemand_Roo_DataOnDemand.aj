@@ -20,127 +20,48 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Component;
 
-privileged aspect JJBuildDataOnDemand_Roo_DataOnDemand {
-    
-    declare @type: JJBuildDataOnDemand: @Component;
-    
-    private Random JJBuildDataOnDemand.rnd = new SecureRandom();
-    
-    private List<JJBuild> JJBuildDataOnDemand.data;
-    
-    @Autowired
-    JJContactDataOnDemand JJBuildDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
-    JJStatusDataOnDemand JJBuildDataOnDemand.jJStatusDataOnDemand;
-    
-    @Autowired
-    JJVersionDataOnDemand JJBuildDataOnDemand.jJVersionDataOnDemand;
-    
-    @Autowired
-    JJBuildService JJBuildDataOnDemand.jJBuildService;
-    
-    @Autowired
-    JJBuildRepository JJBuildDataOnDemand.jJBuildRepository;
-    
-    public JJBuild JJBuildDataOnDemand.getNewTransientJJBuild(int index) {
-        JJBuild obj = new JJBuild();
-        setAllTestcases(obj, index);
-        setCreationDate(obj, index);
-        setDescription(obj, index);
-        setEnabled(obj, index);
-        setName(obj, index);
-        setUpdatedDate(obj, index);
-        return obj;
-    }
-    
-    public void JJBuildDataOnDemand.setAllTestcases(JJBuild obj, int index) {
-        Boolean allTestcases = Boolean.TRUE;
-        obj.setAllTestcases(allTestcases);
-    }
-    
-    public void JJBuildDataOnDemand.setCreationDate(JJBuild obj, int index) {
-        Date creationDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setCreationDate(creationDate);
-    }
-    
-    public void JJBuildDataOnDemand.setDescription(JJBuild obj, int index) {
-        String description = "description_" + index;
-        obj.setDescription(description);
-    }
-    
-    public void JJBuildDataOnDemand.setEnabled(JJBuild obj, int index) {
-        Boolean enabled = Boolean.TRUE;
-        obj.setEnabled(enabled);
-    }
-    
-    public void JJBuildDataOnDemand.setName(JJBuild obj, int index) {
-        String name = "name_" + index;
-        if (name.length() > 100) {
-            name = name.substring(0, 100);
-        }
-        obj.setName(name);
-    }
-    
-    public void JJBuildDataOnDemand.setUpdatedDate(JJBuild obj, int index) {
-        Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setUpdatedDate(updatedDate);
-    }
-    
-    public JJBuild JJBuildDataOnDemand.getSpecificJJBuild(int index) {
-        init();
-        if (index < 0) {
-            index = 0;
-        }
-        if (index > (data.size() - 1)) {
-            index = data.size() - 1;
-        }
-        JJBuild obj = data.get(index);
-        Long id = obj.getId();
-        return jJBuildService.findJJBuild(id);
-    }
-    
-    public JJBuild JJBuildDataOnDemand.getRandomJJBuild() {
-        init();
-        JJBuild obj = data.get(rnd.nextInt(data.size()));
-        Long id = obj.getId();
-        return jJBuildService.findJJBuild(id);
-    }
-    
-    public boolean JJBuildDataOnDemand.modifyJJBuild(JJBuild obj) {
-        return false;
-    }
-    
-    public void JJBuildDataOnDemand.init() {
-        int from = 0;
-        int to = 10;
-        data = jJBuildService.findJJBuildEntries(from, to);
-        if (data == null) {
-            throw new IllegalStateException("Find entries implementation for 'JJBuild' illegally returned null");
-        }
-        if (!data.isEmpty()) {
-            return;
-        }
-        
-        data = new ArrayList<JJBuild>();
-        for (int i = 0; i < 10; i++) {
-            JJBuild obj = getNewTransientJJBuild(i);
-            try {
-                jJBuildService.saveJJBuild(obj);
-            } catch (final ConstraintViolationException e) {
-                final StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
-                    final ConstraintViolation<?> cv = iter.next();
-                    msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
-                }
-                throw new IllegalStateException(msg.toString(), e);
-            }
-            jJBuildRepository.flush();
-            data.add(obj);
-        }
-    }
-    
+privileged aspect JJBuildDataOnDemand_Roo_DataOnDemand{
+
+declare @type:JJBuildDataOnDemand:@Component;
+
+private Random JJBuildDataOnDemand.rnd=new SecureRandom();
+
+private List<JJBuild>JJBuildDataOnDemand.data;
+
+@Autowired JJContactDataOnDemand JJBuildDataOnDemand.jJContactDataOnDemand;
+
+@Autowired JJStatusDataOnDemand JJBuildDataOnDemand.jJStatusDataOnDemand;
+
+@Autowired JJVersionDataOnDemand JJBuildDataOnDemand.jJVersionDataOnDemand;
+
+@Autowired JJBuildService JJBuildDataOnDemand.jJBuildService;
+
+@Autowired JJBuildRepository JJBuildDataOnDemand.jJBuildRepository;
+
+public JJBuild JJBuildDataOnDemand.getNewTransientJJBuild(int index){JJBuild obj=new JJBuild();setAllTestcases(obj,index);setCreationDate(obj,index);setDescription(obj,index);setEnabled(obj,index);setName(obj,index);setUpdatedDate(obj,index);return obj;}
+
+public void JJBuildDataOnDemand.setAllTestcases(JJBuild obj,int index){Boolean allTestcases=Boolean.TRUE;obj.setAllTestcases(allTestcases);}
+
+public void JJBuildDataOnDemand.setCreationDate(JJBuild obj,int index){Date creationDate=new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),Calendar.getInstance().get(Calendar.SECOND)+new Double(Math.random()*1000).intValue()).getTime();obj.setCreationDate(creationDate);}
+
+public void JJBuildDataOnDemand.setDescription(JJBuild obj,int index){String description="description_"+index;obj.setDescription(description);}
+
+public void JJBuildDataOnDemand.setEnabled(JJBuild obj,int index){Boolean enabled=Boolean.TRUE;obj.setEnabled(enabled);}
+
+public void JJBuildDataOnDemand.setName(JJBuild obj,int index){String name="name_"+index;if(name.length()>100){name=name.substring(0,100);}obj.setName(name);}
+
+public void JJBuildDataOnDemand.setUpdatedDate(JJBuild obj,int index){Date updatedDate=new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),Calendar.getInstance().get(Calendar.SECOND)+new Double(Math.random()*1000).intValue()).getTime();obj.setUpdatedDate(updatedDate);}
+
+public JJBuild JJBuildDataOnDemand.getSpecificJJBuild(int index){init();if(index<0){index=0;}if(index>(data.size()-1)){index=data.size()-1;}JJBuild obj=data.get(index);Long id=obj.getId();return jJBuildService.findJJBuild(id);}
+
+public JJBuild JJBuildDataOnDemand.getRandomJJBuild(){init();JJBuild obj=data.get(rnd.nextInt(data.size()));Long id=obj.getId();return jJBuildService.findJJBuild(id);}
+
+public boolean JJBuildDataOnDemand.modifyJJBuild(JJBuild obj){return false;}
+
+public void JJBuildDataOnDemand.init(){int from=0;int to=10;data=jJBuildService.findJJBuildEntries(from,to);if(data==null){throw new IllegalStateException("Find entries implementation for 'JJBuild' illegally returned null");}if(!data.isEmpty()){return;}
+
+data=new ArrayList<JJBuild>();for(int i=0;i<10;i++){JJBuild obj=getNewTransientJJBuild(i);try{jJBuildService.saveJJBuild(obj);}catch(final ConstraintViolationException e){final StringBuilder msg=new StringBuilder();for(Iterator<ConstraintViolation<?>>iter=e.getConstraintViolations().iterator();iter.hasNext();){final ConstraintViolation<?>cv=iter.next();msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");}throw new IllegalStateException(msg.toString(),e);}jJBuildRepository.flush();data.add(obj);}}
+
 }

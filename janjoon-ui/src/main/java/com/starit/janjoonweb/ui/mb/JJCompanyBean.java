@@ -32,7 +32,7 @@ public class JJCompanyBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String calendar;
 	private LazyCompanyDataModel lazyCompanyList;
 	private String updatedCompanyCalendar;

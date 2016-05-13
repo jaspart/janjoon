@@ -59,7 +59,7 @@ public class JJRequirement {
 	private Integer ordering;
 
 	private Integer numero;
-	
+
 	private Integer workload;
 
 	@NotNull

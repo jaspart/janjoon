@@ -26,9 +26,8 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyWorkFlowDataTable;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.WorkFlowsActions;
 
-
 @RooJsfManagedBean(entity = JJWorkflow.class, beanName = "jJWorkflowBean")
-public class JJWorkflowBean implements Serializable{
+public class JJWorkflowBean implements Serializable {
 
 	/**
 	 * 

@@ -176,8 +176,7 @@ public class JJCategoryBean implements Serializable {
 	private boolean getCategoryDialogConfiguration() {
 		Boolean val = jJConfigurationService.getDialogConfig("CategoryDialog",
 				"category.create.saveandclose");
-		if(val == null)
-		{
+		if (val == null) {
 			JJConfiguration configuration = new JJConfiguration();
 			configuration.setName("CategoryDialog");
 			configuration.setDescription(
@@ -189,7 +188,7 @@ public class JJCategoryBean implements Serializable {
 			configuration.setParam("category.create.saveandclose");
 			configuration.setVal("true");
 			jJConfigurationService.saveJJConfiguration(configuration);
-			
+
 			val = jJConfigurationService.getDialogConfig("CategoryDialog",
 					"category.create.saveandclose");
 		}

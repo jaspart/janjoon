@@ -9,7 +9,7 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJSoftware;
 
 @RooJsfManagedBean(entity = JJSoftware.class, beanName = "jJSoftwareBean")
-public class JJSoftwareBean  implements Serializable{
+public class JJSoftwareBean implements Serializable {
 
 	/**
 	 * 

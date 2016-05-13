@@ -116,10 +116,9 @@ public class ConfigListener implements ServletContextListener {
 
 	@Autowired
 	private JJWorkflowService jJWorkflowService;
-	
+
 	@Autowired
-	private JJFlowStepService jJFlowStepService;	
-	
+	private JJFlowStepService jJFlowStepService;
 
 	public void setjJFlowStepService(JJFlowStepService jJFlowStepService) {
 		this.jJFlowStepService = jJFlowStepService;
@@ -461,21 +460,22 @@ public class ConfigListener implements ServletContextListener {
 		// jJSprintService.saveJJSprint(sprint);
 		// }
 		// }
-		
+
 		String[] objects_FlowStep = {"Requirement"};
-		
+
 		for (String object : objects_FlowStep) {
 
 			List<String> names = new ArrayList<String>();
 
-			if (jJFlowStepService.getFlowStep(object, true, null, true).isEmpty()) {
+			if (jJFlowStepService.getFlowStep(object, true, null, true)
+					.isEmpty()) {
 				if (object.equalsIgnoreCase("Requirement")) {
 					names.add("Backlog");
 					names.add("Specification");
 					names.add("Developpement");
-					names.add("Testing");					
+					names.add("Testing");
 
-				} 
+				}
 				int i = 0;
 				for (String name : names) {
 					JJFlowStep flow = new JJFlowStep();
@@ -491,8 +491,6 @@ public class ConfigListener implements ServletContextListener {
 				}
 			}
 		}
-		
-		
 
 		String[] objects = {"Requirement", "Bug", "Message", "Task", "Build",
 				"TaskType", "RequirementState", "TestCase", "Risk"};

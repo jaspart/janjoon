@@ -340,10 +340,13 @@
 																		value="##{jJTaskBean.getDialogHeader(todo,'scrum')}" />
 																	<br />
 																	<h:panelGroup styleClass="Gray Fs10">#{messages.label_workload}:#{todo.workloadPlanned}</h:panelGroup>
-																	<br />
-																	<h:panelGroup styleClass="Gray Fs10">#{todo.product.name}</h:panelGroup>
-																	
-																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+
+																	<h:panelGroup rendered="#{todo.product != null}"
+																		styleClass="Gray Fs10">
+																		<br /> #{todo.product.name}</h:panelGroup>
+
+																	<p:commandButton
+																		styleClass="littleButton Fright RaisedButton BlueTextButton"
 																		id="todoButton" type="button"
 																		icon="ui-icon-#{jJTaskBean.getTaskIcone(todo)}" />
 																	<p:menu overlay="true" trigger="todoButton"
@@ -406,8 +409,9 @@
 														<!-- 																varStatus="progLoop" var="prog"> -->
 														<p:dataScroller id="prog"
 															styleClass="WhiteBlueBack Card ShadowEffect HeiAutoOnMobile"
-															value="#{jjsprint.progressTask}" var="prog" style="overflow-x: hidden;"
-															chunkSize="10" mode="inline" scrollHeight="300">
+															value="#{jjsprint.progressTask}" var="prog"
+															style="overflow-x: hidden;" chunkSize="10" mode="inline"
+															scrollHeight="300">
 															<p:draggable for="progPanel"
 																disabled="#{jjsprint.disableDragDrop}" revert="true"
 																scope="progTask" />
@@ -423,10 +427,13 @@
 																		value="##{jJTaskBean.getDialogHeader(prog,'scrum')}" />
 																	<br />
 																	<h:panelGroup styleClass="Gray Fs10">#{messages.project_gantt_table_assigned_title}:#{prog.assignedTo.name}</h:panelGroup>
-																	<br />
-																	<h:panelGroup styleClass="Gray Fs10">#{prog.product.name}</h:panelGroup>
-																	
-																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+
+																	<h:panelGroup rendered="#{prog.product != null}"
+																		styleClass="Gray Fs10">
+																		<br /> #{prog.product.name}</h:panelGroup>
+
+																	<p:commandButton
+																		styleClass="littleButton Fright RaisedButton BlueTextButton"
 																		id="progButton" type="button"
 																		icon="ui-icon-#{jJTaskBean.getTaskIcone(prog)}" />
 																	<p:menu overlay="true" trigger="progButton"
@@ -505,10 +512,13 @@
 																		value="##{jJTaskBean.getDialogHeader(done,'scrum')}" />
 																	<br />
 																	<h:panelGroup styleClass="Gray Fs10">Diff:#{done.workloadPlanned-done.workloadReal}</h:panelGroup>
-																	<br />
-																	<h:panelGroup styleClass="Gray Fs10">#{done.product.name}</h:panelGroup>																	
+																	<h:panelGroup rendered="#{done.product != null}"
+																		styleClass="Gray Fs10">
+																		<br /> #{done.product.name}</h:panelGroup>
 
-																	<p:commandButton styleClass="littleButton Fright RaisedButton BlueTextButton"
+
+																	<p:commandButton
+																		styleClass="littleButton Fright RaisedButton BlueTextButton"
 																		id="doneButton" type="button"
 																		icon="ui-icon-#{jJTaskBean.getTaskIcone(done)}" />
 																	<p:menu overlay="true" trigger="doneButton"

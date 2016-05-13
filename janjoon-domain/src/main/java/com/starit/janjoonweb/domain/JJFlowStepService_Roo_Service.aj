@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJFlowStep;
 import com.starit.janjoonweb.domain.JJFlowStepService;
 import java.util.List;
 
-privileged aspect JJFlowStepService_Roo_Service {
-    
-    public abstract long JJFlowStepService.countAllJJFlowSteps();    
-    public abstract void JJFlowStepService.deleteJJFlowStep(JJFlowStep JJFlowStep_);    
-    public abstract JJFlowStep JJFlowStepService.findJJFlowStep(Long id);    
-    public abstract List<JJFlowStep> JJFlowStepService.findAllJJFlowSteps();    
-    public abstract List<JJFlowStep> JJFlowStepService.findJJFlowStepEntries(int firstResult, int maxResults);    
-    public abstract void JJFlowStepService.saveJJFlowStep(JJFlowStep JJFlowStep_);    
-    public abstract JJFlowStep JJFlowStepService.updateJJFlowStep(JJFlowStep JJFlowStep_);    
-}
+privileged aspect JJFlowStepService_Roo_Service{
+
+public abstract long JJFlowStepService.countAllJJFlowSteps();public abstract void JJFlowStepService.deleteJJFlowStep(JJFlowStep JJFlowStep_);public abstract JJFlowStep JJFlowStepService.findJJFlowStep(Long id);public abstract List<JJFlowStep>JJFlowStepService.findAllJJFlowSteps();public abstract List<JJFlowStep>JJFlowStepService.findJJFlowStepEntries(int firstResult,int maxResults);public abstract void JJFlowStepService.saveJJFlowStep(JJFlowStep JJFlowStep_);public abstract JJFlowStep JJFlowStepService.updateJJFlowStep(JJFlowStep JJFlowStep_);}

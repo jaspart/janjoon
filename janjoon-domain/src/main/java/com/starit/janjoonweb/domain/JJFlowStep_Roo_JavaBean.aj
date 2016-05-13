@@ -7,78 +7,42 @@ import com.starit.janjoonweb.domain.JJContact;
 import com.starit.janjoonweb.domain.JJFlowStep;
 import java.util.Date;
 
-privileged aspect JJFlowStep_Roo_JavaBean {
-    
-    public String JJFlowStep.getName() {
-        return this.name;
-    }
-    
-    public void JJFlowStep.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJFlowStep.getDescription() {
-        return this.description;
-    }
-    
-    public void JJFlowStep.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJFlowStep.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJFlowStep.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJFlowStep.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJFlowStep.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJFlowStep.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJFlowStep.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJFlowStep.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJFlowStep.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJFlowStep.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJFlowStep.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public Integer JJFlowStep.getLevel() {
-        return this.level;
-    }
-    
-    public void JJFlowStep.setLevel(Integer level) {
-        this.level = level;
-    }
-    
-    public String JJFlowStep.getObjet() {
-        return this.objet;
-    }
-    
-    public void JJFlowStep.setObjet(String objet) {
-        this.objet = objet;
-    }
-    
+privileged aspect JJFlowStep_Roo_JavaBean{
+
+public String JJFlowStep.getName(){return this.name;}
+
+public void JJFlowStep.setName(String name){this.name=name;}
+
+public String JJFlowStep.getDescription(){return this.description;}
+
+public void JJFlowStep.setDescription(String description){this.description=description;}
+
+public Date JJFlowStep.getCreationDate(){return this.creationDate;}
+
+public void JJFlowStep.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJFlowStep.getCreatedBy(){return this.createdBy;}
+
+public void JJFlowStep.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJFlowStep.getUpdatedDate(){return this.updatedDate;}
+
+public void JJFlowStep.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJFlowStep.getUpdatedBy(){return this.updatedBy;}
+
+public void JJFlowStep.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJFlowStep.getEnabled(){return this.enabled;}
+
+public void JJFlowStep.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public Integer JJFlowStep.getLevel(){return this.level;}
+
+public void JJFlowStep.setLevel(Integer level){this.level=level;}
+
+public String JJFlowStep.getObjet(){return this.objet;}
+
+public void JJFlowStep.setObjet(String objet){this.objet=objet;}
+
 }

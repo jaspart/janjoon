@@ -22,7 +22,7 @@ import com.starit.janjoonweb.domain.JJVersionService;
 import com.starit.janjoonweb.ui.mb.util.VersionDataModelUtil;
 
 @RooJsfManagedBean(entity = JJVersion.class, beanName = "jJVersionBean")
-public class JJVersionBean implements Serializable{
+public class JJVersionBean implements Serializable {
 
 	/**
 	 * 

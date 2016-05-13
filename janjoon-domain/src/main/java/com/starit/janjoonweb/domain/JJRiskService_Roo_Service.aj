@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJRisk;
 import com.starit.janjoonweb.domain.JJRiskService;
 import java.util.List;
 
-privileged aspect JJRiskService_Roo_Service {
-    
-    public abstract long JJRiskService.countAllJJRisks();    
-    public abstract void JJRiskService.deleteJJRisk(JJRisk JJRisk_);    
-    public abstract JJRisk JJRiskService.findJJRisk(Long id);    
-    public abstract List<JJRisk> JJRiskService.findAllJJRisks();    
-    public abstract List<JJRisk> JJRiskService.findJJRiskEntries(int firstResult, int maxResults);    
-    public abstract void JJRiskService.saveJJRisk(JJRisk JJRisk_);    
-    public abstract JJRisk JJRiskService.updateJJRisk(JJRisk JJRisk_);    
-}
+privileged aspect JJRiskService_Roo_Service{
+
+public abstract long JJRiskService.countAllJJRisks();public abstract void JJRiskService.deleteJJRisk(JJRisk JJRisk_);public abstract JJRisk JJRiskService.findJJRisk(Long id);public abstract List<JJRisk>JJRiskService.findAllJJRisks();public abstract List<JJRisk>JJRiskService.findJJRiskEntries(int firstResult,int maxResults);public abstract void JJRiskService.saveJJRisk(JJRisk JJRisk_);public abstract JJRisk JJRiskService.updateJJRisk(JJRisk JJRisk_);}

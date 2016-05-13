@@ -22,10 +22,8 @@ import com.starit.janjoonweb.ui.mb.JJRightBean.RightDataModel;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyProfileDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 
-
 @RooJsfManagedBean(entity = JJProfile.class, beanName = "jJProfileBean")
 public class JJProfileBean implements Serializable {
-	
 
 	/**
 	 * 
@@ -132,11 +130,10 @@ public class JJProfileBean implements Serializable {
 	}
 
 	private boolean getProfileDialogConfiguration() {
-		
+
 		Boolean val = jJConfigurationService.getDialogConfig("ProfileDialog",
 				"profile.create.saveandclose");
-		if(val == null)
-		{
+		if (val == null) {
 			JJConfiguration configuration = new JJConfiguration();
 			configuration.setName("ProfileDialog");
 			configuration.setDescription(
@@ -148,11 +145,11 @@ public class JJProfileBean implements Serializable {
 			configuration.setParam("profile.create.saveandclose");
 			configuration.setVal("true");
 			jJConfigurationService.saveJJConfiguration(configuration);
-			
+
 			val = jJConfigurationService.getDialogConfig("ProfileDialog",
 					"profile.create.saveandclose");
 		}
-		return val;		
+		return val;
 	}
 
 	public LazyProfileDataModel getProfileListTable() {

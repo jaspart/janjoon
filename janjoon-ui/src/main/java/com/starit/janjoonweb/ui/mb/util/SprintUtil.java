@@ -272,7 +272,7 @@ public class SprintUtil {
 									.compareTo(o1.getCreationDate());
 						}
 					});
-					
+
 					Collections.sort(progressTask, new Comparator<JJTask>() {
 
 						@Override
@@ -281,7 +281,7 @@ public class SprintUtil {
 									.compareTo(o1.getStartDateReal());
 						}
 					});
-					
+
 					Collections.sort(doneTask, new Comparator<JJTask>() {
 
 						@Override
@@ -290,8 +290,7 @@ public class SprintUtil {
 									.compareTo(o1.getEndDateReal());
 						}
 					});
-					
-					
+
 				}
 			}
 		}

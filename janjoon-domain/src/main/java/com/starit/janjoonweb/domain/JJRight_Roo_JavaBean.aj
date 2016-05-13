@@ -7,62 +7,34 @@ import com.starit.janjoonweb.domain.JJCategory;
 import com.starit.janjoonweb.domain.JJProfile;
 import com.starit.janjoonweb.domain.JJRight;
 
-privileged aspect JJRight_Roo_JavaBean {
-    
-    public String JJRight.getObjet() {
-        return this.objet;
-    }
-    
-    public void JJRight.setObjet(String objet) {
-        this.objet = objet;
-    }
-    
-    public Boolean JJRight.getR() {
-        return this.r;
-    }
-    
-    public void JJRight.setR(Boolean r) {
-        this.r = r;
-    }
-    
-    public Boolean JJRight.getW() {
-        return this.w;
-    }
-    
-    public void JJRight.setW(Boolean w) {
-        this.w = w;
-    }
-    
-    public Boolean JJRight.getX() {
-        return this.x;
-    }
-    
-    public void JJRight.setX(Boolean x) {
-        this.x = x;
-    }
-    
-    public JJCategory JJRight.getCategory() {
-        return this.category;
-    }
-    
-    public void JJRight.setCategory(JJCategory category) {
-        this.category = category;
-    }
-    
-    public JJProfile JJRight.getProfile() {
-        return this.profile;
-    }
-    
-    public void JJRight.setProfile(JJProfile profile) {
-        this.profile = profile;
-    }
-    
-    public Boolean JJRight.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJRight.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
+privileged aspect JJRight_Roo_JavaBean{
+
+public String JJRight.getObjet(){return this.objet;}
+
+public void JJRight.setObjet(String objet){this.objet=objet;}
+
+public Boolean JJRight.getR(){return this.r;}
+
+public void JJRight.setR(Boolean r){this.r=r;}
+
+public Boolean JJRight.getW(){return this.w;}
+
+public void JJRight.setW(Boolean w){this.w=w;}
+
+public Boolean JJRight.getX(){return this.x;}
+
+public void JJRight.setX(Boolean x){this.x=x;}
+
+public JJCategory JJRight.getCategory(){return this.category;}
+
+public void JJRight.setCategory(JJCategory category){this.category=category;}
+
+public JJProfile JJRight.getProfile(){return this.profile;}
+
+public void JJRight.setProfile(JJProfile profile){this.profile=profile;}
+
+public Boolean JJRight.getEnabled(){return this.enabled;}
+
+public void JJRight.setEnabled(Boolean enabled){this.enabled=enabled;}
+
 }

@@ -47,7 +47,6 @@ import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyBugDataModel;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.security.AuthorisationService;
 
-
 @RooJsfManagedBean(entity = JJBug.class, beanName = "jJBugBean")
 public class JJBugBean implements Serializable {
 
@@ -55,7 +54,7 @@ public class JJBugBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String BUG_SUBSCRIPTION_RATE = "bug_subscription_rate";
 	public static final String BUG_SUBSCRIPTION_CANCEL_RATE = "bug_subscription_cancel_rate";
 

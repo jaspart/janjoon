@@ -11,21 +11,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJWorkflowConverter_Roo_Converter {
-    
-    declare parents: JJWorkflowConverter implements Converter;
-    
-    declare @type: JJWorkflowConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJWorkflowConverter");
-    
-    @Autowired
-    JJWorkflowService JJWorkflowConverter.jJWorkflowService;
-    
-    public Object JJWorkflowConverter.getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        Long id = Long.parseLong(value);
-        return jJWorkflowService.findJJWorkflow(id);
-    }
-    
+privileged aspect JJWorkflowConverter_Roo_Converter{
+
+declare parents:JJWorkflowConverter implements Converter;
+
+declare @type:JJWorkflowConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJWorkflowConverter");
+
+@Autowired JJWorkflowService JJWorkflowConverter.jJWorkflowService;
+
+public Object JJWorkflowConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJWorkflowService.findJJWorkflow(id);}
+
 }

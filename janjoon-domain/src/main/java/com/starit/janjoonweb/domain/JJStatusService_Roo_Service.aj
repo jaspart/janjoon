@@ -7,13 +7,6 @@ import com.starit.janjoonweb.domain.JJStatus;
 import com.starit.janjoonweb.domain.JJStatusService;
 import java.util.List;
 
-privileged aspect JJStatusService_Roo_Service {
-    
-    public abstract long JJStatusService.countAllJJStatuses();    
-    public abstract void JJStatusService.deleteJJStatus(JJStatus JJStatus_);    
-    public abstract JJStatus JJStatusService.findJJStatus(Long id);    
-    public abstract List<JJStatus> JJStatusService.findAllJJStatuses();    
-    public abstract List<JJStatus> JJStatusService.findJJStatusEntries(int firstResult, int maxResults);    
-    public abstract void JJStatusService.saveJJStatus(JJStatus JJStatus_);    
-    public abstract JJStatus JJStatusService.updateJJStatus(JJStatus JJStatus_);    
-}
+privileged aspect JJStatusService_Roo_Service{
+
+public abstract long JJStatusService.countAllJJStatuses();public abstract void JJStatusService.deleteJJStatus(JJStatus JJStatus_);public abstract JJStatus JJStatusService.findJJStatus(Long id);public abstract List<JJStatus>JJStatusService.findAllJJStatuses();public abstract List<JJStatus>JJStatusService.findJJStatusEntries(int firstResult,int maxResults);public abstract void JJStatusService.saveJJStatus(JJStatus JJStatus_);public abstract JJStatus JJStatusService.updateJJStatus(JJStatus JJStatus_);}

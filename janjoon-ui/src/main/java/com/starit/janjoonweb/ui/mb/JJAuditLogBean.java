@@ -9,7 +9,7 @@ import com.starit.janjoonweb.domain.JJCompany;
 import com.starit.janjoonweb.ui.mb.lazyLoadingDataTable.LazyConnectionStatistiquesDataModel;
 
 @RooJsfManagedBean(entity = JJAuditLog.class, beanName = "jJAuditLogBean")
-public class JJAuditLogBean implements Serializable{
+public class JJAuditLogBean implements Serializable {
 
 	/**
 	 * 

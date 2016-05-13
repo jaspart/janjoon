@@ -19,7 +19,7 @@ public class FlowStepLevelValidator implements Validator {
 	@Override
 	public void validate(FacesContext arg0, UIComponent arg1, Object arg2)
 			throws ValidatorException {
-		
+
 		JJFlowStep flowStep = (JJFlowStep) arg1.getAttributes().get("flowStep");
 		if (flowStep != null) {
 			if (LoginBean.findBean("jJFlowStepBean") == null) {
@@ -28,14 +28,15 @@ public class FlowStepLevelValidator implements Validator {
 				session.setAttribute("jJFlowStepBean", new JJFlowStepBean());
 			}
 			if (!((JJFlowStepBean) LoginBean.findBean("jJFlowStepBean"))
-					.levelValid(Integer.parseInt(arg2.toString().trim()), flowStep)) {
+					.levelValid(Integer.parseInt(arg2.toString().trim()),
+							flowStep)) {
 				FacesMessage facesMessage = MessageFactory
 						.getMessage("validator_flowStep_levelExist", "Level");
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
 				throw new ValidatorException(facesMessage);
 			}
 		}
-		
+
 	}
 
 }

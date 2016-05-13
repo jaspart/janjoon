@@ -174,6 +174,18 @@
 			</p:outputPanel>
 		</p:dialog>
 
+		<p:dialog id="importSimulatorDialog"
+			header="#{messages.project_scrum_new_title}" modal="true"
+			widgetVar="sprintDialogWidget" dynamic="true"
+			resizable="false" maximizable="false" showEffect="fade"
+			draggable="false" responsive="true">
+			<p:outputPanel id="importSimulatorDialogPanel">
+				<ui:insert name="importSimulator">
+					<ui:include src="sprintDialog.xhtml" />
+				</ui:insert>
+			</p:outputPanel>
+		</p:dialog>
+
 		<p:dialog id="editBugDialog" header="#{messages.label_edit} Bug"
 			modal="true" widgetVar="editBugDialogWidget" dynamic="true"
 			resizable="false" maximizable="false" showEffect="fade"

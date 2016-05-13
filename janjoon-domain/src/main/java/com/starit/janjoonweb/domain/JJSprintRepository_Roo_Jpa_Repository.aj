@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJSprintRepository_Roo_Jpa_Repository {
-    
-    declare parents: JJSprintRepository extends JpaRepository<JJSprint, Long>;
-    
-    declare parents: JJSprintRepository extends JpaSpecificationExecutor<JJSprint>;
-    
-    declare @type: JJSprintRepository: @Repository;
-    
+privileged aspect JJSprintRepository_Roo_Jpa_Repository{
+
+declare parents:JJSprintRepository extends JpaRepository<JJSprint,Long>;
+
+declare parents:JJSprintRepository extends JpaSpecificationExecutor<JJSprint>;
+
+declare @type:JJSprintRepository:@Repository;
+
 }

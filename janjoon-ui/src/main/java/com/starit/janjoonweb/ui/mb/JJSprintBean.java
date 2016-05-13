@@ -1,6 +1,8 @@
 package com.starit.janjoonweb.ui.mb;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,6 +43,7 @@ import com.starit.janjoonweb.domain.JJStatusService;
 import com.starit.janjoonweb.domain.JJTask;
 import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
+import com.starit.janjoonweb.ui.mb.util.ContactCalendarUtil;
 import com.starit.janjoonweb.ui.mb.util.MessageFactory;
 import com.starit.janjoonweb.ui.mb.util.PlanningConfiguration;
 import com.starit.janjoonweb.ui.mb.util.SimulatorUtil;
@@ -551,6 +554,138 @@ public class JJSprintBean implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
 
+	public void saveSimulator() {
+
+		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
+				.getContact();
+
+		JJSprint sprint = new JJSprint();
+
+		sprint.setName(simulator.getName());
+		sprint.setStartDate(simulator.getStartDate());
+		sprint.setEndDate(simulator.getEndDate());
+		sprint.setProject(LoginBean.getProject());
+		sprint.setEnabled(true);
+		sprint.setDescription(sprint.getName() + " /CreatedBy:"
+				+ contact.getName() + " at :" + new Date());
+
+		saveJJSprint(sprint);
+
+		ContactCalendarUtil calendarUtil = new ContactCalendarUtil(
+				LoginBean.getCompany());
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH");
+
+		for (TreeNode node : simulator.getSelectedObjects()) {
+			String name = "";
+			if (node.getChildren().isEmpty()) {
+				JJTask task = new JJTask();
+				task.setEnabled(true);
+				task.setSprint(sprint);
+				task.setStartDatePlanned(
+						calendarUtil.nextWorkingDate(sprint.getStartDate()));
+				task.setCreationDate(new Date());
+
+				task.setCreatedBy(((LoginBean) LoginBean.findBean("loginBean"))
+						.getContact());
+
+				task.setStatus(
+						jJStatusService.getOneStatus("TODO", "Task", true));
+				task.setEnabled(true);
+				task.setSprint(sprint);
+
+				if (node.getData() instanceof JJRequirement) {
+
+					JJRequirement requirement = (JJRequirement) node.getData();
+					name = requirement.getName() + " (" + df.format(new Date())
+							+ "h)";
+
+					task.setRequirement(requirement);
+					task.setWorkloadPlanned(requirement.getWorkload() != null
+							? requirement.getWorkload()
+							: 3);
+					calendarUtil.getEndDate(task, JJTaskBean.Planned,
+							jJTaskService);
+
+				} else if (node.getData() instanceof JJBug) {
+
+					JJBug bug = (JJBug) node.getData();
+					name = bug.getName() + " (" + df.format(new Date()) + "h)";
+
+					task.setBug(bug);
+
+					task.setWorkloadPlanned(
+							bug.getWorkload() != null ? bug.getWorkload() : 3);
+					calendarUtil.getEndDate(task, JJTaskBean.Planned,
+							jJTaskService);
+
+				} else if (node.getData() instanceof JJTestcase) {
+
+					JJTestcase testcase = (JJTestcase) node.getData();
+
+					name = testcase.getName() + " (" + df.format(new Date())
+							+ "h)";
+					task.setTestcase(testcase);
+
+					task.setWorkloadPlanned(testcase.getWorkload() != null
+							? testcase.getWorkload()
+							: 3);
+					calendarUtil.getEndDate(task, JJTaskBean.Planned,
+							jJTaskService);
+				}
+
+				if (name.length() > 100) {
+					name = name.substring(0, 99);
+				}
+
+				task.setName(name);
+				task.setDescription("This is task " + task.getName());
+
+				getJJTaskBean().saveJJTask(task, false, new MutableInt(0));
+				getJJTaskBean().updateView(task, JJTaskBean.ADD_OPERATION);
+
+			}
+		}
+
+		if (sprintList != null) {
+			sprintUtil = new SprintUtil(sprint,
+					jJTaskService.getSprintTasks(sprint,
+							LoginBean.getProduct()),
+					jJContactService, jJTaskService);
+
+			sprintList.set(sprintList.size() - 1, sprintUtil);
+
+			JJSprint sp = new JJSprint();
+			sp.setProject(LoginBean.getProject());
+			sprintList.add(
+					new SprintUtil(sp, null, jJContactService, jJTaskService));
+		}
+
+		category = null;
+		categoryList = null;
+
+		getJJTaskBean().setSprints(null);
+		getJJTaskBean().setSprint(null);
+
+		RequestContext.getCurrentInstance()
+				.execute("PF('sprintDialogWidget').hide()");
+		RequestContext.getCurrentInstance().execute("hideSimulationDialog()");
+
+	}
+
+	public void resetSimulation() {
+		simulator = null;
+
+		if (sprintList != null) {
+			activeTabGantIndex = PlanningConfiguration.getSrumIndex();
+			activeTabSprintIndex = sprintList.size() - 2;
+		}
+
+		String message = "message_successfully_created";
+		FacesMessage facesMessage = MessageFactory.getMessage(message, "Sprint",
+				"");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
+
 	public void createSprint() {
 
 		JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
@@ -928,70 +1063,6 @@ public class JJSprintBean implements Serializable {
 
 	}
 
-	// public void handleAddButton(ActionEvent e) {
-	//
-	// attrListener(e);
-	// logger.info("handleAddButton");
-	//
-	// sprintUtil.setRenderTaskForm(!sprintUtil.isRenderTaskForm());
-	//
-	// if (sprintUtil.isRenderTaskForm()) {
-	// categoryList = null;
-	// getCategoryList();
-	// getBugs();
-	//
-	// } else {
-	// requirement = null;
-	// category = null;
-	// categoryList = null;
-	// bug = null;
-	// bugs = null;
-	// reqList = null;
-	// }
-	// }
-
-	// public void persistTask() {
-	// JJContact contact = ((LoginBean) LoginBean.findBean("loginBean"))
-	// .getContact();
-	// JJStatus status = jJStatusService.getOneStatus("todo", "Task", true);
-	// if (status != null)
-	// task.setStatus(status);
-	// if (requirement != null) {
-	// task.setName(requirement.getName());
-	// task.setRequirement(requirement);
-	// } else if (bug != null) {
-	// task.setName(bug.getName());
-	// task.setBug(bug);
-	// task.setRequirement(bug.getRequirement());
-	// }
-	//
-	// task.setStartDatePlanned(sprintUtil.getSprint().getStartDate());
-	// task.setEndDatePlanned(sprintUtil.getSprint().getEndDate());
-	// task.setSprint(sprintUtil.getSprint());
-	// task.setEnabled(true);
-	// task.setDescription(task.getName() + " /CreatedBy:" + contact.getName()
-	// + " at :" + new Date());
-	//
-	// jJTaskBean.saveJJTask(task, false);
-	//
-	// if (!sprintUtil.isRender()) {
-	//
-	// sprintUtil = new SprintUtil(jJSprintService.findJJSprint(sprintUtil
-	// .getSprint().getId()),
-	// jJTaskService.getSprintTasks(jJSprintService
-	// .findJJSprint(sprintUtil.getSprint().getId())));
-	// sprintList
-	// .set(contains(sprintUtil.getSprint().getId()), sprintUtil);
-	//
-	// }
-	// String message = "message_successfully_created";
-	// RequestContext context = RequestContext.getCurrentInstance();
-	// context.execute("PF('createTaskDialogWidget').hide()");
-	// FacesMessage facesMessage = MessageFactory.getMessage(message, "Task :"
-	// + task.getName());
-	// FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-	// }
-
 	public void doneEvent(ActionEvent e) {
 
 		attrListener(e);
@@ -1006,21 +1077,9 @@ public class JJSprintBean implements Serializable {
 		sp.setProject(LoginBean.getProject());
 		sprintList
 				.add(new SprintUtil(sp, null, jJContactService, jJTaskService));
-		// requirement = null;
+
 		category = null;
 		categoryList = null;
-		// reqList = null;
-		// int i = 0;
-		// if (((LoginBean) LoginBean.findBean("loginBean")).isRenderGantt())
-		// i = 1;
-		// else
-		// i = 0;
-		// RequestContext context = RequestContext.getCurrentInstance();
-		//
-		// context.execute("PF('projectTabView').select(" + i + ")");
-		// update = false;
-		// context.execute("PF('SprintTab').select("
-		// + contains(sprintUtil.getSprint().getId()) + ")");
 
 	}
 

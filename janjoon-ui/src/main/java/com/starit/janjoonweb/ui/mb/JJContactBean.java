@@ -922,7 +922,7 @@ public class JJContactBean implements Serializable {
 	}
 
 	private boolean getContactDialogConfiguration() {
-		
+
 		Boolean val = jJConfigurationService.getDialogConfig("AdminUserDialog",
 				"admin.user.create.saveandclose");
 
@@ -943,7 +943,7 @@ public class JJContactBean implements Serializable {
 					"admin.user.create.saveandclose");
 		}
 
-		return val;		
+		return val;
 	}
 
 	// edit Calendar

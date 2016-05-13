@@ -7,10 +7,8 @@ import com.starit.janjoonweb.domain.JJBug;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect JJBug_Roo_ToString {
-    
-    public String JJBug.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
+privileged aspect JJBug_Roo_ToString{
+
+public String JJBug.toString(){return ReflectionToStringBuilder.toString(this,ToStringStyle.SHORT_PREFIX_STYLE);}
+
 }

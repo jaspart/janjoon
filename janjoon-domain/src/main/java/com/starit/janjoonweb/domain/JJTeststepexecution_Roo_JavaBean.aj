@@ -9,86 +9,46 @@ import com.starit.janjoonweb.domain.JJTeststep;
 import com.starit.janjoonweb.domain.JJTeststepexecution;
 import java.util.Date;
 
-privileged aspect JJTeststepexecution_Roo_JavaBean {
-    
-    public String JJTeststepexecution.getName() {
-        return this.name;
-    }
-    
-    public void JJTeststepexecution.setName(String name) {
-        this.name = name;
-    }
-    
-    public String JJTeststepexecution.getDescription() {
-        return this.description;
-    }
-    
-    public void JJTeststepexecution.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Date JJTeststepexecution.getCreationDate() {
-        return this.creationDate;
-    }
-    
-    public void JJTeststepexecution.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJTeststepexecution.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJTeststepexecution.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJTeststepexecution.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJTeststepexecution.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJTeststepexecution.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJTeststepexecution.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Boolean JJTeststepexecution.getEnabled() {
-        return this.enabled;
-    }
-    
-    public void JJTeststepexecution.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJTeststep JJTeststepexecution.getTeststep() {
-        return this.teststep;
-    }
-    
-    public void JJTeststepexecution.setTeststep(JJTeststep teststep) {
-        this.teststep = teststep;
-    }
-    
-    public Boolean JJTeststepexecution.getPassed() {
-        return this.passed;
-    }
-    
-    public void JJTeststepexecution.setPassed(Boolean passed) {
-        this.passed = passed;
-    }
-    
-    public JJTestcaseexecution JJTeststepexecution.getTestcaseexecution() {
-        return this.testcaseexecution;
-    }
-    
-    public void JJTeststepexecution.setTestcaseexecution(JJTestcaseexecution testcaseexecution) {
-        this.testcaseexecution = testcaseexecution;
-    }
-    
+privileged aspect JJTeststepexecution_Roo_JavaBean{
+
+public String JJTeststepexecution.getName(){return this.name;}
+
+public void JJTeststepexecution.setName(String name){this.name=name;}
+
+public String JJTeststepexecution.getDescription(){return this.description;}
+
+public void JJTeststepexecution.setDescription(String description){this.description=description;}
+
+public Date JJTeststepexecution.getCreationDate(){return this.creationDate;}
+
+public void JJTeststepexecution.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJTeststepexecution.getCreatedBy(){return this.createdBy;}
+
+public void JJTeststepexecution.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJTeststepexecution.getUpdatedDate(){return this.updatedDate;}
+
+public void JJTeststepexecution.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJTeststepexecution.getUpdatedBy(){return this.updatedBy;}
+
+public void JJTeststepexecution.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public Boolean JJTeststepexecution.getEnabled(){return this.enabled;}
+
+public void JJTeststepexecution.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJTeststep JJTeststepexecution.getTeststep(){return this.teststep;}
+
+public void JJTeststepexecution.setTeststep(JJTeststep teststep){this.teststep=teststep;}
+
+public Boolean JJTeststepexecution.getPassed(){return this.passed;}
+
+public void JJTeststepexecution.setPassed(Boolean passed){this.passed=passed;}
+
+public JJTestcaseexecution JJTeststepexecution.getTestcaseexecution(){return this.testcaseexecution;}
+
+public void JJTeststepexecution.setTestcaseexecution(JJTestcaseexecution testcaseexecution){this.testcaseexecution=testcaseexecution;}
+
 }

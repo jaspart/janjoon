@@ -13,94 +13,50 @@ import com.starit.janjoonweb.domain.JJVersion;
 import java.util.Date;
 import java.util.Set;
 
-privileged aspect JJBuild_Roo_JavaBean {
-    
-    public void JJBuild.setName(String name) {
-        this.name = name;
-    }
-    
-    public void JJBuild.setDescription(String description) {
-        this.description = description;
-    }
-    
-    public void JJBuild.setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-    
-    public JJContact JJBuild.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void JJBuild.setCreatedBy(JJContact createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Date JJBuild.getUpdatedDate() {
-        return this.updatedDate;
-    }
-    
-    public void JJBuild.setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-    
-    public JJContact JJBuild.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void JJBuild.setUpdatedBy(JJContact updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public void JJBuild.setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public JJVersion JJBuild.getVersion() {
-        return this.version;
-    }
-    
-    public void JJBuild.setVersion(JJVersion version) {
-        this.version = version;
-    }
-    
-    public JJStatus JJBuild.getStatus() {
-        return this.status;
-    }
-    
-    public void JJBuild.setStatus(JJStatus status) {
-        this.status = status;
-    }
-    
-    public Boolean JJBuild.getAllTestcases() {
-        return this.allTestcases;
-    }
-    
-    public void JJBuild.setAllTestcases(Boolean allTestcases) {
-        this.allTestcases = allTestcases;
-    }
-    
-    public Set<JJTestcase> JJBuild.getTestcases() {
-        return this.testcases;
-    }
-    
-    public void JJBuild.setTestcases(Set<JJTestcase> testcases) {
-        this.testcases = testcases;
-    }
-    
-    public Set<JJTask> JJBuild.getTasks() {
-        return this.tasks;
-    }
-    
-    public void JJBuild.setTasks(Set<JJTask> tasks) {
-        this.tasks = tasks;
-    }
-    
-    public Set<JJMessage> JJBuild.getMessages() {
-        return this.messages;
-    }
-    
-    public void JJBuild.setMessages(Set<JJMessage> messages) {
-        this.messages = messages;
-    }
-    
+privileged aspect JJBuild_Roo_JavaBean{
+
+public void JJBuild.setName(String name){this.name=name;}
+
+public void JJBuild.setDescription(String description){this.description=description;}
+
+public void JJBuild.setCreationDate(Date creationDate){this.creationDate=creationDate;}
+
+public JJContact JJBuild.getCreatedBy(){return this.createdBy;}
+
+public void JJBuild.setCreatedBy(JJContact createdBy){this.createdBy=createdBy;}
+
+public Date JJBuild.getUpdatedDate(){return this.updatedDate;}
+
+public void JJBuild.setUpdatedDate(Date updatedDate){this.updatedDate=updatedDate;}
+
+public JJContact JJBuild.getUpdatedBy(){return this.updatedBy;}
+
+public void JJBuild.setUpdatedBy(JJContact updatedBy){this.updatedBy=updatedBy;}
+
+public void JJBuild.setEnabled(Boolean enabled){this.enabled=enabled;}
+
+public JJVersion JJBuild.getVersion(){return this.version;}
+
+public void JJBuild.setVersion(JJVersion version){this.version=version;}
+
+public JJStatus JJBuild.getStatus(){return this.status;}
+
+public void JJBuild.setStatus(JJStatus status){this.status=status;}
+
+public Boolean JJBuild.getAllTestcases(){return this.allTestcases;}
+
+public void JJBuild.setAllTestcases(Boolean allTestcases){this.allTestcases=allTestcases;}
+
+public Set<JJTestcase>JJBuild.getTestcases(){return this.testcases;}
+
+public void JJBuild.setTestcases(Set<JJTestcase>testcases){this.testcases=testcases;}
+
+public Set<JJTask>JJBuild.getTasks(){return this.tasks;}
+
+public void JJBuild.setTasks(Set<JJTask>tasks){this.tasks=tasks;}
+
+public Set<JJMessage>JJBuild.getMessages(){return this.messages;}
+
+public void JJBuild.setMessages(Set<JJMessage>messages){this.messages=messages;}
+
 }

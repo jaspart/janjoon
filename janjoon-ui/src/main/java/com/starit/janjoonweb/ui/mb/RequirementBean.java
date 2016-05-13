@@ -44,7 +44,7 @@ import com.starit.janjoonweb.ui.security.AuthorisationService;
 
 @Scope("session")
 @Component("requirementBean")
-public class RequirementBean implements Serializable{
+public class RequirementBean implements Serializable {
 
 	/**
 	 * 
@@ -580,7 +580,8 @@ public class RequirementBean implements Serializable{
 				.getRequirements(LoginBean.getCompany(), cat,
 						loginBean.getAuthorizedMap("Requirement", project,
 								product),
-						version, null, chapter,false, true, true, true, false, null);
+						version, null, chapter, false, true, true, true, false,
+						null);
 
 		for (JJRequirement requirement : requirements) {
 			rowCount++;
@@ -705,8 +706,8 @@ public class RequirementBean implements Serializable{
 				LoginBean.getCompany(), selectedCategory,
 				loginBean.getAuthorizedMap("Requirement",
 						requirement.getProject(), requirement.getProduct()),
-				requirement.getVersioning(), null, null, false,false, true, true,
-				false, null);
+				requirement.getVersioning(), null, null, false, false, true,
+				true, false, null);
 		linkReq = cateRequirement.getRequirements();
 
 	}

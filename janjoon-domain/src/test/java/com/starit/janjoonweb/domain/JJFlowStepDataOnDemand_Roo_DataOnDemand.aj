@@ -18,130 +18,46 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Component;
 
-privileged aspect JJFlowStepDataOnDemand_Roo_DataOnDemand {
-    
-    declare @type: JJFlowStepDataOnDemand: @Component;
-    
-    private Random JJFlowStepDataOnDemand.rnd = new SecureRandom();
-    
-    private List<JJFlowStep> JJFlowStepDataOnDemand.data;
-    
-    @Autowired
-    JJContactDataOnDemand JJFlowStepDataOnDemand.jJContactDataOnDemand;
-    
-    @Autowired
-    JJFlowStepService JJFlowStepDataOnDemand.jJFlowStepService;
-    
-    @Autowired
-    JJFlowStepRepository JJFlowStepDataOnDemand.jJFlowStepRepository;
-    
-    public JJFlowStep JJFlowStepDataOnDemand.getNewTransientJJFlowStep(int index) {
-        JJFlowStep obj = new JJFlowStep();
-        setCreationDate(obj, index);
-        setDescription(obj, index);
-        setEnabled(obj, index);
-        setLevel(obj, index);
-        setName(obj, index);
-        setObjet(obj, index);
-        setUpdatedDate(obj, index);
-        return obj;
-    }
-    
-    public void JJFlowStepDataOnDemand.setCreationDate(JJFlowStep obj, int index) {
-        Date creationDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setCreationDate(creationDate);
-    }
-    
-    public void JJFlowStepDataOnDemand.setDescription(JJFlowStep obj, int index) {
-        String description = "description_" + index;
-        obj.setDescription(description);
-    }
-    
-    public void JJFlowStepDataOnDemand.setEnabled(JJFlowStep obj, int index) {
-        Boolean enabled = Boolean.TRUE;
-        obj.setEnabled(enabled);
-    }
-    
-    public void JJFlowStepDataOnDemand.setLevel(JJFlowStep obj, int index) {
-        Integer level = new Integer(index);
-        obj.setLevel(level);
-    }
-    
-    public void JJFlowStepDataOnDemand.setName(JJFlowStep obj, int index) {
-        String name = "name_" + index;
-        if (name.length() > 100) {
-            name = name.substring(0, 100);
-        }
-        obj.setName(name);
-    }
-    
-    public void JJFlowStepDataOnDemand.setObjet(JJFlowStep obj, int index) {
-        String objet = "objet_" + index;
-        if (objet.length() > 25) {
-            objet = objet.substring(0, 25);
-        }
-        obj.setObjet(objet);
-    }
-    
-    public void JJFlowStepDataOnDemand.setUpdatedDate(JJFlowStep obj, int index) {
-        Date updatedDate = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
-        obj.setUpdatedDate(updatedDate);
-    }
-    
-    public JJFlowStep JJFlowStepDataOnDemand.getSpecificJJFlowStep(int index) {
-        init();
-        if (index < 0) {
-            index = 0;
-        }
-        if (index > (data.size() - 1)) {
-            index = data.size() - 1;
-        }
-        JJFlowStep obj = data.get(index);
-        Long id = obj.getId();
-        return jJFlowStepService.findJJFlowStep(id);
-    }
-    
-    public JJFlowStep JJFlowStepDataOnDemand.getRandomJJFlowStep() {
-        init();
-        JJFlowStep obj = data.get(rnd.nextInt(data.size()));
-        Long id = obj.getId();
-        return jJFlowStepService.findJJFlowStep(id);
-    }
-    
-    public boolean JJFlowStepDataOnDemand.modifyJJFlowStep(JJFlowStep obj) {
-        return false;
-    }
-    
-    public void JJFlowStepDataOnDemand.init() {
-        int from = 0;
-        int to = 10;
-        data = jJFlowStepService.findJJFlowStepEntries(from, to);
-        if (data == null) {
-            throw new IllegalStateException("Find entries implementation for 'JJFlowStep' illegally returned null");
-        }
-        if (!data.isEmpty()) {
-            return;
-        }
-        
-        data = new ArrayList<JJFlowStep>();
-        for (int i = 0; i < 10; i++) {
-            JJFlowStep obj = getNewTransientJJFlowStep(i);
-            try {
-                jJFlowStepService.saveJJFlowStep(obj);
-            } catch (final ConstraintViolationException e) {
-                final StringBuilder msg = new StringBuilder();
-                for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
-                    final ConstraintViolation<?> cv = iter.next();
-                    msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");
-                }
-                throw new IllegalStateException(msg.toString(), e);
-            }
-            jJFlowStepRepository.flush();
-            data.add(obj);
-        }
-    }
-    
+privileged aspect JJFlowStepDataOnDemand_Roo_DataOnDemand{
+
+declare @type:JJFlowStepDataOnDemand:@Component;
+
+private Random JJFlowStepDataOnDemand.rnd=new SecureRandom();
+
+private List<JJFlowStep>JJFlowStepDataOnDemand.data;
+
+@Autowired JJContactDataOnDemand JJFlowStepDataOnDemand.jJContactDataOnDemand;
+
+@Autowired JJFlowStepService JJFlowStepDataOnDemand.jJFlowStepService;
+
+@Autowired JJFlowStepRepository JJFlowStepDataOnDemand.jJFlowStepRepository;
+
+public JJFlowStep JJFlowStepDataOnDemand.getNewTransientJJFlowStep(int index){JJFlowStep obj=new JJFlowStep();setCreationDate(obj,index);setDescription(obj,index);setEnabled(obj,index);setLevel(obj,index);setName(obj,index);setObjet(obj,index);setUpdatedDate(obj,index);return obj;}
+
+public void JJFlowStepDataOnDemand.setCreationDate(JJFlowStep obj,int index){Date creationDate=new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),Calendar.getInstance().get(Calendar.SECOND)+new Double(Math.random()*1000).intValue()).getTime();obj.setCreationDate(creationDate);}
+
+public void JJFlowStepDataOnDemand.setDescription(JJFlowStep obj,int index){String description="description_"+index;obj.setDescription(description);}
+
+public void JJFlowStepDataOnDemand.setEnabled(JJFlowStep obj,int index){Boolean enabled=Boolean.TRUE;obj.setEnabled(enabled);}
+
+public void JJFlowStepDataOnDemand.setLevel(JJFlowStep obj,int index){Integer level=new Integer(index);obj.setLevel(level);}
+
+public void JJFlowStepDataOnDemand.setName(JJFlowStep obj,int index){String name="name_"+index;if(name.length()>100){name=name.substring(0,100);}obj.setName(name);}
+
+public void JJFlowStepDataOnDemand.setObjet(JJFlowStep obj,int index){String objet="objet_"+index;if(objet.length()>25){objet=objet.substring(0,25);}obj.setObjet(objet);}
+
+public void JJFlowStepDataOnDemand.setUpdatedDate(JJFlowStep obj,int index){Date updatedDate=new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),Calendar.getInstance().get(Calendar.SECOND)+new Double(Math.random()*1000).intValue()).getTime();obj.setUpdatedDate(updatedDate);}
+
+public JJFlowStep JJFlowStepDataOnDemand.getSpecificJJFlowStep(int index){init();if(index<0){index=0;}if(index>(data.size()-1)){index=data.size()-1;}JJFlowStep obj=data.get(index);Long id=obj.getId();return jJFlowStepService.findJJFlowStep(id);}
+
+public JJFlowStep JJFlowStepDataOnDemand.getRandomJJFlowStep(){init();JJFlowStep obj=data.get(rnd.nextInt(data.size()));Long id=obj.getId();return jJFlowStepService.findJJFlowStep(id);}
+
+public boolean JJFlowStepDataOnDemand.modifyJJFlowStep(JJFlowStep obj){return false;}
+
+public void JJFlowStepDataOnDemand.init(){int from=0;int to=10;data=jJFlowStepService.findJJFlowStepEntries(from,to);if(data==null){throw new IllegalStateException("Find entries implementation for 'JJFlowStep' illegally returned null");}if(!data.isEmpty()){return;}
+
+data=new ArrayList<JJFlowStep>();for(int i=0;i<10;i++){JJFlowStep obj=getNewTransientJJFlowStep(i);try{jJFlowStepService.saveJJFlowStep(obj);}catch(final ConstraintViolationException e){final StringBuilder msg=new StringBuilder();for(Iterator<ConstraintViolation<?>>iter=e.getConstraintViolations().iterator();iter.hasNext();){final ConstraintViolation<?>cv=iter.next();msg.append("[").append(cv.getRootBean().getClass().getName()).append(".").append(cv.getPropertyPath()).append(": ").append(cv.getMessage()).append(" (invalid value = ").append(cv.getInvalidValue()).append(")").append("]");}throw new IllegalStateException(msg.toString(),e);}jJFlowStepRepository.flush();data.add(obj);}}
+
 }

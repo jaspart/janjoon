@@ -15,12 +15,12 @@
 				<h:panelGroup layout="block" styleClass="ContainerIndent">
 					<h:panelGroup layout="block"
 						styleClass="Card ShadowEffect WhiteBlueBack Gray TexAlCenter HoverEffect">
-						<h:panelGroup layout="block"
-							styleClass="Fs24 TexAlCenter Container100">
-							<h:outputText styleClass="BoldGray"
+						<h:panelGroup layout="block" styleClass="TexAlCenter Container100">
+							<h:outputText styleClass="Fs24 BoldGray"
 								value="#{messages.project_simulator_headerTitle}" />
 						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
+						<h:panelGroup layout="block"
+							styleClass="TexAlLeft Container50 Responsive50">
 							<h:panelGroup layout="block" styleClass="Container40">
 								<h:panelGroup layout="block" styleClass="ContainerIndentLabel">
 									<p:outputLabel for="sprintW"
@@ -35,36 +35,66 @@
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="Container50 Responsive50">
-							<h:panelGroup layout="block" styleClass="TexAlCenter ContainerIndent">
+							<h:panelGroup layout="block" styleClass="ContainerIndent">
+								<p:commandButton id="addSprintButton" value="#{messages.project_scrum_new_title}"
+									update=":sprintDialogForm" resetValues="true"
+									styleClass="GrayButton"
+									disabled="#{empty jJSprintBean.simulator.selectedObjects}"
+									oncomplete="PF('sprintDialogWidget').show()"
+									icon="fa fa-plus Fs20" />
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="EmptyBox1" />
 						<h:panelGroup layout="block"
-							styleClass="Container33 Responsive100">
-							<p:outputLabel styleClass="Fs18"
-								value="#{messages.project_simulator_displayProgress}: " />
-							<p:selectBooleanCheckbox
-								value="#{jJSprintBean.simulator.displayProgress}">
-								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
-							</p:selectBooleanCheckbox>
+							styleClass="TexAlLeft Container33 Responsive100">
+							<h:panelGroup layout="block" styleClass="Container70">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel styleClass="Fs18"
+										value="#{messages.project_simulator_displayProgress}: " />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container30">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:selectBooleanCheckbox
+										value="#{jJSprintBean.simulator.displayProgress}">
+										<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+									</p:selectBooleanCheckbox>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block"
-							styleClass="Container33 Responsive100">
-							<p:outputLabel styleClass="Fs18"
-								value="#{messages.project_simulator_displayDone}: " />
-							<p:selectBooleanCheckbox
-								value="#{jJSprintBean.simulator.displayDone}">
-								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
-							</p:selectBooleanCheckbox>
+							styleClass="TexAlLeft Container33 Responsive100">
+							<h:panelGroup layout="block" styleClass="Container70">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel styleClass="Fs18"
+										value="#{messages.project_simulator_displayDone}: " />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container30">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:selectBooleanCheckbox
+										value="#{jJSprintBean.simulator.displayDone}">
+										<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+									</p:selectBooleanCheckbox>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup layout="block"
-							styleClass="Container33 Responsive100">
-							<p:outputLabel styleClass="Fs18"
-								value="#{messages.project_simulator_finishedBug}: " />
-							<p:selectBooleanCheckbox
-								value="#{jJSprintBean.simulator.displayFinishedBug}">
-								<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
-							</p:selectBooleanCheckbox>
+							styleClass="TexAlLeft Container33 Responsive100">
+							<h:panelGroup layout="block" styleClass="Container70">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:outputLabel styleClass="Fs18"
+										value="#{messages.project_simulator_finishedBug}: " />
+								</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup layout="block" styleClass="Container30">
+								<h:panelGroup layout="block" styleClass="ContainerIndent">
+									<p:selectBooleanCheckbox
+										value="#{jJSprintBean.simulator.displayFinishedBug}">
+										<p:ajax update="@form" listener="#{jJSprintBean.updateView}" />
+									</p:selectBooleanCheckbox>
+								</h:panelGroup>
+							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -79,10 +109,10 @@
 						selection="#{jJSprintBean.simulator.selectedObjects}">
 						<p:ajax event="select"
 							listener="#{jJSprintBean.calclutateSimulatorWorkload}"
-							update=":projecttabview:simulatorForm:sprintW" />
+							update=":projecttabview:simulatorForm:sprintW :projecttabview:simulatorForm:addSprintButton" />
 						<p:ajax event="unselect"
 							listener="#{jJSprintBean.calclutateSimulatorWorkload}"
-							update=":projecttabview:simulatorForm:sprintW" />
+							update=":projecttabview:simulatorForm:sprintW :projecttabview:simulatorForm:addSprintButton" />
 						<p:column headerText="#{messages.label_object}" style="width:80%">
 							<h:outputText value="#REQ_#{object.id} #{object.name}"
 								rendered="#{object['class'].simpleName == 'JJRequirement'}" />
@@ -102,7 +132,6 @@
 								value="#{object.status != null ? loginBean.checkMessage(object.status) : ''}"
 								styleClass="#{object.status.name} Fs14" />
 						</p:column>
-
 					</p:treeTable>
 				</h:panelGroup>
 			</h:panelGroup>

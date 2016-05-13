@@ -21,7 +21,6 @@ import com.starit.janjoonweb.domain.JJTaskService;
 import com.starit.janjoonweb.domain.JJTestcase;
 import com.starit.janjoonweb.domain.JJTestcaseexecution;
 
-
 @RooJsfManagedBean(entity = JJTestcaseexecution.class, beanName = "jJTestcaseexecutionBean")
 public class JJTestcaseexecutionBean implements Serializable {
 

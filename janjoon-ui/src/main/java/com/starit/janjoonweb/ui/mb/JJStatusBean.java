@@ -52,7 +52,7 @@ public class JJStatusBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static int KPI_TAB = 0;
 	private static int SPEC_TAB = 1;
 	private static int BUG_TAB = 2;
@@ -1282,8 +1282,8 @@ public class JJStatusBean implements Serializable {
 					LoginBean.getProduct(), "requirement", true);
 			float moyGreen = 0;
 			for (JJTask ta : tasks) {
-				if(ta.getWorkloadReal() != null)
-				moyGreen = moyGreen + ta.getWorkloadReal();
+				if (ta.getWorkloadReal() != null)
+					moyGreen = moyGreen + ta.getWorkloadReal();
 			}
 			moyGreen = moyGreen / tasks.size();
 			greenSerie.set(sp.getName(), moyGreen);
@@ -1416,8 +1416,8 @@ public class JJStatusBean implements Serializable {
 									category,
 									loginBean.getAuthorizedMap("Requirement",
 											project, LoginBean.getProduct()),
-									LoginBean.getVersion(), null, null, false,false,
-									true, false, false, null);
+									LoginBean.getVersion(), null, null, false,
+									false, true, false, false, null);
 
 					boolean isLowCategory = jJCategoryService
 							.isLowLevel(category, LoginBean.getCompany());
@@ -1525,8 +1525,8 @@ public class JJStatusBean implements Serializable {
 									category,
 									loginBean.getAuthorizedMap("Requirement",
 											project, LoginBean.getProduct()),
-									LoginBean.getVersion(), null, null, false,false,
-									true, false, false, null);
+									LoginBean.getVersion(), null, null, false,
+									false, true, false, false, null);
 
 					for (JJRequirement requirement : dataList) {
 						compteur = compteur + calculCompletion(requirement);

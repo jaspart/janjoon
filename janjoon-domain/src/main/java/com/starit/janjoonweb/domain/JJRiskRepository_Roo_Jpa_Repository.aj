@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJRiskRepository_Roo_Jpa_Repository {
-    
-    declare parents: JJRiskRepository extends JpaRepository<JJRisk, Long>;
-    
-    declare parents: JJRiskRepository extends JpaSpecificationExecutor<JJRisk>;
-    
-    declare @type: JJRiskRepository: @Repository;
-    
+privileged aspect JJRiskRepository_Roo_Jpa_Repository{
+
+declare parents:JJRiskRepository extends JpaRepository<JJRisk,Long>;
+
+declare parents:JJRiskRepository extends JpaSpecificationExecutor<JJRisk>;
+
+declare @type:JJRiskRepository:@Repository;
+
 }

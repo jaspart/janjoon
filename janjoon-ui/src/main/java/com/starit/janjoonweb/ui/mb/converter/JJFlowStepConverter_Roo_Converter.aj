@@ -11,21 +11,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect JJFlowStepConverter_Roo_Converter {
-    
-    declare parents: JJFlowStepConverter implements Converter;
-    
-    declare @type: JJFlowStepConverter: @FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJFlowStepConverter");
-    
-    @Autowired
-    JJFlowStepService JJFlowStepConverter.jJFlowStepService;
-    
-    public Object JJFlowStepConverter.getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.length() == 0) {
-            return null;
-        }
-        Long id = Long.parseLong(value);
-        return jJFlowStepService.findJJFlowStep(id);
-    }
-    
+privileged aspect JJFlowStepConverter_Roo_Converter{
+
+declare parents:JJFlowStepConverter implements Converter;
+
+declare @type:JJFlowStepConverter:@FacesConverter("com.starit.janjoonweb.ui.mb.converter.JJFlowStepConverter");
+
+@Autowired JJFlowStepService JJFlowStepConverter.jJFlowStepService;
+
+public Object JJFlowStepConverter.getAsObject(FacesContext context,UIComponent component,String value){if(value==null||value.length()==0){return null;}Long id=Long.parseLong(value);return jJFlowStepService.findJJFlowStep(id);}
+
 }

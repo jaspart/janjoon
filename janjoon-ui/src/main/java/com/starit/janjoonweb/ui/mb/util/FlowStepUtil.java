@@ -16,8 +16,6 @@ public class FlowStepUtil {
 	private JJFlowStep nextFlowStep;
 	private JJFlowStep previousFlowStep;
 	private List<JJRequirement> requirements;
-	
-	
 
 	public FlowStepUtil(JJFlowStep flowStep, JJFlowStep nextFlowStep,
 			JJFlowStep previousFlowStep, List<JJRequirement> requirements) {
@@ -26,7 +24,7 @@ public class FlowStepUtil {
 		this.nextFlowStep = nextFlowStep;
 		this.previousFlowStep = previousFlowStep;
 		this.requirements = requirements;
-		
+
 	}
 	public JJFlowStep getNextFlowStep() {
 		return nextFlowStep;
@@ -62,7 +60,7 @@ public class FlowStepUtil {
 		LoginBean loginBean = (LoginBean) LoginBean.findBean("loginBean");
 		List<JJFlowStep> flows = jjFlowStepService.getFlowStep("Requirement",
 				true, null, true);
-		int i = 1;		
+		int i = 1;
 		int j = flows.size() - 1;
 
 		for (JJFlowStep flow : flows) {
@@ -72,23 +70,24 @@ public class FlowStepUtil {
 									LoginBean.getProject(),
 									LoginBean.getProduct()),
 							LoginBean.getVersion(), flow, true, true);
-		
-			int k= 0;
-			for(JJRequirement r:l)
-			{
-				l.set(k, JJRequirementBean.getRowState(r, jjRequirementService));
+
+			int k = 0;
+			for (JJRequirement r : l) {
+				l.set(k, JJRequirementBean.getRowState(r,
+						jjRequirementService));
 				k++;
 			}
 
-			list.add(new FlowStepUtil(flow, flows.get(i),flows.get(j), l));
-			
-			i++;j++;
-			
+			list.add(new FlowStepUtil(flow, flows.get(i), flows.get(j), l));
+
+			i++;
+			j++;
+
 			if (i == flows.size())
-				i = 0;		
-			
+				i = 0;
+
 			if (j == flows.size())
-				j = 0;		
+				j = 0;
 		}
 
 		return list;

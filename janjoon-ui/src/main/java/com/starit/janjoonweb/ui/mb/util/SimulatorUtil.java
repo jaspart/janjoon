@@ -1,5 +1,6 @@
 package com.starit.janjoonweb.ui.mb.util;
 
+import java.util.Date;
 import java.util.List;
 
 import org.primefaces.model.CheckboxTreeNode;
@@ -16,6 +17,10 @@ import com.starit.janjoonweb.ui.mb.JJRequirementBean;
 import com.starit.janjoonweb.ui.mb.LoginBean;
 
 public class SimulatorUtil {
+
+	private String name;
+	private Date startDate;
+	private Date endDate;
 
 	private Integer workloadAccumulated;
 	private TreeNode treeObject;
@@ -57,6 +62,30 @@ public class SimulatorUtil {
 		this.displayFinishedBug = displayFinishedBug;
 		this.treeObject = initializeTreeObject();
 
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public Integer getWorkloadAccumulated() {

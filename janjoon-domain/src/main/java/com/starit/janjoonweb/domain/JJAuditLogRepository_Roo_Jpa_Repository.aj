@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect JJAuditLogRepository_Roo_Jpa_Repository {
-    
-    declare parents: JJAuditLogRepository extends JpaRepository<JJAuditLog, Long>;
-    
-    declare parents: JJAuditLogRepository extends JpaSpecificationExecutor<JJAuditLog>;
-    
-    declare @type: JJAuditLogRepository: @Repository;
-    
+privileged aspect JJAuditLogRepository_Roo_Jpa_Repository{
+
+declare parents:JJAuditLogRepository extends JpaRepository<JJAuditLog,Long>;
+
+declare parents:JJAuditLogRepository extends JpaSpecificationExecutor<JJAuditLog>;
+
+declare @type:JJAuditLogRepository:@Repository;
+
 }

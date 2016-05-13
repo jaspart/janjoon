@@ -1896,41 +1896,41 @@ public class JJTaskBean implements Serializable {
 						.getRequirements(LoginBean.getCompany(), importCategory,
 								loginBean.getAuthorizedMap("Requirement",
 										project, product),
-								version, importStatus, null,!checkAll ,false, true, false,
-								false, null)) {
+								version, importStatus, null, !checkAll, false,
+								true, false, false, null)) {
 
-//					if (!checkAll) {
-//
-//						if (!jJTaskService.haveTask(requirement, true, false,
-//								true)) {
-							importFormats.add(new ImportFormat(
-									requirement.getName(), requirement));
-//						}
-//					} else {
-//
-//						importFormats.add(new ImportFormat(
-//								requirement.getName(), requirement));
-//					}
+					// if (!checkAll) {
+					//
+					// if (!jJTaskService.haveTask(requirement, true, false,
+					// true)) {
+					importFormats.add(new ImportFormat(requirement.getName(),
+							requirement));
+					// }
+					// } else {
+					//
+					// importFormats.add(new ImportFormat(
+					// requirement.getName(), requirement));
+					// }
 				}
 
 			} else if (objet.equalsIgnoreCase("Testcase")) {
 
 				for (JJTestcase testcase : jJTestcaseService.getImportTestcases(
 						null, project, LoginBean.getProduct(),
-						LoginBean.getVersion(), null,!checkAll,true, false)) {
-//
-//					if (!checkAll) {
-//
-//						if (!jJTaskService.haveTask(testcase, true, false,
-//								true)) {
-							importFormats.add(new ImportFormat(
-									testcase.getName(), testcase));
-//						}
-//					} else {
-//
-//						importFormats.add(
-//								new ImportFormat(testcase.getName(), testcase));
-//					}
+						LoginBean.getVersion(), null, !checkAll, true, false)) {
+					//
+					// if (!checkAll) {
+					//
+					// if (!jJTaskService.haveTask(testcase, true, false,
+					// true)) {
+					importFormats.add(
+							new ImportFormat(testcase.getName(), testcase));
+					// }
+					// } else {
+					//
+					// importFormats.add(
+					// new ImportFormat(testcase.getName(), testcase));
+					// }
 				}
 			}
 
@@ -2024,11 +2024,6 @@ public class JJTaskBean implements Serializable {
 				name = requirement.getName() + " (" + df.format(new Date())
 						+ "h)";
 
-				requirement = jJRequirementService
-						.findJJRequirement(requirement.getId());
-
-				requirement.getTasks().add(task);
-
 				task.setRequirement(requirement);
 
 			} else if (format.getObject() instanceof JJBug) {
@@ -2036,10 +2031,6 @@ public class JJTaskBean implements Serializable {
 				JJBug bug = (JJBug) format.getObject();
 
 				name = bug.getName() + " (" + df.format(new Date()) + "h)";
-
-				bug = jJBugService.findJJBug(bug.getId());
-				bug.getTasks().add(task);
-
 				task.setBug(bug);
 
 			} else if (format.getObject() instanceof JJTestcase) {
@@ -2047,11 +2038,6 @@ public class JJTaskBean implements Serializable {
 				JJTestcase testcase = (JJTestcase) format.getObject();
 
 				name = testcase.getName() + " (" + df.format(new Date()) + "h)";
-
-				testcase = jJTestcaseService.findJJTestcase(testcase.getId());
-
-				testcase.getTasks().add(task);
-
 				task.setTestcase(testcase);
 			}
 
@@ -2266,7 +2252,9 @@ public class JJTaskBean implements Serializable {
 
 		}
 		if (updateObject.intValue() == 1) {
-			JJRequirementBean.updateRowState(ttt.getRequirement(),
+			JJRequirementBean.updateRowState(
+					jJRequirementService
+							.findJJRequirement(ttt.getRequirement().getId()),
 					jJRequirementService, ttt);
 		}
 
@@ -3252,7 +3240,7 @@ public class JJTaskBean implements Serializable {
 							startDate, endDate, workLoad,
 							tt.getStartDateRevised() != null);
 					tasksData.add(tskst);
-					//allTasks.add(tt);
+					// allTasks.add(tt);
 					chapter = tt.getChapter();
 				}
 			} else if (this.sprint == null
@@ -3283,7 +3271,7 @@ public class JJTaskBean implements Serializable {
 				TaskData tskst = new TaskData(tt, tt.getChapter(), startDate,
 						endDate, workLoad, tt.getStartDateRevised() != null);
 				tasksData.add(tskst);
-				
+
 			}
 			allTasks.add(tt);
 		}
