@@ -1,0 +1,1 @@
+./certbot-auto certonly --manual --preferred-challenges dns --installer apache --preferred-challenges tls-sni --pre-hook "service apache2 stop" --post-hook "service apache2 start" --email postmaster@janjoon.com -d www.janjoon.com -d janjoon.com -d www.janjoon.net -d janjoon.net -d www.janjoon.org -d janjoon.org -d www.janjoon.info -d janjoon.info --force-renewal
