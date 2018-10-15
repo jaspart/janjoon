@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <actions/>
+  <description/>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.22">
+      <autoRebuild>false</autoRebuild>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>JANJOON_BUILD="$(echo /var/lib/jenkins/jobs/janjoonCloud/workspace/janjoon-ui/target/janjoon-ui-*.war | cut -f5 -d"-" | cut -f1 -d'.')"
+cp /var/lib/jenkins/jobs/janjoonCloud/workspace/janjoon-ui/target/janjoon-ui-3.0-$JANJOON_BUILD-distrib.zip /tmp/
+ssh jj_prod@localhost cp /tmp/janjoon-ui-3.0-$JANJOON_BUILD-distrib.zip /home/jj_prod/
+ssh jj_prod@localhost /usr/sbin/migrate actual $JANJOON_BUILD 9393 janjoon /home/jj_prod</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
